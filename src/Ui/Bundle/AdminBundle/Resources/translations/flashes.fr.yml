@@ -43,6 +43,7 @@ flash.admin.happening.category.update.success: 'La catégorie de sous événemen
 flash.admin.happening.create.success: 'Le sous-événement a bien été créé'
 flash.admin.happening.empty: 'Il n''y a aucune conférence à exporter pour cet événement'
 flash.admin.happening.participation.empty: 'Il n''y a aucun participant à exporter pour ces conférences'
+flash.admin.happening.participation.export_scheduled: 'L''export des participants aux conférences est en cours. Vous recevrez un email contenant le lien vers le fichier dès qu''il est prêt.'
 flash.admin.happening.update.success: 'Le sous-événement a bien été mis à jour'
 flash.admin.invoice.create.success: 'Le préfixe de facturation a bien été créé'
 flash.admin.invoice.export.failed: 'Il y a une erreur dans le formulaire d''export'

@@ -55,10 +55,10 @@ Feature: See, create and update happening
 
   Scenario: I can export happening participant
     Given I am logged with "test@test.com" on admin
-    When I go to this page "/fr/event/1/happening"
-    Then I should see "admin.happening.participations.button.export"
-    When I follow "admin.happening.participations.button.export"
+    And I go to this page "/fr/event/1/happening"
+    When I press "admin.happening.participations.button.export"
     Then I should be on this page "/fr/event/1/happening"
+    And I should see "flash.admin.happening.participation.empty"
 
   Scenario: I can export happenings in french
     Given I am logged with "test@test.com" on admin

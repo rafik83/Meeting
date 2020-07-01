@@ -44,7 +44,7 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByUserAndHappening(User $user, Happening $happening)
+    public function getByUserAndHappening(User $user, Happening $happening): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -56,7 +56,7 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->setParameter('user', $user)
             ->setParameter('happening', $happening);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -81,7 +81,7 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet)
+    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -92,9 +92,9 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->andWhere('question.sheet = :sheet')
             ->setParameter('happening', $happening)
             ->setParameter('sheet', $sheet)
-            ->setMaxResults(1);
+        ;
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

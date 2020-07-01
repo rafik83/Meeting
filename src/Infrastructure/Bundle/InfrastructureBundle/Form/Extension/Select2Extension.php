@@ -67,4 +67,9 @@ class Select2Extension extends AbstractTypeExtension
     {
         return ChoiceType::class;
     }
+
+    public static function getExtendedTypes(): iterable
+    {
+        return [ChoiceType::class];
+    }
 }

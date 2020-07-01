@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class RequestAccess
@@ -18,19 +20,28 @@ class RequestAccess
     /** @var Meeting */
     public $meeting;
 
+    /** @var Participant */
+    public $participant;
+
     /** @var User */
     public $user;
+
+    /** @var Sheet */
+    public $sheet;
 
     /** @var string */
     public $locale;
 
     public function __construct(
         Meeting $meeting,
-        User $user,
+        Participant $participant,
         string $locale
     ) {
         $this->meeting = $meeting;
-        $this->user    = $user;
+        $this->participant = $participant;
         $this->locale = $locale;
+
+        $this->user = $participant->getUser();
+        $this->sheet = $participant->getSheet();
     }
 }

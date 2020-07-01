@@ -2436,6 +2436,7 @@ services:
     command.video_conference.request_access_handler:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler'
             - '@adapter.video_conference_adapter'
             - '@repository.video_conference_repository'
             - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
@@ -2780,6 +2781,11 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver
         arguments:
             - '@template.participant_info_guesser'
+
+    rule.participant_info_access_rules_resolver:
+        class: Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver
+        arguments:
+            - '@repository.rule_repository'
 
     vimeet_infrastructure.application.components.sorted_sheet:
         class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
@@ -4754,7 +4760,9 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\ParticipantsViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
+            - '@rule.participant_info_access_rules_resolver'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
 
     query.meeting_request.status_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\StateListViewQueryHandler

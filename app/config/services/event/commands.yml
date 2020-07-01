@@ -71,6 +71,38 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SortParticipants }
 
+    Proximum\Vimeet\Application\Command\Happening\Export\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Export }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExportHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExport }
+
+    Proximum\Vimeet\Application\Command\File\PersistContentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.common_export_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\File\PersistContent }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Notify }
+
     #
     # Unavailabilities
     #
@@ -99,3 +131,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting }
+
+    Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting }

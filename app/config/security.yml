@@ -69,6 +69,7 @@ security:
                 name: user_remembered
                 remember_me_parameter: login[rememberMe]
                 secret:   '%secret%'
+                secure: true
                 lifetime: 2592000
                 path:     /
             logout:
@@ -91,6 +92,7 @@ security:
                 name: user_remembered
                 remember_me_parameter: login[rememberMe]
                 secret:   '%secret%'
+                secure: true
                 lifetime: 2592000
                 path:     /
             guard:

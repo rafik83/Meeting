@@ -513,8 +513,7 @@ services:
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction:
         arguments:
@@ -1215,3 +1214,9 @@ services:
             - '@adapter.authorization_checker'
             - '@query.sheet.dashboard_view_query_handler'
             - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.common_export_path%'

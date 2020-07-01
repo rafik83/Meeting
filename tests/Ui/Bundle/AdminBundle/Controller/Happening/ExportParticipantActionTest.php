@@ -1,30 +1,18 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExport;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery;
-use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantListView;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -41,26 +29,40 @@ class ExportParticipantActionTest extends TestCase
     private $router;
 
     /** @var ObjectProphecy */
-    private $queryBus;
-
-    /** @var ObjectProphecy */
-    private $serializerAdapter;
-
-    /** @var ObjectProphecy */
     private $event;
 
     /** @var ObjectProphecy */
     private $request;
+
+    /** @var ObjectProphecy|CommandBusInterface */
+    private $commandBus;
+
+    /** @var ObjectProphecy|Admin */
+    private $admin;
+
+    /** @var AdminDomain */
+    private $adminDomain;
+
+    /** @var ExportParticipantAction */
+    private $exportParticipantAction;
 
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->queryBus = $this->prophesize(QueryBusInterface::class);
-        $this->serializerAdapter = $this->prophesize(SerializerAdapterInterface::class);
+        $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->event = $this->prophesize(Event::class);
         $this->request = $this->prophesize(Request::class);
+        $this->admin = $this->prophesize(Admin::class);
+        $this->adminDomain = new AdminDomain($this->admin->reveal());
+
+        $this->exportParticipantAction = new ExportParticipantAction(
+            $this->authorizationCheckerAdapter->reveal(),
+            $this->flashBag->reveal(),
+            $this->router->reveal(),
+            $this->commandBus->reveal()
+        );
     }
 
     public function testAccessDenied()
@@ -73,15 +75,7 @@ class ExportParticipantActionTest extends TestCase
             ->willReturn(false)
         ;
 
-        $action = new ExportParticipantAction(
-            $this->authorizationCheckerAdapter->reveal(),
-            $this->flashBag->reveal(),
-            $this->router->reveal(),
-            $this->queryBus->reveal(),
-            $this->serializerAdapter->reveal()
-        );
-
-        $action($this->request->reveal(), $this->event->reveal());
+        ($this->exportParticipantAction)($this->request->reveal(), $this->event->reveal(), $this->adminDomain);
     }
 
     public function testEmptyHappeningParticipationException()
@@ -96,8 +90,8 @@ class ExportParticipantActionTest extends TestCase
         $this->event->getAvailableLocale('de')->willReturn('fr');
         $this->event->getId()->willReturn(12);
 
-        $this->queryBus
-            ->handle(new HappeningParticipantExportViewQuery($this->event->reveal(), 'fr'))
+        $this->commandBus
+            ->handle(new ScheduleExport($this->event->reveal(), $this->admin->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willThrow(new EmptyHappeningParticipationException())
         ;
@@ -106,17 +100,11 @@ class ExportParticipantActionTest extends TestCase
 
         $this->router->generate('admin_happening_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 
-        $action = new ExportParticipantAction(
-            $this->authorizationCheckerAdapter->reveal(),
-            $this->flashBag->reveal(),
-            $this->router->reveal(),
-            $this->queryBus->reveal(),
-            $this->serializerAdapter->reveal()
+        $result = ($this->exportParticipantAction)(
+            $this->request->reveal(),
+            $this->event->reveal(),
+            $this->adminDomain
         );
-
-        $result = $action($this->request->reveal(), $this->event->reveal());
-
-        $this->assertInstanceOf(RedirectResponse::class, $result);
         $this->assertEquals('/route', $result->getTargetUrl());
     }
 
@@ -132,37 +120,20 @@ class ExportParticipantActionTest extends TestCase
         $this->event->getAvailableLocale('de')->willReturn('fr');
         $this->event->getId()->willReturn(12);
 
-        $view = $this->prophesize(HappeningParticipantListView::class);
-        $this->queryBus
-            ->handle(new HappeningParticipantExportViewQuery($this->event->reveal(), 'fr'))
+        $this->commandBus
+            ->handle(new ScheduleExport($this->event->reveal(), $this->admin->reveal(), 'fr'))
             ->shouldBeCalled()
-            ->willReturn($view->reveal())
         ;
 
-        $this->serializerAdapter->serialize(
-            $view->reveal(),
-            'csv',
-            [
-                'locale'        => 'fr',
-                'charset'       => Charset::WINDOWS_1252,
-                'csv_delimiter' => ';',
-            ]
-            )->shouldBeCalled()
-            ->willReturn('serialize_content');
+        $this->flashBag->add('success', 'flash.admin.happening.participation.export_scheduled')->shouldBeCalled();
 
-        $this->flashBag->add(Argument::any())->shouldNotBeCalled();
-        $this->router->generate(Argument::any())->shouldNotBeCalled();
+        $this->router->generate('admin_happening_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 
-        $action = new ExportParticipantAction(
-            $this->authorizationCheckerAdapter->reveal(),
-            $this->flashBag->reveal(),
-            $this->router->reveal(),
-            $this->queryBus->reveal(),
-            $this->serializerAdapter->reveal()
+        $result = ($this->exportParticipantAction)(
+            $this->request->reveal(),
+            $this->event->reveal(),
+            $this->adminDomain
         );
-
-        $result = $action($this->request->reveal(), $this->event->reveal());
-
-        $this->assertInstanceOf(CsvFileResponse::class, $result);
+        $this->assertEquals('/route', $result->getTargetUrl());
     }
 }

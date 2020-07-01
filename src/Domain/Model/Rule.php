@@ -57,6 +57,12 @@ class Rule
      */
     private $priority;
 
+    /** @var int|null */
+    private $phoneAccessMinEvaluation;
+
+    /** @var int|null */
+    private $emailAccessMinEvaluation;
+
     /**
      * Rule constructor.
      *
@@ -202,13 +208,27 @@ class Rule
         return $this->priority;
     }
 
+    public function getPhoneAccessMinEvaluation(): ?int
+    {
+        return $this->phoneAccessMinEvaluation;
+    }
+
+    public function getEmailAccessMinEvaluation(): ?int
+    {
+        return $this->emailAccessMinEvaluation;
+    }
+
     /**
      * @param array $what
-     * @param int   $priority
+     * @param int $priority
+     * @param int|null $phoneAccessMinEvaluation
+     * @param int|null $emailAccessMinEvaluation
      */
-    public function update(array $what, $priority)
+    public function update(array $what, $priority, ?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation)
     {
         $this->what     = $what;
         $this->priority = $priority;
+        $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
+        $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
     }
 }

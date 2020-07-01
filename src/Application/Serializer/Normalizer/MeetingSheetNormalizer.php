@@ -103,7 +103,7 @@ class MeetingSheetNormalizer extends AbstractNormalizer implements NormalizerInt
     /**
      * @return array
      */
-    private function getCommonFieldsKey()
+    private static function getCommonFieldsKey()
     {
         return [
             self::COL_EVENT_NAME,
