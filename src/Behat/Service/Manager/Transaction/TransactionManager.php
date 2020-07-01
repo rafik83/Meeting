@@ -17,10 +17,27 @@ class TransactionManager
         $this->transactionRepository = $transactionRepository;
     }
 
+    public function createPaidTransaction(
+        Sheet $sheet,
+        float $amount,
+        string $reference
+    ): Transaction {
+        return $this->createTransaction($sheet, $amount, $reference, Transaction::STATE_PAID);
+    }
+
     public function createPendingTransaction(
         Sheet $sheet,
         float $amount,
         string $reference
+    ): Transaction {
+        return $this->createTransaction($sheet, $amount, $reference, Transaction::STATE_PENDING);
+    }
+
+    private function createTransaction(
+        Sheet $sheet,
+        float $amount,
+        string $reference,
+        string $status
     ): Transaction {
         $date = new \DateTime();
 
@@ -30,7 +47,7 @@ class TransactionManager
             $date,
             Mode::PAYMENT_BANK_CASH,
             $reference,
-            Transaction::STATE_PENDING,
+            $status,
             $sheet->getEvent()->getCurrency()
         );
 

@@ -10,11 +10,13 @@ Feature: Navigate in my notification
     And there is a plan called "Formule premium" with a price of "99"
     And this plan is assigned to this package
     And there is a sheet for this type with the title "Proximum"
+    And there is billing info for this sheet
     And the user "user_asddays_1@proximum.com" is created
     And there is a participant for this sheet and this user
     And the completeness of this sheet for the locale "fr" is 80
     And there is an order with the amount of 300 for this sheet
-    And there is a pending transaction with reference "ref_1" and amount 150 for this sheet
+    And there is a paid transaction with reference "ref_1" and amount 150 for this sheet
+    And there is a pending transaction with reference "ref_2" and amount 150 for this sheet
     And there is a package selected notification for this sheet
     And there is a sheet translation completeness notification for this sheet
     And there is a pending transaction notification for this sheet
