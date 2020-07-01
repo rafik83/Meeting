@@ -17,18 +17,16 @@ class Update extends AbstractHappeningCommand
     /** @var Happening */
     public $happening;
 
-    /**
-     * @param Happening $happening
-     */
     public function __construct(Happening $happening)
     {
-        $this->happening        = $happening;
-        $this->category         = $happening->getCategory();
-        $this->begin            = $happening->getBegin();
-        $this->end              = $happening->getEnd();
-        $this->questionAllowed  = $happening->isQuestionAllowed();
+        $this->happening = $happening;
+        $this->category = $happening->getCategory();
+        $this->begin = $happening->getBegin();
+        $this->end = $happening->getEnd();
+        $this->questionAllowed = $happening->isQuestionAllowed();
         $this->limitParticipant = $happening->getLimitParticipant();
-        $this->invitationCode   = $happening->getInvitationCode();
+        $this->invitationCode = $happening->getInvitationCode();
+        $this->liveUrl = $happening->getLiveUrl();
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;
@@ -61,7 +59,7 @@ class Update extends AbstractHappeningCommand
 
         foreach ($happening->getSpeakers() as $position => $speaker) {
             $this->talkings[] = [
-                'speaker'  => $speaker,
+                'speaker' => $speaker,
                 'position' => $position,
             ];
         }

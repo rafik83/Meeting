@@ -30,12 +30,24 @@ class SeeWhat
     public $priority;
 
     /**
+     * @var int
+     */
+    public $phoneAccessMinEvaluation;
+
+    /**
+     * @var int
+     */
+    public $emailAccessMinEvaluation;
+
+    /**
      * @param Rule $rule
      */
     public function __construct(Rule $rule)
     {
-        $this->rule     = $rule;
+        $this->rule = $rule;
         $this->priority = $rule->getPriority();
-        $this->seeWhat  = $rule->getWhat();
+        $this->seeWhat = $rule->getWhat();
+        $this->phoneAccessMinEvaluation = $rule->getPhoneAccessMinEvaluation();
+        $this->emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
     }
 }

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - VIMEET-2154 - securize impersonation
 
+## [2.35.1] - 2020-06-30
+### Fixed
+- Hotfix - Get / export many happening questions instead of one or null
+
+## [2.35.0] - 2020-06-30
+### Added
+- VIMEET-2171 - Add participant to meeting when accessing to a videoconference meeting
+- VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
+- VIMEET-2126 Add - Export all participants of sheet met
+- VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
+- VIMEET-2153 - secure cookies
+
 ## [2.34.0] - 2020-06-25
 ### Added
 - MV-240 - Asynchronous export of happening participants

@@ -131,3 +131,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting }
+
+    Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting }

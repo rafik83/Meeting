@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\VideoConference;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler;
 use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
@@ -20,6 +22,9 @@ use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
 {
+    /** @var AddParticipantToMeetingHandler */
+    private $addParticipantToMeetingHandler;
+
     /** @var VideoConferenceRepositoryInterface */
     private $videoConferenceRepository;
 
@@ -30,10 +35,12 @@ class RequestAccessHandler
     private $visioSettingsRetriever;
 
     public function __construct(
+        AddParticipantToMeetingHandler $addParticipantToMeetingHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         VideoConferenceRepositoryInterface $videoConferenceRepository,
         VisioSettingsRetriever $visioSettingsRetriever
     ) {
+        $this->addParticipantToMeetingHandler = $addParticipantToMeetingHandler;
         $this->videoConferenceRepository = $videoConferenceRepository;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->visioSettingsRetriever = $visioSettingsRetriever;
@@ -48,6 +55,10 @@ class RequestAccessHandler
      */
     public function handle(RequestAccess $requestAccess): VideoConferenceView
     {
+        $this->addParticipantToMeetingHandler->handle(
+            new AddParticipantToMeeting($requestAccess->participant, $requestAccess->meeting)
+        );
+
         $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
         $visioSettings = $this->visioSettingsRetriever->get($requestAccess->meeting->getEvent());
 

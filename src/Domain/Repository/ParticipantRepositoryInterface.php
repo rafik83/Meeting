@@ -231,6 +231,8 @@ interface ParticipantRepositoryInterface
         \DateTimeInterface $end
     );
 
+    public function isAvailableForMeeting(array $participants, Meeting $meeting): bool;
+
     /**
      * @param Sheet $sheet
      *

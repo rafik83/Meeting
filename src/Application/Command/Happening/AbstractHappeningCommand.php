@@ -50,6 +50,9 @@ class AbstractHappeningCommand implements Command
     /** @var bool */
     public $webinar;
 
+    /** @var string|null $liveUrl url for iframe live (webinar only) */
+    public $liveUrl;
+
     /** @var string */
     public $happeningType = self::TYPE_DEFAULT;
 

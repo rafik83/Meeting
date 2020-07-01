@@ -109,8 +109,6 @@ class HappeningParticipantExportViewQueryHandler
      */
     public function buildView(Happening $happening, User $user, Event $event, $locale)
     {
-        $question = null;
-
         try {
             $sheetName = $this->groupNameResolver->resolve($event, $user);
         } catch (\Exception $exception) {
@@ -123,9 +121,7 @@ class HappeningParticipantExportViewQueryHandler
             $sheet = null;
         }
 
-        if (null !== $sheet) {
-            $question = $this->questionRepository->findByHappeningAndSheet($happening, $sheet);
-        }
+        $questions = null !== $sheet ? $this->questionRepository->findByHappeningAndSheet($happening, $sheet) : [];
 
         $timezone = $event->getTimeZone();
 
@@ -137,7 +133,9 @@ class HappeningParticipantExportViewQueryHandler
             $happening->getTitle($locale),
             null !== $sheet ? $sheet->getId() : '',
             $user->getId(),
-            null !== $question ? $question->getContent() : '',
+            implode("\n", array_map(static function (Happening\Question $question) {
+                return $question->getContent();
+            }, $questions)),
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),

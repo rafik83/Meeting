@@ -50,7 +50,8 @@ class CreateHandler
             $create->limitParticipant,
             $create->invitationCode,
             $create->isWebinar(),
-            $create->isInteractiveWebinar()
+            $create->isInteractiveWebinar(),
+            $create->liveUrl
         );
 
         foreach ($create->translations as $locale => $translation) {
