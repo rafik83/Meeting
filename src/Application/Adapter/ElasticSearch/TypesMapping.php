@@ -45,10 +45,12 @@ final class TypesMapping
                     'type' => 'integer',
                 ],
                 self::USER_EVENT_VIEW_FIRSTNAME => [
-                    'type' => 'string',
+                    'type' => 'text',
+                    'fielddata' => true,
                 ],
                 self::USER_EVENT_VIEW_LASTNAME => [
-                    'type' => 'string',
+                    'type' => 'text',
+                    'fielddata' => true,
                 ],
                 self::USER_EVENT_VIEW_EMAIL => [
                     'type' => 'string',

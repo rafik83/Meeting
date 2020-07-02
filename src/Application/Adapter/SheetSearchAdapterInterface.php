@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Elastica\Result;
@@ -22,19 +14,19 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface SheetSearchAdapterInterface
 {
-    const ES_FIELD_TYPE                  = 'type';
-    const ES_FIELD_CATEGORIES            = 'categories.id';
-    const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
-    const ES_FIELD_IN_CATALOG            = 'inCatalog';
-    const ES_FIELD_POSITION              = 'position';
+    public const ES_FIELD_TYPE                  = 'type';
+    public const ES_FIELD_CATEGORIES            = 'categories.id';
+    public const ES_FIELD_ORGANIZATION_CATEGORY = 'organizationCategory';
+    public const ES_FIELD_IN_CATALOG            = 'inCatalog';
+    public const ES_FIELD_POSITION              = 'position';
 
     /** ElasticSearch keys */
-    const ES_BUCKETS   = 'buckets';
-    const ES_DOC_COUNT = 'doc_count';
-    const ES_KEY       = 'key';
+    public const ES_BUCKETS   = 'buckets';
+    public const ES_DOC_COUNT = 'doc_count';
+    public const ES_KEY       = 'key';
 
-    const ES_PATH_POSITION   = 'participants';
-    const ES_PATH_CATEGORIES = 'categories';
+    public const ES_PATH_POSITION   = 'participants';
+    public const ES_PATH_CATEGORIES = 'categories';
 
     /**
      * @param Event               $event

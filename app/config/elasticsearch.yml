@@ -36,6 +36,7 @@ fos_elastica:
                         sheetName:
                             type: text
                             analyzer: "sheetAnalyzer"
+                            fielddata: true
                             fields:
                                 raw:
                                     type: string

@@ -252,7 +252,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query->setStoredFields(['id']);
 
         return array_map(static function (Result $sheet) {
-            return $sheet->id[0];
+            return $sheet->getId();
         }, $this->searchable->search($query, ['limit' => ElasticSearchConstant::LONG_RESULTS_NUMBER])->getResults());
     }
 
@@ -268,7 +268,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         return array_map(static function (Result $result) {
-            return new SheetListView($result->id, $result->sheetName, $result->ownerEmail);
+            return new SheetListView($result->getId(), $result->sheetName, $result->ownerEmail);
         }, $results);
     }
 
@@ -280,7 +280,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         $sheetIds = array_map(static function (Result $result) {
-            return $result->id;
+            return $result->getId();
         }, $results);
 
         return new SheetIdsView($sheetIds);
@@ -294,7 +294,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale);
 
         $sheetIds = array_map(static function (Result $result) {
-            return $result->id;
+            return $result->getId();
         }, $results);
 
         return new ParticipantsSheetIdsView($sheetIds);

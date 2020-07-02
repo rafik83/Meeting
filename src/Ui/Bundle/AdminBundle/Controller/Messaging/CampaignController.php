@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuer
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
-use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\CreateCampaignType;
