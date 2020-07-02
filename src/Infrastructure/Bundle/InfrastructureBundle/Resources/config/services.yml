@@ -3047,6 +3047,7 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@monolog.logger'
 
     adapter.sendgrid_api_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter

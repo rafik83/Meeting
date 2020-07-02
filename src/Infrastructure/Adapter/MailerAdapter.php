@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Psr\Log\LoggerInterface;
 
 class MailerAdapter implements MailerInterface
 {
@@ -26,16 +27,19 @@ class MailerAdapter implements MailerInterface
     /** @var TranslatorAdapter */
     private $translator;
 
-    /**
-     * @param \Swift_Mailer     $mailer
-     * @param \Twig_Environment $twig
-     * @param TranslatorAdapter $translator
-     */
-    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig, TranslatorAdapter $translator)
-    {
-        $this->mailer     = $mailer;
-        $this->twig       = $twig;
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(
+        \Swift_Mailer $mailer,
+        \Twig_Environment $twig,
+        TranslatorAdapter $translator,
+        LoggerInterface $logger
+    ) {
+        $this->mailer = $mailer;
+        $this->twig = $twig;
         $this->translator = $translator;
+        $this->logger = $logger;
     }
 
     /**
@@ -79,7 +83,26 @@ class MailerAdapter implements MailerInterface
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
-        $this->mailer->send($message);
+        $failedRecipients = [];
+        $this->mailer->send($message, $failedRecipients);
+
+        $context = ['subject' => $subject, 'messageId' => $mail->getMessageId()];
+
+        foreach ($mail->getReceivers() as $receiver) {
+            if (in_array($receiver, $failedRecipients, true)) {
+                $this->logger->error(
+                    sprintf('Failed to send email to %s', $receiver),
+                    $context + ['to' => $receiver]
+                );
+
+                continue;
+            }
+
+            $this->logger->info(
+                sprintf('Email sent to %s', $receiver),
+                $context + ['to' => $receiver]
+            );
+        }
     }
 
     protected function getMailer()
