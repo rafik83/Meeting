@@ -44,6 +44,7 @@ class CreateHandlerTest extends TestCase
             'toto',
             true,
             true,
+            null,
             true
         );
         $expectedTranslation = new Happening\HappeningTranslation(

@@ -71,6 +71,7 @@ class UpdateHandlerTest extends TestCase
             'titi',
             true,
             false,
+            null,
             true
         );
         $expectedTranslation = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
