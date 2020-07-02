@@ -6,18 +6,10 @@ Feature: See, create and update mass unavailability
 
   Scenario: I can create a mass unavailability
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml                |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml         |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml                   |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml            |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml                |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml                 |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml                    |
-      | @InfrastructureBundle/DataFixtures/ORM/Unavailability/RdvCarnot2016-Category.yml |
-      | Admin.yml                                                                        |
-    And I am logged with "test@test.com" on admin
+    And the event "To be or not to be" is created
+    And there is a mass unavailability category called "Pause" for this event
+    And there is a type in this event
+    And I am logged as admin
     When I go to this page "/fr/event/1/unavailability/mass"
     And I follow "admin.unavailability.mass.add"
     And I should be on this page "/fr/event/1/unavailability/mass/create"
@@ -36,7 +28,7 @@ Feature: See, create and update mass unavailability
     And I should see "Mass Unavailability in french"
 
   Scenario: I can update a mass unavailability
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event/1/unavailability/mass/update/1"
     When I fill in the following:
       | unavailability_mass_update[category]                | 1                                      |

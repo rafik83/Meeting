@@ -39,20 +39,44 @@ class RegistrationTemplateManager
             [
                 '211b2168' => [
                     'component' => 'block',
-                    'type'      => '8-4',
-                    'config'    => [],
-                    'children'  => [
+                    'type' => '8-4',
+                    'config' => [],
+                    'children' => [
                         [
                             '0aea62b2' => [
                                 'component' => 'object',
-                                'type'      => 'editable-text',
-                                'config'    => [
-                                    'label'       => ['fr' => 'Titre'],
+                                'type' => 'editable-text',
+                                'config' => [
+                                    'label' => ['fr' => 'Titre'],
                                     'placeholder' => ['fr' => 'Le titre'],
-                                    'help'        => ['fr' => 'Ici le titre'],
-                                    'length'      => 200,
-                                    'required'    => true,
-                                    'tags'        => ['sheet_title', 'sheet_data'],
+                                    'help' => ['fr' => 'Ici le titre'],
+                                    'length' => 200,
+                                    'required' => true,
+                                    'tags' => ['sheet_title', 'sheet_data'],
+                                ],
+                            ],
+                            '0aea62b3' => [
+                                'component' => 'object',
+                                'type' => 'editable-text',
+                                'config' => [
+                                    'label'=> ['fr' => 'Prénom'],
+                                    'placeholder' => ['fr' => 'Votre prénom'],
+                                    'help' => ['fr' => 'Ici le prénom'],
+                                    'length' => 200,
+                                    'required' => false,
+                                    'tags' => ['participant_firstname', 'participant_data'],
+                                ],
+                            ],
+                            '0aea62b4' => [
+                                'component' => 'object',
+                                'type' => 'editable-text',
+                                'config' => [
+                                    'label' => ['fr' => 'Nom'],
+                                    'placeholder' => ['fr' => 'Votre nom'],
+                                    'help' => ['fr' => 'Ici le nom'],
+                                    'length' => 200,
+                                    'required' => false,
+                                    'tags'=> ['participant_lastname', 'participant_data'],
                                 ],
                             ],
                         ],
@@ -60,7 +84,7 @@ class RegistrationTemplateManager
                 ],
             ],
             $event->getLocales(),
-            $event->getFallback(),
+            $event->getLocaleFallback(),
             new \DateTime(),
             $event
         );

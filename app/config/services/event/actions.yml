@@ -313,3 +313,12 @@ services:
             - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
             - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+
+    #
+    # Notification
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Notification\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'

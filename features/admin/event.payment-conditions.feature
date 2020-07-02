@@ -5,13 +5,8 @@ Feature: See and update payment conditions
 
   Scenario: Set payment conditions
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
+    And the event "L'argent ne fait pas le bonheur" is created
+    And I am logged as admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.paymentConditions.link"
     Then the response status code should be 200
@@ -31,7 +26,7 @@ Feature: See and update payment conditions
 
 
   Scenario: See payment conditions
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.paymentConditions.link"
     Then the response status code should be 200
