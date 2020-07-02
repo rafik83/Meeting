@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
-use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
@@ -37,21 +36,16 @@ class ChangeMailHandler
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    /** @var PasswordEncoderInterface */
-    private $passwordEncoder;
-
     public function __construct(
         UserRepositoryInterface $userRepository,
         ChangeMailTokenRepositoryInterface $changeMailTokenRepository,
         ChangeMailTokenGenerator $changeMailTokenGenerator,
-        EventDispatcherInterface $eventDispatcher,
-        PasswordEncoderInterface $passwordEncoder
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository = $userRepository;
         $this->changeMailTokenRepository = $changeMailTokenRepository;
         $this->changeMailTokenGenerator = $changeMailTokenGenerator;
         $this->eventDispatcher = $eventDispatcher;
-        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -63,10 +57,6 @@ class ChangeMailHandler
     public function handle(ChangeMail $changeMail)
     {
         $user = $changeMail->user;
-
-        if ($user->getPassword() !== $this->passwordEncoder->encode($user, $changeMail->password)) {
-            throw new InvalidPasswordException();
-        }
 
         if (null === $changeMail->mail) {
             throw new EmptyFieldException();

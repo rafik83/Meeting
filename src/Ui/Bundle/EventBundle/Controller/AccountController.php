@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Application\Exception\User\InvalidPasswordException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -51,8 +50,6 @@ class AccountController extends Controller
                 $this->addFlash('success', 'flash.change_mail.success');
 
                 return $this->redirectToRoute('event');
-            } catch (InvalidPasswordException $exception) {
-                $form->get('password')->addError(new FormError('validators.currentPassword'));
             } catch (EmailAlreadyExistsException $exception) {
                 $form->get('mail')->addError(new FormError('validators.emailAlreadyExist'));
             } catch (SameEmailException $exception) {
