@@ -936,6 +936,22 @@ event_sheet_happening_webinar_question_add:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
 
+event_happening_webinar_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\RecordAction
+
+event_happening_webinar_stop_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stop-record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StopRecordAction
+
 #
 # Unavailability
 #
