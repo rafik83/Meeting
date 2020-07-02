@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
+### Fixed
+- MV-243 - Add media link in sheet pdf printing
 
 ## [2.35.1] - 2020-06-30
 ### Fixed
