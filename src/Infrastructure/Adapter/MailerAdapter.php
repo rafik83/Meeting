@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Psr\Log\LoggerInterface;
+use function Sentry\captureEvent;
 
 class MailerAdapter implements MailerInterface
 {
@@ -54,7 +55,7 @@ class MailerAdapter implements MailerInterface
         $body = $template->render(['mail' => $mail]);
 
         if ($mail->hasToTranslateSubject()) {
-            $subject  = $this->translator->trans(
+            $subject = $this->translator->trans(
                 $mail->getSubject(),
                 $mail->getSubjectParameters(),
                 'mail',
@@ -66,15 +67,20 @@ class MailerAdapter implements MailerInterface
 
         $message = new \Swift_Message($subject);
         $message->setFrom($mail->getSender());
+        $receivers = array_unique($mail->getReceivers());
 
-        foreach ($mail->getReceivers() as $receiver) {
+        foreach ($receivers as $receiver) {
             $message->addTo($receiver);
         }
 
         if (true === $mail->sendToEmailTeam()
             && ($mail instanceof UserMail || $mail instanceof AbstractCustomizedMail)
         ) {
-            $message->setBcc($mail->getEvent()->getEmailTeam());
+            $mailTeam = $mail->getEvent()->getEmailTeam();
+
+            if (!in_array($mailTeam, $receivers, true)) {
+                $message->setBcc($mailTeam);
+            }
         }
 
         $message
@@ -83,16 +89,31 @@ class MailerAdapter implements MailerInterface
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
-        $failedRecipients = [];
-        $this->mailer->send($message, $failedRecipients);
+        $failedReceivers = [];
+        $this->mailer->send($message, $failedReceivers);
 
-        $context = ['subject' => $subject, 'messageId' => $mail->getMessageId()];
+        $this->handleResults(
+            $receivers,
+            $failedReceivers,
+            $subject,
+            $mail->getMessageId()
+        );
+    }
 
-        foreach ($mail->getReceivers() as $receiver) {
-            if (in_array($receiver, $failedRecipients, true)) {
-                $this->logger->error(
-                    sprintf('Failed to send email to %s', $receiver),
-                    $context + ['to' => $receiver]
+    protected function handleResults(array $receivers, array $failedReceivers, string $subject, string $messageId)
+    {
+        $context = ['subject' => $subject, 'messageId' => $messageId];
+
+        foreach ($receivers as $receiver) {
+            if (in_array($receiver, $failedReceivers, true)) {
+                $errorMessage = sprintf('Failed to send email %s to %s', $messageId, $receiver);
+                $this->logger->error($errorMessage, $context + ['to' => $receiver]);
+                captureEvent(
+                    [
+                        'message' => $errorMessage,
+                        'level' => 'error',
+                        'extra' => ['to' => $receiver] + $context
+                    ]
                 );
 
                 continue;
