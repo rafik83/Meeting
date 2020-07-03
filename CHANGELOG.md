@@ -4,12 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.36.0] - 2020-07-03
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
 ### Fixed
 - MV-242 - Fix meeting / contact evaluations on event dashboard
 - MV-243 - Add media link in sheet pdf printing
-
 ### Added
 - VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
