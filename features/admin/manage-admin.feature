@@ -5,25 +5,19 @@ Feature: Manage Admin
 
   Scenario: I can create an Organizer link to an event
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admin.yml                                                                |
+    And the super admin "test@test.com" is created
+    And the event "Les rendez-vous CARNOT 2016" is created
     And I am logged with "test@test.com" on admin
     When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
     Then I should be on this page "/fr/admin"
-    And I should see "DUPONT"
+    And I should see "Teemiv"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     Then I follow "admin.admin_list.action.create"
     And I should be on this page "/fr/admin/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | organizer@organizer.com |
-      | form.create_admin.children.password.label  | 123456789               |
+      | form.create_admin.children.password.label  | 123456789-Vimeet        |
       | form.create_admin.children.lastname.label  | Toto                    |
       | form.create_admin.children.firstname.label | Tata                    |
     And I select "form.create_admin.role.organizer" from "form.create_admin.children.role.label"
@@ -38,14 +32,14 @@ Feature: Manage Admin
     When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
     Then I should be on this page "/fr/admin"
-    And I should see "DUPONT"
+    And I should see "Teemiv"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     And I should see ""
     Then I follow "admin.admin_list.action.create"
     And I should be on this page "/fr/admin/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | disabled@organizer.com |
-      | form.create_admin.children.password.label  | 123456789              |
+      | form.create_admin.children.password.label  | 123456789-Vimeet2      |
       | form.create_admin.children.lastname.label  | Toto                   |
       | form.create_admin.children.firstname.label | Tata                   |
     And I select "form.create_admin.role.organizer" from "form.create_admin.children.role.label"
@@ -59,14 +53,14 @@ Feature: Manage Admin
     When I go to this page "/fr/event"
     And I follow "admin.admin_list.link"
     Then I should be on this page "/fr/admin"
-    And I should see "DUPONT"
+    And I should see "Teemiv"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
     And I should see ""
     Then I follow "admin.admin_list.action.create"
     And I should be on this page "/fr/admin/create"
     Then I fill in the following:
       | form.create_admin.children.email.label     | event-admin@organizer.com |
-      | form.create_admin.children.password.label  | 123456789                 |
+      | form.create_admin.children.password.label  | 123456789-Vimeet3         |
       | form.create_admin.children.lastname.label  | Toto                      |
       | form.create_admin.children.firstname.label | Tata                      |
     And I select "form.create_admin.role.super_admin" from "form.create_admin.children.role.label"

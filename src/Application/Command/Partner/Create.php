@@ -1,56 +1,35 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Partner;
 
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Components\Security\PasswordGenerator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Create
+class Create implements Command
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $password;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $organizer;
 
-    /**
-     * @var Type[]
-     */
+    /** @var Type[] */
     public $types;
 
-    /**
-     * @param Admin $organizer
-     */
     public function __construct(Admin $organizer)
     {
         $this->organizer = $organizer;
-        $this->password  = substr(md5(uniqid()), 0, 8);
+        $this->password = PasswordGenerator::generate(12);
     }
 }

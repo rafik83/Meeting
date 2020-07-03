@@ -1,0 +1,21 @@
+Proximum\Vimeet\Application\Command\Partner\Create:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email:
+                  message: validators.email
+                  strict: true
+        password:
+            - NotBlank: ~
+            - Length:
+                  min: 12
+                  minMessage: validators.password.min
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneNumber: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneUppercase: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneLowercase: ~
+        lastname:
+            - NotBlank: ~
+        firstname:
+            - NotBlank: ~
+        types:
+            - NotBlank: ~

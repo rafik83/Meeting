@@ -11,6 +11,7 @@ form.add_participant.children.data.label: 'Coordonnées du participant'
 form.add_participant.children.email.label: Email
 form.add_participant.children.submit.label: Envoyer
 form.add_products.children.submit.label: 'Valider les produits'
+form.admin_password.rules: 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 12 caractères.'
 form.registration_path_question.children.answers.label: Réponses
 form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
 form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'

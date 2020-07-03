@@ -7,8 +7,11 @@ Proximum\Vimeet\Application\Command\Admin\Update:
                 strict: true
         password:
             - Length:
-                min: 8
-                minMessage: validators.password.min
+                  min: 12
+                  minMessage: validators.password.min
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneNumber: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneUppercase: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneLowercase: ~
         lastname:
             - NotBlank: ~
         firstname:

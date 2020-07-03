@@ -21,12 +21,12 @@ admin_logout:
 admin_account:
     path: /account
     methods: [GET]
-    defaults: { _controller: AdminBundle:Account:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction
 
 admin_update_password:
     path: /account/password
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Account:updatePassword }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction
 
 #
 # Create Admin/Organizer
@@ -40,12 +40,12 @@ admin_list_admin:
 admin_create_admin:
     path: /admin/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Admin:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\CreateAction
 
 admin_update_admin:
     path: /admin/update/{admin}
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Admin:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\UpdateAction
 
 admin_delete_admin:
     path: /admin/delete/{type}/{admin}
@@ -56,7 +56,7 @@ admin_delete_admin:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction }
 
 #
-# Create Operator
+# Operator
 #
 
 admin_list_operator:
@@ -67,30 +67,29 @@ admin_list_operator:
 admin_create_operator:
     path: /operator/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Operator:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\CreateAction
 
 admin_update_operator:
     path: /operator/update/{operator}
     methods: [GET, POST]
     requirements:
         operator: \d+
-    defaults: { _controller: AdminBundle:Operator:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\UpdateAction
 
 #
-# Create Partner
+# Partner
 #
-
 admin_create_partner:
     path: /partner/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Partner:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\CreateAction
 
 admin_update_partner:
     path: /partner/update/{partner}
     methods: [GET, POST]
     requirements:
         partner: \d+
-    defaults: { _controller: AdminBundle:Partner:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\UpdateAction
 
 #
 # Activate Operator account
