@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Unavailability;
 
 use Proximum\Vimeet\Domain\Model\AbstractCategory;
@@ -21,8 +13,6 @@ class Category extends AbstractCategory
     private $title;
 
     /**
-     * Category constructor.
-     *
      * @param Event  $event
      * @param string $picto
      * @param string $title

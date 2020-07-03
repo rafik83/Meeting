@@ -676,8 +676,10 @@ event_meeting_request_export_contact:
 #
 event_notification_list:
     path: /sheet/{sheet}/notification
+    requirements:
+        sheet: \d+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Notification:list }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Notification\ListAction
 
 #
 # Content
