@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
+use Proximum\Vimeet\Domain\Repository\Happening\RecordArchiveRepositoryInterface;
 
 class RecordHandler
 {
@@ -13,11 +14,16 @@ class RecordHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var RecordArchiveRepositoryInterface */
+    private $recordArchiveRepository;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        RecordArchiveRepositoryInterface $recordArchiveRepository,
         \DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -36,5 +42,7 @@ class RecordHandler
             $videoConferenceArchive->id,
             $this->dateTime
         );
+
+        $this->recordArchiveRepository->add($recordArchive);
     }
 }
