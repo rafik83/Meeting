@@ -469,6 +469,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\User\UserEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: kernel.event_subscriber }
 

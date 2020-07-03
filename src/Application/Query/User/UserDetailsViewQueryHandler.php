@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\User;
 
 use Proximum\Vimeet\Application\View\User\UserDetailsView;
@@ -52,7 +44,7 @@ class UserDetailsViewQueryHandler
         return new UserDetailsView($query->event, $query->user, $userSheetListView);
     }
 
-    private function hasSheetInEvent(array $sheets, Event $event)
+    private function hasSheetInEvent(array $sheets, Event $event): bool
     {
         foreach ($sheets as $sheet) {
             if ($sheet->getEvent() === $event) {
