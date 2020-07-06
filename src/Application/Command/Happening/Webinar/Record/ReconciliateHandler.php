@@ -8,7 +8,7 @@ use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
-class StopRecordHandler
+class ReconciliateHandler
 {
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
@@ -20,8 +20,8 @@ class StopRecordHandler
     private $dateTime;
 
     public function __construct(
-        VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
+        VideoConferenceAdapterInterface $videoConferenceAdapter,
         \DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
@@ -29,29 +29,25 @@ class StopRecordHandler
         $this->dateTime = $dateTime;
     }
 
-    public function handle(StopRecord $stopRecord): void
+    public function handle(Reconciliate $reconciliate): void
     {
-        $happening = $stopRecord->happening;
+        $happening = $reconciliate->happening;
 
+        $listArchive = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
         $recordArchives = $this->recordArchiveRepository->getRecordArchivesForHappening($happening);
         $recordArchivesIndexedByArchiveId = $this->indexRecordArchivesByArchiveId($recordArchives);
-        $archives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
 
         /** @var Archive $archive */
-        foreach ($archives->getItems() as $archive) {
-            if ($archive->status === RecordStatus::STARTED) {
-                $this->videoConferenceAdapter->stopArchive($archive->id);
-            }
-
+        foreach ($listArchive->getItems() as $archive) {
             if (isset($recordArchivesIndexedByArchiveId[$archive->id])) {
                 $recordArchive = $recordArchivesIndexedByArchiveId[$archive->id];
 
-                if (!$recordArchive->isStopped()) {
+                if ($archive->status !== RecordStatus::STARTED) {
                     $recordArchive->stop();
-                    $this->addPathToRecordArchive($archive, $recordArchive);
-
-                    $this->recordArchiveRepository->update($recordArchive);
                 }
+
+                $this->addPathToRecordArchive($archive, $recordArchive);
+                $this->recordArchiveRepository->update($recordArchive);
 
                 continue;
             }

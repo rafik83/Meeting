@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use InvalidArgumentException;
 use OpenTok\Archive;
+use OpenTok\ArchiveList;
 use OpenTok\Layout;
 use OpenTok\MediaMode;
 use OpenTok\OpenTok;
@@ -95,6 +96,11 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     public function getArchive(string $archiveId): Archive
     {
         return $this->openTok->getArchive($archiveId);
+    }
+
+    public function listArchives(string $sessionId): ArchiveList
+    {
+        return $this->openTok->listArchives(0, null, $sessionId);
     }
 
     /**
