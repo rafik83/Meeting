@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecord;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -52,6 +53,8 @@ class StopRecordAction
         ) {
             throw new AccessDeniedException('Access denied to this happening');
         }
+
+        $this->commandBus->handle(new StopRecord($happening));
 
         return new JsonResponse([
             'status' => 'ok',

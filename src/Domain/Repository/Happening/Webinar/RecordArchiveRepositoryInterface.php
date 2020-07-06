@@ -9,5 +9,12 @@ interface RecordArchiveRepositoryInterface
 {
     public function add(RecordArchive $recordArchive): void;
 
+    public function update(RecordArchive $recordArchive): void;
+
+    /**
+     * @param Happening $happening
+     *
+     * @return RecordArchive[]
+     */
     public function getStartedRecordArchiveForHappening(Happening $happening): array;
 }

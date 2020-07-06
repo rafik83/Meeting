@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
-use Proximum\Vimeet\Domain\Repository\Happening\RecordArchiveRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
 class RecordHandler
 {

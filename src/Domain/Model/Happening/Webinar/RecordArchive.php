@@ -65,4 +65,9 @@ class RecordArchive
     {
         return $this->path;
     }
+
+    public function stop(): void
+    {
+        $this->status = RecordStatus::STOPPED;
+    }
 }
