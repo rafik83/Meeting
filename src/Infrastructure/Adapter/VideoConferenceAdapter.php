@@ -92,6 +92,11 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         return $this->openTok->stopArchive($archiveId);
     }
 
+    public function getArchive(string $archiveId): Archive
+    {
+        return $this->openTok->getArchive($archiveId);
+    }
+
     /**
      * {@inheritdoc}
      */
