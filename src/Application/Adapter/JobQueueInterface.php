@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -79,7 +71,7 @@ interface JobQueueInterface
      * @param string $locale
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
-    
+
     public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void;
 
     /**
