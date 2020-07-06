@@ -70,4 +70,14 @@ class RecordArchive
     {
         $this->status = RecordStatus::STOPPED;
     }
+
+    public function addPathToRecordArchive(string $path): void
+    {
+        $this->path = $path;
+    }
+
+    public function isStopped(): bool
+    {
+        return $this->status === RecordStatus::STOPPED;
+    }
 }

@@ -16,5 +16,5 @@ interface RecordArchiveRepositoryInterface
      *
      * @return RecordArchive[]
      */
-    public function getStartedRecordArchiveForHappening(Happening $happening): array;
+    public function getRecordArchivesForHappening(Happening $happening): array;
 }
