@@ -61,7 +61,7 @@ set :keep_releases, 3
 
 # Tasks
 before 'symfony:cache:warmup', 'app_tasks:install'
-after 'symfony:cache:warmup', 'symfony:doctrine:migrations:migrate'
+after 'symfony:cache:warmup', 'app_tasks:db-migration'
 after :deploy, 'app_tasks:php'
 after :deploy, 'app_tasks:supervisor'
 after :deploy, 'app_tasks:redisflushdb'
@@ -69,6 +69,11 @@ after :deploy, 'deploy:cleanup'
 after :deploy, 'app_tasks:translations_update'
 
 namespace :app_tasks do
+  task :db-migration do
+    capifony_pretty_print "--> Doctrine migration"
+    invoke_command "cd #{latest_release} && make migration@prod", :via => run_method
+    capifony_puts_ok
+  end
   task :php do
     capifony_pretty_print "--> Restarting PHP"
     invoke_command "sudo /usr/sbin/service php7.2-fpm reload", :via => run_method
