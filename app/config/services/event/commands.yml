@@ -160,7 +160,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
 
-
     #
     # Sheet object
     #
@@ -170,3 +169,30 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
+
+    #
+    # Webinar
+    #
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecord }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ReconciliateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
