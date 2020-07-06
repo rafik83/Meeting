@@ -25,65 +25,69 @@
   }
 }
 
-  .profile__content {
-    max-width: 375px;
-    margin: 25px auto 0 auto;
-    padding-bottom: 20px;
+.profile__content {
+  max-width: 375px;
+  margin: 25px auto 0 auto;
+  padding-bottom: 20px;
 
-    .identity { text-align: center; }
+  .identity { text-align: center; }
 
-    .avatar {
-      overflow: hidden;
-      width: 70px;
-      height: 70px;
-      border-radius: 100%;
-      background: $bg-container-darkened-color;
+  .avatar {
+    overflow: hidden;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    background: $bg-container-darkened-color;
 
-      > img {
-        display: block;
-        margin: 0 auto;
-        width: 48px;
-      }
-
-      > i {
-        font-size: 2em;
-        text-align: center;
-        line-height: 70px;
-        display: block;
-      }
+    > img {
+      display: block;
+      margin: 0 auto;
+      width: 48px;
     }
 
-    .sub-form { overflow: hidden; }
-
-    p.info { font-size: 13px; }
-
-    .help {
-      float: left;
-      line-height: 34px;
-      color: $color-highlighted;
-
-      &:hover { text-decoration: none; }
-      > span { text-decoration: underline; }
-    }
-
-    .key {
-      float: right;
-      color: $color-highlighted !important;
-      padding: 6px 15px 6px 40px;
-      background: $bg-container-color url($image-path + '/icons/icon-key.svg') 12px center no-repeat;
-      background-size: 22px;
-    }
-
-    .btn-inactive {
-      color: $color-highlighted;
-      background: #E8E8E9 !important;
+    > i {
+      font-size: 2em;
+      text-align: center;
+      line-height: 70px;
+      display: block;
     }
   }
 
-  .profile__center {
-    margin: 0 auto;
-    max-width: 900px;
+  .sub-form { overflow: hidden; }
+
+  p.info { font-size: 13px; }
+
+  .help {
+    float: left;
+    line-height: 34px;
+    color: $color-highlighted;
+
+    &:hover { text-decoration: none; }
+    > span { text-decoration: underline; }
   }
+
+  .key {
+    float: right;
+    color: $color-highlighted !important;
+    padding: 6px 15px 6px 40px;
+    background: $bg-container-color url($image-path + '/icons/icon-key.svg') 12px center no-repeat;
+    background-size: 22px;
+  }
+
+  .btn-inactive {
+    color: $color-highlighted;
+    background: #E8E8E9 !important;
+  }
+
+  .styled-form ul li {
+    list-style-type: disc;
+  }
+}
+
+.profile__center {
+  margin: 0 auto;
+  max-width: 900px;
+}
 
 .profile__box {
   width: 375px;
