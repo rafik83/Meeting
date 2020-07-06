@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
-use Proximum\Vimeet\Domain\Repository\Happening\RecordArchiveRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
 class RecordArchiveRepository implements RecordArchiveRepositoryInterface
 {
@@ -21,6 +21,11 @@ class RecordArchiveRepository implements RecordArchiveRepositoryInterface
     public function add(RecordArchive $recordArchive): void
     {
         $this->entityManager->persist($recordArchive);
+        $this->entityManager->flush($recordArchive);
+    }
+
+    public function update(RecordArchive $recordArchive): void
+    {
         $this->entityManager->flush($recordArchive);
     }
 

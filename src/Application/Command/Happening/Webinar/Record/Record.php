@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening;
 
-class Record
+class Record implements Command
 {
     /** @var Happening */
     public $happening;
