@@ -2,7 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Created;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
@@ -16,10 +19,17 @@ class CreateHandler
     /** @var FileStorageInterface */
     private $fileStorage;
 
-    public function __construct(HappeningRepositoryInterface $happeningRepository, FileStorageInterface $fileStorage)
-    {
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
+    public function __construct(
+        HappeningRepositoryInterface $happeningRepository,
+        FileStorageInterface $fileStorage,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
+    ) {
         $this->happeningRepository = $happeningRepository;
         $this->fileStorage = $fileStorage;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     public function handle(Create $create): void
@@ -78,5 +88,10 @@ class CreateHandler
         );
 
         $this->happeningRepository->add($happening);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::HAPPENING_CREATED,
+            new Created($happening)
+        );
     }
 }
