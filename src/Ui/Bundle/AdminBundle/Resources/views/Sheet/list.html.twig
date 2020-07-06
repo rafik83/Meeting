@@ -364,33 +364,9 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <div class="btn-group">
-                        <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">
-                            {{ 'admin.sheet.read'|trans }}
-                        </a>
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                {{ macro.button(
-                                    path('admin_impersonate',
-                                        {
-                                            'event': event.id,
-                                            'user': sheet.owner.id,
-                                            'route': 'event_sheet_default',
-                                            'params': { 'sheet': sheet.id },
-                                        }),
-                                        'POST',
-                                        'admin.sheet.impersonate'|trans,
-                                        { 'class': 'btn btn-default btn-sm' },
-                                        null,
-                                        'impersonate-to-'~sheet.owner.id
-                                    )
-                                }}
-                            </li>
-                        </ul>
-                    </div>
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.sheet.read'|trans }}
+                    </a>
                 </td>
             </tr>
         {% else %}
