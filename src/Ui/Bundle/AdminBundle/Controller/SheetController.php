@@ -386,7 +386,7 @@ class SheetController extends Controller
         );
 
         $form = $this->createForm(ImportMappingType::class, $importMapping, [
-            'locale' > $locale,
+            'locale' => $locale,
             'importMappingView' => $importMappingView,
             'submit' => true,
         ]);
