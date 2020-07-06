@@ -39,6 +39,8 @@ interface VideoConferenceAdapterInterface
 
     public function stopArchive(string $archiveId): Archive;
 
+    public function getArchive(string $archiveId): Archive;
+
     /**
      * @param Session            $session
      * @param \DateTimeInterface $endDateTime
