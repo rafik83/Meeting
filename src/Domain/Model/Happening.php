@@ -163,7 +163,13 @@ class Happening implements TimeRangeInterface
 
     public function getDescription(string $locale): string
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+        if ($this->translations->containsKey($locale)) {
+            $description = $this->translations->get($locale)->getDescription();
+
+            return $description ?? '';
+        }
+
+        return '';
     }
 
     public function getWebinarHeaderImage(string $locale): ?string
