@@ -2,17 +2,16 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 
-use OpenTok\Archive;
 use OpenTok\ArchiveList;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecord;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecordHandler;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ReconciliateHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
-class StopRecordHandlerTest extends TestCase
+class ReconciliateHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
@@ -24,14 +23,14 @@ class StopRecordHandlerTest extends TestCase
                         'id' => '2516a93f-d04a-4ae9-b088-80efe9e48115',
                         'partnerId' => 1234567,
                         'sessionId' => 'azerty',
-                        'status' => 'started',
+                        'status' => 'stopped',
                         'url' => null,
                     ],
                     [
                         'id' => '2516a93f-d04a-4ae9-b088-80efe9e48116',
                         'partnerId' => 1234567,
                         'sessionId' => 'azerty',
-                        'status' => 'started',
+                        'status' => 'stopped',
                         'url' => null,
                     ],
                     [
@@ -93,29 +92,14 @@ class StopRecordHandlerTest extends TestCase
         $expectedRecordArchive3->stop();
         $expectedRecordArchive3->addPathToRecordArchive('http://example.net/path/to/file.mp4');
 
-        $videoConferenceAdapter
-            ->stopArchive('2516a93f-d04a-4ae9-b088-80efe9e48115')
-            ->shouldBeCalled()
-        ;
-
-        $videoConferenceAdapter
-            ->stopArchive('2516a93f-d04a-4ae9-b088-80efe9e48116')
-            ->shouldBeCalled()
-        ;
-
-        $videoConferenceAdapter
-            ->stopArchive('2516a93f-d04a-4ae9-b088-80efe9e48117')
-            ->shouldNotBeCalled()
-        ;
-
         $recordArchiveRepository->update($expectedRecordArchive1)->shouldBeCalled();
         $recordArchiveRepository->update($expectedRecordArchive2)->shouldBeCalled();
         $recordArchiveRepository->add($expectedRecordArchive3)->shouldBeCalled();
 
-        $stopRecord = new StopRecord($happening->reveal());
-        $handler = new StopRecordHandler(
-            $videoConferenceAdapter->reveal(),
+        $stopRecord = new Reconciliate($happening->reveal());
+        $handler = new ReconciliateHandler(
             $recordArchiveRepository->reveal(),
+            $videoConferenceAdapter->reveal(),
             $dateTime
         );
 
