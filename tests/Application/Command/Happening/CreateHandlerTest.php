@@ -3,9 +3,12 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Created;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
@@ -105,7 +108,17 @@ class CreateHandlerTest extends TestCase
             ->willReturn('/path/webinarHeaderImageEn.jpg')
         ;
 
-        $handler = new CreateHandler($happeningRepository->reveal(), $fileStorage->reveal());
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher
+            ->dispatch(Events::HAPPENING_CREATED, new Created($expectedSubEvent))
+            ->shouldBeCalled()
+        ;
+
+        $handler = new CreateHandler(
+            $happeningRepository->reveal(),
+            $fileStorage->reveal(),
+            $delayedEventDispatcher->reveal()
+        );
         $handler->handle($create);
     }
 }

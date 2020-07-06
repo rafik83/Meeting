@@ -92,6 +92,7 @@ final class Events
     public const PARTICIPANT_VISIO_TESTED = 'participant.visio.tested';
     public const PARTICIPANT_CREATED_BY_GROUP_MANAGER = 'participant.created_by_group_manager';
     public const PARTICIPANT_REMOVED_BY_GROUP_MANAGER = 'participant.removed_by_group_manager';
+    public const HAPPENING_CREATED = 'happening.created';
     public const HAPPENING_PARTICIPATED = 'happening.participated';
     public const HAPPENING_PARTICIPATE = 'happening.participate';
     public const HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED = 'happening.participation.automatically.updated';
