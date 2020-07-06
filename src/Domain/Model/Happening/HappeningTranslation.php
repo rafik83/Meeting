@@ -14,29 +14,19 @@ use Proximum\Vimeet\Domain\Model\Happening;
 
 class HappeningTranslation
 {
-    /**
-     * @var int
-     */
+    /** @var int|null */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     private $happening;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $description;
 
     /**
@@ -58,18 +48,12 @@ class HappeningTranslation
         $this->webinarHeaderImage = $webinarHeaderImage;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -77,15 +61,12 @@ class HappeningTranslation
     /**
      * @param string $locale
      */
-    public function setLocale($locale)
+    public function setLocale($locale): void
     {
         $this->locale = $locale;
     }
 
-    /**
-     * @return Happening
-     */
-    public function getHappening()
+    public function getHappening(): Happening
     {
         return $this->happening;
     }
@@ -93,7 +74,7 @@ class HappeningTranslation
     /**
      * @param Happening $happening
      */
-    public function setHappening($happening)
+    public function setHappening($happening): void
     {
         $this->happening = $happening;
     }
@@ -101,7 +82,7 @@ class HappeningTranslation
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -109,15 +90,12 @@ class HappeningTranslation
     /**
      * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle($title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -125,7 +103,7 @@ class HappeningTranslation
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
