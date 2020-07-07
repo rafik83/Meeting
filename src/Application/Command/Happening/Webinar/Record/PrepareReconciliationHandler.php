@@ -24,9 +24,12 @@ class PrepareReconciliationHandler
             return;
         }
 
+        $date = $prepareReconciliation->dueDate;
 
-        $date = clone $happening->getEnd();
-        $date->modify('+5 minutes');
+        if (!$date instanceof \DateTimeInterface) {
+            $date = clone $happening->getEnd();
+            $date->modify('+5 minutes');
+        }
 
         $this->jobQueue->prepareReconciliation(
             $happening->getId(),

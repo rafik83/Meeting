@@ -165,6 +165,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record }
