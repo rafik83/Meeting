@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
@@ -65,6 +57,9 @@ class WebinarView
     /** @var bool */
     public $isVideoWebinarAndHappeningIsEnded;
 
+    /** @var bool */
+    public $isWebinarRecorded;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -86,7 +81,8 @@ class WebinarView
         int $warningTimeRemainingInSeconds,
         ?string $headerImage,
         ?string $liveUrl,
-        bool $isVideoWebinarAndHappeningIsEnded
+        bool $isVideoWebinarAndHappeningIsEnded,
+        bool $isWebinarRecorded
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -105,6 +101,7 @@ class WebinarView
         $this->liveUrl = $liveUrl;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
+        $this->isWebinarRecorded = $isWebinarRecorded;
     }
 
     public function getSpeakerInfosByUserId(): string

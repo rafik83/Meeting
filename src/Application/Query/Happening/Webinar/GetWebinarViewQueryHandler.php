@@ -59,7 +59,8 @@ class GetWebinarViewQueryHandler
             round($timeRemainingInSeconds * 0.2),
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
-            $this->isVideoWebinarAndHappeningIsEnded($happening)
+            $this->isVideoWebinarAndHappeningIsEnded($happening),
+            $happening->isWebinarRecorded()
         );
     }
 

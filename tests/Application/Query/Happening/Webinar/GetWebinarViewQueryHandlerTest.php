@@ -93,6 +93,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -196,6 +197,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -267,6 +269,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 180,
                 '/path/image.jpg',
                 null,
+<<<<<<< HEAD
                 false
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -322,6 +325,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 '/path/image.jpg',
                 'https://www.utube.com/embed/whatever',
+=======
+>>>>>>> 2161 - Add value of webinar recorded to WebinarView
                 true
             ),
             $this->getWebinarViewQueryHandler->handle(
