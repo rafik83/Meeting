@@ -61,7 +61,7 @@ abstract class AbstractJobQueueAdapter
              ->from(Job::class, 'job')
              ->where('job.command = :command')
              ->andWhere('job.args = :args')
-             ->andWhere('jobs.state = :state')
+             ->andWhere('job.state = :state')
             ->setParameter('command', $command)
             ->setParameter('args', $args, Types::JSON)
             ->setParameter('state', Job::STATE_PENDING)
