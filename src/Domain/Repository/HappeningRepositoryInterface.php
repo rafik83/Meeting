@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -17,15 +9,10 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 interface HappeningRepositoryInterface
 {
-    /**
-     * @param Happening $happening
-     */
-    public function add(Happening $happening);
+    public function add(Happening $happening): void;
+    public function set(Happening $happening): void;
 
-    /**
-     * @param Happening $happening
-     */
-    public function set(Happening $happening);
+    public function getById(int $id): ?Happening;
 
     /**
      * @param Event  $event

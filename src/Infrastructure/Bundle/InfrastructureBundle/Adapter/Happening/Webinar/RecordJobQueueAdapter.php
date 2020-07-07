@@ -2,18 +2,31 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar;
 
+use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\Happening\Webinar\RecordJobQueueInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\PrepareReconciliationCommand;
 
 class RecordJobQueueAdapter extends AbstractJobQueueAdapter implements RecordJobQueueInterface
 {
     public function removeReconciliation(int $happeningId): void
     {
-        // TODO: Implement removeReconciliation() method.
+        $this->removeJob(
+            PrepareReconciliationCommand::NAME,
+            [$happeningId]
+        );
     }
 
     public function prepareReconciliation(int $happeningId, \DateTimeInterface $reconciliationDate): void
     {
-        // TODO: Implement prepareReconciliation() method.
+        $command = PrepareReconciliationCommand::NAME;
+        $args = [$happeningId];
+
+        $this->removeJob($command, $args);
+
+        $job = new Job($command, $args);
+        $job->setExecuteAfter($reconciliationDate);
+
+        $this->setJob($job);
     }
 }

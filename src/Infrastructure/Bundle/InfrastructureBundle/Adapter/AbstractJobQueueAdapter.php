@@ -11,9 +11,6 @@ abstract class AbstractJobQueueAdapter
     /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -37,9 +34,6 @@ abstract class AbstractJobQueueAdapter
         return null !== $pendingJob;
     }
 
-    /**
-     * @param Job $job
-     */
     protected function setJob(Job $job): void
     {
         $command = $job->getCommand();
@@ -54,11 +48,25 @@ abstract class AbstractJobQueueAdapter
         $this->entityManager->flush($job);
     }
 
-    /**
-     * @param Job $job
-     */
     protected function updateJob(Job $job): void
     {
         $this->entityManager->flush($job);
+    }
+
+    protected function removeJob(string $command, array $args): void
+    {
+         $this->entityManager
+             ->createQueryBuilder()
+             ->delete()
+             ->from(Job::class, 'job')
+             ->where('job.command = :command')
+             ->andWhere('job.args = :args')
+             ->andWhere('jobs.state = :state')
+            ->setParameter('command', $command)
+            ->setParameter('args', $args, Types::JSON)
+            ->setParameter('state', Job::STATE_PENDING)
+            ->getQuery()
+            ->execute()
+        ;
     }
 }
