@@ -94,6 +94,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -146,6 +147,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '/path/image.jpg',
                 null,
                 true,
+                false,
                 false
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -199,6 +201,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -271,7 +274,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '/path/image.jpg',
                 null,
                 true,
-                false
+                false,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -301,6 +305,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
@@ -328,7 +333,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '/path/image.jpg',
                 'https://www.utube.com/embed/whatever',
                 true,
-                true
+                true,
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
