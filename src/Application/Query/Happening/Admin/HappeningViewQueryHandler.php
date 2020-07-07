@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningView;
@@ -15,20 +7,12 @@ use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class HappeningViewQueryHandler
 {
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $participationRepository;
 
-    /**
-     * @var SpeakerViewQueryHandler
-     */
+    /** @var SpeakerViewQueryHandler */
     private $speakerViewQueryHandler;
 
-    /**
-     * @param HappeningParticipationRepositoryInterface $participationRepository
-     * @param SpeakerViewQueryHandler                   $speakerViewQueryHandler
-     */
     public function __construct(
         HappeningParticipationRepositoryInterface $participationRepository,
         SpeakerViewQueryHandler $speakerViewQueryHandler
@@ -37,12 +21,7 @@ class HappeningViewQueryHandler
         $this->speakerViewQueryHandler = $speakerViewQueryHandler;
     }
 
-    /**
-     * @param HappeningViewQuery $query
-     *
-     * @return HappeningView
-     */
-    public function handle(HappeningViewQuery $query)
+    public function handle(HappeningViewQuery $query): HappeningView
     {
         $speakers = $query->happening->getSpeakers();
 
@@ -66,7 +45,8 @@ class HappeningViewQueryHandler
             $query->happening->isPrivate(),
             $query->happening->hasProducts(),
             $query->happening->isWebinar(),
-            $query->happening->isInteractiveWebinar()
+            $query->happening->isInteractiveWebinar(),
+            $query->happening->isWebinarRecorded()
         );
     }
 }

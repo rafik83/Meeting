@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening\Admin;
 
 class HappeningView
@@ -51,19 +43,9 @@ class HappeningView
     /** @var bool */
     public $isInteractiveWebinar;
 
-    /**
-     * @param int                $id
-     * @param string             $title
-     * @param string             $categoryTitle
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param bool               $questionAllowed
-     * @param int|null           $limit
-     * @param int                $participations
-     * @param SpeakerView[]      $speakers
-     * @param bool               $isPrivate
-     * @param bool               $hasProducts
-     */
+    /** @var bool */
+    public $isWebinarRecorded;
+
     public function __construct(
         int $id,
         string $title,
@@ -77,7 +59,8 @@ class HappeningView
         bool $isPrivate = false,
         bool $hasProducts = false,
         bool $isWebinar = false,
-        bool $isInteractiveWebinar = false
+        bool $isInteractiveWebinar = false,
+        bool $isWebinarRecorded = true
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -92,12 +75,10 @@ class HappeningView
         $this->hasProducts = $hasProducts;
         $this->isWebinar = $isWebinar;
         $this->isInteractiveWebinar = $isInteractiveWebinar;
+        $this->isWebinarRecorded = $isWebinarRecorded;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasLimit()
+    public function hasLimit(): bool
     {
         return null !== $this->limit;
     }

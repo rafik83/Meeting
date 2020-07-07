@@ -85,6 +85,9 @@
                     {% if happening.isWebinar %}
                         <span class="label label-info">
                             {{ happening.isInteractiveWebinar ? 'admin.happening.type.interactiveWebinar'|trans : 'admin.happening.type.webinar'|trans }}
+                            {% if happening.isWebinarRecorded %}
+                                <i class="icon-Video_2"></i>
+                            {% endif %}
                         </span>
                     {% endif %}
                 </td>
