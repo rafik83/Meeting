@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening\Admin;
 
 class HappeningView
@@ -54,22 +46,9 @@ class HappeningView
     /** @var bool */
     public $isVideoWebinar;
 
-    /**
-     * @param int                $id
-     * @param string             $title
-     * @param string             $categoryTitle
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param bool               $questionAllowed
-     * @param int|null           $limit
-     * @param int                $participations
-     * @param SpeakerView[]      $speakers
-     * @param bool               $isPrivate
-     * @param bool               $hasProducts
-     * @param bool               $isWebinar
-     * @param bool               $isInteractiveWebinar
-     * @param bool               $isVideoWebinar
-     */
+    /** @var bool */
+    public $isWebinarRecorded;
+
     public function __construct(
         int $id,
         string $title,
@@ -84,7 +63,8 @@ class HappeningView
         bool $hasProducts = false,
         bool $isWebinar = false,
         bool $isInteractiveWebinar = false,
-        bool $isVideoWebinar = false
+        bool $isVideoWebinar = false,
+        bool $isWebinarRecorded = true
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -100,12 +80,10 @@ class HappeningView
         $this->isWebinar = $isWebinar;
         $this->isInteractiveWebinar = $isInteractiveWebinar;
         $this->isVideoWebinar = $isVideoWebinar;
+        $this->isWebinarRecorded = $isWebinarRecorded;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasLimit()
+    public function hasLimit(): bool
     {
         return null !== $this->limit;
     }

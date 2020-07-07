@@ -269,8 +269,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 180,
                 '/path/image.jpg',
                 null,
-<<<<<<< HEAD
-                false
+                false,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -299,6 +299,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEvent()->shouldNotBeCalled();
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
@@ -325,8 +326,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 '/path/image.jpg',
                 'https://www.utube.com/embed/whatever',
-=======
->>>>>>> 2161 - Add value of webinar recorded to WebinarView
+                true,
                 true
             ),
             $this->getWebinarViewQueryHandler->handle(
