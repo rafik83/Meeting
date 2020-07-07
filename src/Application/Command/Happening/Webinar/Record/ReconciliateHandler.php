@@ -33,6 +33,10 @@ class ReconciliateHandler
     {
         $happening = $reconciliate->happening;
 
+        if (null === $happening->getWebinarSessionId()) {
+            return;
+        }
+
         $listArchive = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
         $recordArchives = $this->recordArchiveRepository->getRecordArchivesForHappening($happening);
         $recordArchivesIndexedByArchiveId = $this->indexRecordArchivesByArchiveId($recordArchives);

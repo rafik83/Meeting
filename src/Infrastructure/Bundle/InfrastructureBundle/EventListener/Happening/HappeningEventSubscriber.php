@@ -48,7 +48,7 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     public function onHappeningCreation(Created $event): void
     {
         $this->prepareReconciliationHandler->handle(
-            new PrepareReconciliation($event->getHappening())
+            new PrepareReconciliation($event->getHappening(), null)
         );
     }
 
@@ -62,7 +62,7 @@ class HappeningEventSubscriber implements EventSubscriberInterface
         $this->participantAvailabilityReAggregator->recalculateAvailabilityAggregator($event->getHappening());
 
         $this->prepareReconciliationHandler->handle(
-            new PrepareReconciliation($event->getHappening())
+            new PrepareReconciliation($event->getHappening(), null)
         );
     }
 }

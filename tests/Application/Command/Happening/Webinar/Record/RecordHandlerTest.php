@@ -27,7 +27,7 @@ class RecordHandlerTest extends TestCase
 
         $videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
-        $dateTime = new \DateTime();
+        $dateTime = new \DateTime('2020-10-10 10:00:00.000');
 
         $archive = new Archive(
             [
