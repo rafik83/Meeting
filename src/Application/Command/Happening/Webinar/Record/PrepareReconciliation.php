@@ -10,8 +10,14 @@ class PrepareReconciliation implements Command
     /** @var Happening */
     public $happening;
 
-    public function __construct(Happening $happening)
-    {
+    /** @var \DateTimeInterface|null */
+    public $dueDate;
+
+    public function __construct(
+        Happening $happening,
+        ?\DateTimeInterface $dueDate
+    ) {
         $this->happening = $happening;
+        $this->dueDate = $dueDate;
     }
 }

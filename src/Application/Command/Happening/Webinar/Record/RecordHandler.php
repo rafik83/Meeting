@@ -17,14 +17,19 @@ class RecordHandler
     /** @var RecordArchiveRepositoryInterface */
     private $recordArchiveRepository;
 
+    /** @var PrepareReconciliationHandler */
+    private $prepareReconciliationHandler;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
+        PrepareReconciliationHandler $prepareReconciliationHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
+        $this->prepareReconciliationHandler = $prepareReconciliationHandler;
     }
 
     public function handle(Record $record): void
@@ -44,5 +49,14 @@ class RecordHandler
         );
 
         $this->recordArchiveRepository->add($recordArchive);
+
+        $dueDate = clone $this->dateTime;
+        $dueDate->modify('+ 125minutes');
+        $this->prepareReconciliationHandler->handle(
+            new PrepareReconciliation(
+                $happening,
+                $dueDate
+            )
+        );
     }
 }
