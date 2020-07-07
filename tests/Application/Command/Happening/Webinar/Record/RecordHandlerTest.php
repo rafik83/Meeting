@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 use OpenTok\Archive;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -56,10 +58,19 @@ class RecordHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $dueDate = clone $dateTime;
+        $dueDate->modify('+ 125minutes');
+        $prepareReconciliationHandler = $this->prophesize(PrepareReconciliationHandler::class);
+        $prepareReconciliationHandler
+            ->handle(new PrepareReconciliation($happening->reveal(), $dueDate))
+            ->shouldBeCalled()
+        ;
+
         $command = new Record($happening->reveal());
         $handler = new RecordHandler(
             $videoConferenceAdapter->reveal(),
             $recordArchiveRepository->reveal(),
+            $prepareReconciliationHandler->reveal(),
             $dateTime
         );
 
