@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
@@ -98,10 +100,21 @@ abstract class HappeningType extends AbstractType
                 'help' => 'form.happening_create.children.liveUrl.help',
                 'default_protocol' => 'https',
             ])
-            ->add('webinarRecorded', CheckboxType::class, [
-                'required' => false,
-            ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($options) {
+            /** @var Admin $admin */
+            $admin = $options['admin'];
+            $form = $event->getForm();
+
+            if ($admin->isSuperAdmin()) {
+                $form
+                    ->add('webinarRecorded', CheckboxType::class, [
+                        'required' => false,
+                    ])
+                ;
+            }
+        });
     }
 
     /**
