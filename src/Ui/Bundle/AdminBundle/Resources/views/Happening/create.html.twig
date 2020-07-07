@@ -7,7 +7,9 @@
 {% block form_content %}
     {{ form_row(form.category, {widget_columns: 3}) }}
     {{ form_row(form.happeningType) }}
-    {{ form_row(form.webinarRecorded) }}
+    {% if form.webinarRecorded is defined %}
+        {{ form_row(form.webinarRecorded) }}
+    {% endif %}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}
     {{ form_row(form.end, {widget_columns: 3}) }}
@@ -20,6 +22,8 @@
     {{ form_row(form.sidebarAllowed) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
+
+    {% if form.webinarRecorded is defined %}
     <script>
         const webinarRecordedGroup = document.getElementById('happening_create_webinarRecorded-group');
         webinarRecordedGroup.classList.add('hide');
@@ -39,6 +43,7 @@
             )
         });
     </script>
-{% endblock %}
+    {% endif %}
+{% endblock form_content %}
 
 {% block goback_link path('admin_happening_list', { 'event': event.id }) %}
