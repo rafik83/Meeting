@@ -40,7 +40,14 @@ class GetWebinarViewQueryHandler
         $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
 
         $sessionAndTokenView = $this->getSessionAndToken($happening, $isSpeaker);
-        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
+        $timeRemainingInSeconds = max(
+            0,
+            $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+        $timeRemainingBeforeStartInSeconds = max(
+            0,
+            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
 
         return new WebinarView(
             $happening->getId(),
@@ -57,6 +64,7 @@ class GetWebinarViewQueryHandler
             $this->dateTime,
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
+            $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
