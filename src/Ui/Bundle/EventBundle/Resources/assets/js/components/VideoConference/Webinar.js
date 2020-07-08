@@ -94,7 +94,7 @@ function Webinar(element, isSpeaker) {
     this.canRecordWebinar = element.getAttribute('data-webinar-can-record');
     this.recordEndpoint = element.getAttribute('data-webinar-record-endpoint');
     this.stopRecordEndpoint = element.getAttribute('data-webinar-stop-record-endpoint');
-    this.toggleRecording = element.querySelector('#toggle-recording');
+    this.toggleRecordingButton = element.querySelector('#toggle-recording');
     this.isRecording = false;
 
     this.subscribers = [];
@@ -250,9 +250,7 @@ Webinar.prototype.init = function () {
 
     this.connect();
 
-    if (this.isWebinarRecorded && this.canRecordWebinar) {
-        this.prepareRecordButtons();
-    }
+    this.prepareRecordButtons();
 };
 
 Webinar.prototype.updateViewers = function () {
@@ -321,36 +319,70 @@ Webinar.prototype.initShareMedia = function () {
 };
 
 Webinar.prototype.prepareRecordButtons = function() {
-    this.toggleRecording.classList.remove('hide');
-    this.toggleRecording.addEventListener('click', () => {
+    if (!this.isWebinarRecorded || !this.canRecordWebinar) {
+        return;
+    }
+
+    this.toggleRecordingButton.classList.remove('hide');
+    this.toggleRecordingButton.addEventListener('click', () => {
         if (!this.isRecording) {
             // call endpoint record
-            this.isRecording = true;
-            this.toggleRecording.classList.add('recording');
+            this.toggleRecording(true);
 
             $.post(this.recordEndpoint, JSON.stringify({}), (response) => {
-                    console.log('start recording');
+                this.session.signal({
+                        type: 'startRecording'
+                    },
+                    (error) => {
+                        if (error) {
+                            console.error('startRecording signal error', error);
+                        }
+                    }
+                );
             })
             .fail(() => {
-                this.isRecording = false;
-                this.toggleRecording.classList.remove('recording')
+                this.toggleRecording(false);
                 this.showError('Could not start recording');
             });
         } else {
             // call endpoint stop record
-            this.isRecording = false;
-            this.toggleRecording.classList.remove('recording');
+            this.toggleRecording(false);
 
             $.post(this.stopRecordEndpoint, JSON.stringify({}), (response) => {
-                console.log('stopped recording');
+                this.session.signal({
+                        type: 'stopRecording'
+                    },
+                    (error) => {
+                        if (error) {
+                            console.error('stopRecording signal error', error);
+                        }
+                    }
+                );
             })
-                .fail(() => {
-                    this.isRecording = true;
-                    this.toggleRecording.classList.add('recording')
-                    this.showError('Could not stop recording');
-                });
+            .fail(() => {
+                this.toggleRecording(true);
+                this.showError('Could not stop recording');
+            });
         }
     });
+
+    this.session.on('signal:startRecording', (event) => {
+        this.toggleRecording(true);
+    });
+
+    this.session.on('signal:stopRecording', (event) => {
+        this.toggleRecording(false);
+    });
+};
+
+Webinar.prototype.toggleRecording = function(recording) {
+    this.isRecording = recording;
+
+    if (recording) {
+        this.toggleRecordingButton.classList.add('recording');
+    } else {
+        this.toggleRecordingButton.classList.remove('recording');
+    }
 };
 
 Webinar.prototype.hideElement = function (element) {
