@@ -35,6 +35,26 @@
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
+
+        {% if webinarView.isWebinarRecorded %}
+            data-webinar-recorded="true"
+            data-webinar-can-record="true"
+            data-webinar-record-endpoint="{{ path(
+                'event_happening_webinar_record',
+                {
+                    'sheet': sheet.id,
+                    'happening': webinarView.happeningId
+                }
+            ) }}"
+            data-webinar-stop-record-endpoint="{{ path(
+                'event_happening_webinar_stop_record',
+                {
+                    'sheet': sheet.id,
+                    'happening': webinarView.happeningId
+                }
+            ) }}"
+        {% endif %}
+
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
@@ -63,6 +83,13 @@
                     <span class="countdown"></span>
                 </div>
             </div>
+
+            {% if webinarView.isWebinarRecorded %}
+                <button id="toggle-recording" class="btn btn-gray hide" title="{{ 'happening.webinar.recordButtonTitle'|trans }}">
+                    <span class="dot"></span>
+                </button>
+            {% endif %}
+
 
             <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
