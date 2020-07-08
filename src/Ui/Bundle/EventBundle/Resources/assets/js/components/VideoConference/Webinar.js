@@ -26,8 +26,23 @@ function Webinar(element, isSpeaker) {
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
 
+    this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
+    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
+        const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
+
+        const timerInterval = setInterval(() => {
+            const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
+
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                // Change this to a translation key.
+                alert('Le webinar est sur le point de commencer');
+            }
+        }, 500);
+    }
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');

@@ -52,7 +52,14 @@ class GetWebinarViewQueryHandler
         );
 
         $sessionId = $session->getSessionId();
-        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
+        $timeRemainingInSeconds = max(
+            0,
+            $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+        $timeRemainingBeforeStartInSeconds = max(
+            0,
+            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
 
         $speakers = [];
 
@@ -106,6 +113,7 @@ class GetWebinarViewQueryHandler
             $this->dateTime,
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
+            $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
             $happening->isWebinarRecorded()

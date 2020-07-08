@@ -54,6 +54,9 @@ class WebinarView
     /** @var bool */
     public $isWebinarRecorded;
 
+    /** @var int */
+    public $timeRemainingBeforeStartInSeconds;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -72,6 +75,7 @@ class WebinarView
         \DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
+        int $timeRemainingBeforeStartInSeconds,
         ?string $headerImage,
         ?string $liveUrl,
         bool $isWebinarRecorded
@@ -92,6 +96,7 @@ class WebinarView
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
         $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
     public function getSpeakerInfosByUserId(): string
