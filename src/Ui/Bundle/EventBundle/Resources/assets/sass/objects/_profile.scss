@@ -79,7 +79,14 @@
     background: #E8E8E9 !important;
   }
 
-  .styled-form ul li {
+  .styled-form ul, .main header ul {
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      list-style-type: disc;
+    }
+  }
     list-style-type: disc;
   }
 }
