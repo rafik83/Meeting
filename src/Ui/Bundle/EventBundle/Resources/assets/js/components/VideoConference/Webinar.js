@@ -12,6 +12,10 @@ var $ = require('jquery');
 require('bootstrap/js/tooltip');
 require('bootstrap/js/popover'); // popover require tooltip
 
+
+// toto
+
+
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
@@ -34,6 +38,7 @@ function Webinar(element, isSpeaker) {
     this.apiKey = element.getAttribute('data-api-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
+    this.timeRemainingBeforeStartMessage = element.getAttribute('data-time-remaining-before-start-message');
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
@@ -41,12 +46,13 @@ function Webinar(element, isSpeaker) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
         const timerInterval = setInterval(() => {
+            console.log('tour d\'horloge.');
+
             const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
 
             if (remainingTime <= 0) {
                 clearInterval(timerInterval);
-                // Change this to a translation key.
-                alert('Le webinar est sur le point de commencer');
+                alert(this.timeRemainingBeforeStartMessage);
             }
         }, 500);
     }
