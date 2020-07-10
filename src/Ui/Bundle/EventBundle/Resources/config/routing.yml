@@ -982,6 +982,14 @@ event_happening_webinar_download_record_archive:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\Download\DownloadAction
     methods: [GET]
 
+event_happening_webinar_stream:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stream
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
+
 #
 # Unavailability
 #

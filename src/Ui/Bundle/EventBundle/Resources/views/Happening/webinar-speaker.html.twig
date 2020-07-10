@@ -44,6 +44,14 @@
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
 
+         data-webinar-stream-endpoint="{{ path(
+             'event_happening_webinar_stream',
+             {
+                 'sheet': sheet.id,
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"
             data-webinar-can-record="true"

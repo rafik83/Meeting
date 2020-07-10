@@ -241,3 +241,11 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler:
         arguments:
             - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }
+

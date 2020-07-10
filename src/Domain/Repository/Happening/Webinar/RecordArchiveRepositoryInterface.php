@@ -21,4 +21,6 @@ interface RecordArchiveRepositoryInterface
     public function getByArchiveId(string $archiveId): ?RecordArchive;
 
     public function hasStartedRecordArchiveForHappening(Happening $happening): bool;
+
+    public function getStartedRecordArchiveForHappening(Happening $happening): ?RecordArchive;
 }

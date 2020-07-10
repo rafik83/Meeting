@@ -36,6 +36,9 @@ interface VideoConferenceAdapterInterface
 
     public function changeArchiveLayout(string $archiveId, Layout $layout): void;
 
+    public function changeArchiveToVertical(string $archiveId): void;
+    public function changeArchiveToBestFit(string $archiveId): void;
+
     public function changeStreamClassList(string $sessionId, string $streamId, string $class): void;
 
     public function stopArchive(string $archiveId): Archive;

@@ -56,6 +56,22 @@ class RecordArchiveRepository implements RecordArchiveRepositoryInterface
         ;
     }
 
+    public function getStartedRecordArchiveForHappening(Happening $happening): ?RecordArchive
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('recordArchive')
+            ->from(RecordArchive::class, 'recordArchive')
+            ->where('recordArchive.happening = :happening')
+            ->andWhere('recordArchive.status = :status')
+            ->setParameter('happening', $happening)
+            ->setParameter('status', RecordStatus::STARTED)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function hasStartedRecordArchiveForHappening(Happening $happening): bool
     {
         return null !== $this->entityManager
