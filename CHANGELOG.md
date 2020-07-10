@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET 2086 - Webinar video available available even when the happening is over
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
+- VIMEET-2161 - Record webinar
 
 ### Updated
 - Update SncRedisBundle to 3.2.3
