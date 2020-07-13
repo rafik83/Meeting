@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -45,7 +46,7 @@ class RecordHandler
 
         $existingArchives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
         $startedArchives = array_filter($existingArchives->getItems(), function ($archiveItem) {
-            return $archiveItem->status === 'started';
+            return $archiveItem->status === RecordStatus::STARTED;
         });
 
         if (count($startedArchives) === 0) {
