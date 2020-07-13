@@ -167,6 +167,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
             - '@datetime'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record }
 

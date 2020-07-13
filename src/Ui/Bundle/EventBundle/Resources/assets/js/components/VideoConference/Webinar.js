@@ -361,9 +361,10 @@ Webinar.prototype.prepareRecordButtons = function() {
                     }
                 );
             })
-            .fail(() => {
+            .fail((error) => {
                 this.toggleRecording(false);
-                this.showError('Could not start recording');
+                this.showError({name: `${error.status}: ${error.statusText}`, message:'Could not start recording'});
+                console.error(error.status, error.statusText, this.recordEndpoint);
             });
         } else {
             // call endpoint stop record
@@ -507,7 +508,7 @@ Webinar.prototype.showError = function (error) {
             alert(this.accessDeniedErrorMessage);
             break;
         default:
-            alert('There was an error: ' + error.name + ', ' + error.message);
+            alert('There was an error: ' + (error.name ? error.name : error) + (error.message ? (', ' + error.message) : ''));
             break;
     }
 };

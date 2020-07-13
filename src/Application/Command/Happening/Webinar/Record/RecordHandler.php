@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class RecordHandler
 {
@@ -20,16 +21,21 @@ class RecordHandler
     /** @var PrepareReconciliationHandler */
     private $prepareReconciliationHandler;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         PrepareReconciliationHandler $prepareReconciliationHandler,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        LoggerInterface $logger
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
-        $this->dateTime = $dateTime;
         $this->prepareReconciliationHandler = $prepareReconciliationHandler;
+        $this->dateTime = $dateTime;
+        $this->logger = $logger;
     }
 
     public function handle(Record $record): void
@@ -37,29 +43,39 @@ class RecordHandler
         $happening = $record->happening;
         $event = $happening->getEvent();
 
-        $videoConferenceArchive = $this->videoConferenceAdapter->archive(
-            $happening->getWebinarSessionId(),
-            $happening->getTitle($event->getLocaleFallback())
-        );
+        $existingArchives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
+        $startedArchives = array_filter($existingArchives->getItems(), function ($archiveItem) {
+            return $archiveItem->status === 'started';
+        });
 
-        $recordArchive = new RecordArchive(
-            $happening,
-            $videoConferenceArchive->id,
-            $this->dateTime
-        );
+        if (count($startedArchives) === 0) {
+            $videoConferenceArchive = $this->videoConferenceAdapter->archive(
+                $happening->getWebinarSessionId(),
+                $happening->getTitle($event->getLocaleFallback())
+            );
 
-        $this->recordArchiveRepository->add($recordArchive);
-
-        $dueDate = new \DateTime();
-        // Avoid adding microseconds
-        $dueDate->setTime(0, 0, 0, 0);
-        $dueDate->setTimestamp($this->dateTime->getTimestamp());
-        $dueDate->modify('+ 125minutes');
-        $this->prepareReconciliationHandler->handle(
-            new PrepareReconciliation(
+            $recordArchive = new RecordArchive(
                 $happening,
-                $dueDate
-            )
-        );
+                $videoConferenceArchive->id,
+                $this->dateTime
+            );
+
+            $this->recordArchiveRepository->add($recordArchive);
+
+            $dueDate = new \DateTime();
+            // Avoid adding microseconds
+            $dueDate->setTime(0, 0, 0, 0);
+            $dueDate->setTimestamp($this->dateTime->getTimestamp());
+            $dueDate->modify('+ 125minutes');
+            $this->prepareReconciliationHandler->handle(
+                new PrepareReconciliation(
+                    $happening,
+                    $dueDate
+                )
+            );
+            $this->logger->info(sprintf('Webinar #%d: Start record webinar archive', $happening->getId()));
+        } else {
+            $this->logger->warning(sprintf('Webinar #%d: Start record failed because another archive is already started', $happening->getId()));
+        }
     }
 }
