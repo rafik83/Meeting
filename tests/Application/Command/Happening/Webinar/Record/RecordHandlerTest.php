@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 
 use OpenTok\Archive;
+use OpenTok\ArchiveList;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation;
@@ -13,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class RecordHandlerTest extends TestCase
 {
@@ -20,6 +22,7 @@ class RecordHandlerTest extends TestCase
     {
         $happening = $this->prophesize(Happening::class);
         $event = $this->prophesize(Event::class);
+        $happening->getId()->shouldBeCalled()->willReturn(2020);
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getTitle('fr')->shouldBeCalled()->willReturn('Title of the happening');
         $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('azerty');
@@ -28,6 +31,7 @@ class RecordHandlerTest extends TestCase
         $videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
         $dateTime = new \DateTime('2020-10-10 10:00:00.000');
+        $logger = $this->prophesize(LoggerInterface::class);
 
         $archive = new Archive(
             [
@@ -42,6 +46,14 @@ class RecordHandlerTest extends TestCase
                 'apiUrl' => 'https://example.net/azertyuiop',
             ]
         );
+        $videoConferenceAdapter
+            ->listArchives('azerty')
+            ->shouldBeCalled()
+            ->willReturn(new ArchiveList(
+                ['count' => 0, 'items' => []],
+                ['apiKey' => 'azertyuiop', 'apiSecret' => 'poiuytreza', 'apiUrl' => 'https://example.net/azertyuiop']
+            ))
+        ;
         $videoConferenceAdapter
             ->archive('azerty', 'Title of the happening')
             ->shouldBeCalled()
@@ -71,7 +83,8 @@ class RecordHandlerTest extends TestCase
             $videoConferenceAdapter->reveal(),
             $recordArchiveRepository->reveal(),
             $prepareReconciliationHandler->reveal(),
-            $dateTime
+            $dateTime,
+            $logger->reveal()
         );
 
         $handler->handle($command);
