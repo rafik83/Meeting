@@ -68,7 +68,8 @@ class GetWebinarViewQueryHandler
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
-            $happening->isWebinarRecorded()
+            $happening->isWebinarRecorded(),
+            $this->getWebinarRecordStatus($happening)
         );
     }
 
@@ -164,5 +165,22 @@ class GetWebinarViewQueryHandler
         }
 
         return $speakerViews;
+    }
+
+    public function getWebinarRecordStatus(Happening $happening): string
+    {
+        if (!$happening->isWebinarRecorded()) {
+            return false;
+        }
+
+        $archives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
+        $status = array_reduce($archives->getItems(), static function ($carry, $item) {
+            if ($carry[1] < $item->createdAt) {
+                $carry = [$item->status, $item->createdAt];
+            }
+            return $carry;
+        }, [ 'no_record', 0 ]);
+
+        return $status[0];
     }
 }
