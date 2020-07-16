@@ -10,6 +10,7 @@ use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantI
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
@@ -116,8 +117,25 @@ class GetWebinarViewQueryHandler
             $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
-            $happening->isWebinarRecorded()
-
+            $happening->isWebinarRecorded(),
+            $this->getWebinarRecordStatus($happening)
         );
+    }
+
+    public function getWebinarRecordStatus(Happening $happening): string
+    {
+        if (!$happening->isWebinarRecorded()) {
+            return false;
+        }
+
+        $archives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
+        $status = array_reduce($archives->getItems(), function ($carry, $item) {
+            if ($carry[1] < $item->createdAt) {
+                $carry = [$item->status, $item->createdAt];
+            }
+            return $carry;
+        }, [ 'no_record', 0 ]);
+
+        return $status[0];
     }
 }

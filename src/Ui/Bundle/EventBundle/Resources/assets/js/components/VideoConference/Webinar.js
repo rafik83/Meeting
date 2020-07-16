@@ -118,6 +118,12 @@ function Webinar(element, isSpeaker) {
     this.toggleRecordingButton = element.querySelector('#toggle-recording');
     this.isRecording = false;
 
+    const recordStatus = element.getAttribute('data-webinar-record-status');
+    if (recordStatus) {
+        this.isRecording = recordStatus === 'started' || recordStatus === 'paused';
+        this.toggleRecording(this.isRecording);
+    }
+
     this.subscribers = [];
     this.subscribersNameMapping = element.getAttribute('data-subscriber-mapping');
     this.currentUserId = element.getAttribute('data-current-user-id');
