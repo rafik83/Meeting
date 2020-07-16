@@ -63,6 +63,9 @@ class WebinarView
     /** @var bool */
     public $isWebinarRecorded;
 
+    /** @var string */
+    public $webinarRecordStatus;
+
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
 
@@ -90,7 +93,8 @@ class WebinarView
         ?string $liveUrl,
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
-        bool $isWebinarRecorded
+        bool $isWebinarRecorded,
+        string $isWebinarRecordStatus
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -111,6 +115,7 @@ class WebinarView
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->webinarRecordStatus = $isWebinarRecordStatus;
         $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
