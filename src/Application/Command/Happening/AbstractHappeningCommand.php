@@ -56,6 +56,9 @@ class AbstractHappeningCommand implements Command
     /** @var string */
     public $happeningType = self::TYPE_DEFAULT;
 
+      /** @var bool */
+      public $sidebarAllowed;  
+
     public function isWebinar(): bool
     {
         return self::TYPE_WEBINAR === $this->happeningType || self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;

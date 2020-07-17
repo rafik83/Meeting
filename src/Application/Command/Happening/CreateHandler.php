@@ -46,12 +46,13 @@ class CreateHandler
             $create->end,
             $create->category,
             $create->types,
-            $create->questionAllowed,
+            $create->questionAllowed,           
             $create->limitParticipant,
             $create->invitationCode,
             $create->isWebinar(),
             $create->isInteractiveWebinar(),
-            $create->liveUrl
+            $create->liveUrl,
+            $create->sidebarAllowed
         );
 
         foreach ($create->translations as $locale => $translation) {

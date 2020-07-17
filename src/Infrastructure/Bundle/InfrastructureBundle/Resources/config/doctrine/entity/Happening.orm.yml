@@ -36,6 +36,10 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: string
             length: 5000
             nullable: true
+        sidebarAllowed:
+            type: boolean
+            options:
+                default: true            
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

@@ -104,6 +104,15 @@ abstract class HappeningType extends AbstractType
                 'help' => 'form.happening_create.children.liveUrl.help',
                 'default_protocol' => 'https',
             ])
+            ->add('sidebarAllowed', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.sidebarAllowed.answer.true'  => true,
+                    'form.happening_create.children.sidebarAllowed.answer.false' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])            
+            
         ;
     }
 
