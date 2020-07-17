@@ -163,6 +163,7 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $this->happening->isSidebarAllowed()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -236,6 +237,7 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $this->happening->isSidebarAllowed()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
         $update = new Update($this->happening->reveal());
