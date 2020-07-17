@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar;
 
+use OpenTok\ArchiveList;
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -143,7 +144,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 '/path/image.jpg',
                 null,
-                false
+                false,
+                ''
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -252,7 +254,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 300,
                 '/path/image.jpg',
                 null,
-                false
+                false,
+                ''
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -334,6 +337,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
+        $archiveList = $this->prophesize(ArchiveList::class);
+        $archiveList->getItems()->shouldBeCalled()->willReturn([]);
+        $this->videoConferenceAdapter->listArchives('webinar-session-id')->shouldBeCalled()->willReturn($archiveList->reveal());
+
         $this->assertEquals(
             new WebinarView(
                 1,
@@ -375,7 +382,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 '/path/image.jpg',
                 null,
-                true
+                true,
+                'no_record'
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
