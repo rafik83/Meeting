@@ -168,7 +168,7 @@ class GetWebinarViewQueryHandler
         return $speakerViews;
     }
 
-    public function getWebinarRecordStatus(Happening $happening): string
+    private function getWebinarRecordStatus(Happening $happening): string
     {
         if (!$happening->isWebinarRecorded()) {
             return false;
