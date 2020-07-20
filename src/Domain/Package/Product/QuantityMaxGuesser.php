@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -27,10 +19,6 @@ class QuantityMaxGuesser
     /** @var Order[] indexed by Sheet Id */
     private $cachedMergedOrderBySheetId = [];
 
-    /**
-     * @param CartManager $cartManager
-     * @param Merger      $merger
-     */
     public function __construct(CartManager $cartManager, Merger $merger)
     {
         $this->cartManager = $cartManager;

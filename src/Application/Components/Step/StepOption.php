@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
@@ -48,12 +40,6 @@ class StepOption
         $this->dateTime = $dateTime;
     }
 
-    /**
-     * @param Sheet $sheet
-     * @param int   $stepIndex
-     *
-     * @return SelectOptions
-     */
     public function build(Sheet $sheet, int $stepIndex): SelectOptions
     {
         $command = new SelectOptions($sheet, $stepIndex);
@@ -138,7 +124,7 @@ class StepOption
             $sheet->getParticipantsArray()
         );
 
-        return array_map(function (ProductAttributedToParticipant $productAttributedToParticipant) {
+        return array_map(static function (ProductAttributedToParticipant $productAttributedToParticipant) {
             return $productAttributedToParticipant->getParticipant();
         }, $productAttributedToParticipants);
     }
