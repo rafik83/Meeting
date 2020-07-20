@@ -91,7 +91,7 @@ class GetWebinarViewQueryHandler
                 );
             }
         }
-
+        
         return new WebinarView(
             $happening->getId(),
             $query->getUser()->getId(),
@@ -107,7 +107,8 @@ class GetWebinarViewQueryHandler
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
             $happening->getWebinarHeaderImage($query->getLocale()),
-            $happening->getLiveUrl()
+            $happening->getLiveUrl(),
+            $happening->isSidebarAllowed()
         );
     }
 }

@@ -90,6 +90,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);       
         $happening->getEvent()->shouldNotBeCalled();
 
         $session = $this->prophesize(Session::class);
@@ -140,7 +141,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 '/path/image.jpg',
-                null
+                null,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -191,6 +193,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);  
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -260,7 +263,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 '/path/image.jpg',
-                null
+                null,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

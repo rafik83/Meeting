@@ -59,6 +59,9 @@ class WebinarView
     /** @var string|null */
     public $liveUrl;
 
+    /** @var bool */
+    public $sidebarAllowed;    
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -78,7 +81,8 @@ class WebinarView
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
         ?string $headerImage,
-        ?string $liveUrl
+        ?string $liveUrl,
+        bool $sidebarAllowed
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -95,6 +99,7 @@ class WebinarView
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
+        $this->sidebarAllowed = $sidebarAllowed;
     }
 
     public function getSpeakerInfosByUserId(): string
