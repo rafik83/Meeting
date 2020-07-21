@@ -12,10 +12,6 @@ var $ = require('jquery');
 require('bootstrap/js/tooltip');
 require('bootstrap/js/popover'); // popover require tooltip
 
-
-// toto
-
-
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
@@ -39,8 +35,6 @@ function Webinar(element, isSpeaker) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
         const timerInterval = setInterval(() => {
-            console.log('tour d\'horloge.');
-
             const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
 
             if (remainingTime <= 0) {
