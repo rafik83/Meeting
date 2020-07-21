@@ -88,7 +88,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $type2->getCategoriesTitles('fr')->willReturn([]);
         $type2->getTitle('fr')->willReturn('type2');
         $sheet1->getType()->willReturn($type1->reveal());
-        $sheet1->countParticipant()->willReturn(1);
+        $sheet1->countParticipants()->willReturn(1);
         $sheet1->getGroup()->willReturn($group->reveal());
         $sheet1->getTraceableName()->willReturn('Sheet');
         $group->getTitle()->willReturn('group title 1');
@@ -102,7 +102,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->getValidationState()->willReturn('validationState2');
         $sheet2->getCompleteness()->willReturn(75);
         $sheet2->isEnabled()->willReturn(false);
-        $sheet2->isInCatalog()->willReturn(false);
+        $sheet2->isInInternalCatalog()->willReturn(false);
         $sheet2->getType()->willReturn($type2->reveal());
         $sheet2->countParticipants()->willReturn(2);
         $sheet2->getGroup()->willReturn(null);
