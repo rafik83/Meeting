@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Participant\Import\CreateMapping:
+    properties:
+        title:
+            -   NotBlank: ~

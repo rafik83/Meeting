@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Notification;
 
 final class Notification
@@ -15,21 +7,21 @@ final class Notification
     /**
      * Priority
      */
-    const PRIORITY_REQUIRED  = 'required';
-    const PRIORITY_IMPORTANT = 'important';
-    const PRIORITY_NONE      = 'none';
+    public const PRIORITY_REQUIRED  = 'required';
+    public const PRIORITY_IMPORTANT = 'important';
+    public const PRIORITY_NONE      = 'none';
 
     /**
      * Category
      */
-    const CATEGORY_SHEET       = 'sheet';
-    const CATEGORY_TRANSACTION = 'transaction';
-    const CATEGORY_PACKAGE     = 'package';
+    public const CATEGORY_SHEET       = 'sheet';
+    public const CATEGORY_TRANSACTION = 'transaction';
+    public const CATEGORY_PACKAGE     = 'package';
 
     /**
      * Notification Type
      */
-    const TYPE_SHEET_TRANSLATION_COMPLETENESS = 'sheetTranslationCompleteness';
-    const TYPE_PACKAGE_SELECTED               = 'packageSelected';
-    const TYPE_TRANSACTION_PENDING            = 'transactionPending';
+    public const TYPE_SHEET_TRANSLATION_COMPLETENESS = 'sheetTranslationCompleteness';
+    public const TYPE_PACKAGE_SELECTED               = 'packageSelected';
+    public const TYPE_TRANSACTION_PENDING            = 'transactionPending';
 }

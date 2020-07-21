@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class PaginatedSheetListViewQueryHandler
 {
@@ -35,9 +34,6 @@ class PaginatedSheetListViewQueryHandler
 
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
-
-    /** @var Impersonate */
-    private $impersonate;
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -52,7 +48,6 @@ class PaginatedSheetListViewQueryHandler
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
-     * @param Impersonate                 $impersonate
      * @param SheetRepositoryInterface    $sheetRepository
      * @param TraceRepositoryInterface    $traceRepository
      * @param TypeRepositoryInterface     $typeRepository
@@ -61,7 +56,6 @@ class PaginatedSheetListViewQueryHandler
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
-        Impersonate $impersonate,
         SheetRepositoryInterface $sheetRepository,
         TraceRepositoryInterface $traceRepository,
         TypeRepositoryInterface $typeRepository
@@ -69,7 +63,6 @@ class PaginatedSheetListViewQueryHandler
         $this->sheetSearchAdapter     = $sheetSearchAdapter;
         $this->sheetInfoGuesser       = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->impersonate            = $impersonate;
         $this->sheetRepository        = $sheetRepository;
         $this->traceRepository        = $traceRepository;
         $this->typeRepository         = $typeRepository;
@@ -172,14 +165,14 @@ class PaginatedSheetListViewQueryHandler
             new SheetParticipantView(
                 $firstName,
                 $lastName,
-                $sheet->getOwner()->getEmail()
+                $sheet->getOwner()->getEmail(),
+                $sheet->getOwner()->getId()
             ),
             null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCommercialStatus(),
             $sheet->getReminderDate(),
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
-            $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
             $sheet->countParticipant(),
             null !== $sheet->getGroup(),
             null !== $sheet->getGroup() ? $sheet->getGroup()->getTitle() : null,

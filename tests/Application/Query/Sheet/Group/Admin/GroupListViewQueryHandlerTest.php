@@ -19,11 +19,11 @@ use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class GroupListViewQueryHandlerTest extends TestCase
 {
@@ -31,14 +31,15 @@ class GroupListViewQueryHandlerTest extends TestCase
     {
         $datetime = new \DateTime();
         $event = EventFactory::createEvent();
-        $user = UserFactory::create();
         $admin = AdminFactory::create();
+
+        $user = $this->prophesize(User::class);
 
         $reflectionGroup = new \ReflectionClass(Group::class);
         $propertyGroupId = $reflectionGroup->getProperty('id');
         $propertyGroupId->setAccessible(true);
 
-        $group = new Group($event, $user, 'My entity', false ,$datetime);
+        $group = new Group($event, $user->reveal(), 'My entity', false ,$datetime);
         $propertyGroupId->setValue($group, 1);
 
         $reflectionSheet = new \ReflectionClass(Sheet::class);
@@ -52,17 +53,17 @@ class GroupListViewQueryHandlerTest extends TestCase
         $propertySheetId->setValue($sheet2, 2);
 
         $groupViewQueryHandler = $this->prophesize(AdminGroupViewQueryHandler::class);
-        $groupRepository       = $this->prophesize(GroupRepositoryInterface::class);
+        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
 
         $expectedResult = new GroupView(
             1,
             'My entity',
-            $user->getEmail(),
+            'john@email.com',
+            42,
             [
                 new SheetView(1, 'Sheet title 1'),
                 new SheetView(2, 'Sheet title 2'),
             ],
-            '_LINK_',
             $datetime
         );
 

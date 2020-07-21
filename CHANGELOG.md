@@ -6,9 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2155 - Password is required to change email in user account
+- VIMEET-2157 - Save import mapping
 
+### Fixed
+- VIMEET-2154 - securize impersonation
+
+## [2.37.0] - 2020-07-06
+### Added
+- VIMEET-2100 - Add composer.phar version 1.10.6 to the project
+
+## [2.36.0] - 2020-07-03
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
+### Fixed
+- MV-242 - Fix meeting / contact evaluations on event dashboard
+- MV-243 - Add media link in sheet pdf printing
+### Added
+- VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
 ## [2.35.1] - 2020-06-30
 ### Fixed

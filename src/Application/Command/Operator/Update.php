@@ -1,19 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Operator;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Update
+class Update implements Command
 {
     /** @var string */
     public $email;
@@ -39,11 +32,11 @@ class Update
      */
     public function __construct(Admin $operator, array $allowedEventsByAdmin)
     {
-        $this->operator  = $operator;
-        $this->email     = $operator->getEmail();
-        $this->lastname  = $operator->getLastname();
+        $this->operator = $operator;
+        $this->email = $operator->getEmail();
+        $this->lastname = $operator->getLastname();
         $this->firstname = $operator->getFirstname();
-        $this->events    = $operator->getEvents()->toArray();
+        $this->events = $operator->getEvents()->toArray();
         $this->allowedEventsByAdmin = $allowedEventsByAdmin;
     }
 }

@@ -5,17 +5,10 @@ Feature: Login admin
 
   Scenario: Login successful
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admins.yml                                                               |
+    And the super admin "test@test.com" is created
     When I go to this page "/fr/login"
     And I fill in "form.login.children.username.label" with "test@test.com"
-    And I fill in "form.login.children.password.label" with "vimeet_admin"
+    And I fill in "form.login.children.password.label" with "Vimeet_admin1"
     And I press "form.login.children.submit.label"
     Then I should be on this page "/fr/event"
     And I should see "admin.login.logged_as"
@@ -30,8 +23,9 @@ Feature: Login admin
 
   Scenario: Login failed for deactivated admin
     When I go to this page "/fr/login"
+    And the admin "test3@test.com" with role "ROLE_ORGANIZER" is created
     And I fill in "form.login.children.username.label" with "test3@test.com"
-    And I fill in "form.login.children.password.label" with "vimeet_admin"
+    And I fill in "form.login.children.password.label" with "Vimeet_admin1"
     And I press "form.login.children.submit.label"
     Then I should be on this page "/fr/login"
     And I should see "Account is disabled."

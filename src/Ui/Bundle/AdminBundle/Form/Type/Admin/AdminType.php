@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -23,7 +15,7 @@ abstract class AdminType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
@@ -31,6 +23,7 @@ abstract class AdminType extends AbstractType
             ])
             ->add('password', TextType::class, [
                 'required' => isset($options['password_required']) ? $options['password_required'] : true,
+                'help' => 'form.admin_password.rules',
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,
@@ -48,9 +41,9 @@ abstract class AdminType extends AbstractType
                 'required' => true,
             ])
             ->add('events', EventChoiceType::class, [
-                'required'    => false,
-                'expanded'    => true,
-                'multiple'    => true,
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
                 'placeholder' => '',
             ])
         ;

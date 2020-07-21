@@ -1,64 +1,40 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Update
+class Update implements Command
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $password;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $role;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $events;
 
-    /**
-     * @param Admin $admin
-     */
     public function __construct(Admin $admin)
     {
-        $this->admin     = $admin;
-        $this->email     = $admin->getEmail();
-        $this->lastname  = $admin->getLastname();
+        $this->admin = $admin;
+        $this->email = $admin->getEmail();
+        $this->lastname = $admin->getLastname();
         $this->firstname = $admin->getFirstname();
-        $this->role      = $admin->getRole();
-        $this->events    = $admin->getEvents()->toArray();
+        $this->role = $admin->getRole();
+        $this->events = $admin->getEvents()->toArray();
     }
 }
