@@ -139,3 +139,22 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting }
+
+    #
+    # Account
+    #
+    Proximum\Vimeet\Application\Command\User\ChangeMailHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+            - '@components.token.change_mail_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMail }
+    Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }

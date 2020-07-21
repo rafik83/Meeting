@@ -532,22 +532,26 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             if (!$group instanceof Sheet\Group) {
-                if (isset($this->userGroupTitles[$email])) {
-                    $groupTitle = $this->userGroupTitles[$email];
+                $group = $this->groupRepository->getByUserAndEvent($user, $event);
+
+                if (!$group instanceof Sheet\Group) {
+                    if (isset($this->userGroupTitles[$email])) {
+                        $groupTitle = $this->userGroupTitles[$email];
+                    }
+
+                    $group = new Sheet\Group(
+                        $event,
+                        $user,
+                        $groupTitle,
+                        true,
+                        $this->dateTime,
+                        null
+                    );
+
+                    $this->groupRepository->add($group);
                 }
 
-                $group = new Sheet\Group(
-                    $event,
-                    $user,
-                    $groupTitle,
-                    true,
-                    $this->dateTime,
-                    null
-                );
-
-                $this->groupRepository->add($group);
-
-                if (!$firstSheet->hasGroup()) {
+                if ($firstSheet instanceof Sheet && !$firstSheet->hasGroup()) {
                     $firstSheet->setGroup($group);
                     $this->sheetRepository->set($firstSheet);
                 }
