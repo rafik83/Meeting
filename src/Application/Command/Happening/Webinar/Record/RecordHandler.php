@@ -46,7 +46,7 @@ class RecordHandler
 
         $existingArchives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
         $startedArchives = array_filter($existingArchives->getItems(), static function ($archiveItem) {
-            return $archiveItem->status === RecordStatus::STARTED;
+            return in_array($archiveItem->status, RecordStatus::IS_RECORDING_STATUS, true);
         });
 
         if (count($startedArchives) > 0) {
