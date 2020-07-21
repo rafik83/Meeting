@@ -39,7 +39,7 @@ class StopRecordHandler
 
         /** @var Archive $archive */
         foreach ($archives->getItems() as $archive) {
-            if ($archive->status === RecordStatus::STARTED) {
+            if (in_array($archive->status, RecordStatus::IS_RECORDING_STATUS, true)) {
                 $this->videoConferenceAdapter->stopArchive($archive->id);
             }
 
