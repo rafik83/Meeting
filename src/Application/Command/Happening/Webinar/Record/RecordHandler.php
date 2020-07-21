@@ -68,11 +68,7 @@ class RecordHandler
 
         $this->recordArchiveRepository->add($recordArchive);
 
-        $dueDate = new \DateTime();
-        // Avoid adding microseconds
-        $dueDate->setTime(0, 0, 0, 0);
-        $dueDate->setTimestamp($this->dateTime->getTimestamp());
-        $dueDate->modify('+ 125minutes');
+        $dueDate = clone $this->dateTime->modify('+ 125minutes');
         $this->prepareReconciliationHandler->handle(
             new PrepareReconciliation(
                 $happening,
