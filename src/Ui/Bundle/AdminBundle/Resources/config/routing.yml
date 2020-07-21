@@ -2363,3 +2363,12 @@ admin_event_fast_checkin_action_checkin:
         user: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction
+
+# Impersonate
+admin_impersonate:
+    path: /event/{event}/impersonate/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction

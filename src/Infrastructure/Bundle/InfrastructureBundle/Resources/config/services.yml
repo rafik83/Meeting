@@ -2630,6 +2630,11 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.csrf_token:
+        class: Proximum\Vimeet\Infrastructure\Adapter\CsrfTokenAdapter
+        arguments:
+            - '@security.csrf.token_manager'
+
     Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface: '@adapter.authorization_checker'
 
     adapter.templating_adapter:
@@ -3234,7 +3239,6 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
-            - '@security.impersonate'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
             - '@vimeet_infrastructure.repository.type_repository'
