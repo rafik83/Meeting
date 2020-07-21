@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\Create;
@@ -18,10 +10,10 @@ class CreateType extends AdminType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'        => Create::class,
+            'data_class' => Create::class,
             'password_required' => true,
         ]);
     }
@@ -29,7 +21,7 @@ class CreateType extends AdminType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'create_admin';
     }

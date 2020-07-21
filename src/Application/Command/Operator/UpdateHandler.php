@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Operator;
 
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
@@ -31,19 +23,14 @@ class UpdateHandler
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param AdminRepositoryInterface      $adminRepository
-     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
-     * @param EventDispatcherInterface      $eventDispatcher
-     */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->adminRepository                = $adminRepository;
+        $this->adminRepository = $adminRepository;
         $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->eventDispatcher                = $eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -51,7 +38,7 @@ class UpdateHandler
      *
      * @throws EmailAlreadyExistsException
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         $newMail = $update->email !== $update->operator->getEmail();
         $update->email = StringHelper::trimSpacesAndNonBreakSpaces($update->email);
@@ -86,10 +73,7 @@ class UpdateHandler
         }
     }
 
-    /**
-     * @param Admin $operator
-     */
-    private function sendActivationEvent(Admin $operator)
+    private function sendActivationEvent(Admin $operator): void
     {
         $token = $this->activateAccountTokenGenerator->generate($operator);
         $event = new ActivateAccountEvent($operator, $token, $operator->getLocale());

@@ -84,19 +84,17 @@ class ImportMappingHandlerTest extends TestCase
         $localFileStorage            = $this->prophesize(LocalFileStorageAdapter::class);
         $participantImportRepository = $this->prophesize(ParticipantImportRepositoryInterface::class);
         $participantImportLogger     = $this->prophesize(ParticipantImportLogger::class);
-        $participantImport           = $this->prophesize(ParticipantImport::class);
 
         $participantImportLogger->getSheets()->willReturn([]);
         $participantImportLogger->toArray()->willReturn([]);
-
-        $participantImport->getId()->willReturn(123);
 
         $command = new ImportMapping(
             $event->reveal(),
             $type->reveal(),
             $admin->reveal(),
             $locale,
-            new ImportMappingView($csvHeaders, $registrationHeaders, false)
+            new ImportMappingView($csvHeaders, $registrationHeaders, false, null),
+            null
         );
 
         $command->setMappings($mapping);
@@ -115,7 +113,7 @@ class ImportMappingHandlerTest extends TestCase
             'Facture - Adresse' => 'address',
         ];
 
-        $this->assertEquals($expectedReMapping, $command->getMappings());
+        $this->assertEquals($expectedReMapping, $command->getMappingsIndexedByFileHeader());
 
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled()->willReturn($filename);
         $localFileStorage->remove($filename, true)->shouldBeCalled();
@@ -123,9 +121,28 @@ class ImportMappingHandlerTest extends TestCase
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled();
         $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled();
         $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET)->shouldBeCalled();
+        $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING)->shouldBeCalled();
+        $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET)->shouldBeCalled();
         $session->set(ParticipantImportLogger::PARTICIPANT_IMPORT_ID, Argument::any())->shouldBeCalled();
 
-        $participantImportRepository->add($participantImport->reveal());
+        $participantImport = new ParticipantImport(
+            $type->reveal(),
+            [],
+            [
+                'Nom participant' => 'lastname',
+                'Prénom participant' => 'firstname',
+                'Société Acheteur' => 'company',
+                'E-mail Acheteur' => 'participant_import.field.mail',
+                'Mobile' => 'mobile',
+                'Pays Acheteur' => 'country',
+                'Facture - Ville' => 'city',
+                'Facture - Code postal' => 'zipcode',
+                'Facture - Adresse' => 'address',
+            ],
+            $datetime,
+            null
+        );
+        $participantImportRepository->add($participantImport)->shouldBeCalled();
 
         $eventDispatcher
             ->dispatch(

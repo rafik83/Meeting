@@ -77,5 +77,17 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\BillingInfoContext:
                     - '@Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Happening\CategoryContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Unavailability\CategoryContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Messaging\MessageContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Notification\NotificationContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Sheet\SheetCompletenessContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Transaction\TransactionContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy'
                 - behatch:context:json
                 - behatch:context:rest

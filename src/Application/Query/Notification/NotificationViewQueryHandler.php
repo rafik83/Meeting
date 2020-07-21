@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Notification;
 
 use Proximum\Vimeet\Application\Query\Notification\Package\PackageNotificationViewQuery;
@@ -21,33 +13,18 @@ use Proximum\Vimeet\Application\View\Notification\NotificationView;
 
 class NotificationViewQueryHandler
 {
-    /**
-     * @var SheetNotificationViewQueryHandler
-     */
+    /** @var SheetNotificationViewQueryHandler */
     private $sheetNotificationViewQueryHandler;
 
-    /**
-     * @var TransactionNotificationViewQueryHandler
-     */
+    /** @var TransactionNotificationViewQueryHandler */
     private $transactionNotificationViewQueryHandler;
 
-    /**
-     * @var PackageNotificationViewQueryHandler
-     */
+    /** @var PackageNotificationViewQueryHandler */
     private $packageNotificationViewQueryHandler;
 
-    /**
-     * @var NotificationView[]
-     */
+    /** @var NotificationView[] */
     private $notificationViews;
 
-    /**
-     * NotificationViewQueryHandler constructor.
-     *
-     * @param SheetNotificationViewQueryHandler       $sheetNotificationViewQueryHandler
-     * @param TransactionNotificationViewQueryHandler $transactionNotificationViewQueryHandler
-     * @param PackageNotificationViewQueryHandler     $packageNotificationViewQueryHandler
-     */
     public function __construct(
         SheetNotificationViewQueryHandler $sheetNotificationViewQueryHandler,
         TransactionNotificationViewQueryHandler $transactionNotificationViewQueryHandler,
@@ -59,12 +36,7 @@ class NotificationViewQueryHandler
         $this->notificationViews                       = [];
     }
 
-    /**
-     * @param NotificationViewQuery $query
-     *
-     * @return NotificationListView
-     */
-    public function handle(NotificationViewQuery $query)
+    public function handle(NotificationViewQuery $query): NotificationListView
     {
         $sheetNotificationViews = $this->sheetNotificationViewQueryHandler->handle(
             new SheetNotificationViewQuery($query->sheet)
@@ -91,7 +63,7 @@ class NotificationViewQueryHandler
     /**
      * @param NotificationView[] $notificationViews
      */
-    private function addNotifications(array $notificationViews)
+    private function addNotifications(array $notificationViews): void
     {
         $this->notificationViews = array_merge($this->notificationViews, $notificationViews);
     }

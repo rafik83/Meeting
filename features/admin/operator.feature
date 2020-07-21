@@ -5,14 +5,9 @@ Feature: Handle Operator
 
   Scenario: I can create an Operator with the events of the organizer
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admins.yml                                                               |
+    And the admin "test2@test.com" with role "ROLE_ORGANIZER" is created
+    And the event "Les rendez-vous CARNOT 2016" is created
+    And this admin can access this event
     And I am logged with "test2@test.com" on admin
     And I go to this page "/fr/event"
     When I go to this page "/fr/event/past"
@@ -29,7 +24,7 @@ Feature: Handle Operator
     Then I should be on this page "/fr/operator"
     And I should see "flash.admin.operator.create.success"
     Given I am logged with "toto@toto.fr" on admin
-    When I go to this page "/fr/event/past"
+    When I go to this page "/fr/event"
     Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: I can edit an Operator
@@ -41,7 +36,7 @@ Feature: Handle Operator
     And I should see "Toto"
     And I should see "Tata"
     Then I follow "admin.operator_list.table.content.update"
-    And I should be on this page "/fr/operator/update/4"
+    And I should be on this page "/fr/operator/update/2"
     And I uncheck "Les rendez-vous CARNOT 2016"
     And I press "form.update_operator.children.submit.label"
     Then I should be on this page "/fr/operator"

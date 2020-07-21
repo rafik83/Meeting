@@ -6,15 +6,8 @@ Feature: See, create and update unavailability category
 
   Scenario: I can create an unavailability category
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                     |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml       |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml           |
-      | Admin.yml                                                                   |
-    And I am logged with "test@test.com" on admin
+    And the event "To be or not to be" is created
+    And I am logged as admin
     When I go to this page "/fr/event/1/unavailability/category"
     And I follow "admin.unavailability.category.add"
     And I should be on this page "/fr/event/1/unavailability/category/create"
@@ -28,7 +21,7 @@ Feature: See, create and update unavailability category
     And I should see "MyCategory"
 
   Scenario: I can update an unavailability category
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event/1/unavailability/category/update/1"
     When I fill in the following:
       | unavailability_category_update[picto]      | Dejeuner       |

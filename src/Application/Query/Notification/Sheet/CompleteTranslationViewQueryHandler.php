@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Notification\Sheet;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
@@ -17,12 +9,7 @@ use Proximum\Vimeet\Domain\Notification\Notification;
 
 class CompleteTranslationViewQueryHandler extends AbstractNotificationQueryHandler
 {
-    /**
-     * @param CompleteTranslationViewQuery $query
-     *
-     * @return NotificationView
-     */
-    public function handle(CompleteTranslationViewQuery $query)
+    public function handle(CompleteTranslationViewQuery $query): NotificationView
     {
         $link = $this->router->generate(
             'event_sheet_locale',

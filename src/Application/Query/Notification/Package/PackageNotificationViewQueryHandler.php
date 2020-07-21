@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Notification\Package;
 
 use Proximum\Vimeet\Application\View\Notification\NotificationView;
@@ -16,22 +8,12 @@ use Proximum\Vimeet\Domain\Repository\NotificationRepositoryInterface;
 
 class PackageNotificationViewQueryHandler
 {
-    /**
-     * @var NotificationRepositoryInterface
-     */
+    /** @var NotificationRepositoryInterface */
     private $notificationRepository;
 
-    /**
-     * @var NoOrderNotificationViewQueryHandler
-     */
+    /** @var NoOrderNotificationViewQueryHandler */
     private $noOrderNotificationViewQueryHandler;
 
-    /**
-     * PackageNotificationViewQuery constructor.
-     *
-     * @param NotificationRepositoryInterface     $notificationRepository
-     * @param NoOrderNotificationViewQueryHandler $noOrderNotificationViewQueryHandler
-     */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
         NoOrderNotificationViewQueryHandler $noOrderNotificationViewQueryHandler
@@ -45,7 +27,7 @@ class PackageNotificationViewQueryHandler
      *
      * @return NotificationView[]
      */
-    public function handle(PackageNotificationViewQuery $query)
+    public function handle(PackageNotificationViewQuery $query): array
     {
         $packageNotification = $this->notificationRepository->findByType(
             $query->sheet,

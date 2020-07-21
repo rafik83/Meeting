@@ -534,6 +534,10 @@ class ParticipantDenormalizerTest extends TestCase
             null
         );
 
+        $this->groupRepository->getByUserAndEvent($existingUserWithoutGroup->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
         $this->groupRepository->add($newGroup)->shouldBeCalled();
         $this->sheetRepository->set(Argument::that(
             static function (Sheet $sheet) {
@@ -796,7 +800,12 @@ class ParticipantDenormalizerTest extends TestCase
             null
         );
 
-        $this->groupRepository->add($newGroup2)->shouldBeCalled();
+        // strange behavior but to test that we find a group for this user on this event (even if the user is new)
+        $this->groupRepository->getByUserAndEvent($newUser2, $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($newGroup2)
+        ;
+        $this->groupRepository->add($newGroup2)->shouldNotBeCalled();
 
         $this->sheetRepository
             ->getSheetsByUserAndEvent($newUser2, $event->reveal())

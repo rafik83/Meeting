@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Partner;
 
 use PHPUnit\Framework\TestCase;
@@ -23,22 +15,22 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $dateTime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $type     = new Type($event);
+        $event = EventFactory::createEvent();
+        $type = new Type($event);
 
         $organizer = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
 
-        $command            = new Create($organizer);
-        $command->email     = 'partner@vimeet.com';
-        $command->password  = 'password';
+        $command = new Create($organizer);
+        $command->email = 'partner@vimeet.com';
+        $command->password = 'password';
         $command->firstname = 'toto';
-        $command->lastname  = 'tata';
-        $command->types     = [$type];
+        $command->lastname = 'tata';
+        $command->types = [$type];
 
-        $partner         = new Admin('partner@vimeet.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
+        $partner = new Admin('partner@vimeet.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
         $expectedPartner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
 
         $expectedPartner->addEvent($event);
@@ -52,7 +44,7 @@ class CreateHandlerTest extends TestCase
         // Test
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
-        $passwordEncoder->encode(Argument::that(function (Admin $user) use ($partner) {
+        $passwordEncoder->encode(Argument::that(static function (Admin $user) use ($partner) {
             return $user->getEmail() === $partner->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 

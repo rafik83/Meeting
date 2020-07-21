@@ -93,7 +93,8 @@ class ImportMappingAction
             $type,
             $adminDomain->getAdmin(),
             $locale,
-            $importMappingView
+            $importMappingView,
+            $importMappingView->savedImportMapping
         );
 
         $form = $this->formFactory->create(ImportMappingType::class, $importMapping, [

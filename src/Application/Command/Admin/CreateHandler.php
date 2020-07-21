@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
@@ -16,7 +8,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 
 class CreateHandler extends AbstractCreateHandler
 {
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         $create->email = StringHelper::trimSpacesAndNonBreakSpaces($create->email);
 
@@ -34,7 +26,7 @@ class CreateHandler extends AbstractCreateHandler
             $create->firstname,
             $create->lastname,
             $create->role,
-            $create->date
+            $this->dateTime
         );
 
         $password = $this->encoder->encode($admin, $create->password);
