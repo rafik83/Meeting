@@ -179,8 +179,9 @@ class GetWebinarViewQueryHandler
             if ($carry[1] < $item->createdAt) {
                 $carry = [$item->status, $item->createdAt];
             }
+
             return $carry;
-        }, [ 'no_record', 0 ]);
+        }, ['no_record', 0]);
 
         return $status[0];
     }
