@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - VIMEET-2154 - securize impersonation
+- MV-239 - Fix batch action for paged filtered results, for all results selection
 
 ## [2.37.0] - 2020-07-06
 ### Added
