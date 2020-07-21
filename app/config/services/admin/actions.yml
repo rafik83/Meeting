@@ -778,6 +778,17 @@ services:
             - '@templating.engine.twig'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@query.participant.import.import_result_view_query_handler'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating.engine.twig'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@translator'
+
     #
     # Availability Time Range
     #
@@ -1301,3 +1312,10 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.common_export_path%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.csrf_token'
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'

@@ -65,8 +65,8 @@ class AdminGroupViewQueryHandler
             $groupViewQuery->group->getId(),
             $groupViewQuery->group->getTitle(),
             $groupViewQuery->group->getManager()->getEmail(),
+            $groupViewQuery->group->getManager()->getId(),
             $sheetViews,
-            $impersonateUrl,
             $groupViewQuery->group->getCreatedAt()
         );
     }

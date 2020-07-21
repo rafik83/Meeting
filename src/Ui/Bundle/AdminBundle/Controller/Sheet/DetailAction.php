@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
@@ -63,9 +62,6 @@ class DetailAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var Impersonate */
-    private $impersonate;
-
     /** @var QueryBusInterface */
     private $queryBus;
 
@@ -82,8 +78,7 @@ class DetailAction
         QueryBusInterface $queryBus,
         FlashBagInterface $flashBag,
         EngineInterface $engine,
-        RouterInterface $router,
-        Impersonate $impersonate
+        RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->typeRepository = $typeRepository;
@@ -95,15 +90,9 @@ class DetailAction
         $this->flashBag = $flashBag;
         $this->engine = $engine;
         $this->router = $router;
-        $this->impersonate = $impersonate;
     }
 
     /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param Sheet       $sheet
-     * @param AdminDomain $adminDomain
-     *
      * @return Response|RedirectResponse
      */
     public function __invoke(Request $request, Event $event, Sheet $sheet, AdminDomain $adminDomain): Response
@@ -137,8 +126,8 @@ class DetailAction
             $changeType = new ChangeType($sheet, $sheet->getType(), $admin, $locale);
 
             $changeTypeForm = $this->formFactory->create(ChangeTypeType::class, $changeType, [
-                'event'  => $event,
-                'type'   => $sheet->getType(),
+                'event' => $event,
+                'type' => $sheet->getType(),
                 'locale' => $locale,
                 'submit' => true,
             ]);
@@ -169,16 +158,13 @@ class DetailAction
             ]));
         }
 
-        $impersonationToken = $this->impersonate->getEncodedToken($admin, $sheet->getOwner());
-
         return $this->engine->renderResponse(self::TEMPLATE, [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
-            'details'            => $sheetDetailView,
-            'addCommentForm'     => $addCommentForm->createView(),
-            'changeTypeForm'     => null === $changeTypeForm ? null : $changeTypeForm->createView(),
-            'impersonationToken' => $impersonationToken,
+            'event' => $event,
+            'sheet' => $sheet,
+            'sheetTypeTitle' => $sheet->getType()->getTitle($locale),
+            'details' => $sheetDetailView,
+            'addCommentForm' => $addCommentForm->createView(),
+            'changeTypeForm' => null === $changeTypeForm ? null : $changeTypeForm->createView(),
         ]);
     }
 }

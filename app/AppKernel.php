@@ -30,9 +30,6 @@ class AppKernel extends Kernel
             // JMS Job Queue
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
 
-            // Redis
-            new Snc\RedisBundle\SncRedisBundle(),
-
             // Sentry
             new Sentry\SentryBundle\SentryBundle(),
 
@@ -59,6 +56,11 @@ class AppKernel extends Kernel
 
             // Fixtures
             $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
+        }
+
+        if (in_array($this->getEnvironment(), ['prod', 'dev'])) {
+            // Redis
+            $bundles[] = new Snc\RedisBundle\SncRedisBundle();
         }
 
         return $bundles;

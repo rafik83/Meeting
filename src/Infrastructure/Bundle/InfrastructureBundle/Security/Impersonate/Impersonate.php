@@ -18,71 +18,54 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class Impersonate
 {
-    /**
-     * @var UserProviderInterface
-     */
+    // token life duration (seconds)
+    const TIME_TO_LIVE = 60;
+
+    /** @var UserProviderInterface */
     private $adminProvider;
 
-    /**
-     * @var UserProviderInterface
-     */
+    /** @var UserProviderInterface */
     private $userProvider;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $salt;
 
-    /**
-     * @param UserProviderInterface $adminProvider
-     * @param UserProviderInterface $userProvider
-     * @param string                $salt
-     */
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         UserProviderInterface $adminProvider,
         UserProviderInterface $userProvider,
-        $salt
+        string $salt,
+        \DateTimeInterface $datetime
     ) {
         $this->adminProvider = $adminProvider;
-        $this->userProvider  = $userProvider;
-        $this->salt          = $salt;
+        $this->userProvider = $userProvider;
+        $this->salt = $salt;
+        $this->datetime = $datetime;
     }
 
-    /**
-     * @param string $token
-     *
-     * @return UserInterface
-     */
-    public function getAdmin($token)
+    public function getAdmin(string $token): UserInterface
     {
         return $this->getUserByProvider('admin', $token);
     }
 
-    /**
-     * @param string $token
-     *
-     * @return UserInterface
-     */
-    public function getUser($token)
+    public function getUser(string $token): UserInterface
     {
         return $this->getUserByProvider('user', $token);
     }
 
-    /**
-     * @param Admin $admin
-     * @param User  $user
-     *
-     * @return string
-     */
-    public function getEncodedToken(Admin $admin, User $user)
+    public function getEncodedToken(Admin $admin, User $user): string
     {
-        $tokenString = $this->getTokenCheck($admin->getEmail(), $user->getEmail());
+        $expire = $this->datetime->getTimestamp() + self::TIME_TO_LIVE;
+        $tokenString = $this->getTokenCheck($admin->getEmail(), $user->getEmail(), $expire);
 
         return base64_encode(
             serialize(
                 [
                     'from'  => $admin->getEmail(),
                     'to'    => $user->getEmail(),
+                    'expire' => $expire,
                     'check' => $tokenString,
                 ]
             )
@@ -90,14 +73,9 @@ class Impersonate
     }
 
     /**
-     * @param string $provider
-     * @param string $token
-     *
-     * @throws \Exception
-     *
-     * @return UserInterface
+     * @throws BadCredentialsException
      */
-    private function getUserByProvider($provider, $token)
+    private function getUserByProvider(string $provider, string $token): UserInterface
     {
         $decodedToken = $this->decodeToken($token);
 
@@ -113,31 +91,29 @@ class Impersonate
     }
 
     /**
-     * @param array $decodedToken
-     *
-     * @throws \Exception
+     * @throws BadCredentialsException
      */
-    private function checkToken(array $decodedToken)
+    private function checkToken(array $decodedToken): void
     {
         if (!isset($decodedToken['from']) || !isset($decodedToken['from']) || !isset($decodedToken['from'])) {
             throw new BadCredentialsException('token params invalid');
         }
 
-        $tokenCheck = $this->getTokenCheck($decodedToken['from'], $decodedToken['to']);
+        $tokenCheck = $this->getTokenCheck($decodedToken['from'], $decodedToken['to'], $decodedToken['expire']);
 
         if ($tokenCheck !== $decodedToken['check']) {
             throw new BadCredentialsException('Token check invalid');
         }
+
+        if ($this->datetime->getTimestamp() > $decodedToken['expire']) {
+            throw new BadCredentialsException('Token has expired');
+        }
     }
 
     /**
-     * @param string $token
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * @throws BadCredentialsException
      */
-    private function decodeToken($token)
+    private function decodeToken(string $token): array
     {
         $decodedToken = unserialize(base64_decode($token));
 
@@ -148,14 +124,8 @@ class Impersonate
         return $decodedToken;
     }
 
-    /**
-     * @param string $adminEmail
-     * @param string $userEmail
-     *
-     * @return string
-     */
-    private function getTokenCheck($adminEmail, $userEmail)
+    private function getTokenCheck(string $adminEmail, string $userEmail, int $expire): string
     {
-        return sha1($adminEmail . $this->salt . $userEmail);
+        return hash_hmac('sha512', $adminEmail . $userEmail . $expire, $this->salt);
     }
 }

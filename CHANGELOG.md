@@ -4,15 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2155 - Password is required to change email in user account
+- VIMEET-2157 - Save import mapping
+
+### Updated
+- Update SncRedisBundle to 3.2.3
+
 ### Fixed
+- VIMEET-2154 - securize impersonation
 - MV-239 - Fix batch action for paged filtered results, for all results selection
+
+## [2.37.0] - 2020-07-06
+### Added
+- VIMEET-2100 - Add composer.phar version 1.10.6 to the project
 
 ## [2.36.0] - 2020-07-03
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
+
 ### Fixed
 - MV-242 - Fix meeting / contact evaluations on event dashboard
 - MV-243 - Add media link in sheet pdf printing
+
 ### Added
 - VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
@@ -24,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2171 - Add participant to meeting when accessing to a videoconference meeting
 - VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
-- VIMEET-2126 Add - Export all participants of sheet met
+- VIMEET-2126 - Add Export all participants of sheet met
 - VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
 - VIMEET-2153 - secure cookies
 

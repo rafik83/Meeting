@@ -15,8 +15,10 @@ class ImportResultViewQueryHandler
     /** @var ParticipantImportRepositoryInterface */
     private $participantImportRepository;
 
-    public function __construct(SessionInterface $session, ParticipantImportRepositoryInterface $participantImportRepository)
-    {
+    public function __construct(
+        SessionInterface $session,
+        ParticipantImportRepositoryInterface $participantImportRepository
+    ) {
         $this->session = $session;
         $this->participantImportRepository = $participantImportRepository;
     }
@@ -30,11 +32,12 @@ class ImportResultViewQueryHandler
         $loggerData = $participantImport->getResult();
 
         return new ParticipantDenormalizerView(
-            $loggerData[ParticipantImportLogger::EXISTING_PARTICIPATIONS],
-            $loggerData[ParticipantImportLogger::FILE_PARTICIPATIONS],
-            $loggerData[ParticipantImportLogger::CREATED_SHEETS],
-            $loggerData[ParticipantImportLogger::CREATED_USERS],
-            $loggerData[ParticipantImportLogger::IMPORT_ERRORS]
+            $participantImport,
+            $loggerData[ParticipantImportLogger::EXISTING_PARTICIPATIONS] ?? 0,
+            $loggerData[ParticipantImportLogger::FILE_PARTICIPATIONS] ?? 0,
+            $loggerData[ParticipantImportLogger::CREATED_SHEETS] ?? 0,
+            $loggerData[ParticipantImportLogger::CREATED_USERS] ?? 0,
+            $loggerData[ParticipantImportLogger::IMPORT_ERRORS] ?? 0
         );
     }
 }
