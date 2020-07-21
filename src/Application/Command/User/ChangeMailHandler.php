@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Exception\Field\EmptyFieldException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\User\InvalidPasswordException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
@@ -23,47 +24,32 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeMailHandler
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var ChangeMailTokenRepositoryInterface
-     */
+    /** @var ChangeMailTokenRepositoryInterface */
     private $changeMailTokenRepository;
 
-    /**
-     * @var ChangeMailTokenGenerator
-     */
+    /** @var ChangeMailTokenGenerator */
     private $changeMailTokenGenerator;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param UserRepositoryInterface            $userRepository
-     * @param ChangeMailTokenRepositoryInterface $changeMailTokenRepository
-     * @param ChangeMailTokenGenerator           $changeMailTokenGenerator
-     * @param EventDispatcherInterface           $eventDispatcher
-     */
     public function __construct(
         UserRepositoryInterface $userRepository,
         ChangeMailTokenRepositoryInterface $changeMailTokenRepository,
         ChangeMailTokenGenerator $changeMailTokenGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->userRepository            = $userRepository;
+        $this->userRepository = $userRepository;
         $this->changeMailTokenRepository = $changeMailTokenRepository;
-        $this->changeMailTokenGenerator  = $changeMailTokenGenerator;
-        $this->eventDispatcher           = $eventDispatcher;
+        $this->changeMailTokenGenerator = $changeMailTokenGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param ChangeMail $changeMail
-     *
+     * @throws InvalidPasswordException
      * @throws EmailAlreadyExistsException
      * @throws EmptyFieldException
      * @throws SameEmailException

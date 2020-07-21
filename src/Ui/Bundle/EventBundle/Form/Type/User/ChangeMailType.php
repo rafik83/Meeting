@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,6 +26,9 @@ class ChangeMailType extends AbstractType
     {
         $builder
             ->add('mail', EmailType::class, [
+                'required' => true,
+            ])
+            ->add('password', PasswordType::class, [
                 'required' => true,
             ]);
     }

@@ -59,7 +59,7 @@
         "ruflin/elastica": "^3.2",
         "endroid/qr-code": "^3.4",
         "behat/transliterator": "^1.2",
-        "snc/redis-bundle": "^2.1.7",
+        "snc/redis-bundle": "^3.2.3",
         "predis/predis": "^1.1",
         "twilio/sdk": "^5.27",
         "knpuniversity/oauth2-client-bundle": "^1.28",
