@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\ParticipantImport;
 use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
@@ -53,6 +54,7 @@ class ImportMappingHandler
     public function handle(ImportMapping $importMapping): void
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
+        $mappings = $this->removeIgnoreFields($importMapping->getMappingsIndexedByFileHeader());
 
         /** @var ParticipantImportLogger $importLogger */
         $importLogger = $this->serializerAdapter->deserialize(
@@ -61,7 +63,7 @@ class ImportMappingHandler
             'csv',
             [
                 'csv_delimiter' => ';',
-                'mappings' => $this->removeIgnoreFields($importMapping->getMappings()),
+                'mappings' => $mappings,
                 'event' => $importMapping->event,
                 'type' => $importMapping->type,
                 'locale' => $importMapping->locale,
@@ -72,7 +74,9 @@ class ImportMappingHandler
         $participantImport = new ParticipantImport(
             $importMapping->type,
             $importLogger->toArray(),
-            $this->date
+            $mappings,
+            $this->date,
+            $importMapping->importMappingView->savedImportMapping
         );
 
         $this->participantImportRepository->add($participantImport);
@@ -84,6 +88,8 @@ class ImportMappingHandler
 
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET);
 
         $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
             $importMapping->admin,
@@ -100,5 +106,21 @@ class ImportMappingHandler
         return array_filter($mappings, static function ($value) {
             return ParticipantImportTag::REGISTRATION_FIELD_IGNORE !== $value;
         });
+    }
+
+    private function getAssociatedMapping(
+        array $mappings,
+        ImportMappingView $importMappingView
+    ): array {
+        $associatedMapping = [];
+        $csvHeaders = $importMappingView->fieldHeaders;
+
+        foreach ($mappings as $fileColumn => $value) {
+            if (isset($csvHeaders[$fileColumn])) {
+                $associatedMapping[$csvHeaders[$fileColumn]] = $value;
+            }
+        }
+
+        return $associatedMapping;
     }
 }

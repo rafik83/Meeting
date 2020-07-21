@@ -3264,6 +3264,7 @@ services:
     query.participant.import.import_mapping_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository'
             - '@adapter.serializer_adapter'
             - '@adapter.session'
             - '@template.template_data_factory'

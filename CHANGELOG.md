@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
+### Added
+- VIMEET-2157 - Save import mapping
+
 ## [2.35.1] - 2020-06-30
 ### Fixed
 - Hotfix - Get / export many happening questions instead of one or null

@@ -1,80 +1,91 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
+
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping;
 
 class ParticipantImport
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Type
-     */
+    /** @var Type */
     private $type;
 
-    /**
-     * @var array
-     */
+    /** @var array */
+    private $mapping;
+
+    /** @var array */
     private $result;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $createdAt;
 
-    /**
-     * ParticipantImport constructor.
-     *
-     * @param Type               $type
-     * @param array              $result
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct(Type $type, array $result, \DateTimeInterface $createdAt)
-    {
-        $this->type      = $type;
-        $this->result    = $result;
-        $this->createdAt = $createdAt;
-    }
+    /** @var ImportMapping|null */
+    private $importMapping;
 
     /**
-     * @return int
+     * @param Type               $type
+     * @param array              $result
+     * @param array              $mapping
+     * @param \DateTimeInterface $createdAt
+     * @param ImportMapping|null $importMapping
      */
-    public function getId()
+    public function __construct(
+        Type $type,
+        array $result,
+        array $mapping,
+        \DateTimeInterface $createdAt,
+        ?ImportMapping $importMapping = null
+    ) {
+        $this->type = $type;
+        $this->result = $result;
+        $this->mapping = $mapping;
+        $this->createdAt = $createdAt;
+        $this->importMapping = $importMapping;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Type
-     */
-    public function getType()
+    public function getType(): Type
     {
         return $this->type;
     }
 
-    /**
-     * @return array
-     */
-    public function getResult()
+    public function getMapping(): array
+    {
+        return $this->mapping;
+    }
+
+    public function getImportMapping(): ?ImportMapping
+    {
+        return $this->importMapping;
+    }
+
+    public function hasImportMapping(): bool
+    {
+        return null !== $this->importMapping;
+    }
+
+    public function getResult(): array
     {
         return $this->result;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function hasDiffInMapping(): bool
+    {
+        if (!$this->hasImportMapping()) {
+            return true;
+        }
+
+        return $this->mapping !== $this->importMapping->getMapping();
     }
 }
