@@ -911,22 +911,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken }
 
-    command.user.change_mail_handler:
-        class: Proximum\Vimeet\Application\Command\User\ChangeMailHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@repository.change_mail_token_repository'
-            - '@components.token.change_mail_token_generator'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMail }
-    command.user.change_mail_activation_handler:
-        class: Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@repository.change_mail_token_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
     command.happening.speaker.create_handler:
         class: Proximum\Vimeet\Application\Command\Happening\Speaker\CreateHandler
         arguments:
@@ -1092,28 +1076,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add }
-    command.admin.create_handler:
-        class: Proximum\Vimeet\Application\Command\Admin\CreateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.adapter.encoder_adapter'
-            - '@vimeet_infrastructure.adapter.salt_generator'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Create }
     Proximum\Vimeet\Application\Command\Admin\DeleteHandler:
         arguments:
             - '@repository.admin_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
-    command.admin.update_handler:
-        class: Proximum\Vimeet\Application\Command\Admin\UpdateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.adapter.encoder_adapter'
-            - '@vimeet_infrastructure.adapter.salt_generator'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Update }
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -1130,39 +1098,6 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAssign }
-    command.operator.create_handler:
-        class: Proximum\Vimeet\Application\Command\Operator\CreateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.adapter.encoder_adapter'
-            - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@components.token.admin.activate_account_token_generator'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Create }
-    command.operator.update_handler:
-        class: Proximum\Vimeet\Application\Command\Operator\UpdateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@components.token.admin.activate_account_token_generator'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Operator\Update }
-    command.partner.create_handler:
-        class: Proximum\Vimeet\Application\Command\Partner\CreateHandler
-        arguments:
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.adapter.encoder_adapter'
-            - '@vimeet_infrastructure.adapter.salt_generator'
-            - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Create }
-    command.partner.update_handler:
-        class: Proximum\Vimeet\Application\Command\Partner\UpdateHandler
-        arguments:
-            - '@repository.admin_repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Partner\Update }
     command.admin.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ActivateAccountPasswordHandler
         arguments:
@@ -2679,6 +2614,11 @@ services:
         arguments:
             - '@security.authorization_checker'
 
+    adapter.csrf_token:
+        class: Proximum\Vimeet\Infrastructure\Adapter\CsrfTokenAdapter
+        arguments:
+            - '@security.csrf.token_manager'
+
     Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface: '@adapter.authorization_checker'
 
     adapter.templating_adapter:
@@ -3283,7 +3223,6 @@ services:
             - '@adapter.sheet_search_adapter'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
-            - '@security.impersonate'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.trace_repository'
             - '@vimeet_infrastructure.repository.type_repository'
@@ -3313,6 +3252,7 @@ services:
     query.participant.import.import_mapping_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQueryHandler
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository'
             - '@adapter.serializer_adapter'
             - '@adapter.session'
             - '@template.template_data_factory'

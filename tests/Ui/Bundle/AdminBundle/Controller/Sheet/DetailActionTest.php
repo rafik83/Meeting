@@ -28,7 +28,6 @@ use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
@@ -74,9 +73,6 @@ class DetailActionTest extends TestCase
     private $router;
 
     /** @var ObjectProphecy */
-    private $impersonate;
-
-    /** @var ObjectProphecy */
     private $sheet;
 
     /** @var ObjectProphecy */
@@ -109,7 +105,6 @@ class DetailActionTest extends TestCase
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->impersonate = $this->prophesize(Impersonate::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->event = $this->prophesize(Event::class);
         $this->admin = $this->prophesize(Admin::class);
@@ -166,22 +161,14 @@ class DetailActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $token = 'token';
-        $this->impersonate
-            ->getEncodedToken($this->admin->reveal(), $this->user->reveal())
-            ->shouldBeCalled()
-            ->willReturn($token)
-        ;
-
         $this->engine
             ->renderResponse(DetailAction::TEMPLATE, [
-                'event'              => $this->event->reveal(),
-                'sheet'              => $this->sheet->reveal(),
-                'sheetTypeTitle'     => 'type',
-                'details'            => $sheetDetailView->reveal(),
-                'addCommentForm'     => $formView->reveal(),
-                'changeTypeForm'     => null,
-                'impersonationToken' => $token,
+                'event' => $this->event->reveal(),
+                'sheet' => $this->sheet->reveal(),
+                'sheetTypeTitle' => 'type',
+                'details' => $sheetDetailView->reveal(),
+                'addCommentForm' => $formView->reveal(),
+                'changeTypeForm' => null,
             ])->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -196,8 +183,7 @@ class DetailActionTest extends TestCase
             $this->queryBus->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal(),
-            $this->impersonate->reveal()
+            $this->router->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->sheet->reveal(), $this->adminDomain);
@@ -269,10 +255,10 @@ class DetailActionTest extends TestCase
             $this->queryBus->reveal(),
             $this->flashBag->reveal(),
             $this->engine->reveal(),
-            $this->router->reveal(),
-            $this->impersonate->reveal()
+            $this->router->reveal()
         );
 
+        /** @var RedirectResponse */
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->sheet->reveal(), $this->adminDomain);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);

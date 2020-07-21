@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Partner;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -17,26 +9,15 @@ use Symfony\Component\Form\AbstractType;
 
 abstract class PartnerType extends AbstractType
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     protected $typeRepository;
 
-    /**
-     * @param TypeRepositoryInterface $typeRepository
-     */
     public function __construct(TypeRepositoryInterface $typeRepository)
     {
         $this->typeRepository = $typeRepository;
     }
 
-    /**
-     * @param array  $events
-     * @param string $locale
-     *
-     * @return array
-     */
-    public function buildChoices(array $events, $locale)
+    public function buildChoices(array $events, string $locale): array
     {
         $choices = [];
 

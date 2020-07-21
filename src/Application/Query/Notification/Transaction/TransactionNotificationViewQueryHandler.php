@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Notification\Transaction;
 
 use Proximum\Vimeet\Application\View\Notification\NotificationView;
@@ -16,34 +8,18 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
 class TransactionNotificationViewQueryHandler
 {
-    /**
-     * @var TransactionRepositoryInterface
-     */
+    /** @var TransactionRepositoryInterface */
     private $transactionRepository;
 
-    /**
-     * @var TransactionPendingViewQueryHandler
-     */
+    /** @var TransactionPendingViewQueryHandler */
     private $transactionPendingViewQueryHandler;
 
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $balance;
 
-    /**
-     * @var TransactionPaidViewQueryHandler
-     */
+    /** @var TransactionPaidViewQueryHandler */
     private $transactionPaidViewQueryHandler;
 
-    /**
-     * TransactionNotificationViewQueryHandler constructor.
-     *
-     * @param Balance                            $balance
-     * @param TransactionRepositoryInterface     $transactionRepository
-     * @param TransactionPendingViewQueryHandler $transactionPendingViewQueryHandler
-     * @param TransactionPaidViewQueryHandler    $transactionPaidViewQueryHandler
-     */
     public function __construct(
         Balance $balance,
         TransactionRepositoryInterface $transactionRepository,
@@ -61,13 +37,13 @@ class TransactionNotificationViewQueryHandler
      *
      * @return NotificationView[]
      */
-    public function handle(TransactionNotificationViewQuery $query)
+    public function handle(TransactionNotificationViewQuery $query): array
     {
         $transactionNotificationViews = [];
 
-        $balance             = $this->balance->getBalance($query->sheet);
+        $balance = $this->balance->getBalance($query->sheet);
         $pendingTransactions = $this->transactionRepository->findPending($query->sheet);
-        $paidTransactions    = $this->transactionRepository->findPaid($query->sheet);
+        $paidTransactions = $this->transactionRepository->findPaid($query->sheet);
 
         // generate notification if transaction pending and balance is positive
         if (count($pendingTransactions) > 0 && $balance > 0) {
