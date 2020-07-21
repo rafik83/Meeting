@@ -21,8 +21,8 @@ function Webinar(element, isSpeaker) {
     this.startFullScreenClass = 'glyphicon-fullscreen';
     this.endFullScreenClass = 'icon-Reduire_3';
 
-    this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1; 
-    console.log(this.sidebarAllowed);
+    this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
+
     if(this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
     } else {
@@ -55,8 +55,6 @@ function Webinar(element, isSpeaker) {
     );
 
     this.sideContainer = element.querySelector('.side-container');
-
-    this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
 
     if (this.sidebarAllowed) {
         this.chatContainer = element.querySelector('[data-chat-container]');
@@ -694,8 +692,11 @@ Webinar.prototype.createFullscreenButton = function () {
     fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
     fullscreenButton.classList.add('OT_ignore');
-    console.log(this.shiftWithSidebar)
-    if(this.shiftWithSidebar) fullscreenButton.classList.add(this.shiftWithSidebar);
+
+    if (this.shiftWithSidebar) {
+        fullscreenButton.classList.add(this.shiftWithSidebar);
+    }
+
     fullscreenButton.appendChild(this.iconFullscreenButton);
 
     this.layoutContainer.appendChild(fullscreenButton);

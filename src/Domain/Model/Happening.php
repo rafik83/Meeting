@@ -427,10 +427,7 @@ class Happening implements TimeRangeInterface
         $this->invitationCode = $invitationCode;
     }
 
-    /**
-     * @return bool
-     */
-    public function isSidebarAllowed()
+    public function isSidebarAllowed() : bool
     {
         return $this->sidebarAllowed;
     }   
