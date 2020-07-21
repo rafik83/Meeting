@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
@@ -37,7 +29,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Imperson
 
 class PaginatedSheetListViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $admin = $this->prophesize(Admin::class);
@@ -79,7 +71,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->getValidationState()->willReturn('validationState1');
         $sheet1->getCompleteness()->willReturn(45);
         $sheet1->isEnabled()->willReturn(true);
-        $sheet1->isInCatalog()->willReturn(true);
+        $sheet1->isInInternalCatalog()->willReturn(true);
         $sheet1->isAccepted()->willReturn(true);
         $sheet1->isValidated()->willReturn(false);
         $sheet1->attend()->willReturn(true);
@@ -112,7 +104,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->isEnabled()->willReturn(false);
         $sheet2->isInCatalog()->willReturn(false);
         $sheet2->getType()->willReturn($type2->reveal());
-        $sheet2->countParticipant()->willReturn(2);
+        $sheet2->countParticipants()->willReturn(2);
         $sheet2->getGroup()->willReturn(null);
         $sheet2->getSpot()->willReturn(null);
         $sheet2->isAccepted()->willReturn(false);
@@ -224,6 +216,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             $expectedSheet2,
         ], 1, 20, 2);
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 }
