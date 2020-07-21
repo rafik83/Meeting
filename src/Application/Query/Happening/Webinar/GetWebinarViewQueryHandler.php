@@ -91,7 +91,7 @@ class GetWebinarViewQueryHandler
                 );
             }
         }
-        
+
         return new WebinarView(
             $happening->getId(),
             $query->getUser()->getId(),

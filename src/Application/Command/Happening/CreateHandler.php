@@ -46,7 +46,7 @@ class CreateHandler
             $create->end,
             $create->category,
             $create->types,
-            $create->questionAllowed,           
+            $create->questionAllowed,
             $create->limitParticipant,
             $create->invitationCode,
             $create->isWebinar(),

@@ -78,7 +78,7 @@ class Happening implements TimeRangeInterface
     private $liveUrl;
 
     /** @var bool */
-    private $sidebarAllowed = true;    
+    private $sidebarAllowed = true;
 
     public function __construct(
         Event $event,
@@ -86,13 +86,13 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $end,
         CategoryHappening $category,
         array $types,
-        bool $questionAllowed = false,       
+        bool $questionAllowed = false,
         ?int $limitParticipant = null,
         ?string $invitationCode = null,
         bool $webinar = false,
         bool $interactiveWebinar = false,
         ?string $liveUrl = null,
-        bool $sidebarAllowed = true 
+        bool $sidebarAllowed = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -103,7 +103,7 @@ class Happening implements TimeRangeInterface
         $this->participations = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->types = new ArrayCollection($types);
-        $this->questionAllowed = $questionAllowed;        
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->products = new ArrayCollection();
@@ -234,7 +234,7 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $end,
         CategoryHappening $category,
         array $types,
-        bool $questionAllowed,      
+        bool $questionAllowed,
         ?int $limitParticipant,
         bool $webinar,
         bool $interactiveWebinar,
@@ -246,7 +246,7 @@ class Happening implements TimeRangeInterface
         $this->end = $end;
         $this->types = new ArrayCollection($types);
         $this->category = $category;
-        $this->questionAllowed = $questionAllowed;       
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
@@ -430,7 +430,7 @@ class Happening implements TimeRangeInterface
     public function isSidebarAllowed() : bool
     {
         return $this->sidebarAllowed;
-    }   
+    }
 
     /**
      * @return Product[]
