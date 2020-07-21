@@ -49,34 +49,37 @@ class RecordHandler
             return $archiveItem->status === RecordStatus::STARTED;
         });
 
-        if (count($startedArchives) === 0) {
-            $videoConferenceArchive = $this->videoConferenceAdapter->archive(
-                $happening->getWebinarSessionId(),
-                $happening->getTitle($event->getLocaleFallback())
-            );
-
-            $recordArchive = new RecordArchive(
-                $happening,
-                $videoConferenceArchive->id,
-                $this->dateTime
-            );
-
-            $this->recordArchiveRepository->add($recordArchive);
-
-            $dueDate = new \DateTime();
-            // Avoid adding microseconds
-            $dueDate->setTime(0, 0, 0, 0);
-            $dueDate->setTimestamp($this->dateTime->getTimestamp());
-            $dueDate->modify('+ 125minutes');
-            $this->prepareReconciliationHandler->handle(
-                new PrepareReconciliation(
-                    $happening,
-                    $dueDate
-                )
-            );
-            $this->logger->info(sprintf('Webinar #%d: Start record webinar archive', $happening->getId()));
-        } else {
+        if (count($startedArchives) > 0) {
             $this->logger->warning(sprintf('Webinar #%d: Start record failed because another archive is already started', $happening->getId()));
+
+            return;
         }
+
+        $videoConferenceArchive = $this->videoConferenceAdapter->archive(
+            $happening->getWebinarSessionId(),
+            $happening->getTitle($event->getLocaleFallback())
+        );
+
+        $recordArchive = new RecordArchive(
+            $happening,
+            $videoConferenceArchive->id,
+            $this->dateTime
+        );
+
+        $this->recordArchiveRepository->add($recordArchive);
+
+        $dueDate = new \DateTime();
+        // Avoid adding microseconds
+        $dueDate->setTime(0, 0, 0, 0);
+        $dueDate->setTimestamp($this->dateTime->getTimestamp());
+        $dueDate->modify('+ 125minutes');
+        $this->prepareReconciliationHandler->handle(
+            new PrepareReconciliation(
+                $happening,
+                $dueDate
+            )
+        );
+
+        $this->logger->info(sprintf('Webinar #%d: Start record webinar archive', $happening->getId()));
     }
 }
