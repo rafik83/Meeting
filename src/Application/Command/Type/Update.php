@@ -88,6 +88,9 @@ class Update implements Command
     /** @var bool */
     public $mustEvaluateMeeting;
 
+    /** @var bool */
+    public $submitValidationSheet;
+
     public function __construct(Type $type, string $locale)
     {
         $this->sheetTemplate = $type->getSheetTemplate();
@@ -113,6 +116,7 @@ class Update implements Command
         $this->numberMaxOfMeetingsPerSheet = $type->getNumberMaxOfMeetingsPerSheet();
         $this->canEvaluateMeeting = $type->canEvaluateMeeting();
         $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
+        $this->submitValidationSheet = $type->isSubmitValidationSheet();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

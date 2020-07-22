@@ -1,7 +1,9 @@
-{% if sheet.isValidationDraft %}
-    <button class="btn btn-primary" data-toggle="modal" data-target="#sheetSubmitModal">{{ 'sheet.submit.validation'|trans }}</button>
-{% elseif sheet.isValidationPending %}
-    <a class="btn btn-gray" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
-        {{ 'sheet.submit.validation.pending'|trans }}
-    </a>
+{% if sheet.type.isSubmitValidationSheet() %}
+    {% if sheet.isValidationDraft %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#sheetSubmitModal">{{ 'sheet.submit.validation'|trans }}</button>
+    {% elseif sheet.isValidationPending %}
+        <a class="btn btn-gray" data-toggle="tooltip" title="{{ 'sheet.submit.validation.moreInfoOnPending'|trans }}">
+            {{ 'sheet.submit.validation.pending'|trans }}
+        </a>
+    {% endif %}
 {% endif %}

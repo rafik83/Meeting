@@ -115,6 +115,9 @@ class Type implements WhoInterface, TypeInterface
     /** @var bool */
     private $mustEvaluateMeeting = false;
 
+    /** @var bool */
+    public $submitValidationSheet = true;
+
     public function __construct(Event $event)
     {
         $this->event = $event;
@@ -458,7 +461,8 @@ class Type implements WhoInterface, TypeInterface
         ?int $numberMaxOfHappeningsPerUser = null,
         ?int $numberMaxOfMeetingsPerSheet = null,
         bool $canEvaluateMeeting = true,
-        bool $mustEvaluateMeeting = false
+        bool $mustEvaluateMeeting = false,
+        bool $submitValidationSheet = true
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -475,6 +479,7 @@ class Type implements WhoInterface, TypeInterface
         $this->numberMaxOfMeetingsPerSheet = $numberMaxOfMeetingsPerSheet;
         $this->canEvaluateMeeting = $canEvaluateMeeting;
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
+        $this->submitValidationSheet = $submitValidationSheet;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -547,5 +552,10 @@ class Type implements WhoInterface, TypeInterface
     public function mustEvaluateMeeting(): bool
     {
         return $this->mustEvaluateMeeting;
+    }
+
+    public function isSubmitValidationSheet(): bool
+    {
+        return $this->submitValidationSheet;
     }
 }

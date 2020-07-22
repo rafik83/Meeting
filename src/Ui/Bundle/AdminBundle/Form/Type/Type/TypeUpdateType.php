@@ -135,6 +135,9 @@ class TypeUpdateType extends AbstractType
             ->add('mustEvaluateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('submitValidationSheet', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 
