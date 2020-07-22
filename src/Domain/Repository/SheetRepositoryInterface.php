@@ -396,7 +396,7 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getByUser(User $user);
+    public function getByUser(User $user): array;
 
     /**
      * @param Group $group
