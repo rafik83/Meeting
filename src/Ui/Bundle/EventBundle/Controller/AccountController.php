@@ -30,23 +30,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AccountController extends Controller
 {
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     *
      * @return RedirectResponse|Response
      */
-    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null)
+    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(EventVoter::CHANGE_EMAIL, $eventDomain->getEvent());
 
         $changeMail = new ChangeMail($user, $eventDomain->getEvent());
-        $form       = $this->createForm(ChangeMailType::class, $changeMail, [
+        $form = $this->createForm(ChangeMailType::class, $changeMail, [
             'action' => $this->generateUrl('event_account_change_mail', ['sheet' => $sheet->getId()]),
         ]);
+
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -64,17 +60,14 @@ class AccountController extends Controller
         return $this->render('EventBundle:User:update_account.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param EventDomain     $eventDomain
-     * @param ChangeMailToken $changeMailToken
-     *
      * @return RedirectResponse
      */
-    public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken)
+    public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken): RedirectResponse
     {
         if ($changeMailToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
@@ -84,7 +77,7 @@ class AccountController extends Controller
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $user                 = $changeMailToken->getUser();
+        $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
 
         $this->get('tactician.commandbus')->handle($changeMailActivation);

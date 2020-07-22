@@ -19,14 +19,9 @@ use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationSt
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
-use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 
 class ParticipantDetailQueryHandler
 {
@@ -45,28 +40,18 @@ class ParticipantDetailQueryHandler
     /** @var IsParticipantVisio */
     private $isParticipantVisio;
 
-    /** @var Impersonate */
-    private $impersonate;
-
-    /** @var EventUrlGeneratorInterface */
-    private $eventUrlGenerator;
-
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler,
         PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler,
         AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler,
-        IsParticipantVisio $isParticipantVisio,
-        Impersonate $impersonate,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        IsParticipantVisio $isParticipantVisio
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
         $this->phoneValidationStatusQueryHandler = $phoneValidationStatusQueryHandler;
         $this->availabilityConfirmationStatusQueryHandler = $availabilityConfirmationStatusQueryHandler;
         $this->isParticipantVisio = $isParticipantVisio;
-        $this->impersonate = $impersonate;
-        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     /**
@@ -76,7 +61,7 @@ class ParticipantDetailQueryHandler
      */
     public function handle(ParticipantDetailQuery $query): SheetParticipantsView
     {
-        $sheet            = $query->sheet;
+        $sheet = $query->sheet;
         $participantViews = [];
 
         $owner = $sheet->getOwner();
@@ -87,8 +72,7 @@ class ParticipantDetailQueryHandler
             $owner->getEmail(),
             $owner->getMobile(),
             $owner->getPhone(),
-            null === $sheet->getParticipantOwner(),
-            $this->getImpersonationUrl($query->admin, $sheet, $sheet->getOwner())
+            null === $sheet->getParticipantOwner()
         );
 
         /** @var Participant $participant */
@@ -111,22 +95,10 @@ class ParticipantDetailQueryHandler
                 $this->availabilityConfirmationStatusQueryHandler->handle(
                     new AvailabilityConfirmationStatusQuery($query->event, $user)
                 ),
-                $this->getImpersonationUrl($query->admin, $sheet, $user)
+                $user->getId()
             );
         }
 
         return new SheetParticipantsView($ownerView, $participantViews);
-    }
-
-    private function getImpersonationUrl(Admin $admin, Sheet $sheet, User $user)
-    {
-        return $this->eventUrlGenerator->generateEventAbsoluteUrl(
-            $sheet->getEvent(),
-            'event_sheet_default',
-            [
-                'sheet' => $sheet->getId(),
-                '_switchto' => $this->impersonate->getEncodedToken($admin, $user),
-            ]
-        );
     }
 }

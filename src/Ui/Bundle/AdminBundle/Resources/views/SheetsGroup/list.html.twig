@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import button %}
+
 {% block title 'admin.sheets_group.title'|trans %}
 
 {% block content %}
@@ -27,7 +29,7 @@
         {% for groupView in groupViews %}
             <tr>
                 <td>{{ groupView.title }}</td>
-                <td>{{ groupView.emailManager }}</td>
+                <td>{{ groupView.managerEmail }}</td>
                 <td>
                     <ul>
                         {% for sheet in groupView.sheetViews %}
@@ -43,8 +45,28 @@
                     {{ groupView.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
                 </td>
                 <td>
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_sheets_group_update', {'event': event.id, 'sheetGroup': groupView.id}) }}">{{ 'admin.sheets_group.update.link'|trans }}</a>
-                    <a class="btn btn-default btn-sm" target="_blank" href="{{ groupView.impersonateLink }}">{{ 'admin.sheet.impersonate'|trans }}</a>
+                    <a
+                        class="btn btn-default btn-sm"
+                        href="{{ path('admin_sheets_group_update', {'event': event.id, 'sheetGroup': groupView.id}) }}"
+                    >
+                        {{ 'admin.sheets_group.update.link'|trans }}
+                    </a>
+                    {{ button(
+                        path('admin_impersonate',
+                            {
+                                'event': event.id,
+                                'user': groupView.managerId,
+                                'route': 'event_sheet_group_index',
+                                'params': { 'sheetGroup': groupView.id },
+                            }),
+                            'POST',
+                            'admin.sheet.impersonate'|trans,
+                            { 'class': 'btn btn-default btn-sm' },
+                            null,
+                            'impersonate-to-'~groupView.managerId
+                        )
+                    }}
+
                 </td>
             </tr>
         {% else %}

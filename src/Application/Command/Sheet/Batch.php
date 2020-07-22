@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -81,6 +82,9 @@ class Batch extends AbstractBatch
      */
     public $filters;
 
+    /** @var null|RuleInterface  */
+    public $condition;
+
     /** @var Event */
     public $event;
 
@@ -125,17 +129,12 @@ class Batch extends AbstractBatch
     /** @var Type */
     public $duplicateToType;
 
-    /**
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
-     * @param array  $filters
-     */
-    public function __construct(Event $event, Admin $admin, $locale, array $filters = [])
+    public function __construct(Event $event, Admin $admin, $locale, array $filters = [], ?RuleInterface $condition = null)
     {
-        $this->admin   = $admin;
+        $this->event = $event;
+        $this->admin = $admin;
+        $this->locale = $locale;
         $this->filters = $filters;
-        $this->event   = $event;
-        $this->locale  = $locale;
+        $this->condition = $condition;
     }
 }

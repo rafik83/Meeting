@@ -5,10 +5,11 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant;
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping;
+use Proximum\Vimeet\Domain\Repository\Sheet\ImportMappingRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CharsetChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImportType extends AbstractType
 {
+    /** @var ImportMappingRepositoryInterface */
+    private $sheetImportMappingRepository;
+
+    public function __construct(ImportMappingRepositoryInterface $sheetImportMappingRepository)
+    {
+        $this->sheetImportMappingRepository = $sheetImportMappingRepository;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +51,23 @@ class ImportType extends AbstractType
                 'required' => true,
             ])
         ;
+
+        $mappingChoices = $this->sheetImportMappingRepository->getByEvent($options['event']);
+
+        if (!empty($mappingChoices)) {
+            $builder
+                ->add('mapping', ChoiceType::class, [
+                    'expanded' => false,
+                    'multiple' => false,
+                    'required' => false,
+                    'choices' => $mappingChoices,
+                    'choice_label' => static function (ImportMapping $importMapping) {
+                        return $importMapping->getTitle();
+                    },
+                    'choice_translation_domain' => false,
+                ])
+            ;
+        }
     }
 
     /**

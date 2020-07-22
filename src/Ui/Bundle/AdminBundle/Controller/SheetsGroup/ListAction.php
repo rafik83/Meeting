@@ -32,11 +32,6 @@ class ListAction
     /** @var EngineInterface */
     private $engine;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
@@ -47,11 +42,6 @@ class ListAction
         $this->engine = $engine;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
     public function __invoke(Event $event, AdminDomain $adminDomain): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_OPERATE')
@@ -63,7 +53,7 @@ class ListAction
         $groupViews = $this->queryBus->handle(new GroupListViewQuery($event, $adminDomain->getAdmin()));
 
         return $this->engine->renderResponse(self::TEMPLATE, [
-            'event'      => $event,
+            'event' => $event,
             'groupViews' => $groupViews,
         ]);
     }

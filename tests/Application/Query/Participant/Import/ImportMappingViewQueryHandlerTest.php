@@ -11,6 +11,7 @@ use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\Sheet\ImportMappingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
@@ -24,6 +25,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
     {
         $type = $this->prophesize(Type::class);
 
+        $importMappingRepository = $this->prophesize(ImportMappingRepositoryInterface::class);
         $serializerAdapter = $this->prophesize(SerializerAdapterInterface::class);
         $session = $this->prophesize(SessionAdapter::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
@@ -136,7 +138,15 @@ class ImportMappingViewQueryHandlerTest extends TestCase
             ->willReturn('Fiche : ')
         ;
 
+        $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING)
+            ->shouldBeCalled()
+            ->willReturn(12)
+        ;
+
+        $importMappingRepository->getById(12)->shouldBeCalled()->willReturn(null);
+
         $handler = new ImportMappingViewQueryHandler(
+            $importMappingRepository->reveal(),
             $serializerAdapter->reveal(),
             $session->reveal(),
             $templateDataFactory->reveal(),
@@ -168,7 +178,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
             'key7' => 'Fiche : object7',
 
         ];
-        $expected = new ImportMappingView($fieldHeaders, $headers, true);
+        $expected = new ImportMappingView($fieldHeaders, $headers, true, null);
 
         $this->assertEquals($expected, $result);
     }

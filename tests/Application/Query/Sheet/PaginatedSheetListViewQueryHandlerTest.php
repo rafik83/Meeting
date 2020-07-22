@@ -49,7 +49,9 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $ownerSheet2->getAccount()->willReturn($account1->reveal());
         $account1->getFirstName()->willReturn('truc');
         $account1->getLastName()->willReturn('muche');
+        $ownerSheet1->getId()->willReturn(123);
         $ownerSheet1->getEmail()->willReturn('email1@sheet.fr');
+        $ownerSheet2->getId()->willReturn(456);
         $ownerSheet2->getEmail()->willReturn('email2@sheet.fr');
 
         $group = $this->prophesize(Sheet\Group::class);
@@ -125,9 +127,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantFirstName($participant->reveal(), 'fr')->shouldBeCalled()->willReturn('participant first name');
         $participantInfoGuesser->guessParticipantLastName($participant->reveal(), 'fr')->shouldBeCalled()->willReturn('participant last name');
-        $impersonate = $this->prophesize(Impersonate::class);
-        $impersonate->getEncodedToken($admin->reveal(), $ownerSheet1->reveal())->shouldBeCalled()->willReturn('token1');
-        $impersonate->getEncodedToken($admin->reveal(), $ownerSheet2->reveal())->shouldBeCalled()->willReturn('token2');
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->findFullSheets([$sheet1->reveal(), $sheet2->reveal()])->shouldBeCalled()->willReturn([$sheet1->reveal(), $sheet2->reveal()]);
         $traceRepository = $this->prophesize(TraceRepositoryInterface::class);
@@ -146,7 +145,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             $sheetSearchAdapter->reveal(),
             $sheetInfoGuesser->reveal(),
             $participantInfoGuesser->reveal(),
-            $impersonate->reveal(),
             $sheetRepository->reveal(),
             $traceRepository->reveal(),
             $typeRepository->reveal()
@@ -173,13 +171,12 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             ['Category'],
             ['Title'],
             'type1',
-            new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
+            new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr', 123),
             'admin name',
             CommercialStatus::STATUS_INTEREST,
             $datetime1,
             $datetime1,
             $datetime1,
-            'token1',
             1,
             true,
             'group title 1',
@@ -198,13 +195,12 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             [],
             [],
             'type2',
-            new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
+            new SheetParticipantView('truc', 'muche', 'email2@sheet.fr', 456),
             '',
             CommercialStatus::STATUS_DO_NOT_CALL,
             $datetime1,
             $datetime2,
             $datetime2,
-            'token2',
             2,
             false,
             null,

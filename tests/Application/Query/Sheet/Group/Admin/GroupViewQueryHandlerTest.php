@@ -18,26 +18,29 @@ use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $datetime = new \DateTime();
-        $admin    = AdminFactory::create();
-        $event    = EventFactory::createEvent();
-        $user     = UserFactory::create();
+        $admin = AdminFactory::create();
+        $event = EventFactory::createEvent();
+
+        $user = $this->prophesize(User::class);
+        $user->getEmail()->shouldBeCalled()->willReturn('john@email.com');
+        $user->getId()->shouldBeCalled()->willReturn(42);
 
         $reflectionGroup = new \ReflectionClass(Group::class);
         $propertyGroupId = $reflectionGroup->getProperty('id');
         $propertyGroupId->setAccessible(true);
 
-        $group = new Group($event, $user, 'My entity', false, $datetime);
+        $group = new Group($event, $user->reveal(), 'My entity', false, $datetime);
         $propertyGroupId->setValue($group, 1);
 
         $reflectionSheet = new \ReflectionClass(Sheet::class);
@@ -58,12 +61,12 @@ class GroupViewQueryHandlerTest extends TestCase
         $expectedGroupView = new GroupView(
             1,
             'My entity',
-            $user->getEmail(),
+            'john@email.com',
+            42,
             [
                 new SheetView(1, 'Sheet title 1'),
                 new SheetView(2, 'Sheet title 2'),
             ],
-            '_IMPERSONATE_LINK_',
             $datetime
         );
 
