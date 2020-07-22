@@ -1,0 +1,13 @@
+Proximum\Vimeet\Application\Command\Partner\Update:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email:
+                  message: validators.email
+                  strict: true
+        lastname:
+            - NotBlank: ~
+        firstname:
+            - NotBlank: ~
+        types:
+            - NotBlank: ~

@@ -33,15 +33,13 @@ class ChangeMailHandler
         ChangeMailTokenGenerator $changeMailTokenGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->userRepository            = $userRepository;
+        $this->userRepository = $userRepository;
         $this->changeMailTokenRepository = $changeMailTokenRepository;
-        $this->changeMailTokenGenerator  = $changeMailTokenGenerator;
-        $this->eventDispatcher           = $eventDispatcher;
+        $this->changeMailTokenGenerator = $changeMailTokenGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param ChangeMail $changeMail
-     *
      * @throws EmailAlreadyExistsException
      * @throws EmptyFieldException
      * @throws SameEmailException

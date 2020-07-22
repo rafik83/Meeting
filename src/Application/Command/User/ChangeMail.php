@@ -7,15 +7,17 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class ChangeMail
 {
-    /**
-     * @var User */
+    /** @var User */
     public $user;
+
+    /** @var Event */
+    public $event;
 
     /** @var string */
     public $mail;
 
-    /** @var Event */
-    public $event;
+    /** @var string */
+    public $password;
 
     public function __construct(User $user, Event $event)
     {

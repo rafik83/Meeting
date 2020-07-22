@@ -28,6 +28,8 @@ flash.admin.event.index.success: 'La réindexation de l''ensemble des événemen
 flash.admin.event.paymentConditions.update.success: 'Les conditions de paiement ont été modifiées avec succès'
 flash.admin.event.practicalInfo.update.success: 'Les informations pratiques ont bien été mises à jour'
 flash.admin.event.sheets.index.success: 'L''indexation des fiches est en cours'
+flash.admin.event.sheet.import_mapping.create.success: 'Votre nouveau mapping d''import a été créé'
+flash.admin.event.sheet.import_mapping.update.success: 'Votre mapping d''import a été sauvegardé'
 flash.admin.event.un_archive.success: 'L''événement a été désarchivé'
 flash.admin.event.update.asset.failed: 'La génération du style des couleurs a échoué, vous pouvez re-soumettre le formulaire'
 flash.admin.event.update.success: 'L''événement a bien été mis à jour'

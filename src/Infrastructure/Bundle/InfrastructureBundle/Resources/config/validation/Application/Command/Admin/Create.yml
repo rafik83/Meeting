@@ -8,8 +8,11 @@ Proximum\Vimeet\Application\Command\Admin\Create:
         password:
             - NotBlank: ~
             - Length:
-                min: 8
+                min: 12
                 minMessage: validators.password.min
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneNumber: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneUppercase: ~
+            - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Password\ContainsAtLeastOneLowercase: ~
         lastname:
             - NotBlank: ~
         firstname:

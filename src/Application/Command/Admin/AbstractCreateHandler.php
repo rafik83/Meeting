@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
@@ -16,33 +8,27 @@ use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 abstract class AbstractCreateHandler
 {
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     protected $adminRepository;
 
-    /**
-     * @var PasswordEncoderInterface
-     */
+    /** @var PasswordEncoderInterface */
     protected $encoder;
 
-    /**
-     * @var SaltGeneratorInterface
-     */
+    /** @var SaltGeneratorInterface */
     protected $saltGenerator;
 
-    /**
-     * @param AdminRepositoryInterface $adminRepository
-     * @param PasswordEncoderInterface $encoder
-     * @param SaltGeneratorInterface   $saltGenerator
-     */
+    /** @var \DateTimeInterface */
+    protected $dateTime;
+
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
-        SaltGeneratorInterface $saltGenerator
+        SaltGeneratorInterface $saltGenerator,
+        \DateTimeInterface $dateTime
     ) {
         $this->adminRepository = $adminRepository;
-        $this->encoder         = $encoder;
-        $this->saltGenerator   = $saltGenerator;
+        $this->encoder = $encoder;
+        $this->saltGenerator = $saltGenerator;
+        $this->dateTime = $dateTime;
     }
 }

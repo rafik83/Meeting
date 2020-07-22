@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
 use Proximum\Vimeet\Application\Command\Admin\Update;
@@ -18,10 +10,10 @@ class UpdateType extends AdminType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'        => Update::class,
+            'data_class' => Update::class,
             'password_required' => false,
         ]);
     }
@@ -29,7 +21,7 @@ class UpdateType extends AdminType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'update_admin';
     }

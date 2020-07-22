@@ -360,6 +360,13 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository'
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType }
+
     #
     # Value Resolver
     #

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Operator;
 
 use PHPUnit\Framework\TestCase;
@@ -24,14 +16,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $dateTime  = new \DateTime();
-        $event     = EventFactory::createEvent('a');
-        $event2    = EventFactory::createEvent('b');
-        $event3    = EventFactory::createEvent('c');
-        $event4    = EventFactory::createEvent('d');
-        $operator  = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
+        $event = EventFactory::createEvent('a');
+        $event2 = EventFactory::createEvent('b');
+        $event3 = EventFactory::createEvent('c');
+        $event4 = EventFactory::createEvent('d');
+        $operator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);
         $operator->addEvent($event4);
@@ -41,11 +33,11 @@ class UpdateHandlerTest extends TestCase
             $event3,
         ];
 
-        $command            = new Update($operator, $events);
-        $command->email     = 'test2@test.com';
+        $command = new Update($operator, $events);
+        $command->email = 'test2@test.com';
         $command->firstname = 'truc';
-        $command->lastname  = 'muche';
-        $command->events    = [$event, $event3];
+        $command->lastname = 'muche';
+        $command->events = [$event, $event3];
 
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator->addEvent($event);
@@ -57,7 +49,7 @@ class UpdateHandlerTest extends TestCase
         $adminRepository->set($expectedOperator)->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,
@@ -82,21 +74,21 @@ class UpdateHandlerTest extends TestCase
         $handler->handle($command);
     }
 
-    public function testHandleWithNewMail()
+    public function testHandleWithNewMail(): void
     {
         $dateTime  = new \DateTime();
-        $event     = EventFactory::createEvent('a');
-        $event2    = EventFactory::createEvent('b');
-        $event3    = EventFactory::createEvent('c');
-        $operator  = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
+        $event = EventFactory::createEvent('a');
+        $event2 = EventFactory::createEvent('b');
+        $event3 = EventFactory::createEvent('c');
+        $operator = new Admin('test@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $operator->addEvent($event);
         $operator->addEvent($event2);
 
-        $command            = new Update($operator, [$event, $event2, $event3]);
-        $command->email     = 'test2@test.com';
+        $command = new Update($operator, [$event, $event2, $event3]);
+        $command->email = 'test2@test.com';
         $command->firstname = 'truc';
-        $command->lastname  = 'muche';
-        $command->events    = [$event, $event3];
+        $command->lastname = 'muche';
+        $command->events = [$event, $event3];
 
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'truc', 'muche', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator->addEvent($event);
@@ -106,8 +98,8 @@ class UpdateHandlerTest extends TestCase
         $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
         $adminRepository->set($expectedOperator)->shouldBeCalled();
 
-        $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(EventDispatcherInterface::class);
+        $activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,

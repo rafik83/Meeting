@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Components\Security\PasswordGenerator;
 use Proximum\Vimeet\Application\Query\Sheet\GetUploadedObjectsTreeQuery;
 use Proximum\Vimeet\Application\View\Sheet\UploadedObjectsTreeView;
 use Proximum\Vimeet\Domain\Model\File;
-use Proximum\Vimeet\Domain\Sheet\PasswordGenerator;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsPasswordMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\ExportUploadedObjectsZipMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\NoUploadedObjectsZipMail;
@@ -57,7 +57,7 @@ class ExportUploadedObjectsCommandHandler
                 $command->admin
             )
         );
-        
+
         if (0 === \count($uploadedObjectsTreeView->tree)) {
             $this->mailer->send(
                 new NoUploadedObjectsZipMail(

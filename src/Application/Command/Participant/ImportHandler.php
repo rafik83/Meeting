@@ -42,5 +42,9 @@ class ImportHandler
         $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_FILE, $filename);
         $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET, $command->charset);
         $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET, $command->allowMultiSheet);
+
+        if ($command->mapping) {
+            $this->session->set(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING, $command->mapping->getId());
+        }
     }
 }

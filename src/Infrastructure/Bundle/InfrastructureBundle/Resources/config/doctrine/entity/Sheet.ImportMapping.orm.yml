@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Sheet\ImportMapping:
+    type: entity
+    table: sheet_import_mapping
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+        mapping:
+            type: json_array
+            nullable: true
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

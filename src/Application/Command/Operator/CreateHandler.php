@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Operator;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
@@ -20,38 +13,27 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CreateHandler extends AbstractCreateHandler
 {
-    /**
-     * @var ActivateAccountTokenGenerator
-     */
+    /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param AdminRepositoryInterface      $adminRepository
-     * @param PasswordEncoderInterface      $encoder
-     * @param SaltGeneratorInterface        $saltGenerator
-     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
-     * @param DelayedEventDispatcher        $eventDispatcher
-     */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         PasswordEncoderInterface $encoder,
         SaltGeneratorInterface $saltGenerator,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcherInterface $eventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
-        parent::__construct($adminRepository, $encoder, $saltGenerator);
+        parent::__construct($adminRepository, $encoder, $saltGenerator, $dateTime);
 
-        $this->activateAccountTokenGenerator  = $activateAccountTokenGenerator;
-        $this->eventDispatcher                = $eventDispatcher;
+        $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -59,7 +41,7 @@ class CreateHandler extends AbstractCreateHandler
      *
      * @throws EmailAlreadyExistsException
      */
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         $create->email = StringHelper::trimSpacesAndNonBreakSpaces($create->email);
 
@@ -77,7 +59,7 @@ class CreateHandler extends AbstractCreateHandler
             $create->firstname,
             $create->lastname,
             Admin::ROLE_OPERATOR,
-            $create->date
+            $this->dateTime
         );
 
         $password = $this->encoder->encode($admin, $create->password);
@@ -92,11 +74,7 @@ class CreateHandler extends AbstractCreateHandler
         $this->sendActivationEvent($create, $admin);
     }
 
-    /**
-     * @param Create $create
-     * @param Admin  $admin
-     */
-    private function sendActivationEvent(Create $create, Admin $admin)
+    private function sendActivationEvent(Create $create, Admin $admin): void
     {
         $token = $this->activateAccountTokenGenerator->generate($admin);
         $event = new ActivateAccountEvent($admin, $token, $create->organizer->getLocale());

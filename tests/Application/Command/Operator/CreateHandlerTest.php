@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Operator;
 
 use PHPUnit\Framework\TestCase;
@@ -27,21 +19,21 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandleWithEvents()
+    public function testHandleWithEvents(): void
     {
         $dateTime  = new \DateTime();
-        $event     = EventFactory::createEvent();
-        $event2    = EventFactory::createEvent();
+        $event = EventFactory::createEvent();
+        $event2 = EventFactory::createEvent();
         $organizer = new Admin('test@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_ORGANIZER, $dateTime);
         $organizer->addEvent($event);
         $organizer->addEvent($event2);
 
-        $command            = new Create($organizer, $dateTime);
-        $command->email     = 'test2@test.com';
-        $command->password  = 'password';
+        $command = new Create($organizer);
+        $command->email = 'test2@test.com';
+        $command->password = 'password';
         $command->firstname = 'toto';
-        $command->lastname  = 'tata';
-        $command->events    = [$event, $event2];
+        $command->lastname = 'tata';
+        $command->events = [$event, $event2];
 
         $operator = new Admin('test2@test.com', '__salt__', null, 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
         $expectedOperator = new Admin('test2@test.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_OPERATOR, $dateTime);
@@ -52,7 +44,7 @@ class CreateHandlerTest extends TestCase
         $saltGenerator->generate()->shouldBeCalled()->willReturn('__salt__');
 
         $passwordEncoder = $this->prophesize(PasswordEncoderInterface::class);
-        $passwordEncoder->encode(Argument::that(function (Admin $user) use ($operator) {
+        $passwordEncoder->encode(Argument::that(static function (Admin $user) use ($operator) {
             return $user->getEmail() === $operator->getEmail();
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
@@ -61,12 +53,12 @@ class CreateHandlerTest extends TestCase
         $adminRepository->add($expectedOperator)->shouldBeCalled();
 
         $activateAccountTokenGenerator  = $this->prophesize(ActivateAccountTokenGenerator::class);
-        $eventDispatcher                = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
         $expectedActivateAccountToken = new ActivateAccountToken(
             $expectedOperator,
             'STRING',
-            new \DateTime()
+            $dateTime
         );
 
         $activateAccountEvent = new ActivateAccountEvent(
@@ -83,7 +75,8 @@ class CreateHandlerTest extends TestCase
             $passwordEncoder->reveal(),
             $saltGenerator->reveal(),
             $activateAccountTokenGenerator->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $dateTime
         );
         $handler->handle($command);
     }
