@@ -68,7 +68,7 @@ class UpdateHandler
             $update->numberMaxOfMeetingsPerSheet,
             $update->canEvaluateMeeting,
             $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false,
-            $update->submitValidationSheet
+            $update->canSubmitValidation
         );
         $type->setHidden($update->hidden);
 

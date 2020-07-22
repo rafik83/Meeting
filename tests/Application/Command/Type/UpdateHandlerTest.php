@@ -55,7 +55,7 @@ class UpdateHandlerTest extends TestCase
         $update->numberMaxOfHappeningsPerUser = 10;
         $update->canEvaluateMeeting = false;
         $update->mustEvaluateMeeting = true;
-        $update->submitValidationSheet = false;
+        $update->canSubmitValidation = false;
 
         //Mock
         $typeRepository             = $this->prophesize(TypeRepositoryInterface::class);
@@ -76,7 +76,7 @@ class UpdateHandlerTest extends TestCase
                 && new ValidationCriteria(false) == $actual->getValidationCriteria()
                 && !$actual->canEvaluateMeeting()
                 && !$actual->mustEvaluateMeeting()
-                && !$actual->isSubmitValidationSheet()
+                && !$actual->canSubmitValidation()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant', $type)->willReturn(false);

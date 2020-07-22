@@ -123,7 +123,7 @@ class TypeCreateType extends AbstractType
             ->add('mustEvaluateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('submitValidationSheet', CheckboxType::class, [
+            ->add('canSubmitValidation', CheckboxType::class, [
                 'required' => false,
             ])
         ;

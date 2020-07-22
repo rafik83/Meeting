@@ -72,7 +72,7 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
-        submitValidationSheet:
+        canSubmitValidation:
             type: boolean
             options:
                 default: true

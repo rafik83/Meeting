@@ -1255,7 +1255,7 @@ form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
 form.type_create.children.sheetTemplate.label: 'Template de présentation'
 form.type_create.children.submit.label: Enregistrer
-form.type_create.children.submitValidationSheet.label: 'Soumettre sa fiche à validation'
+form.type_create.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_create.children.template.label: Template
 form.type_create.children.translations.prototype.children.description.label: Description
 form.type_create.children.translations.prototype.children.title.label: Titre
@@ -1313,7 +1313,7 @@ form.type_update.children.rank.label: Position
 form.type_update.children.registrationTemplate.label: 'Template d''inscription'
 form.type_update.children.sheetTemplate.label: 'Template de présentation'
 form.type_update.children.submit.label: Enregistrer
-form.type_update.children.submitValidationSheet.label: 'Soumettre sa fiche à validation'
+form.type_update.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_update.children.translations.prototype.children.description.label: Description
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'

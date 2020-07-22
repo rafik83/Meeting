@@ -68,7 +68,7 @@ class CreateHandler
             $create->numberMaxOfMeetingsPerSheet,
             $create->canEvaluateMeeting,
             $create->canEvaluateMeeting ? $create->mustEvaluateMeeting : false,
-            $create->submitValidationSheet
+            $create->canSubmitValidation
         );
 
         $localesTitleAlreadyExists = [];

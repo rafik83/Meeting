@@ -93,7 +93,7 @@ class Create implements Command
     public $mustEvaluateMeeting = false;
 
     /** @var bool */
-    public $submitValidationSheet = true;
+    public $canSubmitValidation = true;
 
     public function __construct(Event $event, string $locale)
     {
