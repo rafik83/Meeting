@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2200 - Allow more planning than participant
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
 
@@ -16,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-239 - Fix batch action for paged filtered results, for all results selection
 - Hotfix - meeting slot duration in admin
 - Index users on mail change
+
+## [2.38.0] - 2020-07-22
+### Added
+- VIMEET-2200 - Allow more planning than participant
 
 ## [2.37.0] - 2020-07-06
 ### Added

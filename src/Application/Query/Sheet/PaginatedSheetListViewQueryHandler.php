@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
@@ -157,7 +149,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getValidationState(),
             $sheet->getCompleteness(),
             $sheet->isEnabled(),
-            $sheet->isInCatalog(),
+            $sheet->isInInternalCatalog(),
             $sheet->attend(),
             $sheet->getType()->getCategoriesTitles($locale),
             $linkedSheetsTitle,
@@ -173,7 +165,7 @@ class PaginatedSheetListViewQueryHandler
             $sheet->getReminderDate(),
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
-            $sheet->countParticipant(),
+            $sheet->countParticipants(),
             null !== $sheet->getGroup(),
             null !== $sheet->getGroup() ? $sheet->getGroup()->getTitle() : null,
             null !== $sheet->getSpot() ? $sheet->getSpot()->getReference() : null,

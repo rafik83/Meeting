@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\Export;
@@ -19,22 +11,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportPlannerCommand extends Command
 {
-    const NAME                      = 'vimeet:planner:export';
+    public const NAME = 'vimeet:planner:export';
 
-    const LOCK_MEETING_REQUEST      = 'lock-requests';
-    const DONT_LOCK_MEETING_REQUEST = 'not-lock-requests';
+    public const LOCK_MEETING_REQUEST = 'lock-requests';
+    public const DONT_LOCK_MEETING_REQUEST = 'not-lock-requests';
 
-    const MODE_AUTO   = 'auto';
-    const MODE_MANUAL = 'manual';
+    public const MODE_AUTO = 'auto';
+    public const MODE_MANUAL = 'manual';
 
     /** @var ExportHandler */
     private $exportPlannerHandler;
 
-    /**
-     * ExportPlannerCommand constructor.
-     *
-     * @param ExportHandler $exportPlannerHandler
-     */
     public function __construct(ExportHandler $exportPlannerHandler)
     {
         parent::__construct(self::NAME);
@@ -45,7 +32,7 @@ class ExportPlannerCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this
             ->setName(self::NAME)
@@ -94,5 +81,7 @@ class ExportPlannerCommand extends Command
         );
 
         $output->writeln($result);
+
+        return 0;
     }
 }

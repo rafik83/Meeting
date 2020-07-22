@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -30,9 +22,6 @@ class OptionRow
         $this->isAttributable = $isAttributable;
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return !$this->isAttributable
@@ -40,9 +29,6 @@ class OptionRow
             : \count($this->participants);
     }
 
-    /**
-     * @param int $quantity
-     */
     public function setQuantity(int $quantity): void
     {
         $this->quantity = $quantity;
