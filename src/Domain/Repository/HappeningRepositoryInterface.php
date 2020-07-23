@@ -73,4 +73,6 @@ interface HappeningRepositoryInterface
      * @return Happening[]
      */
     public function findWithProductsAndType(Event $event, Type $type): array;
+
+    public function findWebinarBySessionId(string $sessionId): ?Happening;
 }
