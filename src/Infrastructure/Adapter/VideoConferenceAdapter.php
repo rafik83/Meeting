@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use InvalidArgumentException;
@@ -68,6 +60,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
                 'hasVideo' => true,
                 'hasAudio' => true,
                 'outputMode' => OutputMode::COMPOSED,
+                'resolution' => '1280x720',
             ]
         );
     }
