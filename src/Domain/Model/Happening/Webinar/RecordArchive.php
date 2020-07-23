@@ -80,4 +80,9 @@ class RecordArchive
     {
         return $this->status === RecordStatus::STOPPED;
     }
+
+    public function unstop(): void
+    {
+        $this->status = RecordStatus::STARTED;
+    }
 }

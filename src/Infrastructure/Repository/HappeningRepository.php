@@ -213,4 +213,20 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->getResult()
         ;
     }
+
+    public function findWebinarBySessionId(string $sessionId): ?Happening
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->where('happening.webinar = true')
+            ->andWhere('happening.webinarSessionId = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

@@ -40,4 +40,18 @@ class RecordArchiveRepository implements RecordArchiveRepositoryInterface
             ->getResult()
         ;
     }
+
+    public function getByArchiveId(string $archiveId): ?RecordArchive
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('recordArchive')
+            ->from(RecordArchive::class, 'recordArchive')
+            ->where('recordArchive.archiveId = :archiveId')
+            ->setParameter('archiveId', $archiveId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }
