@@ -1,14 +1,6 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
-namespace Proximum\Vimeet\Application\Query\Notification;
+namespace Proximum\Vimeet\Tests\Application\Query\Notification;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
@@ -31,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class TransactionViewQueryHandlerTest extends TestCase
 {
-    public function testHandleNotificationPending()
+    public function testHandleNotificationPending(): void
     {
         $datetime    = new \DateTime();
         $event       = EventFactory::createEvent();
@@ -66,12 +58,12 @@ class TransactionViewQueryHandlerTest extends TestCase
         $this->assertEquals($notificationView, $expectedNotificationView);
     }
 
-    public function testHandleNotificationPaid()
+    public function testHandleNotificationPaid(): void
     {
-        $datetime    = new \DateTime();
-        $event       = EventFactory::createEvent();
-        $user        = new User('user@gmail.com', 'salt', 'pasword', 'fr');
-        $sheet       = SheetFactory::create($event, $user, $datetime);
+        $datetime = new \DateTime();
+        $event = EventFactory::createEvent();
+        $user = new User('user@gmail.com', 'salt', 'pasword', 'fr');
+        $sheet = SheetFactory::create($event, $user, $datetime);
         $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
 
         // Expected view
@@ -101,28 +93,54 @@ class TransactionViewQueryHandlerTest extends TestCase
         $this->assertEquals($notificationView, $expectedNotificationView);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
-        $datetime        = new \DateTime();
-        $event           = EventFactory::createEvent();
-        $user            = new User('user@gmail.com', 'salt', 'pasword', 'fr');
-        $sheet           = SheetFactory::create($event, $user, $datetime);
-        $transaction     = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
+        $datetime = new \DateTime();
+        $event = EventFactory::createEvent();
+        $user = new User('user@gmail.com', 'salt', 'pasword', 'fr');
+        $sheet = SheetFactory::create($event, $user, $datetime);
+        $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
         $paidTransaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
 
         // Mock
-        $transactionRepository              = $this->prophesize(TransactionRepositoryInterface::class);
+        $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
         $transactionPendingViewQueryHandler = $this->prophesize(TransactionPendingViewQueryHandler::class);
         $balance = $this->prophesize(Balance::class);
-        $transactionPaidViewQueryHandler    = $this->prophesize(TransactionPaidViewQueryHandler::class);
+        $transactionPaidViewQueryHandler = $this->prophesize(TransactionPaidViewQueryHandler::class);
 
         $balance->getBalance($sheet)->shouldBeCalled()->willReturn(100.0);
         $transactionRepository->findPending($sheet)->shouldBeCalled()->willReturn([$transaction]);
         $transactionRepository->findPaid($sheet)->shouldBeCalled()->willReturn([$paidTransaction]);
 
+        $notificationTransactionPendingView = new NotificationView(
+            $datetime,
+            'icon',
+            'category',
+            'description',
+            'link',
+            'important',
+            []
+        );
         $transactionPendingViewQueryHandler
             ->handle(new TransactionPendingViewQuery($transaction))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn($notificationTransactionPendingView)
+        ;
+
+        $notificationTransactionPaidView = new NotificationView(
+            $datetime,
+            'icon',
+            'category',
+            'description',
+            'link',
+            'important',
+            []
+        );
+        $transactionPaidViewQueryHandler
+            ->handle(new TransactionPaidViewQuery($paidTransaction))
+            ->shouldBeCalled()
+            ->willReturn($notificationTransactionPaidView)
+        ;
 
         $handler = new TransactionNotificationViewQueryHandler(
             $balance->reveal(),
@@ -131,6 +149,11 @@ class TransactionViewQueryHandlerTest extends TestCase
             $transactionPaidViewQueryHandler->reveal()
         );
 
-        $handler->handle(new TransactionNotificationViewQuery($sheet));
+        $result = $handler->handle(new TransactionNotificationViewQuery($sheet));
+
+        $this->assertEquals(
+            [$notificationTransactionPendingView, $notificationTransactionPaidView],
+            $result
+        );
     }
 }

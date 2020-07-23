@@ -1,65 +1,36 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-class Create
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Components\Security\PasswordGenerator;
+
+class Create implements Command
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $password;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $role;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $events;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var \DateTimeInterface
-     */
-    public $date;
-
-    /**
-     * @param string             $locale
-     * @param \DateTimeInterface $date
-     */
-    public function __construct($locale, \DateTimeInterface $date)
+    public function __construct(string $locale)
     {
-        $this->locale   = $locale;
-        $this->password = substr(md5(uniqid()), 0, 8);
-        $this->date     = $date;
+        $this->locale = $locale;
+        $this->password = PasswordGenerator::generate(12);
     }
 }

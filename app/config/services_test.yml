@@ -183,6 +183,29 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager:
+        arguments:
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager:
+        arguments:
+            - '@repository.unavailability.category_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager:
+        arguments:
+            - '@repository.messaging.message_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager:
+        arguments:
+            - '@repository.sheet.completeness_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager:
+        arguments:
+            - '@repository.transaction'
 
     #
     # Proxies
@@ -328,6 +351,36 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.billing_info'
+
+    Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
+
+    Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
+
+    Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager'
+
+    Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
 
     #
     # Other services

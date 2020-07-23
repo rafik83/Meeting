@@ -23,7 +23,7 @@ set :update_vendors, false
 # Composer
 set :use_composer,     true
 set :use_composer_tmp, false
-set :composer_bin,     "composer"
+set :composer_bin,     "bin/composer.phar"
 
 # Directory structure
 set :symfony_console, "bin/console"
@@ -91,7 +91,7 @@ namespace :app_tasks do
   end
   task :translations_update do
     capifony_pretty_print "--> Run translations update"
-    invoke_command "cd #{latest_release} && php bin/console vimeet:translations:schedule-update vimeet@elao.com fr --env=prod", :via => run_method
+    invoke_command "cd #{latest_release} && php bin/console vimeet:translations:schedule-update equipe@fairness.coop fr --env=prod", :via => run_method
     capifony_puts_ok
   end
 end

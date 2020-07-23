@@ -1,47 +1,36 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\UserEmailChangeActivatedEvent;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class ChangeMailActivationHandler
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var ChangeMailTokenRepositoryInterface
-     */
+    /** @var ChangeMailTokenRepositoryInterface */
     private $changeMailTokenRepository;
 
-    /**
-     * @param UserRepositoryInterface            $userRepository
-     * @param ChangeMailTokenRepositoryInterface $changeMailTokenRepository
-     */
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
-        ChangeMailTokenRepositoryInterface $changeMailTokenRepository
+        ChangeMailTokenRepositoryInterface $changeMailTokenRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
-        $this->userRepository            = $userRepository;
+        $this->userRepository = $userRepository;
         $this->changeMailTokenRepository = $changeMailTokenRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
-    /**
-     * @param ChangeMailActivation $changeMailActivation
-     */
-    public function handle(ChangeMailActivation $changeMailActivation)
+    public function handle(ChangeMailActivation $changeMailActivation): void
     {
         $mail = StringHelper::trimSpacesAndNonBreakSpaces($changeMailActivation->mail);
         $user = $changeMailActivation->user;
@@ -50,5 +39,12 @@ class ChangeMailActivationHandler
         $this->userRepository->set($user);
 
         $this->changeMailTokenRepository->deleteAllForUser($user);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::USER_EMAIL_CHANGE_ACTIVATED,
+            new UserEmailChangeActivatedEvent(
+                $user
+            )
+        );
     }
 }

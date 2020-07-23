@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use DateTime;
@@ -53,13 +45,13 @@ class ChangeMailHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->tokenGenerator            = $this->prophesize(ChangeMailTokenGenerator::class);
-        $this->userRepository            = $this->prophesize(UserRepositoryInterface::class);
+        $this->tokenGenerator = $this->prophesize(ChangeMailTokenGenerator::class);
+        $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->changeMailTokenRepository = $this->prophesize(ChangeMailTokenRepositoryInterface::class);
-        $this->eventDispatcher           = $this->prophesize(EventDispatcherInterface::class);
-        $this->date                      = $date  = new DateTime();
-        $this->user                      = $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
-        $this->event                     = $event = EventFactory::createEvent();
+        $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->date = new DateTime();
+        $this->user = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
+        $this->event = EventFactory::createEvent();
     }
 
     public function testHandle()
@@ -78,9 +70,11 @@ class ChangeMailHandlerTest extends TestCase
 
         $this->eventDispatcher->dispatch('change_mail', $expectedEvent)->shouldBeCalled();
 
+
         // Base
         $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'toto@toto.fr';
+        $changeMail->password = 'plain_password';
 
         // Handler
         $handler = new ChangeMailHandler(
@@ -99,6 +93,7 @@ class ChangeMailHandlerTest extends TestCase
         // Base
         $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = null;
+        $changeMail->password = 'plain_password';
 
         // Handler
         $handler = new ChangeMailHandler(
@@ -117,6 +112,7 @@ class ChangeMailHandlerTest extends TestCase
         // Base
         $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'test@test.fr';
+        $changeMail->password = 'plain_password';
 
         // Handler
         $handler = new ChangeMailHandler(
@@ -138,6 +134,7 @@ class ChangeMailHandlerTest extends TestCase
         // Base
         $changeMail = new ChangeMail($this->user, $this->event);
         $changeMail->mail = 'toto@toto.fr';
+        $changeMail->password = 'plain_password';
 
         // Handler
         $handler = new ChangeMailHandler(

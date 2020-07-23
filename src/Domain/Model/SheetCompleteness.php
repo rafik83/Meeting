@@ -1,87 +1,52 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 class SheetCompleteness
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $completeness;
 
-    /**
-     * SheetCompleteness constructor.
-     *
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param int    $completeness
-     */
-    public function __construct(Sheet $sheet, $locale, $completeness)
-    {
-        $this->sheet        = $sheet;
-        $this->locale       = $locale;
+    public function __construct(
+        Sheet $sheet,
+        string $locale,
+        int $completeness
+    ) {
+        $this->sheet = $sheet;
+        $this->locale = $locale;
         $this->completeness = $completeness;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Sheet
-     */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @return int
-     */
-    public function getCompleteness()
+    public function getCompleteness(): int
     {
         return $this->completeness;
     }
 
-    /**
-     * @param int $completeness
-     */
-    public function setCompleteness($completeness)
+    public function setCompleteness(int $completeness): void
     {
         $this->completeness = $completeness;
     }

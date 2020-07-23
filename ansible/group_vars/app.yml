@@ -11,6 +11,7 @@ app_options:
   elasticsearch:         true
   elasticsearch_version: '1.7'
   redis:                 true
+  redis_version:         '5'
 
 app_patterns:
 

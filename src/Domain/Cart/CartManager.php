@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -54,16 +46,6 @@ class CartManager
     /** @var ProductAttributedToParticipantSetter */
     private $productAttributedToParticipantSetter;
 
-    /**
-     * @param CartRowRepositoryInterface                        $cartRowRepository
-     * @param CartStepRepositoryInterface                       $cartStepRepository
-     * @param PromotionCodeRowRepositoryInterface               $promotionCodeRowRepository
-     * @param Merger                                            $orderMerger
-     * @param ParticipantProductSetter                          $participantProductSetter
-     * @param ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
-     * @param ProductAttributedToParticipantSetter              $productAttributedToParticipantSetter
-     * @param DelayedEventDispatcherInterface                   $delayedEventDispatcher
-     */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,

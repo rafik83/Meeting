@@ -913,7 +913,7 @@ class MeetingRequestController extends Controller
      */
     private function displayEditForm(DiscussionMeetingRequestView $discussion, Sheet $sheet)
     {
-        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant();
+        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipants();
     }
 
     /**

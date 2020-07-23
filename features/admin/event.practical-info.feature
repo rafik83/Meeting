@@ -5,13 +5,8 @@ Feature: See and update practical information
 
   Scenario: Set practical information
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
+    And the event "La communication c'est la clé du succès" is created
+    And I am logged as admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.practicalInfo.link"
     Then the response status code should be 200
@@ -25,7 +20,7 @@ Feature: See and update practical information
     And I press "event_practical_info_update_submit"
 
   Scenario: See practical information
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/en/event/1"
     When I follow "admin.event.practicalInfo.link"
     Then the response status code should be 200

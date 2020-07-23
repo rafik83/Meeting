@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -26,51 +18,34 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CompletenessCalculator
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var SheetCompletenessRepositoryInterface
-     */
+    /** @var SheetCompletenessRepositoryInterface */
     private $sheetCompletenessRepository;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @param TemplateDataFactory                  $templateDataFactory
-     * @param SheetRepositoryInterface             $sheetRepository
-     * @param SheetCompletenessRepositoryInterface $sheetCompletenessRepository
-     * @param DelayedEventDispatcher               $eventDispatcher
-     */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         SheetRepositoryInterface $sheetRepository,
         SheetCompletenessRepositoryInterface $sheetCompletenessRepository,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->templateDataFactory         = $templateDataFactory;
-        $this->sheetRepository             = $sheetRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->sheetRepository = $sheetRepository;
         $this->sheetCompletenessRepository = $sheetCompletenessRepository;
-        $this->eventDispatcher             = $eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function calculateCompleteness(Sheet $sheet)
+    public function calculateCompleteness(Sheet $sheet): void
     {
-        $locales  = $sheet->getEvent()->getLocales();
-        $fallback = $sheet->getEvent()->getFallback();
+        $locales= $sheet->getEvent()->getLocales();
+        $fallback = $sheet->getEvent()->getLocaleFallback();
 
         $total     = [];
         $completed = [];
@@ -93,7 +68,7 @@ class CompletenessCalculator
         $notificationCompleteness = [];
         $averageCompleteness      = 0;
         foreach ($locales as $locale) {
-            $localeCompleteness        = 0 !== $total[$locale] ? floor($completed[$locale] / $total[$locale] * 100) : 0;
+            $localeCompleteness = 0 !== $total[$locale] ? floor($completed[$locale] / $total[$locale] * 100) : 0;
             $unitLocalizedCompleteness = new SheetCompleteness(
                 $sheet,
                 $locale,
@@ -106,7 +81,7 @@ class CompletenessCalculator
             $notificationCompleteness[$locale] = 100 === (int) $localeCompleteness;
         }
 
-        $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));
+        $sheet->setCompleteness((int) (floor($averageCompleteness / count($locales))));
 
         $this->sheetRepository->set($sheet);
 
@@ -128,7 +103,7 @@ class CompletenessCalculator
         array &$total,
         array &$completed,
         array $locales
-    ) {
+    ): void {
         $countTotal     = 0;
         $countCompleted = 0;
         foreach ($templateData->getEditableSheetDataExceptedImageObjects() as $object) {
@@ -161,7 +136,7 @@ class CompletenessCalculator
         array $locales,
         array &$total,
         array &$completed
-    ) {
+    ): void {
         foreach ($templateData->getObjects() as $object) {
             if (true === $object->getRequired()) {
                 if ($object->isEditable() && $object instanceof ContentObjectInterface) {

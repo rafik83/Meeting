@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
 use Symfony\Component\Form\FormError;
@@ -16,22 +8,12 @@ use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterf
 
 class ErrorFactory
 {
-    /**
-     * @var SymfonyTranslatorInterface
-     */
+    /** @var SymfonyTranslatorInterface */
     private $translator;
 
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $requestStack;
 
-    /**
-     * ErrorFactory constructor.
-     *
-     * @param SymfonyTranslatorInterface $translator
-     * @param RequestStack               $requestStack
-     */
     public function __construct(SymfonyTranslatorInterface $translator, RequestStack $requestStack)
     {
         $this->translator   = $translator;

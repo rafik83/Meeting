@@ -23,6 +23,7 @@ Feature: Change my mail
     And I go to this page "/fr/account/sheet/1/change-mail"
     Then I fill in the following:
       | form.change_mail.children.mail.label | truc@bidule.com |
+      | form.change_mail.children.password.label | p@ssw0rd |
     And I press "common.validate"
     Then I should be on "/fr/participant/1/step/1"
     And the response status code should be 200
