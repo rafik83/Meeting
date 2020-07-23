@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,7 @@ class RecordStatusChangeCallbackAction
         $url = $content['url'] ?? null;
         $partnerId = $content['partnerId'] ?? null;
 
-        if ($partnerId !== $this->apiKey) {
+        if ((string) $partnerId !== $this->apiKey) {
             return new JsonResponse(
                 ['message' => 'wrong parameters'],
                 Response::HTTP_FORBIDDEN
