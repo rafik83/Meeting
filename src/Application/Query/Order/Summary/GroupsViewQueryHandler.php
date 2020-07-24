@@ -105,20 +105,38 @@ class GroupsViewQueryHandler
 
         $stepOption = $funnel->getStepByType(Step::TYPE_OPTIONS);
 
-        foreach ($order->getGroupsIds() as $groupId) {
-            $groupsView->addGroupView(
-                $this->groupViewQueryHandler->handle(
-                    new GroupViewQuery(
-                        $groupsViewQuery->sheet,
-                        $stepOption,
-                        $order,
-                        $groupsViewQuery->locale,
-                        Product::TYPE_OPTION,
-                        $groupId,
-                        $planView
-                    )
+        if (empty($order->getGroupsIds())) {
+            $groupView = $this->groupViewQueryHandler->handle(
+                new GroupViewQuery(
+                    $groupsViewQuery->sheet,
+                    $stepOption,
+                    $order,
+                    $groupsViewQuery->locale,
+                    Product::TYPE_OPTION,
+                    null,
+                    $planView
                 )
             );
+
+            if ($groupView->hasProductOrCustomRow()) {
+                $groupsView->addGroupView($groupView);
+            }
+        } else {
+            foreach ($order->getGroupsIds() as $groupId) {
+                $groupsView->addGroupView(
+                    $this->groupViewQueryHandler->handle(
+                        new GroupViewQuery(
+                            $groupsViewQuery->sheet,
+                            $stepOption,
+                            $order,
+                            $groupsViewQuery->locale,
+                            Product::TYPE_OPTION,
+                            $groupId,
+                            $planView
+                        )
+                    )
+                );
+            }
         }
 
         return $groupsView;
