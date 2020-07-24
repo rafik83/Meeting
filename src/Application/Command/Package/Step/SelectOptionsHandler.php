@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -32,12 +24,6 @@ class SelectOptionsHandler
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @param CartManager            $cartManager
-     * @param \DateTimeInterface     $now
-     * @param Merger                 $merger
-     * @param DelayedEventDispatcher $eventDispatcher
-     */
     public function __construct(
         CartManager $cartManager,
         \DateTimeInterface $now,
@@ -50,9 +36,6 @@ class SelectOptionsHandler
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param SelectOptions $selectOptions
-     */
     public function handle(SelectOptions $selectOptions): void
     {
         $sheet = $selectOptions->sheet;

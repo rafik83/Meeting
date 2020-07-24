@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Planner;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -16,31 +8,18 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
 class PlanningQuantityGuesser
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param Merger                   $orderMerger
-     */
     public function __construct(OrderRepositoryInterface $orderRepository, Merger $orderMerger)
     {
         $this->orderRepository = $orderRepository;
         $this->orderMerger     = $orderMerger;
     }
 
-    /**
-     * @param Sheet $sheet
-     *
-     * @return int
-     */
     public function guess(Sheet $sheet): int
     {
         // If the sheet has no package,

@@ -73,6 +73,9 @@ class HappeningWebinarActionTest extends TestCase
     /** @var \DateTimeInterface */
     private $datetime;
 
+    /** @var ObjectProphecy|Happening */
+    private $happening;
+
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -88,7 +91,6 @@ class HappeningWebinarActionTest extends TestCase
         $this->userDomain = new UserDomain($this->user->reveal());
         $this->sheet = $this->prophesize(Sheet::class);
         $this->happening = $this->prophesize(Happening::class);
-
         $this->happening->getEvent()->willReturn($this->event->reveal());
         $this->sheet->getEvent()->willReturn($this->event->reveal());
     }
@@ -266,6 +268,8 @@ class HappeningWebinarActionTest extends TestCase
         $this->request->getLocale()->shouldBeCalled()->willReturn('fr');
         $webinarView = $this->prophesize(WebinarView::class);
         $webinarView->reveal()->isSpeaker = false;
+        $webinarView->isVideoWebinarAndHappeningIsEnded()->shouldBeCalled()->willReturn(false);
+
         $this->queryBus
             ->handle(Argument::type(GetWebinarViewQuery::class))
             ->shouldBeCalled()

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
@@ -23,52 +15,36 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ChangeMailHandler
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var ChangeMailTokenRepositoryInterface
-     */
+    /** @var ChangeMailTokenRepositoryInterface */
     private $changeMailTokenRepository;
 
-    /**
-     * @var ChangeMailTokenGenerator
-     */
+    /** @var ChangeMailTokenGenerator */
     private $changeMailTokenGenerator;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param UserRepositoryInterface            $userRepository
-     * @param ChangeMailTokenRepositoryInterface $changeMailTokenRepository
-     * @param ChangeMailTokenGenerator           $changeMailTokenGenerator
-     * @param EventDispatcherInterface           $eventDispatcher
-     */
     public function __construct(
         UserRepositoryInterface $userRepository,
         ChangeMailTokenRepositoryInterface $changeMailTokenRepository,
         ChangeMailTokenGenerator $changeMailTokenGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
-        $this->userRepository            = $userRepository;
+        $this->userRepository = $userRepository;
         $this->changeMailTokenRepository = $changeMailTokenRepository;
-        $this->changeMailTokenGenerator  = $changeMailTokenGenerator;
-        $this->eventDispatcher           = $eventDispatcher;
+        $this->changeMailTokenGenerator = $changeMailTokenGenerator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param ChangeMail $changeMail
-     *
      * @throws EmailAlreadyExistsException
      * @throws EmptyFieldException
      * @throws SameEmailException
      */
-    public function handle(ChangeMail $changeMail)
+    public function handle(ChangeMail $changeMail): void
     {
         $user = $changeMail->user;
 

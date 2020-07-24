@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\ExecInterface;
@@ -35,7 +27,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportPlannerMail;
 
 class ExportHandler
 {
-    const XML_ROOT_NODE = 'MeetingSchedule';
+    public const XML_ROOT_NODE = 'MeetingSchedule';
 
     /** @var LockMeetingRequestUpdateHandler */
     private $lockMeetingRequestHandler;
@@ -95,20 +87,20 @@ class ExportHandler
         ExecInterface $execAdapter,
         FileFactory $fileFactory
     ) {
-        $this->lockMeetingRequestHandler   = $lockMeetingRequestHandler;
-        $this->dispatcherHandler           = $dispatcherHandler;
-        $this->plannerHandler              = $plannerHandler;
-        $this->serializer                  = $serializer;
-        $this->fileStorageAdapter          = $fileStorageAdapter;
+        $this->lockMeetingRequestHandler = $lockMeetingRequestHandler;
+        $this->dispatcherHandler = $dispatcherHandler;
+        $this->plannerHandler = $plannerHandler;
+        $this->serializer = $serializer;
+        $this->fileStorageAdapter = $fileStorageAdapter;
         $this->exportLocationDirectoryPath = $exportLocationDirectoryPath;
-        $this->plannerFilesPath            = $plannerFilesPath;
-        $this->plannerCommand              = $plannerCommand;
-        $this->eventRepository             = $eventRepository;
-        $this->plannerJobRepository        = $plannerJobRepository;
-        $this->mailer                      = $mailer;
-        $this->mailSender                  = $mailSender;
-        $this->execAdapter                 = $execAdapter;
-        $this->fileFactory                 = $fileFactory;
+        $this->plannerFilesPath = $plannerFilesPath;
+        $this->plannerCommand = $plannerCommand;
+        $this->eventRepository = $eventRepository;
+        $this->plannerJobRepository = $plannerJobRepository;
+        $this->mailer = $mailer;
+        $this->mailSender = $mailSender;
+        $this->execAdapter = $execAdapter;
+        $this->fileFactory = $fileFactory;
     }
 
     /**
@@ -257,7 +249,7 @@ class ExportHandler
      * @param Export $command
      * @param File   $file
      */
-    private function notifyCreationOfFile(Event $event, Export $command, File $file)
+    private function notifyCreationOfFile(Event $event, Export $command, File $file): void
     {
         $this->mailer->send(new ExportPlannerMail(
             $event,
@@ -276,7 +268,7 @@ class ExportHandler
      * @param Event  $event
      * @param Export $command
      */
-    private function notifyError($message, Event $event, Export $command)
+    private function notifyError($message, Event $event, Export $command): void
     {
         $this->mailer->send(
             new ExportPlannerMailError(

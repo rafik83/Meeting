@@ -59,6 +59,12 @@ class WebinarView
     /** @var string|null */
     public $liveUrl;
 
+    /** @var bool */
+    public $isVideoWebinarAndHasLiveUrl;
+
+    /** @var bool */
+    public $isVideoWebinarAndHappeningIsEnded;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -67,6 +73,7 @@ class WebinarView
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
+        bool $isVideoWebinarAndHasLiveUrl,
         string $token,
         string $sessionId,
         string $apiKey,
@@ -78,7 +85,8 @@ class WebinarView
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
         ?string $headerImage,
-        ?string $liveUrl
+        ?string $liveUrl,
+        bool $isVideoWebinarAndHappeningIsEnded
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -95,6 +103,8 @@ class WebinarView
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
+        $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
+        $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
     }
 
     public function getSpeakerInfosByUserId(): string
@@ -129,5 +139,10 @@ class WebinarView
         }
 
         return json_encode($mapping);
+    }
+
+    public function isVideoWebinarAndHappeningIsEnded(): bool
+    {
+        return $this->isVideoWebinarAndHappeningIsEnded;
     }
 }

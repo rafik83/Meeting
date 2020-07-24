@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Planner;
 
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
@@ -48,10 +40,10 @@ class IndicatorCalculator
 
     public function getIndicator(Sheet $sheet): IndicatorView
     {
-        $participantsCount       = $sheet->countParticipants();
+        $participantsCount = $sheet->countParticipants();
         $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
-        $planningQuantity        = $this->planningQuantityGuesser->guess($sheet);
-        $unavailabilities        = [];
+        $planningQuantity = $this->planningQuantityGuesser->guess($sheet);
+        $unavailabilities = [];
 
         $meetingRequestsCount = $this
             ->requestRepository

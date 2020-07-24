@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Planner;
 
 class IndicatorView
@@ -170,6 +162,6 @@ class IndicatorView
             0,
             min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount, $this->maxMeetingAvailable)
         );
-        $this->usableSlots = $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount, $numberMaxOfMeetingsPerSheet ?? +INF));
+        $this->usableSlots = max(0, min($this->slotCount, $this->availableSlotsCount, $numberMaxOfMeetingsPerSheet ?? +INF));
     }
 }

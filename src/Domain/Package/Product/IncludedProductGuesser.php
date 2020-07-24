@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,7 +11,7 @@ class IncludedProductGuesser extends AbstractIncludedProductGuesser
      *
      * @return int[]
      */
-    public function getIncludedProductIds(Sheet $sheet)
+    public function getIncludedProductIds(Sheet $sheet): array
     {
         $selectedPlan = $this->getSelectedPlan($sheet);
         $includedProductIds = [];

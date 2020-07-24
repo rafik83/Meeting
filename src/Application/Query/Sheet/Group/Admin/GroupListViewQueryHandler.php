@@ -32,17 +32,15 @@ class GroupListViewQueryHandler
         GroupRepositoryInterface $groupRepository
     ) {
         $this->groupViewQueryHandler = $groupViewQueryHandler;
-        $this->groupRepository       = $groupRepository;
+        $this->groupRepository = $groupRepository;
     }
 
     /**
-     * @param GroupListViewQuery $groupListViewQuery
-     *
      * @return GroupView[]
      */
-    public function handle(GroupListViewQuery $groupListViewQuery)
+    public function handle(GroupListViewQuery $groupListViewQuery): array
     {
-        $groupViews   = [];
+        $groupViews = [];
         $sheetsGroups = $this->groupRepository->getAllByEventOrderedByTitle($groupListViewQuery->event);
 
         if (!empty($sheetsGroups)) {

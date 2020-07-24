@@ -31,11 +31,6 @@ class SheetViewQueryHandler
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @param SheetRepositoryInterface   $sheetRepository
-     * @param IndicatorCalculator        $indicatorCalculator
-     * @param MeetingRepositoryInterface $meetingRepository
-     */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         IndicatorCalculator $indicatorCalculator,
@@ -51,7 +46,7 @@ class SheetViewQueryHandler
      *
      * @return SheetView[]
      */
-    public function handle(SheetViewQuery $query)
+    public function handle(SheetViewQuery $query): array
     {
         $this->orderTypeById($query);
         $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event);
@@ -91,10 +86,7 @@ class SheetViewQueryHandler
         return $sheetViews;
     }
 
-    /**
-     * @param SheetViewQuery $query
-     */
-    private function orderTypeById(SheetViewQuery $query)
+    private function orderTypeById(SheetViewQuery $query): void
     {
         foreach ($query->types as $type) {
             $this->types[$type->id] = $type;

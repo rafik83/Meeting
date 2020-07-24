@@ -7,27 +7,28 @@
         >
             <i class="icon-{{ happening.picto }} happeningParticipateIcon"></i> {{ 'happening.webinar.start'|trans }}
         </a>
-    {% else %}
-        {% if happening.hasParticipations or not happening.isFull %}
-            <a href="{{ path('event_sheet_happening_participate', { 'sheet': sheet.id, 'happening': happening.id }) }}"
-               class="happeningParticipateAction"
-               data-picto="{{ ('<i class="icon icon-' ~ happening.picto ~ '"></i>')|escape }}"
-               data-label-participate="{{ 'happening.participate.action'|trans }}"
-               data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
-               data-label-cancel="{{ 'happening.participationCancel.action'|trans }}"
-            >
-                {% if doesCurrentUserParticipate %}
-                    <i class="icon icon-Fermer_4 happeningParticipateIcon"></i>
-                {% elseif (isUserAloneParticipant and doesCurrentUserParticipate) or not doesCurrentUserParticipate %}
-                    <i class="icon icon-Valider_4 happeningParticipateIcon"></i>
-                {% endif %}
-                <span>
-                    {{ (happening.hasParticipations ? (isUserAloneParticipant ? 'happening.participationCancel.action' : 'happening.participationUpdate.action') : 'happening.participate.action')|trans }}
-                </span>
-            </a>
-        {% elseif happening.isFull %}
-            <span class="label label-default">{{ 'happening.participate.full'|trans }}</span>
-        {% endif %}
+    {% endif %}
+
+    {% if happening.hasParticipations or not happening.isFull or happening.webinarOpened %}
+        <a href="{{ path('event_sheet_happening_participate', { 'sheet': sheet.id, 'happening': happening.id }) }}"
+            class="happeningParticipateAction"
+            data-picto="{{ ('<i class="icon icon-' ~ happening.picto ~ '"></i>')|escape }}"
+            data-label-participate="{{ 'happening.participate.action'|trans }}"
+            data-label-participation-update="{{ 'happening.participationUpdate.action'|trans }}"
+            data-label-cancel="{{ 'happening.participationCancel.action'|trans }}"
+            data-webinar-open="{{ happening.webinarOpened }}"
+        >
+            {% if doesCurrentUserParticipate %}
+                <i class="icon icon-Fermer_4 happeningParticipateIcon"></i>
+            {% elseif (isUserAloneParticipant and doesCurrentUserParticipate) or not doesCurrentUserParticipate %}
+                <i class="icon icon-Valider_4 happeningParticipateIcon"></i>
+            {% endif %}
+            <span>
+                {{ (happening.hasParticipations ? (isUserAloneParticipant ? 'happening.participationCancel.action' : 'happening.participationUpdate.action') : 'happening.participate.action')|trans }}
+            </span>
+        </a>
+    {% elseif happening.isFull %}
+        <span class="label label-default">{{ 'happening.participate.full'|trans }}</span>
     {% endif %}
 </div>
 {% endif %}
