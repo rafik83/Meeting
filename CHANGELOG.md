@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Add missing translation key for available priority request
 
 ## [2.39.0] - 2020-07-24
 ### Added
@@ -19,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-239 - Fix batch action for paged filtered results, for all results selection
 - Hotfix - meeting slot duration in admin
 - Index users on mail change
-- Add missing translation key for available priority request
 
 ## [2.38.0] - 2020-07-22
 ### Added
