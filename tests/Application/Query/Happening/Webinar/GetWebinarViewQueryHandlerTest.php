@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar;
 
-use OpenTok\ArchiveList;
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -22,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandlerTest extends TestCase
@@ -38,15 +38,20 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var \DateTime */
     private $dateTime;
 
+    /** @var ObjectProphecy */
+    private $recordArchiveRepository;
+
     protected function setUp(): void
     {
         $this->getUserParticipantInfosHandler = $this->prophesize(GetUserParticipantInfosHandler::class);
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
+        $this->recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->recordArchiveRepository->reveal(),
             $this->dateTime
         );
     }
@@ -151,7 +156,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 false,
                 false,
-                ''
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -241,6 +246,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->recordArchiveRepository->reveal(),
             $date
         );
 
@@ -266,7 +272,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 false,
                 false,
-                ''
+                false
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -350,9 +356,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
-        $archiveList = $this->prophesize(ArchiveList::class);
-        $archiveList->getItems()->shouldBeCalled()->willReturn([]);
-        $this->videoConferenceAdapter->listArchives('webinar-session-id')->shouldBeCalled()->willReturn($archiveList->reveal());
+        $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $this->assertEquals(
             new WebinarView(
@@ -399,7 +406,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 false,
                 true,
-                'no_record'
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -460,7 +467,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 true,
                 false,
-                ''
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

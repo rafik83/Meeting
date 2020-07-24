@@ -56,7 +56,7 @@
                     'happening': webinarView.happeningId
                 }
             ) }}"
-            data-webinar-record-status="{{ webinarView.webinarRecordStatus }}"
+            data-webinar-is-recording="{{ webinarView.isWebinarRecording ? 'true' : 'false' }}"
         {% endif %}
 
     >
@@ -90,7 +90,7 @@
 
             {% if webinarView.isWebinarRecorded %}
                 <button id="toggle-recording" class="btn btn-gray hide" title="{{ 'happening.webinar.recordButtonTitle'|trans }}">
-                    <span class="dot"></span>
+                    <span class="dot {% if webinarView.isWebinarRecording%}recording{% endif %}"></span>
                 </button>
             {% endif %}
 
