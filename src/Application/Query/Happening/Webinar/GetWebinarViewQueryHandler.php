@@ -11,6 +11,7 @@ use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
@@ -24,13 +25,18 @@ class GetWebinarViewQueryHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var RecordArchiveRepositoryInterface */
+    private $recordArchiveRepository;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        RecordArchiveRepositoryInterface $recordArchiveRepository,
         \DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -69,7 +75,7 @@ class GetWebinarViewQueryHandler
             $happening->getLiveUrl(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $happening->isWebinarRecorded(),
-            $this->getWebinarRecordStatus($happening)
+            $this->isWebinarRecording($happening)
         );
     }
 
@@ -167,21 +173,12 @@ class GetWebinarViewQueryHandler
         return $speakerViews;
     }
 
-    private function getWebinarRecordStatus(Happening $happening): string
+    private function isWebinarRecording(Happening $happening): bool
     {
         if (!$happening->isWebinarRecorded()) {
             return false;
         }
 
-        $archives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
-        $status = array_reduce($archives->getItems(), static function ($carry, $item) {
-            if ($carry[1] < $item->createdAt) {
-                $carry = [$item->status, $item->createdAt];
-            }
-
-            return $carry;
-        }, ['no_record', 0]);
-
-        return $status[0];
+        return $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening);
     }
 }

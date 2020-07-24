@@ -112,9 +112,9 @@ function Webinar(element, isSpeaker) {
     this.toggleRecordingButton = element.querySelector('#toggle-recording');
     this.isRecording = false;
 
-    const recordStatus = element.getAttribute('data-webinar-record-status');
-    if (recordStatus) {
-        this.isRecording = recordStatus === 'started' || recordStatus === 'paused';
+    const recordStatus = element.getAttribute('data-webinar-is-recording');
+    if (this.isWebinarRecorded && this.canRecordWebinar && recordStatus) {
+        this.isRecording = recordStatus === 'true';
         this.toggleRecording(this.isRecording);
     }
 
