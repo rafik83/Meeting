@@ -42,9 +42,13 @@ class GetWebinarViewQueryHandler
         $sessionAndTokenView = $this->getSessionAndToken($happening, $isSpeaker);
         $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
 
-        $placeholders = ['_firstname_','_lastname_'];
-        $values = [urlencode($query->getUser()->getFirstName()),urlencode($query->getUser()->getLastName())];
-        $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        $liveUrl = $happening->getLiveUrl();
+
+        if (strpos($liveUrl, '_firstname_') !== false || strpos($liveUrl, '_lastname_') !== false) {
+            $placeholders = ['_firstname_','_lastname_'];
+            $values = [urlencode($query->getUser()->getFirstName()),urlencode($query->getUser()->getLastName())];
+            $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        }
 
         return new WebinarView(
             $happening->getId(),

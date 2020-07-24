@@ -54,6 +54,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(111);
+        $user->getFirstname()->shouldBeCalled()->willReturn('Michel');
+        $user->getLastname()->shouldBeCalled()->willReturn('Dupont');
 
         $user1 = $this->prophesize(User::class);
         $user2 = $this->prophesize(User::class);
@@ -90,7 +92,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
-        $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.google.com/iframe?u=_firstname_%20_lastname_');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
@@ -144,7 +146,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 '/path/image.jpg',
-                null,
+                'https://www.google.com/iframe?u=Michel%20Dupont',
                 true,
                 false
             ),
