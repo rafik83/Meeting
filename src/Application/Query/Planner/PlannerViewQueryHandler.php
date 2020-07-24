@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\Exception\Planner;
@@ -15,56 +7,30 @@ use Proximum\Vimeet\Application\View\Planner\PlannerView;
 
 class PlannerViewQueryHandler
 {
-    /**
-     * @var DayViewQueryHandler
-     */
+    /** @var DayViewQueryHandler */
     private $dayViewQueryHandler;
 
-    /**
-     * @var SlotViewQueryHandler
-     */
+    /** @var SlotViewQueryHandler */
     private $slotViewQueryHandler;
 
-    /**
-     * @var TypeViewQueryHandler
-     */
+    /** @var TypeViewQueryHandler */
     private $typeViewQueryHandler;
 
-    /**
-     * @var TypePriorityViewQueryHandler
-     */
+    /** @var TypePriorityViewQueryHandler */
     private $typePriorityViewQueryHandler;
 
-    /**
-     * @var SheetViewQueryHandler
-     */
+    /** @var SheetViewQueryHandler */
     private $sheetViewQueryHandler;
 
-    /**
-     * @var ParticipantViewQueryHandler
-     */
+    /** @var ParticipantViewQueryHandler */
     private $participantViewQueryHandler;
 
-    /**
-     * @var MeetingViewQueryHandler
-     */
+    /** @var MeetingViewQueryHandler */
     private $meetingViewQueryHandler;
 
-    /**
-     * @var SpotViewQueryHandler
-     */
+    /** @var SpotViewQueryHandler */
     private $spotViewQueryHandler;
 
-    /**
-     * @param DayViewQueryHandler          $dayViewQueryHandler
-     * @param SlotViewQueryHandler         $slotViewQueryHandler
-     * @param TypeViewQueryHandler         $typeViewQueryHandler
-     * @param TypePriorityViewQueryHandler $typePriorityViewQueryHandler
-     * @param SheetViewQueryHandler        $sheetViewQueryHandler
-     * @param ParticipantViewQueryHandler  $participantViewQueryHandler
-     * @param MeetingViewQueryHandler      $meetingViewQueryHandler
-     * @param SpotViewQueryHandler         $spotViewQueryHandler
-     */
     public function __construct(
         DayViewQueryHandler $dayViewQueryHandler,
         SlotViewQueryHandler $slotViewQueryHandler,
@@ -93,19 +59,19 @@ class PlannerViewQueryHandler
      *
      * @return PlannerView
      */
-    public function handle(PlannerViewQuery $query)
+    public function handle(PlannerViewQuery $query): PlannerView
     {
-        $event          = $query->event;
-        $days           = $this->dayViewQueryHandler->handle(new DayViewQuery($event->getDays()));
-        $slots          = $this->slotViewQueryHandler->handle(new SlotViewQuery($event, $days));
-        $types          = $this->typeViewQueryHandler->handle(new TypeViewQuery($event, $query->locale));
+        $event = $query->event;
+        $days = $this->dayViewQueryHandler->handle(new DayViewQuery($event->getDays()));
+        $slots = $this->slotViewQueryHandler->handle(new SlotViewQuery($event, $days));
+        $types  = $this->typeViewQueryHandler->handle(new TypeViewQuery($event, $query->locale));
         $typePriorities = $this->typePriorityViewQueryHandler->handle(new TypePriorityViewQuery($event, $types));
-        $sheets         = $this->sheetViewQueryHandler->handle(
+        $sheets = $this->sheetViewQueryHandler->handle(
             new SheetViewQuery($event, $types, $query->exportSolutionType)
         );
-        $participants   = $this->participantViewQueryHandler->handle(new ParticipantViewQuery($event, $sheets, $slots));
-        $spots          = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets, $slots));
-        $meetings       = $this->meetingViewQueryHandler->handle(
+        $participants = $this->participantViewQueryHandler->handle(new ParticipantViewQuery($event, $sheets, $slots));
+        $spots = $this->spotViewQueryHandler->handle(new SpotViewQuery($event, $sheets, $slots));
+        $meetings = $this->meetingViewQueryHandler->handle(
             new MeetingViewQuery($event, $sheets, $participants, $slots, $spots, $query->exportSolutionType)
         );
 

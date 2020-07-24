@@ -107,7 +107,7 @@ class BatchHandler
     public function handle(Batch $batch): BatchResult
     {
         if (Batch::SELECTION_TYPE_ALL === $batch->selectionType) {
-            $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale);
+            $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale, $batch->condition);
         }
 
         if ($batch->validate) {

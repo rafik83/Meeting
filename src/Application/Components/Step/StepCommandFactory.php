@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\AbstractStep;
@@ -17,28 +9,15 @@ use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class StepCommandFactory
 {
-    /**
-     * @var StepPlan
-     */
+    /** @var StepPlan */
     private $stepPlan;
 
-    /**
-     * @var StepParticipantAndPlanning
-     */
+    /** @var StepParticipantAndPlanning */
     private $stepParticipantAndPlanning;
 
-    /**
-     * @var StepOption
-     */
+    /** @var StepOption */
     private $stepOption;
 
-    /**
-     * StepCommandFactory constructor.
-     *
-     * @param StepPlan                   $stepPlan
-     * @param StepParticipantAndPlanning $stepParticipantAndPlanning
-     * @param StepOption                 $stepOption
-     */
     public function __construct(
         StepPlan $stepPlan,
         StepParticipantAndPlanning $stepParticipantAndPlanning,
@@ -58,7 +37,7 @@ class StepCommandFactory
      *
      * @return AbstractStep
      */
-    public function create($type, Sheet $sheet, $stepIndex)
+    public function create($type, Sheet $sheet, $stepIndex): AbstractStep
     {
         switch ($type) {
             case Step::TYPE_PLAN:

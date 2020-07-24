@@ -19,6 +19,7 @@ class AbstractHappeningCommand implements Command
     public const TYPE_DEFAULT = 'default';
     public const TYPE_WEBINAR = 'webinar';
     public const TYPE_WEBINAR_INTERACTIVE = 'webinar_interactive';
+    public const TYPE_WEBINAR_VIDEO = 'webinar_video';
 
     /** @var Category */
     public $category;
@@ -63,8 +64,14 @@ class AbstractHappeningCommand implements Command
     {
         return self::TYPE_WEBINAR === $this->happeningType || self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
     }
+
     public function isInteractiveWebinar(): bool
     {
         return self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
+    }
+
+    public function isVideoWebinar(): bool
+    {
+        return self::TYPE_WEBINAR_VIDEO === $this->happeningType;
     }
 }

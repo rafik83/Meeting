@@ -150,6 +150,6 @@ class MeetingSlot implements TimeRangeInterface
      */
     public function duration()
     {
-        return $this->end->diff($this->begin)->format('%i min');
+        return ($this->end->getTimestamp() - $this->begin->getTimestamp()) / 60;
     }
 }

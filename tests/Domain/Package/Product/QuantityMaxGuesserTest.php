@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 
 use PHPUnit\Framework\TestCase;
@@ -29,7 +21,7 @@ class QuantityMaxGuesserTest extends TestCase
     private $sheet;
     private $package;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->package = $this->prophesize(Package::class);
 
@@ -43,9 +35,8 @@ class QuantityMaxGuesserTest extends TestCase
         $this->quantityMaxGuesser = new QuantityMaxGuesser($this->cartManager->reveal(), $this->merger->reveal());
     }
 
-    public function testGetMaxPlanningWithSelectedPlanAndIncludedPlanning()
+    public function testGetMaxPlanningWithSelectedPlanAndIncludedPlanning(): void
     {
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(2);
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
         $planning = $this->prophesize(Product::class);
@@ -67,12 +58,11 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn($cartRow->reveal());
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(1, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
+        self::assertEquals(2, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
     }
 
-    public function testGetMaxPlanningWithoutIncludedPlanningLimitedByProductAvailability()
+    public function testGetMaxPlanningWithoutIncludedPlanningLimitedByProductAvailability(): void
     {
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(4);
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
         $planning = $this->prophesize(Product::class);
@@ -91,60 +81,11 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn($cartRow->reveal());
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(2, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
+        self::assertEquals(2, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
     }
 
-    public function testGetMaxPlanningWithoutIncludedPlanningLimitedByProductQuantityMax()
+    public function testGetMaxPlanningWithNoCartNeitherOrder(): void
     {
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(5);
-        $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
-
-        $planning = $this->prophesize(Product::class);
-        $planning->getQuantityMax()->shouldBeCalled()->willReturn(3);
-        $planning->getAvailability()->shouldBeCalled()->willReturn(4);
-
-        $this->package->getPlanning()->shouldBeCalled()->willReturn($planning->reveal());
-
-        $plan = $this->prophesize(Product::class);
-        $plan->getIncludedPlanningProduct()->shouldBeCalled()->willReturn(null);
-
-        $cartRow = $this->prophesize(CartRow::class);
-        $cartRow->getProduct()->shouldBeCalled()->willReturn($plan->reveal());
-
-        $cart = $this->prophesize(Cart::class);
-        $cart->getPlanRow()->shouldBeCalled()->willReturn($cartRow->reveal());
-        $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
-
-        $this->assertEquals(3, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
-    }
-
-    public function testGetMaxPlanningWithoutIncludedPlanningLimitedByParticipantsNumber()
-    {
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(1);
-        $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
-
-        $planning = $this->prophesize(Product::class);
-        $planning->getQuantityMax()->shouldBeCalled()->willReturn(3);
-        $planning->getAvailability()->shouldBeCalled()->willReturn(4);
-
-        $this->package->getPlanning()->shouldBeCalled()->willReturn($planning->reveal());
-
-        $plan = $this->prophesize(Product::class);
-        $plan->getIncludedPlanningProduct()->shouldBeCalled()->willReturn(null);
-
-        $cartRow = $this->prophesize(CartRow::class);
-        $cartRow->getProduct()->shouldBeCalled()->willReturn($plan->reveal());
-
-        $cart = $this->prophesize(Cart::class);
-        $cart->getPlanRow()->shouldBeCalled()->willReturn($cartRow->reveal());
-        $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
-
-        $this->assertEquals(1, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
-    }
-
-    public function testGetMaxPlanningWithNoCartNeitherOrder()
-    {
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(1);
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
         $planning = $this->prophesize(Product::class);
@@ -157,10 +98,10 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(1, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
+        self::assertEquals(3, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
     }
 
-    public function testGetMaxPlanningWithSelectedPlanAndIncludedPlanningInOrder()
+    public function testGetMaxPlanningWithSelectedPlanAndIncludedPlanningInOrder(): void
     {
         $includedPlanningProduct = $this->prophesize(Product\ProductIncluded::class);
         $includedPlanningProduct->getQuantity()->shouldBeCalled()->willReturn(1);
@@ -178,7 +119,6 @@ class QuantityMaxGuesserTest extends TestCase
 
         $order = $this->prophesize(Order::class);
 
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(2);
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
         $this->sheet->getNotCancelledOrders()->shouldBeCalled()->willReturn([$order->reveal()]);
         $this->merger->merge([$order->reveal()])->shouldBeCalled()->willReturn($mergedOrder->reveal());
@@ -189,10 +129,10 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(1, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
+        self::assertEquals(2, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
     }
 
-    public function testGetMaxPlanningWithPreviousQuantityInOrder()
+    public function testGetMaxPlanningWithPreviousQuantityInOrder(): void
     {
         $plan = $this->prophesize(Product::class);
         $plan->getIncludedPlanningProduct()->shouldBeCalled()->willReturn(null);
@@ -210,7 +150,6 @@ class QuantityMaxGuesserTest extends TestCase
 
         $order = $this->prophesize(Order::class);
 
-        $this->sheet->countParticipants()->shouldBeCalled()->willReturn(7);
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
         $this->sheet->getNotCancelledOrders()->shouldBeCalled()->willReturn([$order->reveal()]);
         $this->merger->merge([$order->reveal()])->shouldBeCalled()->willReturn($mergedOrder->reveal());
@@ -221,10 +160,10 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(6, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
+        self::assertEquals(6, $this->quantityMaxGuesser->getMaxPlanning($this->sheet->reveal()));
     }
 
-    public function testGetMaxByProductWithSelectedPlanAndIncludedProduct()
+    public function testGetMaxByProductWithSelectedPlanAndIncludedProduct(): void
     {
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
@@ -247,10 +186,10 @@ class QuantityMaxGuesserTest extends TestCase
 
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(2, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(2, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
     }
 
-    public function testGetMaxByProductForAttributableProduct()
+    public function testGetMaxByProductForAttributableProduct(): void
     {
         $this->sheet->countParticipants()->shouldBeCalled()->willReturn(2);
 
@@ -259,10 +198,16 @@ class QuantityMaxGuesserTest extends TestCase
         $product->getQuantityMax()->shouldBeCalled()->willReturn(3);
         $product->getAvailability()->shouldBeCalled()->willReturn(4);
 
-        $this->assertEquals(2, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(
+            2,
+            $this->quantityMaxGuesser->getMaxByProduct(
+                $this->sheet->reveal(),
+                $product->reveal()
+            )
+        );
     }
 
-    public function testGetMaxByProductWithoutIncludedProductLimitedByProductAvailability()
+    public function testGetMaxByProductWithoutIncludedProductLimitedByProductAvailability(): void
     {
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
@@ -282,10 +227,10 @@ class QuantityMaxGuesserTest extends TestCase
 
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(2, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(2, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
     }
 
-    public function testGetMaxByProductWithoutIncludedProductLimitedByProductQuantityMax()
+    public function testGetMaxByProductWithoutIncludedProductLimitedByProductQuantityMax(): void
     {
         $this->sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(false);
 
@@ -304,10 +249,16 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn($cartRow->reveal());
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(3, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(
+            3,
+            $this->quantityMaxGuesser->getMaxByProduct(
+                $this->sheet->reveal(),
+                $product->reveal()
+            )
+        );
     }
 
-    public function testGetMaxByProductThereIsNoCartNeitherOrder()
+    public function testGetMaxByProductThereIsNoCartNeitherOrder(): void
     {
         $cart = $this->prophesize(Cart::class);
 
@@ -321,13 +272,16 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(
+        self::assertEquals(
             INF,
-            $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal())
+            $this->quantityMaxGuesser->getMaxByProduct(
+                $this->sheet->reveal(),
+                $product->reveal()
+            )
         );
     }
 
-    public function testGetMaxByProductWithSelectedPlanAndIncludedProductInOrder()
+    public function testGetMaxByProductWithSelectedPlanAndIncludedProductInOrder(): void
     {
         $includedProduct = $this->prophesize(Product\ProductIncluded::class);
         $includedProduct->getQuantity()->shouldBeCalled()->willReturn(1);
@@ -353,10 +307,16 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(4, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(
+            4,
+            $this->quantityMaxGuesser->getMaxByProduct(
+                $this->sheet->reveal(),
+                $product->reveal()
+            )
+        );
     }
 
-    public function testGetMaxByProductWithPreviousQuantityInOrder()
+    public function testGetMaxByProductWithPreviousQuantityInOrder(): void
     {
         $product = $this->prophesize(Product::class);
         $product->isAttributable()->shouldBeCalled()->willReturn(false);
@@ -382,6 +342,12 @@ class QuantityMaxGuesserTest extends TestCase
         $cart->getPlanRow()->shouldBeCalled()->willReturn(null);
         $this->cartManager->getCart($this->sheet->reveal())->shouldBeCalled()->willReturn($cart->reveal());
 
-        $this->assertEquals(3, $this->quantityMaxGuesser->getMaxByProduct($this->sheet->reveal(), $product->reveal()));
+        self::assertEquals(
+            3,
+            $this->quantityMaxGuesser->getMaxByProduct(
+                $this->sheet->reveal(),
+                $product->reveal()
+            )
+        );
     }
 }

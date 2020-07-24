@@ -5,7 +5,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2159 - Add option sidebar webinar 
+- VIMEET-2159 - Add option sidebar webinar
+### Fixed
+- Hotfix - Profile avatar missing styles
+- MV-246 - Order option without group data
+
+### Updated
+- MV-229 - Show cancel button when webinar has started
+
+## [2.39.0] - 2020-07-24
+### Added
+- VIMEET 2086 - Webinar video available available even when the happening is over
+- VIMEET-2155 - Password is required to change email in user account
+- VIMEET-2157 - Save import mapping
+
+### Updated
+- Update SncRedisBundle to 3.2.3
+
+### Fixed
+- VIMEET-2154 - securize impersonation
+- MV-239 - Fix batch action for paged filtered results, for all results selection
+- Hotfix - meeting slot duration in admin
+- Index users on mail change
+
+## [2.38.0] - 2020-07-22
+### Added
+- VIMEET-2200 - Allow more planning than participant
 
 ## [2.37.0] - 2020-07-06
 ### Added
@@ -14,9 +39,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.36.0] - 2020-07-03
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
+
 ### Fixed
 - MV-242 - Fix meeting / contact evaluations on event dashboard
 - MV-243 - Add media link in sheet pdf printing
+
 ### Added
 - VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
@@ -28,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2171 - Add participant to meeting when accessing to a videoconference meeting
 - VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
-- VIMEET-2126 Add - Export all participants of sheet met
+- VIMEET-2126 - Add Export all participants of sheet met
 - VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
 - VIMEET-2153 - secure cookies
 

@@ -162,6 +162,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $this->happening->isSidebarAllowed()->willReturn(true);
 
@@ -236,6 +237,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $this->happening->isSidebarAllowed()->willReturn(true);
 

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
@@ -28,11 +20,6 @@ class StepParticipantAndPlanning
     /** @var ProductByParticipantGetter */
     private $productByParticipantGetter;
 
-    /**
-     * @param Merger                     $orderMerger
-     * @param CartManager                $cartManager
-     * @param ProductByParticipantGetter $productByParticipantGetter
-     */
     public function __construct(
         Merger $orderMerger,
         CartManager $cartManager,
@@ -43,12 +30,6 @@ class StepParticipantAndPlanning
         $this->productByParticipantGetter = $productByParticipantGetter;
     }
 
-    /**
-     * @param Sheet    $sheet
-     * @param null|int $stepIndex
-     *
-     * @return SelectParticipantAndPlanning
-     */
     public function build(Sheet $sheet, ?int $stepIndex = null): SelectParticipantAndPlanning
     {
         $cart = $this->cartManager->getCart($sheet, $stepIndex);

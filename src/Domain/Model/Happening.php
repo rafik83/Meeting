@@ -71,6 +71,9 @@ class Happening implements TimeRangeInterface
     /** @var bool */
     private $interactiveWebinar;
 
+    /** @var bool */
+    private $videoWebinar;
+
     /** @var null|string */
     private $webinarSessionId;
 
@@ -91,6 +94,7 @@ class Happening implements TimeRangeInterface
         ?string $invitationCode = null,
         bool $webinar = false,
         bool $interactiveWebinar = false,
+        bool $videoWebinar = false,
         ?string $liveUrl = null,
         bool $sidebarAllowed = true
     ) {
@@ -109,6 +113,7 @@ class Happening implements TimeRangeInterface
         $this->products = new ArrayCollection();
         $this->webinar = $webinar;
         $this->interactiveWebinar = $interactiveWebinar;
+        $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
     }
@@ -238,6 +243,7 @@ class Happening implements TimeRangeInterface
         ?int $limitParticipant,
         bool $webinar,
         bool $interactiveWebinar,
+        bool $videoWebinar,
         ?string $invitationCode = null,
         ?string $liveUrl = null,
         bool $sidebarAllowed
@@ -251,6 +257,7 @@ class Happening implements TimeRangeInterface
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
         $this->interactiveWebinar = $interactiveWebinar;
+        $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
     }
@@ -472,7 +479,7 @@ class Happening implements TimeRangeInterface
 
     public function isWebinar(): bool
     {
-        return $this->webinar || $this->interactiveWebinar;
+        return $this->webinar || $this->interactiveWebinar || $this->videoWebinar;
     }
 
     public function isInteractiveWebinar(): bool
@@ -480,8 +487,18 @@ class Happening implements TimeRangeInterface
         return $this->interactiveWebinar;
     }
 
+    public function isVideoWebinar(): bool
+    {
+        return $this->videoWebinar;
+    }
+
     public function getLiveUrl(): ?string
     {
         return $this->liveUrl;
+    }
+
+    public function isVideoWebinarAndHasLiveUrl(): bool
+    {
+        return $this->isVideoWebinar() && null !== $this->getLiveUrl();
     }
 }
