@@ -4,14 +4,18 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RecordAction
@@ -25,17 +29,28 @@ class RecordAction
     /** @var CommandBusInterface */
     private $commandBus;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /** @var IsRecordingAllowed */
+    private $isRecordingAllowed;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        IsRecordingAllowed $isRecordingAllowed,
+        TranslatorInterface $translator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
         $this->commandBus = $commandBus;
+        $this->translator = $translator;
+        $this->isRecordingAllowed = $isRecordingAllowed;
     }
 
     public function __invoke(
+        Request $request,
         Sheet $sheet,
         Happening $happening,
         UserDomain $userDomain
@@ -52,6 +67,21 @@ class RecordAction
             || !$happening->isWebinarRecorded()
         ) {
             throw new AccessDeniedException('Access denied to this happening');
+        }
+
+        if (!$this->isRecordingAllowed->isSatisfiedBy($happening)) {
+            return new JsonResponse(
+                [
+                    'status' => 'fail',
+                    'message' => $this->translator->trans(
+                        'happening.webinar.record.not_possible_as_webinar_ended',
+                        [],
+                        'messages',
+                        $request->getLocale()
+                    ),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         $this->commandBus->handle(new Record($happening));

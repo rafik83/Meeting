@@ -267,6 +267,7 @@ happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de com
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.tab: 'Questions'
 happening.webinar.recordButtonTitle: 'Enregistrement'
+happening.webinar.record.not_possible_as_webinar_ended: 'Vous ne pouvez plus lancer d''enregistrement car ce webinar est terminé depuis plus de 30 minutes'
 happening.webinar.start: 'Démarrer'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.screenshare.start: 'Partager mon écran'

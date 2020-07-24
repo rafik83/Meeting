@@ -5893,6 +5893,10 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
 
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed:
+        arguments:
+            - '@datetime'
+
     #
     # Serializer: normalizers and encoders
     #

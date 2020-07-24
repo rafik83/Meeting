@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\User\Event\Participant\ParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
@@ -41,17 +42,22 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $recordArchiveRepository;
 
+    /** @var ObjectProphecy */
+    private $isRecordingAllowed;
+
     protected function setUp(): void
     {
         $this->getUserParticipantInfosHandler = $this->prophesize(GetUserParticipantInfosHandler::class);
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $this->recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
+        $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
             $this->recordArchiveRepository->reveal(),
+            $this->isRecordingAllowed->reveal(),
             $this->dateTime
         );
     }
@@ -101,6 +107,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -210,6 +217,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEvent()->shouldNotBeCalled();
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -247,6 +255,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
             $this->recordArchiveRepository->reveal(),
+            $this->isRecordingAllowed->reveal(),
             $date
         );
 
@@ -326,6 +335,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -437,6 +447,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
@@ -474,4 +485,5 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             )
         );
     }
+
 }

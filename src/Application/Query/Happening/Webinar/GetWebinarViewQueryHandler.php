@@ -10,6 +10,7 @@ use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantI
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
@@ -28,16 +29,21 @@ class GetWebinarViewQueryHandler
     /** @var RecordArchiveRepositoryInterface */
     private $recordArchiveRepository;
 
+    /** @var IsRecordingAllowed */
+    private $isRecordingAllowed;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
+        IsRecordingAllowed $isRecordingAllowed,
         \DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
+        $this->isRecordingAllowed = $isRecordingAllowed;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -75,7 +81,7 @@ class GetWebinarViewQueryHandler
             $happening->getLiveUrl(),
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
-            $happening->isWebinarRecorded(),
+            $this->isRecordingAllowed->isSatisfiedBy($happening),
             $this->isWebinarRecording($happening)
         );
     }
