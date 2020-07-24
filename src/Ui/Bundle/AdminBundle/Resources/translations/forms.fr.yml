@@ -156,6 +156,7 @@ form.category_update.children.submit.label: Enregistrer
 form.category_update.children.translations.prototype.children.title.label: Titre
 form.category_update.children.types.label: 'Sélectionner les types de participation'
 form.change_mail.children.mail.label: 'Saisir votre nouvel email'
+form.change_mail.children.password.label: 'Par mesure de sécurité, veuillez saisir votre mot de passe'
 form.change_mail.children.submit.label: Envoyer
 form.change_owner.children.owner.label: 'Choisir un propriétaire'
 form.change_owner.children.submit.label: Changer
@@ -483,6 +484,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening.happeningType.default.label: 'En présentiel'
 form.happening.happeningType.webinar.label: Webinaire
 form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
+form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
@@ -668,6 +670,7 @@ form.participant_import.children.allowMultiSheet.choice.yes: 'Oui'
 form.participant_import.children.allowMultiSheet.label: 'Autoriser le multi-fiche'
 form.participant_import.children.charset.label: Encodage
 form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.mapping.label: 'Selectionner une correspondance enregistrée'
 form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
 form.participant_import.children.type.placeholder: 'Sélectionner un type'
@@ -1030,6 +1033,11 @@ form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
 form.sheet_filter.children.validationState.label: 'Statut fiche'
+form.sheet_import_mapping_create.children.submit.label: 'Enregistrer une nouvelle correspondance'
+form.sheet_import_mapping_create.children.title.label: 'Titre de la correspondance'
+form.sheet_import_mapping_result.text.diff: 'Vous avez effectué des modifications à la correspondance utilisée'
+form.sheet_import_mapping_result.text.save_title: 'Enregistrer sous une nouvelle correspondance'
+form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisée'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler

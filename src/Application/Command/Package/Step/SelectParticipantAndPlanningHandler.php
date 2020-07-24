@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -30,18 +22,13 @@ class SelectParticipantAndPlanningHandler
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @param CartManager            $cartManager
-     * @param Merger                 $merger
-     * @param DelayedEventDispatcher $eventDispatcher
-     */
     public function __construct(
         CartManager $cartManager,
         Merger $merger,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->cartManager     = $cartManager;
-        $this->merger          = $merger;
+        $this->cartManager = $cartManager;
+        $this->merger = $merger;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -50,9 +37,9 @@ class SelectParticipantAndPlanningHandler
      *
      * @throws PackageNotFoundException
      */
-    public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning)
+    public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning): void
     {
-        $sheet   = $selectParticipantAndPlanning->sheet;
+        $sheet = $selectParticipantAndPlanning->sheet;
         $package = $sheet->getPackage();
 
         if (!$package) {
@@ -70,10 +57,6 @@ class SelectParticipantAndPlanningHandler
         $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 
-    /**
-     * @param Cart $cart
-     * @param int  $planningQuantity
-     */
     private function handlePlanning(Cart $cart, int $planningQuantity): void
     {
         $sheet = $cart->getSheet();

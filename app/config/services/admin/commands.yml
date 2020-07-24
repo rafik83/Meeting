@@ -726,3 +726,19 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\RegistrationPath\AnswerRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\RegistrationPath\RemoveAssignationParticipationType }
+
+    #
+    # Sheet import
+    #
+    Proximum\Vimeet\Application\Command\Participant\Import\CreateMappingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import\CreateMapping }
+    Proximum\Vimeet\Application\Command\Participant\Import\UpdateMappingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import\UpdateMapping }

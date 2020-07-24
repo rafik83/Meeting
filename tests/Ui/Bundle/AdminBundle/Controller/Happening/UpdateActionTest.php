@@ -162,6 +162,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
 
         $form = $this->prophesize(Form::class);
@@ -235,6 +236,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
 
         $form = $this->prophesize(Form::class);

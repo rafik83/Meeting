@@ -97,17 +97,13 @@ $slotHeight: 60px;
         position: relative;
       }
       .actions {
-        display: inline-block;
-        width: 100%;
-        flex-flow: row;
+        align-items: center;
+        display: flex;
+        justify-content: end;
         z-index: 9999;
-        position: absolute;
         margin-left: 10px;
         padding-right: 45px;
-        right: 0;
-        bottom: 5%;
         > a, .label {
-          float: right;
           margin-left: 5px;
         }
         > .label {

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -25,20 +17,13 @@ class CartCleaner
     /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @param CartManager                $cartManager
-     * @param CartRowRepositoryInterface $cartRowRepository
-     */
     public function __construct(CartManager $cartManager, CartRowRepositoryInterface $cartRowRepository)
     {
         $this->cartManager = $cartManager;
         $this->cartRowRepository = $cartRowRepository;
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function handle(Sheet $sheet)
+    public function handle(Sheet $sheet): void
     {
         $cart = $this->cartManager->getCart($sheet);
 

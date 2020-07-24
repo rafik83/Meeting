@@ -7,16 +7,20 @@ use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping as SheetImportMapping;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class ImportMapping implements Command
 {
     /**
-     * A mapping array of csv headers keys and their registration headers key
+     * A mapping array of csv headers index and their registration headers key
      *
      * @var array
      */
     private $mappings = [];
+
+    /** @var array */
+    private $mappingsIndexedByFileHeader = [];
 
     /** @var Event */
     public $event;
@@ -38,13 +42,31 @@ class ImportMapping implements Command
         Type $type,
         Admin $admin,
         string $locale,
-        ImportMappingView $importMappingView
+        ImportMappingView $importMappingView,
+        ?SheetImportMapping $sheetImportMapping
     ) {
         $this->event = $event;
         $this->type = $type;
         $this->locale = $locale;
         $this->admin = $admin;
         $this->importMappingView = $importMappingView;
+
+        if ($sheetImportMapping instanceof SheetImportMapping && empty($this->mappings)) {
+            $map = $sheetImportMapping->getMapping();
+            $this->mappingsIndexedByFileHeader = $map;
+            $associatedMapping = [];
+
+            $csvHeaders = $this->importMappingView->fieldHeaders;
+            $csvHeadersFlip = array_flip($csvHeaders);
+
+            foreach ($map as $key => $value) {
+                if (isset($csvHeadersFlip[$key])) {
+                    $associatedMapping[$csvHeadersFlip[$key]] = $value;
+                }
+            }
+
+            $this->mappings = $associatedMapping;
+        }
     }
 
     public function isEmailInMappings(): bool
@@ -74,6 +96,8 @@ class ImportMapping implements Command
 
     public function setMappings(array $mappingIndexedByInt): void
     {
+        $this->mappings = $mappingIndexedByInt;
+
         $mappingIndexedByFileHeader = [];
 
         foreach ($mappingIndexedByInt as $key => $field) {
@@ -82,11 +106,16 @@ class ImportMapping implements Command
             }
         }
 
-        $this->mappings = $mappingIndexedByFileHeader;
+        $this->mappingsIndexedByFileHeader = $mappingIndexedByFileHeader;
     }
 
     public function getMappings(): array
     {
         return $this->mappings;
+    }
+
+    public function getMappingsIndexedByFileHeader(): array
+    {
+        return $this->mappingsIndexedByFileHeader;
     }
 }

@@ -67,6 +67,7 @@ class UpdateHandler
             $update->limitParticipant,
             $update->isWebinar(),
             $update->isInteractiveWebinar(),
+            $update->isVideoWebinar(),
             $update->invitationCode,
             $update->liveUrl
         );
