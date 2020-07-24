@@ -4,9 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.39.0] - 2020-07-24
 ### Added
 - VIMEET 2086 - Webinar video available available even when the happening is over
-- VIMEET-2200 - Allow more planning than participant
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
 
