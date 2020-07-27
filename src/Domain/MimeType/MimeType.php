@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\MimeType;
 
 final class MimeType
@@ -17,6 +9,7 @@ final class MimeType
     public const FORMAT_PDF = 'pdf';
     public const FORMAT_PPT = 'ppt';
     public const FORMAT_CSV = 'csv';
+    public const FORMAT_VIDEO = 'video';
 
     public const AVAILABLE_MIME_TYPES_BY_FORMAT = [
         self::FORMAT_IMAGE => self::IMAGE_MIME_TYPES,
@@ -24,6 +17,7 @@ final class MimeType
         self::FORMAT_PDF => self::PDF_MIME_TYPES,
         self::FORMAT_PPT => self::PPT_MIME_TYPES,
         self::FORMAT_CSV => self::CSV_MIME_TYPES,
+        self::FORMAT_VIDEO => self::VIDEO_MIME_TYPES,
     ];
 
     public const IMAGE_MIME_TYPES = [
@@ -63,6 +57,12 @@ final class MimeType
         'text/csv',
         'text/plain',
         'application/csv',
+    ];
+
+    public const VIDEO_MIME_TYPES = [
+        'video/mp4', // .mp4
+        'video/x-msvideo', // .avi
+        'video/webm', // .webm
     ];
 
     public static function getMimeTypesByFormats(array $formats = []): array

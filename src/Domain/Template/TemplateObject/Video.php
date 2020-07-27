@@ -5,50 +5,14 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadObject extends EditableObject implements UploadableObjectInterface
+class Video extends EditableObject implements UploadableObjectInterface
 {
     public const ALLOWED_FORMATS = [
-        MimeType::FORMAT_IMAGE,
-        MimeType::FORMAT_VECTOR_IMAGE,
-        MimeType::FORMAT_PDF,
-        MimeType::FORMAT_PPT,
-        MimeType::FORMAT_CSV,
+        MimeType::FORMAT_VIDEO,
     ];
 
     /** @var null|UploadedFile */
-    private $file;
-
-    /**
-     * @return bool
-     */
-    public function isCrypted(): bool
-    {
-        return null !== $this->getOption('crypted') && true === $this->getOption('crypted');
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFilter(): bool
-    {
-        $filter = $this->getOption('filter');
-
-        return null !== $filter
-            && isset($filter['active'])
-            && true === $filter['active'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilterLabel(): string
-    {
-        $filter = $this->getOption('filter');
-
-        return null !== $filter
-        && isset($filter['label'])
-        && null !== $filter['label'] ? $filter['label'] : '';
-    }
+    public $file;
 
     public function getFile(): ?UploadedFile
     {
@@ -100,18 +64,13 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
         $this->setPath($value);
     }
 
-    public function getFormats(): ?array
+    public static function supportedMimeType(): array
     {
-        return $this->getOption('formats');
+        return MimeType::getMimeTypesByFormats([MimeType::FORMAT_VIDEO]);
     }
 
-    public function isImageFormat(): bool
+    public function isVideoAndHasPath(): bool
     {
-        return \in_array($this->getExtension(), MimeType::IMAGE_EXTENSIONS, true);
-    }
-
-    public function isUploadAndHasPath(): bool
-    {
-        return $this->isUpload() && $this->getPath();
+        return $this->isVideo() && $this->getPath();
     }
 }

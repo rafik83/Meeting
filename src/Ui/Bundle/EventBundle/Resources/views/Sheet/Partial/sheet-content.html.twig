@@ -35,9 +35,9 @@
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">
-                <li{% if locale == event.fallback %} class="active"{% endif %}>
+                <li{% if locale == event.localeFallback %} class="active"{% endif %}>
                     <a href="{{ path('event_sheet_locale', { 'sheet': sheet.id, 'locale': event.fallback }) }}">
-                        <span class="name">{{ event.fallback|locale }}*</span>
+                        <span class="name">{{ event.localeFallback|locale }}*</span>
                     </a>
                 </li>
                 {% for event_locale in event.locales if event_locale != event.fallback %}

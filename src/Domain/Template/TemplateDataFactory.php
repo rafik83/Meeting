@@ -54,6 +54,7 @@ class TemplateDataFactory
         'upload'                => TemplateObject\UploadObject::class,
         'datetime'              => TemplateObject\DateTime::class,
         'multi-upload'          => TemplateObject\MultiUploadCollectionObject::class,
+        'video'                 => TemplateObject\Video::class,
     ];
 
     /**
