@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2159 - Add option sidebar webinar
 ### Fixed
 - Hotfix - Profile avatar missing styles
 - MV-246 - Order option without group data
