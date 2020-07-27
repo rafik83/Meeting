@@ -49,8 +49,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->questionVoteRepository
             ->getByQuestionAndUser($question->reveal(), $user->reveal())
             ->shouldBeCalled()
-            ->willReturn(null)
-        ;
+            ->willReturn(null);
 
         $this->questionVoteRepository->add(Argument::type(QuestionVote::class))->shouldBeCalled();
 

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET 2178 - In a webinar, participant can vote for a question
+- VIMEET-2159 - Add option sidebar webinar
 
 ### Fixed
 - Hotfix - Profile avatar missing styles
