@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
+use Proximum\Vimeet\Domain\Repository\Sheet\ImportMappingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
@@ -27,12 +28,17 @@ class ImportMappingViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ImportMappingRepositoryInterface */
+    private $importMappingRepository;
+
     public function __construct(
+        ImportMappingRepositoryInterface $importMappingRepository,
         SerializerAdapterInterface $serializerAdapter,
         SessionAdapter $session,
         TemplateDataFactory $templateDataFactory,
         TranslatorInterface $translator
     ) {
+        $this->importMappingRepository = $importMappingRepository;
         $this->serializerAdapter = $serializerAdapter;
         $this->session = $session;
         $this->templateDataFactory = $templateDataFactory;
@@ -104,6 +110,13 @@ class ImportMappingViewQueryHandler
             }
         }
 
-        return new ImportMappingView($csvHeaders, $headers, $allowMultiSheet);
+        $savedImportMapping = null;
+        $savedImportMappingId = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING);
+
+        if ($savedImportMappingId) {
+            $savedImportMapping = $this->importMappingRepository->getById($savedImportMappingId);
+        }
+
+        return new ImportMappingView($csvHeaders, $headers, $allowMultiSheet, $savedImportMapping);
     }
 }

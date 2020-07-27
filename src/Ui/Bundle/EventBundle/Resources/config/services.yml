@@ -66,6 +66,15 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+
+    security.admin_user_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter
+        arguments:
+            - '@components.security.admin_sheet_access'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: security.voter }
+
     security_voter.happening_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
         arguments:
@@ -555,6 +564,7 @@ services:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
             - '%secret%'
+            - '@datetime'
 
     security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchUserListener

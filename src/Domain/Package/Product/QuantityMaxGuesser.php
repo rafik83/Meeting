@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -27,10 +19,6 @@ class QuantityMaxGuesser
     /** @var Order[] indexed by Sheet Id */
     private $cachedMergedOrderBySheetId = [];
 
-    /**
-     * @param CartManager $cartManager
-     * @param Merger      $merger
-     */
     public function __construct(CartManager $cartManager, Merger $merger)
     {
         $this->cartManager = $cartManager;
@@ -40,9 +28,9 @@ class QuantityMaxGuesser
     /**
      * @param Sheet $sheet
      *
-     * @return int
+     * @return int|float
      */
-    public function getMaxPlanning(Sheet $sheet): int
+    public function getMaxPlanning(Sheet $sheet)
     {
         $planning = $sheet->getPackage()->getPlanning();
 
@@ -50,27 +38,25 @@ class QuantityMaxGuesser
             return 0;
         }
 
-        $countParticipants = $sheet->countParticipants();
-        $remainingQuantity = $countParticipants;
-
+        $remainingQuantity = INF;
         $selectedPlan = $this->getSelectedPlan($sheet);
 
         if ($selectedPlan) {
             $includedPlanningProduct = $selectedPlan->getIncludedPlanningProduct();
 
             if ($includedPlanningProduct) {
-                $remainingQuantity = $countParticipants - $includedPlanningProduct->getQuantity();
+                $remainingQuantity = $planning->getQuantityMax() - $includedPlanningProduct->getQuantity();
             }
         }
 
-        $max = min(
-            $remainingQuantity,
-            $countParticipants,
-            $planning->getQuantityMax(),
-            $planning->getAvailability() + $this->getPreviousOrderedQuantity($sheet, $planning)
+        return max(
+            0,
+            min(
+                $remainingQuantity,
+                $planning->getQuantityMax(),
+                $planning->getAvailability() + $this->getPreviousOrderedQuantity($sheet, $planning)
+            )
         );
-
-        return $max < 0 ? 0 : $max;
     }
 
     /**

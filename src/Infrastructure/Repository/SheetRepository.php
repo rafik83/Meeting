@@ -888,7 +888,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByUser(User $user)
+    public function getByUser(User $user): array
     {
         $queryBuilder = $this
             ->entityManager

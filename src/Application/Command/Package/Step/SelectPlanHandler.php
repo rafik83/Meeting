@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -20,19 +12,13 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectPlanHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var BuyableObjectResolver
-     */
+    /** @var BuyableObjectResolver */
     private $buyableObjectResolver;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /** @var ProductsAttributedToParticipantRemoveAllBySheet */

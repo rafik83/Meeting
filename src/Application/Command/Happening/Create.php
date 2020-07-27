@@ -21,6 +21,7 @@ class Create extends AbstractHappeningCommand
     {
         $this->event = $event;
         $this->questionAllowed = false;
+        $this->sidebarAllowed = true;
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

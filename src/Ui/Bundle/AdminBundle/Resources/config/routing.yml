@@ -933,8 +933,9 @@ admin_sheet_import_result:
     requirements:
         event: \d+
         type: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet:importResult }
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction
+
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:
@@ -2362,3 +2363,12 @@ admin_event_fast_checkin_action_checkin:
         user: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction
+
+# Impersonate
+admin_impersonate:
+    path: /event/{event}/impersonate/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction

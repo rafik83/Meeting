@@ -230,14 +230,7 @@ class Order
         return $total;
     }
 
-    /**
-     * @param int         $groupId
-     * @param string      $locale
-     * @param string|null $fallback
-     *
-     * @return string
-     */
-    public function getGroupLabel($groupId, $locale, $fallback = null)
+    public function getGroupLabel(?int $groupId, string $locale, ?string $fallback = null): string
     {
         $data = json_decode($this->groupsData, true);
 
@@ -292,14 +285,12 @@ class Order
     }
 
     /**
-     * @param $groupId
-     *
      * @return false|Order\Row[]
      */
-    public function getProductRowsForGroupId($groupId)
+    public function getProductRowsForGroupId(string $type, ?int $groupId)
     {
-        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId) {
-            return $row->isProduct() && $row->getGroupId() === $groupId;
+        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId, $type) {
+            return $row->isProduct() && $type === $row->getType() && $row->getGroupId() === $groupId;
         });
     }
 

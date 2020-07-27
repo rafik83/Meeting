@@ -1,62 +1,42 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\View\Normalizer;
+
+use Proximum\Vimeet\Domain\Model\ParticipantImport;
 
 class ParticipantDenormalizerView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $existingParticipations;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $fileParticipations;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $createdSheets = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $createdUsers = 0;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $errors = [];
 
-    /**
-     * ParticipantDenormalizerView constructor.
-     *
-     * @param int   $existingParticipations
-     * @param int   $fileParticipations
-     * @param int   $createdSheets
-     * @param int   $createdUsers
-     * @param array $errors
-     */
+    /** @var ParticipantImport */
+    public $participantImport;
+
     public function __construct(
-        $existingParticipations,
-        $fileParticipations,
-        $createdSheets,
-        $createdUsers,
+        ParticipantImport $participantImport,
+        int $existingParticipations,
+        int $fileParticipations,
+        int $createdSheets,
+        int $createdUsers,
         array $errors
     ) {
+        $this->participantImport = $participantImport;
         $this->existingParticipations = $existingParticipations;
-        $this->fileParticipations     = $fileParticipations;
-        $this->createdSheets          = $createdSheets;
-        $this->createdUsers           = $createdUsers;
-        $this->errors                 = $errors;
+        $this->fileParticipations = $fileParticipations;
+        $this->createdSheets = $createdSheets;
+        $this->createdUsers = $createdUsers;
+        $this->errors = $errors;
     }
 }

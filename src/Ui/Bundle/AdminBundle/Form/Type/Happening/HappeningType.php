@@ -43,6 +43,7 @@ abstract class HappeningType extends AbstractType
                     'form.happening.happeningType.default.label' => AbstractHappeningCommand::TYPE_DEFAULT,
                     'form.happening.happeningType.webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR,
                     'form.happening.happeningType.interactive_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_INTERACTIVE,
+                    'form.happening.happeningType.video_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_VIDEO,
                 ],
                 'expanded' => true,
                 'required' => true,
@@ -104,6 +105,15 @@ abstract class HappeningType extends AbstractType
                 'help' => 'form.happening_create.children.liveUrl.help',
                 'default_protocol' => 'https',
             ])
+            ->add('sidebarAllowed', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.sidebarAllowed.answer.true'  => true,
+                    'form.happening_create.children.sidebarAllowed.answer.false' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])            
+            
         ;
     }
 

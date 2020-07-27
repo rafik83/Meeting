@@ -42,6 +42,26 @@
             </tbody>
         </table>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            {% if existingImportMapping %}
+                <p>{{ 'form.sheet_import_mapping_result.text.diff'|trans({}, 'forms') }}</p>
+            {% endif %}
+            {% if updateForm is not null %}
+                {{ form(updateForm) }}
+            {% endif %}
+            {% if createForm is not null %}
+                {% if existingImportMapping %}
+                    <hr>
+                {% endif %}
+                <h5>{{ 'form.sheet_import_mapping_result.text.save_title'|trans({}, 'forms') }}</h5>
+                {{ form_start(createForm) }}
+                    {{ form_row(createForm.title) }}
+                    {{ form_row(createForm.submit) }}
+                {{ form_end(createForm) }}
+            {% endif %}
+        </div>
+    </div>
 
     <div class="form-group submit-section">
         <div class="col-sm-3">

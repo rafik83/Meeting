@@ -1,4 +1,5 @@
 parameters:
+    scheme: http
     feature_video_conference_enabled: true
     feature_video_conference_date_security_enabled: false
     feature_event_dates_to_current_date_enabled: true
