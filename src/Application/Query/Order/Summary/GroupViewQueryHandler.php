@@ -53,7 +53,7 @@ class GroupViewQueryHandler
         if (Product::TYPE_OPTION === $groupViewQuery->type) {
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
-            foreach ($order->getProductRowsForGroupId($groupViewQuery->groupId) as $row) {
+            foreach ($order->getProductRowsForGroupId($groupViewQuery->type, $groupViewQuery->groupId) as $row) {
                 $products[] = $this->rowViewQueryHandler->handle(
                     new RowViewQuery(
                         $order,
