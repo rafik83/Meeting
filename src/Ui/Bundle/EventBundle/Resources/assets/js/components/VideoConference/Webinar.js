@@ -65,6 +65,7 @@ function Webinar(element, isSpeaker) {
     this.questionsButton = element.querySelector('[data-questions-button]');
     this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
     this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
+    this.questionListeners = [];
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
     this.joinButton = element.querySelector('[data-webinar-join-button]');
@@ -809,10 +810,13 @@ Webinar.prototype.showQuestions = function (event) {
 
 Webinar.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
+    const voteHref = this.questionsContainer.getAttribute('data-vote-href');
 
     const $questionsList = $(this.questionsList);
 
     $.get(href, function (response) {
+        // make shure there no listeners leak
+        this.removeQuestionListeners();
         $questionsList.empty();
         response.forEach((item) => {
             const rowEl = document.createElement('div');
@@ -820,10 +824,50 @@ Webinar.prototype.initQuestions = function () {
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
-            const questionCreatedAt = document.createElement('small');
-            questionCreatedAt.classList.add('pull-right');
+
+            const questionAside = document.createElement('small');
+            questionAside.classList.add('pull-right', 'question-aside');
+            const likeBlock = document.createElement('div');
+            const voteCount = document.createElement('span');
+            if (+item.voteCount) {
+                voteCount.textContent = item.voteCount;
+                voteCount.classList.add('question-vote-count')
+            }
+            likeBlock.append(voteCount);
+
+            const likeBtn = document.createElement('i');
+            likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
+            likeBtn.setAttribute('data-question-id', item.questionId);
+            const onLikedClicked = function (event) {
+                const payload = {'questionId': event.currentTarget.getAttribute('data-question-id')};
+                $.post(voteHref, JSON.stringify(payload), (response) => {
+                    if (response.status === 'ok') {
+                        this.sendUpdateQuestionsSignal();
+                    } else {
+                        this.showError('Question vote failed');
+                    }
+                }, 'json');
+                event.currentTarget.classList.add('disabled');
+
+                // remove all listeners, they'll be added again on questions update
+                this.removeQuestionListeners();
+            }.bind(this);
+            likeBtn.addEventListener('click', onLikedClicked);
+            this.questionListeners.push([likeBtn, onLikedClicked]);
+
+            if (item.isLiked) {
+                likeBtn.classList.add('btn-primary');
+            } else {
+                likeBtn.classList.add('btn-gray');
+            }
+            likeBlock.appendChild(likeBtn);
+
+            questionAside.append(likeBlock);
+
+            const questionCreatedAt = document.createElement('div')
             questionCreatedAt.textContent = item.createdAt;
-            contentEl.appendChild(questionCreatedAt);
+            questionAside.appendChild(questionCreatedAt);
+            contentEl.appendChild(questionAside);
             contentEl.appendChild(document.createTextNode(item.questionContent));
 
             const authorEl = rowEl.appendChild(document.createElement('div'));
@@ -869,16 +913,7 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormSubmit.disabled = false;
 
         if (response.status === 'ok') {
-            this.session.signal({
-                    type: 'QuestionsUpdate'
-                },
-                (error) => {
-                    if (error) {
-                        console.error('QuestionsUpdate signal error', error);
-                    }
-                }
-            );
-
+            this.sendUpdateQuestionsSignal();
             this.questionsList.scrollTop = 0;
 
             return;
@@ -892,6 +927,22 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormContent.value = questionContent;
         this.showError('Question creation failed');
     });
+}
+
+Webinar.prototype.sendUpdateQuestionsSignal = function () {
+    this.session.signal({
+        type: 'QuestionsUpdate'
+    },
+    (error) => {
+        if (error) {
+            console.error('QuestionsUpdate signal error', error);
+        }
+    });
+}
+
+Webinar.prototype.removeQuestionListeners = function () {
+    this.questionListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
+    this.questionListeners = [];
 }
 
 Webinar.prototype.isSidebarOpened = function () {
@@ -987,4 +1038,3 @@ Webinar.prototype.maximizeAllSubscribers = function() {
 };
 
 module.exports = Webinar;
-
