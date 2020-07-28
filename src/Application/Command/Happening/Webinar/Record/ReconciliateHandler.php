@@ -41,6 +41,7 @@ class ReconciliateHandler
         $recordArchives = $this->recordArchiveRepository->getRecordArchivesForHappening($happening);
         $recordArchivesIndexedByArchiveId = $this->indexRecordArchivesByArchiveId($recordArchives);
 
+dump($listArchive->getItems());
         /** @var Archive $archive */
         foreach ($listArchive->getItems() as $archive) {
             if (isset($recordArchivesIndexedByArchiveId[$archive->id])) {

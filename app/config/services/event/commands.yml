@@ -188,6 +188,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\AggregateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
+            - '@adapter.s3_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate }
+
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter'

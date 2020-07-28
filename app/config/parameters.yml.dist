@@ -109,6 +109,11 @@ parameters:
     agenda_version_diff_notification_time_in_minutes: 30
     agenda_version_diff_dday_notification_time_in_minutes: 10
 
+    s3_access_key: ~
+    s3_secret_key: ~
+    s3_bucket: "proximum-vimeet-tokbox-archives-prod"
+    s3_prefix: "zip/dev/"
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
