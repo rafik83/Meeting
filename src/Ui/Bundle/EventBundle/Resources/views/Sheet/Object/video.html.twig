@@ -8,7 +8,9 @@
                         Your browser does not support the video tag.
                     </video>
                 {% else %}
-                    <div class="add-video"><i class="icon-Ouvrir_1"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}</div>
+                    <div class="add-video">
+                        <i class="icon-Ouvrir_1"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
+                    </div>
                 {% endif %}
             </div>
         </a>

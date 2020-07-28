@@ -34,14 +34,14 @@ class Video extends EditableObject implements UploadableObjectInterface
         $this->data['path'] = $path;
     }
 
-    public function getExtension(): ?string
+    public function getMimeType(): ?string
     {
-        return $this->data['extension'] ?? null;
+        return $this->data['mime-type'] ?? null;
     }
 
-    public function setExtension(string $extension): void
+    public function setMimeType(string $mimeType): void
     {
-        $this->data['extension'] = $extension;
+        $this->data['mime-type'] = $mimeType;
     }
 
     public function getContentValue(): string
@@ -72,5 +72,13 @@ class Video extends EditableObject implements UploadableObjectInterface
     public function isVideoAndHasPath(): bool
     {
         return $this->isVideo() && $this->getPath();
+    }
+
+    public function getDefaultValue(): array
+    {
+        return [
+            'path' => $this->getPath(),
+            'mime-type' => $this->getMimeType(),
+        ];
     }
 }

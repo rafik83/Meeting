@@ -50,6 +50,22 @@ services:
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler'
+            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@sheet.infos_helper'
+            - '@Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker'
+
+
     #
     # Package
     #

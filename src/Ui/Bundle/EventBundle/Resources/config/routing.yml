@@ -233,7 +233,8 @@ event_sheet_update:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:update }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\UpdateAction
+
 
 event_sheet_add_participant:
     path: /sheet/{sheet}/{locale}/{key}/participant/add/form

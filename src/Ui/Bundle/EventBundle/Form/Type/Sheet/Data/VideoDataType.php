@@ -23,7 +23,10 @@ class VideoDataType extends AbstractType
                 'accept' => implode(', ', TemplateObject\Video::supportedMimeType()),
             ],
             'constraints' => [
-                new File(['mimeTypes' => TemplateObject\Video::supportedMimeType()]),
+                new File([
+                    'mimeTypes' => TemplateObject\Video::supportedMimeType(),
+                    'maxSize' => '100M',
+                ]),
             ],
         ]);
     }
