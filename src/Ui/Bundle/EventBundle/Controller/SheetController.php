@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
@@ -29,12 +21,12 @@ use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectForm;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -233,7 +225,7 @@ class SheetController extends Controller
         );
 
         if ($sheetToDisplay !== $sheet) {
-            if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
+            if (!$sheet->isInInternalCatalog() || !$isCatalogAllowed) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
@@ -261,82 +253,6 @@ class SheetController extends Controller
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
             'templateData'  => $templateData,
-        ]);
-    }
-
-    /**
-     * Render the form of an object. Loaded by ajax from the sheet.
-     *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
-     * @return Response
-     */
-    public function formAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        try {
-            $templateObjectView = $this
-                ->get('tactician.commandbus')
-                ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-            ;
-        } catch (Template\Exception\ObjectNotFoundException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        }
-
-        $form = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
-
-        return $this->render('EventBundle:Sheet:form.html.twig', [
-            'sheet'    => $sheet,
-            'uid'      => $key,
-            'form'     => $form->createView(),
-            'locale'   => $locale,
-            'currency' => $eventDomain->getEvent()->getCurrency(),
-            'vatMode'  => $eventDomain->getEvent()->getMode(),
-            'label'    => $templateObjectView->label,
-            'templateObjectView' => $templateObjectView,
-        ]);
-    }
-
-    /**
-     * @param Template\TemplateObject $object
-     * @param string                  $locale
-     * @param string                  $key
-     *
-     * @return FormInterface
-     */
-    private function createObjectForm(Template\TemplateObject $object, $locale, $key): FormInterface
-    {
-        $types = [
-            'editable-text' => Data\EditableTextDataType::class,
-            'button-link'   => Data\ButtonLinkDataType::class,
-            'media'         => Data\MediaCollectionDataType::class,
-            'collection'    => Data\ItemCollectionDataType::class,
-            'nomenclature'  => Data\NomenclatureDataType::class,
-            'image'         => Data\ImageDataType::class,
-            'tags'          => Data\ItemCollectionDataType::class,
-            'multi-upload'  => Data\MultiUploadDataType::class,
-        ];
-
-        if (!isset($types[$object->getType()])) {
-            throw $this->createNotFoundException('No form found for this object');
-        }
-
-        return $this->createForm($types[$object->getType()], $object, [
-            'action' => $this->generateUrl(
-                'event_sheet_update',
-                ['sheet' => $object->getSheet()->getId(), 'locale' => $locale, 'key' => $key]
-            ),
-            'submit'      => true,
-            'locale'      => $locale,
-            'help'        => $object->getHelp(),
-            'placeholder' => $object->getPlaceholder(),
-            'object'      => $object,
-            'required'    => $object->getRequired(),
         ]);
     }
 
@@ -394,7 +310,9 @@ class SheetController extends Controller
             ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
         ;
 
-        $form = $this->createObjectForm($object, $locale, $key);
+        $form = $this->get(CreateObjectFormHandler::class)
+            ->handle(new CreateObjectForm($object, $locale, $key))
+        ;
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted()) {

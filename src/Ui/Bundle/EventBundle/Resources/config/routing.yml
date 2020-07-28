@@ -207,7 +207,7 @@ event_sheet_form:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:form }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\FormAction
 
 event_sheet_objects_collection_update:
     path: /sheet/{sheet}/objects-collection/{key}
