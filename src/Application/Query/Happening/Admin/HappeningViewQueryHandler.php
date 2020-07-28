@@ -46,6 +46,7 @@ class HappeningViewQueryHandler
             $query->happening->hasProducts(),
             $query->happening->isWebinar(),
             $query->happening->isInteractiveWebinar(),
+            $query->happening->isVideoWebinar(),
             $query->happening->isWebinarRecorded()
         );
     }

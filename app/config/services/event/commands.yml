@@ -159,6 +159,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
 
+    #
     # Webinar
     #
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
@@ -192,3 +193,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallbackHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }

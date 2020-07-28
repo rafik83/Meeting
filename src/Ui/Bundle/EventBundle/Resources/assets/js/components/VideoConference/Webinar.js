@@ -39,8 +39,6 @@ function Webinar(element, isSpeaker) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
         const timerInterval = setInterval(() => {
-            console.log('tour d\'horloge.');
-
             const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
 
             if (remainingTime <= 0) {
@@ -118,9 +116,9 @@ function Webinar(element, isSpeaker) {
     this.toggleRecordingButton = element.querySelector('#toggle-recording');
     this.isRecording = false;
 
-    const recordStatus = element.getAttribute('data-webinar-record-status');
-    if (recordStatus) {
-        this.isRecording = recordStatus === 'started' || recordStatus === 'paused';
+    const recordStatus = element.getAttribute('data-webinar-is-recording');
+    if (this.isWebinarRecorded && this.canRecordWebinar && recordStatus) {
+        this.isRecording = recordStatus === 'true';
         this.toggleRecording(this.isRecording);
     }
 
@@ -1091,4 +1089,3 @@ Webinar.prototype.maximizeAllSubscribers = function() {
 };
 
 module.exports = Webinar;
-

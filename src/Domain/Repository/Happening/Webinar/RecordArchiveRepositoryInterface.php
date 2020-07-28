@@ -17,4 +17,8 @@ interface RecordArchiveRepositoryInterface
      * @return RecordArchive[]
      */
     public function getRecordArchivesForHappening(Happening $happening): array;
+
+    public function getByArchiveId(string $archiveId): ?RecordArchive;
+
+    public function hasStartedRecordArchiveForHappening(Happening $happening): bool;
 }

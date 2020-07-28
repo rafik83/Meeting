@@ -484,6 +484,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening.happeningType.default.label: 'En présentiel'
 form.happening.happeningType.webinar.label: Webinaire
 form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
+form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'

@@ -52,10 +52,16 @@ class WebinarView
     public $liveUrl;
 
     /** @var bool */
+    public $isVideoWebinarAndHasLiveUrl;
+
+    /** @var bool */
+    public $isVideoWebinarAndHappeningIsEnded;
+
+    /** @var bool */
     public $isWebinarRecorded;
 
-    /** @var string */
-    public $webinarRecordStatus;
+    /** @var bool */
+    public $isWebinarRecording;
 
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
@@ -68,6 +74,7 @@ class WebinarView
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
+        bool $isVideoWebinarAndHasLiveUrl,
         string $token,
         string $sessionId,
         string $apiKey,
@@ -81,8 +88,9 @@ class WebinarView
         int $timeRemainingBeforeStartInSeconds,
         ?string $headerImage,
         ?string $liveUrl,
+        bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
-        string $isWebinarRecordStatus
+        bool $isWebinarRecording
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -99,8 +107,10 @@ class WebinarView
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
+        $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
+        $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->isWebinarRecorded = $isWebinarRecorded;
-        $this->webinarRecordStatus = $isWebinarRecordStatus;
+        $this->isWebinarRecording = $isWebinarRecording;
         $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
@@ -136,5 +146,10 @@ class WebinarView
         }
 
         return json_encode($mapping);
+    }
+
+    public function isVideoWebinarAndHappeningIsEnded(): bool
+    {
+        return $this->isVideoWebinarAndHappeningIsEnded;
     }
 }

@@ -25,7 +25,9 @@ class RecordJobQueueAdapter extends AbstractJobQueueAdapter implements RecordJob
         $this->removeJob($command, $args);
 
         $job = new Job($command, $args);
-        $job->setExecuteAfter($reconciliationDate);
+        $date = new \DateTime();
+        $date->setTimestamp($reconciliationDate->getTimestamp());
+        $job->setExecuteAfter($date);
 
         $this->setJob($job);
     }

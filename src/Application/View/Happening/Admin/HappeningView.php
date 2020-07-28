@@ -44,6 +44,9 @@ class HappeningView
     public $isInteractiveWebinar;
 
     /** @var bool */
+    public $isVideoWebinar;
+
+    /** @var bool */
     public $isWebinarRecorded;
 
     public function __construct(
@@ -60,6 +63,7 @@ class HappeningView
         bool $hasProducts = false,
         bool $isWebinar = false,
         bool $isInteractiveWebinar = false,
+        bool $isVideoWebinar = false,
         bool $isWebinarRecorded = true
     ) {
         $this->id = $id;
@@ -75,6 +79,7 @@ class HappeningView
         $this->hasProducts = $hasProducts;
         $this->isWebinar = $isWebinar;
         $this->isInteractiveWebinar = $isInteractiveWebinar;
+        $this->isVideoWebinar = $isVideoWebinar;
         $this->isWebinarRecorded = $isWebinarRecorded;
     }
 

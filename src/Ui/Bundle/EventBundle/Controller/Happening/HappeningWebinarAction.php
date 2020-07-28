@@ -87,9 +87,7 @@ class HappeningWebinarAction
 
         return new Response(
             $this->engine->render(
-                $webinarView->isSpeaker
-                    ? '@Event/Happening/webinar-speaker.html.twig'
-                    : '@Event/Happening/webinar-viewer.html.twig',
+                $this->getTemplateNameDependingOnContext($webinarView),
                 [
                     'event' => $event,
                     'sheet' => $sheet,
@@ -98,5 +96,16 @@ class HappeningWebinarAction
                 ]
             )
         );
+    }
+
+    private function getTemplateNameDependingOnContext(WebinarView $webinarView): string
+    {
+        if ($webinarView->isVideoWebinarAndHappeningIsEnded()) {
+            return '@Event/Happening/webinar-video.html.twig';
+        }
+
+        return $webinarView->isSpeaker
+            ? '@Event/Happening/webinar-speaker.html.twig'
+            : '@Event/Happening/webinar-viewer.html.twig';
     }
 }

@@ -29,6 +29,10 @@ class Update extends AbstractHappeningCommand
             $this->happeningType = self::TYPE_WEBINAR_INTERACTIVE;
         }
 
+        if ($happening->isVideoWebinar()) {
+            $this->happeningType = self::TYPE_WEBINAR_VIDEO;
+        }
+
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {
                 /** @var Happening\HappeningTranslation $translation */

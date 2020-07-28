@@ -38,6 +38,7 @@ abstract class HappeningType extends AbstractType
                     'form.happening.happeningType.default.label' => AbstractHappeningCommand::TYPE_DEFAULT,
                     'form.happening.happeningType.webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR,
                     'form.happening.happeningType.interactive_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_INTERACTIVE,
+                    'form.happening.happeningType.video_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_VIDEO,
                 ],
                 'expanded' => true,
                 'required' => true,

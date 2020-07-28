@@ -45,12 +45,19 @@ class RecordHandler
         $event = $happening->getEvent();
 
         $existingArchives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
-        $startedArchives = array_filter($existingArchives->getItems(), function ($archiveItem) {
-            return $archiveItem->status === RecordStatus::STARTED;
+        $startedArchives = array_filter($existingArchives->getItems(), static function ($archiveItem) {
+            return in_array($archiveItem->status, RecordStatus::IS_RECORDING_STATUS, true);
         });
 
         if (count($startedArchives) > 0) {
             $this->logger->warning(sprintf('Webinar #%d: Start record failed because another archive is already started', $happening->getId()));
+
+            $this->prepareReconciliationHandler->handle(
+                new PrepareReconciliation(
+                    $happening,
+                    $this->dateTime
+                )
+            );
 
             return;
         }
@@ -68,11 +75,7 @@ class RecordHandler
 
         $this->recordArchiveRepository->add($recordArchive);
 
-        $dueDate = new \DateTime();
-        // Avoid adding microseconds
-        $dueDate->setTime(0, 0, 0, 0);
-        $dueDate->setTimestamp($this->dateTime->getTimestamp());
-        $dueDate->modify('+ 125minutes');
+        $dueDate = clone $this->dateTime->modify('+ 125minutes');
         $this->prepareReconciliationHandler->handle(
             new PrepareReconciliation(
                 $happening,

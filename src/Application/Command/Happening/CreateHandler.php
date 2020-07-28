@@ -53,6 +53,7 @@ class CreateHandler
             $create->invitationCode,
             $create->isWebinar(),
             $create->isInteractiveWebinar(),
+            $create->isVideoWebinar(),
             $create->liveUrl,
             $create->isWebinar() && $create->webinarRecorded
         );

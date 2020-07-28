@@ -47,6 +47,7 @@ class CreateHandlerTest extends TestCase
             'toto',
             true,
             true,
+            false,
             null,
             true
         );

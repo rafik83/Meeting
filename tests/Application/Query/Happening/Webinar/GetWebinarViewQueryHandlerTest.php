@@ -2,9 +2,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar;
 
-use OpenTok\ArchiveList;
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
@@ -15,12 +15,14 @@ use Proximum\Vimeet\Application\Query\User\Event\Participant\ParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandlerTest extends TestCase
@@ -37,15 +39,25 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var \DateTime */
     private $dateTime;
 
+    /** @var ObjectProphecy */
+    private $recordArchiveRepository;
+
+    /** @var ObjectProphecy */
+    private $isRecordingAllowed;
+
     protected function setUp(): void
     {
         $this->getUserParticipantInfosHandler = $this->prophesize(GetUserParticipantInfosHandler::class);
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
+        $this->recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
+        $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->recordArchiveRepository->reveal(),
+            $this->isRecordingAllowed->reveal(),
             $this->dateTime
         );
     }
@@ -91,8 +103,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -131,6 +145,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
+                false,
                 'User token',
                 'webinar-session-id',
                 'api key',
@@ -145,7 +160,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '/path/image.jpg',
                 null,
                 false,
-                ''
+                false,
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -195,8 +211,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldNotBeCalled();
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -233,6 +251,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->recordArchiveRepository->reveal(),
+            $this->isRecordingAllowed->reveal(),
             $date
         );
 
@@ -241,6 +261,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
+                false,
                 'User token',
                 'webinar-session-id',
                 'api key',
@@ -255,7 +276,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '/path/image.jpg',
                 null,
                 false,
-                ''
+                false,
+                false
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -306,7 +328,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -337,15 +361,17 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
-        $archiveList = $this->prophesize(ArchiveList::class);
-        $archiveList->getItems()->shouldBeCalled()->willReturn([]);
-        $this->videoConferenceAdapter->listArchives('webinar-session-id')->shouldBeCalled()->willReturn($archiveList->reveal());
+        $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $this->assertEquals(
             new WebinarView(
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
+                false,
                 'User token',
                 'webinar-session-id',
                 'api key',
@@ -382,12 +408,74 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 '/path/image.jpg',
                 null,
+                false,
                 true,
-                'no_record'
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
             )
         );
     }
+
+    public function testHandleEndedVideoWebinar(): void
+    {
+        $user = $this->prophesize(User::class);
+        $user->getId()->shouldBeCalled()->willReturn(111);
+
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->shouldBeCalled()->willReturn(1);
+        $happening->getTitle('en')->shouldBeCalled()->willReturn(
+            'Video Webinar: how to work remotely during the Covid-19 crisis'
+        );
+        $happening->hasWebinarSessionId()->shouldNotBeCalled();
+        $happening->getWebinarSessionId()->shouldNotBeCalled();
+        $happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
+        $happening->getSpeakers()->shouldNotBeCalled();
+        $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:00:00'));
+        $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:45:00'));
+        $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
+        $happening->getEvent()->shouldNotBeCalled();
+        $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
+        $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
+
+        $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
+        $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
+        $this->videoConferenceAdapter->generateAccessToken(Argument::any())->shouldNotBeCalled();
+
+        $happening->getParticipations()->shouldNotBeCalled();
+        $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
+
+        $this->assertEquals(
+            new WebinarView(
+                1,
+                111,
+                'Video Webinar: how to work remotely during the Covid-19 crisis',
+                true,
+                '',
+                '',
+                '',
+                false,
+                [],
+                [],
+                new TimeRangeView(new \DateTime('2020-03-30 11:00:00'), new \DateTime('2020-03-30 11:45:00')),
+                $this->dateTime,
+                0,
+                0,
+                0,
+                '/path/image.jpg',
+                'https://www.utube.com/embed/whatever',
+                true,
+                false,
+                false
+            ),
+            $this->getWebinarViewQueryHandler->handle(
+                new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
+            )
+        );
+    }
+
 }

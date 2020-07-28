@@ -71,6 +71,7 @@ class UpdateHandlerTest extends TestCase
             'titi',
             true,
             false,
+            false,
             null,
             true
         );

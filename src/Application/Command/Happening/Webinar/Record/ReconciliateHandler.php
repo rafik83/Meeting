@@ -46,7 +46,7 @@ class ReconciliateHandler
             if (isset($recordArchivesIndexedByArchiveId[$archive->id])) {
                 $recordArchive = $recordArchivesIndexedByArchiveId[$archive->id];
 
-                if ($archive->status !== RecordStatus::STARTED) {
+                if (!in_array($archive->status, RecordStatus::IS_RECORDING_STATUS, true)) {
                     $recordArchive->stop();
                 }
 
