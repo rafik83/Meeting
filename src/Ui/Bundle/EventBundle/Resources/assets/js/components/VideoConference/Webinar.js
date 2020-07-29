@@ -206,11 +206,7 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
-        if (this.subscribers.length === 2) {
-            this.subscribers.forEach((subscriber) => this.autoMaximize(subscriber));
-        } else if (this.subscribers.length > 2) {
-            this.autoMaximize(subscriber);
-        }
+        this.autoMaximize(subscriber);
 
         if (this.hasMediaSharing && !this.isScreenShareStream(subscriber.stream)) {
             this.minimize(subscriber.element)
@@ -1017,6 +1013,9 @@ Webinar.prototype.autoMaximize = function(subscriber) {
     var activity = null;
     subscriber.on('audioLevelUpdated', function(event) {
         if (this.hasMediaSharing) {
+            return;
+        }
+        if (this.subscribers.length < 2) {
             return;
         }
 
