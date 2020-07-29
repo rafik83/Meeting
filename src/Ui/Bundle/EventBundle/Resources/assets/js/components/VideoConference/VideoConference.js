@@ -204,6 +204,10 @@ VideoConference.prototype.init = function() {
       this.autoMaximize(subscriber);
     }
 
+    if (!this.hasScreenSharing && !this.subscribers.length) {
+        this.maximize(subscriber.element);
+    }
+
     this.subscribers.push(subscriber);
 
     this.hideElement(this.meetingHelperWaitingContainer);
@@ -219,6 +223,7 @@ VideoConference.prototype.init = function() {
       subscriber.element.classList.remove('ot-layout');
 
       if (this.isScreenShareStream(event.stream)) {
+        this.hasScreenSharing = false;
         this.maximizeAllSubscribers();
       }
 
