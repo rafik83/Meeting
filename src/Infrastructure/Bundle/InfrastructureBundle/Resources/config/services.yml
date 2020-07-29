@@ -1251,6 +1251,13 @@ services:
             - '%shared_uploaded_files%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection }
+
+    Proximum\Vimeet\Application\Command\Sheet\Upload\VideoUploadHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Upload\VideoUpload }
+
     command.sheet.template.save_print_template_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplateHandler
         arguments:

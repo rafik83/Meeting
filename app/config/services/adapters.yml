@@ -34,3 +34,11 @@ services:
     Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter:
         arguments:
             - '%google_cloud_storage_config%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator: ~
+
+    Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
+            - '%google_cloud_storage_video_uri%'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'

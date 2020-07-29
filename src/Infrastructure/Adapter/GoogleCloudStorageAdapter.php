@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Google\Cloud\Storage\StorageClient;
+use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 
@@ -95,6 +96,11 @@ class GoogleCloudStorageAdapter
     public function delete(string $path): void
     {
         $flySystem = $this->init();
-        $flySystem->delete($path);
+
+        try {
+            $flySystem->delete($path);
+        } catch (FileNotFoundException $exception) {
+            return;
+        }
     }
 }

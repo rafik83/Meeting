@@ -1,25 +1,28 @@
 <div id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }}">
     {% if not isCatalog %}
+        {% if item.isVideoAndHasPath %}
+            <video width="320" height="240" controls>
+                <source src="{{ item.path }}" type="{{ item.mimeType }}">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
         <a class="image-background" href="{{ path('event_sheet_form', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal" title="{{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}">
-            <div class="placeholder">
-                {% if item.isVideoAndHasPath %}
-                    <video width="320" height="240" controls>
-                        <source src="{{ item.path }}" type="{{ item.extension }}"/>
-                        Your browser does not support the video tag.
-                    </video>
-                {% else %}
-                    <div class="add-video">
-                        <i class="icon-Ouvrir_1"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
-                    </div>
-                {% endif %}
-            </div>
+            {% if item.isVideoAndHasPath %}
+                <div class="add-video">
+                    <i class="icon-Video_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}
+                </div>
+            {% else %}
+                <div class="add-video">
+                    <i class="icon-Video_2"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
+                </div>
+            {% endif %}
         </a>
     {% else %}
         <div class="image-background">
             <div class="placeholder">
                 {% if item.isVideoAndHasPath %}
                     <video width="320" height="240" controls autoplay>
-                        <source src="{{ item.path }}" type="{{ item.extension }}"/>
+                        <source src="{{ item.path }}" type="{{ item.mimeType }}">
                         Your browser does not support the video tag.
                     </video>
                 {% endif %}

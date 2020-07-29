@@ -10,6 +10,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
+use Proximum\Vimeet\Application\Command\Sheet\Upload\VideoUpload;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
@@ -180,6 +181,14 @@ class UpdateAction
                     $object->setData($objectData);
                 }
 
+                if ($object instanceof Template\TemplateObject\Video) {
+                    $objectData = $this
+                        ->commandBus
+                        ->handle(new VideoUpload($eventDomain->getEvent(), $object))
+                    ;
+                    $object->setData($objectData);
+                }
+
                 $this->commandBus->handle(new UpdateData($sheet, $templateData, $object));
 
                 return new RedirectResponse(
@@ -218,25 +227,25 @@ class UpdateAction
 
         return new Response(
             $this->engine->render($twig, [
-                'canAddParticipant'         => $canAddParticipant,
-                'event'                     => $eventDomain->getEvent(),
-                'form'                      => $form->createView(),
-                'label'                     => $label,
-                'levelsArchitecture'        => $levelsArchitecture,
-                'locale'                    => $locale,
-                'nomenclatures'             => $nomenclatures,
-                'object'                    => $object,
-                'participants'              => $participants,
-                'sheet'                     => $sheet,
-                'taggedData'                => $taggedData,
-                'templateData'              => $templateData,
-                'uid'                       => $key,
-                'currency'                  => $eventDomain->getEvent()->getCurrency(),
-                'vatMode'                   => $eventDomain->getEvent()->getMode(),
-                'isRequestMeetingEnabled'   => false,
-                'isCatalog'                 => false,
-                'tipTranslationViews'       => $tipTranslationViews,
-                'templateObjectView'        => $templateObjectView,
+                'canAddParticipant' => $canAddParticipant,
+                'event' => $eventDomain->getEvent(),
+                'form' => $form->createView(),
+                'label' => $label,
+                'levelsArchitecture' => $levelsArchitecture,
+                'locale' => $locale,
+                'nomenclatures' => $nomenclatures,
+                'object' => $object,
+                'participants' => $participants,
+                'sheet' => $sheet,
+                'taggedData' => $taggedData,
+                'templateData' => $templateData,
+                'uid' => $key,
+                'currency' => $eventDomain->getEvent()->getCurrency(),
+                'vatMode' => $eventDomain->getEvent()->getMode(),
+                'isRequestMeetingEnabled' => false,
+                'isCatalog' => false,
+                'tipTranslationViews' => $tipTranslationViews,
+                'templateObjectView' => $templateObjectView,
                 'isPhoneValidationRequired' => false,
             ])
         );

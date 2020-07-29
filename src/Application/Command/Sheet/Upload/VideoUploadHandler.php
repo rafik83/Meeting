@@ -29,7 +29,10 @@ class VideoUploadHandler
             $this->videoStorage->remove($object->getPath());
         }
 
-        $path = $this->videoStorage->upload($file);
+        $path = $this->videoStorage->upload(
+            $videoUpload->event,
+            $file
+        );
 
         return [
             'path' => $path,

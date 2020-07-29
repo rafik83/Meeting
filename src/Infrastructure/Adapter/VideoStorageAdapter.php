@@ -2,16 +2,52 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\VideoStorageInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class VideoStorageAdapter implements VideoStorageInterface
 {
-    public function upload($file): ?string
+    /** @var GoogleCloudStorageAdapter */
+    private $googleCloudStorageAdapter;
+
+    /** @var string */
+    private $googleCloudStorageUri;
+
+    /** @var UuidGeneratorInterface */
+    private $uuidGenerator;
+
+    public function __construct(
+        GoogleCloudStorageAdapter $googleCloudStorageAdapter,
+        string $googleCloudStorageUri,
+        UuidGeneratorInterface $uuidGenerator
+    ) {
+        $this->googleCloudStorageAdapter = $googleCloudStorageAdapter;
+        $this->googleCloudStorageUri = $googleCloudStorageUri;
+        $this->uuidGenerator = $uuidGenerator;
+    }
+
+    public function upload(Event $event, $file): ?string
     {
         if (!$file instanceof UploadedFile) {
-            return;
+            return null;
         }
+
+        $relativePath = sprintf(
+            '/%s/%d/%s.%s',
+            'sheet-video',
+            $event->getId(),
+            $this->uuidGenerator->generate(),
+            $file->getClientOriginalExtension()
+        );
+
+        $this->googleCloudStorageAdapter->create(
+            file_get_contents($file),
+            $relativePath
+        );
+
+        return sprintf('%s%s', $this->googleCloudStorageUri, $relativePath);
     }
 
     public function remove($path): void
@@ -19,5 +55,13 @@ class VideoStorageAdapter implements VideoStorageInterface
         if (empty($path)) {
             return;
         }
+
+        $relativePath = str_replace(
+            $this->googleCloudStorageUri,
+            '',
+            $path
+        );
+
+        $this->googleCloudStorageAdapter->delete($relativePath);
     }
 }
