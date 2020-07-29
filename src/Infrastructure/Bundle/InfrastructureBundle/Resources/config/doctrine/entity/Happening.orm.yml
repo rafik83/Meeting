@@ -44,6 +44,10 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: boolean
             options:
                 default: false
+        sidebarAllowed:
+            type: boolean
+            options:
+                default: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

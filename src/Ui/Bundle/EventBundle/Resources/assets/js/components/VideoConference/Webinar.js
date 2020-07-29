@@ -24,7 +24,14 @@ function Webinar(element, isSpeaker) {
 
     this.startFullScreenClass = 'glyphicon-fullscreen';
     this.endFullScreenClass = 'icon-Reduire_3';
-    this.onFullscreenClass = 'fullscreen-webinar-button';
+
+    this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
+
+    if(this.sidebarAllowed) {
+        this.shiftWithSidebar = 'shift-with-sidebar';
+    } else {
+        this.shiftWithSidebar = '';
+    }
 
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
@@ -68,24 +75,27 @@ function Webinar(element, isSpeaker) {
 
     this.sideContainer = element.querySelector('.side-container');
 
-    this.chatContainer = element.querySelector('[data-chat-container]');
-    this.questionsContainer = element.querySelector('[data-questions-container]');
-    this.questionsList = this.questionsContainer.querySelector('.questions-list');
-    this.questionsForm = element.querySelector('[data-questions-form]');
-    this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
-    this.questionsFormAction = this.questionsForm.getAttribute('action');
-    this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
+    if (this.sidebarAllowed) {
+        this.chatContainer = element.querySelector('[data-chat-container]');
+        this.questionsContainer = element.querySelector('[data-questions-container]');
+        this.questionsList = this.questionsContainer.querySelector('.questions-list');
+        this.questionsForm = element.querySelector('[data-questions-form]');
+        this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
+        this.questionsFormAction = this.questionsForm.getAttribute('action');
+        this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
 
-    this.chatInstance = null;
-    this.chatButton = element.querySelector('[data-chat-button]');
-    if (this.chatButton) {
-        this.chatButton.addEventListener('click', this.showChat.bind(this));
+        this.chatInstance = null;
+        this.chatButton = element.querySelector('[data-chat-button]');
+        if (this.chatButton) {
+            this.chatButton.addEventListener('click', this.showChat.bind(this));
+        }
+        this.questionsButton = element.querySelector('[data-questions-button]');
+        this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
+        this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
     }
-    this.questionsButton = element.querySelector('[data-questions-button]');
-    this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
-    this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
+
     this.joinButton = element.querySelector('[data-webinar-join-button]');
 
     this.layoutContainer = element.querySelector('.layout-container');
@@ -734,6 +744,9 @@ Webinar.prototype.handleStopSharing = function () {
 };
 
 Webinar.prototype.createToggleSidebarButton = function () {
+    if(!this.sidebarAllowed){
+        return
+    }
     const toggleSidebarButton = document.createElement('button');
     const icon = document.createElement('i');
     const showSidebarClass = 'icon-Precedent_3';
@@ -781,7 +794,11 @@ Webinar.prototype.createFullscreenButton = function () {
     fullscreenButton.classList.add('btn-gray');
     fullscreenButton.classList.add('start-fullscreen-button');
     fullscreenButton.classList.add('OT_ignore');
-    fullscreenButton.classList.add(this.onFullscreenClass);
+
+    if (this.shiftWithSidebar) {
+        fullscreenButton.classList.add(this.shiftWithSidebar);
+    }
+
     fullscreenButton.appendChild(this.iconFullscreenButton);
 
     this.layoutContainer.appendChild(fullscreenButton);
@@ -828,14 +845,14 @@ Webinar.prototype.toggleFullscreenAndSidebarButtons = function (isFullScreen) {
         this.hideElement(this.toggleSidebarButton);
 
         if (this.fullscreenButton) {
-            this.fullscreenButton.classList.remove(this.onFullscreenClass);
+            this.fullscreenButton.classList.remove(this.shiftWithSidebar);
         }
 
         return;
     }
 
     if (this.fullscreenButton) {
-        this.fullscreenButton.classList.add(this.onFullscreenClass);
+        this.fullscreenButton.classList.add(this.shiftWithSidebar);
     }
 
     if (this.iconFullscreenButton) {
@@ -1001,6 +1018,9 @@ Webinar.prototype.isSidebarOpened = function () {
 }
 
 Webinar.prototype.toggleSideBar = function () {
+    if (!this.sidebarAllowed) {
+        return
+    }
     if (!this.isSidebarOpened()) {
         this.showElement(this.sideContainer);
         this.initChat();

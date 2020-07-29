@@ -52,6 +52,9 @@ class WebinarView
     public $liveUrl;
 
     /** @var bool */
+    public $sidebarAllowed;
+
+    /** @var bool */
     public $isVideoWebinarAndHasLiveUrl;
 
     /** @var bool */
@@ -88,6 +91,7 @@ class WebinarView
         int $timeRemainingBeforeStartInSeconds,
         ?string $headerImage,
         ?string $liveUrl,
+        bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
         bool $isWebinarRecording
@@ -107,6 +111,7 @@ class WebinarView
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
+        $this->sidebarAllowed = $sidebarAllowed;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->isWebinarRecorded = $isWebinarRecorded;

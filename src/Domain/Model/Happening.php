@@ -76,6 +76,9 @@ class Happening implements TimeRangeInterface
     /** @var bool */
     private $webinarRecorded;
 
+    /** @var bool */
+    private $sidebarAllowed = true;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -89,7 +92,8 @@ class Happening implements TimeRangeInterface
         bool $interactiveWebinar = false,
         bool $videoWebinar = false,
         ?string $liveUrl = null,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $sidebarAllowed = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -109,6 +113,7 @@ class Happening implements TimeRangeInterface
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->webinarRecorded = $webinarRecorded;
+        $this->sidebarAllowed = $sidebarAllowed;
     }
 
     public function getId(): ?int
@@ -206,7 +211,8 @@ class Happening implements TimeRangeInterface
         bool $videoWebinar,
         ?string $invitationCode = null,
         ?string $liveUrl = null,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $sidebarAllowed
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -220,6 +226,7 @@ class Happening implements TimeRangeInterface
         $this->interactiveWebinar = $interactiveWebinar;
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
+        $this->sidebarAllowed = $sidebarAllowed;
     }
 
     public function updateTranslation(
@@ -359,6 +366,11 @@ class Happening implements TimeRangeInterface
     public function setInvitationCode(string $invitationCode): void
     {
         $this->invitationCode = $invitationCode;
+    }
+
+    public function isSidebarAllowed() : bool
+    {
+        return $this->sidebarAllowed;
     }
 
     /**

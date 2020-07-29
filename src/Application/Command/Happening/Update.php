@@ -20,6 +20,7 @@ class Update extends AbstractHappeningCommand
         $this->invitationCode = $happening->getInvitationCode();
         $this->liveUrl = $happening->getLiveUrl();
         $this->webinarRecorded = $happening->isWebinarRecorded();
+        $this->sidebarAllowed = $happening->isSidebarAllowed();
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;

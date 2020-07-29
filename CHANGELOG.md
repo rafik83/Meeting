@@ -5,6 +5,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2159 - Add option sidebar webinar
+- Add fly system and google cloud storage adapter
+
+### Fixed
+- Hotfix - Profile avatar missing styles
+- MV-246 - Order option without group data
+
+### Updated
+- MV-229 - Show cancel button when webinar has started
+
+## [2.39.0] - 2020-07-24
+### Added
 - VIMEET 2086 - Webinar video available available even when the happening is over
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
