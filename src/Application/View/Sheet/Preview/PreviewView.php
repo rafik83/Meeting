@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
@@ -44,13 +36,17 @@ class PreviewView
     /** @var bool */
     public $canDisplayImage;
 
+    /** @var string|null */
+    public $fileMimeType;
+
     public function __construct(
         string $id,
         string $content,
         string $type,
         array $cardViews = [],
         bool $link = false,
-        bool $canDisplayImage = true
+        bool $canDisplayImage = true,
+        ?string $fileMimeType = null
     ) {
         $this->id = $id;
         $this->content = $content;
@@ -59,60 +55,50 @@ class PreviewView
         $this->tagViews = [];
         $this->link = $link;
         $this->canDisplayImage = $canDisplayImage;
+        $this->fileMimeType = $fileMimeType;
     }
 
-    /**
-     * @return bool
-     */
-    public function isImage()
+    public function isImage(): bool
     {
         return AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE === $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isParticipant()
+    public function isParticipant(): bool
     {
         return AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT === $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isTag()
+    public function isVideo(): bool
+    {
+        return AbstractChild::TEMPLATE_OBJECT_TYPE_VIDEO === $this->type;
+    }
+
+    public function hasContent(): bool
+    {
+        return !empty($this->content);
+    }
+
+    public function isTag(): bool
     {
         return AbstractChild::TEMPLATE_OBJECT_TYPE_TAG === $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isParticipantsPosition()
+    public function isParticipantsPosition(): bool
     {
         return CustomPreviewData::PARTICIPANTS_POSITION === $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrong()
+    public function isStrong(): bool
     {
         return false !== $this->strong;
     }
 
-    /**
-     * @return bool
-     */
     public function isPopulatedFromTagSheetOrganization(): bool
     {
         return Tag::SHEET_ORGANIZATION === $this->populatedFromTag;
     }
 
-    /**
-     * @param TagView $tagView
-     */
-    public function addTagView(TagView $tagView)
+    public function addTagView(TagView $tagView): void
     {
         $this->tagViews[] = $tagView;
     }

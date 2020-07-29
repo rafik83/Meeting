@@ -7,6 +7,14 @@
         {% else %}
             <h3>{{ title }}</h3>
         {% endif %}
+    {% elseif object.isVideo %}
+        {% if object.hasContent %}
+            <video width="280" height="210" controls>
+                <source src="{{ object.content }}" type="{{ object.fileMimeType }}">
+                Your browser does not support the video tag.
+            </video>
+
+        {% endif %}
     {% elseif object.isParticipant %}
         <div class="list list--users">
             {% for participant in object.cardViews %}

@@ -99,7 +99,7 @@ class CatalogController extends Controller
             return $this->redirect($availabilityConfirmation->redirectRoute);
         }
 
-        if (!$sheet->isInCatalog()) {
+        if (!$sheet->isInInternalCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
