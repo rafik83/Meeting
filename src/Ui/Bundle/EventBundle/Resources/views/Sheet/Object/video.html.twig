@@ -1,32 +1,38 @@
-<div id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }}">
-    {% if not isCatalog %}
+{% if not isCatalog %}
+    <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
         {% if item.isVideoAndHasPath %}
-            <video width="320" height="240" controls>
+            <video width="380" height="auto" controls>
                 <source src="{{ item.path }}" type="{{ item.mimeType }}">
                 Your browser does not support the video tag.
             </video>
         {% endif %}
-        <a class="image-background" href="{{ path('event_sheet_form', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal" title="{{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}">
+        <a class="video-background" href="{{ path('event_sheet_form', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal" title="{{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}">
             {% if item.isVideoAndHasPath %}
-                <div class="add-video">
+                <div class="edit-video">
                     <i class="icon-Video_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}
                 </div>
             {% else %}
-                <div class="add-video">
-                    <i class="icon-Video_2"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
+                <div class="placeholder">
+                    <footer>
+                        <div class="add-video">
+                            <i class="icon-Video_2"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
+                        </div>
+                    </footer>
+
                 </div>
             {% endif %}
         </a>
-    {% else %}
-        <div class="image-background">
-            <div class="placeholder">
-                {% if item.isVideoAndHasPath %}
-                    <video width="320" height="240" controls autoplay>
-                        <source src="{{ item.path }}" type="{{ item.mimeType }}">
-                        Your browser does not support the video tag.
-                    </video>
-                {% endif %}
+    </section>
+{% else %}
+    {% if item.isVideoAndHasPath %}
+        <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
+            <div class="video-background">
+                <video width="380" height="auto" controls autoplay muted>
+                    <source src="{{ item.path }}" type="{{ item.mimeType }}">
+                    Your browser does not support the video tag.
+                </video>
             </div>
-        </div>
+        </section>
     {% endif %}
-</div>
+{% endif %}
+

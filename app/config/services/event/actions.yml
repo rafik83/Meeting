@@ -65,6 +65,12 @@ services:
             - '@sheet.infos_helper'
             - '@Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\RemoveVideoAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
 
     #
     # Package

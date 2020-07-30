@@ -1,0 +1,76 @@
+
+.object--video {
+  margin-bottom: 40px;
+
+  .video-background {
+    width: 100%;
+
+    .placeholder {
+      min-height: 160px;
+      line-height: 160px;
+      text-align: center;
+
+      .add-video {
+        font-size: 15px;
+      }
+
+      color: $gradient-text-color;
+      padding: 20px;
+      @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+
+      a {
+        font-family: OpenSans, Helvetica, sans-serif;
+        color: $gradient-text-color;
+      }
+
+      footer,
+      footer i[class^='icon-'],
+      footer a { color: rgba($gradient-text-color, .6); }
+
+      // Folded corner
+      &:after,
+      &:before {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        content: ' ';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        transform: rotate(360deg);
+      }
+
+      &:after {
+        border-width: 0 0 37px 37px;
+        border-color: transparent transparent $bg-container-color transparent;
+      }
+
+      &:before {
+        border-width: 37px 37px 0 0;
+        border-color: rgba(#ffffff, .5) transparent transparent transparent;
+      }
+    }
+
+    .edit-video {
+      font-size: 15px;
+    }
+  }
+
+  video {
+    @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.2);
+  }
+}
+
+
+.object--video--preview {
+  text-align: center;
+
+  .object--video--header {
+    padding-bottom: 10px;
+  }
+
+  .object--video--footer {
+    padding-top: 10px;
+  }
+}

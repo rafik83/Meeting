@@ -288,6 +288,15 @@ event_sheet_remove_image:
     methods: [DELETE]
     defaults: { _controller: EventBundle:Sheet:removeImage }
 
+event_sheet_remove_video:
+    path: /sheet/{sheet}/{locale}/{key}/video/remove
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\RemoveVideoAction
+
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate
     requirements:
