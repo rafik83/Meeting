@@ -57,8 +57,9 @@ class MeetingTypeViewQueryHandlerTest extends TestCase
     {
         $this->type->getId()->shouldBeCalled()->willReturn(1);
         $this->type->getTitle('fr')->shouldBeCalled()->willReturn('type title');
+        $this->type->isHidden()->shouldBeCalled()->willReturn(false);
 
-        $expectedTypeView = new TypeView(1, 'type title', '');
+        $expectedTypeView = new TypeView(1, 'type title', '', false);
 
         $this->typeRepository
             ->getFromSheetMeetingRequests($this->sheet, $this->locale)

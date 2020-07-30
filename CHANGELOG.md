@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2159 - Add option sidebar webinar
 
 ### Fixed
+- MV-247 - Do not show back link on registration pages when type is hidden
 - Hotfix - Profile avatar missing styles
 - MV-246 - Order option without group data
 - MV-228 - Fix missing bullet points in registration path forms
+- Add missing translation key for available priority request
 
 ### Updated
 - MV-229 - Show cancel button when webinar has started
