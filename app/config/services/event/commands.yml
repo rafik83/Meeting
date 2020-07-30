@@ -192,7 +192,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
-            - '@adapter.s3_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate }

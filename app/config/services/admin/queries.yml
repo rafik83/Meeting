@@ -307,6 +307,6 @@ services:
     Proximum\Vimeet\Application\Query\Happening\Admin\WebinarDownloadQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
-            - '@adapter.s3_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\WebinarDownloadQuery }

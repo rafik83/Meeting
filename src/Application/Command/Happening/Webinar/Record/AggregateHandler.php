@@ -3,8 +3,8 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
 use Proximum\Vimeet\Application\Adapter\FinderAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\RemoteFileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -16,8 +16,8 @@ class AggregateHandler
     /** @var ZipArchiveAdapterInterface */
     private $zipArchiveAdapter;
 
-    /** @var RemoteFileStorageInterface */
-    private $remoteFileStorage;
+    /** @var ZipRecordArchiveStorageInterface */
+    private $zipRecordArchiveStorage;
 
     /** @var FinderAdapterInterface */
     private $finder;
@@ -25,12 +25,12 @@ class AggregateHandler
     public function __construct(
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         ZipArchiveAdapterInterface $zipArchiveAdapter,
-        RemoteFileStorageInterface $remoteFileStorage,
+        ZipRecordArchiveStorageInterface $zipRecordArchiveStorage,
         FinderAdapterInterface $finder
     ) {
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->zipArchiveAdapter = $zipArchiveAdapter;
-        $this->remoteFileStorage = $remoteFileStorage;
+        $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
         $this->finder = $finder;
     }
 
@@ -67,7 +67,7 @@ class AggregateHandler
             $zipFile = new \SplFileInfo($zipFilePath);
             dump($zipFile);
 
-            $this->remoteFileStorage->upload($zipFile, 'multiple-archives/' . $zipFile->getFilename());
+            $this->zipRecordArchiveStorage->upload($zipFile, 'multiple-archives/' . $zipFile->getFilename());
 
             unlink($zipFile->getRealPath());
             $filesystem = new Filesystem();

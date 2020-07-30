@@ -34,3 +34,7 @@ services:
     Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter:
         arguments:
             - '%google_cloud_storage_config%'
+
+    Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'

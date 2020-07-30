@@ -2548,13 +2548,6 @@ services:
             - '@adapter.file_system_adapter'
             - '%kernel.root_dir%/../web'
             - '@datetime'
-    adapter.s3_file_storage:
-        class: Proximum\Vimeet\Infrastructure\Adapter\S3FileStorageAdapter
-        arguments:
-            - '@s3_client'
-            - '%s3_bucket%'
-            - '%s3_prefix%'
-            - '@datetime'
     Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
     Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
     Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter: ~
@@ -2674,11 +2667,6 @@ services:
         arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
-
-    s3_client:
-        class: Aws\S3\S3Client
-        arguments:
-            - { credentials: { key: '%s3_access_key%', secret: '%s3_secret_key%' }, region: 'eu-west-3', version: '2006-03-01' }
 
     #
     # Components

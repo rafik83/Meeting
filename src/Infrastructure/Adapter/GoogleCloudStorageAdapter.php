@@ -92,6 +92,13 @@ class GoogleCloudStorageAdapter
         $flySystem->write($path, $content);
     }
 
+    public function upload(string $localFile, string $remotePath): void
+    {
+        $flySystem = $this->init();
+
+        $flySystem->writeStream($remotePath, fopen($localFile, 'r'));
+    }
+
     public function delete(string $path): void
     {
         $flySystem = $this->init();

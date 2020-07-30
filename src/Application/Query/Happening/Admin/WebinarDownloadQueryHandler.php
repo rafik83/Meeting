@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
-use Proximum\Vimeet\Application\Adapter\RemoteFileStorageInterface;
+use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
@@ -11,15 +11,15 @@ class WebinarDownloadQueryHandler
     /** @var RecordArchiveRepositoryInterface */
     public $recordArchiveRepository;
 
-    /** @var RemoteFileStorageInterface */
-    public $remoteFileStorage;
+    /** @var ZipRecordArchiveStorageInterface */
+    public $zipRecordArchiveStorage;
 
     public function __construct(
         RecordArchiveRepositoryInterface $recordArchiveRepository,
-        RemoteFileStorageInterface $remoteFileStorage
+        ZipRecordArchiveStorageInterface $zipRecordArchiveStorage
     ) {
         $this->recordArchiveRepository = $recordArchiveRepository;
-        $this->remoteFileStorage = $remoteFileStorage;
+        $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
     }
 
     public function handle(WebinarDownloadQuery $query): ?string
@@ -35,9 +35,9 @@ class WebinarDownloadQueryHandler
             return $recordedArchives[0]->getPath();
         }
 
-        $tempFilePath = sprintf('%s/webinar-%d.zip', sys_get_temp_dir(), $query->happening->getId());
-        $this->remoteFileStorage->download(sprintf('multiple-archives/webinar-%d.zip', $query->happening->getId()), $tempFilePath);
+        // $tempFilePath = sprintf('%s/webinar-%d.zip', sys_get_temp_dir(), $query->happening->getId());
+        $url = $this->zipRecordArchiveStorage->getUrl(sprintf('multiple-archives/webinar-%d.zip', $query->happening->getId());
 
-        return $tempFilePath;
+        return $url;
     }
 }
