@@ -20,7 +20,7 @@
             {% elseif key == 'fromPriority' %}
                 {{ form_row(child,
                     {
-                        'label' : 'form.catalog_create_meeting_request.children.fromPriority.label'|trans({}, 'forms')~' '~'('~priorityNumberAvailable~'/'~sheet.type.priorityMeetingRequestsNumber~' restante(s))',
+                        'label' : 'form.catalog_create_meeting_request.children.fromPriority.label'|trans({}, 'forms')~' '~ 'form.catalog_create_meeting_request.children.fromPriorityRemaining.label'|transchoice(priorityNumberAvailable, {'%available%': priorityNumberAvailable, '%total%': sheet.type.priorityMeetingRequestsNumber}, 'forms'),
                         'label_attr': { 'title': priorityNumberAvailable~'form.catalog_create_meeting_request.children.tooltip.title'|trans({}, 'forms')~sheet.type.priorityMeetingRequestsNumber~' total'}
                     }
                 )

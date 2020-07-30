@@ -4,13 +4,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Hotfix - allow text/* on csv participant import
+
+## [2.40.0] - 2020-07-30
 ### Added
 - VIMEET-2159 - Add option sidebar webinar
 
 ### Fixed
+- MV-247 - Do not show back link on registration pages when type is hidden
 - Hotfix - Profile avatar missing styles
 - MV-246 - Order option without group data
-- Hotfix - allow text/* on csv participant import
+- MV-228 - Fix missing bullet points in registration path forms
+- Add missing translation key for available priority request
 
 ### Updated
 - MV-229 - Show cancel button when webinar has started

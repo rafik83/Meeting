@@ -21,15 +21,14 @@ class TypeView
     /** @var string */
     public $description;
 
-    /**
-     * @param int    $id
-     * @param string $title
-     * @param string $description
-     */
-    public function __construct($id, $title, $description)
+    /** @var bool */
+    public $hidden;
+
+    public function __construct(int $id, string $title, ?string $description, bool $hidden)
     {
-        $this->id          = $id;
-        $this->title       = $title;
+        $this->id = $id;
+        $this->title = $title;
         $this->description = $description;
+        $this->hidden = $hidden;
     }
 }

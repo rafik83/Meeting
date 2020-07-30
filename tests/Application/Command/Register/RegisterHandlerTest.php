@@ -29,7 +29,7 @@ class RegisterHandlerTest extends TestCase
     public function testHandle()
     {
         $event             = EventFactory::createEvent();
-        $type              = new TypeView(1, 'title', 'desc');
+        $type              = new TypeView(1, 'title', 'desc', false);
         $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
@@ -68,7 +68,7 @@ class RegisterHandlerTest extends TestCase
         $this->expectException(EmailAlreadyExistsException::class);
 
         $event             = EventFactory::createEvent();
-        $type              = new TypeView(1, 'title', 'desc');
+        $type              = new TypeView(1, 'title', 'desc', false);
         $command           = new RegisterNewUser('test@test.com', 'fr', $event, $type);
         $command->password = 'password';
 
