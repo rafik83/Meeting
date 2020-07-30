@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2159 - Add option sidebar webinar
+
 ### Fixed
 - Hotfix - Profile avatar missing styles
 - MV-246 - Order option without group data
+- Hotfix - allow text/* on csv participant import
 
 ### Updated
 - MV-229 - Show cancel button when webinar has started
