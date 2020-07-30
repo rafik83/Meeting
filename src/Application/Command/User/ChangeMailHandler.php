@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Token\ChangeMailTokenGenerator;
@@ -15,7 +7,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Exception\Field\EmptyFieldException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
-use Proximum\Vimeet\Application\Exception\User\InvalidPasswordException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
@@ -49,12 +40,11 @@ class ChangeMailHandler
     }
 
     /**
-     * @throws InvalidPasswordException
      * @throws EmailAlreadyExistsException
      * @throws EmptyFieldException
      * @throws SameEmailException
      */
-    public function handle(ChangeMail $changeMail)
+    public function handle(ChangeMail $changeMail): void
     {
         $user = $changeMail->user;
 

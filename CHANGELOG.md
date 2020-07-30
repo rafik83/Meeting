@@ -5,6 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2159 - Add option sidebar webinar
+
+### Fixed
+- Hotfix - Profile avatar missing styles
+- MV-246 - Order option without group data
+- MV-228 - Fix missing bullet points in registration path forms
+
+### Updated
+- MV-229 - Show cancel button when webinar has started
+
+## [2.39.0] - 2020-07-24
+### Added
+- VIMEET 2086 - Webinar video available available even when the happening is over
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
 
@@ -14,7 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - VIMEET-2154 - securize impersonation
 - MV-239 - Fix batch action for paged filtered results, for all results selection
-- MV-228 - Fix missing bullet points in registration path forms
+- Hotfix - meeting slot duration in admin
+- Index users on mail change
+
+## [2.38.0] - 2020-07-22
+### Added
+- VIMEET-2200 - Allow more planning than participant
 
 ## [2.37.0] - 2020-07-06
 ### Added

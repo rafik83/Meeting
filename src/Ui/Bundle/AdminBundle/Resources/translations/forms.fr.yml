@@ -484,6 +484,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening.happeningType.default.label: 'En présentiel'
 form.happening.happeningType.webinar.label: Webinaire
 form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
+form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
@@ -496,6 +497,9 @@ form.happening_create.children.liveUrl.label: 'Url de l''iframe pour la diffusio
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
 form.happening_create.children.questionAllowed.label: 'Question des participants'
+form.happening_create.children.sidebarAllowed.answer.false: Non
+form.happening_create.children.sidebarAllowed.answer.true: Oui
+form.happening_create.children.sidebarAllowed.label: 'Activer les options d''interactions'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -517,6 +521,7 @@ form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
+form.happening_update.children.sidebarAllowed.label: 'Activer les options d''interactions'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter

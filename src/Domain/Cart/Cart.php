@@ -178,15 +178,12 @@ class Cart
      */
     public function getParticipantRows(): array
     {
-        return array_filter($this->getRows(), function (CartRow $cartRow) {
+        return array_filter($this->getRows(), static function (CartRow $cartRow) {
             return $cartRow->getProduct()->isParticipant();
         });
     }
 
-    /**
-     * @return null|CartRow
-     */
-    public function getPlanningRow()
+    public function getPlanningRow(): ?CartRow
     {
         foreach ($this->rows as $cartRow) {
             if ($cartRow->getProduct()->isPlanning()) {
@@ -202,7 +199,7 @@ class Cart
      */
     public function getOptionsRow()
     {
-        return $this->rows->filter(function (CartRow $cartRow) {
+        return $this->rows->filter(static function (CartRow $cartRow) {
             return $cartRow->getProduct()->isOption();
         });
     }
@@ -220,9 +217,9 @@ class Cart
      *
      * @return bool
      */
-    public function hasProduct(Product $product)
+    public function hasProduct(Product $product): bool
     {
-        return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
+        return $this->rows->exists(static function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
     }
@@ -232,10 +229,10 @@ class Cart
      *
      * @return bool
      */
-    public function hasPromotionCode(PromotionCode $promotionCode)
+    public function hasPromotionCode(PromotionCode $promotionCode): bool
     {
         return $this->promotionCodeRows->exists(
-            function ($key, PromotionCodeRow $promotionCodeRow) use ($promotionCode) {
+            static function ($key, PromotionCodeRow $promotionCodeRow) use ($promotionCode) {
                 return $promotionCodeRow->getPromotionCode() === $promotionCode;
             });
     }
@@ -245,7 +242,7 @@ class Cart
      *
      * @return CartRow|null
      */
-    public function getCartRowForProduct(Product $product)
+    public function getCartRowForProduct(Product $product): ?CartRow
     {
         foreach ($this->rows as $cartRow) {
             if ($cartRow->getProduct() === $product) {
@@ -263,7 +260,7 @@ class Cart
      */
     public function getRow(Product $product)
     {
-        return $this->rows->filter(function (CartRow $cartRow) use ($product) {
+        return $this->rows->filter(static function (CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         })->first();
     }
@@ -271,7 +268,7 @@ class Cart
     /**
      * @return CartRow[]
      */
-    public function getRows()
+    public function getRows(): array
     {
         return $this->rows->toArray();
     }
@@ -279,7 +276,7 @@ class Cart
     /**
      * @return PromotionCodeRow[]
      */
-    public function getPromotionCodeRows()
+    public function getPromotionCodeRows(): array
     {
         return $this->promotionCodeRows->toArray();
     }
@@ -287,7 +284,7 @@ class Cart
     /**
      * Clear the cart
      */
-    public function clear()
+    public function clear(): void
     {
         $this->rows->clear();
     }
@@ -305,7 +302,7 @@ class Cart
     /**
      * @return null|int
      */
-    public function getCurrentStep()
+    public function getCurrentStep(): ?int
     {
         return $this->currentStep;
     }
@@ -331,7 +328,7 @@ class Cart
 
         return empty($rows) ? 0 : array_reduce(
             $rows,
-            function ($carry, CartRow $row) {
+            static function ($carry, CartRow $row) {
                 return $carry + ($row->getQuantity() * $row->getProduct()->getUnitPrice());
             },
             0

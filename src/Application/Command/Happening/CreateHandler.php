@@ -51,7 +51,9 @@ class CreateHandler
             $create->invitationCode,
             $create->isWebinar(),
             $create->isInteractiveWebinar(),
-            $create->liveUrl
+            $create->isVideoWebinar(),
+            $create->liveUrl,
+            $create->sidebarAllowed
         );
 
         foreach ($create->translations as $locale => $translation) {

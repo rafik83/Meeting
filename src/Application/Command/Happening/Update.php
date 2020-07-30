@@ -27,6 +27,7 @@ class Update extends AbstractHappeningCommand
         $this->limitParticipant = $happening->getLimitParticipant();
         $this->invitationCode = $happening->getInvitationCode();
         $this->liveUrl = $happening->getLiveUrl();
+        $this->sidebarAllowed = $happening->isSidebarAllowed();        
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;
@@ -34,6 +35,10 @@ class Update extends AbstractHappeningCommand
 
         if ($happening->isInteractiveWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR_INTERACTIVE;
+        }
+
+        if ($happening->isVideoWebinar()) {
+            $this->happeningType = self::TYPE_WEBINAR_VIDEO;
         }
 
         foreach ($happening->getEvent()->getLocales() as $locale) {

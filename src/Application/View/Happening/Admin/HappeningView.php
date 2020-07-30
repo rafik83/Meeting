@@ -51,6 +51,9 @@ class HappeningView
     /** @var bool */
     public $isInteractiveWebinar;
 
+    /** @var bool */
+    public $isVideoWebinar;
+
     /**
      * @param int                $id
      * @param string             $title
@@ -63,6 +66,9 @@ class HappeningView
      * @param SpeakerView[]      $speakers
      * @param bool               $isPrivate
      * @param bool               $hasProducts
+     * @param bool               $isWebinar
+     * @param bool               $isInteractiveWebinar
+     * @param bool               $isVideoWebinar
      */
     public function __construct(
         int $id,
@@ -77,7 +83,8 @@ class HappeningView
         bool $isPrivate = false,
         bool $hasProducts = false,
         bool $isWebinar = false,
-        bool $isInteractiveWebinar = false
+        bool $isInteractiveWebinar = false,
+        bool $isVideoWebinar = false
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -92,6 +99,7 @@ class HappeningView
         $this->hasProducts = $hasProducts;
         $this->isWebinar = $isWebinar;
         $this->isInteractiveWebinar = $isInteractiveWebinar;
+        $this->isVideoWebinar = $isVideoWebinar;
     }
 
     /**

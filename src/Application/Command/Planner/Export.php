@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
@@ -57,12 +49,12 @@ class Export
             throw new \InvalidArgumentException('solutionType must be one of ExportSolutionType');
         }
 
-        $this->eventId            = $eventId;
-        $this->locale             = $locale;
-        $this->emailToNotify      = $emailToNotify;
+        $this->eventId = $eventId;
+        $this->locale = $locale;
+        $this->emailToNotify = $emailToNotify;
         $this->lockMeetingRequest = $lockMeetingRequest;
-        $this->solutionType       = $solutionType;
-        $this->isModeAuto         = $isModeAuto;
-        $this->plannerJobId       = $plannerJobId;
+        $this->solutionType = $solutionType;
+        $this->isModeAuto = $isModeAuto;
+        $this->plannerJobId = $plannerJobId;
     }
 }
