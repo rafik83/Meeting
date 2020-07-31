@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2168 - Video object on sheet template
 - Add fly system and google cloud storage adapter
+- VIMEET-2173 - Add option submit validation sheet
+- VIMEET-2170 - Upload Video on sheet
 
 ## [2.41.0] - 2020-07-30
 ### Fixed

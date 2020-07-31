@@ -96,7 +96,7 @@ class SheetController extends Controller
             return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
         }
 
-        if ($sheet->isValidationDraft()) {
+        if ($sheet->isValidationDraft() && $sheet->getType()->canSubmitValidation()) {
             $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
                 new SheetValidationViewQuery(
                     $sheet,
@@ -294,6 +294,10 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        if (!$sheet->getType()->canSubmitValidation()) {
+            throw $this->createAccessDeniedException();
+        }
 
         $submitValidation = new SubmitValidation($sheet, $user);
 

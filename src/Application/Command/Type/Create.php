@@ -92,6 +92,9 @@ class Create implements Command
     /** @var bool */
     public $mustEvaluateMeeting = false;
 
+    /** @var bool */
+    public $canSubmitValidation = true;
+
     public function __construct(Event $event, string $locale)
     {
         $this->event  = $event;
