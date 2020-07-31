@@ -392,13 +392,14 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject[]
      */
-    public function getPreviewAvailableObjects()
+    public function getPreviewAvailableObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\Image
                 || $object instanceof TemplateObject\EditableText
                 || $object instanceof TemplateObject\Participant
                 || $object instanceof TemplateObject\Tag
+                || $object instanceof TemplateObject\Video
             ;
         });
     }

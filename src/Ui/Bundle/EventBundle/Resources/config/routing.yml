@@ -207,7 +207,7 @@ event_sheet_form:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:form }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\FormAction
 
 event_sheet_objects_collection_update:
     path: /sheet/{sheet}/objects-collection/{key}
@@ -233,7 +233,8 @@ event_sheet_update:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:update }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\UpdateAction
+
 
 event_sheet_add_participant:
     path: /sheet/{sheet}/{locale}/{key}/participant/add/form
@@ -286,6 +287,15 @@ event_sheet_remove_image:
         key: \w+
     methods: [DELETE]
     defaults: { _controller: EventBundle:Sheet:removeImage }
+
+event_sheet_remove_video:
+    path: /sheet/{sheet}/{locale}/{key}/video/remove
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\RemoveVideoAction
 
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate

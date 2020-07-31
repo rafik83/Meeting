@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
@@ -16,22 +8,12 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class TemplateObjectViewQueryHandler
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var TemplateProductGuesser
-     */
+    /** @var TemplateProductGuesser */
     private $templateProductGuesser;
 
-    /**
-     * TemplateObjectViewQueryHandler constructor.
-     *
-     * @param TemplateDataFactory    $templateDataFactory
-     * @param TemplateProductGuesser $templateProductGuesser
-     */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         TemplateProductGuesser $templateProductGuesser
@@ -40,15 +22,10 @@ class TemplateObjectViewQueryHandler
         $this->templateProductGuesser = $templateProductGuesser;
     }
 
-    /**
-     * @param TemplateObjectViewQuery $query
-     *
-     * @return TemplateObjectView
-     */
-    public function handle(TemplateObjectViewQuery $query)
+    public function handle(TemplateObjectViewQuery $query): TemplateObjectView
     {
         $templateData = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
-        $object       = $templateData->getObject($query->key);
+        $object = $templateData->getObject($query->key);
 
         $products = $this->templateProductGuesser->getProducts($object, $query->sheet->getPackage());
 

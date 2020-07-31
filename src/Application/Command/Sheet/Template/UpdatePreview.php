@@ -1,38 +1,23 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class UpdatePreview
+class UpdatePreview implements Command
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     public $previewObjects;
 
-    /**
-     * @var TemplateObject[]
-     */
+    /** @var TemplateObject[] */
     public $templateObjects;
 
-    /**
-     * @var SheetTemplate
-     */
+    /** @var SheetTemplate */
     public $sheetTemplate;
 
     /**
-     * UpdatePreview constructor.
-     *
      * @param SheetTemplate    $sheetTemplate
      * @param TemplateObject[] $templateObjects
      */
