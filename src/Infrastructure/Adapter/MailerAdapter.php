@@ -100,7 +100,7 @@ class MailerAdapter implements MailerInterface
         );
     }
 
-    protected function handleResults(array $receivers, array $failedReceivers, string $subject, string $messageId)
+    protected function handleResults(array $receivers, array $failedReceivers, string $subject, ?string $messageId = null)
     {
         $context = ['subject' => $subject, 'messageId' => $messageId];
 

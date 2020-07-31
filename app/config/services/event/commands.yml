@@ -156,5 +156,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.change_mail_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
