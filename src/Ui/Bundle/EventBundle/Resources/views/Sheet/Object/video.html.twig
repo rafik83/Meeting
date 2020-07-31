@@ -1,7 +1,7 @@
 {% if not isCatalog %}
     <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
         {% if item.isVideoAndHasPath %}
-            <video width="380" height="auto" controls controlsList="nodownload">
+            <video width="100%" height="auto" controls controlsList="nodownload">
                 <source src="{{ item.path }}" type="{{ item.mimeType }}">
                 Your browser does not support the video tag.
             </video>
@@ -27,7 +27,7 @@
     {% if item.isVideoAndHasPath %}
         <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
             <div class="video-background">
-                <video width="380" height="auto" controls autoplay muted controlsList="nodownload">
+                <video width="100%" height="auto" controls autoplay muted controlsList="nodownload">
                     <source src="{{ item.path }}" type="{{ item.mimeType }}">
                     Your browser does not support the video tag.
                 </video>

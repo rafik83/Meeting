@@ -62,9 +62,13 @@
   }
 }
 
+.object--video--background {
+  @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+}
 
 .object--video--preview {
   text-align: center;
+  margin: 20px 40px;
 
   .object--video--header {
     padding-bottom: 10px;

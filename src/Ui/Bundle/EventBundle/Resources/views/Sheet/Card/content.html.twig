@@ -9,8 +9,7 @@
         {% endif %}
     {% elseif object.isVideo %}
         {% if object.hasContent %}
-            {# center element here #}
-            <video width="280" height="auto" controls controlsList="nodownload">
+            <video width="100%" height="auto" controls controlsList="nodownload" class="object--video--background">
                 <source src="{{ object.content }}" type="{{ object.fileMimeType }}">
                 Your browser does not support the video tag.
             </video>
