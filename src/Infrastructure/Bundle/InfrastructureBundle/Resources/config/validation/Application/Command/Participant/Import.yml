@@ -5,7 +5,7 @@ Proximum\Vimeet\Application\Command\Participant\Import:
         file:
             - NotBlank: ~
             - File:
-                mimeTypes: ['text/plain', 'text/csv', 'application/csv']
+                mimeTypes: ['text/plain', 'text/csv', 'application/csv', 'text/*']
                 maxSize: 25M
         allowMultiSheet:
             - NotNull: ~

@@ -72,6 +72,10 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        canSubmitValidation:
+            type: boolean
+            options:
+                default: true
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

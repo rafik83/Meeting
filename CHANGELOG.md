@@ -5,12 +5,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2159 - Add option sidebar webinar
+- VIMEET-2173 - Add option submit validation sheet
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 
+## [2.41.0] - 2020-07-30
 ### Fixed
+- Hotfix - allow text/* on csv participant import
+
+## [2.40.0] - 2020-07-30
+### Added
+- VIMEET-2159 - Add option sidebar webinar
+
+### Fixed
+- MV-247 - Do not show back link on registration pages when type is hidden
 - Hotfix - Profile avatar missing styles
 - MV-246 - Order option without group data
+- MV-228 - Fix missing bullet points in registration path forms
+- Add missing translation key for available priority request
 
 ### Updated
 - MV-229 - Show cancel button when webinar has started
