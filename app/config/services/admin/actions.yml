@@ -235,6 +235,33 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
+    # Print Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\BuilderAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.print_template_resolver'
+            - '@templating.engine.twig'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Preview
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Preview\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+
+    #
     # Registration Template
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:

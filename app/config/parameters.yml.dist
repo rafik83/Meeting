@@ -119,6 +119,7 @@ parameters:
     feature_product_vat_enabled: false
     liip_imagine_data_root: "%kernel.project_dir%/web"
 
+    google_cloud_storage_video_uri: 'https://video-cdn.vimeet.events'
     google_cloud_storage_config:
         project_id: ''
         bucket_name: ''

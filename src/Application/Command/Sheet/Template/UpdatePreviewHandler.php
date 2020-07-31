@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
@@ -19,22 +11,12 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class UpdatePreviewHandler
 {
-    /**
-     * @var SheetTemplateRepositoryInterface
-     */
+    /** @var SheetTemplateRepositoryInterface */
     private $sheetTemplateRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * UpdatePreviewHandler constructor.
-     *
-     * @param SheetTemplateRepositoryInterface $sheetTemplateRepository
-     * @param TemplateDataFactory              $templateDataFactory
-     */
     public function __construct(
         SheetTemplateRepositoryInterface $sheetTemplateRepository,
         TemplateDataFactory $templateDataFactory
@@ -48,7 +30,7 @@ class UpdatePreviewHandler
      *
      * @throws TemplateException
      */
-    public function handle(UpdatePreview $updatePreview)
+    public function handle(UpdatePreview $updatePreview): void
     {
         $templateData = $this->templateDataFactory->createFromTemplate($updatePreview->sheetTemplate);
 

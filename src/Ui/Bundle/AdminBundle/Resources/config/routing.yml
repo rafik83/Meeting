@@ -1296,7 +1296,7 @@ admin_template_sheet_add_locale:
         template: \d+
 admin_template_sheet_preview_update:
     path: /template/sheet/{template}/preview
-    defaults: { _controller: AdminBundle:Template\Sheet\Preview:updatePreview }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Preview\UpdateAction
     methods: [GET, POST]
     requirements:
         template: \d+
@@ -1324,14 +1324,14 @@ admin_template_sheet_update:
 
 admin_template_sheet_print_template_builder:
     path: /template/sheet/{template}/print
-    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\BuilderAction
     methods: [GET]
     requirements:
         template: \d+
 
 admin_template_sheet_print_template_save:
     path: /template/sheet/{template}/print/save
-    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\SaveAction
     methods: [POST]
     requirements:
         template: \d+

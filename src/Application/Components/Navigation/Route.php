@@ -28,6 +28,7 @@ final class Route
     ];
 
     public const SHEET_DEFAULT = 'event_sheet_default';
+    public const SHEET_UPDATE = 'event_sheet_update';
 
     public const PARTICIPANT = [
         self::PARTICIPANT_ACCOUNT,

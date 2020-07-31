@@ -541,6 +541,7 @@ sheet.object.option.buyable.label: 'Option payante'
 sheet.object.product.included: Inclus
 sheet.object.showLess.title: 'Voir la suite'
 sheet.object.showMore.title: 'Voir moins'
+sheet.object.video.remove: 'Supprimer cette vidéo'
 sheet.participant.remove: 'Supprimer de la fiche'
 sheet.participant.seeLess.title: 'Voir moins'
 sheet.participant.seeMore.title: 'Voir plus'

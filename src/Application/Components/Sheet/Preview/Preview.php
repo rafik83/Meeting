@@ -139,6 +139,10 @@ class Preview
                 $previewView->canDisplayImage = $templateObject->canDisplayImage();
             }
 
+            if ($templateObject instanceof TemplateObject\Video) {
+                $previewView->fileMimeType = $templateObject->getMimeType();
+            }
+
             return $previewView;
         }
 
