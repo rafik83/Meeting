@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\VideoStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -18,14 +19,19 @@ class VideoStorageAdapter implements VideoStorageInterface
     /** @var UuidGeneratorInterface */
     private $uuidGenerator;
 
+    /** @var FileStorageInterface */
+    private $fileStorage;
+
     public function __construct(
         GoogleCloudStorageAdapter $googleCloudStorageAdapter,
         string $googleCloudStorageUri,
-        UuidGeneratorInterface $uuidGenerator
+        UuidGeneratorInterface $uuidGenerator,
+        FileStorageInterface $fileStorage
     ) {
         $this->googleCloudStorageAdapter = $googleCloudStorageAdapter;
         $this->googleCloudStorageUri = $googleCloudStorageUri;
         $this->uuidGenerator = $uuidGenerator;
+        $this->fileStorage = $fileStorage;
     }
 
     public function upload(Event $event, $file): ?string
@@ -43,7 +49,7 @@ class VideoStorageAdapter implements VideoStorageInterface
         );
 
         $this->googleCloudStorageAdapter->create(
-            file_get_contents($file),
+            $this->fileStorage->getContents($file),
             $relativePath
         );
 

@@ -29,6 +29,11 @@ class Video extends EditableObject implements UploadableObjectInterface
         return $this->data['path'] ?? null;
     }
 
+    public function hasPath(): bool
+    {
+        return !empty($this->getPath());
+    }
+
     public function setPath(string $path): void
     {
         $this->data['path'] = $path;

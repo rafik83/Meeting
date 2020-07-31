@@ -25,7 +25,7 @@ class VideoUploadHandler
             return $object->getDefaultValue();
         }
 
-        if ($object->getPath()) {
+        if ($object->hasPath()) {
             $this->videoStorage->remove($object->getPath());
         }
 
