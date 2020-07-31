@@ -42,7 +42,7 @@ class MeetingTypeViewQueryHandler
         $typeViews = [];
 
         foreach ($visibleTypes as $type) {
-            $typeViews[] = new TypeView($type->getId(), $type->getTitle($query->locale), '');
+            $typeViews[] = new TypeView($type->getId(), $type->getTitle($query->locale), '', $type->isHidden());
         }
 
         return $typeViews;
