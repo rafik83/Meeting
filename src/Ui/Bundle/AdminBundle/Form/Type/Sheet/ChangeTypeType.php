@@ -57,7 +57,7 @@ class ChangeTypeType extends AbstractType
         $builder->get('type')->addModelTransformer(
             new CallbackTransformer(
                 function (Type $type) {
-                    return new TypeView($type->getId(), '', '');
+                    return new TypeView($type->getId(), '', '', $type->isHidden());
                 },
                 function (TypeView $typeview = null) {
                     if (null === $typeview) {

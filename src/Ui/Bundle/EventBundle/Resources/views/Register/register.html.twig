@@ -13,7 +13,9 @@
 
         <div class="main__content">
             {{ form_start(form, {attr: {class: 'styled-form'}}) }}
-            <a href="{{ path('event') }}" class="back"><i class="icon-Retour"></i></a>
+
+            {% if not typeView.hidden %}<a href="{{ path('event') }}" class="back"><i class="icon-Retour"></i></a>{% endif %}
+
             <div class="inputs">
                 <div>
                     <div class="avatar">
