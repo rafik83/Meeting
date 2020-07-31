@@ -807,3 +807,8 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler:
         arguments:
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler:
+        arguments:
+            - '@form.factory'
+            - '@adapter.router'

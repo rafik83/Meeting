@@ -1,1 +1,38 @@
-{# placeholder #}
+{% if not isCatalog %}
+    <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
+        {% if item.isVideoAndHasPath %}
+            <video width="100%" height="auto" controls controlsList="nodownload">
+                <source src="{{ item.path }}" type="{{ item.mimeType }}">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+        <a class="video-background" href="{{ path('event_sheet_form', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" data-toggle="modal" data-target="#edit-modal" title="{{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}">
+            {% if item.isVideoAndHasPath %}
+                <div class="edit-video">
+                    <i class="icon-Video_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}
+                </div>
+            {% else %}
+                <div class="placeholder">
+                    <footer>
+                        <div class="add-video">
+                            <i class="icon-Video_2"></i> {{ item.placeholder(locale, fallback)|default(item.label(locale, fallback)) }}
+                        </div>
+                    </footer>
+
+                </div>
+            {% endif %}
+        </a>
+    </section>
+{% else %}
+    {% if item.isVideoAndHasPath %}
+        <section id="object-{{ uid }}" class="object object--video {{ 'style--' ~ item.style }} section">
+            <div class="video-background">
+                <video width="100%" height="auto" controls autoplay muted controlsList="nodownload">
+                    <source src="{{ item.path }}" type="{{ item.mimeType }}">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+    {% endif %}
+{% endif %}
+
