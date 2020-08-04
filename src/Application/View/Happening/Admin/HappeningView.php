@@ -49,6 +49,9 @@ class HappeningView
     /** @var bool */
     public $isWebinarRecorded;
 
+    /** @var bool */
+    public $isWebinarRecordAvailable;
+
     public function __construct(
         int $id,
         string $title,
@@ -64,7 +67,8 @@ class HappeningView
         bool $isWebinar = false,
         bool $isInteractiveWebinar = false,
         bool $isVideoWebinar = false,
-        bool $isWebinarRecorded = true
+        bool $isWebinarRecorded = true,
+        bool $isWebinarRecordAvailable = false
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -81,6 +85,7 @@ class HappeningView
         $this->isInteractiveWebinar = $isInteractiveWebinar;
         $this->isVideoWebinar = $isVideoWebinar;
         $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->isWebinarRecordAvailable = $isWebinarRecordAvailable;
     }
 
     public function hasLimit(): bool

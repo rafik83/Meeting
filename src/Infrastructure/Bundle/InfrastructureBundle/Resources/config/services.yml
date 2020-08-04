@@ -3061,6 +3061,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@query.happening.admin.speaker_view_query_handler'
+            - '@datetime'
     query.happening.admin.happening_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQueryHandler
         arguments:

@@ -304,9 +304,10 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Visio\UpdateVisioSettingsViewQuery }
 
-    Proximum\Vimeet\Application\Query\Happening\Admin\WebinarDownloadQueryHandler:
+    Proximum\Vimeet\Application\Query\Happening\Admin\DownloadWebinarQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\WebinarDownloadQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\DownloadWebinarQuery }

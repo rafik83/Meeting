@@ -13,5 +13,6 @@ namespace Proximum\Vimeet\Application\Adapter;
 interface ZipRecordArchiveStorageInterface
 {
     public function upload(string $localPath, string $remotePath): void;
-    public function getUrl(string $path): string;
+    public function download(string $remotePath, string $localPath): bool;
+    public function delete(string $remotePath): void;
 }

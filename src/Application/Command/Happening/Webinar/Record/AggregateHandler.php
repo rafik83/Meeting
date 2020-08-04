@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 use Proximum\Vimeet\Application\Adapter\FinderAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
+use Proximum\Vimeet\Domain\File\FileTemporary;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -34,7 +35,7 @@ class AggregateHandler
         $this->finder = $finder;
     }
 
-    public function handle(Aggregate $command): void
+    public function handle(Aggregate $command): FileTemporary
     {
         $recordArchives = $this->recordArchiveRepository->getRecordArchivesForHappening($command->happening);
 
@@ -48,7 +49,6 @@ class AggregateHandler
 
             foreach ($recordArchives as $recordArchive) {
                 $tempFilePath = sprintf('%s/webinar-%d-part%d.mp4', $tempDir, $command->happening->getId(), $index);
-                dump($recordArchive->getPath().'::'.$tempFilePath);
                 if ($recordArchive->getPath()) {
                     // todo do copy in an adapter
                     copy($recordArchive->getPath(), $tempFilePath);
@@ -61,17 +61,16 @@ class AggregateHandler
                 throw new \RuntimeException('No archive found for webinar');
             }
 
-            $zipFilePath = sprintf('%s/webinar-%d.zip', sys_get_temp_dir(), $command->happening->getId());
-            $this->zipArchiveAdapter->zipFiles($files, $zipFilePath, $tempDir);
+            $fileName = sprintf('webinar-%d.zip', $command->happening->getId());
+            $zipFilePath = sprintf('%s/%s', sys_get_temp_dir(), $fileName);
+            $this->zipArchiveAdapter->zipFiles($files, $zipFilePath, '');
 
-            $zipFile = new \SplFileInfo($zipFilePath);
-            dump($zipFile);
+            $this->zipRecordArchiveStorage->upload($zipFilePath, 'multiple-archives/' . $fileName);
 
-            $this->zipRecordArchiveStorage->upload($zipFile, 'multiple-archives/' . $zipFile->getFilename());
-
-            unlink($zipFile->getRealPath());
             $filesystem = new Filesystem();
             $filesystem->remove($tempDir);
+
+            return new FileTemporary($zipFilePath, $fileName);
         }
     }
 }

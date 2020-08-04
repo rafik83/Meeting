@@ -109,7 +109,7 @@
                         </a>
                     {% endset %}
 
-                    {% if happening.isWebinarRecorded %}
+                    {% if happening.isWebinarRecordAvailable %}
                     <div class="dropdown btn-group pull-right" data-toggle="tooltip" data-placement="top">
                         {{ updateBtn }}
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -119,8 +119,7 @@
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="{{ path('admin_happening_download', { 'event': event.id, 'happening': happening.id }) }}">
-                                    {# todo change translation key #}
-                                    {{ 'download'|trans }}
+                                    {{ 'admin.happening.download'|trans }}
                                 </a>
                             </li>
                         </ul>

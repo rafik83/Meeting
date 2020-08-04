@@ -100,6 +100,33 @@ class GoogleCloudStorageAdapter
         $flySystem->writeStream($remotePath, fopen($localFile, 'r'));
     }
 
+    public function download(string $remotePath, $localPath): bool
+    {
+        $flySystem = $this->init();
+
+        if (!$flySystem->has($remotePath)) {
+            return false;
+        }
+
+        $remoteStream = $flySystem->readStream($remotePath);
+        if (!$remoteStream) {
+            return false;
+        }
+
+        $fh = fopen($localPath, 'w');
+        $result = (bool) stream_copy_to_stream($remoteStream, $fh);
+        fclose($fh);
+
+        return $result;
+    }
+
+    public function has(string $remotePath): bool
+    {
+        $flySystem = $this->init();
+
+        return $flySystem->has($remotePath);
+    }
+
     public function delete(string $path): void
     {
         $flySystem = $this->init();

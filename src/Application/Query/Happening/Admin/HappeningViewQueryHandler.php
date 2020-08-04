@@ -13,12 +13,17 @@ class HappeningViewQueryHandler
     /** @var SpeakerViewQueryHandler */
     private $speakerViewQueryHandler;
 
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         HappeningParticipationRepositoryInterface $participationRepository,
-        SpeakerViewQueryHandler $speakerViewQueryHandler
+        SpeakerViewQueryHandler $speakerViewQueryHandler,
+        \DateTimeInterface $datetime
     ) {
         $this->participationRepository = $participationRepository;
         $this->speakerViewQueryHandler = $speakerViewQueryHandler;
+        $this->datetime = $datetime;
     }
 
     public function handle(HappeningViewQuery $query): HappeningView
@@ -47,7 +52,8 @@ class HappeningViewQueryHandler
             $query->happening->isWebinar(),
             $query->happening->isInteractiveWebinar(),
             $query->happening->isVideoWebinar(),
-            $query->happening->isWebinarRecorded()
+            $query->happening->isWebinarRecorded(),
+            $query->happening->isWebinarRecorded() && $query->happening->getEnd() < $this->datetime
         );
     }
 }

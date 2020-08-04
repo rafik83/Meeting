@@ -2,11 +2,13 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
+use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
+use Proximum\Vimeet\Domain\File\FileTemporary;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
-class WebinarDownloadQueryHandler
+class DownloadWebinarQueryHandler
 {
     /** @var RecordArchiveRepositoryInterface */
     public $recordArchiveRepository;
@@ -14,15 +16,21 @@ class WebinarDownloadQueryHandler
     /** @var ZipRecordArchiveStorageInterface */
     public $zipRecordArchiveStorage;
 
+    /** @var UuidGeneratorInterface */
+    private $uuidGenerator;
+
     public function __construct(
         RecordArchiveRepositoryInterface $recordArchiveRepository,
-        ZipRecordArchiveStorageInterface $zipRecordArchiveStorage
+        ZipRecordArchiveStorageInterface $zipRecordArchiveStorage,
+        UuidGeneratorInterface $uuidGenerator
     ) {
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
+        $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
+        $this->uuidGenerator = $uuidGenerator;
     }
 
-    public function handle(WebinarDownloadQuery $query): ?string
+    public function handle(DownloadWebinarQuery $query): ?FileTemporary
     {
         if (!$query->happening->isWebinarRecorded()) {
             throw new \RuntimeException('This webinar has not the recorded option');
@@ -35,9 +43,21 @@ class WebinarDownloadQueryHandler
             return $recordedArchives[0]->getPath();
         }
 
-        // $tempFilePath = sprintf('%s/webinar-%d.zip', sys_get_temp_dir(), $query->happening->getId());
-        $url = $this->zipRecordArchiveStorage->getUrl(sprintf('multiple-archives/webinar-%d.zip', $query->happening->getId());
+        $fileName = sprintf('webinar-%d.zip', $query->happening->getId());
+        $remotePath = sprintf('multiple-archives/%s', $fileName);
 
-        return $url;
+        if ($query->regenerate) {
+            $this->zipRecordArchiveStorage->delete($remotePath);
+
+            return null;
+        }
+
+        $fileTemporary = new FileTemporary(sprintf('%s/%s', sys_get_temp_dir(), $this->uuidGenerator->generate()), $fileName);
+
+        if (!$this->zipRecordArchiveStorage->download($remotePath, $fileTemporary->getTempFilePath())) {
+            return null;
+        }
+
+        return $fileTemporary;
     }
 }

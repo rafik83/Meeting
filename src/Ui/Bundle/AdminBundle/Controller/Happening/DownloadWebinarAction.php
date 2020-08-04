@@ -7,16 +7,17 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate;
-use Proximum\Vimeet\Application\Query\Happening\Admin\WebinarDownloadQuery;
+use Proximum\Vimeet\Application\Query\Happening\Admin\DownloadWebinarQuery;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\File\FileTemporary;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-class WebinarDownloadAction
+class DownloadWebinarAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -38,9 +39,9 @@ class WebinarDownloadAction
     }
 
     public function __invoke(
+        Request $request,
         Event $event,
-        Happening $happening,
-        AdminDomain $adminDomain
+        Happening $happening
     ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $event !== $happening->getEvent()
@@ -48,18 +49,21 @@ class WebinarDownloadAction
             throw new AccessDeniedException('Access Denied!');
         }
 
-        // launch reconciliate, to be sure all urls are up to date
-        $this->commandBus->handle(new Reconciliate($happening));
+        // get file from remote storage, if already generated
+        $downloadWebinar = new DownloadWebinarQuery($happening, $request->query->get('reset') === '1');
+        /** @var FileTemporary|null */
+        $recordedArchive = $this->queryBus->handle($downloadWebinar);
 
-        // aggregate files in a zip if webinar has been recorded in multiple archives
-        $this->commandBus->handle(new Aggregate($happening));
+        if (null === $recordedArchive) {
+            // launch reconciliate, to be sure all urls are up to date
+            $this->commandBus->handle(new Reconciliate($happening));
+            // aggregate files in a zip if webinar has been recorded in multiple archives
+            $recordedArchive = $this->commandBus->handle(new Aggregate($happening));
+        }
 
-        $recordedArchivePath = $this->queryBus->handle(new WebinarDownloadQuery($happening));
-
-        $recordedArchiveFile = new \SplFileInfo($recordedArchivePath);
-
-        $response = new BinaryFileResponse($recordedArchiveFile->getRealPath());
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $recordedArchiveFile->getFilename());
+        $response = new BinaryFileResponse($recordedArchive->getTempFilePath());
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $recordedArchive->getOriginalName());
+        $response->deleteFileAfterSend(true);
 
         return $response;
     }
