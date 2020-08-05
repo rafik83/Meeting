@@ -11,27 +11,30 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class FileSystemAdapter implements FileSystemAdapterInterface
 {
-    /**
-     * @var Filesystem
-     */
+    /** @var Filesystem */
     public $fileSystem;
+
+    /** @var UuidGeneratorInterface */
+    public $uuidGenerator;
 
     /**
      * @param Filesystem $fileSystem
      */
-    public function __construct(Filesystem $fileSystem)
+    public function __construct(Filesystem $fileSystem, UuidGeneratorInterface $uuidGenerator)
     {
         $this->fileSystem = $fileSystem;
+        $this->uuidGenerator = $uuidGenerator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function dumpFile($filename, $content)
+    public function dumpFile(string $filename, string $content)
     {
         $this->fileSystem->dumpFile($filename, $content);
     }
@@ -74,5 +77,27 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void
     {
         $this->fileSystem->copy($originFile, $targetFile, $overwriteNewerFiles);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createTempDir(): string
+    {
+        $path = $this->getTemporaryPath();
+        $this->mkdir($path);
+
+        return $path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemporaryPath(): string
+    {
+        $tempDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'vimeet';
+        $this->mkdir($tempDir, 0600);
+
+        return $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
     }
 }

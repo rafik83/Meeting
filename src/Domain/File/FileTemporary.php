@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Domain\File;
 
 class FileTemporary
 {
-    /** @var string */
+    /** @var string can be a path to a local file or any path that can be copied with copy function (like http/https url) */
     private $tempFilePath;
 
     /** @var string */

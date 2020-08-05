@@ -308,6 +308,6 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
+            - '@adapter.file_system_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\DownloadWebinarQuery }

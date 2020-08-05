@@ -195,6 +195,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
+            - '@adapter.file_system_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate }
 

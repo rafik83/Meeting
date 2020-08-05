@@ -2632,6 +2632,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
         arguments:
             - '@filesystem'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
 
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer

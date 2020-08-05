@@ -97,7 +97,10 @@ class GoogleCloudStorageAdapter
     {
         $flySystem = $this->init();
 
-        $flySystem->writeStream($remotePath, fopen($localFile, 'r'));
+        $fh = fopen($localFile, 'r');
+        if (!$flySystem->writeStream($remotePath, $fh)) {
+            throw new \RunTimeException(sprintf('File [%s] upload error', $remotePath));
+        }
     }
 
     public function download(string $remotePath, $localPath): bool

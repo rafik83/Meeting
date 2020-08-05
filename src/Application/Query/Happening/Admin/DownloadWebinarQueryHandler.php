@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
-use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\File\FileTemporary;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
@@ -16,18 +16,17 @@ class DownloadWebinarQueryHandler
     /** @var ZipRecordArchiveStorageInterface */
     public $zipRecordArchiveStorage;
 
-    /** @var UuidGeneratorInterface */
-    private $uuidGenerator;
+    /** @var FileSystemAdapterInterface */
+    private $fileSystem;
 
     public function __construct(
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         ZipRecordArchiveStorageInterface $zipRecordArchiveStorage,
-        UuidGeneratorInterface $uuidGenerator
+        FileSystemAdapterInterface $fileSystem
     ) {
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
-        $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
-        $this->uuidGenerator = $uuidGenerator;
+        $this->fileSystem = $fileSystem;
     }
 
     public function handle(DownloadWebinarQuery $query): ?FileTemporary
@@ -40,7 +39,8 @@ class DownloadWebinarQueryHandler
         $recordedArchives = $this->recordArchiveRepository->getRecordArchivesForHappening($query->happening);
 
         if (count($recordedArchives) === 1) {
-            return $recordedArchives[0]->getPath();
+            $fileName = sprintf('webinar-%d.mp4', $query->happening->getId());
+            return new FileTemporary($recordedArchives[0]->getPath(), $fileName);
         }
 
         $fileName = sprintf('webinar-%d.zip', $query->happening->getId());
@@ -52,7 +52,7 @@ class DownloadWebinarQueryHandler
             return null;
         }
 
-        $fileTemporary = new FileTemporary(sprintf('%s/%s', sys_get_temp_dir(), $this->uuidGenerator->generate()), $fileName);
+        $fileTemporary = new FileTemporary($this->fileSystem->getTemporaryPath(), $fileName);
 
         if (!$this->zipRecordArchiveStorage->download($remotePath, $fileTemporary->getTempFilePath())) {
             return null;
