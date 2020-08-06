@@ -36,9 +36,15 @@ class AddRowToGroupHandler
 
     /**
      * @param AddRowToGroup $addRow
+     * @throws \InvalidArgumentException
      */
     public function handle(AddRowToGroup $addRow): void
     {
+        // check that provided groupId is valid for order
+        if (!isset($addRow->order->getGroups()[$addRow->groupId])) {
+            throw new \InvalidArgumentException(sprintf('Group %d is not valid for order %d', $addRow->groupId, $addRow->order->getId()));
+        }
+
         $customRow = Row::createCustomRowToGroup(
             $addRow->order,
             $addRow->quantity,

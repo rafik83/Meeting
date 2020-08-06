@@ -33,11 +33,13 @@ class AddRowToGroupHandlerTest extends TestCase
             100,
             20
         );
+        $order->getGroups()->willReturn([5 => 'foo']);
         $order->getVatRate()->willReturn(20);
         $order->addCustomRow($row)->shouldBeCalled();
         $orderRepository->set($order->reveal())->shouldBeCalled();
 
         $add = new AddRowToGroup($order->reveal(), 5);
+        $add->groupId = 5;
         $add->price = 100;
         $add->label = 'toto';
         $add->quantity = 2;
