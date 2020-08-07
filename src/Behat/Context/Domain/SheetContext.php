@@ -111,7 +111,7 @@ class SheetContext implements Context
             throw new \LogicException('Missing Type');
         }
 
-        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, $type, $title);
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, $this->sheetContextProxy->getStorage()->get('user'), $type, $title);
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 

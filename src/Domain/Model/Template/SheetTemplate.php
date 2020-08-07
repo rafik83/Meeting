@@ -1,70 +1,37 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Template;
 
-use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetTemplate extends AbstractTemplate
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $preview;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $printValue;
 
-    /**
-     * SheetTemplate constructor.
-     *
-     * @param string            $title
-     * @param array             $value
-     * @param array             $locales
-     * @param string            $fallback
-     * @param DateTimeInterface $createdAt
-     * @param array             $preview
-     * @param Event|null        $event
-     */
     public function __construct(
-        $title,
+        string $title,
         array $value,
         array $locales,
-        $fallback,
+        string $fallback,
         \DateTimeInterface $createdAt,
         array $preview = [],
-        Event $event = null
+        ?Event $event = null
     ) {
         parent::__construct($title, $value, $locales, $fallback, $createdAt, $event);
 
         $this->preview = $preview;
     }
 
-    /**
-     * @return string
-     */
-    public function getFallback()
+    public function getFallback(): string
     {
-        return $this->event ? $this->event->getFallback() : $this->fallback;
+        return $this->event ? $this->event->getLocaleFallback() : $this->fallback;
     }
 
-    /**
-     * @param string $title
-     * @param string $fallback
-     *
-     * @return SheetTemplate
-     */
-    public function update($title, $fallback)
+    public function update(string $title, string $fallback): self
     {
         if (!$this->hasLocale($fallback)) {
             throw new \InvalidArgumentException('Default locale should be in the template locales.');
@@ -76,32 +43,19 @@ class SheetTemplate extends AbstractTemplate
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getPreview()
+    public function getPreview(): array
     {
         return $this->preview;
     }
 
-    /**
-     * @param array $preview
-     *
-     * @return SheetTemplate
-     */
-    public function setPreview($preview)
+    public function setPreview(array $preview): self
     {
         $this->preview = $preview;
 
         return $this;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getAvailableLocale($locale)
+    public function getAvailableLocale(string $locale): string
     {
         if (in_array($locale, $this->getLocales())) {
             return $locale;
@@ -110,17 +64,11 @@ class SheetTemplate extends AbstractTemplate
         return $this->getFallback();
     }
 
-    /**
-     * @return array
-     */
     public function getPrintValue(): array
     {
         return $this->printValue;
     }
 
-    /**
-     * @param array $printValue
-     */
     public function setPrintValue(array $printValue)
     {
         $this->printValue = $printValue;

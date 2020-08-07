@@ -88,4 +88,38 @@ class ParticipantContext implements Context
 
         $this->participantContextProxy->getStorage()->set('participant', $participant);
     }
+
+    /**
+     * @Given this participant is registered
+     */
+    public function thisParticipantIsRegistered()
+    {
+        $participant = $this->participantContextProxy->getStorage()->get('participant');
+        $user = $this->participantContextProxy->getStorage()->get('user');
+
+        if (null === $participant) {
+            throw new \InvalidArgumentException('Missing Participant');
+        }
+        if (null === $user) {
+            throw new \InvalidArgumentException('Missing User');
+        }
+
+        $this->participantContextProxy->getParticipantManager()->register($participant, $user->getFirstName(), $user->getLastName());
+    }
+
+    /**
+     * @Given this participant has visio option activated
+     */
+    public function thisSheetHasVisioOptionActivated()
+    {
+        $participant = $this->participantContextProxy->getStorage()->get('participant');
+        $user = $this->participantContextProxy->getStorage()->get('user');
+
+        if (null === $participant) {
+            throw new \InvalidArgumentException('Missing Participant');
+        }
+        $this->participantContextProxy->getParticipantManager()->setVisioEnabled($participant);
+    }
+
+
 }

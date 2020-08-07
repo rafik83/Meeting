@@ -4,18 +4,29 @@ Feature:
 
   Scenario: I can see a list of users
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | Admin.yml                                                                |
-    And I am logged with "test@test.com" on admin
+    And the event "ASD Days" is created
+    And the user "user_asddays_1@proximum.com" is created
+    And this user is called "John" "Doe"
+    And there is a type "Fournisseur" in this event
+    And this user is declared in this event
+    And there is a sheet for this type with the title "Aanera"
+    And there is a participant for this sheet and this user
+    And the user "user_asddays_2@proximum.com" is created
+    And this user is declared in this event
+    And there is a sheet for this type with the title "Hello World Company"
+    And there is a participant for this sheet and this user
+    And the user "user_asddays_3@proximum.com" is created
+    And this user is a woman
+    And this user is called "Julie" "Martin"
+    And this user position is "Community Manager"
+    And there is a type "Investisseur" in this event
+    And this user is declared in this event
+    And there is a sheet for this type with the title "World Company Inc"
+    And there is a participant for this sheet and this user
+    And there is a type "Donneur d'ordre" in this event
+    And the user "user_asddays_4@proximum.com" is created
+    And this user is declared in this event
+    And I am logged as admin
     And I am on this page "/fr/event"
     When I go to this page "/fr/event/1/users"
     Then I should see "user_asddays_1@proximum.com"
@@ -23,7 +34,7 @@ Feature:
     And I should see "user_asddays_3@proximum.com"
 
   Scenario: I can filter users by sheet type
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event"
     And I go to this page "/fr/event/1/users"
     And I should see "user_asddays_1@proximum.com"
@@ -44,7 +55,7 @@ Feature:
     Then I should see "admin.zero-result"
 
   Scenario: I can filter users by type and participation
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event"
     And I go to this page "/fr/event/1/users"
     And I should see "user_asddays_1@proximum.com"
@@ -61,7 +72,7 @@ Feature:
     Then I should see "admin.zero-result"
 
   Scenario: I can filter users by participation with sheet or without sheet
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event"
     And I go to this page "/fr/event/1/users"
     When I follow "admin.users.withSheet"
@@ -78,7 +89,7 @@ Feature:
     And I should not see "user_asddays_3@proximum.com"
 
   Scenario: I can search user by name or email
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event"
     When I go to this page "/fr/event/1/users?text=john&participation=withSheet"
     Then I should see "user_asddays_1@proximum.com"
@@ -92,7 +103,7 @@ Feature:
     And I should not see "user_asddays_4@proximum.com"
 
   Scenario: I can see details information from an user
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event"
     And I go to this page "/fr/event/1/users"
     And I follow "Investisseur"

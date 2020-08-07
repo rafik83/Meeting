@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,12 +19,7 @@ class RegistrationTemplateManager
         $this->registrationTemplateRepository = $registrationTemplateRepository;
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return RegistrationTemplate
-     */
-    public function create(Event $event)
+    public function create(?Event $event): RegistrationTemplate
     {
         $registrationTemplate = new RegistrationTemplate(
             'RegistrationTemplate',
@@ -79,12 +66,39 @@ class RegistrationTemplateManager
                                     'tags'=> ['participant_lastname', 'participant_data'],
                                 ],
                             ],
+                            'adc97e8d' => [
+                                'component' => 'object',
+                                'type' => 'nomenclature',
+                                'config' => [
+                                    'label' => ['fr' => 'Chiffre d\'affaires'],
+                                    'placeholder' => ['fr' => 'Votre Chiffre d\'affaires'],
+                                    'help' => ['fr' => 'Ici le Chiffre d\'affaires'],
+                                    'mode' => 'singles',
+                                    'nomenclature' => 1,
+                                    'tags'=> ['sheet_organization_turnover', 'sheet_data'],
+                                ],
+                            ],
+                            '3ad4b72f' => [
+                                'component' => 'object',
+                                'type' => 'editable-text',
+                                'config' => [
+                                    'type' => 'text',
+                                    'label' => ['fr' => 'Nom (Société / Organisme)'],
+                                    'placeholder' => ['fr' => 'Nom (Société / Organisme)'],
+                                    'help' => ['fr' => ''],
+                                    'length' => 250,
+                                    'required' => true,
+                                    'translatable' => false,
+                                    'tags'=> ['sheet_organization', 'sheet_title', 'sheet_data'],
+                                ],
+                            ],
+
                         ],
                     ],
                 ],
             ],
-            $event->getLocales(),
-            $event->getLocaleFallback(),
+            $event ? $event->getLocales() : ['fr'],
+            $event? $event->getLocaleFallback() : 'fr',
             new \DateTime(),
             $event
         );
