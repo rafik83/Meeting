@@ -92,8 +92,8 @@ class Happening implements TimeRangeInterface
         bool $interactiveWebinar = false,
         bool $videoWebinar = false,
         ?string $liveUrl = null,
-        bool $webinarRecorded = true,
-        bool $sidebarAllowed = true
+        bool $sidebarAllowed = true,
+        bool $webinarRecorded = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -114,6 +114,7 @@ class Happening implements TimeRangeInterface
         $this->liveUrl = $liveUrl;
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->webinarRecorded = $webinarRecorded;
     }
 
     public function getId(): ?int
@@ -211,8 +212,8 @@ class Happening implements TimeRangeInterface
         bool $videoWebinar,
         ?string $invitationCode = null,
         ?string $liveUrl = null,
-        bool $webinarRecorded = true,
-        bool $sidebarAllowed
+        bool $sidebarAllowed,
+        bool $webinarRecorded = true
     ): void {
         $this->begin = $begin;
         $this->end = $end;

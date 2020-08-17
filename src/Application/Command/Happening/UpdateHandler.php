@@ -59,8 +59,8 @@ class UpdateHandler
             $update->isVideoWebinar(),
             $update->invitationCode,
             $update->liveUrl,
-            $update->isWebinar() && $update->webinarRecorded,
-            $update->sidebarAllowed
+            $update->sidebarAllowed,
+            $update->isWebinar() && $update->webinarRecorded
         );
 
         foreach ($update->translations as $locale => $translation) {

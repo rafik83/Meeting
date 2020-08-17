@@ -1078,7 +1078,7 @@ admin_happening_download:
         event: \d+
         happening: \d+
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\DownloadWebinarAction }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\DownloadWebinarAction
 
 #
 # Happening Category

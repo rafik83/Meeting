@@ -107,8 +107,7 @@ abstract class HappeningType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
-            ])            
-            
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($options) {

@@ -161,6 +161,16 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
 
     #
+    # Sheet object
+    #
+    Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideoHandler:
+        arguments:
+            - '@command.sheet.remove_data_handler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
+
+    #
     # Webinar
     #
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
@@ -189,16 +199,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
 
-    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\AggregateHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipArchiveAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter'
-            - '@adapter.file_system_adapter'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate }
-
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter'
@@ -212,13 +212,3 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }
-
-    #
-    # Sheet object
-    #
-    Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideoHandler:
-        arguments:
-            - '@command.sheet.remove_data_handler'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
