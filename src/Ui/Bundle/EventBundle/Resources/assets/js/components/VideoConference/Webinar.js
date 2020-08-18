@@ -144,6 +144,8 @@ function Webinar(element, isSpeaker) {
     this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
     this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
     this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
+    this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
+    this.invisibleModeenableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
 
     this.endSharingButton = element.querySelector('#media-stop-sharing');
     this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
@@ -963,7 +965,7 @@ Webinar.prototype.toggleSideBar = function () {
 
 Webinar.prototype.handleInvisibleMode = function () {
     if (this.invisibleMode) {
-        if (!window.confirm('Quit invisible mode and activate your audio and camera?')) {
+        if (!window.confirm(this.invisibleModeQuitConfirmationMessage)) {
             return;
         }
 
@@ -977,7 +979,7 @@ Webinar.prototype.handleInvisibleMode = function () {
         return;
     }
 
-    if (!window.confirm('Enable invisible mode?')) {
+    if (!window.confirm(this.invisibleModeenableConfirmationMessage)) {
         return;
     }
 

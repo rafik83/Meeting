@@ -19,6 +19,8 @@
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
+         data-invisibleMode-quitConfirmation-message="{{ 'happening.webinar.invisibleMode.quitConfirmation'|trans }}"
+         data-invisibleMode-enableConfirmation-message="{{ 'happening.webinar.invisibleMode.enableConfirmation'|trans }}"
          data-media-share-url-video-message="{{ 'meeting.video.media.share.urlVideo'|trans }}"
          data-media-share-url-video-security-error-message="{{ 'meeting.video.media.share.urlVideo.securityError'|trans }}"
          data-media-share-url-video-loading-error-message="{{ 'meeting.video.media.share.urlVideo.loadingError'|trans }}"
@@ -72,7 +74,7 @@
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
             </button>
 
-            <button id="invisible-mode-button" class="btn btn-off hide">
+            <button id="invisible-mode-button" class="btn btn-off hide" title="{{ 'happening.webinar.invisibleMode.button'|trans }}">
                 <i class="glyphicon glyphicon-ban-circle icon-center"></i>
             </button>
 
