@@ -145,7 +145,7 @@ function Webinar(element, isSpeaker) {
     this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
     this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
     this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
-    this.invisibleModeenableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
+    this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
 
     this.endSharingButton = element.querySelector('#media-stop-sharing');
     this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
@@ -979,7 +979,7 @@ Webinar.prototype.handleInvisibleMode = function () {
         return;
     }
 
-    if (!window.confirm(this.invisibleModeenableConfirmationMessage)) {
+    if (!window.confirm(this.invisibleModeEnableConfirmationMessage)) {
         return;
     }
 
