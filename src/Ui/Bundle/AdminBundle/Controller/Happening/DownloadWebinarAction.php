@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use function foo\func;
 
 class DownloadWebinarAction
 {
@@ -78,13 +80,6 @@ class DownloadWebinarAction
             );
         }
 
-        $response = new BinaryFileResponse($happening->getWebinarRecordZipFileUrl());
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $happening->getTitle($event->getLocaleFallback()) . '.zip'
-        );
-        $response->deleteFileAfterSend(true);
-
-        return $response;
+        return new RedirectResponse($happening->getWebinarRecordZipFileUrl());
     }
 }

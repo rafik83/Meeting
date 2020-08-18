@@ -34,6 +34,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\She
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ZipRecordArchiveCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand;
@@ -528,7 +529,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         string $locale
     ): void {
         $job = new Job(
-            ScheduleUpdateTranslationsCommand::NAME,
+            ZipRecordArchiveCommand::NAME,
             [
                 $happening->getId(),
                 $admin->getId(),

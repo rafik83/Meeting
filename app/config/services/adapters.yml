@@ -47,3 +47,5 @@ services:
     Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
+            - '%google_cloud_storage_video_uri%'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'

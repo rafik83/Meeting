@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class ZipRecordArchiveHandler
 {
@@ -22,16 +23,21 @@ class ZipRecordArchiveHandler
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         ZipRecordArchiveStorageInterface $zipRecordArchiveStorage,
         FileSystemAdapterInterface $fileSystem,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
-        HappeningRepositoryInterface $happeningRepository
+        HappeningRepositoryInterface $happeningRepository,
+        LoggerInterface $logger
     ) {
         $this->zipRecordArchiveStorage = $zipRecordArchiveStorage;
         $this->fileSystem = $fileSystem;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->happeningRepository = $happeningRepository;
+        $this->logger = $logger;
     }
 
     public function handle(ZipRecordArchive $command): void
@@ -75,6 +81,7 @@ class ZipRecordArchiveHandler
             $this->fileSystem->getTemporaryPath(),
             $fileName
         );
+
         $this->zipRecordArchiveStorage->prepareZip(
             $files,
             $zipFileName
@@ -84,6 +91,10 @@ class ZipRecordArchiveHandler
             $zipFileName,
             $happening->getEvent(),
             $remotePath
+        );
+
+        $this->logger->notice(
+            sprintf('VIMEET : Zip record archive of happening webinar %d is uploaded on %s', $happening->getId(), $remoteUrl)
         );
 
         $this->fileSystem->remove($zipFileName);

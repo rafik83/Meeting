@@ -225,5 +225,6 @@ services:
             - '@adapter.file_system_adapter'
             - '@adapter.video_conference_adapter'
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive }

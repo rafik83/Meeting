@@ -98,6 +98,9 @@ class FileSystemAdapter implements FileSystemAdapterInterface
         $tempDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'vimeet';
         $this->mkdir($tempDir, 0600);
 
-        return $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
+        $dir = $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
+        $this->mkdir($dir, 0600);
+
+        return $dir;
     }
 }

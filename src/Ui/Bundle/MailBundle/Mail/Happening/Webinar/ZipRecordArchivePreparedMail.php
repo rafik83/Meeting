@@ -9,8 +9,8 @@ use Proximum\Vimeet\Domain\Model\Happening;
 
 class ZipRecordArchivePreparedMail extends AbstractMail
 {
-    public const SUBJECT = 'mail.happening.participation.subject';
-    public const TEMPLATE = 'MailBundle:Mail:Happening/participation.html.twig';
+    public const SUBJECT = 'mail.happening.webinar.zip_record_archive_prepared.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Happening/zip_record_archive_prepared.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;
@@ -38,5 +38,10 @@ class ZipRecordArchivePreparedMail extends AbstractMail
 
         $this->event = $event;
         $this->happening = $happening;
+    }
+
+    public function getWebinarRecordZipFileUrl(): ?string
+    {
+        return $this->happening->getWebinarRecordZipFileUrl();
     }
 }
