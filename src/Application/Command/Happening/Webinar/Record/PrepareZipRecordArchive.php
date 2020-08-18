@@ -17,13 +17,18 @@ class PrepareZipRecordArchive implements Command
     /** @var string|null */
     public $locale;
 
+    /** @var bool */
+    public $forceRegeneration;
+
     public function __construct(
         Happening $happening,
+        bool $forceRegeneration = false,
         ?Admin $admin = null,
         ?string $locale = null
     ) {
         $this->happening = $happening;
         $this->admin = $admin;
         $this->locale = $locale;
+        $this->forceRegeneration = $forceRegeneration;
     }
 }

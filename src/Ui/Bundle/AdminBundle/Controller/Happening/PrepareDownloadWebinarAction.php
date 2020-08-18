@@ -11,16 +11,12 @@ use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use function foo\func;
 
-class DownloadWebinarAction
+class PrepareDownloadWebinarAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -68,6 +64,7 @@ class DownloadWebinarAction
             $this->commandBus->handle(
                 new PrepareZipRecordArchive(
                     $happening,
+                    false,
                     $admin,
                     $request->getLocale()
                 )

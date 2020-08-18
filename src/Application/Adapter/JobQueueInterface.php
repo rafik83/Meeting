@@ -226,6 +226,7 @@ interface JobQueueInterface
 
     public function zipRecordArchive(
         Happening $happening,
+        bool $forceRegeneration = false,
         ?Admin $admin = null,
         ?string $locale = null
     ): void;

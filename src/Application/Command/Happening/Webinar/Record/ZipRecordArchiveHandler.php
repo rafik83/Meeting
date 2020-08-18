@@ -54,6 +54,11 @@ class ZipRecordArchiveHandler
 
         if ($command->regenerate && $happening->hasWebinarRecordZipFileUrl()) {
             $this->zipRecordArchiveStorage->delete($happening->getWebinarRecordZipFileUrl());
+            $happening->addWebinarRecordZipFileUrl(null);
+        }
+
+        if ($happening->hasWebinarRecordZipFileUrl()) {
+            return;
         }
 
         $archiveList = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());

@@ -50,6 +50,7 @@ class ZipRecordArchiveCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Zip the record archives of the happening webinar and upload the zip')
             ->addArgument('happening', InputArgument::REQUIRED, 'The happening to handle')
+            ->addArgument('force-regeneration', InputArgument::REQUIRED, 'Force the regeneration of the zip')
             ->addArgument('admin', InputArgument::OPTIONAL, 'The admin to notify')
             ->addArgument('locale', InputArgument::OPTIONAL, 'The locale to use to notify')
         ;
@@ -62,6 +63,7 @@ class ZipRecordArchiveCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $happening = $this->happeningRepository->getById($input->getArgument('happening'));
+        $force = $input->getArgument('force-regeneration') === 'force';
         $admin = $this->adminRepository->findById($input->getArgument('admin'));
         $locale = $input->getArgument('locale');
 
@@ -70,7 +72,8 @@ class ZipRecordArchiveCommand extends Command
         }
 
         $this->commandBus->handle(new ZipRecordArchive(
-            $happening
+            $happening,
+            $force
         ));
 
         if (null !== $admin) {

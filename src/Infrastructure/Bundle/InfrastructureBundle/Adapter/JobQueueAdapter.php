@@ -517,11 +517,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
     public function zipRecordArchive(
         Happening $happening,
+        bool $forceRegeneration = false,
         ?Admin $admin = null,
         ?string $locale = null
     ): void {
         $arguments = [
             $happening->getId(),
+            $forceRegeneration ? 'force' : 'no-force'
         ];
 
         if ($admin instanceof Admin) {

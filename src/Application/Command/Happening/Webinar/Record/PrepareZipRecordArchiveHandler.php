@@ -19,6 +19,7 @@ class PrepareZipRecordArchiveHandler
     {
         $this->jobQueue->zipRecordArchive(
             $command->happening,
+            $command->forceRegeneration,
             $command->admin,
             $command->locale
         );

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 
-use PhpParser\Node\Arg;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallbackHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -16,7 +17,7 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 class StatusChangeCallbackHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $recordArchiveRepository, $happeningRepository;
+    private $recordArchiveRepository, $happeningRepository, $prepareZipRecordArchiveHandler;
 
     /** @var \DateTime */
     private $dateTime;
@@ -28,6 +29,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
     {
         $this->recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
         $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $this->prepareZipRecordArchiveHandler = $this->prophesize(PrepareZipRecordArchiveHandler::class);
         $this->dateTime = new \DateTime();
 
         $this->archiveId = 'archiveId';
@@ -43,6 +45,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         ;
 
         $happening = $this->prophesize(Happening::class);
+        $happening->hasWebinarRecordZipFileUrl()->shouldBeCalled()->willReturn(false);
         $this->happeningRepository->findWebinarBySessionId($this->sessionId)
             ->shouldBeCalled()
             ->willReturn($happening)
@@ -66,6 +69,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
@@ -80,6 +84,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         ;
 
         $happening = $this->prophesize(Happening::class);
+        $happening->hasWebinarRecordZipFileUrl()->shouldBeCalled()->willReturn(false);
         $this->happeningRepository->findWebinarBySessionId($this->sessionId)
             ->shouldBeCalled()
             ->willReturn($happening)
@@ -104,6 +109,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
@@ -135,6 +141,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
@@ -144,6 +151,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
     public function test_handle_stopped_for_started_archive(): void
     {
         $happening = $this->prophesize(Happening::class);
+        $happening->hasWebinarRecordZipFileUrl()->shouldBeCalled()->willReturn(true);
         $recordArchive = new RecordArchive(
             $happening->reveal(),
             $this->archiveId,
@@ -163,6 +171,11 @@ class StatusChangeCallbackHandlerTest extends TestCase
 
         $this->recordArchiveRepository->update($expected)->shouldBeCalled();
 
+        $this->prepareZipRecordArchiveHandler
+            ->handle(new PrepareZipRecordArchive($happening->reveal(), true))
+            ->shouldBeCalled()
+        ;
+
         $command = new StatusChangeCallback(
             $this->archiveId,
             $this->sessionId,
@@ -173,6 +186,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
@@ -210,6 +224,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
@@ -249,6 +264,7 @@ class StatusChangeCallbackHandlerTest extends TestCase
         $handler = new StatusChangeCallbackHandler(
             $this->recordArchiveRepository->reveal(),
             $this->happeningRepository->reveal(),
+            $this->prepareZipRecordArchiveHandler->reveal(),
             $this->dateTime
         );
 
