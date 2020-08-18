@@ -15,6 +15,7 @@ require('bootstrap/js/popover'); // popover require tooltip
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
+    this.invisibleMode = true;
     this.typeScreenShare = 'screen';
     this.typeCustomShare = 'custom';
 
@@ -168,13 +169,20 @@ function Webinar(element, isSpeaker) {
 
 Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
+
     if (this.liveUrl) {
         this.hideElement(this.helperContainer);
         this.liveVideo();
     } else {
         this.showElement(this.webinarWaitingMessage);
     }
+
     this.init();
+
+    if (this.invisibleMode) {
+        this.toggleButton(this.toggleVideoElement, false);
+        this.toggleButton(this.toggleAudioElement, false);
+    }
 };
 
 /**
@@ -359,6 +367,11 @@ Webinar.prototype.initChat = function () {
  */
 Webinar.prototype.publishStream = function () {
     this.hideElement(this.helperContainer);
+
+    if (this.invisibleMode) {
+        return;
+    }
+
     const publisher = this.publisher.create({
         audioSource: this.settings.getAudioSource(),
         videoSource: this.settings.getVideoSource(),
@@ -941,6 +954,18 @@ Webinar.prototype.toggleSideBar = function () {
  * Toggle audio stream
  */
 Webinar.prototype.toggleAudio = function () {
+    if (this.invisibleMode) {
+        if (!window.confirm('Quit invisible mode ?')) {
+            return;
+        }
+
+        this.invisibleMode = false;
+        this.publishStream();
+        this.toggleButton(this.toggleVideoElement, true);
+        this.toggleButton(this.toggleAudioElement, true);
+        return;
+    }
+
     const publisher = this.publisher.publisher;
 
     if (!publisher || !publisher.stream) {
@@ -957,6 +982,18 @@ Webinar.prototype.toggleAudio = function () {
  * Toggle video stream
  */
 Webinar.prototype.toggleVideo = function () {
+    if (this.invisibleMode) {
+        if (!window.confirm('Quit invisible mode ?')) {
+            return;
+        }
+
+        this.invisibleMode = false;
+        this.publishStream();
+        this.toggleButton(this.toggleVideoElement, true);
+        this.toggleButton(this.toggleAudioElement, true);
+        return;
+    }
+
     const publisher = this.publisher.publisher;
 
     if (!publisher || !publisher.stream) {
