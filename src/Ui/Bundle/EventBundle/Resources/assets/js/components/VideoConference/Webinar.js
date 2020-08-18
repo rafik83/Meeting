@@ -15,7 +15,7 @@ require('bootstrap/js/popover'); // popover require tooltip
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
-    this.invisibleMode = true;
+    this.invisibleMode = false;
     this.typeScreenShare = 'screen';
     this.typeCustomShare = 'custom';
 
@@ -156,18 +156,23 @@ function Webinar(element, isSpeaker) {
     this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
     this.enableVideo = true;
 
+    this.invisibleModeButton = element.querySelector('#invisible-mode-button');
+    this.invisibleModeButton.addEventListener('click', this.handleInvisibleMode.bind(this));
+
     this.settingsContainer = this.element.querySelector('[data-settings-container]');
 
     this.publisher = new Publisher(this.layoutContainer);
 
     this.settings = new Settings(
       this.settingsContainer.querySelector('#video-settings-section'),
-      this.join.bind(this)
+      this.join.bind(this),
+      true
     );
     this.settings.init();
 }
 
-Webinar.prototype.join = function () {
+Webinar.prototype.join = function (invisibleMode) {
+    this.invisibleMode = invisibleMode;
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
@@ -180,8 +185,9 @@ Webinar.prototype.join = function () {
     this.init();
 
     if (this.invisibleMode) {
-        this.toggleButton(this.toggleVideoElement, false);
-        this.toggleButton(this.toggleAudioElement, false);
+        this.hideElement(this.toggleVideoElement);
+        this.hideElement(this.toggleAudioElement);
+        this.toggleButton(this.invisibleModeButton, true);
     }
 };
 
@@ -271,8 +277,13 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
-        this.showElement(this.toggleAudioElement);
-        this.showElement(this.toggleVideoElement);
+        this.showElement(this.invisibleModeButton);
+
+        if (!this.invisibleMode) {
+            this.showElement(this.toggleAudioElement);
+            this.showElement(this.toggleVideoElement);
+        }
+
         this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
@@ -950,22 +961,42 @@ Webinar.prototype.toggleSideBar = function () {
     this.layout();
 };
 
-/**
- * Toggle audio stream
- */
-Webinar.prototype.toggleAudio = function () {
+Webinar.prototype.handleInvisibleMode = function () {
     if (this.invisibleMode) {
-        if (!window.confirm('Quit invisible mode ?')) {
+        if (!window.confirm('Quit invisible mode and activate your audio and camera?')) {
             return;
         }
 
         this.invisibleMode = false;
         this.publishStream();
-        this.toggleButton(this.toggleVideoElement, true);
-        this.toggleButton(this.toggleAudioElement, true);
+
+        this.toggleButton(this.invisibleModeButton, false);
+        this.showElement(this.toggleVideoElement);
+        this.showElement(this.toggleAudioElement);
+
         return;
     }
 
+    if (!window.confirm('Enable invisible mode?')) {
+        return;
+    }
+
+    this.invisibleMode = true;
+
+    if (this.publisher) {
+        this.publisher.destroy();
+        this.layout();
+    }
+
+    this.toggleButton(this.invisibleModeButton, true);
+    this.hideElement(this.toggleVideoElement);
+    this.hideElement(this.toggleAudioElement);
+};
+
+/**
+ * Toggle audio stream
+ */
+Webinar.prototype.toggleAudio = function () {
     const publisher = this.publisher.publisher;
 
     if (!publisher || !publisher.stream) {
@@ -982,18 +1013,6 @@ Webinar.prototype.toggleAudio = function () {
  * Toggle video stream
  */
 Webinar.prototype.toggleVideo = function () {
-    if (this.invisibleMode) {
-        if (!window.confirm('Quit invisible mode ?')) {
-            return;
-        }
-
-        this.invisibleMode = false;
-        this.publishStream();
-        this.toggleButton(this.toggleVideoElement, true);
-        this.toggleButton(this.toggleAudioElement, true);
-        return;
-    }
-
     const publisher = this.publisher.publisher;
 
     if (!publisher || !publisher.stream) {
