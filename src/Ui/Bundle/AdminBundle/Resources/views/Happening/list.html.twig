@@ -118,9 +118,15 @@
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
+                                {% if not happening.hasWebinarRecordZipFileUrl %}
                                 <a href="{{ path('admin_happening_download', { 'event': event.id, 'happening': happening.id }) }}">
                                     {{ 'admin.happening.download'|trans }}
                                 </a>
+                                {% else %}
+                                    <a href="{{ happening.webinarRecordZipFileUrl }}" download>
+                                        {{ 'admin.happening.download'|trans }}
+                                    </a>
+                                {% endif %}
                             </li>
                         </ul>
                     </div>

@@ -9,6 +9,9 @@ use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\File\FileTemporary;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 
+/**
+ * @deprecated
+ */
 class AggregateHandler
 {
     /** @var RecordArchiveRepositoryInterface */

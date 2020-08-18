@@ -5,6 +5,9 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening;
 
+/**
+ * @deprecated
+ */
 class Aggregate implements Command
 {
     /** @var Happening */
