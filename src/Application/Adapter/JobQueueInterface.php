@@ -226,7 +226,7 @@ interface JobQueueInterface
 
     public function zipRecordArchive(
         Happening $happening,
-        Admin $admin,
-        string $locale
+        ?Admin $admin = null,
+        ?string $locale = null
     ): void;
 }

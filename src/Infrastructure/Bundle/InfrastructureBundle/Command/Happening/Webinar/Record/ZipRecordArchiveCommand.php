@@ -50,8 +50,8 @@ class ZipRecordArchiveCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Zip the record archives of the happening webinar and upload the zip')
             ->addArgument('happening', InputArgument::REQUIRED, 'The happening to handle')
-            ->addArgument('admin', InputArgument::REQUIRED, 'The admin to notify')
-            ->addArgument('locale', InputArgument::REQUIRED, 'The locale to use to notify')
+            ->addArgument('admin', InputArgument::OPTIONAL, 'The admin to notify')
+            ->addArgument('locale', InputArgument::OPTIONAL, 'The locale to use to notify')
         ;
     }
 
@@ -69,18 +69,16 @@ class ZipRecordArchiveCommand extends Command
             throw new \InvalidArgumentException('Happening not found.');
         }
 
-        if (null === $admin) {
-            throw new \InvalidArgumentException('Admin not found.');
-        }
-
         $this->commandBus->handle(new ZipRecordArchive(
             $happening
         ));
 
-        $this->eventDispatcher->dispatch(
-            Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED,
-            new ZipRecordArchivePreparedEvent($happening, $admin, $locale)
-        );
+        if (null !== $admin) {
+            $this->eventDispatcher->dispatch(
+                Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED,
+                new ZipRecordArchivePreparedEvent($happening, $admin, $locale ?? $admin->getLocale())
+            );
+        }
 
         return 0;
     }

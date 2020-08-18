@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use JMS\JobQueueBundle\Entity\Job;
@@ -525,16 +517,23 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
 
     public function zipRecordArchive(
         Happening $happening,
-        Admin $admin,
-        string $locale
+        ?Admin $admin = null,
+        ?string $locale = null
     ): void {
+        $arguments = [
+            $happening->getId(),
+        ];
+
+        if ($admin instanceof Admin) {
+            $arguments[] = $admin->getId();
+
+            if ($locale) {
+                $arguments[] = $locale;
+            }
+        }
         $job = new Job(
             ZipRecordArchiveCommand::NAME,
-            [
-                $happening->getId(),
-                $admin->getId(),
-                $locale
-            ]
+            $arguments
         );
 
         $this->setJob($job);

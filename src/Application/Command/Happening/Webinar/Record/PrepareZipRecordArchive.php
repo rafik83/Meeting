@@ -11,16 +11,16 @@ class PrepareZipRecordArchive implements Command
     /** @var Happening */
     public $happening;
 
-    /** @var Admin */
+    /** @var Admin|null */
     public $admin;
 
-    /** @var string */
+    /** @var string|null */
     public $locale;
 
     public function __construct(
         Happening $happening,
-        Admin $admin,
-        string $locale
+        ?Admin $admin = null,
+        ?string $locale = null
     ) {
         $this->happening = $happening;
         $this->admin = $admin;
