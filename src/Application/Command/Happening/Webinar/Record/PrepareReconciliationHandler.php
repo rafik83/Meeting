@@ -29,7 +29,7 @@ class PrepareReconciliationHandler
 
         if (!$date instanceof DateTimeInterface) {
             $date = clone $happening->getEnd();
-            $date->modify('+15 minutes');
+            $date->modify('+5 minutes');
         }
 
         $this->jobQueue->prepareReconciliation(

@@ -44,4 +44,19 @@ class ZipRecordArchivePreparedMail extends AbstractMail
     {
         return $this->happening->getWebinarRecordZipFileUrl();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectParameters(): array
+    {
+        return [
+            '%happeningTitle%' => $this->getHappeningTitle(),
+        ];
+    }
+
+    public function getHappeningTitle(): string
+    {
+        return $this->happening->getTitle($this->event->getAvailableLocale($this->locale));
+    }
 }

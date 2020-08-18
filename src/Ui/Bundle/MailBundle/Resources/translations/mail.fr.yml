@@ -71,6 +71,10 @@ mail.happening.participation.intro: 'Liste des participants mis à jour automati
 mail.happening.participation.register: '%name% inscrit'
 mail.happening.participation.subject: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.unregister: '%name% désinscrit'
+mail.happening.webinar.zip_record_archive_prepared.intro: 'Le fichier de l''enregistrement du webinar %happeningTitle% est disponible au téléchargement :'
+mail.happening.webinar.zip_record_archive_prepared.link: 'Télécharger l''enregistrement'
+mail.happening.webinar.zip_record_archive_prepared.outro: 'Bonne journée'
+mail.happening.webinar.zip_record_archive_prepared.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
 mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
 mail.omz.export.link.click: 'Télécharger le fichier des participants OMZ'
 mail.omz.export.subject: 'Fichier d''export OMZ'
