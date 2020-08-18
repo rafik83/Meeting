@@ -151,3 +151,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ZipRecordArchiveCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@repository.admin_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@event_dispatcher'
+        tags:
+            - { name: console.command }

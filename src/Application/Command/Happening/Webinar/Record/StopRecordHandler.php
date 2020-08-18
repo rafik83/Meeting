@@ -48,8 +48,6 @@ class StopRecordHandler
 
                 if (!$recordArchive->isStopped()) {
                     $recordArchive->stop();
-                    $this->addPathToRecordArchive($archive, $recordArchive);
-
                     $this->recordArchiveRepository->update($recordArchive);
                 }
 
@@ -63,18 +61,8 @@ class StopRecordHandler
                 $this->dateTime
             );
             $recordArchive->stop();
-            $this->addPathToRecordArchive($archive, $recordArchive);
 
             $this->recordArchiveRepository->add($recordArchive);
-        }
-    }
-
-    private function addPathToRecordArchive(Archive $archive, RecordArchive $recordArchive): void
-    {
-        $archiveUrl = $archive->url;
-
-        if (!empty($archiveUrl)) {
-            $recordArchive->addPathToRecordArchive($archiveUrl);
         }
     }
 

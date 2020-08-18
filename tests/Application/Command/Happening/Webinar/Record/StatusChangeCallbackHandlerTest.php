@@ -91,7 +91,6 @@ class StatusChangeCallbackHandlerTest extends TestCase
             $this->dateTime
         );
         $recordArchive->stop();
-        $recordArchive->addPathToRecordArchive($this->url);
 
         $this->recordArchiveRepository->add($recordArchive)->shouldBeCalled();
 
@@ -161,7 +160,6 @@ class StatusChangeCallbackHandlerTest extends TestCase
 
         $expected = clone $recordArchive;
         $expected->stop();
-        $expected->addPathToRecordArchive($this->url);
 
         $this->recordArchiveRepository->update($expected)->shouldBeCalled();
 

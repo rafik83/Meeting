@@ -79,6 +79,9 @@ class Happening implements TimeRangeInterface
     /** @var bool */
     private $sidebarAllowed = true;
 
+    /** @var null|string */
+    private $webinarRecordZipFileUrl = null;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -435,5 +438,20 @@ class Happening implements TimeRangeInterface
     public function isVideoWebinarAndHasLiveUrl(): bool
     {
         return $this->isVideoWebinar() && null !== $this->getLiveUrl();
+    }
+
+    public function addWebinarRecordZipFileUrl(?string $url): void
+    {
+        $this->webinarRecordZipFileUrl = $url;
+    }
+
+    public function hasWebinarRecordZipFileUrl(): bool
+    {
+        return !empty($this->getWebinarRecordZipFileUrl());
+    }
+
+    public function getWebinarRecordZipFileUrl(): ?string
+    {
+        return $this->webinarRecordZipFileUrl;
     }
 }

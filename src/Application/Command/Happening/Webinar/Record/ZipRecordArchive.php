@@ -1,11 +1,11 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Query\Happening\Admin;
+namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
-use Proximum\Vimeet\Application\Query\Query;
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening;
 
-class DownloadWebinarQuery implements Query
+class ZipRecordArchive implements Command
 {
     /** @var Happening */
     public $happening;
@@ -13,8 +13,10 @@ class DownloadWebinarQuery implements Query
     /** @var bool regenerate archive, only for multiple files and for testing purposes */
     public $regenerate;
 
-    public function __construct(Happening $happening, bool $regenerate = false)
-    {
+    public function __construct(
+        Happening $happening,
+        bool $regenerate = false
+    ) {
         $this->happening = $happening;
         $this->regenerate = $regenerate;
     }

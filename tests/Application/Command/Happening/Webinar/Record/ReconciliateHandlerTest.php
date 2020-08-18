@@ -90,7 +90,6 @@ class ReconciliateHandlerTest extends TestCase
             $dateTime
         );
         $expectedRecordArchive3->stop();
-        $expectedRecordArchive3->addPathToRecordArchive('http://example.net/path/to/file.mp4');
 
         $recordArchiveRepository->update($expectedRecordArchive1)->shouldBeCalled();
         $recordArchiveRepository->update($expectedRecordArchive2)->shouldBeCalled();

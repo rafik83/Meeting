@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
@@ -27,6 +19,7 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchivePreparedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingsDeletedAllEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\AbstractGroupEvent;
@@ -51,6 +44,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSend
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\AccountTemporarilyDisabledMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\ZipRecordArchivePreparedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
@@ -446,7 +440,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
@@ -468,7 +462,21 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
             Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
             Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated',
+            Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED => 'onHappeningZipRecordArchivePrepared',
         ];
+    }
+
+    public function onHappeningZipRecordArchivePrepared(ZipRecordArchivePreparedEvent $event): void
+    {
+        $this->mailer->send(
+            new ZipRecordArchivePreparedMail(
+                $event->getHappening(),
+                $event->getEvent(),
+                $this->sender->generate($event->getEvent()),
+                $event->getAdmin()->getEmail(),
+                $event->getLocale()
+            )
+        );
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -222,4 +223,10 @@ interface JobQueueInterface
     public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void;
 
     public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void;
+
+    public function zipRecordArchive(
+        Happening $happening,
+        Admin $admin,
+        string $locale
+    ): void;
 }

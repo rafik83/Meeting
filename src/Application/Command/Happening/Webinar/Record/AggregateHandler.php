@@ -55,11 +55,8 @@ class AggregateHandler
 
         foreach ($recordArchives as $recordArchive) {
             $tempFilePath = sprintf('%s/webinar-%d-part%d.mp4', $tempDir, $command->happening->getId(), $index);
-            if ($recordArchive->getPath()) {
-                $this->fileSystemAdapter->copy($recordArchive->getPath(), $tempFilePath);
-                $index++;
-            }
         }
+
         $files = $this->finderAdapter->filesIn($tempDir);
 
         if (count($files) === 0) {
@@ -69,8 +66,6 @@ class AggregateHandler
         $fileName = sprintf('webinar-%d.zip', $command->happening->getId());
         $zipFilePath = $this->fileSystemAdapter->getTemporaryPath();
         $this->zipArchiveAdapter->zipFiles($files, $zipFilePath, '');
-
-        $this->zipRecordArchiveStorage->upload($zipFilePath, 'multiple-archives/' . $fileName);
 
         $this->fileSystemAdapter->remove($tempDir);
 

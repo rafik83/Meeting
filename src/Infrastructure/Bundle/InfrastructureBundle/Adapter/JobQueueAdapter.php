@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -519,5 +520,22 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void
     {
         $this->setJob(new Job(ExportParticipantsCommand::NAME, [$event->getId(), $admin->getId(), $locale]));
+    }
+
+    public function zipRecordArchive(
+        Happening $happening,
+        Admin $admin,
+        string $locale
+    ): void {
+        $job = new Job(
+            ScheduleUpdateTranslationsCommand::NAME,
+            [
+                $happening->getId(),
+                $admin->getId(),
+                $locale
+            ]
+        );
+
+        $this->setJob($job);
     }
 }

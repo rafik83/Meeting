@@ -48,7 +48,6 @@ class StatusChangeCallbackHandler
 
             if (!in_array($status, RecordStatus::IS_RECORDING_STATUS, true)) {
                 $recordArchive->stop();
-                $this->addPathToRecordArchive($recordArchive, $statusChangeCallback->url);
             }
 
             $this->recordArchiveRepository->add($recordArchive);
@@ -71,14 +70,6 @@ class StatusChangeCallbackHandler
         }
 
         $recordArchive->stop();
-        $this->addPathToRecordArchive($recordArchive, $statusChangeCallback->url);
         $this->recordArchiveRepository->update($recordArchive);
-    }
-
-    private function addPathToRecordArchive(RecordArchive $recordArchive, ?string $url = null): void
-    {
-        if (!empty($url)) {
-            $recordArchive->addPathToRecordArchive($url);
-        }
     }
 }

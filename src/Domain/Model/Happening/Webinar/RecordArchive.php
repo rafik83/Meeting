@@ -22,9 +22,6 @@ class RecordArchive
     /** @var \DateTimeInterface */
     private $createdAt;
 
-    /** @var string|null */
-    private $path;
-
     public function __construct(
         Happening $happening,
         string $archiveId,
@@ -61,19 +58,9 @@ class RecordArchive
         return $this->createdAt;
     }
 
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
     public function stop(): void
     {
         $this->status = RecordStatus::STOPPED;
-    }
-
-    public function addPathToRecordArchive(string $path): void
-    {
-        $this->path = $path;
     }
 
     public function isStopped(): bool

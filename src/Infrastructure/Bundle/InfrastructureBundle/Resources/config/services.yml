@@ -5899,6 +5899,8 @@ services:
         arguments:
             - '@datetime'
 
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible: ~
+
     #
     # Serializer: normalizers and encoders
     #

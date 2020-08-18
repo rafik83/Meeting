@@ -212,3 +212,18 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchiveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
+            - '@adapter.file_system_adapter'
+            - '@adapter.video_conference_adapter'
+            - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive }

@@ -53,37 +53,7 @@ class AggregateHandlerTest extends TestCase
         );
     }
 
-    public function testHandle()
-    {
-        $happening = $this->prophesize(Happening::class);
-        $happening->getId()->shouldBeCalled()->willreturn(5432);
-        $recordArchive1 = $this->prophesize(RecordArchive::class);
-        $recordArchive1->getPath()->shouldBeCalled()->willReturn('https://www.fakeawss3.com/video/xx32-de9.mp4?t=8833447878');
-        $recordArchive2 = $this->prophesize(RecordArchive::class);
-        $recordArchive2->getPath()->shouldBeCalled()->willReturn('https://www.fakeawss3.com/video/ww78-ed7.mp4?t=7766551122');
-
-        $this->recordArchiveRepository
-            ->getRecordArchivesForHappening($happening->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$recordArchive1->reveal(), $recordArchive2->reveal()]);
-
-        $this->fileSystemAdapter->createTempDir()->shouldBeCalled()->willReturn('/tmp/vimeet/18428e41-e67c-4865-9ad3-6e50e18a94e9');
-        $this->fileSystemAdapter->copy(Argument::type('string'), Argument::type('string'))->shouldBeCalledTimes(2);
-        $file = $this->prophesize(SplFileInfo::class);
-        $this->finderAdapter->filesIn('/tmp/vimeet/18428e41-e67c-4865-9ad3-6e50e18a94e9')->shouldBeCalled()->willReturn([$file]);
-        $this->fileSystemAdapter->getTemporaryPath()->shouldBeCalled()->willReturn('/tmp/vimeet/2983e194-47cd-4b2c-89ae-e7d8cb4b8312');
-        $this->zipArchiveAdapter->zipFiles([$file], '/tmp/vimeet/2983e194-47cd-4b2c-89ae-e7d8cb4b8312', '')->shouldBeCalled();
-        $this->zipRecordArchiveStorage->upload('/tmp/vimeet/2983e194-47cd-4b2c-89ae-e7d8cb4b8312', 'multiple-archives/webinar-5432.zip')->shouldBeCalled();
-        $this->fileSystemAdapter->remove('/tmp/vimeet/18428e41-e67c-4865-9ad3-6e50e18a94e9')->shouldBeCalled();
-
-        $command = new Aggregate($happening->reveal());
-        $fileTemporary = $this->aggregateHandler->handle($command);
-
-        $this->assertEquals('/tmp/vimeet/2983e194-47cd-4b2c-89ae-e7d8cb4b8312', $fileTemporary->getTempFilePath());
-        $this->assertEquals('webinar-5432.zip', $fileTemporary->getOriginalName());
-    }
-
-    public function testHandleWithSingleArchive()
+    public function testHandleWithSingleArchive(): void
     {
         $happening = $this->prophesize(Happening::class);
         $recordArchive1 = $this->prophesize(RecordArchive::class);

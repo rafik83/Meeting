@@ -4,18 +4,19 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Aggregate;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate;
-use Proximum\Vimeet\Application\Query\Happening\Admin\DownloadWebinarQuery;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
-use Proximum\Vimeet\Domain\File\FileTemporary;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class DownloadWebinarAction
 {
@@ -25,23 +26,34 @@ class DownloadWebinarAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
+    /** @var IsRecordedFileAccessible */
+    private $isRecordedFileAccessible;
+
+    /** @var RouterInterface */
+    private $router;
+
+    /** @var FlashBagInterface */
+    private $flashBag;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
+        IsRecordedFileAccessible $isRecordedFileAccessible,
+        RouterInterface $router,
+        FlashBagInterface $flashBag
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
-        $this->queryBus = $queryBus;
+        $this->isRecordedFileAccessible = $isRecordedFileAccessible;
+        $this->router = $router;
+        $this->flashBag = $flashBag;
     }
 
     public function __invoke(
         Request $request,
         Event $event,
-        Happening $happening
+        Happening $happening,
+        AdminDomain $adminDomain
     ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $event !== $happening->getEvent()
@@ -49,20 +61,28 @@ class DownloadWebinarAction
             throw new AccessDeniedException('Access Denied!');
         }
 
-        // get file from remote storage, if already generated
-        $downloadWebinar = new DownloadWebinarQuery($happening, $request->query->get('reset') === '1');
-        /** @var FileTemporary|null */
-        $recordedArchive = $this->queryBus->handle($downloadWebinar);
+        if (!$this->isRecordedFileAccessible->isSatisfiedBy($happening)) {
+            $admin = $adminDomain->getAdmin();
+            $this->commandBus->handle(
+                new PrepareZipRecordArchive(
+                    $happening,
+                    $admin,
+                    $request->getLocale()
+                )
+            );
 
-        if (null === $recordedArchive) {
-            // launch reconciliate, to be sure all urls are up to date
-            $this->commandBus->handle(new Reconciliate($happening));
-            // aggregate files in a zip if webinar has been recorded in multiple archives
-            $recordedArchive = $this->commandBus->handle(new Aggregate($happening));
+            $this->flashBag->add('warning', 'flash.admin.happening.webinar.zip_record_archive.not_prepared');
+
+            return new RedirectResponse(
+                $this->router->generate('admin_happening_list', ['event' => $event->getId()])
+            );
         }
 
-        $response = new BinaryFileResponse($recordedArchive->getTempFilePath());
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $recordedArchive->getOriginalName());
+        $response = new BinaryFileResponse($happening->getWebinarRecordZipFileUrl());
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $happening->getTitle($event->getLocaleFallback()) . '.zip'
+        );
         $response->deleteFileAfterSend(true);
 
         return $response;
