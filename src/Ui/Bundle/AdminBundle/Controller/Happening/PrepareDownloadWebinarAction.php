@@ -6,15 +6,14 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive;
-use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PrepareDownloadWebinarAction
 {
@@ -52,7 +51,7 @@ class PrepareDownloadWebinarAction
         Event $event,
         Happening $happening,
         AdminDomain $adminDomain
-    ): Response {
+    ): RedirectResponse {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $event !== $happening->getEvent()
         ) {
