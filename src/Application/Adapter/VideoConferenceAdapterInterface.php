@@ -44,6 +44,8 @@ interface VideoConferenceAdapterInterface
 
     public function listArchives(string $sessionId): ArchiveList;
 
+    public function listArchiveUrls(string $sessionId): array;
+
     /**
      * @param Session            $session
      * @param \DateTimeInterface $endDateTime

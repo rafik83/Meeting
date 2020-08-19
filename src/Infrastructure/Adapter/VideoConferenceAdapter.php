@@ -96,6 +96,20 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         return $this->openTok->listArchives(0, null, $sessionId);
     }
 
+    public function listArchiveUrls(string $sessionId): array
+    {
+        $list = $this->listArchives($sessionId);
+        $urls = [];
+
+        foreach ($list->getItems() as $archive) {
+            if (isset($archive->url)) {
+                $urls[] = $archive->url;
+            }
+        }
+
+        return $urls;
+    }
+
     /**
      * {@inheritdoc}
      */
