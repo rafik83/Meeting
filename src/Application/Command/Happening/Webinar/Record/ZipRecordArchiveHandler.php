@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
-use OpenTok\Archive;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
@@ -66,7 +65,6 @@ class ZipRecordArchiveHandler
         $files = [];
         $index = 1;
 
-        /** @var Archive $archive */
         foreach ($archiveUrls as $archiveUrl) {
             $archiveFileName = sprintf('webinar-%d-part%d.mp4', $happening->getId(), $index);
             $files[$archiveFileName] = $archiveUrl;
