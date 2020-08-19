@@ -209,7 +209,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@vimeet_infrastructure.repository.happening_repository'
-            - '@datetime'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }
