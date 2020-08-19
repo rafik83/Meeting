@@ -67,9 +67,13 @@ function Webinar(element, isSpeaker) {
 
         this.chatInstance = null;
         this.chatButton = element.querySelector('[data-chat-button]');
+
         if (this.chatButton) {
             this.chatButton.addEventListener('click', this.showChat.bind(this));
         }
+
+        this.questionVoteMessage = element.getAttribute('data-question-vote-message');
+        this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
         this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
@@ -835,6 +839,7 @@ Webinar.prototype.initQuestions = function () {
         // make shure there no listeners leak
         this.removeQuestionListeners();
         $questionsList.empty();
+
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.classList.add('question-row');
@@ -844,17 +849,21 @@ Webinar.prototype.initQuestions = function () {
 
             const questionAside = document.createElement('small');
             questionAside.classList.add('pull-right', 'question-aside');
+
             const likeBlock = document.createElement('div');
             const voteCount = document.createElement('span');
+
             if (+item.voteCount) {
                 voteCount.textContent = item.voteCount;
                 voteCount.classList.add('question-vote-count')
             }
+
             likeBlock.append(voteCount);
 
             const likeBtn = document.createElement('i');
             likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
             likeBtn.setAttribute('data-question-id', item.questionId);
+
             const onLikedClicked = function (event) {
                 const payload = {'questionId': event.currentTarget.getAttribute('data-question-id')};
                 $.post(voteHref, JSON.stringify(payload), (response) => {
@@ -869,19 +878,17 @@ Webinar.prototype.initQuestions = function () {
                 // remove all listeners, they'll be added again on questions update
                 this.removeQuestionListeners();
             }.bind(this);
+
             likeBtn.addEventListener('click', onLikedClicked);
             this.questionListeners.push([likeBtn, onLikedClicked]);
 
-            if (item.isLiked) {
-                likeBtn.classList.add('btn-primary');
-            } else {
-                likeBtn.classList.add('btn-gray');
-            }
+            likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+            likeBtn.title = item.isLiked ? this.questionUnvoteMessage : this.questionVoteMessage;
             likeBlock.appendChild(likeBtn);
 
             questionAside.append(likeBlock);
 
-            const questionCreatedAt = document.createElement('div')
+            const questionCreatedAt = document.createElement('div');
             questionCreatedAt.textContent = item.createdAt;
             questionAside.appendChild(questionCreatedAt);
             contentEl.appendChild(questionAside);
@@ -901,6 +908,7 @@ Webinar.prototype.initQuestions = function () {
             }
 
             const avatarEl = authorEl.appendChild(document.createElement('span'));
+
             if (item.avatar) {
                 avatarEl.classList.add('question-author-avatar');
                 const imgEl = avatarEl.appendChild(document.createElement('img'));
