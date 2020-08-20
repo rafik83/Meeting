@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class Meeting implements MessageSubjectInterface
+class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
 {
     public const STATE_SCHEDULED = 'scheduled';
     public const STATE_CANCELED  = 'canceled';
@@ -156,6 +156,11 @@ class Meeting implements MessageSubjectInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return 'meeting';
     }
 
     /**

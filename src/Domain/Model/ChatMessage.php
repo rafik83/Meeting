@@ -6,14 +6,6 @@ use DateTimeInterface;
 
 class ChatMessage
 {
-    public const OBJECT_TYPE_MEETING = 'meeting';
-    public const OBJECT_TYPE_HAPPENING = 'happening';
-
-    public const ALL_OBJECT_TYPES = [
-        self::OBJECT_TYPE_MEETING,
-        self::OBJECT_TYPE_HAPPENING,
-    ];
-
     /** @var int */
     private $id;
 
@@ -33,18 +25,13 @@ class ChatMessage
     private $content;
 
     public function __construct(
-        string $objectType,
-        int $objectId,
+        ChatMessageLinkableInterface $object,
         User $createdBy,
         DateTimeInterface $createdAt,
         string $content
     ) {
-        if (!in_array($objectType, self::ALL_OBJECT_TYPES, true)) {
-            throw new \InvalidArgumentException('ObjectType invalid');
-        }
-
-        $this->objectType = $objectType;
-        $this->objectId = $objectId;
+        $this->objectType = $object->getObjectType();
+        $this->objectId = $object->getId();
         $this->createdBy = $createdBy;
         $this->createdAt = $createdAt;
         $this->content = $content;
