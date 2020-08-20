@@ -2,14 +2,16 @@
 
 namespace Proximum\Vimeet\Domain\Happening\Webinar;
 
+use DateTime;
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 
 class IsRecordingAllowed
 {
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $dateTime;
 
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(DateTimeInterface $dateTime)
     {
         $this->dateTime = $dateTime;
     }
@@ -21,7 +23,7 @@ class IsRecordingAllowed
         }
 
         $webinarEnd = $happening->getEnd();
-        $webinarEndPlus30Minutes = new \DateTime();
+        $webinarEndPlus30Minutes = new DateTime();
         $webinarEndPlus30Minutes->setTimestamp($webinarEnd->getTimestamp());
         $webinarEndPlus30Minutes->modify('+30 minutes');
 

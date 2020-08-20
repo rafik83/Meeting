@@ -19,6 +19,7 @@
 /composer.phar
 /*.sql
 /behat.yml
+/.phpunit.result.cache
 
 # Tests
 /var/tests/*

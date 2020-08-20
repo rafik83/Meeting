@@ -5,7 +5,9 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Hap
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchiveNotPreparedEvent;
 use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchivePreparedEvent;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarIsRecordingException;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -14,9 +16,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ZipRecordArchiveCommand extends Command
+class ForceZipRecordArchiveCommand extends Command
 {
-    public const NAME = 'vimeet:happening:webinar:zip-record-archive';
+    public const NAME = 'vimeet:happening:webinar:force-zip-record-archive';
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -48,7 +50,7 @@ class ZipRecordArchiveCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Zip the record archives of the happening webinar and upload the zip')
+            ->setDescription('This command forces the creation of the zip of record archive')
             ->addArgument('happening', InputArgument::REQUIRED, 'The happening to handle')
             ->addArgument('force-regeneration', InputArgument::REQUIRED, 'Force the regeneration of the zip')
             ->addArgument('admin', InputArgument::OPTIONAL, 'The admin to notify')
@@ -71,10 +73,30 @@ class ZipRecordArchiveCommand extends Command
             throw new \InvalidArgumentException('Happening not found.');
         }
 
-        $this->commandBus->handle(new ZipRecordArchive(
-            $happening,
-            $force
-        ));
+        try {
+            $this->commandBus->handle(new ZipRecordArchive(
+                $happening,
+                $force
+            ));
+
+            if (null !== $admin) {
+                $this->eventDispatcher->dispatch(
+                    Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED,
+                    new ZipRecordArchivePreparedEvent($happening, $admin, $locale ?? $admin->getLocale())
+                );
+            }
+        } catch (WebinarIsRecordingException $exception) {
+            if (null !== $admin) {
+                $this->eventDispatcher->dispatch(
+                    Events::HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED,
+                    new ZipRecordArchiveNotPreparedEvent(
+                        $happening,
+                        $admin,
+                        $locale ?? $admin->getLocale()
+                    )
+                );
+            }
+        }
 
         if (null !== $admin) {
             $this->eventDispatcher->dispatch(

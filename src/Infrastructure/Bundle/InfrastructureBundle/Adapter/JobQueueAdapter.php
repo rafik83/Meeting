@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
+use DateTime;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -537,6 +538,20 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             ZipRecordArchiveCommand::NAME,
             $arguments
         );
+
+        $this->setJob($job);
+    }
+
+    public function planDownloadRecordArchive(
+        Happening $happening,
+        DateTime $dueDate
+    ): void {
+        $job = new Job(
+            ZipRecordArchiveCommand::NAME,
+            [$happening->getId()]
+        );
+
+        $job->setExecuteAfter($dueDate);
 
         $this->setJob($job);
     }

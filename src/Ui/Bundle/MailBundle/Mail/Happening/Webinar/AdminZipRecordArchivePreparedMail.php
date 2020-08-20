@@ -7,10 +7,10 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 
-class ZipRecordArchivePreparedMail extends AbstractMail
+class AdminZipRecordArchivePreparedMail extends AbstractMail
 {
-    public const SUBJECT = 'mail.happening.webinar.zip_record_archive_prepared.subject';
-    public const TEMPLATE = 'MailBundle:Mail:Happening/zip_record_archive_prepared.html.twig';
+    public const SUBJECT = 'mail.happening.webinar.admin.zip_record_archive_prepared.subject';
+    public const TEMPLATE = 'MailBundle:Mail:Happening/admin_zip_record_archive_prepared.html.twig';
 
     /** @var string */
     protected $subject = self::SUBJECT;

@@ -7,7 +7,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
-class ZipRecordArchivePreparedEvent extends SymfonyEvent
+class ZipRecordArchiveNotPreparedEvent extends SymfonyEvent
 {
     /** @var Happening */
     private $happening;

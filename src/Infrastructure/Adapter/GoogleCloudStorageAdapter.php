@@ -140,4 +140,11 @@ class GoogleCloudStorageAdapter
             return;
         }
     }
+
+    public function signedUrl($url, $date): string
+    {
+        $flySystem = $this->init();
+
+        return $flySystem->getAdapter()->getTemporaryUrl($url, $date);
+    }
 }

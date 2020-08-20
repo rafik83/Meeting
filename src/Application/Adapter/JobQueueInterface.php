@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use DateTime;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
@@ -229,5 +230,10 @@ interface JobQueueInterface
         bool $forceRegeneration = false,
         ?Admin $admin = null,
         ?string $locale = null
+    ): void;
+
+    public function planDownloadRecordArchive(
+        Happening $happening,
+        DateTime $dueDate
     ): void;
 }
