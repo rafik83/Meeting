@@ -537,10 +537,7 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
         return array_merge($this->getFromParticipantsArray(), $this->getToParticipantsArray());
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }

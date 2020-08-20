@@ -4,9 +4,11 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject;
+use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ListAction
 {
@@ -18,20 +20,27 @@ class ListAction
         $this->queryBus = $queryBus;
     }
 
-    public function __invoke(EventDomain $eventDomain, UserDomain $userDomain, string $objectType, int $objectId)
-    {
+    public function __invoke(
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        string $objectType,
+        int $objectId
+    ): JsonResponse {
         try {
+            /** @var ChatMessageLinkableInterface $object */
             $object = $this->queryBus->handle(
                 new GuessChatMessageLinkableObject($objectType, $objectId)
             );
         } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), 500);
+            return new JsonResponse(['error' => $exception->getMessage()], 500);
         }
 
-        return new JsonResponse(
-            [
+        $event = $eventDomain->getEvent();
 
-            ]
-        );
+        if ($event !== $object->getEvent()) {
+            throw new AccessDeniedException('Object not in this event');
+        }
+
+        return new JsonResponse();
     }
 }

@@ -69,6 +69,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->select('happening')
             ->from(Happening::class, 'happening')
             ->where('happening.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
     }

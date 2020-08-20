@@ -207,6 +207,10 @@ services:
         arguments:
             - '@repository.transaction'
 
+    Proximum\Vimeet\Behat\Service\Manager\HappeningManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+
     #
     # Proxies
     #
@@ -381,6 +385,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
+
+    Proximum\Vimeet\Behat\Proxy\HappeningContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\HappeningManager'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
 
     #
     # Other services

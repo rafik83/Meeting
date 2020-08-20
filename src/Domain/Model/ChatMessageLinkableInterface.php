@@ -10,4 +10,6 @@ interface ChatMessageLinkableInterface
     public function getId();
 
     public function getObjectType(): string;
+
+    public function getEvent(): Event;
 }

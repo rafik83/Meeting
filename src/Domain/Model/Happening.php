@@ -131,10 +131,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         return 'happening';
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
