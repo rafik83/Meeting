@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\ChatMessage:
+    type:  entity
+    table: chat_message
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        objectType:
+            type: string
+        objectId:
+            type: integer
+        createdAt:
+            type: datetime
+        content:
+            type: text
+    indexes:
+        object_index:
+            columns: [object_type, object_id]
+    manyToOne:
+        createdBy:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
