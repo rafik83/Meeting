@@ -351,3 +351,10 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating.engine.twig'
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

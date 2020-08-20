@@ -111,3 +111,13 @@ services:
     Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject }

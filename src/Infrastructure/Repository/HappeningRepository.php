@@ -61,6 +61,18 @@ class HappeningRepository implements HappeningRepositoryInterface
         }
     }
 
+    public function findById(int $id): ?Happening
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->where('happening.id = :id')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * {@inheritdoc}
      */

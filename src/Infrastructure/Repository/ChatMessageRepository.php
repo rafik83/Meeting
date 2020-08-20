@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
+use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ChatMessageRepository implements ChatMessageRepositoryInterface
@@ -23,5 +24,10 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
     {
         $this->entityManager->persist($chatMessage);
         $this->entityManager->flush($chatMessage);
+    }
+
+    public function list(ChatMessageLinkableInterface $object): void
+    {
+        // TODO: Implement list() method.
     }
 }

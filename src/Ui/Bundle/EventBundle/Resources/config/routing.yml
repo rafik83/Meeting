@@ -1164,6 +1164,17 @@ event_meeting_evaluation:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction
 
 #
+# Chat
+#
+event_chat_messages_list:
+    path: /chat/{objectType}/{objectId}/list
+    requirements:
+        objectType: \w+
+        objectId: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
+
+#
 # Custom
 #
 event_styleguide:
