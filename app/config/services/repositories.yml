@@ -95,3 +95,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Sheet\ImportMappingRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
