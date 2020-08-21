@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Domain\Happening\Webinar;
 use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 
 class IsRecordedFileAccessibleForUser
 {
@@ -22,7 +23,7 @@ class IsRecordedFileAccessibleForUser
             return false;
         }
 
-        $endTime = $happening->getEnd();
+        $endTime = DaysHelper::cloneDateTime($happening->getEnd());
         $endTime->modify('+7 days');
 
         if ($endTime < $this->dateTime) {
