@@ -177,6 +177,7 @@ services:
     Proximum\Vimeet\Application\Command\Chat\AddChatMessageHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }

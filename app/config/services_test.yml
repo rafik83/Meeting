@@ -210,6 +210,7 @@ services:
     Proximum\Vimeet\Behat\Service\Manager\HappeningManager:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     #
     # Proxies

@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\HappeningContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 
 class HappeningContext implements Context
 {
@@ -31,6 +33,29 @@ class HappeningContext implements Context
 
         $happeningManager = $this->happeningContextProxy->getHappeningManager();
         $happening = $happeningManager->createHappening($category);
-        $this->happeningContextProxy->getStorage()->set('meeting', $happening);
+        $this->happeningContextProxy->getStorage()->set('happening', $happening);
+    }
+
+    /**
+     * @Given /^this user participate to this happening$/
+     */
+    public function thisUserParticipateToThisHappening()
+    {
+        /** @var null|Happening $happening */
+        $happening = $this->happeningContextProxy->getStorage()->get('happening');
+
+        if (null === $happening) {
+            throw new \InvalidArgumentException('Missing Happening');
+        }
+
+        /** @var null|User $user */
+        $user = $this->happeningContextProxy->getStorage()->get('user');
+
+        if (null === $user) {
+            throw new \InvalidArgumentException('Missing User');
+        }
+
+        $happeningManager = $this->happeningContextProxy->getHappeningManager();
+        $happeningManager->userParticipateToHappening($user, $happening);
     }
 }
