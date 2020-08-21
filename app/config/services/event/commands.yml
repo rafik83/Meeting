@@ -170,3 +170,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Command\Chat\AddChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }

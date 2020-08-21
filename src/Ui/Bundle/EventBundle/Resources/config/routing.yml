@@ -1174,6 +1174,14 @@ event_chat_messages_list:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
 
+event_chat_messages_add:
+    path: /chat/{objectType}/{objectId}/add
+    requirements:
+        objectType: \w+
+        objectId: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction
+
 #
 # Custom
 #
