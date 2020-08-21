@@ -1,15 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Token\Admin;
 
+use DateInterval;
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Token\AbstractTokenGenerator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
@@ -22,15 +16,12 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      */
     private $respository;
 
-    /**
-     * ActivateAccountTokenGenerator constructor.
-     *
-     * @param ActivateAccountTokenRepositoryInterface $respository
-     * @param \DateTimeInterface                      $dateTime
-     */
-    public function __construct(ActivateAccountTokenRepositoryInterface $respository, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        ActivateAccountTokenRepositoryInterface $respository,
+        DateTimeInterface $dateTime
+    ) {
         parent::__construct($dateTime);
+
 
         $this->respository = $respository;
     }
@@ -42,7 +33,7 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      *
      * @return ActivateAccountToken
      */
-    public function generate(Admin $admin)
+    public function generate(Admin $admin): ActivateAccountToken
     {
         $token = new ActivateAccountToken($admin, $this->generateToken($admin), $this->expirateDate);
 
@@ -52,11 +43,8 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
         return $token;
     }
 
-    /**
-     * @return \DateInterval
-     */
     protected function getLifetime()
     {
-        return new \DateInterval('P14D');
+        return new DateInterval('P14D');
     }
 }
