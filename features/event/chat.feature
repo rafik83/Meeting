@@ -17,6 +17,6 @@ Feature: I can chat
     When I send a GET request to "http://super-event.vimeet.proximum/fr/chat/happening/1/list"
     And the JSON should be equal to:
       """
-      {
-      }
+      [
+      ]
       """

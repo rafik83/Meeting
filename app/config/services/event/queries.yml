@@ -121,3 +121,10 @@ services:
             - '@vimeet_infrastructure.repository.happening_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject }
+
+    Proximum\Vimeet\Application\Query\Chat\ListChatMessagesHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\ListChatMessages }

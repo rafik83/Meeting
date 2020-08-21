@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
@@ -26,8 +27,25 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
         $this->entityManager->flush($chatMessage);
     }
 
-    public function list(ChatMessageLinkableInterface $object): void
+    /**
+     * @return ChatMessageView[]
+     */
+    public function list(ChatMessageLinkableInterface $object): array
     {
-        // TODO: Implement list() method.
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select(
+                sprintf(
+                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt)',
+                    ChatMessageView::class
+                )
+            )
+            ->from(ChatMessage::class, 'chatMessage')
+            ->where('chatMessage.objectType = :objectType AND chatMessage.objectId = :objectId')
+            ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
+            ->orderBy('chatMessage.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }
