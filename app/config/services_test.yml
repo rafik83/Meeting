@@ -2,11 +2,6 @@ parameters:
     sms_directory: '%kernel.root_dir%/../var/sms'
 
 services:
-    datetime:
-        class: DateTimeImmutable
-        arguments:
-            - '2020-03-16 10:35:00'
-
     #
     # Storage
     #

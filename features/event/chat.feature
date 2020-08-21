@@ -26,19 +26,4 @@ Feature: I can chat
       }
       """
     When I send a GET request to "http://super-event.vimeet.proximum/fr/chat/happening/1/list"
-    And the JSON should be equal to:
-      """
-      [
-          {
-              "id": 1,
-              "content": "Hello, how are you today?",
-              "createdAt": {
-                  "date": "2020-03-16 10:35:00.000000",
-                  "timezone_type": 3,
-                  "timezone": "UTC"
-              },
-              "formattedCreatedAt": "11:35:00"
-          }
-
-      ]
-      """
+    And the JSON node "[0].content" should be equal to the string "Hello, how are you today?"
