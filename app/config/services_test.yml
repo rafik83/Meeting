@@ -3,9 +3,9 @@ parameters:
 
 services:
     datetime:
-        class: DateTime
+        class: DateTimeImmutable
         arguments:
-            - '2020-12-30 10:35:00'
+            - '2020-03-16 10:35:00'
 
     #
     # Storage

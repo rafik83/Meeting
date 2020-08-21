@@ -21,7 +21,6 @@ class AddChatMessageHandler
 
     public function handle(AddChatMessage $command): void
     {
-        var_dump($this->now);
         $this->messageRepository->add(new ChatMessage($command->object, $command->user, $this->now, $command->content));
     }
 }

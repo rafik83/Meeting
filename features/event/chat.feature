@@ -29,5 +29,16 @@ Feature: I can chat
     And the JSON should be equal to:
       """
       [
+          {
+              "id": 1,
+              "content": "Hello, how are you today?",
+              "createdAt": {
+                  "date": "2020-03-16 10:35:00.000000",
+                  "timezone_type": 3,
+                  "timezone": "UTC"
+              },
+              "formattedCreatedAt": "11:35:00"
+          }
+
       ]
       """
