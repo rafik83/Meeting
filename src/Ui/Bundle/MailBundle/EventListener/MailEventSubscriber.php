@@ -445,29 +445,32 @@ class MailEventSubscriber implements EventSubscriberInterface
     {
         $domainEvent = $event->getEvent();
         $happening = $event->getHappening();
-        $this->mailer->send(
-            new AdminZipRecordArchivePreparedMail(
-                $happening,
-                $domainEvent,
-                $this->sender->generate($domainEvent),
-                $event->getAdmin()->getEmail(),
-                $event->getLocale()
-            )
-        );
 
-        foreach ($happening->getSpeakers() as $speaker) {
-            $speakerUser = $speaker->getUser();
+        if ($event->hasAdmin()) {
+            $this->mailer->send(
+                new AdminZipRecordArchivePreparedMail(
+                    $happening,
+                    $domainEvent,
+                    $this->sender->generate($domainEvent),
+                    $event->getAdmin()->getEmail(),
+                    $event->getLocale()
+                )
+            );
+        } else {
+            foreach ($happening->getSpeakers() as $speaker) {
+                $speakerUser = $speaker->getUser();
 
-            if ($speakerUser instanceof User) {
-                $this->mailer->send(
-                    new ZipRecordArchiveAvailableForSpeakerMail(
-                        $happening,
-                        $domainEvent,
-                        $this->sender->generate($domainEvent),
-                        $speakerUser->getEmail(),
-                        $domainEvent->getAvailableLocale($speakerUser->getLocale())
-                    )
-                );
+                if ($speakerUser instanceof User) {
+                    $this->mailer->send(
+                        new ZipRecordArchiveAvailableForSpeakerMail(
+                            $happening,
+                            $domainEvent,
+                            $this->sender->generate($domainEvent),
+                            $speakerUser->getEmail(),
+                            $domainEvent->getAvailableLocale($speakerUser->getLocale())
+                        )
+                    );
+                }
             }
         }
     }

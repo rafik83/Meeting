@@ -7,7 +7,14 @@
     <br>
     {{ macros.button(
         'mail.happening.webinar.zip_record_archive_available_for_speaker.link'|trans({},'mail', mail.locale),
-        mail.webinarRecordZipFileUrl
+        eventUrl(
+            mail.event,
+            'event_happening_webinar_download_record_archive',
+            {
+                'happening': mail.happening.id,
+                '_locale': mail.event.getAvailableLocale(mail.locale)
+            }
+        )
     ) }}
     <br>
     <p>{{ 'mail.happening.webinar.zip_record_archive_available_for_speaker.outro'|trans({}, 'mail', mail.locale) }}</p>

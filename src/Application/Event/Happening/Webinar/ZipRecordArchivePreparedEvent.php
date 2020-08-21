@@ -47,4 +47,9 @@ class ZipRecordArchivePreparedEvent extends SymfonyEvent
     {
         return $this->locale;
     }
+
+    public function hasAdmin(): bool
+    {
+        return null !== $this->admin;
+    }
 }

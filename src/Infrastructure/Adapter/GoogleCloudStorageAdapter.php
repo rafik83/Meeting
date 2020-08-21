@@ -141,10 +141,10 @@ class GoogleCloudStorageAdapter
         }
     }
 
-    public function signedUrl($url, $date): string
+    public function signedUrl(string $url, \DateTimeInterface $date, array $options = []): string
     {
         $flySystem = $this->init();
 
-        return $flySystem->getAdapter()->getTemporaryUrl($url, $date);
+        return $flySystem->getAdapter()->getTemporaryUrl($url, $date, $options);
     }
 }

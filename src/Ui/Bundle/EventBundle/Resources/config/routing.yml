@@ -975,6 +975,13 @@ event_sheet_happening_webinar_question_vote:
     methods: [ POST ]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
 
+event_happening_webinar_download_record_archive:
+    path: /happening/{happening}/webinar/download/record
+    requirements:
+        happening: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\Download\DownloadAction
+    methods: [GET]
+
 #
 # Unavailability
 #
