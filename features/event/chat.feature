@@ -6,7 +6,7 @@
 
 Feature: I can chat
 
-  Scenario: I can list a webinar chat messages
+  Scenario: I can participate to webinar chat
     Given the database is purged
     And the event "BestOfWeb" is created
     And the user "hello@example.net" is created
