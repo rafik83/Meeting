@@ -12,6 +12,7 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet'
+            - '@monolog.logger'
     Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\PrepareImportSheetsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'

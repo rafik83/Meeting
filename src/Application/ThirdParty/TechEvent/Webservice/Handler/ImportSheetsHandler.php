@@ -7,6 +7,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Psr\Log\LoggerInterface;
 
 class ImportSheetsHandler
 {
@@ -22,16 +23,21 @@ class ImportSheetsHandler
     /** @var ConvertContactToSheet */
     private $convertContactToSheet;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         WSClient $WSClient,
         TypeRepositoryInterface $typeRepository,
         TemplateDataFactory $templateDataFactory,
-        ConvertContactToSheet $convertContactToSheet
+        ConvertContactToSheet $convertContactToSheet,
+        LoggerInterface $logger
     ) {
         $this->WSClient = $WSClient;
         $this->typeRepository = $typeRepository;
         $this->templateDataFactory = $templateDataFactory;
         $this->convertContactToSheet = $convertContactToSheet;
+        $this->logger = $logger;
     }
 
     public function handle(Event $event, array $eventConfiguration): void
@@ -53,6 +59,10 @@ class ImportSheetsHandler
         }
 
         $contacts = $this->WSClient->getContactsToSynchro($endpoint, $identifier);
+
+        $this->logger->notice(
+            sprintf('VIMEET : Importing %d contacts from techevent on event "%d".', count($contacts), $event->getId())
+        );
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
         $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type, null);

@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Data\Type as DataType;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -51,7 +50,7 @@ class ConvertContactToSheet
         $registrationTemplate->clear();
         $sheetTemplate->clear();
 
-        $mandatoryKeys = $eventConfiguration['mandatory_key'] ?? [];
+        $mandatoryKeys = $eventConfiguration['mandatory_keys'] ?? [];
         if (!isset($mandatoryKeys['email'], $mandatoryKeys['identifier'])) {
             return;
         }

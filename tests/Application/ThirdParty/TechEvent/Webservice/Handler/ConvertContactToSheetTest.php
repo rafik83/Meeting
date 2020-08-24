@@ -59,7 +59,7 @@ class ConvertContactToSheetTest extends TestCase
         ];
 
         $configuration = [
-            'mandatory_key' => [
+            'mandatory_keys' => [
                 'email' => 'EMAIL',
                 'identifier' => 'IDCONTACT',
                 'country' => 'IDPAYS',
