@@ -39,7 +39,10 @@ class ImportSheetsHandler
         $endpoint = $eventConfiguration['endpoint'] ?? null;
         $typeId = $eventConfiguration['type'] ?? null;
 
-        if (null === $endpoint || null === $typeId) {
+        // Unique identifier of the contact, can be IDCONTACT, IdContact for eg.
+        $identifier = $eventConfiguration['mandatory_keys']['identifier'] ?? null;
+
+        if (null === $endpoint || null === $typeId || null === $identifier) {
             return;
         }
 
@@ -49,7 +52,7 @@ class ImportSheetsHandler
             return;
         }
 
-        $contacts = $this->WSClient->getContactsToSynchro($endpoint);
+        $contacts = $this->WSClient->getContactsToSynchro($endpoint, $identifier);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
         $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type, null);

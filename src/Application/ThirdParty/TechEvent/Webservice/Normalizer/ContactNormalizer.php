@@ -8,8 +8,11 @@ use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\Teleph
 
 class ContactNormalizer
 {
-    public function normalize(array $contact, array $normalizerMapping): array
-    {
+    public function normalize(
+        array $contact,
+        array $normalizerMapping,
+        ?string $countryKey = null
+    ): array {
         if (empty($normalizerMapping)) {
             return $contact;
         }
@@ -25,7 +28,7 @@ class ContactNormalizer
                 $contactsNormalized[$key] = $this->convert(
                     $contactData,
                     $normalizerMapping[$key],
-                    $contact['IDPAYS'] ?? ''
+                    null !== $countryKey ? ($contact[$countryKey] ?? '') : ''
                 );
 
                 continue;

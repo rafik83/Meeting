@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Hand
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Data\Type as DataType;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet;
 use Proximum\Vimeet\Domain\Model\User;
 use PHPUnit\Framework\TestCase;
@@ -38,15 +37,15 @@ class ConvertContactToSheetTest extends TestCase
             "IDCONTACT" => "113893672",
             "SOCIETE" => "TPM",
             "IDCIVILITE" => "M  ",
-            "NOM" => "HAMLAT",
+            "NOM" => "Test",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
             "GRADE" => "CF",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
             "IDPAYS" => "DZ",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
+            "EMAIL" => "example-1@example.net",
             "Secteur_activité" => "A99  ",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
             "Typologie_société" => "TP99 ",
@@ -60,6 +59,11 @@ class ConvertContactToSheetTest extends TestCase
         ];
 
         $configuration = [
+            'mandatory_key' => [
+                'email' => 'EMAIL',
+                'identifier' => 'IDCONTACT',
+                'country' => 'IDPAYS',
+            ],
             'mapping' => [
                 "EMAIL" => "email",
                 "SOCIETE" => "sheet_title",
@@ -87,13 +91,13 @@ class ConvertContactToSheetTest extends TestCase
         ];
 
         $dataIndexedByTag = [
-            "email" => "HAMLETLEE16@HOTMAIL.COM",
+            "email" => "example-1@example.net",
             "sheet_title" => "TPM",
             "tag_sheet_generic_1" => "CF",
             "participant_gender" => "man",
-            "participant_lastname" => "HAMLAT",
+            "participant_lastname" => "Test",
             "participant_firstname" => "MOHAMED",
-            "sheet_address" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "sheet_address" => "27 rue du test",
             "sheet_zipcode" => "16006",
             "sheet_city" => "ALGER",
             "sheet_country" => "DZ",
@@ -110,14 +114,14 @@ class ConvertContactToSheetTest extends TestCase
             "SOCIETE" => "TPM",
             "GRADE" => "CF",
             "IDCIVILITE" => "man",
-            "NOM" => "HAMLAT",
+            "NOM" => "Test",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
             "IDPAYS" => "DZ",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
+            "EMAIL" => "example-1@example.net",
             "Secteur_activité" => "A99  ",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
             "Typologie_société" => "TP99 ",
@@ -130,7 +134,7 @@ class ConvertContactToSheetTest extends TestCase
             "RDV_B2B" => false
         ];
 
-        $contactNormalizer->normalize($contact, $configuration['normalize'])
+        $contactNormalizer->normalize($contact, $configuration['normalize'], 'IDPAYS')
             ->shouldBeCalled()
             ->willReturn($resultNormalizer);
 
@@ -138,7 +142,7 @@ class ConvertContactToSheetTest extends TestCase
             new ConvertToParticipant(
                 $event->reveal(),
                 $type->reveal(),
-                $contact[DataType::EMAIL],
+                $contact['EMAIL'],
                 'fr',
                 $dataIndexedByTag,
                 $registrationTemplate->reveal(),
@@ -153,7 +157,7 @@ class ConvertContactToSheetTest extends TestCase
                 $user->reveal(),
                 $event->reveal(),
                 ExtraDataType::IMPORTED_FROM_TECH_EVENT,
-                $contact[DataType::ID_CONTACT],
+                $contact['IDCONTACT'],
                 $dateTime
             )
         )->shouldBeCalled();

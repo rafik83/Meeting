@@ -51,14 +51,28 @@ class ConvertContactToSheet
         $registrationTemplate->clear();
         $sheetTemplate->clear();
 
-        $contact = $this->contactNormalizer->normalize($contact, $eventConfiguration['normalize'] ?? []);
+        $mandatoryKeys = $eventConfiguration['mandatory_key'] ?? [];
+        if (!isset($mandatoryKeys['email'], $mandatoryKeys['identifier'])) {
+            return;
+        }
+
+        $emailKey = $mandatoryKeys['email'];
+        $identifierKey = $mandatoryKeys['identifier'];
+        $countryKey = $mandatoryKeys['country'] ?? null;
+
+        $contact = $this->contactNormalizer->normalize(
+            $contact,
+            $eventConfiguration['normalize'] ?? [],
+            $countryKey
+        );
+
         $dataIndexedByTag = $this->getDataIndexedByTag($contact, $eventConfiguration['mapping'] ?? []);
 
         $participant = $this->convertToParticipantHandler->handle(
             new ConvertToParticipant(
                 $event,
                 $type,
-                $contact[DataType::EMAIL],
+                $contact[$emailKey],
                 $event->getLocaleFallback(),
                 $dataIndexedByTag,
                 $registrationTemplate,
@@ -73,7 +87,7 @@ class ConvertContactToSheet
                     $participant->getUser(),
                     $event,
                     ExtraDataType::IMPORTED_FROM_TECH_EVENT,
-                    $contact[DataType::ID_CONTACT],
+                    $contact[$identifierKey],
                     $this->dateTime
                 )
             );

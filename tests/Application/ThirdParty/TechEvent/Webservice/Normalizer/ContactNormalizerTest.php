@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer;
@@ -66,7 +65,7 @@ class ContactNormalizerTest extends TestCase
         ];
 
         $normalizer = new ContactNormalizer();
-        $result = $normalizer->normalize($contact, $normalizerMapping);
+        $result = $normalizer->normalize($contact, $normalizerMapping, 'IDPAYS');
 
         $this->assertSame($result, $expectedResult);
     }
