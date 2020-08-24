@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -20,15 +21,20 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
     /** @var UuidGeneratorInterface */
     private $uuidGenerator;
 
+    /** @var FileSystemAdapterInterface */
+    private $filesystem;
+
     public function __construct(
         GoogleCloudStorageAdapter $googleCloudStorage,
         string $googleCloudStorageUri,
-        UuidGeneratorInterface $uuidGenerator
+        UuidGeneratorInterface $uuidGenerator,
+        FileSystemAdapterInterface $filesystem
     ) {
         $this->googleCloudStorage = $googleCloudStorage;
         $this->googleCloudStorageUri = $googleCloudStorageUri;
         $this->zipArchive = new \ZipArchive();
         $this->uuidGenerator = $uuidGenerator;
+        $this->filesystem = $filesystem;
     }
 
     public function prepareZip(array $files, string $zipName): void
@@ -38,9 +44,11 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
         }
 
         foreach ($files as $name => $url) {
-            $this->zipArchive->addFromString(
-                $name,
-                file_get_contents($url)
+            $tempFile = $this->filesystem->getTemporaryPath().DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
+            $this->filesystem->copy($url, $tempFile);
+            $this->zipArchive->addFile(
+                $tempFile,
+                $name
             );
         }
 

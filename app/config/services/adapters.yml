@@ -49,3 +49,4 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
             - '%google_cloud_storage_video_uri%'
             - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
+            - '@adapter.file_system_adapter'

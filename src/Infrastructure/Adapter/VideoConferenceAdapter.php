@@ -102,8 +102,9 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         $urls = [];
 
         foreach ($list->getItems() as $archive) {
-            if (isset($archive->url)) {
-                $urls[] = $archive->url;
+            $url = $archive->url;
+            if ($url) {
+                $urls[] = $url;
             }
         }
 
