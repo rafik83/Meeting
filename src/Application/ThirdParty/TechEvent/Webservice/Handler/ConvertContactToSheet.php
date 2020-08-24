@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
@@ -67,7 +59,7 @@ class ConvertContactToSheet
                 $event,
                 $type,
                 $contact[DataType::EMAIL],
-                $event->getFallback(),
+                $event->getLocaleFallback(),
                 $dataIndexedByTag,
                 $registrationTemplate,
                 $sheetTemplate,

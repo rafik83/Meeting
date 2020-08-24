@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
@@ -32,7 +24,7 @@ class ConvertContactToSheetTest extends TestCase
         $participant = $this->prophesize(Participant::class);
         $participant->getUser()->willReturn($user->reveal());
         $event = $this->prophesize(Event::class);
-        $event->getFallback()->willReturn('fr');
+        $event->getLocaleFallback()->willReturn('fr');
         $type = $this->prophesize(Type::class);
         $registrationTemplate = $this->prophesize(TemplateData::class);
         $sheetTemplate = $this->prophesize(TemplateData::class);

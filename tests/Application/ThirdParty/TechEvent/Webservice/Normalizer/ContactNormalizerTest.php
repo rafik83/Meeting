@@ -1,12 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Normalizer;
 
@@ -19,7 +12,7 @@ class ContactNormalizerTest extends TestCase
     {
         $normalizerMapping = [
             "TEL" => "telephone",
-		    "IDCIVILITE" => "gender",
+            "IDCIVILITE" => "gender",
             "RDV_B2B" => "boolean",
             "IDPAYS" => "country"
         ];
