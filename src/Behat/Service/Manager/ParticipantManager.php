@@ -68,7 +68,7 @@ class ParticipantManager
         return $participant;
     }
 
-    public function register(Participant $participant, string $firstname, string $lastname): void
+    public function setBasicRegistrationData(Participant $participant, string $firstname, string $lastname): void
     {
         $participant->getSheet()->setRegistrationData([
             // Chiffre d'affaires

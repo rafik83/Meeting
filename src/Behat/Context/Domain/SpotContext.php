@@ -29,7 +29,7 @@ class SpotContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $this->spotContextProxy->getSpotManager()->create($event, $reference, $size, $meetingCapacity, $seatCapacity, $active==='active');
+        $this->spotContextProxy->getSpotManager()->create($event, $reference, $size, $meetingCapacity, $seatCapacity, $active === 'active');
     }
 
     /**

@@ -98,7 +98,7 @@ class RegistrationTemplateManager
                 ],
             ],
             $event ? $event->getLocales() : ['fr'],
-            $event? $event->getLocaleFallback() : 'fr',
+            $event ? $event->getLocaleFallback() : 'fr',
             new \DateTime(),
             $event
         );

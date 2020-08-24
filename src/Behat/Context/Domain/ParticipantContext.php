@@ -104,7 +104,7 @@ class ParticipantContext implements Context
             throw new \InvalidArgumentException('Missing User');
         }
 
-        $this->participantContextProxy->getParticipantManager()->register($participant, $user->getFirstName(), $user->getLastName());
+        $this->participantContextProxy->getParticipantManager()->setBasicRegistrationData($participant, $user->getFirstName(), $user->getLastName());
     }
 
     /**

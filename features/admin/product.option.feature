@@ -9,7 +9,6 @@ Feature: Handle Product
     And the event "TedX" is created
     And I am logged as admin
     When I go to this page "/fr/event"
-    # When I go to this page "/fr/event/past"
     And I follow "admin.product.link"
     Then I should be on this page "/fr/event/1/product"
     And I should see "admin.zero-result"
