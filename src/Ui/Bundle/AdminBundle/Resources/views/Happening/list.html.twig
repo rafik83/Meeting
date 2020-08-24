@@ -102,7 +102,7 @@
                 <td>{{ happening.questionAllowed ? '✓' : '' }}</td>
                 <td>{{ happening.participations }}</td>
                 <td>{{ happening.hasLimit ? happening.limit : 'admin.happening.list.no-limit'|trans}}</td>
-                <td class="text-right">
+                <td class="text-right dropdown-min-width">
                     {% set updateBtn %}
                         <a href="{{ path('admin_happening_update', { 'event': event.id, 'happening': happening.id }) }}" class="btn btn-default btn-sm">
                             {{ 'admin.happening.update'|trans }}
@@ -110,7 +110,7 @@
                     {% endset %}
 
                     {% if happening.isWebinarRecordAvailable %}
-                    <div class="dropdown btn-group pull-right" data-toggle="tooltip" data-placement="top">
+                    <div class="btn-group" data-toggle="tooltip" data-placement="top">
                         {{ updateBtn }}
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span class="caret"></span>
