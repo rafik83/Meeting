@@ -34,17 +34,23 @@ class SpotManager
         $this->sheetRepository = $sheetRepository;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $reference
-     * @param int    $meetingCapacity
-     * @param int    $seatCapacity
-     *
-     * @return Spot
-     */
-    public function create(Event $event, $reference, $meetingCapacity, $seatCapacity)
-    {
-        $spot = new Spot($reference, $event, 1, $meetingCapacity, $seatCapacity, true);
+    public function create(
+        Event $event,
+        string $reference,
+        int $meetingCapacity,
+        int $seatCapacity,
+        bool $isVisio = false
+    ): Spot {
+        $spot = new Spot(
+            $reference,
+            $event,
+            1,
+            $meetingCapacity,
+            $seatCapacity,
+            true,
+            Spot::PRIORITY_MUTUALIZE,
+            $isVisio
+        );
         $this->spotRepository->add($spot);
 
         return $spot;
