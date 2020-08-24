@@ -101,6 +101,7 @@ class LoginContext extends RawMinkContext implements KernelAwareContext
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->clear();
         $client->getCookieJar()->set($cookie);
     }
 }

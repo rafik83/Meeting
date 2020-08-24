@@ -32,7 +32,7 @@ Feature: I can chat
   Scenario: I can participate to meeting chat
     Given the database is purged
     And the event "BestOfWeb" is created
-    And the user "hello@example.net" is created
+    And the user "hello2@example.net" is created
     And there is a sheet
     And there is a participant for this sheet and this user
     And there is a video meeting for this participant
