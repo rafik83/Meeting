@@ -357,9 +357,11 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction:
         arguments:
+            - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

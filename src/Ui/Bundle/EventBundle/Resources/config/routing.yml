@@ -1167,16 +1167,18 @@ event_meeting_evaluation:
 # Chat
 #
 event_chat_messages_list:
-    path: /chat/{objectType}/{objectId}/list
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/list
     requirements:
+        sheet: \d+
         objectType: \w+
         objectId: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
 
 event_chat_messages_add:
-    path: /chat/{objectType}/{objectId}/add
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/add
     requirements:
+        sheet: \d+
         objectType: \w+
         objectId: \d+
     methods: [POST]
