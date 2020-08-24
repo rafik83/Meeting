@@ -16,10 +16,23 @@ class ChatMessageView
     /** @var null|string */
     public $formattedCreatedAt;
 
-    public function __construct(int $id, string $content, \DateTimeInterface $createdAt)
-    {
+    /** @var string */
+    public $authorName;
+
+    /** @var string */
+    public $sheetTitle;
+
+    public function __construct(
+        int $id,
+        string $content,
+        \DateTimeInterface $createdAt,
+        string $authorName,
+        string $sheetTitle
+    ) {
         $this->id = $id;
         $this->content = $content;
         $this->createdAt = $createdAt;
+        $this->authorName = $authorName;
+        $this->sheetTitle = $sheetTitle;
     }
 }

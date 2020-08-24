@@ -37,6 +37,6 @@ class AddChatMessageHandler
             throw new AccessDeniedToChatMessages('Access denied to this chat messages');
         }
 
-        $this->messageRepository->add(new ChatMessage($command->object, $command->user, $this->now, $command->content));
+        $this->messageRepository->add(new ChatMessage($command->object, $command->user, $this->now, $command->content, '', ''));
     }
 }

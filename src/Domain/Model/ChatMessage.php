@@ -24,17 +24,27 @@ class ChatMessage
     /** @var string */
     private $content;
 
+    /** @var string */
+    public $authorName;
+
+    /** @var string */
+    public $sheetTitle;
+
     public function __construct(
         ChatMessageLinkableInterface $object,
         User $createdBy,
         DateTimeInterface $createdAt,
-        string $content
+        string $content,
+        string $authorName,
+        string $sheetTitle
     ) {
         $this->objectType = $object->getObjectType();
         $this->objectId = $object->getId();
         $this->createdBy = $createdBy;
         $this->createdAt = $createdAt;
         $this->content = $content;
+        $this->authorName = $authorName;
+        $this->sheetTitle = $sheetTitle;
     }
 
     public function getId(): int
@@ -67,4 +77,13 @@ class ChatMessage
         return $this->content;
     }
 
+    public function getAuthorName(): string
+    {
+        return $this->authorName;
+    }
+
+    public function getSheetTitle(): string
+    {
+        return $this->sheetTitle;
+    }
 }

@@ -36,7 +36,7 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->createQueryBuilder()
             ->select(
                 sprintf(
-                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt)',
+                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt, chatMessage.authorName, chatMessage.sheetTitle)',
                     ChatMessageView::class
                 )
             )

@@ -15,6 +15,10 @@ Proximum\Vimeet\Domain\Model\ChatMessage:
             type: datetime
         content:
             type: text
+        authorName:
+            type: string
+        sheetTitle:
+            type: string
     indexes:
         object_index:
             columns: [object_type, object_id]
