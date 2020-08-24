@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\UserContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\User;
 
 class UserContext implements Context
 {
@@ -28,14 +29,25 @@ class UserContext implements Context
 
     /**
      * @Given /^the user "(?P<email>[^"]+)" is created$/
-     *
-     * @param string $email
      */
-    public function create($email)
+    public function create(string $email): User
     {
         $user = $this->userContextProxy->getUserManager()->create($email);
 
         $this->userContextProxy->getStorage()->set('user', $user);
+
+        return $user;
+    }
+
+    /**
+     * @Given /^the user is created with email "(?P<email>[^"]+)", firstname "(?P<firstname>[^"]+)" and lastname "(?P<lastname>[^"]+)"$/
+     */
+    public function createWithEmailFirstnameAndLastname(string $email, string $firstname, string $lastname): User
+    {
+        $user = $this->create($email);
+        $this->userContextProxy->getUserManager()->fillInformation($user, $firstname, $lastname);
+
+        return $user;
     }
 
     /**
