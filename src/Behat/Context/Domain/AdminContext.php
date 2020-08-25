@@ -44,6 +44,20 @@ class AdminContext implements Context
     }
 
     /**
+     * @Given /^this admin has an activation token "(?P<token>[^"]+)"$/
+     */
+    public function createAdminWithToken(string $token): void
+    {
+        $admin = $this->adminContextProxy->getStorage()->get('admin');
+
+        if (!$admin instanceof Admin) {
+            throw new \InvalidArgumentException('Admin not found');
+        }
+
+        $this->adminContextProxy->getAdminManager()->assignToken($admin, $token);
+    }
+
+    /**
      * @Given /^this admin can access this event$/
      */
     public function assignEvent(): void
@@ -52,11 +66,11 @@ class AdminContext implements Context
         $event = $this->adminContextProxy->getStorage()->get('event');
 
         if (!$admin instanceof Admin) {
-            Throw new \InvalidArgumentException('Admin not found');
+            throw new \InvalidArgumentException('Admin not found');
         }
 
         if (!$event instanceof Event) {
-            Throw new \InvalidArgumentException('Event not found');
+            throw new \InvalidArgumentException('Event not found');
         }
 
         $this->adminContextProxy->getAdminManager()->assignEvent($admin, $event);

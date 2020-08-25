@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Behat\Service\Manager\Transaction;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 
@@ -41,6 +42,13 @@ class TransactionManager
     ): Transaction {
         $date = new \DateTime();
 
+        $participants = $sheet->getParticipants();
+        /** @var User */
+        $user = null;
+        if (count($participants)) {
+            $user = $participants->first()->getUser();
+        }
+
         $transaction = new Transaction(
             $sheet,
             $amount,
@@ -48,7 +56,8 @@ class TransactionManager
             Mode::PAYMENT_BANK_CASH,
             $reference,
             $status,
-            $sheet->getEvent()->getCurrency()
+            $sheet->getEvent()->getCurrency(),
+            $user
         );
 
         $this->transactionRepository->add($transaction);

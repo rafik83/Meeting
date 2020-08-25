@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
@@ -27,28 +19,22 @@ class SlotManager
     /** @var SlotGenerator */
     private $slotGenerator;
 
-    /**
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param SlotGenerator                  $slotGenerator
-     */
     public function __construct(MeetingSlotRepositoryInterface $meetingSlotRepository, SlotGenerator $slotGenerator)
     {
         $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->slotGenerator         = $slotGenerator;
+        $this->slotGenerator = $slotGenerator;
     }
 
-    /**
-     * @param Event $event
-     * @param int   $quantity
-     */
-    public function create(Event $event, $quantity)
+    public function create(Event $event, int $quantity, ?\DateTimeInterface $start = null)
     {
         $interval = self::INTERVAL;
         $duration = self::DURATION;
 
-        $now   = new \DateTime();
-        $begin = new \DateTime(sprintf('%s %s', $now->format('Y-m-d'), '08:00:00'));
-        $end   = clone $begin;
+        if (null === $start) {
+            $start = new \DateTime();
+        }
+        $begin = new \DateTime(sprintf('%s %s', $start->format('Y-m-d'), '08:00:00'));
+        $end = clone $begin;
         $end->add(new \DateInterval(sprintf('PT%sM', ($interval + $duration) * $quantity)));
 
         $slots = $this->slotGenerator->generate(
@@ -61,23 +47,23 @@ class SlotManager
         }
     }
 
+    public function addSlot(MeetingSlot $slot): void
+    {
+        $this->meetingSlotRepository->add($slot);
+    }
+
     /**
-     * @param Event $event
-     *
      * @return MeetingSlot[]
      */
-    public function findByEvent(Event $event)
+    public function findByEvent(Event $event): array
     {
         return $this->meetingSlotRepository->findByEvent($event);
     }
 
     /**
-     * @param Event $event
-     * @param int   $slotId
-     *
      * @return null|MeetingSlot
      */
-    public function findByEventAndId(Event $event, $slotId)
+    public function findByEventAndId(Event $event, int $slotId): ?MeetingSlot
     {
         return $this->meetingSlotRepository->find($event, $slotId);
     }

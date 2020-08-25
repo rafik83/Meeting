@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
@@ -27,13 +19,9 @@ class SpotContext implements Context
     }
 
     /**
-     * @Given /^there is an active spot "(?P<reference>[^"]+)" with meeting capacity of (?P<meetingCapacity>\d+), seat capacity of (?P<seatCapacity>\d+)$/
-     *
-     * @param string $reference
-     * @param int    $meetingCapacity
-     * @param int    $seatCapacity
+     * @Given /^there is an (?P<active>(in)?active) spot "(?P<reference>[^"]+)" with size of (?P<size>\d+), meeting capacity of (?P<meetingCapacity>\d+), seat capacity of (?P<seatCapacity>\d+)$/
      */
-    public function thereIsAnActiveSpot($reference, $meetingCapacity, $seatCapacity)
+    public function thereIsAnActiveSpot(string $active, string $reference, int $size, int $meetingCapacity, int $seatCapacity)
     {
         $event = $this->spotContextProxy->getStorage()->get('event');
 
@@ -41,7 +29,7 @@ class SpotContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $this->spotContextProxy->getSpotManager()->create($event, $reference, $meetingCapacity, $seatCapacity);
+        $this->spotContextProxy->getSpotManager()->create($event, $reference, $size, $meetingCapacity, $seatCapacity, $active === 'active');
     }
 
     /**
