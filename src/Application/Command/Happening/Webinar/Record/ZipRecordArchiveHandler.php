@@ -81,7 +81,7 @@ class ZipRecordArchiveHandler
 
         $zipFileName = sprintf(
             '%s/%s',
-            $this->fileSystem->getTemporaryPath(),
+            $this->fileSystem->createTempDir(),
             $fileName
         );
 

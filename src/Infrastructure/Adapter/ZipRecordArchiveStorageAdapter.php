@@ -44,7 +44,7 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
         }
 
         foreach ($files as $name => $url) {
-            $tempFile = $this->filesystem->getTemporaryPath().DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
+            $tempFile = $this->filesystem->generateTemporaryPath();
             $this->filesystem->copy($url, $tempFile);
             $this->zipArchive->addFile(
                 $tempFile,

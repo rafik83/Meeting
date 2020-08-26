@@ -80,27 +80,25 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create temporary directory and return path
      */
     public function createTempDir(): string
     {
-        $path = $this->getTemporaryPath();
+        $path = $this->generateTemporaryPath();
         $this->mkdir($path);
 
         return $path;
     }
 
     /**
-     * {@inheritdoc}
+     * Generate path to temporary file or directory (file is not created)
      */
-    public function getTemporaryPath(): string
+    public function generateTemporaryPath(): string
     {
         $tempDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'vimeet';
+        // create just container dir, to avoid error if path is used to copy file
         $this->mkdir($tempDir, 0600);
 
-        $dir = $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
-        $this->mkdir($dir, 0600);
-
-        return $dir;
+        return $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();;
     }
 }

@@ -110,7 +110,7 @@ class ZipRecordArchiveHandlerTest extends TestCase
         ];
         $this->videoConferenceAdapter->listArchiveUrls('session-id')->shouldBeCalled()->willReturn($urls);
 
-        $this->fileSystem->getTemporaryPath()
+        $this->fileSystem->createTempDir()
             ->shouldBeCalled()
             ->willReturn('/tmp/vimeet/1234-1234-1234')
         ;
