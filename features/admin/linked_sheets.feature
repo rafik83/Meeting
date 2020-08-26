@@ -5,18 +5,11 @@ Feature: Manage linked sheets
 
   Scenario: I can't link only one sheet
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
+    And the event "Les rendez-vous CARNOT 2019" is created
+    And there is a type in this event
+    And there is a rule for this type and this event
+    And there is a sheet for this type with the title "Proximum"
+    And I am logged as admin
     And I am on this page "/fr/event/1/linked-sheets/list"
     Then I follow "admin.linked_sheets.create"
     And I should be on this page "/fr/event/1/linked-sheets/create"
@@ -25,17 +18,28 @@ Feature: Manage linked sheets
     Then I should see "validators.linkedSheets.add.notEnoughSheets"
 
   Scenario: I can't link from different types
-    Given I am logged with "test@test.com" on admin
+    Given the database is purged
+    Given the event "Les rendez-vous CARNOT 2019" is created
+    And I am logged as admin
+    And there is a type in this event
+    And there is a sheet for this type with the title "Fairness Coop"
+    And there is a type in this event
+    And there is a sheet for this type with the title "Acme Corp"
     And I am on this page "/fr/event/1/linked-sheets/list"
     Then I follow "admin.linked_sheets.create"
     And I should be on this page "/fr/event/1/linked-sheets/create"
     And I select "0" from "create_linked_sheets_sheetViews"
-    And I additionally select "2" from "create_linked_sheets_sheetViews"
+    And I additionally select "1" from "create_linked_sheets_sheetViews"
     And I press "form.create_linked_sheets.children.submit.label"
     Then I should see "validators.linkedSheets.add.notUniqueType"
 
   Scenario: I can link sheets
-    Given I am logged with "test@test.com" on admin
+    Given the database is purged
+    Given the event "Les rendez-vous CARNOT 2019" is created
+    And I am logged as admin
+    And there is a type in this event
+    And there is a sheet for this type with the title "Aanera"
+    And there is a sheet for this type with the title "Hello World Company"
     And I am on this page "/fr/event/1/linked-sheets/list"
     Then I follow "admin.linked_sheets.create"
     And I should be on this page "/fr/event/1/linked-sheets/create"

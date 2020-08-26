@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -24,10 +16,6 @@ class SpotManager
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @param SpotRepositoryInterface  $spotRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     */
     public function __construct(SpotRepositoryInterface $spotRepository, SheetRepositoryInterface $sheetRepository)
     {
         $this->spotRepository  = $spotRepository;
@@ -39,6 +27,7 @@ class SpotManager
         string $reference,
         int $meetingCapacity,
         int $seatCapacity,
+        bool $active,
         bool $isVisio = false
     ): Spot {
         $spot = new Spot(
@@ -47,7 +36,7 @@ class SpotManager
             1,
             $meetingCapacity,
             $seatCapacity,
-            true,
+            $active,
             Spot::PRIORITY_MUTUALIZE,
             $isVisio
         );
@@ -56,23 +45,12 @@ class SpotManager
         return $spot;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $reference
-     *
-     * @return Spot|null
-     */
-    public function getByReference(Event $event, $reference)
+    public function getByReference(Event $event, string $reference): Spot
     {
         return $this->spotRepository->findByReference($event, $reference);
     }
 
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param string $reference
-     */
-    public function assignToSheet(Event $event, Sheet $sheet, $reference)
+    public function assignToSheet(Event $event, Sheet $sheet, string $reference): void
     {
         $spot = $this->spotRepository->findByReference($event, $reference);
 

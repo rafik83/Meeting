@@ -5,17 +5,17 @@ Feature: Spot feature
 
   Scenario: I can list spot
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Spot.yml            |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-MeetingSlot.yml     |
-      | Admin.yml                                                                |
-    And I am logged with "test@test.com" on admin
+    And the event "Superbowl 2019" is created
+    And there is an active spot "G0345" with size of 6, meeting capacity of 3, seat capacity of 4
+    And there is an active spot "A008" with size of 6, meeting capacity of 3, seat capacity of 4
+    And there is an active spot "B090" with size of 6, meeting capacity of 5, seat capacity of 4
+    And there is an active spot "A100" with size of 6, meeting capacity of 3, seat capacity of 4
+    And there is an inactive spot "F098" with size of 6, meeting capacity of 5, seat capacity of 4
+    And there is a meeting slot from 2016-10-12 08:00:00 to 2016-10-12 08:30:00
+    And there is a meeting slot from 2016-10-12 08:30:00 to 2016-10-12 09:00:00
+    And there is a meeting slot from 2016-10-12 09:00:00 to 2016-10-12 09:30:00
+    And there is a meeting slot from 2016-10-12 09:30:00 to 2016-10-12 10:00:00
+    And I am logged as admin
     When I go to this page "/fr/event/1/spot"
     Then I should see "G0345"
     And I should see "A008"
@@ -24,7 +24,7 @@ Feature: Spot feature
     And I should see "F098"
 
   Scenario: I can create spot
-    Given I am logged with "test@test.com" on admin
+    And I am logged as admin
     And I go to "/fr/event/1"
     And I follow "admin.spot.link"
     Then I should be on this page "/fr/event/1/spot"
@@ -44,7 +44,7 @@ Feature: Spot feature
     And I should see "90"
 
   Scenario: I can filter spots with active filter
-    Given I am logged with "test@test.com" on admin
+    And I am logged as admin
     And I go to this page "/fr/event/1/spot"
     And I should see "A008"
     And I should see "F098"
@@ -53,7 +53,7 @@ Feature: Spot feature
     And I should not see "F098"
 
   Scenario: I can filter spots with reference filter
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot"
     When I fill in the following:
       | form.filter_spot_type.children.reference.label | A |
@@ -65,7 +65,7 @@ Feature: Spot feature
     And I should not see "F098"
 
   Scenario: I can filter spots with meetingCapacity filter
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot"
     When I fill in the following:
       | form.filter_spot_type.children.meetingCapacity.label | 5 |
@@ -77,7 +77,7 @@ Feature: Spot feature
     And I should not see "G0345"
 
   Scenario: I can filter spots using all filters
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot?active=0"
     When I fill in the following:
       | form.filter_spot_type.children.reference.label       | F09 |
@@ -92,7 +92,7 @@ Feature: Spot feature
     And I should not see "B090"
 
   Scenario: I can disable spot in batch mode
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot?active=1"
     And I should see "G0345"
     And I should see "A008"
@@ -107,7 +107,7 @@ Feature: Spot feature
     And I should not see "B090"
 
   Scenario: I can set spot unavailabilities
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot"
     And I should see "A100"
     And I should see "B090"
@@ -125,7 +125,7 @@ Feature: Spot feature
     And I should see "✓" in the "#spot-3" element
 
   Scenario: I can delete spot in batch mode
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/spot"
     And I should see "G0345"
     And I should see "A008"
