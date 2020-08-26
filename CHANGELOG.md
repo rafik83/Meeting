@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-1925 - Chat
+- VIMEET-1925 - Chat API
 
 ## [2.42.0] - 2020-07-31
 ### Added
