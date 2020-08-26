@@ -45,6 +45,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $happening->getEvent()->shouldBeCalled()->willReturn($event);
 
         $user1 = $this->prophesize(User::class);
+        $user1->getId()->shouldBeCalled()->willReturn(1);
         $user1->getFirstName()
             ->shouldBeCalled()
             ->willReturn('Jean');
@@ -59,6 +60,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
             ->willReturn(null);
 
         $user2 = $this->prophesize(User::class);
+        $user2->getId()->shouldBeCalled()->willReturn(2);
         $user2->getFirstName()
             ->shouldBeCalled()
             ->willReturn('George');
@@ -122,6 +124,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'World Company',
                     '7:23:42 PM',
                     0,
+                    false,
                     false
                 ),
                 new QuestionView(
@@ -134,6 +137,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'Cola inc.',
                     '10:00:00 AM',
                     2,
+                    true,
                     true
                 )
             ],

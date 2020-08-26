@@ -32,6 +32,7 @@ class GetHappeningQuestionsHandler
 
         foreach ($questions as [$question, $voteCount, $userVoteCount]) {
             $author = $question->getCreatedBy();
+            $canVote = $query->getUser()->getId() !== $author->getId();
 
             $questionViews[] = new QuestionView(
                 $question->getId(),
@@ -43,7 +44,8 @@ class GetHappeningQuestionsHandler
                 $question->getSheet()->getTitle(),
                 $mediumHourFormatter->format($question->getCreatedAt()),
                 $voteCount,
-                $userVoteCount > 0
+                $userVoteCount > 0,
+                $canVote
             );
         }
 

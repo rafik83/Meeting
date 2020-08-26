@@ -74,6 +74,7 @@ function Webinar(element, isSpeaker) {
 
         this.questionVoteMessage = element.getAttribute('data-question-vote-message');
         this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
+        this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
         this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
@@ -879,11 +880,16 @@ Webinar.prototype.initQuestions = function () {
                 this.removeQuestionListeners();
             }.bind(this);
 
-            likeBtn.addEventListener('click', onLikedClicked);
-            this.questionListeners.push([likeBtn, onLikedClicked]);
+            if (item.canVote) {
+                likeBtn.addEventListener('click', onLikedClicked);
+                this.questionListeners.push([likeBtn, onLikedClicked]);
 
-            likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
-            likeBtn.title = item.isLiked ? this.questionUnvoteMessage : this.questionVoteMessage;
+                likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+                likeBtn.title = item.isLiked ? this.questionUnvoteMessage : this.questionVoteMessage;
+            } else {
+                likeBtn.classList.add('btn-gray', 'disabled');
+                likeBtn.title = this.questionVoteDisabledMessage;
+            }
             likeBlock.appendChild(likeBtn);
 
             questionAside.append(likeBlock);

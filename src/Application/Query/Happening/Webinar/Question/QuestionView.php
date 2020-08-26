@@ -34,6 +34,9 @@ class QuestionView
     /** @var bool */
     public $isLiked;
 
+    /** @var bool */
+    public $canVote;
+
     public function __construct(
         int $questionId,
         string $questionContent,
@@ -44,7 +47,8 @@ class QuestionView
         ?string $sheetTitle,
         string $createdAt,
         int $voteCount,
-        bool $isLiked
+        bool $isLiked,
+        bool $canVote
     ) {
         $this->questionId = $questionId;
         $this->questionContent = $questionContent;
@@ -56,5 +60,6 @@ class QuestionView
         $this->createdAt = $createdAt;
         $this->voteCount = $voteCount;
         $this->isLiked = $isLiked;
+        $this->canVote = $canVote;
     }
 }
