@@ -5,6 +5,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion;
+use Proximum\Vimeet\Application\Exception\Happening\QuestionNotAllowedException;
+use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -14,7 +16,9 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class VoteHappeningQuestionAction
@@ -65,7 +69,13 @@ class VoteHappeningQuestionAction
             throw new BadRequestHttpException('Empty id for question');
         }
 
-        $this->commandBus->handle(new VoteHappeningQuestion($payload['questionId'], $user));
+        try {
+            $this->commandBus->handle(new VoteHappeningQuestion($payload['questionId'], $user));
+        } catch (QuestionNotFoundException $e) {
+            throw new NotFoundHttpException($e->getMessage(), $e);
+        } catch (QuestionNotAllowedException $e) {
+            throw new AccessDeniedHttpException($e->getMessage(), $e);
+        }
 
         return new JsonResponse(
             [
