@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Hotfix: Fix datetime modification in AbstractTokenGenerator
 
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+
 ## [2.42.0] - 2020-07-31
 ### Added
 - VIMEET-2168 - Video object on sheet template

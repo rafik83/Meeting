@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -28,12 +20,7 @@ class EventManager
         $this->eventRepository = $eventRepository;
     }
 
-    /**
-     * @param string $eventTitle
-     *
-     * @return Event
-     */
-    public function create($eventTitle = null): Event
+    public function create(?string $eventTitle = null): Event
     {
         $event = EventFactory::createEvent($eventTitle);
         $event->getConfiguration()->setColors(
@@ -56,5 +43,20 @@ class EventManager
         $this->eventRepository->add($event);
 
         return $event;
+    }
+
+    public function set(Event $event): void
+    {
+        $this->eventRepository->set($event);
+    }
+
+    public function findByDomain(string $eventDomain): ?Event
+    {
+        return $this->eventRepository->getEventByDomain($eventDomain);
+    }
+
+    public function setLocale(Event $event, string $locale): void
+    {
+        $event->setLocales([$locale], $locale);
     }
 }
