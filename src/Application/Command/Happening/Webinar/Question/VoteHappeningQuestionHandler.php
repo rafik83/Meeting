@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
+use Proximum\Vimeet\Application\Exception\Happening\QuestionNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
@@ -29,6 +30,10 @@ class VoteHappeningQuestionHandler
 
         if (null === $question) {
             throw new QuestionNotFoundException();
+        }
+
+        if ($command->getUser()->getId() === $question->getCreatedBy()->getId()) {
+            throw new QuestionNotAllowedException();
         }
 
         $questionVote = $this->questionVoteRepository->getByQuestionAndUser($question, $command->getUser());

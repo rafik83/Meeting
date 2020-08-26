@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
 use Proximum\Vimeet\Application\Command\Command;
-use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\User;
 
 class VoteHappeningQuestion implements Command
