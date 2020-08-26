@@ -67,7 +67,13 @@ interface FileSystemAdapterInterface
      */
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void;
 
+    /**
+     * Create temporary directory and return path
+     */
     public function createTempDir(): string;
 
+    /**
+     * Generate path to temporary file or directory (file is not created)
+     */
     public function generateTemporaryPath(): string;
 }

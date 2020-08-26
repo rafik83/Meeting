@@ -80,7 +80,7 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     }
 
     /**
-     * Create temporary directory and return path
+     * {@inheritdoc}
      */
     public function createTempDir(): string
     {
@@ -91,7 +91,7 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     }
 
     /**
-     * Generate path to temporary file or directory (file is not created)
+     * {@inheritdoc}
      */
     public function generateTemporaryPath(): string
     {
