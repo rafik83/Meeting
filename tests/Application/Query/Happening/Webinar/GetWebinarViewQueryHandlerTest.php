@@ -175,6 +175,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     {
         $date = new \DateTime('2020-03-30 11:50:00');
         $user = $this->prophesize(User::class);
+        $user->getFirstname()->willReturn('Michel');
+        $user->getLastname()->willReturn('Dupont');
         $user->getId()->shouldBeCalled()->willReturn(111);
 
         $user1 = $this->prophesize(User::class);
