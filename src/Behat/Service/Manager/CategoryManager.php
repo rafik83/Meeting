@@ -37,9 +37,10 @@ class CategoryManager
         return $category;
     }
 
-    public function addAllTypes(Category $category)
+    public function addAllTypes(Category $category): void
     {
         $types = $this->typeRepository->getTypesByEvent($category->getEvent());
+
         foreach ($types as $type) {
             $category->addType($type);
         }
