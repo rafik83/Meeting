@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
@@ -24,20 +16,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForgottenPasswordController extends Controller
 {
+
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
      * @return RedirectResponse|Response
      */
-    public function forgottenPasswordAction(Request $request, EventDomain $eventDomain)
+    public function forgottenPasswordAction(Request $request, EventDomain $eventDomain): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
 
         $forgottenPassword = new ForgottenPassword($eventDomain->getEvent(), $request->getLocale());
-        $form              = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
+        $form = $this->createForm(ForgottenPasswordType::class, $forgottenPassword, [
             'action' => $this->generateUrl('event_forgotten_password'),
             'method' => 'POST',
             'submit' => true,
@@ -46,25 +36,24 @@ class ForgottenPasswordController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($forgottenPassword);
-
-                return $this->redirectToRoute('event_forgotten_password_confirm');
             } catch (EmailDoesNotExistException $exception) {
-                $form->get('email')->addError($this->get('error_factory')->create('validators.emailDoesNotExist', $request->getLocale()));
+                // log only: for security reasons, no message is displayed
+                $this->get('logger')->info(sprintf('Email %s is not registered', $form->get('email')->getData()));
             }
+
+            return $this->redirectToRoute('event_forgotten_password_confirm');
         }
 
         return $this->render('EventBundle:ResetPassword:request_token.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param EventDomain $eventDomain
-     *
      * @return RedirectResponse|Response
      */
-    public function forgottenPasswordConfirmAction(EventDomain $eventDomain)
+    public function forgottenPasswordConfirmAction(EventDomain $eventDomain): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
@@ -76,20 +65,16 @@ class ForgottenPasswordController extends Controller
     }
 
     /**
-     * @param Request                $request
-     * @param EventDomain            $eventDomain
-     * @param ForgottenPasswordToken $forgottenPasswordToken
-     *
      * @return RedirectResponse|Response
      */
-    public function createNewPasswordAction(Request $request, EventDomain $eventDomain, ForgottenPasswordToken $forgottenPasswordToken)
+    public function createNewPasswordAction(Request $request, EventDomain $eventDomain, ForgottenPasswordToken $forgottenPasswordToken): Response
     {
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
         }
 
         $newPassword = new NewPassword($forgottenPasswordToken->getUser(), $eventDomain->getEvent());
-        $form        = $this->createForm(NewPasswordType::class, $newPassword, [
+        $form = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [
                 'token' => $forgottenPasswordToken->getToken(),
             ]),
@@ -106,7 +91,7 @@ class ForgottenPasswordController extends Controller
 
         return $this->render('EventBundle:ResetPassword:new_password.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }
