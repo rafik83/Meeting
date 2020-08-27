@@ -5,20 +5,15 @@ Feature: Admin Transaction
 
   Scenario: I can see a list of transactions
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
-      | Admin.yml                                                                |
+    And the event "ASD Days" is created
+    And the domain for this event is "asddays-2016.vimeet.proximum"
+    And the user "user_asddays_1@proximum.com" is created
+    And there is a sheet
+    And there is a participant for this sheet and this user
+    And there is a pending transaction with reference "ref_2" and amount 150 for this sheet
+    And there is a paid transaction with reference "ref_1" and amount 150 for this sheet
     And elastica is populate
-    And I am logged with "test@test.com" on admin
+    And I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     When I go to this page "/fr/event/1/sheet/1"
     And I should see "user_asddays_1@proximum.com"
@@ -27,7 +22,7 @@ Feature: Admin Transaction
     And I should see "admin.transaction.state.paid"
 
   Scenario: I can add a new transaction
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     When I go to this page "/fr/event/1/sheet/1"
     And I follow "admin.transaction.add"
@@ -42,11 +37,11 @@ Feature: Admin Transaction
     And I should see "flash.admin.transaction.create.success"
 
   Scenario: I can edit a transaction
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     When I go to this page "/fr/event/1/sheet/1"
     And I follow "admin.transaction.edit"
-    Then I should be on this page "/fr/event/1/sheet/1/transaction/4/update"
+    Then I should be on this page "/fr/event/1/sheet/1/transaction/1/update"
     And I fill in the following:
       | form.update_transaction.children.amount.label | 525 |
     Then I check the "form.transaction.children.state.paid" radio
@@ -57,10 +52,9 @@ Feature: Admin Transaction
     And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum"
 
   Scenario: I can remove a transaction
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     When I go to this page "/fr/event/1/sheet/1"
     And I press "admin.transaction.remove"
     Then I should be on this page "/fr/event/1/sheet/1"
     And I should see "flash.admin.transaction.remove.success"
-

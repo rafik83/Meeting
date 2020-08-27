@@ -4,26 +4,17 @@ Feature: Import products and package from an event
 
   Scenario: Import products
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admin.yml                                                                |
-    And I am logged with "test@test.com" on admin
+    And the event "Devoxx" is created
+    And there is a product Participant called "Stand premium" with a price of "420" and a max quantity of 42
+    And there is an option called "Option chaise" with a price of "4"
+    And there is an option called "Option wifi" with a price of "8"
+    And the event "Download festival" is created
+    And I am logged as admin
     When I go to this page "/fr/event/2/product"
     Then I follow "admin.package.import.link"
     And I should be on this page "/fr/event/2/product/import"
-    Then I select "ASD Days" from "import_products_and_template_event"
+    Then I select "Devoxx" from "import_products_and_template_event"
     And I press "form.import_products_and_template.children.submit.label"
     Then I should be on this page "/fr/event/2/product"
     And I should see "Option chaise"
-    And I should see "Option A"
+    And I should see "Option wifi"

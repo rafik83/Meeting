@@ -6996,7 +6996,6 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@datetime'
-            - '@Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler'
 
     #
     # QRCode

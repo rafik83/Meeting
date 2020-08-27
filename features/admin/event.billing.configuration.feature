@@ -5,13 +5,10 @@ Feature: Edit event billing configuration
 
   Scenario: go to edit billing configuration page
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | Admin.yml                                                                |
-    And I am logged with "test@test.com" on admin
+    And the event "Best of web" is created
+    And the super admin "test@test.com" is created
+    And I am logged with this admin
+
     Then I am on this page "/fr/event"
     And I go to this page "/fr/event/1/billing/configuration"
     Then the response status code should be 200
