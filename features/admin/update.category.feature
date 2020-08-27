@@ -24,7 +24,7 @@ Feature: Update a participation category
     When I fill in the following:
       | category_create_translations_fr_title | category title fr |
       | category_create_translations_en_title | category title en |
-    And I check "category_create_types_0"
+    And I check "PME"
     And I press "form.category_create.children.submit.label"
     Then the response status code should be 200
     And I should see "flash.admin.category.create.success"
@@ -32,14 +32,15 @@ Feature: Update a participation category
   Scenario: I can remove a type in a category
     Given I am logged as admin
     And I am on this page "/fr/event/1/category/1/update"
-    Then the "category_update_types_0" checkbox should be checked
-    And the "category_update_types_1" checkbox should be checked
-    And the "category_update_types_2" checkbox should not be checked
-    When I check "category_update_types_2"
-    And I uncheck "category_update_types_0"
+    Then the "PME" checkbox should be checked
+    And the "Grand groupe" checkbox should be checked
+    And the "Administration" checkbox should not be checked
+    When I check "Administration"
+    And I uncheck "PME"
     And I press "form.category_update.children.submit.label"
     Then I should see "flash.admin.category.update.success"
     When I go to "/fr/event/1/category/1/update"
-    Then the "category_update_types_0" checkbox should not be checked
-    And the "category_update_types_1" checkbox should be checked
-    And the "category_update_types_2" checkbox should be checked
+    Then the "PME" checkbox should not be checked
+    And the "Grand groupe" checkbox should be checked
+    And the "Administration" checkbox should be checked
+

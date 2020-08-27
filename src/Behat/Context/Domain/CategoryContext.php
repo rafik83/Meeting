@@ -34,7 +34,7 @@ class CategoryContext implements Context
     /**
      * @Given this category contains all types
      */
-    public function thisCategoryContainsAllTypes()
+    public function thisCategoryContainsAllTypes(): void
     {
         $category = $this->categoryContextProxy->getStorage()->get('categoryParticipant');
 
@@ -42,6 +42,6 @@ class CategoryContext implements Context
             throw new \InvalidArgumentException('Missing Category');
         }
 
-        $category = $this->categoryContextProxy->getCategoryManager()->addAllTypes($category);
+        $this->categoryContextProxy->getCategoryManager()->addAllTypes($category);
     }
 }
