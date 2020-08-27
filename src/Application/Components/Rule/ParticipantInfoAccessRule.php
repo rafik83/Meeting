@@ -18,10 +18,14 @@ class ParticipantInfoAccessRule
     /** @var int|null */
     private $emailAccessMinEvaluation;
 
-    public function __construct(?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation)
+    /** @var bool */
+    private $requestAutomaticallyTransformedIntoMeeting;
+
+    public function __construct(?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation, bool $requestAutomaticallyTransformedIntoMeeting = false)
     {
         $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
         $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
+        $this->requestAutomaticallyTransformedIntoMeeting = $requestAutomaticallyTransformedIntoMeeting;
     }
 
     public function isPhoneVisible(?int $evaluation): bool
