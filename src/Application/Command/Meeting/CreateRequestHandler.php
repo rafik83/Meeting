@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -41,14 +43,18 @@ class CreateRequestHandler
     private $eventDispatcher;
 
     /**
-     * CreateRequestHandler constructor.
-     *
-     * @param RequestRepositoryInterface $requestRepository
-     * @param MessageRepositoryInterface $messageRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $dateTime
+     * @var ApproveRequestHandler
      */
+    private $approveRequestHandler;
+
+    /**
+     * @var RequestPermissionManager
+     */
+    private $requestPermissionManager;
+
     public function __construct(
+        ApproveRequestHandler $approveRequestHandler,
+        RequestPermissionManager $requestPermissionManager,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         DelayedEventDispatcher $eventDispatcher,
@@ -58,12 +64,14 @@ class CreateRequestHandler
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
         $this->dateTime          = $dateTime;
+        $this->approveRequestHandler = $approveRequestHandler;
+        $this->requestPermissionManager = $requestPermissionManager;
     }
 
     /**
      * @param CreateRequest $createRequest
      *
-     * @return CreateRequestResult
+     * @return CreateRequestResult|ApproveRequestResult
      */
     public function handle(CreateRequest $createRequest)
     {
@@ -98,6 +106,13 @@ class CreateRequestHandler
             Events::MEETING_REQUEST_CREATED,
             new CreateRequestEvent($request)
         );
+
+        if ($this->requestPermissionManager->isAllowedToApprove(
+            $request,
+            $createRequest->from
+        )) {
+            return $this->approveRequestHandler->handle(new ApproveRequest($createRequest->creator, $request, $createRequest->from, $createRequest->locale));
+        }
 
         return new CreateRequestResult($request);
     }

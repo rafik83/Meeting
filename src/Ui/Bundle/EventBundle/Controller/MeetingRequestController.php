@@ -341,7 +341,7 @@ class MeetingRequestController extends Controller
 
         $this->authorizeToCreateRequest($request, $eventDomain->getEvent(), $sheet, $toSheet);
 
-        $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user);
+        $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user, $request->getLocale());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
                 'sheet'   => $sheet->getId(),
@@ -355,6 +355,20 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($createRequest);
+
+            if ($result instanceof ApproveRequestResult) {
+                $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
+                    'meetingDdayView' => $result->meetingView,
+                    'error'           => $result->hasError,
+                ]);
+
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    false,
+                    $flashMessageView,
+                    $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
+                ));
+            }
 
             return new JsonResponse($this->createJsonResponseData(
                 true,

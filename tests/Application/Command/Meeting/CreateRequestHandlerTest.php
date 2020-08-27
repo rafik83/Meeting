@@ -47,7 +47,7 @@ class CreateRequestHandlerTest extends TestCase
         $dateTime     = new DateTime();
 
         // Command
-        $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1);
+        $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1, "fr");
         $createRequest->description = 'test';
         $createRequest->participants = [$participant1, $participant2];
 
