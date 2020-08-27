@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
 
 ### Fixed
 - Tip content can be nullable, and tip translations affected on event come from the event locales.

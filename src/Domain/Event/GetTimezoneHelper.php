@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Event;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -26,10 +27,17 @@ class GetTimezoneHelper
     /** @var ParticipantGuesser */
     private $participantGuesser;
 
-    public function __construct(IsParticipantVisio $isParticipantVisio, ParticipantGuesser $participantGuesser)
-    {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(
+        IsParticipantVisio $isParticipantVisio,
+        ParticipantGuesser $participantGuesser,
+        TranslatorInterface $translator
+    ) {
         $this->isParticipantVisio = $isParticipantVisio;
         $this->participantGuesser = $participantGuesser;
+        $this->translator = $translator;
     }
 
     public function getTimezoneByEventAndParticipant(Event $event, Participant $participant): string
@@ -52,5 +60,15 @@ class GetTimezoneHelper
         }
 
         return $event->getTimeZone();
+    }
+
+    public static function timezoneToTranslationKey(string $timezone): string
+    {
+        return 'timezone.' . strtolower(str_replace('/', '-', $timezone));
+    }
+
+    public function getTimezoneTranslated(string $timezone): string
+    {
+        return $this->translator->trans('timezone.' . strtolower(str_replace('/', '-', $timezone)));
     }
 }

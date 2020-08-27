@@ -173,7 +173,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType:
         arguments:
-            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
         tags:
             - { name: 'form.type' }
 
