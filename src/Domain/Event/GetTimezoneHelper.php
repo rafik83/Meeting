@@ -62,11 +62,6 @@ class GetTimezoneHelper
         return $event->getTimeZone();
     }
 
-    public static function timezoneToTranslationKey(string $timezone): string
-    {
-        return 'timezone.' . strtolower(str_replace('/', '-', $timezone));
-    }
-
     public function getTimezoneTranslated(string $timezone): string
     {
         return $this->translator->trans('timezone.' . strtolower(str_replace('/', '-', $timezone)));
