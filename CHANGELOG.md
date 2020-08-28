@@ -5,8 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2187 - Invisible mode for webinar speaker
 - VIMEET-1925 - Chat API
+
+## [2.43.0] - 2020-08-27
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+- VIMEET-2174 - Do not ask a new password when user is logged with a token
 
 ## [2.42.0] - 2020-07-31
 ### Added
