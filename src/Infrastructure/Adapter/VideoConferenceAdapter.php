@@ -14,6 +14,8 @@ use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
+use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Broadcast as DomainBroadcast;
+use Proximum\Vimeet\Infrastructure\Tokbox\Broadcast\Broadcast;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
@@ -191,5 +193,22 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     public function getSession(string $sessionId): Session
     {
         return new Session($this->openTok, $sessionId);
+    }
+
+    public function startBroadcast(
+        string $sessionId,
+        int $duration
+    ): DomainBroadcast {
+        return new Broadcast(
+            $this->openTok->startBroadcast($sessionId, [
+                'maxDuration' => $duration,
+                'resolution' => '1280x720',
+            ])
+        );
+    }
+
+    public function stopBroadcast(string $broadcastId): DomainBroadcast
+    {
+        return new Broadcast($this->openTok->stopBroadcast($broadcastId));
     }
 }

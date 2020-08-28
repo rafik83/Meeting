@@ -15,6 +15,7 @@ use OpenTok\ArchiveList;
 use OpenTok\Layout;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
+use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Broadcast;
 
 interface VideoConferenceAdapterInterface
 {
@@ -73,4 +74,11 @@ interface VideoConferenceAdapterInterface
      * @return string
      */
     public function getApiKey(): string;
+
+    public function startBroadcast(
+        string $sessionId,
+        int $duration
+    ): Broadcast;
+
+    public function stopBroadcast(string $broadcastId): Broadcast;
 }
