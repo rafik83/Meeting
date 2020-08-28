@@ -28,13 +28,12 @@ class RequestPermissionManager
     private $answeringMeetingRequestAccessChecker;
 
     /**
-     * RequestPermissionManager constructor.
-     *
-     * @param RequestRepositoryInterface           $requestRepository
-     * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
-     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+     * @var AllowTransformRequestIntoMeetingOnDday
      */
+    private $allowTransformRequestIntoMeetingOnDday;
+
     public function __construct(
+        AllowTransformRequestIntoMeetingOnDday $allowTransformRequestIntoMeetingOnDday,
         RequestRepositoryInterface $requestRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
@@ -42,6 +41,7 @@ class RequestPermissionManager
         $this->requestRepository                    = $requestRepository;
         $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->allowTransformRequestIntoMeetingOnDday = $allowTransformRequestIntoMeetingOnDday;
     }
 
     /**
@@ -154,7 +154,9 @@ class RequestPermissionManager
      */
     public function isAllowedToApprove(Request $request, Sheet $sheet)
     {
-        /*return true;*/
+        if ($this->allowTransformRequestIntoMeetingOnDday->__invoke($request)) {
+            return true;
+        }
 
         return $request->isReceiver($sheet)
             && $request->isSent()
