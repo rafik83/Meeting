@@ -364,9 +364,21 @@ class MeetingRequestController extends Controller
 
                 return new JsonResponse($this->createJsonResponseData(
                     true,
-                    false,
-                    $flashMessageView,
-                    $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
+                    null === $result || (null !== $result && null === $result->meetingView && !$result->hasError),
+                    $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
+                        'sheet'                        => $sheet,
+                        'meetingRequest'               => $result->request,
+                        'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                            ->allowedToAccess($eventDomain->getEvent()),
+                        'isMeetingRequestUpdateLocked' => $eventDomain
+                            ->getEvent()
+                            ->getConfiguration()
+                            ->isMeetingRequestUpdateLocked(),
+                        'isPhoneValidationRequired' => false,
+                    ]),
+                    '',
+                    //$this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
+                    $flashMessageView ?? null
                 ));
             }
 

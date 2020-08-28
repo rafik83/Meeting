@@ -154,9 +154,9 @@ class ApproveRequestHandler
                 );
 
                 if ($meetingDdayView instanceof MeetingDdayView) {
-                    return new ApproveRequestResult($meetingDdayView);
+                    return new ApproveRequestResult($meetingDdayView, false, $approveRequest->request);
                 } else {
-                    return new ApproveRequestResult(null, true);
+                    return new ApproveRequestResult(null, true, $approveRequest->request);
                 }
             }
         }
