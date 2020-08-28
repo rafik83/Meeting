@@ -222,6 +222,8 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
+        this.autoMaximize(subscriber);
+
         if (this.hasMediaSharing && !this.isScreenShareStream(subscriber.stream)) {
             this.minimize(subscriber.element)
         }
@@ -257,6 +259,7 @@ Webinar.prototype.init = function () {
             this.hasMediaSharing = false;
             this.maximizeAllSubscribers();
         }
+        this.layout();
     }.bind(this));
 
     this.session.on('sessionDisconnected', function () {
@@ -1064,5 +1067,38 @@ Webinar.prototype.maximizeAllSubscribers = function() {
     });
 };
 
-module.exports = Webinar;
+Webinar.prototype.autoMaximize = function(subscriber) {
+    var activity = null;
+    subscriber.on('audioLevelUpdated', function(event) {
+        if (this.hasMediaSharing) {
+            return;
+        }
+        if (this.subscribers.length < 2) {
+            return;
+        }
 
+        const now = Date.now();
+        if (event.audioLevel > 0.2) {
+            if (!activity) {
+                activity = {timestamp: now, talking: false};
+            } else if (activity.talking) {
+                activity.timestamp = now;
+            } else if (now - activity.timestamp > 1000) {
+                // detected audio activity for more than 1s for the first time.
+                activity.talking = true;
+                this.minimizeAllSubscribers();
+                this.maximize(subscriber.element);
+                this.layout();
+            }
+        } else if (activity && now - activity.timestamp > 2000) {
+            // detected low audio activity for more than 2s
+            if (activity.talking) {
+                this.maximizeAllSubscribers();
+                this.layout();
+            }
+            activity = null;
+        }
+    }.bind(this));
+};
+
+module.exports = Webinar;

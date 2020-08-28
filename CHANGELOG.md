@@ -4,7 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Add
+### Added
+- VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 
 ## [2.43.0] - 2020-08-27
