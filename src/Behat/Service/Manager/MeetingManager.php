@@ -287,7 +287,7 @@ class MeetingManager
         $meetingRequest = $this->createMeetingRequest($event, $sheet, [$participant]);
 
         $spotReference = 'Visio1';
-        $this->spotManager->create($event, $spotReference, 1, 10, true, true);
+        $this->spotManager->create($event, $spotReference, 1, 10, true, true, true);
         $spot = $this->spotManager->getByReference($event, $spotReference);
 
         if (null === $spot || !$spot->isVisio()) {

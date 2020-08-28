@@ -25,15 +25,16 @@ class SpotManager
     public function create(
         Event $event,
         string $reference,
+        int $size,
         int $meetingCapacity,
         int $seatCapacity,
-        bool $active,
+        bool $active = true,
         bool $isVisio = false
     ): Spot {
         $spot = new Spot(
             $reference,
             $event,
-            1,
+            $size,
             $meetingCapacity,
             $seatCapacity,
             $active,
