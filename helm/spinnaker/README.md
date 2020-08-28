@@ -1,0 +1,26 @@
+# Install the spin CLI
+
+https://www.spinnaker.io/setup/spin/
+
+# Get the spin CLI credential file
+
+```
+gsutil cp gs://vimeet-config-staging/spin.yaml spin-staging.yaml
+gsutil cp gs://vimeet-config-prod/spin.yaml spin-prod.yaml
+```
+
+# Save updated pipelines and pipeline templates
+
+Linux / macOS bash :
+
+```
+find ./templates -type f -name "*.json" -exec spin --config spin-staging.yaml pipeline-template save -f {} \;
+find ./pipelines -type f -name "*.json" -exec spin --config spin-staging.yaml pipeline save -f {} \;
+```
+
+Windows PowerShell :
+
+```
+Get-ChildItem ".\templates" -Recurse -Filter *.json | % { & spin --config spin-staging.yaml pipeline-template save -f $_.FullName }
+Get-ChildItem ".\pipelines" -Recurse -Filter *.json | % { & spin --config spin-staging.yaml pipeline save -f $_.FullName }
+```

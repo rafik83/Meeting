@@ -1,0 +1,205 @@
+{
+    "schema": "v2",
+    "variables": [
+        {
+            "type": "string",
+            "defaultValue": "default",
+            "description": "Kubernetes namespace",
+            "name": "namespace"
+        },
+        {
+            "type": "string",
+            "defaultValue": "library/vimeet",
+            "description": "Vimeet Docker image to run",
+            "name": "vimeetImage"
+        },
+        {
+            "type": "string",
+            "defaultValue": "default",
+            "description": "Vimeet theme",
+            "name": "vimeetTheme"
+        },
+        {
+            "type": "string",
+            "defaultValue": "cron-template",
+            "description": "Job name",
+            "name": "jobName"
+        },
+        {
+            "type": "string",
+            "defaultValue": "true",
+            "description": "Cron is enabled",
+            "name": "cronEnabled"
+        },
+        {
+            "type": "string",
+            "defaultValue": "0 0/1 * 1/1 * ? *",
+            "description": "Cron expression",
+            "name": "cronExpression"
+        },
+        {
+            "type": "string",
+            "defaultValue": "/var/www/html/bin/cli command",
+            "description": "Command to run",
+            "name": "cronCommand"
+        }
+    ],
+    "id": "vimeetCronTemplate",
+    "protect": false,
+    "metadata": {
+        "name": "Vimeet Cron",
+        "description": "A Vimeet Cron Pipeline.",
+        "owner": "fbaligant@synalabs.com",
+        "scopes": [
+            "global"
+        ]
+    },
+    "pipeline": {
+        "keepWaitingPipelines": false,
+        "lastModifiedBy": "anonymous",
+        "limitConcurrent": true,
+        "stages": [
+            {
+                "account": "default",
+                "alias": "runJob",
+                "application": "${ templateVariables.namespace }",
+                "cloudProvider": "kubernetes",
+                "credentails": "default",
+                "manifest": {
+                    "apiVersion": "batch/v1",
+                    "kind": "Job",
+                    "metadata": {
+                        "annotations": {
+                            "strategy.spinnaker.io/recreate": "true"
+                        },
+                        "name": "${ templateVariables.jobName }",
+                        "namespace": "${ templateVariables.namespace }"
+                    },
+                    "spec": {
+                        "template": {
+                            "spec": {
+                                "containers": [
+                                    {
+                                        "args": [
+                                            "${ templateVariables.cronCommand }\n"
+                                        ],
+                                        "command": [
+                                            "sh",
+                                            "-c"
+                                        ],
+                                        "envFrom": [
+                                            {
+                                                "configMapRef": {
+                                                    "name": "vimeet"
+                                                }
+                                            },
+                                            {
+                                                "secretRef": {
+                                                    "name": "vimeet"
+                                                }
+                                            }
+                                        ],
+                                        "image": "${ templateVariables.vimeetImage }",
+                                        "imagePullPolicy": "Always",
+                                        "name": "vimeet",
+                                        "resources": {
+                                            "requests": {
+                                                "cpu": "300m",
+                                                "memory": "512Mi"
+                                            }
+                                        },
+                                        "volumeMounts": [
+                                            {
+                                                "mountPath": "/var/www/html/web/cache",
+                                                "name": "vimeet-web-cache"
+                                            },
+                                            {
+                                                "mountPath": "/var/www/html/web/themes/${ templateVariables.vimeetTheme }/cache",
+                                                "name": "vimeet-theme-cache"
+                                            },
+                                            {
+                                                "mountPath": "/var/filer",
+                                                "name": "vimeet-data"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "restartPolicy": "Never",
+                                "securityContext": {
+                                    "fsGroup": 33,
+                                    "runAsGroup": 33,
+                                    "runAsUser": 33
+                                },
+                                "volumes": [
+                                    {
+                                        "emptyDir": {},
+                                        "name": "vimeet-web-cache"
+                                    },
+                                    {
+                                        "emptyDir": {},
+                                        "name": "vimeet-theme-cache"
+                                    },
+                                    {
+                                        "name": "vimeet-data",
+                                        "persistentVolumeClaim": {
+                                            "claimName": "fs-master"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "backoffLimit": 0
+                    }
+                },
+                "name": "Run Job",
+                "refId": "1",
+                "requiredArtifactIds": [
+                    "fc143116-95ab-4b2a-b503-d865ce6ecfa7"
+                ],
+                "requiredArtifacts": [],
+                "requisiteStageRefIds": [
+                    "2"
+                ],
+                "source": "text",
+                "type": "runJobManifest"
+            },
+            {
+                "application": "${ templateVariables.namespace }",
+                "executionOptions": {
+                    "successful": true
+                },
+                "expectedArtifacts": [
+                    {
+                        "defaultArtifact": {
+                            "customKind": true,
+                            "id": "32aa1267-e675-4567-9477-a05c9e940af3"
+                        },
+                        "displayName": "vimeet-docker-image",
+                        "id": "fc143116-95ab-4b2a-b503-d865ce6ecfa7",
+                        "matchArtifact": {
+                            "id": "6d1b0b7b-436e-4027-b323-c8a94fde4e50",
+                            "name": "${ templateVariables.vimeetImage }",
+                            "type": "docker/image"
+                        },
+                        "useDefaultArtifact": false,
+                        "usePriorArtifact": false
+                    }
+                ],
+                "name": "Find image",
+                "pipeline": "${#pipelineId(\"deploy\")}",
+                "refId": "2",
+                "requisiteStageRefIds": [],
+                "type": "findArtifactFromExecution"
+            }
+        ],
+        "triggers": [
+            {
+                "cronExpression": "${ templateVariables.cronExpression }",
+                "enabled": "${ templateVariables.cronEnabled }",
+                "id": "0375b37d-437c-47b1-bce3-a1d26fb21e71",
+                "type": "cron"
+            }
+        ],
+        "updateTs": "0"
+    }
+}

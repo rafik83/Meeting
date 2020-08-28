@@ -21,6 +21,7 @@ RUN set -eux \
   libxslt-dev \
   unzip \
   msmtp \
+  python-minimal \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -85,6 +86,7 @@ RUN if [ ! -z "$XDEBUG" ]; then \
   fi
 
 COPY docker/apache/entrypoint /usr/local/bin/docker-php-entrypoint
+RUN chmod a+rx /usr/local/bin/docker-php-entrypoint
 COPY docker/apache/etc/apache.conf /etc/apache2/apache2.conf
 COPY docker/apache/etc/apache/docker-php.conf /etc/apache2/conf-available/docker-php.conf
 COPY docker/apache/etc/apache/vimeet.conf /etc/apache2/sites-available/000-default.conf
@@ -107,7 +109,7 @@ COPY helm/spinnaker /var/www/spinnaker
 # NodeJS and Yarn
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs=8.17.0-1nodesource1
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install yarn
@@ -115,9 +117,13 @@ RUN apt-get update && apt-get install yarn
 # Timezone
 RUN echo "Europe/Paris" > /etc/timezone
 
-# Prepare Composer Install
+# Prepare /var/www
 RUN mkdir -p /var/www/.composer && \
-    chown www-data:www-data /var/www/.composer
+    chown www-data:www-data /var/www/.composer && \
+    touch /var/www/.yarnrc && \
+    chown www-data:www-data /var/www/.yarnrc && \
+    mkdir -p /var/www/.yarn && \
+    chown www-data:www-data /var/www/.yarn
 
 # Working directory
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs/current
@@ -126,15 +132,23 @@ USER www-data
 # Composer Install
 RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --optimize-autoloader --no-progress
 
-# Cleanup parameters.yml
-RUN rm -f /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml
+# NodeJS Install
+RUN make install@prod
+
+# Symfony
+RUN bin/console cache:clear --env=prod && \
+    bin/console cache:warmup --env=prod
+
+# Cleanup
+RUN rm -f /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml && \
+    rm -f /var/www/proximum-vimeet.project.local/htdocs/current/web/*_dev.php
 
 # Symlinks
-RUN ln -sfn /share/shared/web/media web/media && \
-    ln -sfn /share/shared/web/uploads web/uploads && \
-    ln -sfn /share/shared/web/css web/css && \
-    ln -sfn /share/shared/var/logs var/logs && \
-    ln -sfn /share/shared/var/shared_uploaded_files var/shared_uploaded_files && \
+RUN ln -sfn /share/shared/web/media web/ && \
+    ln -sfn /share/shared/web/uploads web/ && \
+    ln -sfn /share/shared/web/css web/ && \
+    ln -sfn /share/shared/var/logs var/ && \
+    ln -sfn /share/shared/var/shared_uploaded_files var/ && \
     ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml && \
     ln -sfn /share/shared/openl10n.yml openl10n.yml
 
