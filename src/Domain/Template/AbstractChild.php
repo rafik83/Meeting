@@ -28,6 +28,7 @@ abstract class AbstractChild
     public const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
     public const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
     public const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
+    public const TEMPLATE_OBJECT_TYPE_VIDEO         = 'video';
 
     /**
      * @var string
@@ -115,6 +116,11 @@ abstract class AbstractChild
     public function isUpload(): bool
     {
         return self::TEMPLATE_OBJECT_TYPE_UPLOAD === $this->type;
+    }
+
+    public function isVideo(): bool
+    {
+        return self::TEMPLATE_OBJECT_TYPE_VIDEO === $this->type;
     }
 
     /**

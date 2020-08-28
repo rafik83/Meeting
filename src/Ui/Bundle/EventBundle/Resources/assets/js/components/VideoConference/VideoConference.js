@@ -93,7 +93,8 @@ function VideoConference(
   if (this.useSettings) {
     this.settings = new Settings(
         this.settingsContainer.querySelector('#video-settings-section'),
-        this.join.bind(this)
+        this.join.bind(this),
+        false
     );
     this.settings.init();
   } else {

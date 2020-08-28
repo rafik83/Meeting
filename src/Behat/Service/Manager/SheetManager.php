@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -32,12 +24,6 @@ class SheetManager
     /** @var SheetInfoSetter */
     private $sheetInfoSetter;
 
-    /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param SheetInfoSetter          $sheetInfoSetter
-     * @param UserManager              $userManager
-     * @param TypeManager              $typeManager
-     */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetInfoSetter $sheetInfoSetter,
@@ -45,40 +31,32 @@ class SheetManager
         TypeManager $typeManager
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->userManager     = $userManager;
-        $this->typeManager     = $typeManager;
+        $this->userManager = $userManager;
+        $this->typeManager = $typeManager;
         $this->sheetInfoSetter = $sheetInfoSetter;
     }
 
     /**
-     * @param Event            $event
-     * @param User|null        $user
-     * @param Type|null        $type
-     * @param string|null      $title
-     * @param Sheet\Group|null $group
-     * @param string           $createdAt
-     *
-     * @return Sheet
      * @throws \Exception
      */
     public function create(
         Event $event,
         User $user = null,
         Type $type = null,
-        $title = null,
+        string $title = null,
         Sheet\Group $group = null,
         string $createdAt = 'now'
-    ) {
+    ): Sheet {
         if (null === $user) {
             $user = $this->userManager->create();
         }
 
         if (null === $type) {
-            $type = $this->typeManager->create($event);
+            $type = $this->typeManager->create($event, 'Type 1');
         }
 
         $sheet = SheetFactory::create($event, $user, new \DateTime($createdAt), $type);
-        $sheet->setData([]);
+        $sheet->setData(['dcc42d3d' => ['text' => ['fr' => $title, 'en' => $title]]]);
         $sheet->setRegistrationData([]);
         $sheet->setTitle($title);
 
@@ -95,21 +73,12 @@ class SheetManager
         return $sheet;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $sheetTitle
-     *
-     * @return null|Sheet
-     */
-    public function getSheetByEventAndTitle(Event $event, string $sheetTitle): ? Sheet
+    public function getSheetByEventAndTitle(Event $event, string $sheetTitle): ?Sheet
     {
         return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function setInCatalog(Sheet $sheet)
+    public function setInCatalog(Sheet $sheet): void
     {
         $sheet->setInCatalog(true);
         $sheet->setInCatalogAt(new \DateTime());
@@ -117,20 +86,15 @@ class SheetManager
         $this->sheetRepository->set($sheet);
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function setValidated(Sheet $sheet)
+    public function setValidated(Sheet $sheet): void
     {
+        $sheet->setValidationState(Sheet::STATE_VALIDATION_VALIDATED);
         $sheet->markAsValidated();
 
         $this->sheetRepository->set($sheet);
     }
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function setEnabled(Sheet $sheet)
+    public function setEnabled(Sheet $sheet): void
     {
         $sheet->setEnable(true);
 

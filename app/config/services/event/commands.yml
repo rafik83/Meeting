@@ -156,5 +156,17 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.change_mail_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
+
+
+    #
+    # Sheet object
+    #
+    Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideoHandler:
+        arguments:
+            - '@command.sheet.remove_data_handler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -19,44 +11,28 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateDataHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var BuyableObjectResolver
-     */
+    /** @var BuyableObjectResolver */
     private $buyableObjectResolver;
 
-    /**
-     * @var RemoveDataHandler
-     */
+    /** @var RemoveDataHandler */
     private $removeDataHandler;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * UpdateDataHandler constructor.
-     *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param BuyableObjectResolver    $buyableObjectResolver
-     * @param RemoveDataHandler        $removeDataHandler
-     * @param DelayedEventDispatcher   $eventDispatcher
-     */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         BuyableObjectResolver $buyableObjectResolver,
         RemoveDataHandler $removeDataHandler,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->sheetRepository       = $sheetRepository;
+        $this->sheetRepository = $sheetRepository;
         $this->buyableObjectResolver = $buyableObjectResolver;
-        $this->removeDataHandler     = $removeDataHandler;
-        $this->eventDispatcher       = $eventDispatcher;
+        $this->removeDataHandler = $removeDataHandler;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function handle(UpdateData $command): void

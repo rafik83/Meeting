@@ -15,6 +15,7 @@ require('bootstrap/js/popover'); // popover require tooltip
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
+    this.invisibleMode = false;
     this.typeScreenShare = 'screen';
     this.typeCustomShare = 'custom';
 
@@ -143,6 +144,8 @@ function Webinar(element, isSpeaker) {
     this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
     this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
     this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
+    this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
+    this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
 
     this.endSharingButton = element.querySelector('#media-stop-sharing');
     this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
@@ -155,26 +158,39 @@ function Webinar(element, isSpeaker) {
     this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
     this.enableVideo = true;
 
+    this.invisibleModeButton = element.querySelector('#invisible-mode-button');
+    this.invisibleModeButton.addEventListener('click', this.handleInvisibleMode.bind(this));
+
     this.settingsContainer = this.element.querySelector('[data-settings-container]');
 
     this.publisher = new Publisher(this.layoutContainer);
 
     this.settings = new Settings(
       this.settingsContainer.querySelector('#video-settings-section'),
-      this.join.bind(this)
+      this.join.bind(this),
+      true
     );
     this.settings.init();
 }
 
-Webinar.prototype.join = function () {
+Webinar.prototype.join = function (invisibleMode) {
+    this.invisibleMode = invisibleMode;
     this.hideElement(this.joinButton);
+
     if (this.liveUrl) {
         this.hideElement(this.helperContainer);
         this.liveVideo();
     } else {
         this.showElement(this.webinarWaitingMessage);
     }
+
     this.init();
+
+    if (this.invisibleMode) {
+        this.hideElement(this.toggleVideoElement);
+        this.hideElement(this.toggleAudioElement);
+        this.toggleButton(this.invisibleModeButton, true);
+    }
 };
 
 /**
@@ -266,8 +282,13 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
-        this.showElement(this.toggleAudioElement);
-        this.showElement(this.toggleVideoElement);
+        this.showElement(this.invisibleModeButton);
+
+        if (!this.invisibleMode) {
+            this.showElement(this.toggleAudioElement);
+            this.showElement(this.toggleVideoElement);
+        }
+
         this.showElement(this.mediaStartSharingButton);
         this.showElement(this.timerContainer);
         this.showElement(this.viewersContainer);
@@ -362,6 +383,11 @@ Webinar.prototype.initChat = function () {
  */
 Webinar.prototype.publishStream = function () {
     this.hideElement(this.helperContainer);
+
+    if (this.invisibleMode) {
+        return;
+    }
+
     const publisher = this.publisher.create({
         audioSource: this.settings.getAudioSource(),
         videoSource: this.settings.getVideoSource(),
@@ -938,6 +964,38 @@ Webinar.prototype.toggleSideBar = function () {
     this.chatInstance.hideTextChat();
     this.initQuestions();
     this.layout();
+};
+
+Webinar.prototype.handleInvisibleMode = function () {
+    if (this.invisibleMode) {
+        if (!window.confirm(this.invisibleModeQuitConfirmationMessage)) {
+            return;
+        }
+
+        this.invisibleMode = false;
+        this.publishStream();
+
+        this.toggleButton(this.invisibleModeButton, false);
+        this.showElement(this.toggleVideoElement);
+        this.showElement(this.toggleAudioElement);
+
+        return;
+    }
+
+    if (!window.confirm(this.invisibleModeEnableConfirmationMessage)) {
+        return;
+    }
+
+    this.invisibleMode = true;
+
+    if (this.publisher) {
+        this.publisher.destroy();
+        this.layout();
+    }
+
+    this.toggleButton(this.invisibleModeButton, true);
+    this.hideElement(this.toggleVideoElement);
+    this.hideElement(this.toggleAudioElement);
 };
 
 /**

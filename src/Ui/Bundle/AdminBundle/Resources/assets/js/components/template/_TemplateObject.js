@@ -16,7 +16,8 @@ var $ = require('jquery'),
   GenderObject = require('./../templateObjects/_GenderObject'),
   UploadObject = require('./../templateObjects/_UploadObject'),
   DatetimeObject = require('./../templateObjects/_DatetimeObject'),
-  MultiUploadObject = require('./../templateObjects/_MultiUploadObject')
+  MultiUploadObject = require('./../templateObjects/_MultiUploadObject'),
+  VideoObject = require('./../templateObjects/_VideoObject')
 ;
 
 /**
@@ -107,6 +108,9 @@ function TemplateObject(element, locale, builderType)
       break;
     case 'multi-upload':
       this.object = new MultiUploadObject(this.element, this.locale, this.builderType);
+      break;
+    case 'video':
+      this.object = new VideoObject(this.element, this.locale, this.builderType);
       break;
   }
 
