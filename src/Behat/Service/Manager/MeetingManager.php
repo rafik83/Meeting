@@ -185,7 +185,7 @@ class MeetingManager
 
         $meetingRequest = $this->createMeetingRequest($event);
 
-        $spot = $this->spotManager->create($event, 'MyRef', 1, 2, true);
+        $spot = $this->spotManager->create($event, 'MyRef', 1, 2, 2, true);
 
         return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
