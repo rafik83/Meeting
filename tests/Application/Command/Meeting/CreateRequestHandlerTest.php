@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestResult;
+use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -64,8 +66,15 @@ class CreateRequestHandlerTest extends TestCase
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
+        $approveRequestHandler = $this->prophesize(ApproveRequestHandler::class);
+
+        $requestPermissionManager = $this->prophesize(RequestPermissionManager::class);
+        $requestPermissionManager->isAllowedToApprove($expectedRequest, $sheetFrom)->willReturn(false);
+
         // Handler
         $handler = new CreateRequestHandler(
+            $approveRequestHandler->reveal(),
+            $requestPermissionManager->reveal(),
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal(),

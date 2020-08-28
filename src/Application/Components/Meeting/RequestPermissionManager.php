@@ -154,7 +154,7 @@ class RequestPermissionManager
      */
     public function isAllowedToApprove(Request $request, Sheet $sheet)
     {
-        return true;
+        /*return true;*/
 
         return $request->isReceiver($sheet)
             && $request->isSent()
