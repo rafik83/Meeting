@@ -203,8 +203,8 @@ class TransformRequestIntoMeetingHandler
             Meeting::CREATED_BY_PARTICIPANT
         );
 
-        $this->meetingRepository->add($meeting);
         $query->request->setMeeting($meeting);
+        $this->meetingRepository->add($meeting);
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_CREATED,
