@@ -136,8 +136,8 @@ RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --opt
 RUN make install@prod
 
 # Symfony
-RUN bin/console cache:clear --env=prod && \
-    bin/console cache:warmup --env=prod
+#RUN bin/console cache:clear --env=prod && \
+#    bin/console cache:warmup --env=prod
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
