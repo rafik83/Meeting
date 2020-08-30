@@ -482,14 +482,32 @@ podAnnotations: {}
 affinity: {}
 
 # Add your own init container or uncomment and modify the given example.
-initContainers:
-  cache-warmup:
-    image: "busybox"
-    imagePullPolicy: "IfNotPresent"
-    command:
-    - "true"
-    securityContext:
-      runAsUser: 33
-    volumeMounts:
-      - mountPath: /share/shared
-        name: vimeet-data
+#initContainers:
+#  cache-clear:
+#    image: eu.gcr.io/proximum-vimeet-staging/vimeet
+#    imagePullPolicy: Always
+#    command:
+#      - sh
+#      - -c
+#      - cd /var/www/proximum-vimeet.project.local/htdocs/current && bin/console cache:clear --env=prod && exit 0
+#    securityContext:
+#      runAsUser: 33
+#    volumeMounts:
+#      - mountPath: /share/shared
+#        name: vimeet-data
+#      - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+#        name: vimeet-var-cache
+#  cache-warmup:
+#    image: eu.gcr.io/proximum-vimeet-staging/vimeet
+#    imagePullPolicy: Always
+#    command:
+#      - sh
+#      - -c
+#      - cd /var/www/proximum-vimeet.project.local/htdocs/current && bin/console cache:warmup --env=prod
+#    securityContext:
+#      runAsUser: 33
+#    volumeMounts:
+#      - mountPath: /share/shared
+#        name: vimeet-data
+#      - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+#        name: vimeet-var-cache

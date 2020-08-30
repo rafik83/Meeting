@@ -140,8 +140,11 @@ RUN bin/console cache:clear --env=prod && \
     bin/console cache:warmup --env=prod
 
 # Cleanup
-RUN rm -f /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml && \
-    rm -f /var/www/proximum-vimeet.project.local/htdocs/current/web/*_dev.php
+RUN rm -f app/config/parameters.yml && \
+    rm -f web/*_dev.php && \
+    rm -rf web/uploads && \
+    rm -rf web/css && \
+    rm -rf var/logs
 
 # Symlinks
 RUN ln -sfn /share/shared/web/media web/ && \
