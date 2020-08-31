@@ -24,7 +24,7 @@ class AllowTransformRequestIntoMeetingOnDday
         $this->ruleRepository = $ruleRepository;
     }
 
-    public function __invoke(Request $request): bool
+    public function __invoke(Request $request)
     {
         if (!$request->getEvent()->getConfiguration()->isVisio()) {
             return false;
