@@ -12,6 +12,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
@@ -27,6 +28,7 @@ class ConvertContactToSheetTest extends TestCase
         $type = $this->prophesize(Type::class);
         $registrationTemplate = $this->prophesize(TemplateData::class);
         $sheetTemplate = $this->prophesize(TemplateData::class);
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         $userEventExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -56,6 +58,7 @@ class ConvertContactToSheetTest extends TestCase
             "Centres_intérêt" => "I01;I02;I03;I04;I05;I07",
             "Conference" => "Y",
             "RDV_B2B" => "0",
+            "PASSWORD" => "AZERTYUIOPqsdfghjklm"
         ];
 
         $configuration = [
@@ -63,6 +66,7 @@ class ConvertContactToSheetTest extends TestCase
                 'email' => 'EMAIL',
                 'identifier' => 'IDCONTACT',
                 'country' => 'IDPAYS',
+                'loginData' => 'PASSWORD',
             ],
             'mapping' => [
                 "EMAIL" => "email",
@@ -102,10 +106,10 @@ class ConvertContactToSheetTest extends TestCase
             "sheet_city" => "ALGER",
             "sheet_country" => "DZ",
             "sheet_phone" => "0666778877",
-            "sheet_organization_category" => "TP99 ",
-            "sheet_staff" => "T1   ",
-            "participant_position" => "F02  ",
-            "tag_sheet_generic_3" => "D07  ",
+            "sheet_organization_category" => "TP99",
+            "sheet_staff" => "T1",
+            "participant_position" => "F02",
+            "tag_sheet_generic_3" => "D07",
             "tag_sheet_generic_2" => false,
         ];
 
@@ -122,15 +126,16 @@ class ConvertContactToSheetTest extends TestCase
             "VILLE" => "ALGER",
             "IDPAYS" => "DZ",
             "EMAIL" => "example-1@example.net",
-            "Secteur_activité" => "A99  ",
+            "Secteur_activité" => "A99",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
-            "Typologie_société" => "TP99 ",
+            "Typologie_société" => "TP99",
             "Préciser_Typologie" => "PME",
-            "Nombre_Personnes" => "T1   ",
-            "Votre_Fonction" => "F02  ",
-            "Nature_de_votre_société_organisation" => "D07  ",
+            "Nombre_Personnes" => "T1",
+            "Votre_Fonction" => "F02",
+            "Nature_de_votre_société_organisation" => "D07",
             "Centres_intérêt" => "I01;I02;I03;I04;I05;I07",
             "Conference" => "Y",
+            "PASSWORD" => 'AZERTYUIOPqsdfghjklm',
             "RDV_B2B" => false
         ];
 
@@ -162,11 +167,22 @@ class ConvertContactToSheetTest extends TestCase
             )
         )->shouldBeCalled();
 
+        $userEventExtraDataRepository->add(
+            new User\Event\ExtraData(
+                $user->reveal(),
+                $event->reveal(),
+                ExtraDataType::TECH_EVENT_LOGIN_DATA,
+                $contact['PASSWORD'],
+                $dateTime
+            )
+        )->shouldBeCalled();
+
         $handler = new ConvertContactToSheet(
             $userEventExtraDataRepository->reveal(),
             $convertToParticipantHandler->reveal(),
             $dateTime,
-            $contactNormalizer->reveal()
+            $contactNormalizer->reveal(),
+            $userRepository->reveal()
         );
         $handler->handle(
             $event->reveal(),

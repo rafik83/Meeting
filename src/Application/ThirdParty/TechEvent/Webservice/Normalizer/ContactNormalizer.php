@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\BooleanConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\GenderConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\TelephoneConverter;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 
 class ContactNormalizer
 {
@@ -50,7 +51,7 @@ class ContactNormalizer
             case 'telephone':
                 return TelephoneConverter::convert($dataToConvert, $country);
             default:
-                return $dataToConvert;
+                return StringHelper::trimSpacesAndNonBreakSpaces($dataToConvert);
         }
     }
 }

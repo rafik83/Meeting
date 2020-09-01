@@ -6,6 +6,7 @@ services:
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@datetime'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer'
+            - '@vimeet_infrastructure.repository.user_repository'
     Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient'
