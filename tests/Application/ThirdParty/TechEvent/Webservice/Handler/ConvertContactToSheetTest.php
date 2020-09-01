@@ -167,6 +167,12 @@ class ConvertContactToSheetTest extends TestCase
             )
         )->shouldBeCalled();
 
+        $userEventExtraDataRepository->removeForUserAndEventAndName(
+            $user->reveal(),
+            $event->reveal(),
+            ExtraDataType::TECH_EVENT_LOGIN_DATA
+        )->shouldBeCalled();
+
         $userEventExtraDataRepository->add(
             new User\Event\ExtraData(
                 $user->reveal(),

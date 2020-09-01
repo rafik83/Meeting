@@ -218,6 +218,21 @@ services:
         arguments:
             - '@security.http_utils'
 
+    Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler'
+            - '@Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticationSuccessHandler'
+            - '@security.csrf.token_manager'
+
+    Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticationSuccessHandler:
+        arguments:
+            - '@security.http_utils'
+
     #
     # Get Spots
     #

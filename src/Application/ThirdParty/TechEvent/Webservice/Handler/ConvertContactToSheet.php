@@ -65,7 +65,7 @@ class ConvertContactToSheet
         $emailKey = $mandatoryKeys['email'];
         $identifierKey = $mandatoryKeys['identifier'];
         $loginDataKey = $mandatoryKeys['loginData'] ?? null;
-        // login data should not be normalize (no trim, etc..)
+        // login data should not be normalized (no trim, etc..)
         $loginData = $contact[$loginDataKey] ?? null;
         $countryKey = $mandatoryKeys['country'] ?? null;
         $email = mb_strtolower($contact[$emailKey]);
@@ -112,6 +112,12 @@ class ConvertContactToSheet
         }
 
         if ($user instanceof User && null !== $loginData) {
+            $this->userEventExtraDataRepository->removeForUserAndEventAndName(
+                $user,
+                $event,
+                ExtraDataType::TECH_EVENT_LOGIN_DATA
+            );
+
             $this->userEventExtraDataRepository->add(
                 new User\Event\ExtraData(
                     $user,
