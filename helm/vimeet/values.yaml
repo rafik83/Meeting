@@ -171,6 +171,12 @@ image:
 ## vimeetHost: vimeet.local
 
 ##
+## Worker
+##
+worker:
+  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console jms-job-queue:run --no-interaction --env=dev --verbose"
+
+##
 ## External database configuration
 ##
 externalDatabase:
@@ -413,8 +419,15 @@ ingress:
   #   key:
   #   certificate:
 
-## Replica scaling
+## Apache Replica scaling
 hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetAverageUtilization: 60
+
+# JMS worker Replica scaling
+hpaWorker:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
@@ -482,7 +495,8 @@ podAnnotations: {}
 affinity: {}
 
 # Add your own init container or uncomment and modify the given example.
-#initContainers:
+initContainers:
+  {}
 #  cache-clear:
 #    image: eu.gcr.io/proximum-vimeet-staging/vimeet
 #    imagePullPolicy: Always
