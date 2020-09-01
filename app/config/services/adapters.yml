@@ -43,3 +43,17 @@ services:
             - '%google_cloud_storage_video_uri%'
             - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
             - '@adapter.local_file_storage'
+
+    #
+    # Webinar Notifications (Mercure)
+    #
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\WebinarNotificationPublisher:
+        arguments:
+            - '%mercure_hub_publisher_url%'
+            - '%mercure_publisher_key%'
+            - '@adapter.http_adapter'
+
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\WebinarNotificationSubscriber:
+        arguments:
+            - '%mercure_hub_subscriber_url%'
+            - '%mercure_subscriber_key%'

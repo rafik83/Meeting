@@ -13,9 +13,12 @@
 
 {% block body %}
     <div class="webinar webinar-viewer"
+         data-happening-id="{{ webinarView.happeningId }}"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
          data-session-id="{{ webinarView.sessionId }}"
+         data-notifications-provider-url="{{ webinarView.notification.providerUrl }}"
+         data-notifications-subscriber-key="{{ webinarView.notification.subscriberKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
@@ -67,4 +70,3 @@
         </div>
     </div>
 {% endblock body %}
-

@@ -3,15 +3,18 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\WebinarNotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractWebinarNotification;
 
 class GetWebinarViewQueryHandler
 {
@@ -21,16 +24,21 @@ class GetWebinarViewQueryHandler
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
+    /** @var WebinarNotificationSubscriberInterface */
+    private $webinarNotificationSubscriber;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        WebinarNotificationSubscriberInterface $webinarNotificationSubscriber,
         \DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->webinarNotificationSubscriber = $webinarNotificationSubscriber;
         $this->dateTime = $dateTime;
     }
 
@@ -42,6 +50,11 @@ class GetWebinarViewQueryHandler
         $sessionAndTokenView = $this->getSessionAndToken($happening, $isSpeaker);
         $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
 
+        $notificationView = new NotificationView(
+            $this->webinarNotificationSubscriber->getUrl(),
+            $this->webinarNotificationSubscriber->getSubscriberKey($happening, AbstractWebinarNotification::TYPE_QUESTIONS)
+        );
+
         return new WebinarView(
             $happening->getId(),
             $query->getUser()->getId(),
@@ -50,6 +63,7 @@ class GetWebinarViewQueryHandler
             $sessionAndTokenView->token,
             $sessionAndTokenView->sessionId,
             $sessionAndTokenView->apiKey,
+            $notificationView,
             $isSpeaker,
             $this->getSpeakerViews($happening, $query->getLocale()),
             $this->getParticipantViews($happening, $query->getLocale()),

@@ -2,22 +2,30 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\WebinarNotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractWebinarNotification;
 
 class AddHappeningQuestionHandler
 {
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
-    /** @var \DateTimeInterface */
+    /** @var WebinarNotificationPublisherInterface */
+    private $webinarNotificationPublisher;
+
+    /** @var DateTimeInterface */
     private $datetime;
 
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
-        \DateTimeInterface $datetime
+        WebinarNotificationPublisherInterface $webinarNotificationPublisher,
+        DateTimeInterface $datetime
     ) {
         $this->questionRepository = $questionRepository;
+        $this->webinarNotificationPublisher = $webinarNotificationPublisher;
         $this->datetime = $datetime;
     }
 
@@ -37,5 +45,10 @@ class AddHappeningQuestionHandler
         );
 
         $this->questionRepository->add($question);
+
+        $this->webinarNotificationPublisher->send($command->getHappening(), AbstractWebinarNotification::TYPE_QUESTIONS, [
+            'action' => 'update',
+            'authorId' => $command->getCreatedBy()->getId(),
+        ]);
     }
 }

@@ -53,3 +53,15 @@ services:
             - proxy
         depends_on:
             - database
+
+    mercure:
+        image: dunglas/mercure:v0.10
+        ports:
+            - "8088:80"
+        environment:
+            PUBLISHER_JWT_KEY: "secretkey"
+            SUBSCRIBER_JWT_KEY: "secretkey"
+            ALLOW_ANONYMOUS: "0"
+            CORS_ALLOWED_ORIGINS: "*"
+        networks:
+            - proxy

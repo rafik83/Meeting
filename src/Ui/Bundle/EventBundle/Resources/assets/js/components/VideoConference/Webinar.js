@@ -11,6 +11,7 @@ var Settings = require('./Settings');
 var $ = require('jquery');
 require('bootstrap/js/tooltip');
 require('bootstrap/js/popover'); // popover require tooltip
+const esPolyfill = require('event-source-polyfill');
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -30,9 +31,13 @@ function Webinar(element, isSpeaker) {
         this.shiftWithSidebar = '';
     }
 
+    this.happeningId = element.getAttribute('data-happening-id');
+
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
+    this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
@@ -167,14 +172,18 @@ function Webinar(element, isSpeaker) {
 
     this.settings = new Settings(
       this.settingsContainer.querySelector('#video-settings-section'),
-      this.join.bind(this),
+      this.onSettingsValidate.bind(this),
       true
     );
     this.settings.init();
 }
 
-Webinar.prototype.join = function (invisibleMode) {
+Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
+    this.join();
+};
+
+Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
@@ -264,10 +273,6 @@ Webinar.prototype.init = function () {
 
     this.session.on('sessionDisconnected', function () {
         this.layout();
-    }.bind(this));
-
-    this.session.on('signal:QuestionsUpdate', function (event) {
-        this.initQuestions();
     }.bind(this));
 
     this.connect();
@@ -894,6 +899,22 @@ Webinar.prototype.initQuestions = function () {
 
             $questionsList[0].appendChild(rowEl);
         });
+
+        const url = new URL(this.notificationProviderUrl);
+        url.searchParams.append('topic', `https://vimeet.events/happening/${this.happeningId}/webinar/questions`);
+
+        var eventSource = new esPolyfill.EventSourcePolyfill(url, {
+            headers: {
+                'Authorization': `Bearer ${this.notificationSubscriberKey}`
+            }
+        });
+        eventSource.onmessage = (event) => {
+            const payload = JSON.parse(event.data);
+            if (payload.action === 'update') {
+                this.initQuestions();
+            }
+        }
+
     }.bind(this))
     .fail(function () {
         console.error('Failed to load webinar questions');
@@ -915,16 +936,6 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormSubmit.disabled = false;
 
         if (response.status === 'ok') {
-            this.session.signal({
-                    type: 'QuestionsUpdate'
-                },
-                (error) => {
-                    if (error) {
-                        console.error('QuestionsUpdate signal error', error);
-                    }
-                }
-            );
-
             this.questionsList.scrollTop = 0;
 
             return;
