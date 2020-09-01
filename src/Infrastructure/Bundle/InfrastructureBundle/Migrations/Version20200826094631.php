@@ -6,7 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Auto-generated Migration: Add request_automatically_transformed_into_meeting in rule's table
  */
 final class Version20200826094631 extends AbstractMigration
 {

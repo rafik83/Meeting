@@ -377,7 +377,6 @@ class MeetingRequestController extends Controller
                         'isPhoneValidationRequired' => false,
                     ]),
                     '',
-                    //$this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
                     $flashMessageView ?? null
                 ));
             }
