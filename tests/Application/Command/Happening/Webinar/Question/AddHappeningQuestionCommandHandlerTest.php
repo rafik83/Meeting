@@ -3,6 +3,8 @@
 namespace Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\WebinarNotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -14,17 +16,25 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class AddHappeningQuestionHandlerTest extends TestCase
 {
-    /** @var ObjectProphecy|QuestionRepositoryInterface */
+    /** @var ObjectProphecy */
     private $questionRepository;
 
+    /** @var ObjectProphecy */
+    private $webinarNotificationPublisher;
+
     /** @var AddHappeningQuestionHandler */
-    private $addQuestionHandler;
+    private $addHappeningQuestionHandler;
 
     public function setUp()
     {
         $this->datetime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler($this->questionRepository->reveal(), $this->datetime);
+        $this->webinarNotificationPublisher = $this->prophesize(WebinarNotificationPublisherInterface::class);
+        $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler(
+            $this->questionRepository->reveal(),
+            $this->webinarNotificationPublisher->reveal(),
+            $this->datetime
+        );
     }
 
     public function test_add_happening_question()
@@ -32,6 +42,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
         $happening = $this->prophesize(Happening::class);
 
         $createdBy = $this->prophesize(User::class);
+        $createdBy->getId()->shouldBeCalled()->willReturn(42);
 
         $sheet = SheetFactory::create(EventFactory::createEvent(), $createdBy->reveal());
 
@@ -59,6 +70,9 @@ class AddHappeningQuestionHandlerTest extends TestCase
         );
 
         $this->questionRepository->add($expectedQuestion)
+            ->shouldBeCalled();
+
+        $this->webinarNotificationPublisher->send($happening->reveal(), 'questions', Argument::withEntry('action', 'update'))
             ->shouldBeCalled();
 
         $this->addHappeningQuestionHandler->handle($addHappeningQuestion->reveal());
