@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -50,11 +42,6 @@ class Update
     /** @var array */
     public $translations;
 
-    /**
-     * Update constructor.
-     *
-     * @param Tip $tip
-     */
     public function __construct(Tip $tip)
     {
         $this->tip                 = $tip;

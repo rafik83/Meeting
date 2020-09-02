@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Tip\Event;
 
 use PHPUnit\Framework\TestCase;
@@ -23,7 +15,7 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $type1 = $this->prophesize(Type::class);

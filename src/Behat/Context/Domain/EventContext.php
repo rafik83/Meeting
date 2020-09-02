@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
@@ -29,13 +21,31 @@ class EventContext implements Context
 
     /**
      * @Given /^the event "(?P<eventTitle>[^"]+)" is created$/
-     *
-     * @param string|null $eventTitle
      */
-    public function createEvent(string $eventTitle = null)
+    public function createEvent(?string $eventTitle = null)
     {
         $event = $this->eventContextProxy->getEventManager()->create($eventTitle);
         $this->eventContextProxy->getStorage()->set('event', $event);
+    }
+
+    /**
+     * @Given /^there is an event with domain "(?P<eventDomain>[^"]+)"$/
+     */
+    public function getEventByDomain(string $eventDomain)
+    {
+        $event = $this->eventContextProxy->getEventManager()->findByDomain($eventDomain);
+        $this->eventContextProxy->getStorage()->set('event', $event);
+    }
+
+    /**
+     * @Given /^the domain for this event is "(?P<domain>[^"]+)"$/
+     */
+    public function setEventDomain(string $domain)
+    {
+        $event = $this->getEvent();
+        $event->setDomain($domain);
+
+        $this->eventContextProxy->getEventManager()->set($event);
     }
 
     /**
@@ -50,8 +60,6 @@ class EventContext implements Context
 
     /**
      * @Given /^the catalog is open since "(?P<date>[^"]+)"$/
-     *
-     * @param string $date
      */
     public function theCatalogIsOpen(string $date)
     {
@@ -127,6 +135,20 @@ class EventContext implements Context
         $this->eventContextProxy->getAccessManager()->setRegistrationCloseDate(
             new \DateTime('now + 1 day'), $event
         );
+    }
+
+    /**
+     * @Given the locale for this event is :locale
+     */
+    public function theLocaleForThisEventIs($locale)
+    {
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->eventContextProxy->getEventManager()->setLocale($event, $locale);
     }
 
     /**

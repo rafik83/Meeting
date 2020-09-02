@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\MinkExtension\Context\MinkContext;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Element\NodeElement;
-use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
@@ -21,6 +21,7 @@ use Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -94,6 +95,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $filesystem = new Filesystem();
 
         $filesystem->remove($spoolDir);
+
+        $client = $this->getClient();
+        $client->getCookieJar()->clear();
     }
 
     /**
@@ -549,12 +553,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function iAmLoggedOnEvent($email, $eventUrl)
     {
         $this->setBaseUrl($eventUrl);
-        $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof BrowserKitDriver) {
-            throw new \Exception('BrowserKitDriver not supported');
-        }
 
-        $client = $driver->getClient();
+        $client = $this->getClient();
         $client->getCookieJar()->set(new Cookie(session_name(), true));
 
         $session = $client->getContainer()->get('session');
@@ -580,18 +580,43 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     public function iAmLoggedAsAdminWithGivenEmail($email)
     {
         $this->setBaseUrl('http://admin.vimeet.proximum');
-        $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof BrowserKitDriver) {
-            throw new \Exception('BrowserKitDriver not supported');
-        }
 
-        $client = $driver->getClient();
+        $client = $this->getClient();
         $client->getCookieJar()->set(new Cookie(session_name(), true));
 
         $session = $client->getContainer()->get('session');
 
         $user = $this->kernel->getContainer()->get('repository.admin_repository')->findByEmail($email);
         $providerKey = 'admin';
+
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $session->set('_security_' . $providerKey, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
+    }
+
+    /**
+     * @Given I am logged with :email on front
+     */
+    public function iAmLoggedAsUserWithGivenEmailOnFront($email)
+    {
+        /** @var Event */
+        $event = $this->featureContextProxy->getStorage()->get('event');
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->setBaseUrl('http://'.$event->getDomain());
+
+        $client = $this->getClient();
+        $client->getCookieJar()->set(new Cookie(session_name(), true));
+
+        $session = $client->getContainer()->get('session');
+
+        $user = $this->kernel->getContainer()->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+        $providerKey = 'main';
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
         $session->set('_security_' . $providerKey, serialize($token));
@@ -828,5 +853,35 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $link = $this->fixStepArgument($link);
         $element->clickLink($link);
+    }
+
+    /**
+     * @Then I follow delete for type :type
+     */
+    public function iFollowDeleteForType($type)
+    {
+        $locator = sprintf("//td[text()[contains(., '%s')]]/..//form/button[@data-confirm='admin.type.action.confirmDelete']", $type);
+        $button = $this->getSession()->getPage()->find('xpath', $locator);
+        $button->press();
+    }
+
+    /**
+     * @Then I follow edit for type :type
+     */
+    public function iFollowEditForType($type)
+    {
+        $locator = sprintf("//td[text()[contains(., '%s')]]/..//a[text()[contains(., 'admin.type.update.link')]]", $type);
+        $editLink = $this->getSession()->getPage()->find('xpath', $locator);
+        $this->getSession()->visit($editLink->getAttribute('href'));
+    }
+
+    private function getClient(): Client
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof BrowserKitDriver) {
+            throw new \Exception('BrowserKitDriver not supported');
+        }
+
+        return $driver->getClient();
     }
 }
