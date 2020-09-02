@@ -52,6 +52,11 @@ class MediaResourceCountCommand extends Command
                 InputArgument::REQUIRED,
                 'The type to count on'
             )
+            ->addArgument(
+                'sheet-count',
+                InputArgument::OPTIONAL,
+                'If supplied, the count for each sheet is outputted'
+            )
         ;
     }
 
@@ -65,15 +70,21 @@ class MediaResourceCountCommand extends Command
         // 1552
         $type = $this->typeRepository->getById($typeId);
 
+        $countElementBySheet = $input->getArgument('sheet-count') !== null;
+
         if ($type === null || $type->getEvent() !== $event) {
             return;
         }
 
         $sheets = $this->sheetRepository->getByTypes([$type]);
+        $countSheet = count($sheets);
+        $output->writeln("Number of sheet to analyze : $countSheet");
 
         $link = 0;
         foreach ($sheets as $sheet) {
             $data = $sheet->getData();
+
+            $linkForSheet = 0;
 
             // id to check
             // M2541Md657
@@ -83,6 +94,7 @@ class MediaResourceCountCommand extends Command
                 foreach ($data['M2541Md657'] as $element) {
                     if (isset($element['path'])) {
                         ++$link;
+                        ++$linkForSheet;
                     }
                 }
             }
@@ -91,8 +103,14 @@ class MediaResourceCountCommand extends Command
                 foreach ($data['M199fMfc3c']['medias'] as $element) {
                     if (isset($element['url'])) {
                         ++$link;
+                        ++$linkForSheet;
                     }
                 }
+            }
+
+            if ($countElementBySheet) {
+                $sheetId = $sheet->getId();
+                $output->writeln("$sheetId : $linkForSheet");
             }
         }
 
