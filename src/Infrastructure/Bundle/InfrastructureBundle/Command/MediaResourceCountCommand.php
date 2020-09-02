@@ -8,7 +8,6 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MediaResourceCountCommand extends Command
@@ -72,12 +71,31 @@ class MediaResourceCountCommand extends Command
 
         $sheets = $this->sheetRepository->getByTypes([$type]);
 
+        $link = 0;
         foreach ($sheets as $sheet) {
             $data = $sheet->getData();
 
             // id to check
             // M2541Md657
             // M199fMfc3c
+
+            if (isset($data['M2541Md657']) && is_array($data['M2541Md657'])) {
+                foreach ($data['M2541Md657'] as $element) {
+                    if (isset($element['path'])) {
+                        ++$link;
+                    }
+                }
+            }
+
+            if (isset($data['M199fMfc3c']['medias']) && is_array($data['M199fMfc3c']['medias'])) {
+                foreach ($data['M199fMfc3c']['medias'] as $element) {
+                    if (isset($element['url'])) {
+                        ++$link;
+                    }
+                }
+            }
         }
+
+        $output->writeln("The number of element is $link");
     }
 }
