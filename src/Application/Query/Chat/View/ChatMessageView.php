@@ -21,6 +21,9 @@ class ChatMessageView
      */
     public $isAuthor;
 
+    /** @var string|null */
+    public $avatar;
+
     /** @var int */
     public $authorId;
 
@@ -34,6 +37,7 @@ class ChatMessageView
         int $id,
         string $content,
         \DateTimeInterface $createdAt,
+        ?string $avatar,
         int $authorId,
         string $authorName,
         string $sheetTitle
@@ -41,6 +45,7 @@ class ChatMessageView
         $this->id = $id;
         $this->content = $content;
         $this->createdAt = $createdAt;
+        $this->avatar = $avatar;
         $this->authorId = $authorId;
         $this->authorName = $authorName;
         $this->sheetTitle = $sheetTitle;

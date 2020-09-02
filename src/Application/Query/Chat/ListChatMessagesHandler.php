@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Query\Chat\Exception\AccessDeniedToChatMessages;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
+use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ListChatMessagesHandler

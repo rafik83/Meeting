@@ -3,7 +3,6 @@
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
 var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
 var initLayoutContainer = require('opentok-layout-js');
-var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
@@ -71,10 +70,9 @@ function Webinar(element, isSpeaker) {
         this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
 
         this.chatInstance = null;
+        this.chatLoaded = false;
         this.chatButton = element.querySelector('[data-chat-button]');
-        if (this.chatButton) {
-            this.chatButton.addEventListener('click', this.showChat.bind(this));
-        }
+        this.chatButton.addEventListener('click', this.showChat.bind(this));
 
         this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
         this.questionsButton = element.querySelector('[data-questions-button]');
@@ -347,11 +345,12 @@ Webinar.prototype.showElement = function (element) {
  */
 
 Webinar.prototype.initChat = function () {
-    if (this.chatInstance) {
+    if (this.chatLoaded) {
         return;
     }
 
     const href = this.chatContainer.getAttribute('data-href');
+    const defaultAvatar = this.chatContainer.getAttribute('data-default-avatar');
 
     const $addChatFormList = $(this.addChatFormList);
 
@@ -376,30 +375,29 @@ Webinar.prototype.initChat = function () {
             const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
             authorNameTextEl.textContent = item.authorName;
 
-            if (item.sheetTitle) {
-                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
-                authorTitleEl.textContent = [item.position, item.sheetTitle].filter((item) => !!item).join(', ');
-                authorTitleEl.classList.add('chat-author-title');
-
-                if (item.isAuthor) {
-                    authorTitleEl.classList.remove('chat-author-title');
-                    authorTitleEl.classList.add('chat-author-title-on');
-                }
-            }
-
             const avatarEl = authorEl.appendChild(document.createElement('span'));
 
-            if (item.avatar) {
-                avatarEl.classList.add('chat-author-avatar');
-                const imgEl = avatarEl.appendChild(document.createElement('img'));
+            avatarEl.classList.add('chat-author-avatar');
+            const imgEl = avatarEl.appendChild(document.createElement('img'));
+
+            if (item.avatar == null) {
+                imgEl.setAttribute('src', defaultAvatar);
+            } else {
                 imgEl.setAttribute('src', item.avatar);
             }
 
+            if (item.sheetTitle) {
+                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
+                authorTitleEl.textContent = [item.sheetTitle].filter((item) => !!item).join(', ');
+                authorTitleEl.classList.add('chat-author-title');
+
+                if (item.isAuthor) {
+                    authorTitleEl.classList.add('chat-author-title-on');
+                }
+
+            }
+
             if (item.isAuthor) {
-                rowEl.classList.remove('chat-row');
-                contentEl.classList.remove('chat-content');
-                authorEl.classList.remove('chat-author');
-                authorNameEl.classList.remove('chat-author-name');
                 rowEl.classList.add('chat-row-on');
                 contentEl.classList.add('chat-content-on');
                 authorEl.classList.add('chat-author-on');
@@ -408,6 +406,8 @@ Webinar.prototype.initChat = function () {
 
             $addChatFormList[0].appendChild(rowEl);
         });
+
+        this.chatLoaded = true;
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar questions');
@@ -868,6 +868,7 @@ Webinar.prototype.showChat = function (event) {
     this.chatButton.classList.add('btn-primary');
     this.hideElement(this.questionsContainer);
     this.showElement(this.chatContainer);
+    this.initChat();
 };
 
 Webinar.prototype.showQuestions = function (event) {
@@ -882,7 +883,6 @@ Webinar.prototype.showQuestions = function (event) {
     this.showElement(this.questionsContainer);
 
     this.initQuestions();
-    this.initChat();
 };
 
 Webinar.prototype.initQuestions = function () {

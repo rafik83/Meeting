@@ -291,12 +291,13 @@
 
     .chat-author-avatar {
       align-self: center;
+      background-color: #dddddd;
+      margin-left: 10px;
+      border-radius: 50%;
 
       img {
-        border-radius: 50%;
         display: inline-block;
         height: 32px;
-        margin-left: 10px;
         object-fit: cover;
         width: 32px;
       }
@@ -305,28 +306,16 @@
 }
 
 .chat-row-on {
-  border: 1px solid #259de8;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  overflow: hidden;
-  margin-right:0px;
+  border: 1px solid #259de8 !important;
+  margin-right:0px !important;
   margin-left:30px;
 
-
   .chat-content-on {
-    font-size: 16px;
-    padding: 10px;
     color:#259de8;
   }
 
   .chat-author-on {
-    align-items: flex-end;
-    background-color: #259de8;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    padding: 4px 10px;
-    text-align: right;
+    background-color: #259de8 !important;
     color: white;
   }
 
@@ -338,24 +327,11 @@
   }
 
   .chat-author-title-on {
-    color: white;
-    display: inline-block;
-    margin-left: 5px;
-    font-style: italic;
-    text-align: right;
+    color: white !important;
   }
 
   .chat-author-avatar-on {
     align-self: center;
-
-    img-on {
-      border-radius: 50%;
-      display: inline-block;
-      height: 32px;
-      margin-left: 10px;
-      object-fit: cover;
-      width: 32px;
-    }
   }
 }
 
