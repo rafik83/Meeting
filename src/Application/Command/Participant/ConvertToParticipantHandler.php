@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\Event\UpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
