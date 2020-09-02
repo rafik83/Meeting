@@ -5605,6 +5605,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     domain.event.has_sheet:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
