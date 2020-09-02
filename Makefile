@@ -322,11 +322,11 @@ event-build-guideline-asset@preprod:
 event-build-guideline-asset@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
-import-preprod-db@llocal:
+import-preprod-db@local:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events.wip', '.vimeet.proximum')"
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.wip')"
 	make post-import-db
 
 post-import-db:
