@@ -144,6 +144,9 @@ class TechEventAuthenticator extends AbstractGuardAuthenticator
         }
 
         $loginData = $loginDataExtraData->getValue();
+
+        // TechEvent is sending the user password encoded with sha1.
+        // Therefore we encode the user input password to check it against the stored value.
         if (sha1($credentials['password']) !== $loginData) {
             throw new BadCredentialsException('Invalid credentials.');
         }
