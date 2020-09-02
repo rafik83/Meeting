@@ -69,8 +69,8 @@ class ListChatMessagesHandlerTest extends TestCase
 
         $this->chatMessageRepository->list($this->happening->reveal())->shouldBeCalled()->willReturn(
             [
-                new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 'Korben DALLAS', 'Taxi Inc.'),
-                new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 'Leeloo', 'Fifth Element'),
+                new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 12345, 'Pierre DUPONT.', 'Taxi Inc.'),
+                new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 007, 'Leeloo', 'Fifth Element'),
             ]
         );
 
@@ -86,10 +86,10 @@ class ListChatMessagesHandlerTest extends TestCase
             new ListChatMessages($this->happening->reveal(), $this->user->reveal(), 'fr')
         );
 
-        $result1 = new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 'Korben DALLAS', 'Taxi Inc.');
+        $result1 = new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 12345, 'Pierre DUPONT.', 'Taxi Inc.');
         $result1->formattedCreatedAt = '14:00:00';
 
-        $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 'Leeloo', 'Fifth Element');
+        $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 007, 'Leeloo', 'Fifth Element');
         $result2->formattedCreatedAt = '14:05:00';
 
         $this->assertEquals([$result1, $result2], $chatMessageViews);
