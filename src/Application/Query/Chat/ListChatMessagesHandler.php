@@ -47,6 +47,7 @@ class ListChatMessagesHandler
 
         foreach ($chatMessagesViews as $chatMessagesView) {
             $chatMessagesView->formattedCreatedAt = $mediumHourFormatter->format($chatMessagesView->createdAt);
+            $chatMessagesView->isAuthor = $query->user->getId() === $chatMessagesView->authorId;
         }
 
         return $chatMessagesViews;

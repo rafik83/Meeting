@@ -259,6 +259,7 @@ happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y p
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.chat.tab: 'Chat'
+happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.end: 'Arrêter'
 happening.webinar.endingAt: 'Fin dans'
 happening.webinar.media.share: 'Partager'
