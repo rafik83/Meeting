@@ -34,16 +34,6 @@ class AllowTransformRequestIntoMeetingOnDdayTest extends TestCase
         $request->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $request->getFromSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
         $request->getToSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
-        $event->hasDay()->shouldBeCalled()->willReturn(true);
-
-        $firstDay = $this->prophesize(Event\Day::class);
-        $firstDay->getStartTime()->shouldBeCalled()->willReturn(new \DateTime('2020-08-30T08:00'));
-
-        $lastDay = $this->prophesize(Event\Day::class);
-        $lastDay->getEndTime()->shouldBeCalled()->willReturn(new \DateTime('2020-09-02T18:00'));
-
-        $event->getFirstDay()->shouldBeCalled()->willReturn($firstDay->reveal());
-        $event->getLastDay()->shouldBeCalled()->willReturn($lastDay->reveal());
 
         $invoke = new AllowTransformRequestIntoMeetingOnDday(
             $ddayGuesser,

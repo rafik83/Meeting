@@ -203,6 +203,7 @@ class RuleRepository implements RuleRepositoryInterface
      */
     public function update(Rule $rule)
     {
+        dump($rule);
         $this->entityManager->flush($rule);
 
         return $rule;

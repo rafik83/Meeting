@@ -30,10 +30,6 @@ class AllowTransformRequestIntoMeetingOnDday
             return false;
         }
 
-        if (!$this->ddayGuesser->isItDDayAndFeatureEnabled($request->getEvent())) {
-            return false;
-        }
-
         $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($request->getFromSheet(), $request->getToSheet());
 
         foreach ($rules as $rule) {
