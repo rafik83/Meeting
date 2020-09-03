@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2213 - Translate timezones
 - VIMEET 2178 - In a webinar, participant can vote for a question
 - Command to count media/upload element on sheets
+- VIMEET-2175 - TechEvent api changed to handle login data, add guard to check login data on login
 
 ### Fixed
 - Tip content can be nullable, and tip translations affected on event come from the event locales.
