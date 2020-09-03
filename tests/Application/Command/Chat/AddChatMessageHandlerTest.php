@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Chat;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Chat\AddChatMessage;
 use Proximum\Vimeet\Application\Command\Chat\AddChatMessageHandler;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
@@ -28,6 +29,8 @@ class AddChatMessageHandlerTest extends TestCase
         $now = new DateTimeImmutable('2020-05-12 14:12:00');
 
         $messageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
+        $savedChatMesssage = $this->prophesize(ChatMessage::class);
+        $savedChatMesssage->getId()->willReturn(43);
         $messageRepository->add(
             new ChatMessage(
                 $meeting->reveal(),
@@ -37,12 +40,20 @@ class AddChatMessageHandlerTest extends TestCase
                 'Paul DUPOND',
                 'World Company'
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->willReturn($savedChatMesssage->reveal());
 
         $checkAccessToChatMessages = $this->prophesize(CheckAccessToChatMessages::class);
         $checkAccessToChatMessages->isSatisfiedBy($meeting->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $addChatMessageHandler = new AddChatMessageHandler($messageRepository->reveal(), $checkAccessToChatMessages->reveal(), $now);
+        $notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
+        $notificationPublisher->publishChatMessageNotification($meeting->reveal(), 43)->shouldBeCalled();
+
+        $addChatMessageHandler = new AddChatMessageHandler(
+            $messageRepository->reveal(),
+            $checkAccessToChatMessages->reveal(),
+            $notificationPublisher->reveal(),
+            $now
+        );
         $addChatMessageHandler->handle(new AddChatMessage($meeting->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }
 }

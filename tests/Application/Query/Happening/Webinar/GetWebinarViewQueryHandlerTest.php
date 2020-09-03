@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\WebinarNotificationSubscriberInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
@@ -34,7 +34,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     private $videoConferenceAdapter;
 
     /** @var ObjectProphecy */
-    private $webinarNotificationSubscriber;
+    private $notificationSubscriber;
 
     /** @var GetWebinarViewQueryHandler */
     private $getWebinarViewQueryHandler;
@@ -46,13 +46,13 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     {
         $this->getUserParticipantInfosHandler = $this->prophesize(GetUserParticipantInfosHandler::class);
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
-        $this->webinarNotificationSubscriber = $this->prophesize(WebinarNotificationSubscriberInterface::class);
+        $this->notificationSubscriber = $this->prophesize(NotificationSubscriberInterface::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
-            $this->webinarNotificationSubscriber->reveal(),
+            $this->notificationSubscriber->reveal(),
             $this->dateTime
         );
     }
@@ -134,8 +134,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ),
         ];
 
-        $this->webinarNotificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->webinarNotificationSubscriber->getSubscriberKey($happening->reveal(), 'questions')
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), ['questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
@@ -242,8 +242,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
-        $this->webinarNotificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->webinarNotificationSubscriber->getSubscriberKey($happening->reveal(), 'questions')
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), ['questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
@@ -328,10 +328,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getParticipations()->shouldNotBeCalled();
         $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
 
-        $this->webinarNotificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-            $this->webinarNotificationSubscriber->getSubscriberKey($happening->reveal(), 'questions')
-                ->shouldBeCalled()
-                ->willReturn('xxxxyyy');
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), ['questions'])
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
 
         $this->assertEquals(
             new WebinarView(

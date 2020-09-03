@@ -8,7 +8,7 @@ use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 
 interface ChatMessageRepositoryInterface
 {
-    public function add(ChatMessage $chatMessage): void;
+    public function add(ChatMessage $chatMessage): ChatMessage;
 
     /**
      * @return ChatMessageView[]

@@ -47,13 +47,13 @@ services:
     #
     # Webinar Notifications (Mercure)
     #
-    Proximum\Vimeet\Infrastructure\Adapter\Mercure\WebinarNotificationPublisher:
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher:
         arguments:
             - '%mercure_hub_publisher_url%'
             - '%mercure_publisher_key%'
             - '@adapter.http_adapter'
 
-    Proximum\Vimeet\Infrastructure\Adapter\Mercure\WebinarNotificationSubscriber:
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber:
         arguments:
             - '%mercure_hub_subscriber_url%'
             - '%mercure_subscriber_key%'

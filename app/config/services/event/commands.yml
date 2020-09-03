@@ -61,7 +61,7 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\WebinarNotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }

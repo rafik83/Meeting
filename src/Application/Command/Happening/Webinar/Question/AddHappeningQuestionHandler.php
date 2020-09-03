@@ -3,29 +3,29 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Application\Adapter\WebinarNotificationPublisherInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractWebinarNotification;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class AddHappeningQuestionHandler
 {
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
-    /** @var WebinarNotificationPublisherInterface */
-    private $webinarNotificationPublisher;
+    /** @var NotificationPublisherInterface */
+    private $notificationPublisher;
 
     /** @var DateTimeInterface */
     private $datetime;
 
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
-        WebinarNotificationPublisherInterface $webinarNotificationPublisher,
+        NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $datetime
     ) {
         $this->questionRepository = $questionRepository;
-        $this->webinarNotificationPublisher = $webinarNotificationPublisher;
+        $this->notificationPublisher = $notificationPublisher;
         $this->datetime = $datetime;
     }
 
@@ -46,7 +46,7 @@ class AddHappeningQuestionHandler
 
         $this->questionRepository->add($question);
 
-        $this->webinarNotificationPublisher->send($command->getHappening(), AbstractWebinarNotification::TYPE_QUESTIONS, [
+        $this->notificationPublisher->publishHappeningNotification($command->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
             'action' => 'update',
             'authorId' => $command->getCreatedBy()->getId(),
         ]);

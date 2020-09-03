@@ -4,7 +4,7 @@ namespace Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\WebinarNotificationPublisherInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -20,7 +20,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
     private $questionRepository;
 
     /** @var ObjectProphecy */
-    private $webinarNotificationPublisher;
+    private $notificationPublisher;
 
     /** @var AddHappeningQuestionHandler */
     private $addHappeningQuestionHandler;
@@ -29,10 +29,10 @@ class AddHappeningQuestionHandlerTest extends TestCase
     {
         $this->datetime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $this->webinarNotificationPublisher = $this->prophesize(WebinarNotificationPublisherInterface::class);
+        $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
         $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler(
             $this->questionRepository->reveal(),
-            $this->webinarNotificationPublisher->reveal(),
+            $this->notificationPublisher->reveal(),
             $this->datetime
         );
     }
@@ -72,7 +72,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
         $this->questionRepository->add($expectedQuestion)
             ->shouldBeCalled();
 
-        $this->webinarNotificationPublisher->send($happening->reveal(), 'questions', Argument::withEntry('action', 'update'))
+        $this->notificationPublisher->publishHappeningNotification($happening->reveal(), 'questions', Argument::withEntry('action', 'update'))
             ->shouldBeCalled();
 
         $this->addHappeningQuestionHandler->handle($addHappeningQuestion->reveal());

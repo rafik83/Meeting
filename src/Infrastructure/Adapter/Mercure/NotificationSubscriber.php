@@ -3,10 +3,11 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 
 use Firebase\JWT\JWT;
-use Proximum\Vimeet\Application\Adapter\WebinarNotificationSubscriberInterface;
+use InvalidArgumentException;
+use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 
-class WebinarNotificationSubscriber extends AbstractWebinarNotification implements WebinarNotificationSubscriberInterface
+class NotificationSubscriber extends AbstractNotification implements NotificationSubscriberInterface
 {
     /** @var string */
     private $mercureHubUrl;
@@ -25,11 +26,17 @@ class WebinarNotificationSubscriber extends AbstractWebinarNotification implemen
         return $this->mercureHubUrl;
     }
 
-    public function getSubscriberKey(Happening $happening, $type): string
+    public function getHappeningSubscriberKey(Happening $happening, array $types): string
     {
+        if (empty($types)) {
+            throw new InvalidArgumentException('Types array cannot be empty');
+        }
+
         return JWT::encode([
             'mercure' => [
-                'subscriber' => ['topic' => $this->getTopic($happening->getId(), $type)],
+                'subscriber' => array_map(function ($type) use ($happening) {
+                    return ['topic' => $this->getHappeningTopic($happening->getId(), $type)];
+                }, $types),
             ]
         ], $this->mercureSubscriberKey);
     }
