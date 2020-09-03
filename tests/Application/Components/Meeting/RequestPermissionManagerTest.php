@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Components\Meeting;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeetingOnDday;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
@@ -34,7 +34,7 @@ class RequestPermissionManagerTest extends TestCase
     public $meetingPublishedAccessChecker;
 
     /** @var ObjectProphecy */
-    private $allowTransformRequestIntoMeetingOnDday;
+    private $allowTransformRequestIntoMeeting;
 
     /** @var ObjectProphecy */
     private $requestRepository;
@@ -50,7 +50,7 @@ class RequestPermissionManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->allowTransformRequestIntoMeetingOnDday = $this->prophesize(AllowTransformRequestIntoMeetingOnDday::class);
+        $this->allowTransformRequestIntoMeeting = $this->prophesize(AllowTransformRequestIntoMeeting::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
         $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
@@ -63,7 +63,7 @@ class RequestPermissionManagerTest extends TestCase
     private function getRequestPermissionManager()
     {
         return new RequestPermissionManager(
-            $this->allowTransformRequestIntoMeetingOnDday->reveal(),
+            $this->allowTransformRequestIntoMeeting->reveal(),
             $this->requestRepository->reveal(),
             $this->meetingPublishedAccessChecker->reveal(),
             $this->answeringMeetingRequestAccessChecker->reveal()

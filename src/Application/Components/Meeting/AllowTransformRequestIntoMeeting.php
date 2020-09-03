@@ -6,7 +6,7 @@ use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
-class AllowTransformRequestIntoMeetingOnDday
+class AllowTransformRequestIntoMeeting
 {
     /**
      * @var DDayGuesser

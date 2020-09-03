@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeetingOnDday;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
@@ -61,12 +61,12 @@ class ApproveRequestHandler
     private $meetingDDayViewQueryHandler;
 
     /**
-     * @var AllowTransformRequestIntoMeetingOnDday
+     * @var AllowTransformRequestIntoMeeting
      */
-    private $allowTransformRequestIntoMeetingOnDday;
+    private $allowTransformRequestIntoMeeting;
 
     public function __construct(
-        AllowTransformRequestIntoMeetingOnDday $allowTransformRequestIntoMeetingOnDday,
+        AllowTransformRequestIntoMeeting $allowTransformRequestIntoMeeting,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $permissionManager,
@@ -86,7 +86,7 @@ class ApproveRequestHandler
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
         $this->ddayGuesser                        = $ddayGuesser;
         $this->meetingDDayViewQueryHandler = $meetingDDayViewQueryHandler;
-        $this->allowTransformRequestIntoMeetingOnDday = $allowTransformRequestIntoMeetingOnDday;
+        $this->allowTransformRequestIntoMeeting = $allowTransformRequestIntoMeeting;
     }
 
     /**
@@ -141,23 +141,23 @@ class ApproveRequestHandler
             new ApprovedRequestEvent($approveRequest->request)
         );
 
-        if ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())) {
-            if ($this->allowTransformRequestIntoMeetingOnDday->__invoke($approveRequest->request)
-                || false === $this->validationRequiredChecker->handle(
-                    $approveRequest->sheet,
-                    $approveRequest->editor
+        if ($this->allowTransformRequestIntoMeeting->__invoke($approveRequest->request)
+            || ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())
+                && false === $this->validationRequiredChecker->handle(
+                        $approveRequest->sheet,
+                        $approveRequest->editor
+                    )
                 )
-            ) {
-                $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
-                    $approveRequest->request,
-                    $approveRequest->locale
-                );
+        ) {
+            $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
+                $approveRequest->request,
+                $approveRequest->locale
+            );
 
-                if ($meetingDdayView instanceof MeetingDdayView) {
-                    return new ApproveRequestResult($meetingDdayView, false, $approveRequest->request);
-                } else {
-                    return new ApproveRequestResult(null, true, $approveRequest->request);
-                }
+            if ($meetingDdayView instanceof MeetingDdayView) {
+                return new ApproveRequestResult($meetingDdayView, false, $approveRequest->request);
+            } else {
+                return new ApproveRequestResult(null, true, $approveRequest->request);
             }
         }
 

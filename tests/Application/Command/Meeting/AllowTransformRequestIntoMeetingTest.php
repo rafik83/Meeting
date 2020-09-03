@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeetingOnDday;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -12,7 +12,7 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
-class AllowTransformRequestIntoMeetingOnDdayTest extends TestCase
+class AllowTransformRequestIntoMeetingTest extends TestCase
 {
     public function testInvoke() {
 
@@ -35,7 +35,7 @@ class AllowTransformRequestIntoMeetingOnDdayTest extends TestCase
         $request->getFromSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
         $request->getToSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
 
-        $invoke = new AllowTransformRequestIntoMeetingOnDday(
+        $invoke = new AllowTransformRequestIntoMeeting(
             $ddayGuesser,
             $ruleRepository->reveal()
     );
