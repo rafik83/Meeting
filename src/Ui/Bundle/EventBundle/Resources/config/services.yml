@@ -123,6 +123,13 @@ services:
         tags:
             - { name: security.voter }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
+        tags:
+            - { name: security.voter }
+
     #
     # Form extension
     #

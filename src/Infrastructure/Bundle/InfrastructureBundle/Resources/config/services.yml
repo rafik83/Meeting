@@ -5927,6 +5927,12 @@ services:
         arguments:
             - '@datetime'
 
+    Proximum\Vimeet\Domain\Happening\IsUserSpeaker: ~
+
+    Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast:
+        arguments:
+            - '@datetime'
+
     #
     # Serializer: normalizers and encoders
     #

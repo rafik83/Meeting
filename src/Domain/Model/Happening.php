@@ -82,6 +82,9 @@ class Happening implements TimeRangeInterface
     /** @var null|string */
     private $webinarRecordZipFileUrl = null;
 
+    /** @var bool */
+    private $allowHls = false;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -96,7 +99,8 @@ class Happening implements TimeRangeInterface
         bool $videoWebinar = false,
         ?string $liveUrl = null,
         bool $sidebarAllowed = true,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = false
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -118,6 +122,7 @@ class Happening implements TimeRangeInterface
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
         $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
     }
 
     public function getId(): ?int
@@ -216,7 +221,8 @@ class Happening implements TimeRangeInterface
         ?string $invitationCode = null,
         ?string $liveUrl = null,
         bool $sidebarAllowed,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = false
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -231,6 +237,7 @@ class Happening implements TimeRangeInterface
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->allowHls = $allowHls;
     }
 
     public function updateTranslation(
@@ -453,5 +460,10 @@ class Happening implements TimeRangeInterface
     public function getWebinarRecordZipFileUrl(): ?string
     {
         return $this->webinarRecordZipFileUrl;
+    }
+
+    public function allowWebinarOnHLS(): bool
+    {
+        return $this->allowHls;
     }
 }

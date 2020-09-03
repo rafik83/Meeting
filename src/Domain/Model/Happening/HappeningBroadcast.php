@@ -67,4 +67,9 @@ class HappeningBroadcast
     {
         return $this->createdAt;
     }
+
+    public function stop(): void
+    {
+        $this->isStopped = true;
+    }
 }

@@ -35,4 +35,9 @@ class Broadcast implements DomainBroadcast
     {
         return $this->broadcastId;
     }
+
+    public function getHlsUrl(): ?string
+    {
+        return $this->hls;
+    }
 }
