@@ -1,18 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client;
 
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Data\Type;
 
 class WSClient
 {
@@ -24,7 +15,7 @@ class WSClient
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getContactsToSynchro(string $endpoint): array
+    public function getContactsToSynchro(string $endpoint, string $identifier): array
     {
         try {
             $response = $this->httpAdapter->get($endpoint);
@@ -41,7 +32,7 @@ class WSClient
                     $json = json_encode($xmlContact);
                     $contact = json_decode($json, true);
 
-                    $contacts[$contact[Type::ID_CONTACT]] = $contact;
+                    $contacts[$contact[$identifier]] = $contact;
                 }
 
                 return $contacts;
