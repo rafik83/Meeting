@@ -51,9 +51,13 @@ class AgendaView
     /** @var bool */
     public $isItDDay;
 
+    /** @var string */
+    public $timezoneTranslated;
+
     public function __construct(
         array $dayViews,
         string $timezone,
+        string $timezoneTranslated,
         Sheet $sheet,
         Participant $participant,
         bool $isUserAloneParticipant,
@@ -73,6 +77,7 @@ class AgendaView
         $this->participants = $participants;
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->timezone = $timezone;
+        $this->timezoneTranslated = $timezoneTranslated;
         $this->canMoveMeeting = $canMoveMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->isParticipantVisio = $isParticipantVisio;

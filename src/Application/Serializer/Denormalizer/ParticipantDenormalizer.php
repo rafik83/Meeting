@@ -145,7 +145,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         );
 
         foreach ($data as $key => $row) {
-            if (!array_key_exists($mappedMailCsvColumn, $row)) {
+            if (!array_key_exists($mappedMailCsvColumn, $row) || null === $row[$mappedMailCsvColumn]) {
                 continue;
             }
 

@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2169 - Live streaming myevent
+- VIMEET-2106 - The speaking user video is maximized based on audio level
+- Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
+- VIMEET 2178 - In a webinar, participant can vote for a question
+
+### Fixed
+- Tip content can be nullable, and tip translations affected on event come from the event locales.
+
+## [2.43.0] - 2020-08-27
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+- VIMEET-2174 - Do not ask a new password when user is logged with a token
 
 ## [2.42.0] - 2020-07-31
 ### Added

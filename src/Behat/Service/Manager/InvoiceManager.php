@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\InvoiceFactory;
@@ -43,13 +44,16 @@ class InvoiceManager
      *
      * @return Invoice
      */
-    public function create(Event $event, $numero, Sheet $sheet = null)
+    public function create(Event $event, $numero, Sheet $sheet = null, ?Order $order = null)
     {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
         }
 
         $invoice = InvoiceFactory::create($numero, $sheet);
+        if (null !== $order) {
+            $order->setInvoice($invoice);
+        }
         $this->invoiceRepository->add($invoice);
 
         return $invoice;
