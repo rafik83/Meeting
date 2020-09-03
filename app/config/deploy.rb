@@ -68,7 +68,7 @@ after :deploy, 'deploy:cleanup'
 after :deploy, 'app_tasks:translations_update'
 
 namespace :app_tasks do
-  task :db_migration, :roles => :app, :except => { :no_release => true } do
+  task :db_migration, :roles => :app, :except => { :no_release => true, :primary => false } do
     capifony_pretty_print "--> Doctrine migration and flush Redis"
     invoke_command "cd #{latest_release} && make migration-and-redis-flushdb@prod", :via => run_method
     capifony_puts_ok
