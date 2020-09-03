@@ -102,6 +102,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.happening_question_vote_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionVoteRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:

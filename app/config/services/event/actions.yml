@@ -127,6 +127,12 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Meeting
     #
