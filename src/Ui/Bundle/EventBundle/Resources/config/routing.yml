@@ -1020,14 +1020,14 @@ event_happening_webinar_start_broadcast:
     requirements:
         happening: \d+
     methods: [POST]
-    controller: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StartAction
 
 event_happening_webinar_stop_broadcast:
     path: /happening/{happening}/webinar/broadcast/stop
     requirements:
         happening: \d+
     methods: [POST]
-    controller: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StopAction
 
 #
 # Unavailability

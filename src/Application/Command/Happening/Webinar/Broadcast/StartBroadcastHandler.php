@@ -38,6 +38,11 @@ class StartBroadcastHandler
         $maxDuration = 36000;
         $duration = max((int) $end->getTimestamp() - $this->dateTime->getTimestamp(), 0);
 
+        if (0 === $duration) {
+            // throw exception, can not be 0
+            $duration = 3600;
+        }
+
         // A broadcast can't last more than 10hours.
         if ($duration > $maxDuration) {
             $duration = $maxDuration;
