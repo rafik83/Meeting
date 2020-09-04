@@ -1,20 +1,14 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Domain\User\Security;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Security\CanPasswordBeDefinedWithActivationEmail;
@@ -46,7 +40,10 @@ class CanPasswordBeDefinedWithActivationEmailTest extends TestCase
     /** @var ObjectProphecy|Participant */
     private $participant;
 
-    public function setUp()
+    /** @var ObjectProphecy */
+    private $extraParameterRepository;
+
+    public function setUp(): void
     {
         $this->event = $this->prophesize(Event::class);
         $this->email = 'test@idontknow.why';
@@ -55,8 +52,11 @@ class CanPasswordBeDefinedWithActivationEmailTest extends TestCase
         $this->userWithPassword = UserFactory::create();
         $this->userWithoutPassword = UserFactory::createWithEmptyPassword($this->email);
         $this->participant = $this->prophesize(Participant::class);
+        $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $this->canPasswordBeDefinedWithActivationEmail = new CanPasswordBeDefinedWithActivationEmail(
-            $this->participantRepository->reveal(), $this->userRepository->reveal()
+            $this->participantRepository->reveal(),
+            $this->userRepository->reveal(),
+            $this->extraParameterRepository->reveal()
         );
     }
 
@@ -84,12 +84,38 @@ class CanPasswordBeDefinedWithActivationEmailTest extends TestCase
         );
     }
 
+    public function testTechEventLogin(): void
+    {
+        $this->userRepository
+            ->findByEmail($this->email)
+            ->shouldBeCalled()
+            ->willReturn($this->userWithoutPassword)
+        ;
+
+        $extraParam = $this->prophesize(Event\ExtraParameter::class);
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_TECH_EVENT_LOGIN_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn($extraParam)
+        ;
+
+        $this->assertFalse(
+            $this->canPasswordBeDefinedWithActivationEmail->isSatisfiedBy($this->event->reveal(), $this->email)
+        );
+    }
+
     public function testParticipantIsNotImported(): void
     {
         $this->userRepository
             ->findByEmail($this->email)
             ->shouldBeCalled()
             ->willReturn($this->userWithoutPassword);
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_TECH_EVENT_LOGIN_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
         $this->participantRepository->getAllParticipantForUser($this->event->reveal(), $this->userWithoutPassword)
             ->shouldBeCalled()
@@ -108,6 +134,12 @@ class CanPasswordBeDefinedWithActivationEmailTest extends TestCase
             ->findByEmail($this->email)
             ->shouldBeCalled()
             ->willReturn($this->userWithoutPassword);
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_TECH_EVENT_LOGIN_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
         $this->participantRepository->getAllParticipantForUser($this->event->reveal(), $this->userWithoutPassword)
             ->shouldBeCalled()

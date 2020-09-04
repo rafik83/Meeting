@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use League\Tactician\CommandBus;
@@ -46,14 +38,6 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param FlashBagInterface                    $flashBag
-     * @param EngineInterface                      $engine
-     * @param CommandBus                           $commandBus
-     * @param RouterInterface                      $router
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
@@ -85,7 +69,7 @@ class UpdateAction
         }
 
         $command = new Update($tip);
-        $form    = $this->formFactory->create(UpdateType::class, $command, [
+        $form = $this->formFactory->create(UpdateType::class, $command, [
             'submit' => true,
         ]);
 

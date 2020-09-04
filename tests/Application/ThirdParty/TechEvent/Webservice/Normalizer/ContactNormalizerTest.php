@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer;
@@ -19,7 +11,7 @@ class ContactNormalizerTest extends TestCase
     {
         $normalizerMapping = [
             "TEL" => "telephone",
-		    "IDCIVILITE" => "gender",
+            "IDCIVILITE" => "gender",
             "RDV_B2B" => "boolean",
             "IDPAYS" => "country"
         ];
@@ -31,11 +23,11 @@ class ContactNormalizerTest extends TestCase
             "NOM" => "HAMLAT",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "FRANCE",
             "IDPAYS" => "FR",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
+            "EMAIL" => "example-1@example.net",
             "Secteur_activité" => "A99  ",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
             "Typologie_société" => "TP99 ",
@@ -55,11 +47,11 @@ class ContactNormalizerTest extends TestCase
             "NOM" => "HAMLAT",
             "PRENOM" => "MOHAMED",
             "TEL" => "+33666778877",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "FRANCE",
             "IDPAYS" => "FR",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
+            "EMAIL" => "example-1@example.net",
             "Secteur_activité" => "A99  ",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
             "Typologie_société" => "TP99 ",
@@ -73,7 +65,7 @@ class ContactNormalizerTest extends TestCase
         ];
 
         $normalizer = new ContactNormalizer();
-        $result = $normalizer->normalize($contact, $normalizerMapping);
+        $result = $normalizer->normalize($contact, $normalizerMapping, 'IDPAYS');
 
         $this->assertSame($result, $expectedResult);
     }

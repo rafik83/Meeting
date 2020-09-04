@@ -487,6 +487,11 @@ event_change_password:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
+event_tech_event_login_check:
+    path: /login-authentication-check
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\TechEvent\LoginCheckAction
+
 #
 # OAuth2
 #
@@ -945,6 +950,14 @@ event_sheet_happening_webinar_question_add:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
+
+event_sheet_happening_webinar_question_vote:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/vote
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
 
 #
 # Unavailability

@@ -1,0 +1,17 @@
+Proximum\Vimeet\Domain\Model\Happening\QuestionVote:
+    type:  entity
+    table: happening_question_vote
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    manyToOne:
+        question:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Question
+            joinColumn:
+                onDelete: CASCADE
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
