@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 
 class HappeningBroadcast
@@ -21,14 +22,18 @@ class HappeningBroadcast
     /** @var bool */
     private $isStopped;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $createdAt;
+
+    /** @var DateTimeInterface */
+    private $endAt;
 
     public function __construct(
         Happening $happening,
         string $broadcastId,
         bool $isStopped,
-        \DateTimeInterface $createdAt,
+        DateTimeInterface $createdAt,
+        DateTimeInterface $endAt,
         ?string $hlsUrl = null
     ) {
         $this->happening = $happening;
@@ -36,6 +41,7 @@ class HappeningBroadcast
         $this->isStopped = $isStopped;
         $this->hlsUrl = $hlsUrl;
         $this->createdAt = $createdAt;
+        $this->endAt = $endAt;
     }
 
     public function getId(): ?int
@@ -63,9 +69,14 @@ class HappeningBroadcast
         return $this->isStopped;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getEndAt(): DateTimeInterface
+    {
+        return $this->endAt;
     }
 
     public function stop(): void

@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast:
             nullable: true
         createdAt:
             type: datetime
+        endAt:
+            type: datetime
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening

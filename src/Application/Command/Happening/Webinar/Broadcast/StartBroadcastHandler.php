@@ -41,6 +41,8 @@ class StartBroadcastHandler
         // A broadcast can't last more than 10hours.
         if ($duration > $maxDuration) {
             $duration = $maxDuration;
+            $end = DaysHelper::cloneDateTime($this->dateTime);
+            $end = $end->modify("+$maxDuration seconds");
         }
 
         $broadcast = $this->videoConferenceAdapter->startBroadcast(
@@ -53,6 +55,7 @@ class StartBroadcastHandler
             $broadcast->getBroadcastId(),
             false,
             $this->dateTime,
+            $end,
             $broadcast->getHlsUrl()
         );
 
