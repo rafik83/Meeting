@@ -188,6 +188,18 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StartAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StopAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
     #
     # Meeting
     #

@@ -999,6 +999,7 @@ event_sheet_happening_webinar_question_vote:
     methods: [ POST ]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
 
+<<<<<<< HEAD
 event_happening_webinar_download_record_archive:
     path: /happening/{happening}/webinar/download/record
     requirements:
@@ -1013,6 +1014,20 @@ event_happening_webinar_stream:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
+
+event_happening_webinar_start_broadcast:
+    path: /happening/{happening}/webinar/broadcast/start
+    requirements:
+        happening: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast
+
+event_happening_webinar_stop_broadcast:
+    path: /happening/{happening}/webinar/broadcast/stop
+    requirements:
+        happening: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast
 
 #
 # Unavailability
