@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
@@ -60,12 +52,12 @@ class CreateRequestHandler
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
+        $this->approveRequestHandler = $approveRequestHandler;
+        $this->requestPermissionManager = $requestPermissionManager;
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher   = $eventDispatcher;
         $this->dateTime          = $dateTime;
-        $this->approveRequestHandler = $approveRequestHandler;
-        $this->requestPermissionManager = $requestPermissionManager;
     }
 
     /**

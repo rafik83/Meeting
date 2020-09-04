@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
@@ -38,10 +30,10 @@ class RequestPermissionManager
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->requestRepository                    = $requestRepository;
-        $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
-        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->allowTransformRequestIntoMeeting = $allowTransformRequestIntoMeeting;
+        $this->requestRepository = $requestRepository;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**

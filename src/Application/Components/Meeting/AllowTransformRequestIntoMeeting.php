@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Meeting;
 
-use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
