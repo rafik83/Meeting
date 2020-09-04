@@ -54,6 +54,32 @@ class ProductContext implements Context
     }
 
     /**
+     * @Given /^there is a product Planning called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)" and a max quantity of (?P<maxQuantity>\d+)$/
+     *
+     * @param string $title
+     * @param float  $unitPrice
+     * @param int    $maxQuantity
+     */
+    public function createPlanningProduct(
+        string $title,
+        float $unitPrice,
+        int $maxQuantity
+    ) {
+        $event = $this->productContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $product = $this->productContextProxy
+            ->getProductManager()
+            ->createPlanning($event, $title, $unitPrice, 20, $maxQuantity)
+        ;
+
+        $this->productContextProxy->getStorage()->set('productPlanning', $product);
+    }
+
+    /**
      * @Given /^there is a plan called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
      *
      * @param string $title
@@ -97,7 +123,7 @@ class ProductContext implements Context
     }
 
     /**
-     * @Given /^this plan includes this product participant (?P<quantity>\d+) times$/
+     * @Given /^this plan includes this product participant (?P<quantity>\d+) times?$/
      *
      * @param int $quantity
      */

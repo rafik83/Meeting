@@ -6,16 +6,10 @@ Feature: Handle Update Product
 
   Scenario: I can update a planning linked to an event
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
-      | Admins.yml                                                               |
-    Given I am logged with "test2@test.com" on admin
-    And I go to this page "/fr/event"
-    When I go to this page "/fr/event/1/product/4/update/planning"
+    And the event "CES" is created
+    And I am logged as admin
+    And there is a product Planning called "Planning de RDV PO" with a price of "4200" and a max quantity of 1
+    When I go to this page "/fr/event/1/product/1/update/planning"
     Then I should see "form.product_update_planning.children.name.label"
     And I fill in the following:
       | form.product_update_planning.children.name.label    | PlanningTitleModify |
@@ -24,6 +18,6 @@ Feature: Handle Update Product
     And I should see "admin.product.update.success"
 
   Scenario: I see my updated product
-    Given I am logged with "test2@test.com" on admin
-    When I go to this page "/fr/event/1/product/4/update/planning"
+    Given I am logged as admin
+    When I go to this page "/fr/event/1/product/1/update/planning"
     Then the "form.product_update_planning.children.name.label" field should contain "PlanningTitleModify"
