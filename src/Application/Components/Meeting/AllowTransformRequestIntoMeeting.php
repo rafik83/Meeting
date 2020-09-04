@@ -9,18 +9,12 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 class AllowTransformRequestIntoMeeting
 {
     /**
-     * @var DDayGuesser
-     */
-    private $ddayGuesser;
-
-    /**
      * @var RuleRepositoryInterface
      */
     private $ruleRepository;
 
-    public function __construct(DDayGuesser $ddayGuesser, RuleRepositoryInterface $ruleRepository)
+    public function __construct(RuleRepositoryInterface $ruleRepository)
     {
-        $this->ddayGuesser = $ddayGuesser;
         $this->ruleRepository = $ruleRepository;
     }
 

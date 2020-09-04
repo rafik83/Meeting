@@ -2920,7 +2920,6 @@ services:
 
     Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting:
         arguments:
-            - '@domain.event.day.dday_guesser'
             - '@repository.rule_repository'
 
     application.components.messaging.message_factory:

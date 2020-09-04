@@ -23,7 +23,6 @@ class AllowTransformRequestIntoMeetingTest extends TestCase
         $ruleRepository->getBySeerSheetAndSeeableSheet(Argument::any(), Argument::any())->shouldBeCalled()->willReturn([$rule->reveal()]);
 
         $date = new \DateTime('2020-08-31');
-        $ddayGuesser = new DDayGuesser($date,true);
 
         $request = $this->prophesize(Request::class);
 
@@ -35,11 +34,11 @@ class AllowTransformRequestIntoMeetingTest extends TestCase
         $request->getFromSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
         $request->getToSheet()->shouldBeCalled()->willReturn($this->prophesize(Sheet::class));
 
-        $invoke = new AllowTransformRequestIntoMeeting(
-            $ddayGuesser,
-            $ruleRepository->reveal()
-    );
+        $invoke = new AllowTransformRequestIntoMeeting($ruleRepository->reveal());
         $result = $invoke->__invoke($request->reveal());
         $this->assertTrue($result);
+
+        $allowTransformRequestIntoMeeting = $this->prophesize(AllowTransformRequestIntoMeeting::class);
+        $allowTransformRequestIntoMeeting->__invoke($request)->willReturn(true);
     }
 }
