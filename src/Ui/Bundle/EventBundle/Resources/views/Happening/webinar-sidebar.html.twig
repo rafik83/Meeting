@@ -8,6 +8,7 @@
         <div data-chat-container
              data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'happening', objectId: webinarView.happeningId }) }}"
              data-default-avatar="{{ asset('assets/images/icons/icon-user-2.png') }}"
+             data-vote-chat-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
         >
             <div class="chat-list">
                 {# content filled with javascript #}
