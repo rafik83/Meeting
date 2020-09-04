@@ -1,17 +1,10 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\TypeContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class TypeContext implements Context
 {
@@ -29,7 +22,7 @@ class TypeContext implements Context
     /**
      * @Given /^there is a type in this event$/
      */
-    public function createInEvent()
+    public function createInEvent($title = 'Type 1')
     {
         $event = $this->typeContextProxy->getStorage()->get('event');
 
@@ -37,8 +30,16 @@ class TypeContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $type = $this->typeContextProxy->getTypeManager()->create($event);
+        $type = $this->typeContextProxy->getTypeManager()->create($event, $title);
         $this->typeContextProxy->getStorage()->set('type', $type);
+    }
+
+    /**
+     * @Given there is a type :title in this event
+     */
+    public function thereIsATypeInThisEvent($title)
+    {
+        $this->createInEvent($title);
     }
 
     /**
@@ -58,5 +59,29 @@ class TypeContext implements Context
         }
 
         $this->typeContextProxy->getTypeManager()->assignPackageToType($type, $package);
+    }
+
+    /**
+     * @Given this type is hidden
+     */
+    public function thisTypeIsHidden()
+    {
+        /** @var Type */
+        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type->setHidden(true);
+
+        $this->typeContextProxy->getTypeManager()->set($type);
+    }
+
+    /**
+     * @Given this type has availability management enabled
+     */
+    public function thisTypeHasAvailabilityManagementEnabled()
+    {
+        /** @var Type */
+        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_AVAILABLE);
+
+        $this->typeContextProxy->getTypeManager()->set($type);
     }
 }

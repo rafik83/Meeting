@@ -44,14 +44,10 @@ class ListAction
             throw new AccessDeniedException();
         }
 
-        try {
-            /** @var ChatMessageLinkableInterface $object */
-            $object = $this->queryBus->handle(
-                new GuessChatMessageLinkableObject($objectType, $objectId)
-            );
-        } catch (\Exception $exception) {
-            return new JsonResponse(['error' => $exception->getMessage()], 500);
-        }
+        /** @var ChatMessageLinkableInterface $object */
+        $object = $this->queryBus->handle(
+            new GuessChatMessageLinkableObject($objectType, $objectId)
+        );
 
         if ($event !== $object->getEvent()) {
             throw new AccessDeniedException('Object not in this event');

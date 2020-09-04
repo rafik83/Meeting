@@ -18,7 +18,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
     private $questionRepository;
 
     /** @var AddHappeningQuestionHandler */
-    private $addQuestionHandler;
+    private $addHappeningQuestionHandler;
 
     public function setUp()
     {

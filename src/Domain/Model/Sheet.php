@@ -229,6 +229,11 @@ class Sheet implements TraceableInterface
         $this->availableSlots = new ArrayCollection();
     }
 
+    public function __tostring()
+    {
+        return $this->title.' '.$this->id.' '.$this->type->getIdentifier();
+    }
+
     /**
      * @return array
      */
@@ -360,7 +365,7 @@ class Sheet implements TraceableInterface
         return $participants;
     }
 
-        /**
+    /**
      * @throws SheetException
      *
      * @return Participant

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Chat;
 
 use Proximum\Vimeet\Application\Exception\Happening\HappeningNotFoundException;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -25,6 +26,7 @@ class GuessChatMessageLinkableObjectHandler
 
     /**
      * @throws HappeningNotFoundException
+     * @throws MeetingNotFoundException
      */
     public function handle(GuessChatMessageLinkableObject $query): ChatMessageLinkableInterface
     {
@@ -42,7 +44,7 @@ class GuessChatMessageLinkableObjectHandler
             $meeting = $this->meetingRepository->findById($query->objectId);
 
             if (null === $meeting) {
-                throw new HappeningNotFoundException('Meeting not found for given id.');
+                throw new MeetingNotFoundException('Meeting not found for given id.');
             }
 
             return $meeting;

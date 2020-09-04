@@ -102,6 +102,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.happening_question_vote_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionVoteRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:
@@ -5609,6 +5613,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     domain.event.has_sheet:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
@@ -6992,7 +6997,6 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@datetime'
-            - '@Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler'
 
     #
     # QRCode

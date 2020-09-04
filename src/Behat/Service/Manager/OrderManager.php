@@ -1,17 +1,10 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
@@ -29,12 +22,6 @@ class OrderManager
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param SheetManager             $sheetManager
-     * @param BillingInfoManager       $billingInfoManager
-     * @param \DateTimeInterface       $dateTime
-     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SheetManager $sheetManager,
@@ -48,20 +35,13 @@ class OrderManager
     }
 
     /**
-     * @param Event      $event
-     * @param float      $total
-     * @param bool       $isVatApplicable
-     * @param Sheet|null $sheet
-     *
      * @throws \Exception
-     *
-     * @return Order
      */
     public function createOrderOfGivenTotal(
         Event $event,
         $total,
         bool $isVatApplicable,
-        Sheet $sheet = null
+        ?Sheet $sheet = null
     ): Order {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
@@ -77,26 +57,27 @@ class OrderManager
             }
         }
 
-        $order = new Order($sheet, '', $this->dateTime);
+        $groupsData = json_encode(['1' => ['translations' => ['fr' => ['label' => 'Options de communication']], 'rank' => 0]]);
+        $order = new Order($sheet, $groupsData, $this->dateTime);
         $this->createOrderRow($order, 'My product label', $total, 1, $sheet->getEvent()->getVat());
         $this->orderRepository->add($order);
 
         return $order;
     }
 
-    /**
-     * @param Order  $order
-     * @param string $label
-     * @param float  $price
-     * @param int    $quantity
-     * @param float  $vatRate
-     *
-     * @return Order\Row
-     */
     public function createOrderRow(Order $order, string $label, float $price, int $quantity, float $vatRate): Order\Row
     {
         $orderRow = new Order\Row($order, $quantity, $vatRate, null, null, $label, $price);
         $order->addRow($orderRow);
+
+        return $orderRow;
+    }
+
+    public function createOrderProductRow(Order $order, Product $product): Order\Row
+    {
+        $orderRow = new Order\Row($order, 1, $product->getVat(), $product, null, $product->getTitle('fr'), $product->getUnitPrice());
+        $order->addRow($orderRow);
+        $this->orderRepository->set($order);
 
         return $orderRow;
     }

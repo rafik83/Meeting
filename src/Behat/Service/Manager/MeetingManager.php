@@ -185,9 +185,17 @@ class MeetingManager
 
         $meetingRequest = $this->createMeetingRequest($event);
 
-        $spot = $this->spotManager->create($event, 'MyRef', 1, 2);
+        $spot = $this->spotManager->create($event, 'MyRef', 1, 2, 2, true);
 
         return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
+    }
+
+    public function createMeetingSlot(Event $event, $fromDate, $toDate): MeetingSlot
+    {
+        $slot = new MeetingSlot($event, $fromDate, $toDate);
+        $this->slotManager->addSlot($slot);
+
+        return $slot;
     }
 
     /**
@@ -279,7 +287,7 @@ class MeetingManager
         $meetingRequest = $this->createMeetingRequest($event, $sheet, [$participant]);
 
         $spotReference = 'Visio1';
-        $this->spotManager->create($event, $spotReference, 1, 10, true);
+        $this->spotManager->create($event, $spotReference, 1, 10, true, true, true);
         $spot = $this->spotManager->getByReference($event, $spotReference);
 
         if (null === $spot || !$spot->isVisio()) {

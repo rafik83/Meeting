@@ -3,17 +3,23 @@
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 
 class AdminManager
 {
     /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    public function __construct(AdminRepositoryInterface $adminRepository)
+    /** @var ActivateAccountTokenRepositoryInterface */
+    private $activateAccountTokenRepository;
+
+    public function __construct(AdminRepositoryInterface $adminRepository, ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository)
     {
         $this->adminRepository = $adminRepository;
+        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
     }
 
     /**
@@ -50,5 +56,11 @@ class AdminManager
     {
         $admin->addEvent($event);
         $this->adminRepository->set($admin);
+    }
+
+    public function assignToken(Admin $admin, string $token): void
+    {
+        $activateAccountToken = new ActivateAccountToken($admin, $token, new \DateTime('+1 hour'));
+        $this->activateAccountTokenRepository->create($activateAccountToken);
     }
 }
