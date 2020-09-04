@@ -2,12 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Chat;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Query\Chat\Exception\AccessDeniedToChatMessages;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
-use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ListChatMessagesHandler
@@ -21,14 +21,19 @@ class ListChatMessagesHandler
     /** @var CheckAccessToChatMessages */
     private $checkAccessToChatMessages;
 
+    /** @var RouterInterface */
+    private $routerAdapter;
+
     public function __construct(
         ChatMessageRepositoryInterface $chatMessageRepository,
         CheckAccessToChatMessages $checkAccessToChatMessages,
-        GetTimezoneHelper $getTimezoneHelper
+        GetTimezoneHelper $getTimezoneHelper,
+        RouterInterface $routerAdapter
     ) {
         $this->chatMessageRepository = $chatMessageRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
         $this->getTimezoneHelper = $getTimezoneHelper;
+        $this->routerAdapter = $routerAdapter;
     }
 
     /**
@@ -49,6 +54,9 @@ class ListChatMessagesHandler
         foreach ($chatMessagesViews as $chatMessagesView) {
             $chatMessagesView->formattedCreatedAt = $mediumHourFormatter->format($chatMessagesView->createdAt);
             $chatMessagesView->isAuthor = $query->user->getId() === $chatMessagesView->authorId;
+            if (null === $chatMessagesView->avatar) {
+                $chatMessagesView->avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $chatMessagesView->authorName]);
+            }
         }
 
         return $chatMessagesViews;

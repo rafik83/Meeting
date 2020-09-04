@@ -19,7 +19,7 @@ class ChatMessageView
     /** If true user is author question
      * @var bool
      */
-    public $isAuthor;
+    public $isAuthor = false;
 
     /** @var string|null */
     public $avatar;
