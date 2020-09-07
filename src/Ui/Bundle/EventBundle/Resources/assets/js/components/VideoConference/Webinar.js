@@ -384,7 +384,6 @@ Webinar.prototype.initChat = function () {
     }
 
     const href = this.chatContainer.getAttribute('data-href');
-    const defaultAvatar = this.chatContainer.getAttribute('data-default-avatar');
     const voteChatHref = this.chatContainer.getAttribute('data-vote-chat-href');
 
     const $addChatFormList = $(this.addChatFormList);
@@ -402,7 +401,28 @@ Webinar.prototype.initChat = function () {
             const chatAside = document.createElement('small');
             chatAside.classList.add('pull-right', 'chat-aside');
 
-            const likeBlock = document.createElement('div');
+            const emoticonBlock = document.createElement('div');
+
+            ['&#x1F44D;','&#128079;', '&#x2764;&#xFE0F'].forEach((item)=> {
+                const emoticonBtn = document.createElement('i');
+                emoticonBtn.classList.add('glyphicon', item, 'btn', 'btn-xs');
+                emoticonBtn.innerHTML = item;
+                emoticonBtn.setAttribute('data-chat-id', item.content);
+                emoticonBlock.append(emoticonBtn);
+
+                if (item.canVote) {
+                    emoticonBtn.addEventListener('click', onLikedClicked);
+                    this.chatListeners.push([emoticonBtn, onLikedClicked]);
+
+                    emoticonBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+                    emoticonBtn.title = item.isLiked ? this.chatUnvoteMessage : this.chatVoteMessage;
+                } else {
+                    emoticonBtn.classList.add('btn-gray','disabled');
+                    emoticonBtn.title = this.chatVoteDisabledMessage;
+                }
+                emoticonBlock.appendChild(emoticonBtn);
+            });
+
             const voteChatCount = document.createElement('span');
 
             if (+item.voteChatCount) {
@@ -410,11 +430,7 @@ Webinar.prototype.initChat = function () {
                 voteChatCount.classList.add('chat-vote-count')
             }
 
-            likeBlock.append(voteChatCount);
-
-            const likeBtn = document.createElement('i');
-            likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
-            likeBtn.setAttribute('data-chat-id', item.content);
+            emoticonBlock.append(voteChatCount);
 
             const onLikedClicked = function (event) {
                 const payload = {'chatId': event.currentTarget.getAttribute('data-chat-id')};
@@ -431,20 +447,7 @@ Webinar.prototype.initChat = function () {
                 this.removeChatListeners();
             }.bind(this);
 
-            if (item.canVote) {
-                likeBtn.addEventListener('click', onLikedClicked);
-                this.chatListeners.push([likeBtn, onLikedClicked]);
-
-                likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
-                likeBtn.title = item.isLiked ? this.chatUnvoteMessage : this.chatVoteMessage;
-            } else {
-                likeBtn.classList.add('btn-gray', 'disabled');
-                likeBtn.title = this.chatVoteDisabledMessage;
-            }
-            likeBlock.appendChild(likeBtn);
-
-            chatAside.append(likeBlock);
-
+            chatAside.appendChild(emoticonBlock);
 
             const chatCreatedAt = document.createElement('div');
             chatCreatedAt.textContent = item.formattedCreatedAt;
@@ -464,12 +467,7 @@ Webinar.prototype.initChat = function () {
 
             avatarEl.classList.add('chat-author-avatar');
             const imgEl = avatarEl.appendChild(document.createElement('img'));
-
-            if (item.avatar == null) {
-                imgEl.setAttribute('src', defaultAvatar);
-            } else {
-                imgEl.setAttribute('src', item.avatar);
-            }
+            imgEl.setAttribute('src', item.avatar);
 
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));

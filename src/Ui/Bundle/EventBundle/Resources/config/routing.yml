@@ -1203,6 +1203,15 @@ event_chat_avatar:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction
 
+event_chat_messages_vote:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/vote
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\VoteAction
+
 #
 # Custom
 #
