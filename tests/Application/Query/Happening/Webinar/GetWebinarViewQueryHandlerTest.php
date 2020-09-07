@@ -112,6 +112,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
+        $happening->getEvent()->shouldNotBeCalled();
+        $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -348,6 +350,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
+        $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -464,6 +467,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
+        $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();

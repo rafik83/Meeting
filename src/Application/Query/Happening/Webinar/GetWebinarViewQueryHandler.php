@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -23,7 +24,7 @@ class GetWebinarViewQueryHandler
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $dateTime;
 
     /** @var RecordArchiveRepositoryInterface */
@@ -92,7 +93,8 @@ class GetWebinarViewQueryHandler
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $this->isRecordingAllowed->isSatisfiedBy($happening),
             $this->isWebinarRecording($happening),
-            $happening->getEvent()->getAutoArchiveWebinar()
+            $happening->getEvent()->getAutoArchiveWebinar(),
+            $happening->allowWebinarOnHLS()
         );
     }
 

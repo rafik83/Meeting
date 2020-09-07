@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\View\Happening;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class WebinarView
@@ -27,7 +28,7 @@ class WebinarView
     /** @var TimeRangeView */
     public $slot;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     public $currentTime;
 
     /** @var int */
@@ -75,6 +76,9 @@ class WebinarView
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
 
+    /** @var bool */
+    public $allowWebinarOnHLS;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -91,7 +95,7 @@ class WebinarView
         array $speakers,
         array $participantViews,
         TimeRangeView $slot,
-        \DateTimeInterface $currentTime,
+        DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
         int $timeRemainingBeforeStartInSeconds,
@@ -102,7 +106,8 @@ class WebinarView
         bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
-        bool $isWebinarRecordAutoStart
+        bool $isWebinarRecordAutoStart,
+        bool $allowWebinarOnHLS = false
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -127,6 +132,7 @@ class WebinarView
         $this->isWebinarRecorded = $isWebinarRecorded;
         $this->isWebinarRecording = $isWebinarRecording;
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
+        $this->allowWebinarOnHLS = $allowWebinarOnHLS;
     }
 
     public function getSpeakerInfosByUserId(): string
