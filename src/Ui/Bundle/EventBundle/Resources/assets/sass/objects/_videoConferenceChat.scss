@@ -270,6 +270,7 @@
 
       i {
         cursor: pointer;
+        color: #333;
       }
     }
 
@@ -388,6 +389,11 @@
   button:hover {
     background-color: #999;
   }
+}
+
+.glyphicon {
+  margin-right: 0 !important;
+  margin-left: 8px;
 }
 
 @media screen and (max-width: 767px) {
