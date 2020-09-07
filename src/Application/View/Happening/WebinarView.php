@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening;
 
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class WebinarView
@@ -28,6 +21,9 @@ class WebinarView
 
     /** @var string */
     public $apiKey;
+
+    /** @var NotificationView */
+    public $notification;
 
     /** @var bool */
     public $isSpeaker;
@@ -80,6 +76,7 @@ class WebinarView
         string $token,
         string $sessionId,
         string $apiKey,
+        NotificationView $notification,
         bool $isSpeaker,
         array $speakers,
         array $participantViews,
@@ -98,6 +95,7 @@ class WebinarView
         $this->token = $token;
         $this->sessionId = $sessionId;
         $this->apiKey = $apiKey;
+        $this->notification = $notification;
         $this->isSpeaker = $isSpeaker;
         $this->slot = $slot;
         $this->currentTime = $currentTime;

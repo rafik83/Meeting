@@ -132,3 +132,10 @@ parameters:
         token_uri: ''
         auth_provider_x509_cert_url: ''
         client_x509_cert_url: ''
+
+    # should be accessible from PHP
+    mercure_hub_publisher_url: 'http://mercure/.well-known/mercure'
+    mercure_publisher_key: ''
+    # should be accessible from browser
+    mercure_hub_subscriber_url: 'https://notifications.k8s.vimeet.events/.well-known/mercure'
+    mercure_subscriber_key: ''

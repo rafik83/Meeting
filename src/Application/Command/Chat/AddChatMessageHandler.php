@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Chat;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
@@ -15,16 +17,21 @@ class AddChatMessageHandler
     /** @var CheckAccessToChatMessages */
     private $checkAccessToChatMessages;
 
-    /** @var \DateTime */
+    /** @var NotificationPublisherInterface */
+    private $notificationPublisher;
+
+    /** @var DateTimeInterface */
     private $now;
 
     public function __construct(
         ChatMessageRepositoryInterface $messageRepository,
         CheckAccessToChatMessages $checkAccessToChatMessages,
-        \DateTimeInterface $now
+        NotificationPublisherInterface $notificationPublisher,
+        DateTimeInterface $now
     ) {
         $this->messageRepository = $messageRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
+        $this->notificationPublisher = $notificationPublisher;
         $this->now = $now;
     }
 
@@ -37,7 +44,7 @@ class AddChatMessageHandler
             throw new ChatMessageNotAllowedException('Access denied to this chat messages');
         }
 
-        $this->messageRepository->add(
+        $chatMessage = $this->messageRepository->add(
             new ChatMessage(
                 $command->object,
                 $command->user,
@@ -47,5 +54,7 @@ class AddChatMessageHandler
                 $command->sheet->getTitle()
             )
         );
+
+        $this->notificationPublisher->publishChatMessageNotification($command->object, $chatMessage->getId());
     }
 }
