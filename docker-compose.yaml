@@ -53,6 +53,15 @@ services:
             - proxy
         depends_on:
             - database
+        networks:
+            - proxy
+
+    redis:
+        image: redis:5-alpine
+        ports:
+            - "6379:6379"
+        networks:
+            - proxy
 
     mercure:
         image: dunglas/mercure:v0.10
