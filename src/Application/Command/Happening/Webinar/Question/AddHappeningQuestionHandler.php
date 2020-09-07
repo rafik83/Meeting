@@ -48,7 +48,6 @@ class AddHappeningQuestionHandler
 
         $this->notificationPublisher->publishHappeningNotification($command->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
             'action' => 'update',
-            'authorId' => $command->getCreatedBy()->getId(),
         ]);
     }
 }

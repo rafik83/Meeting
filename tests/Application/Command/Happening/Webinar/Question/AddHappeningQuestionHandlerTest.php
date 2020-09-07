@@ -42,7 +42,6 @@ class AddHappeningQuestionHandlerTest extends TestCase
         $happening = $this->prophesize(Happening::class);
 
         $createdBy = $this->prophesize(User::class);
-        $createdBy->getId()->shouldBeCalled()->willReturn(42);
 
         $sheet = SheetFactory::create(EventFactory::createEvent(), $createdBy->reveal());
 

@@ -70,6 +70,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@vimeet_infrastructure.repository.happening_question_vote_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion }
 
