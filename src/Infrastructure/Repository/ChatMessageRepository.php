@@ -48,4 +48,9 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->getResult()
         ;
     }
+
+    public function findById(int $id): ?ChatMessage
+    {
+        return $this->entityManager->find(ChatMessage::class, $id);
+    }
 }

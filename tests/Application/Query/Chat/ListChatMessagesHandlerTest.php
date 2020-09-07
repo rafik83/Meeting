@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Chat;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
-use Proximum\Vimeet\Application\Query\Chat\Exception\AccessDeniedToChatMessages;
+use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessages;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessagesHandler;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
@@ -48,7 +48,7 @@ class ListChatMessagesHandlerTest extends TestCase
 
     public function test_access_denied()
     {
-        $this->expectException(AccessDeniedToChatMessages::class);
+        $this->expectException(ChatMessageNotAllowedException::class);
 
         $this->checkAccessToChatMessages
             ->isSatisfiedBy($this->happening, $this->user)

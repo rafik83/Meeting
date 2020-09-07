@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Application\Command\Chat;
 
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
-use Proximum\Vimeet\Application\Query\Chat\Exception\AccessDeniedToChatMessages;
+use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
@@ -29,12 +29,12 @@ class AddChatMessageHandler
     }
 
     /**
-     * @throws AccessDeniedToChatMessages
+     * @throws ChatMessageNotAllowedException
      */
     public function handle(AddChatMessage $command): void
     {
         if (!$this->checkAccessToChatMessages->isSatisfiedBy($command->object, $command->user)) {
-            throw new AccessDeniedToChatMessages('Access denied to this chat messages');
+            throw new ChatMessageNotAllowedException('Access denied to this chat messages');
         }
 
         $this->messageRepository->add(

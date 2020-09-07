@@ -14,4 +14,6 @@ interface ChatMessageRepositoryInterface
      * @return ChatMessageView[]
      */
     public function list(ChatMessageLinkableInterface $object): array;
+
+    public function findById(int $id): ?ChatMessage;
 }

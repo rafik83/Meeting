@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Chat;
 
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
-use Proximum\Vimeet\Application\Query\Chat\Exception\AccessDeniedToChatMessages;
+use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
@@ -32,12 +32,12 @@ class ListChatMessagesHandler
 
     /**
      * @return ChatMessageView[]
-     * @throws AccessDeniedToChatMessages
+     * @throws ChatMessageNotAllowedException
      */
     public function handle(ListChatMessages $query): array
     {
         if (!$this->checkAccessToChatMessages->isSatisfiedBy($query->object, $query->user)) {
-            throw new AccessDeniedToChatMessages('Access denied to this chat messages');
+            throw new ChatMessageNotAllowedException('Access denied to this chat messages');
         }
 
         $chatMessagesViews = $this->chatMessageRepository->list($query->object);
