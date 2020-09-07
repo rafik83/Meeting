@@ -6,12 +6,14 @@ services:
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@datetime'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer'
+            - '@vimeet_infrastructure.repository.user_repository'
     Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet'
+            - '@monolog.logger'
     Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\PrepareImportSheetsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'

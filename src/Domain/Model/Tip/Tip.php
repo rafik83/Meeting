@@ -222,7 +222,7 @@ class Tip
      *
      * @return Tip $this
      */
-    public function translate($locale, $title, $content, \DateTimeInterface $dateTime)
+    public function translate($locale, $title, $content, \DateTimeInterface $dateTime): self
     {
         if ($this->hasTranslation($locale)) {
             $this->getTranslation($locale)->set($locale, $title, $content);

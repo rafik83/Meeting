@@ -4,10 +4,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.44.0] - 2020-09-03
 ### Added
 - VIMEET-1925 - Chat API
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
+- VIMEET 2178 - In a webinar, participant can vote for a question
+- Command to count media/upload element on sheets
+- VIMEET-2175 - TechEvent api changed to handle login data, add guard to check login data on login
+
+### Fixed
+- Tip content can be nullable, and tip translations affected on event come from the event locales.
 
 ## [2.43.0] - 2020-08-27
 ### Added

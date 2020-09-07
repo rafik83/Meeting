@@ -66,6 +66,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@vimeet_infrastructure.repository.happening_question_vote_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion }
+
     Proximum\Vimeet\Application\Command\Sheet\SortParticipantsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
