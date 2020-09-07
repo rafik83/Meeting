@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 use OpenTok\Archive;
@@ -81,4 +73,17 @@ interface VideoConferenceAdapterInterface
     ): Broadcast;
 
     public function stopBroadcast(string $broadcastId): Broadcast;
+
+    public function getBroadcastForSession(string $session): ?Broadcast;
+
+    /**
+     * In some case, when a broadcast is started but not stopped
+     * Tokbox leaves old broadcast up
+     * And in these case, can be useful to get them.
+     *
+     * @param string $session
+     *
+     * @return Broadcast[]
+     */
+    public function getBroadcastsForSession(string $session): array;
 }

@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 
 use DateTimeInterface;
+use OpenTok\Exception\BroadcastDomainException;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Exception\BroadcastException;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\DaysHelper;
@@ -50,10 +52,22 @@ class StartBroadcastHandler
             $end = $end->modify("+$maxDuration seconds");
         }
 
-        $broadcast = $this->videoConferenceAdapter->startBroadcast(
-            $happening->getWebinarSessionId(),
-            $duration
-        );
+        $sessionId = $happening->getWebinarSessionId();
+        $broadcast = null;
+
+        try {
+            $broadcast = $this->videoConferenceAdapter->startBroadcast(
+                $sessionId,
+                $duration
+            );
+        } catch (BroadcastDomainException $exception) {
+            // Handle error code 409, already broadcast
+            $broadcast = $this->videoConferenceAdapter->getBroadcastForSession($sessionId);
+
+            if ($broadcast === null) {
+                throw new BroadcastException('Broadcast could not be started');
+            }
+        }
 
         $happeningBroadcast = new HappeningBroadcast(
             $happening,

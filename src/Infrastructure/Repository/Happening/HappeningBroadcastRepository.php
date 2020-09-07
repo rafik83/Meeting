@@ -36,6 +36,8 @@ class HappeningBroadcastRepository implements HappeningBroadcastRepositoryInterf
             ->from(HappeningBroadcast::class, 'broadcast')
             ->where('broadcast.happening = :happening')
             ->setParameter('happening', $happening)
+            ->getQuery()
+            ->execute()
         ;
     }
 
@@ -47,6 +49,7 @@ class HappeningBroadcastRepository implements HappeningBroadcastRepositoryInterf
             ->from(HappeningBroadcast::class, 'broadcast')
             ->where('broadcast.happening = :happening')
             ->setParameter('happening', $happening)
+            ->addOrderBy('broadcast.createdAt', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()

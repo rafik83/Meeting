@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use OpenTok\Archive;
 use OpenTok\ArchiveList;
 use OpenTok\Layout;
+use OpenTok\Broadcast as TokboxBroadcast;
 use OpenTok\MediaMode;
 use OpenTok\OpenTok;
 use OpenTok\OutputMode;
@@ -16,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorA
 use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Broadcast as DomainBroadcast;
 use Proximum\Vimeet\Infrastructure\Tokbox\Broadcast\Broadcast;
+use Proximum\Vimeet\Infrastructure\Tokbox\Client;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
@@ -31,16 +33,24 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     /** @var bool */
     private $hasSecurity;
 
+    /** @var Client */
+    private $tokboxClient;
+
     /**
      * @param OpenTok $openTok
      * @param string  $tokboxApiKey
      * @param bool    $hasSecurity
      */
-    public function __construct(OpenTok $openTok, string $tokboxApiKey, bool $hasSecurity)
-    {
+    public function __construct(
+        OpenTok $openTok,
+        string $tokboxApiKey,
+        bool $hasSecurity,
+        Client $tokboxClient
+    ) {
         $this->openTok = $openTok;
         $this->tokboxApiKey = $tokboxApiKey;
         $this->hasSecurity = $hasSecurity;
+        $this->tokboxClient = $tokboxClient;
     }
 
     /**
@@ -199,7 +209,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         string $sessionId,
         int $duration
     ): DomainBroadcast {
-        return new Broadcast(
+        return Broadcast::createFromTokboxObject(
             $this->openTok->startBroadcast($sessionId, [
                 'maxDuration' => $duration,
                 'resolution' => '1280x720',
@@ -209,6 +219,33 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 
     public function stopBroadcast(string $broadcastId): DomainBroadcast
     {
-        return new Broadcast($this->openTok->stopBroadcast($broadcastId));
+        return Broadcast::createFromTokboxObject($this->openTok->stopBroadcast($broadcastId));
+    }
+
+    public function getBroadcastForSession(string $session): ?DomainBroadcast
+    {
+        $json = $this->tokboxClient->getBroadcastForSession($session);
+
+        if (empty($json)) {
+            return null;
+        }
+
+        return Broadcast::createFromJson($json);
+    }
+
+    public function getBroadcastsForSession(string $session): array
+    {
+        $list = $this->tokboxClient->getBroadcastsForSession($session);
+
+        if (empty($list)) {
+            return [];
+        }
+
+        $broadcasts = [];
+        foreach ($list as $item) {
+            $broadcasts[] = Broadcast::createFromJson($item);
+        }
+
+        return $broadcasts;
     }
 }
