@@ -38,11 +38,12 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->createQueryBuilder()
             ->select(
                 sprintf(
-                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt, chatMessage.authorName, chatMessage.sheetTitle)',
+                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt, createdBy.account.avatar, createdBy.id, chatMessage.authorName, chatMessage.sheetTitle)',
                     ChatMessageView::class
                 )
             )
             ->from(ChatMessage::class, 'chatMessage')
+            ->join('chatMessage.createdBy' , 'createdBy')
             ->where('chatMessage.objectType = :objectType AND chatMessage.objectId = :objectId')
             ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
             ->orderBy('chatMessage.createdAt', 'ASC')

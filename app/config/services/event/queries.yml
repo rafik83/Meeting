@@ -128,5 +128,6 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
             - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\ListChatMessages }

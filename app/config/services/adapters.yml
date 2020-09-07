@@ -57,3 +57,8 @@ services:
         arguments:
             - '%mercure_hub_subscriber_url%'
             - '%mercure_subscriber_key%'
+
+    #
+    # Auto avatar (with initials)
+    #
+    Proximum\Vimeet\Infrastructure\Adapter\AvatarAdapter: ~

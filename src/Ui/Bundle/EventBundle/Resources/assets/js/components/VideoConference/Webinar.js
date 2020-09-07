@@ -3,7 +3,6 @@
 var TokboxInstance = require('./TokboxInstance').TokboxInstance;
 var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
 var initLayoutContainer = require('opentok-layout-js');
-var openTokTextChat = require('opentok-text-chat');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var Counter = require('./Counter');
@@ -64,6 +63,11 @@ function Webinar(element, isSpeaker) {
 
     if (this.sidebarAllowed) {
         this.chatContainer = element.querySelector('[data-chat-container]');
+        this.addChatForm = element.querySelector('[data-chat-form]');
+        this.addChatFormContent = this.addChatForm.querySelector('input[name="content"]');
+        this.addChatFormAction = this.addChatForm.getAttribute('action');
+        this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
+        this.addChatFormList = this.chatContainer.querySelector('.chat-list');
         this.questionsContainer = element.querySelector('[data-questions-container]');
         this.questionsList = this.questionsContainer.querySelector('.questions-list');
         this.questionsForm = element.querySelector('[data-questions-form]');
@@ -72,19 +76,24 @@ function Webinar(element, isSpeaker) {
         this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
 
         this.chatInstance = null;
+        this.chatLoaded = false;
         this.chatButton = element.querySelector('[data-chat-button]');
 
-        if (this.chatButton) {
-            this.chatButton.addEventListener('click', this.showChat.bind(this));
-        }
-
+        this.chatButton.addEventListener('click', this.showChat.bind(this));
+        this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
         this.questionVoteMessage = element.getAttribute('data-question-vote-message');
         this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
         this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
+
+        this.chatVoteMessage = element.getAttribute('data-chat-vote-message');
+        this.chatUnvoteMessage = element.getAttribute('data-chat-unvote-message');
+        this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
+
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
         this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
         this.questionListeners = [];
+        this.chatListeners = [];
     }
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
@@ -373,20 +382,126 @@ Webinar.prototype.showElement = function (element) {
 /**
  * Open chat
  */
+
 Webinar.prototype.initChat = function () {
-    if (this.chatInstance) {
+    if (this.chatLoaded) {
         return;
     }
 
-    this.chatInstance = new openTokTextChat({
-        session: this.session,
-        sender: {
-            alias: this.userCompleteName,
-        },
-        textChatContainer: '[data-chat-container]',
-        waitingMessage: this.chatWaitingMessage,
-        alwaysOpen: true
-    });
+    const href = this.chatContainer.getAttribute('data-href');
+    const defaultAvatar = this.chatContainer.getAttribute('data-default-avatar');
+    const voteChatHref = this.chatContainer.getAttribute('data-vote-chat-href');
+
+    const $addChatFormList = $(this.addChatFormList);
+
+    $.get(href, function (response) {
+        this.removeChatListeners();
+        $addChatFormList.empty();
+        response.forEach((item) => {
+            const rowEl = document.createElement('div');
+            rowEl.classList.add('chat-row');
+
+            const contentEl = rowEl.appendChild(document.createElement('div'));
+            contentEl.classList.add('chat-content');
+
+            const chatAside = document.createElement('small');
+            chatAside.classList.add('pull-right', 'chat-aside');
+
+            const likeBlock = document.createElement('div');
+            const voteChatCount = document.createElement('span');
+
+            if (+item.voteChatCount) {
+                voteChatCount.textContent = item.voteChatCount;
+                voteChatCount.classList.add('chat-vote-count')
+            }
+
+            likeBlock.append(voteChatCount);
+
+            const likeBtn = document.createElement('i');
+            likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
+            likeBtn.setAttribute('data-chat-id', item.content);
+
+            const onLikedClicked = function (event) {
+                const payload = {'chatId': event.currentTarget.getAttribute('data-chat-id')};
+                $.post(voteChatHref, JSON.stringify(payload), (response) => {
+                    if (response.status === 'ok') {
+                        this.sendUpdateChatSignal();
+                    } else {
+                        this.showError('Question vote failed');
+                    }
+                }, 'json');
+                event.currentTarget.classList.add('disabled');
+
+                // remove all listeners, they'll be added again on chat update
+                this.removeChatListeners();
+            }.bind(this);
+
+            if (item.canVote) {
+                likeBtn.addEventListener('click', onLikedClicked);
+                this.chatListeners.push([likeBtn, onLikedClicked]);
+
+                likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+                likeBtn.title = item.isLiked ? this.chatUnvoteMessage : this.chatVoteMessage;
+            } else {
+                likeBtn.classList.add('btn-gray', 'disabled');
+                likeBtn.title = this.chatVoteDisabledMessage;
+            }
+            likeBlock.appendChild(likeBtn);
+
+            chatAside.append(likeBlock);
+
+
+            const chatCreatedAt = document.createElement('div');
+            chatCreatedAt.textContent = item.formattedCreatedAt;
+            chatAside.appendChild(chatCreatedAt);
+
+            contentEl.appendChild(chatAside);
+            contentEl.appendChild(document.createTextNode(item.content));
+
+            const authorEl = rowEl.appendChild(document.createElement('div'));
+            authorEl.classList.add('chat-author');
+            const authorNameEl = authorEl.appendChild(document.createElement('span'));
+            authorNameEl.classList.add('chat-author-name');
+            const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
+            authorNameTextEl.textContent = item.authorName;
+
+            const avatarEl = authorEl.appendChild(document.createElement('span'));
+
+            avatarEl.classList.add('chat-author-avatar');
+            const imgEl = avatarEl.appendChild(document.createElement('img'));
+
+            if (item.avatar == null) {
+                imgEl.setAttribute('src', defaultAvatar);
+            } else {
+                imgEl.setAttribute('src', item.avatar);
+            }
+
+            if (item.sheetTitle) {
+                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
+                authorTitleEl.textContent = [item.sheetTitle].filter((item) => !!item).join(', ');
+                authorTitleEl.classList.add('chat-author-title');
+
+                if (item.isAuthor) {
+                    authorTitleEl.classList.add('chat-author-title-on');
+                }
+
+            }
+
+            if (item.isAuthor) {
+                rowEl.classList.add('chat-row-on');
+                contentEl.classList.add('chat-content-on');
+                authorEl.classList.add('chat-author-on');
+                authorNameEl.classList.add('chat-author-name-on');
+            }
+
+            $addChatFormList[0].appendChild(rowEl);
+        });
+
+        this.chatLoaded = true;
+    }.bind(this))
+        .fail(function () {
+            console.error('Failed to load webinar chat');
+        }.bind(this));
 };
 
 /**
@@ -848,6 +963,7 @@ Webinar.prototype.showChat = function (event) {
     this.chatButton.classList.add('btn-primary');
     this.hideElement(this.questionsContainer);
     this.showElement(this.chatContainer);
+    this.initChat();
 };
 
 Webinar.prototype.showQuestions = function (event) {
@@ -1007,6 +1123,39 @@ Webinar.prototype.submitQuestion = function (event) {
     });
 }
 
+
+Webinar.prototype.submitChat = function (event) {
+    event.preventDefault();
+    const chatContent = this.addChatFormContent.value;
+
+    if ('' === chatContent) {
+        window.setTimeout(() => this.addChatFormSubmit.disabled = false, 100);
+        return;
+    }
+
+    this.addChatFormContent.value = '';
+
+    $.post(this.addChatFormAction, JSON.stringify({content: chatContent}), (response) => {
+        this.addChatFormSubmit.disabled = false;
+
+        if (response.status === 'ok') {
+            this.sendUpdateChatSignal();
+            this.addChatFormList.scrollTop = 0;
+
+            return;
+        }
+
+        this.addChatFormContent.value = content;
+        this.showError('Message creation failed');
+    })
+
+        .fail(() => {
+            this.addChatFormSubmit.disabled = false;
+            this.addChatFormContent.value = content;
+            this.showError('Message creation failed');
+        });
+}
+
 Webinar.prototype.sendUpdateQuestionsSignal = function () {
     this.session.signal({
         type: 'QuestionsUpdate'
@@ -1023,6 +1172,22 @@ Webinar.prototype.removeQuestionListeners = function () {
     this.questionListeners = [];
 }
 
+Webinar.prototype.sendUpdateChatSignal = function () {
+    this.session.signal({
+            type: 'ChatUpdate'
+        },
+        (error) => {
+            if (error) {
+                console.error('ChatUpdate signal error', error);
+            }
+        });
+}
+
+Webinar.prototype.removeChatListeners = function () {
+    this.chatListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
+    this.chatListeners = [];
+}
+
 Webinar.prototype.isSidebarOpened = function () {
     return !this.sideContainer.classList.contains('hide');
 }
@@ -1034,8 +1199,6 @@ Webinar.prototype.toggleSideBar = function () {
     if (!this.isSidebarOpened()) {
         this.showElement(this.sideContainer);
         this.initChat();
-        this.chatInstance.showTextChat();
-        this.chatInstance.deliverUnsentMessages();
         this.element.classList.add('chat-opened');
         this.layout();
 

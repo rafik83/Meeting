@@ -1197,6 +1197,12 @@ event_chat_messages_add:
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction
 
+event_chat_avatar:
+    path: /chat/avatar
+    requirements:
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction
+
 #
 # Custom
 #
