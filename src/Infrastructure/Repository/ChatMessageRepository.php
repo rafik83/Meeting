@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\ChatMessageVote;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ChatMessageRepository implements ChatMessageRepositoryInterface
@@ -32,11 +33,12 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
      */
     public function list(ChatMessageLinkableInterface $object): array
     {
-        return $this->entityManager
+        $messages = $this->entityManager
             ->createQueryBuilder()
             ->select(
                 sprintf(
-                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt, chatMessage.authorName, chatMessage.sheetTitle)',
+                    'NEW %s(chatMessage.id, chatMessage.content, chatMessage.createdAt, createdBy.account.avatar, ' .
+                        'createdBy.id, chatMessage.authorName, chatMessage.sheetTitle)',
                     ChatMessageView::class
                 )
             )
@@ -47,6 +49,32 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->getQuery()
             ->getResult()
         ;
+
+        $votes = $this->entityManager
+            ->createQueryBuilder()
+            ->select('chatMessage.id, vote.type, COUNT(vote.id) as count')
+            ->from(ChatMessage::class, 'chatMessage')
+            ->join(ChatMessageVote::class, 'vote', 'WITH', 'vote.chatMessage = chatMessage')
+            ->where('chatMessage.objectType = :objectType')
+            ->andWhere('chatMessage.objectId = :objectId')
+            ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
+            ->addGroupBy('chatMessage.id')
+            ->addGroupBy('vote.type')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        if (count($votes)) {
+            $indexedVotes = array_reduce($votes, function ($carry, $row) {
+                $carry[$row['id']][$row['type']] = $row['count'];
+                return $carry;
+            });
+            foreach ($messages as $message) {
+                $message->votes = $indexedVotes[$message->id]??[];
+            }
+        }
+
+        return $messages;
     }
 
     public function findById(int $id): ?ChatMessage

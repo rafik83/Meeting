@@ -22,6 +22,9 @@ class ChatMessageView
     /** @var string */
     public $sheetTitle;
 
+    /** @var array */
+    public $votes = [];
+
     public function __construct(
         int $id,
         string $content,
