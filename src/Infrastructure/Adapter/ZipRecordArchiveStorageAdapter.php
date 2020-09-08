@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\UuidGeneratorInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Psr\Log\LoggerInterface;
 
 class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
 {
@@ -27,12 +28,16 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
     /** @var TokboxRecordS3StorageAdapter */
     private $tokboxRecordS3StorageAdapter;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         GoogleCloudStorageAdapter $googleCloudStorage,
         string $googleCloudStorageUri,
         UuidGeneratorInterface $uuidGenerator,
         FileSystemAdapterInterface $filesystem,
-        TokboxRecordS3StorageAdapter $tokboxRecordS3StorageAdapter
+        TokboxRecordS3StorageAdapter $tokboxRecordS3StorageAdapter,
+        LoggerInterface $logger
     ) {
         $this->googleCloudStorage = $googleCloudStorage;
         $this->googleCloudStorageUri = $googleCloudStorageUri;
@@ -40,6 +45,7 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
         $this->uuidGenerator = $uuidGenerator;
         $this->filesystem = $filesystem;
         $this->tokboxRecordS3StorageAdapter = $tokboxRecordS3StorageAdapter;
+        $this->logger = $logger;
     }
 
     public function prepareZip(array $files, string $zipName): void
@@ -60,6 +66,10 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
                 $this->zipArchive->addFile(
                     $tempFile,
                     $name
+                );
+            } else {
+                $this->logger->warning(
+                    sprintf('VIMEET : The file for the archive %s does not exist on the S3 Storage.', $archiveId)
                 );
             }
         }

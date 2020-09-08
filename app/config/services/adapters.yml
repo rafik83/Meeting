@@ -59,3 +59,4 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
             - '@adapter.file_system_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\TokboxRecordS3StorageAdapter'
+            - '@logger'
