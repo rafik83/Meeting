@@ -276,13 +276,24 @@
 
     .chat-vote-count {
       background-color: $gray-lighter;
-      border-radius: 4px;
+      border-radius: 0;
       color: $gray-light;
       font-size: 10px;
       font-weight: bold;
-      margin-right: 4px;
-      padding: 2px 8px;
+      margin-right: 0;
+      padding: 0;
       vertical-align: sub;
+    }
+
+    .chat-emoticon {
+      align-items: flex-end;
+      background-color: white;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      padding: 10px;
+      text-align: right;
+      clear: right;
     }
 
     .chat-author {
@@ -325,6 +336,11 @@
       }
     }
   }
+}
+
+.btn-gray {
+  height: 30px !important;
+  width: 33px !important;
 }
 
 .chat-row-on {

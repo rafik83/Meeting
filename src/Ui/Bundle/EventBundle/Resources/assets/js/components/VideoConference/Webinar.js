@@ -86,7 +86,14 @@ function Webinar(element, isSpeaker) {
         this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
         this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
 
-        this.chatVoteMessage = element.getAttribute('data-chat-vote-message');
+        this.chatVoteMessage = {
+            'like' : element.getAttribute('data-chat-vote-like'),
+            'acclaim' : element.getAttribute('data-chat-vote-acclaim'),
+            'heart' : element.getAttribute('data-chat-vote-heart'),
+            'instructive' : element.getAttribute('data-chat-vote-instructive'),
+            'happy' : element.getAttribute('data-chat-vote-happy')
+        };
+
         this.chatUnvoteMessage = element.getAttribute('data-chat-unvote-message');
         this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
 
@@ -410,7 +417,6 @@ Webinar.prototype.initChat = function () {
             const emoticonBlock = document.createElement('div');
 
             const onLikedClicked = function (event) {
-                console.log('ok');
                 const payload = {'messageId': event.currentTarget.getAttribute('data-message-id'),
                     'messageType': event.currentTarget.getAttribute('data-message-type')};
                 $.post(voteChatHref, JSON.stringify(payload), (response) => {
@@ -425,45 +431,15 @@ Webinar.prototype.initChat = function () {
                 this.removeChatListeners();
             }.bind(this);
 
-            ['&#x1F44D;','&#128079;', '&#x2764;&#xFE0F','&#128161;','&#128522;'].forEach((smileyCode)=> {
-                const emoticonBtn = document.createElement('i');
-                emoticonBtn.classList.add('glyphicon', smileyCode, 'btn', 'btn-xs');
-                emoticonBtn.innerHTML = smileyCode;
-                emoticonBtn.setAttribute('data-message-id', item.id);
-                emoticonBtn.setAttribute('data-message-type', smileyCode);
-                emoticonBlock.append(emoticonBtn);
-
-               // todo a supprimer
-                item.canVote = true;
-                if (item.canVote) {
-                    emoticonBtn.addEventListener('click', onLikedClicked);
-                    this.chatListeners.push([emoticonBtn, onLikedClicked]);
-
-                    emoticonBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
-                    emoticonBtn.title = item.isLiked ? this.chatUnvoteMessage : this.chatVoteMessage;
-                } else {
-                    emoticonBtn.classList.add('btn-gray','disabled');
-                    emoticonBtn.title = this.chatVoteDisabledMessage;
-                }
-                emoticonBlock.appendChild(emoticonBtn);
-            });
-
-            const voteChatCount = document.createElement('span');
-
-            if (+item.voteChatCount) {
-                voteChatCount.textContent = item.voteChatCount;
-                voteChatCount.classList.add('chat-vote-count')
-            }
-
-            emoticonBlock.append(voteChatCount);
-            chatAside.appendChild(emoticonBlock);
-
             const chatCreatedAt = document.createElement('div');
             chatCreatedAt.textContent = item.formattedCreatedAt;
             chatAside.appendChild(chatCreatedAt);
 
             contentEl.appendChild(chatAside);
             contentEl.appendChild(document.createTextNode(item.content));
+
+            const emoticonEl = rowEl.appendChild(document.createElement('div'));
+            emoticonEl.classList.add('chat-emoticon');
 
             const authorEl = rowEl.appendChild(document.createElement('div'));
             authorEl.classList.add('chat-author');
@@ -473,10 +449,46 @@ Webinar.prototype.initChat = function () {
             authorNameTextEl.textContent = item.authorName;
 
             const avatarEl = authorEl.appendChild(document.createElement('span'));
-
             avatarEl.classList.add('chat-author-avatar');
             const imgEl = avatarEl.appendChild(document.createElement('img'));
             imgEl.setAttribute('src', item.avatar);
+
+            const element = {
+                '&#x1F44D;' :'like',
+                '&#128079;' : 'acclaim',
+                '&#x2764;&#xFE0F' : 'heart',
+                '&#128161;' : 'instructive',
+                '&#128522;' : 'happy'
+            };
+
+            for (let smileyCode in element) {
+                const emoticonBtn = document.createElement('i');
+                emoticonBtn.classList.add('glyphicon', 'btn', 'btn-xs');
+                emoticonBtn.innerHTML = smileyCode;
+                emoticonBtn.setAttribute('data-message-id', item.id);
+                emoticonBtn.setAttribute('data-message-type', element[smileyCode]);
+
+                const voteChat = document.createElement('span');
+                emoticonBtn.append(voteChat);
+
+                if (item.votes[element[smileyCode]]) {
+                    voteChat.textContent = item.votes[element[smileyCode]];
+                    voteChat.classList.add('chat-vote-count');
+                }
+                emoticonEl.appendChild(emoticonBlock);
+
+                if (!item.isAuthor) {
+                    emoticonBtn.addEventListener('click', onLikedClicked);
+                    this.chatListeners.push([emoticonBtn, onLikedClicked]);
+
+                    emoticonBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+                    emoticonBtn.title = this.chatVoteMessage[element[smileyCode]];
+                } else {
+                    emoticonBtn.classList.add('btn-gray','disabled');
+                    emoticonBtn.title = this.chatVoteDisabledMessage;
+                }
+                emoticonBlock.appendChild(emoticonBtn);
+            };
 
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
@@ -486,7 +498,6 @@ Webinar.prototype.initChat = function () {
                 if (item.isAuthor) {
                     authorTitleEl.classList.add('chat-author-title-on');
                 }
-
             }
 
             if (item.isAuthor) {

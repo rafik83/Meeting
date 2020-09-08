@@ -199,4 +199,4 @@ services:
             - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
             - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VotehatMessage }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VoteChatMessage }

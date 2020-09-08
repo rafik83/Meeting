@@ -3,16 +3,12 @@
 namespace Proximum\Vimeet\Application\Command\Chat;
 
 use Proximum\Vimeet\Application\Command\Command;
-use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\User;
 
 class VoteChatMessage implements Command
 {
     /** @var int */
     private $chatMessageId;
-
-    /** @var ChatMessageLinkableInterface $chatMessageLinkableObject */
-    private $chatMessageLinkableObject;
 
     /** @var User */
     private $user;

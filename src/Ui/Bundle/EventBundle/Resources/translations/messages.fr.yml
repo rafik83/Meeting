@@ -90,6 +90,14 @@ catalog.selectItemsFromNomenclatures.unSelectAll: 'Tout désélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
+chat.vote.acclaim: 'Applaudir'
+chat.vote.happy: 'Content'
+chat.vote.heart: 'J''adore'
+chat.vote.instructive: 'Instructif'
+chat.vote.like: 'J''aime'
+chat.unvote: 'Retirer mon vote'
+chat.vote: 'Voter pour ce message'
+chat.voteDisabled: 'Vous ne pouvez pas voter pour ce message'
 common.back: Retour
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
