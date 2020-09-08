@@ -191,3 +191,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }
+
+    Proximum\Vimeet\Application\Command\Chat\VoteChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
+            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VotehatMessage }

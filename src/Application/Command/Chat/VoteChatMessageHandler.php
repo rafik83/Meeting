@@ -43,7 +43,7 @@ class VoteChatMessageHandler
             throw new ChatMessageNotFoundException();
         }
 
-        if (!$this->checkAccessToChatMessages->isSatisfiedBy($command->getchatMessageLinkableObject(), $command->user)) {
+        if (!$this->checkAccessToChatMessages->isSatisfiedBy($command->getchatMessageLinkableObject(), $command->getUser())) {
             throw new ChatMessageNotAllowedException('Access denied to this chat message');
         }
 
@@ -51,22 +51,22 @@ class VoteChatMessageHandler
             throw new ChatMessageNotAllowedException('Access denied to this chat message');
         }
 
-        $questionVote = $this->questionVoteRepository->getByChatMessageAndUser($chatMessage, $command->getUser(), $command->getType());
+        $chatMessageVote = $this->chatMessageVoteRepository->getByChatMessageAndUser($chatMessage, $command->getUser(), $command->getType());
 
-        if ($questionVote) {
-            $this->questionVoteRepository->remove($questionVote);
+        if ($chatMessageVote) {
+            $this->chatMessageVoteRepository->remove($chatMessageVote);
             // todo: add notification publish
 
             return;
         }
 
-        $questionVote = new ChatMessageVote(
+        $chatMessageVote = new ChatMessageVote(
             $chatMessage,
             $command->getUser(),
             $command->getType()
         );
 
-        $this->chatMessageVoteRepository->add($questionVote);
+        $this->chatMessageVoteRepository->add($chatMessageVote);
         // todo: add notification publish
     }
 }
