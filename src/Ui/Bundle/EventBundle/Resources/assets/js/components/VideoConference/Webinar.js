@@ -510,11 +510,9 @@ Webinar.prototype.publishStream = function () {
 
     publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
     publisher.on('streamCreated', (event) => {
-        console.log(event.stream);
         this.handleStream(event.stream, 'video');
     });
     publisher.on('streamDestroyed', (event) => {
-        console.log(event.stream);
         this.handleStopStream(event.stream, 'video');
     });
 
@@ -661,12 +659,10 @@ Webinar.prototype.shareVideo = function () {
             this.layout();
 
             publisher.on('streamCreated', (event) => {
-                console.log(event.stream);
                 this.handleStream(event.stream, this.typeCustomShare);
             });
 
             publisher.on('streamDestroyed', (event) => {
-                console.log(event.stream);
                 this.handleStopStream(event.stream, this.typeCustomShare);
             });
         }
@@ -690,9 +686,7 @@ Webinar.prototype.handleStream = function(
         streamId: streamId,
         type: type,
         action: 'start'
-    }, (response) => {
-        console.log(response);
-    })
+    }, (response) => {})
     .fail((error) => {
         console.error(error);
     });
@@ -708,9 +702,7 @@ Webinar.prototype.handleStopStream = function(
         streamId: streamId,
         type: type,
         action: 'stop'
-    }, (response) => {
-        console.log(response);
-    })
+    }, (response) => {})
     .fail((error) => {
         console.error(error);
     });
@@ -791,11 +783,9 @@ Webinar.prototype.screenshare = function () {
         this.layout();
 
         publisherScreen.on('streamCreated', (event) => {
-            console.log(event.stream);
             this.handleStream(event.stream, this.typeScreenShare);
         });
         publisherScreen.on('streamDestroyed', (event) => {
-            console.log(event.stream);
             this.handleStopStream(event.stream, this.typeScreenShare);
         });
 
