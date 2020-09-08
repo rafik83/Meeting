@@ -6,6 +6,8 @@ use Proximum\Vimeet\Application\Command\Chat\VoteChatMessage;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotFoundException;
+use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject;
+use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler;
 use Proximum\Vimeet\Domain\Model\ChatMessageVote;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatMessageVoteRepositoryInterface;
@@ -21,14 +23,19 @@ class VoteChatMessageHandler
     /** @var CheckAccessToChatMessages */
     private $checkAccessToChatMessages;
 
+    /** @var GuessChatMessageLinkableObjectHandler */
+    private $guessChatMessageLinkableObjectHandler;
+
     public function __construct(
         ChatMessageRepositoryInterface $chatMessageRepository,
         ChatMessageVoteRepositoryInterface $chatMessageVoteRepository,
-        CheckAccessToChatMessages $checkAccessToChatMessages
+        CheckAccessToChatMessages $checkAccessToChatMessages,
+        GuessChatMessageLinkableObjectHandler $guessChatMessageLinkableObjectHandler
     ) {
         $this->chatMessageRepository = $chatMessageRepository;
         $this->chatMessageVoteRepository = $chatMessageVoteRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
+        $this->guessChatMessageLinkableObjectHandler = $guessChatMessageLinkableObjectHandler;
     }
 
     /**
@@ -38,12 +45,14 @@ class VoteChatMessageHandler
     public function handle(VoteChatMessage $command): void
     {
         $chatMessage = $this->chatMessageRepository->findById($command->getChatMessageId());
-
         if (null === $chatMessage) {
             throw new ChatMessageNotFoundException();
         }
 
-        if (!$this->checkAccessToChatMessages->isSatisfiedBy($command->getchatMessageLinkableObject(), $command->getUser())) {
+        $chatMessageLinkableObject = $this->guessChatMessageLinkableObjectHandler->handle(
+            new GuessChatMessageLinkableObject($chatMessage->getObjectType(), $chatMessage->getObjectId())
+        );
+        if (!$this->checkAccessToChatMessages->isSatisfiedBy($chatMessageLinkableObject, $command->getUser())) {
             throw new ChatMessageNotAllowedException('Access denied to this chat message');
         }
 

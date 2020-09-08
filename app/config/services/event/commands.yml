@@ -197,5 +197,6 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
             - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
+            - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VotehatMessage }
