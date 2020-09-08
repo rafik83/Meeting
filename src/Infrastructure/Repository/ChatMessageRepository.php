@@ -22,10 +22,12 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(ChatMessage $chatMessage): void
+    public function add(ChatMessage $chatMessage): ChatMessage
     {
         $this->entityManager->persist($chatMessage);
         $this->entityManager->flush($chatMessage);
+
+        return $chatMessage;
     }
 
     /**
@@ -43,6 +45,7 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
                 )
             )
             ->from(ChatMessage::class, 'chatMessage')
+            ->join('chatMessage.createdBy' , 'createdBy')
             ->where('chatMessage.objectType = :objectType AND chatMessage.objectId = :objectId')
             ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
             ->orderBy('chatMessage.createdAt', 'ASC')

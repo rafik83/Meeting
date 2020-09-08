@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Chat;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessages;
@@ -27,6 +29,8 @@ class ListChatMessagesHandlerTest extends TestCase
     private $checkAccessToChatMessages;
     /** @var ObjectProphecy|GetTimezoneHelper */
     private $getTimezoneHelper;
+    /** @var ObjectProphecy */
+    private $routerAdapter;
     /** @var ListChatMessagesHandler */
     private $listChatMessagesHandler;
 
@@ -38,11 +42,13 @@ class ListChatMessagesHandlerTest extends TestCase
         $this->chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $this->checkAccessToChatMessages = $this->prophesize(CheckAccessToChatMessages::class);
         $this->getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $this->routerAdapter = $this->prophesize(RouterInterface::class);
 
         $this->listChatMessagesHandler = new ListChatMessagesHandler(
             $this->chatMessageRepository->reveal(),
             $this->checkAccessToChatMessages->reveal(),
-            $this->getTimezoneHelper->reveal()
+            $this->getTimezoneHelper->reveal(),
+            $this->routerAdapter->reveal()
         );
     }
 
@@ -51,7 +57,7 @@ class ListChatMessagesHandlerTest extends TestCase
         $this->expectException(ChatMessageNotAllowedException::class);
 
         $this->checkAccessToChatMessages
-            ->isSatisfiedBy($this->happening, $this->user)
+            ->isSatisfiedBy($this->happening->reveal(), $this->user->reveal())
             ->shouldBeCalled()
             ->willReturn(false);
 
@@ -69,8 +75,8 @@ class ListChatMessagesHandlerTest extends TestCase
 
         $this->chatMessageRepository->list($this->happening->reveal())->shouldBeCalled()->willReturn(
             [
-                new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 'Korben DALLAS', 'Taxi Inc.'),
-                new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 'Leeloo', 'Fifth Element'),
+                new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), '/custom-picture.jpg', 12345, 'Pierre DUPONT.', 'Taxi Inc.'),
+                new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), null, 007, 'Leeloo', 'Fifth Element'),
             ]
         );
 
@@ -82,14 +88,18 @@ class ListChatMessagesHandlerTest extends TestCase
             ->willReturn('Europe/Paris')
         ;
 
+        $this->routerAdapter->generate('event_chat_avatar', Argument::withKey('name'))
+            ->shouldBeCalled()
+            ->willReturn('/fr/chat/avatar?Leeloo');
+
         $chatMessageViews = $this->listChatMessagesHandler->handle(
             new ListChatMessages($this->happening->reveal(), $this->user->reveal(), 'fr')
         );
 
-        $result1 = new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), 'Korben DALLAS', 'Taxi Inc.');
+        $result1 = new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), '/custom-picture.jpg', 12345, 'Pierre DUPONT.', 'Taxi Inc.');
         $result1->formattedCreatedAt = '14:00:00';
 
-        $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), 'Leeloo', 'Fifth Element');
+        $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), '/fr/chat/avatar?Leeloo', 007, 'Leeloo', 'Fifth Element');
         $result2->formattedCreatedAt = '14:05:00';
 
         $this->assertEquals([$result1, $result2], $chatMessageViews);
