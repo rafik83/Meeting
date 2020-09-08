@@ -111,6 +111,23 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         return $urls;
     }
 
+    public function listArchiveIds(string $sessionId): array
+    {
+        $list = $this->listArchives($sessionId);
+        $archives = $list->getItems();
+
+        usort($archives, static function (Archive $archiveA, Archive $archiveB) {
+            return $archiveA->createdAt <=> $archiveB->createdAt;
+        });
+
+        $ids = [];
+        foreach ($archives as $archive) {
+            $ids[] = $archive->id;
+        }
+
+        return $ids;
+    }
+
     /**
      * {@inheritdoc}
      */

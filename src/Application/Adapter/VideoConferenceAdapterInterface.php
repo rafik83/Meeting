@@ -45,6 +45,7 @@ interface VideoConferenceAdapterInterface
     public function listArchives(string $sessionId): ArchiveList;
 
     public function listArchiveUrls(string $sessionId): array;
+    public function listArchiveIds(string $sessionId): array;
 
     /**
      * @param Session            $session

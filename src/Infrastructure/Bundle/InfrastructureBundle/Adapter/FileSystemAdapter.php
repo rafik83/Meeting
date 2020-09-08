@@ -99,6 +99,6 @@ class FileSystemAdapter implements FileSystemAdapterInterface
         // create just container dir, to avoid error if path is used to copy file
         $this->mkdir($tempDir, 0600);
 
-        return $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();;
+        return $tempDir.DIRECTORY_SEPARATOR.$this->uuidGenerator->generate();
     }
 }

@@ -104,11 +104,11 @@ class ZipRecordArchiveHandlerTest extends TestCase
 
         $this->zipRecordArchiveStorage->delete('/path-to-file.zip')->shouldBeCalled();
         $urls = [
-            'https://example.net/file1.mp4',
-            'https://example.net/file2.mp4',
-            'https://example.net/file3.mp4',
+            'ebdb4fec-802f-433b-a428-4d5ab053cc15',
+            '37d456d0-d2b4-43a9-901b-001edddb570d',
+            '3789e4be-168c-49ac-9ad1-c853409d5b0f',
         ];
-        $this->videoConferenceAdapter->listArchiveUrls('session-id')->shouldBeCalled()->willReturn($urls);
+        $this->videoConferenceAdapter->listArchiveIds('session-id')->shouldBeCalled()->willReturn($urls);
 
         $this->fileSystem->createTempDir()
             ->shouldBeCalled()
@@ -116,9 +116,9 @@ class ZipRecordArchiveHandlerTest extends TestCase
         ;
 
         $files = [
-            'webinar-12-part1.mp4' => 'https://example.net/file1.mp4',
-            'webinar-12-part2.mp4' => 'https://example.net/file2.mp4',
-            'webinar-12-part3.mp4' => 'https://example.net/file3.mp4',
+            'webinar-12-part1.mp4' => 'ebdb4fec-802f-433b-a428-4d5ab053cc15',
+            'webinar-12-part2.mp4' => '37d456d0-d2b4-43a9-901b-001edddb570d',
+            'webinar-12-part3.mp4' => '3789e4be-168c-49ac-9ad1-c853409d5b0f',
         ];
         $this->zipRecordArchiveStorage
             ->prepareZip(

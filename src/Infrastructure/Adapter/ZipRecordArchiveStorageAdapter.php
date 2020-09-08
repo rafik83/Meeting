@@ -24,17 +24,22 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
     /** @var FileSystemAdapterInterface */
     private $filesystem;
 
+    /** @var TokboxRecordS3StorageAdapter */
+    private $tokboxRecordS3StorageAdapter;
+
     public function __construct(
         GoogleCloudStorageAdapter $googleCloudStorage,
         string $googleCloudStorageUri,
         UuidGeneratorInterface $uuidGenerator,
-        FileSystemAdapterInterface $filesystem
+        FileSystemAdapterInterface $filesystem,
+        TokboxRecordS3StorageAdapter $tokboxRecordS3StorageAdapter
     ) {
         $this->googleCloudStorage = $googleCloudStorage;
         $this->googleCloudStorageUri = $googleCloudStorageUri;
         $this->zipArchive = new \ZipArchive();
         $this->uuidGenerator = $uuidGenerator;
         $this->filesystem = $filesystem;
+        $this->tokboxRecordS3StorageAdapter = $tokboxRecordS3StorageAdapter;
     }
 
     public function prepareZip(array $files, string $zipName): void
@@ -43,13 +48,20 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
             return;
         }
 
-        foreach ($files as $name => $url) {
-            $tempFile = $this->filesystem->generateTemporaryPath();
-            $this->filesystem->copy($url, $tempFile);
-            $this->zipArchive->addFile(
-                $tempFile,
-                $name
-            );
+        foreach ($files as $name => $archiveId) {
+            if ($this->tokboxRecordS3StorageAdapter->hasFile($archiveId)) {
+                $tempFile = $this->filesystem->generateTemporaryPath();
+
+                $this->filesystem->dumpFile(
+                    $tempFile,
+                    $this->tokboxRecordS3StorageAdapter->getFile($archiveId)
+                );
+
+                $this->zipArchive->addFile(
+                    $tempFile,
+                    $name
+                );
+            }
         }
 
         $this->zipArchive->close();

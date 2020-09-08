@@ -60,14 +60,14 @@ class ZipRecordArchiveHandler
             return;
         }
 
-        $archiveUrls = $this->videoConferenceAdapter->listArchiveUrls($happening->getWebinarSessionId());
+        $archiveIds = $this->videoConferenceAdapter->listArchiveIds($happening->getWebinarSessionId());
 
         $files = [];
         $index = 1;
 
-        foreach ($archiveUrls as $archiveUrl) {
+        foreach ($archiveIds as $archiveId) {
             $archiveFileName = sprintf('webinar-%d-part%d.mp4', $happening->getId(), $index);
-            $files[$archiveFileName] = $archiveUrl;
+            $files[$archiveFileName] = $archiveId;
 
             ++$index;
         }
