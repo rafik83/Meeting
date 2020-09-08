@@ -408,13 +408,32 @@ Webinar.prototype.initChat = function () {
 
             const emoticonBlock = document.createElement('div');
 
-            ['&#x1F44D;','&#128079;', '&#x2764;&#xFE0F'].forEach((item)=> {
+            const onLikedClicked = function (event) {
+                console.log('ok');
+                const payload = {'messageId': event.currentTarget.getAttribute('data-message-id'),
+                    'messageType': event.currentTarget.getAttribute('data-message-type')};
+                $.post(voteChatHref, JSON.stringify(payload), (response) => {
+                    if (response.status !== 'ok') {
+
+                        this.showError('Message vote failed');
+                    }
+                }, 'json');
+                event.currentTarget.classList.add('disabled');
+
+                // remove all listeners, they'll be added again on chat update
+                this.removeChatListeners();
+            }.bind(this);
+
+            ['&#x1F44D;','&#128079;', '&#x2764;&#xFE0F','&#128161;','&#128522;'].forEach((smileyCode)=> {
                 const emoticonBtn = document.createElement('i');
-                emoticonBtn.classList.add('glyphicon', item, 'btn', 'btn-xs');
-                emoticonBtn.innerHTML = item;
-                emoticonBtn.setAttribute('data-chat-id', item.content);
+                emoticonBtn.classList.add('glyphicon', smileyCode, 'btn', 'btn-xs');
+                emoticonBtn.innerHTML = smileyCode;
+                emoticonBtn.setAttribute('data-message-id', item.id);
+                emoticonBtn.setAttribute('data-message-type', smileyCode);
                 emoticonBlock.append(emoticonBtn);
 
+               // todo a supprimer
+                item.canVote = true;
                 if (item.canVote) {
                     emoticonBtn.addEventListener('click', onLikedClicked);
                     this.chatListeners.push([emoticonBtn, onLikedClicked]);
@@ -436,22 +455,6 @@ Webinar.prototype.initChat = function () {
             }
 
             emoticonBlock.append(voteChatCount);
-
-            const onLikedClicked = function (event) {
-                const payload = {'chatId': event.currentTarget.getAttribute('data-chat-id')};
-                $.post(voteChatHref, JSON.stringify(payload), (response) => {
-                    if (response.status === 'ok') {
-                        this.sendUpdateChatSignal();
-                    } else {
-                        this.showError('Question vote failed');
-                    }
-                }, 'json');
-                event.currentTarget.classList.add('disabled');
-
-                // remove all listeners, they'll be added again on chat update
-                this.removeChatListeners();
-            }.bind(this);
-
             chatAside.appendChild(emoticonBlock);
 
             const chatCreatedAt = document.createElement('div');
@@ -495,7 +498,25 @@ Webinar.prototype.initChat = function () {
             $addChatFormList[0].appendChild(rowEl);
         });
 
+        this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
+
+        const url = new URL(this.notificationProviderUrl); // todo remplacer la valeur
+        url.searchParams.append('topic', `https://vimeet.events/event/137/notifications/happening/${this.happeningId}`);
+
+        var eventSource = new esPolyfill.EventSourcePolyfill(url, {
+            headers: {
+                'Authorization': `Bearer ${this.notificationSubscriberKey}`
+            }
+        });
+        eventSource.onmessage = (event) => {
+            const payload = JSON.parse(event.data);
+            if (payload.action === 'add_chat_message') {
+                this.chatLoaded = false;
+                this.initChat();
+            }
+        }
+
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar chat');
@@ -1137,9 +1158,6 @@ Webinar.prototype.submitChat = function (event) {
         this.addChatFormSubmit.disabled = false;
 
         if (response.status === 'ok') {
-            this.sendUpdateChatSignal();
-            this.addChatFormList.scrollTop = 0;
-
             return;
         }
 
@@ -1168,17 +1186,6 @@ Webinar.prototype.sendUpdateQuestionsSignal = function () {
 Webinar.prototype.removeQuestionListeners = function () {
     this.questionListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
     this.questionListeners = [];
-}
-
-Webinar.prototype.sendUpdateChatSignal = function () {
-    this.session.signal({
-            type: 'ChatUpdate'
-        },
-        (error) => {
-            if (error) {
-                console.error('ChatUpdate signal error', error);
-            }
-        });
 }
 
 Webinar.prototype.removeChatListeners = function () {

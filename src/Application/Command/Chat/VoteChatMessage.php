@@ -20,10 +20,9 @@ class VoteChatMessage implements Command
     /** @var string */
     private $type;
 
-    public function __construct(int $chatMessageId, ChatMessageLinkableInterface $chatMessageLinkableObject, User $user, string $type)
+    public function __construct(int $chatMessageId, User $user, string $type)
     {
         $this->chatMessageId = $chatMessageId;
-        $this->chatMessageLinkableObject = $chatMessageLinkableObject;
         $this->user = $user;
         $this->type = $type;
     }
@@ -31,11 +30,6 @@ class VoteChatMessage implements Command
     public function getChatMessageId(): int
     {
         return $this->chatMessageId;
-    }
-
-    public function getchatMessageLinkableObject(): ChatMessageLinkableInterface
-    {
-        return $this->chatMessageLinkableObject;
     }
 
     public function getUser(): User
