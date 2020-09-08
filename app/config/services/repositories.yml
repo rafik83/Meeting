@@ -100,6 +100,6 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
-            Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository:
+    Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
