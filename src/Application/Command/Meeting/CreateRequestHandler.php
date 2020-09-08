@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
@@ -40,24 +40,24 @@ class CreateRequestHandler
     private $approveRequestHandler;
 
     /**
-     * @var RequestPermissionManager
+     * @var AllowTransformRequestIntoMeeting
      */
-    private $requestPermissionManager;
+    private $allowTransformRequestIntoMeeting;
 
     public function __construct(
         ApproveRequestHandler $approveRequestHandler,
-        RequestPermissionManager $requestPermissionManager,
+        AllowTransformRequestIntoMeeting $allowTransformRequestIntoMeeting,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->approveRequestHandler = $approveRequestHandler;
-        $this->requestPermissionManager = $requestPermissionManager;
+        $this->allowTransformRequestIntoMeeting = $allowTransformRequestIntoMeeting;
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->dateTime          = $dateTime;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -99,10 +99,7 @@ class CreateRequestHandler
             new CreateRequestEvent($request)
         );
 
-        if ($this->requestPermissionManager->isAllowedToApprove(
-            $request,
-            $createRequest->from
-        )) {
+        if ($this->allowTransformRequestIntoMeeting->__invoke($request)) {
             return $this->approveRequestHandler->handle(new ApproveRequest($createRequest->creator, $request, $createRequest->from, $createRequest->locale));
         }
 
