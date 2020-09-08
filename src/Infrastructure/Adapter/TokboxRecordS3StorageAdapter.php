@@ -54,11 +54,11 @@ class TokboxRecordS3StorageAdapter
         return new Filesystem($adapter);
     }
 
-    public function getFile(string $archiveId)
+    public function getFileAsStream(string $archiveId)
     {
         $flySystem = $this->init();
 
-        return $flySystem->read($this->getPath($archiveId));
+        return $flySystem->readStream($this->getPath($archiveId));
     }
 
     private function getPath($archiveId): string

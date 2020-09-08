@@ -67,6 +67,8 @@ interface FileSystemAdapterInterface
      */
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void;
 
+    public function copyStream($stream, string $targetFile): void;
+
     /**
      * Create temporary directory and return path
      */

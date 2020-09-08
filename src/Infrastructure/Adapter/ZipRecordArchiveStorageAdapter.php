@@ -52,9 +52,9 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
             if ($this->tokboxRecordS3StorageAdapter->hasFile($archiveId)) {
                 $tempFile = $this->filesystem->generateTemporaryPath();
 
-                $this->filesystem->dumpFile(
-                    $tempFile,
-                    $this->tokboxRecordS3StorageAdapter->getFile($archiveId)
+                $this->filesystem->copyStream(
+                    $this->tokboxRecordS3StorageAdapter->getFileAsStream($archiveId),
+                    $tempFile
                 );
 
                 $this->zipArchive->addFile(

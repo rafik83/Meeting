@@ -79,6 +79,14 @@ class FileSystemAdapter implements FileSystemAdapterInterface
         $this->fileSystem->copy($originFile, $targetFile, $overwriteNewerFiles);
     }
 
+    public function copyStream($stream, string $targetFile): void
+    {
+        $target = @fopen($targetFile, 'w');
+        stream_copy_to_stream($stream, $target);
+        fclose($target);
+        unset($target);
+    }
+
     /**
      * {@inheritdoc}
      */

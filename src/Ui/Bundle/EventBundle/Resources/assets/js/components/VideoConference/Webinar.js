@@ -12,10 +12,6 @@ var $ = require('jquery');
 require('bootstrap/js/tooltip');
 require('bootstrap/js/popover'); // popover require tooltip
 
-
-// toto
-
-
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
@@ -416,8 +412,16 @@ Webinar.prototype.toggleRecording = function(recording) {
 
     if (recording) {
         this.toggleRecordingButton.classList.add('recording');
+        this.toggleRecordingButton.setAttribute(
+            'title',
+            this.toggleRecordingButton.getAttribute('data-button-recording-title')
+        );
     } else {
         this.toggleRecordingButton.classList.remove('recording');
+        this.toggleRecordingButton.setAttribute(
+            'title',
+            this.toggleRecordingButton.getAttribute('data-button-record-title')
+        );
     }
 };
 
