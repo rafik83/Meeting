@@ -21,7 +21,7 @@ class SheetListViewQueryHandler
      */
     public function handle(SheetListViewQuery $query): array
     {
-        if (empty($query->filters)) {
+        if (empty($query->filters) && null === $query->condition) {
             return [];
         }
 

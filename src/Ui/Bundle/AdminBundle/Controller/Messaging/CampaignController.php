@@ -55,7 +55,7 @@ class CampaignController extends Controller
             'attr' => ['class' => 'btn btn-default'],
         ]);
 
-        $filters = [];
+        $filters = $request->query->get('targetting') ?? [];
         $filterForm->handleRequest($request);
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
