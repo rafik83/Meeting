@@ -56,6 +56,7 @@ class GetWebinarViewQueryHandler
         );
 
         return new WebinarView(
+            $happening->getEvent()->getId(),
             $happening->getId(),
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),

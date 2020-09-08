@@ -30,6 +30,7 @@ function Webinar(element, isSpeaker) {
         this.shiftWithSidebar = '';
     }
 
+    this.eventId = element.getAttribute('data-event-id');
     this.happeningId = element.getAttribute('data-happening-id');
 
     this.token = element.getAttribute('data-token');
@@ -501,8 +502,8 @@ Webinar.prototype.initChat = function () {
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
 
-        const url = new URL(this.notificationProviderUrl); // todo remplacer la valeur
-        url.searchParams.append('topic', `https://vimeet.events/event/137/notifications/happening/${this.happeningId}`);
+        const url = new URL(this.notificationProviderUrl);
+        url.searchParams.append('topic', `https://vimeet.events/event/${this.event}/notifications/happening/${this.happeningId}`);
 
         var eventSource = new esPolyfill.EventSourcePolyfill(url, {
             headers: {

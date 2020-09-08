@@ -8,6 +8,9 @@ use Proximum\Vimeet\Domain\Time\TimeRangeView;
 class WebinarView
 {
     /** @var int */
+    public $eventId;
+
+    /** @var int */
     public $happeningId;
 
     /** @var string */
@@ -69,6 +72,7 @@ class WebinarView
      * @param WebinarParticipantView[] $participantViews
      */
     public function __construct(
+        int $eventId,
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
@@ -89,6 +93,7 @@ class WebinarView
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded
     ) {
+        $this->eventId = $eventId;
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
         $this->happeningTitle = $happeningTitle;
