@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Sheet\LastLogin;
 
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -26,7 +18,7 @@ class UpdateLastLoginHandler
         $this->dateTime = $dateTime;
     }
 
-    public function handle(UpdateLastLogin $updateLastLogin)
+    public function handle(UpdateLastLogin $updateLastLogin): void
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($updateLastLogin->user, $updateLastLogin->event);
 

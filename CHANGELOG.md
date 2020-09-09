@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2175 - TechEvent Token Authenticator
 - VIMEET-2161 - Record webinar
 - VIMEET-2163 - Download webinar records for admin
 - VIMEET-2162 - Download webinar records for speaker
