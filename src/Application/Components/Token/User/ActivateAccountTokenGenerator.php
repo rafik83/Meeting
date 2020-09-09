@@ -1,15 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Token\User;
 
+use DateInterval;
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Token\AbstractTokenGenerator;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -27,19 +21,17 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
     private $userActivateAccountTokenExpiration;
 
     /**
-     * ActivateAccountTokenGenerator constructor.
-     *
      * @param ActivateAccountTokenRepositoryInterface $respository
-     * @param \DateTimeInterface                      $dateTime
+     * @param DateTimeInterface                      $dateTime
      * @param string                                  $userActivateAccountTokenExpiration
      */
     public function __construct(
         ActivateAccountTokenRepositoryInterface $respository,
-        \DateTimeInterface $dateTime,
+        DateTimeInterface $dateTime,
         $userActivateAccountTokenExpiration
     ) {
         $this->userActivateAccountTokenExpiration = $userActivateAccountTokenExpiration;
-        $this->respository                        = $respository;
+        $this->respository = $respository;
 
         parent::__construct($dateTime);
     }
@@ -52,7 +44,7 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
      *
      * @return ActivateAccountToken
      */
-    public function generate(User $user, Sheet $sheet)
+    public function generate(User $user, Sheet $sheet): ActivateAccountToken
     {
         $token = new ActivateAccountToken($user, $this->generateToken($user), $sheet, $this->expirateDate);
 
@@ -62,11 +54,8 @@ class ActivateAccountTokenGenerator extends AbstractTokenGenerator
         return $token;
     }
 
-    /**
-     * @return \DateInterval
-     */
     protected function getLifetime()
     {
-        return new \DateInterval($this->userActivateAccountTokenExpiration);
+        return new DateInterval($this->userActivateAccountTokenExpiration);
     }
 }

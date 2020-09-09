@@ -45,6 +45,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $happening->getEvent()->shouldBeCalled()->willReturn($event);
 
         $user1 = $this->prophesize(User::class);
+        $user1->getId()->shouldBeCalled()->willReturn(1);
         $user1->getFirstName()
             ->shouldBeCalled()
             ->willReturn('Jean');
@@ -59,6 +60,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
             ->willReturn(null);
 
         $user2 = $this->prophesize(User::class);
+        $user2->getId()->shouldBeCalled()->willReturn(2);
         $user2->getFirstName()
             ->shouldBeCalled()
             ->willReturn('George');
@@ -78,8 +80,19 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $sheet2 = SheetFactory::create($event, $user2->reveal());
         $sheet2->setTitle('Cola inc.');
 
-        $question1 = new Question($happening->reveal(), $sheet1, $user1->reveal(), new \DateTime('2020-06-01 17:23:42'), 'The solution is already deployed?');
-        $question2 = new Question($happening->reveal(), $sheet2, $user2->reveal(), new \DateTime('2020-05-29 08:00:00'), 'What is the environmental impact of the AI?');
+        $question1 = $this->prophesize(Question::class);
+        $question1->getId()->shouldBeCalled()->willReturn(1);
+        $question1->getSheet()->shouldBeCalled()->willReturn($sheet1);
+        $question1->getCreatedBy()->shouldBeCalled()->willReturn($user1->reveal());
+        $question1->getCreatedAt()->shouldBeCalled()->willReturn(new \DateTime('2020-06-01 17:23:42'));
+        $question1->getContent()->shouldBeCalled()->willReturn('The solution is already deployed?');
+
+        $question2 = $this->prophesize(Question::class);
+        $question2->getId()->shouldBeCalled()->willReturn(42);
+        $question2->getSheet()->shouldBeCalled()->willReturn($sheet2);
+        $question2->getCreatedBy()->shouldBeCalled()->willReturn($user2->reveal());
+        $question2->getCreatedAt()->shouldBeCalled()->willReturn(new \DateTime('2020-05-29 08:00:00'));
+        $question2->getContent()->shouldBeCalled()->willReturn('What is the environmental impact of the AI?');
 
         $this->getTimezoneHelper
             ->getTimezoneByEventAndUser($event, $user1->reveal())
@@ -88,9 +101,12 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         ;
 
         $this->questionRepository
-            ->getByHappeningDuringWebinar($happening->reveal())
+            ->getByHappeningDuringWebinar($happening->reveal(), $user1->reveal())
             ->shouldBeCalled()
-            ->willReturn([$question1, $question2]);
+            ->willReturn([
+                [$question1, 0, 0],
+                [$question2, 2, 1],
+            ]);
 
         $result = $this->getHappeningQuestionsHandler->handle(
             new GetHappeningQuestions($happening->reveal(), $user1->reveal(), 'en')
@@ -99,22 +115,30 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         $this->assertEquals(
             [
                 new QuestionView(
+                    1,
                     'The solution is already deployed?',
                     'Jean',
                     'Dupond',
                     null,
                     null,
                     'World Company',
-                    '7:23:42 PM'
+                    '7:23:42 PM',
+                    0,
+                    false,
+                    false
                 ),
                 new QuestionView(
+                    42,
                     'What is the environmental impact of the AI?',
                     'George',
                     'DOE',
                     'Employee',
                     null,
                     'Cola inc.',
-                    '10:00:00 AM'
+                    '10:00:00 AM',
+                    2,
+                    true,
+                    true
                 )
             ],
             $result

@@ -97,6 +97,7 @@ security:
                 entry_point: Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
                 authenticators:
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
+                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticator
                     - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Google\GoogleAuthenticator
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator

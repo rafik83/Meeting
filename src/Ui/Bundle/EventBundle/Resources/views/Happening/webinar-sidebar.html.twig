@@ -9,6 +9,7 @@
         <div class="hide"
             data-questions-container
             data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+            data-vote-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
         >
             <div class="questions-list">
                 {# content filled with javascript #}

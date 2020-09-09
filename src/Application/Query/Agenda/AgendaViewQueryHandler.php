@@ -151,6 +151,7 @@ class AgendaViewQueryHandler
         ;
 
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($query->event, $query->participant);
+        $timezoneTranslated = $this->getTimezoneHelper->getTimezoneTranslated($timezone);
 
         $participants = $this->participantViewQueryHandler->handle(
             new ParticipantViewQuery($sheet->getParticipants()->toArray(), $query->locale)
@@ -160,6 +161,7 @@ class AgendaViewQueryHandler
             return new AgendaView(
                 [],
                 $timezone,
+                $timezoneTranslated,
                 $sheet,
                 $participant,
                 $isUserAloneParticipant,
@@ -235,6 +237,7 @@ class AgendaViewQueryHandler
         return new AgendaView(
             $dayViews,
             $timezone,
+            $timezoneTranslated,
             $sheet,
             $participant,
             $isUserAloneParticipant,

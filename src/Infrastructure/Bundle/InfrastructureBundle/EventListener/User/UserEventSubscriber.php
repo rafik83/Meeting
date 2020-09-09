@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\OwnerChangedEvent;
+use Proximum\Vimeet\Application\Event\User\Event\UpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\UserEmailChangeActivatedEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,6 +32,7 @@ class UserEventSubscriber implements EventSubscriberInterface
         return [
             Events::SHEET_OWNER_CHANGED => 'onSheetOwnerChanged',
             Events::USER_EMAIL_CHANGE_ACTIVATED => 'onUserEmailChangeActivated',
+            Events::USER_EVENT_UPDATED => 'onUserUpdated',
         ];
     }
 
@@ -52,5 +54,15 @@ class UserEventSubscriber implements EventSubscriberInterface
                 )
             );
         }
+    }
+
+    public function onUserUpdated(UpdatedEvent $updatedEvent): void
+    {
+        $this->commandBus->handle(
+            new Update(
+                $updatedEvent->user,
+                $updatedEvent->event
+            )
+        );
     }
 }

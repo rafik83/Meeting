@@ -1,18 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
-use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Data\Type as DataType;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet;
 use Proximum\Vimeet\Domain\Model\User;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +12,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
@@ -32,10 +24,11 @@ class ConvertContactToSheetTest extends TestCase
         $participant = $this->prophesize(Participant::class);
         $participant->getUser()->willReturn($user->reveal());
         $event = $this->prophesize(Event::class);
-        $event->getFallback()->willReturn('fr');
+        $event->getLocaleFallback()->willReturn('fr');
         $type = $this->prophesize(Type::class);
         $registrationTemplate = $this->prophesize(TemplateData::class);
         $sheetTemplate = $this->prophesize(TemplateData::class);
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         $userEventExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -46,15 +39,15 @@ class ConvertContactToSheetTest extends TestCase
             "IDCONTACT" => "113893672",
             "SOCIETE" => "TPM",
             "IDCIVILITE" => "M  ",
-            "NOM" => "HAMLAT",
+            "NOM" => "Test",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
             "GRADE" => "CF",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
             "IDPAYS" => "DZ",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
+            "EMAIL" => "example-1@example.net",
             "Secteur_activité" => "A99  ",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
             "Typologie_société" => "TP99 ",
@@ -65,9 +58,16 @@ class ConvertContactToSheetTest extends TestCase
             "Centres_intérêt" => "I01;I02;I03;I04;I05;I07",
             "Conference" => "Y",
             "RDV_B2B" => "0",
+            "PASSWORD" => "AZERTYUIOPqsdfghjklm"
         ];
 
         $configuration = [
+            'mandatory_keys' => [
+                'email' => 'EMAIL',
+                'identifier' => 'IDCONTACT',
+                'country' => 'IDPAYS',
+                'loginData' => 'PASSWORD',
+            ],
             'mapping' => [
                 "EMAIL" => "email",
                 "SOCIETE" => "sheet_title",
@@ -95,21 +95,21 @@ class ConvertContactToSheetTest extends TestCase
         ];
 
         $dataIndexedByTag = [
-            "email" => "HAMLETLEE16@HOTMAIL.COM",
+            "email" => "example-1@example.net",
             "sheet_title" => "TPM",
             "tag_sheet_generic_1" => "CF",
             "participant_gender" => "man",
-            "participant_lastname" => "HAMLAT",
+            "participant_lastname" => "Test",
             "participant_firstname" => "MOHAMED",
-            "sheet_address" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "sheet_address" => "27 rue du test",
             "sheet_zipcode" => "16006",
             "sheet_city" => "ALGER",
             "sheet_country" => "DZ",
             "sheet_phone" => "0666778877",
-            "sheet_organization_category" => "TP99 ",
-            "sheet_staff" => "T1   ",
-            "participant_position" => "F02  ",
-            "tag_sheet_generic_3" => "D07  ",
+            "sheet_organization_category" => "TP99",
+            "sheet_staff" => "T1",
+            "participant_position" => "F02",
+            "tag_sheet_generic_3" => "D07",
             "tag_sheet_generic_2" => false,
         ];
 
@@ -118,27 +118,28 @@ class ConvertContactToSheetTest extends TestCase
             "SOCIETE" => "TPM",
             "GRADE" => "CF",
             "IDCIVILITE" => "man",
-            "NOM" => "HAMLAT",
+            "NOM" => "Test",
             "PRENOM" => "MOHAMED",
             "TEL" => "0666778877",
-            "ADRESSE1" => "27 FERMÉ ABDELKADER ALLAOUA KOUBA",
+            "ADRESSE1" => "27 rue du test",
             "CODEPOSTAL" => "16006",
             "VILLE" => "ALGER",
             "IDPAYS" => "DZ",
-            "EMAIL" => "HAMLETLEE16@HOTMAIL.COM",
-            "Secteur_activité" => "A99  ",
+            "EMAIL" => "example-1@example.net",
+            "Secteur_activité" => "A99",
             "Préciser_Activite_Autre" => "TRANSPORT ET LOGISTIQUE",
-            "Typologie_société" => "TP99 ",
+            "Typologie_société" => "TP99",
             "Préciser_Typologie" => "PME",
-            "Nombre_Personnes" => "T1   ",
-            "Votre_Fonction" => "F02  ",
-            "Nature_de_votre_société_organisation" => "D07  ",
+            "Nombre_Personnes" => "T1",
+            "Votre_Fonction" => "F02",
+            "Nature_de_votre_société_organisation" => "D07",
             "Centres_intérêt" => "I01;I02;I03;I04;I05;I07",
             "Conference" => "Y",
+            "PASSWORD" => 'AZERTYUIOPqsdfghjklm',
             "RDV_B2B" => false
         ];
 
-        $contactNormalizer->normalize($contact, $configuration['normalize'])
+        $contactNormalizer->normalize($contact, $configuration['normalize'], 'IDPAYS')
             ->shouldBeCalled()
             ->willReturn($resultNormalizer);
 
@@ -146,7 +147,7 @@ class ConvertContactToSheetTest extends TestCase
             new ConvertToParticipant(
                 $event->reveal(),
                 $type->reveal(),
-                $contact[DataType::EMAIL],
+                $contact['EMAIL'],
                 'fr',
                 $dataIndexedByTag,
                 $registrationTemplate->reveal(),
@@ -161,7 +162,23 @@ class ConvertContactToSheetTest extends TestCase
                 $user->reveal(),
                 $event->reveal(),
                 ExtraDataType::IMPORTED_FROM_TECH_EVENT,
-                $contact[DataType::ID_CONTACT],
+                $contact['IDCONTACT'],
+                $dateTime
+            )
+        )->shouldBeCalled();
+
+        $userEventExtraDataRepository->removeForUserAndEventAndName(
+            $user->reveal(),
+            $event->reveal(),
+            ExtraDataType::TECH_EVENT_LOGIN_DATA
+        )->shouldBeCalled();
+
+        $userEventExtraDataRepository->add(
+            new User\Event\ExtraData(
+                $user->reveal(),
+                $event->reveal(),
+                ExtraDataType::TECH_EVENT_LOGIN_DATA,
+                $contact['PASSWORD'],
                 $dateTime
             )
         )->shouldBeCalled();
@@ -170,7 +187,8 @@ class ConvertContactToSheetTest extends TestCase
             $userEventExtraDataRepository->reveal(),
             $convertToParticipantHandler->reveal(),
             $dateTime,
-            $contactNormalizer->reveal()
+            $contactNormalizer->reveal(),
+            $userRepository->reveal()
         );
         $handler->handle(
             $event->reveal(),
