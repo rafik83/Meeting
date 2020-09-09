@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Domain\Event;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -22,14 +23,19 @@ class GetTimezoneHelperTest extends TestCase
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
 
+    /** @var ObjectProphecy|TranslatorInterface */
+    private $translator;
+
     protected function setUp()
     {
         $this->isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
         $this->participantGuesser = $this->prophesize(ParticipantGuesser::class);
+        $this->translator = $this->prophesize(TranslatorInterface::class);
 
         $this->getTimezoneHelper = new GetTimezoneHelper(
             $this->isParticipantVisio->reveal(),
-            $this->participantGuesser->reveal()
+            $this->participantGuesser->reveal(),
+            $this->translator->reveal()
         );
     }
 
@@ -79,6 +85,16 @@ class GetTimezoneHelperTest extends TestCase
         $this->assertEquals(
             'America/New_York',
             $this->getTimezoneHelper->getTimezoneByEventAndParticipant($event->reveal(), $participant->reveal())
+        );
+    }
+
+    public function testGetTimezoneTranslated()
+    {
+        $this->translator->trans('timezone.america-new_york')->shouldBeCalled()->willReturn('New York');
+
+        $this->assertEquals(
+            'New York',
+            $this->getTimezoneHelper->getTimezoneTranslated('America/New_York')
         );
     }
 }

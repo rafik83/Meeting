@@ -72,7 +72,7 @@ class SSOAuthenticatorTest extends TestCase
     /** @var SSOAuthenticator */
     private $ssoAuthenticator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->redirectResponse = $this->prophesize(RedirectResponse::class);
         $this->event = $this->prophesize(Event::class);

@@ -68,12 +68,18 @@ function Webinar(element, isSpeaker) {
 
         this.chatInstance = null;
         this.chatButton = element.querySelector('[data-chat-button]');
+
         if (this.chatButton) {
             this.chatButton.addEventListener('click', this.showChat.bind(this));
         }
+
+        this.questionVoteMessage = element.getAttribute('data-question-vote-message');
+        this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
+        this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
         this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
+        this.questionListeners = [];
     }
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
@@ -222,6 +228,8 @@ Webinar.prototype.init = function () {
             this.subscribers.push(subscriber);
         }
 
+        this.autoMaximize(subscriber);
+
         if (this.hasMediaSharing && !this.isScreenShareStream(subscriber.stream)) {
             this.minimize(subscriber.element)
         }
@@ -257,6 +265,7 @@ Webinar.prototype.init = function () {
             this.hasMediaSharing = false;
             this.maximizeAllSubscribers();
         }
+        this.layout();
     }.bind(this));
 
     this.session.on('sessionDisconnected', function () {
@@ -852,21 +861,72 @@ Webinar.prototype.showQuestions = function (event) {
 
 Webinar.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
+    const voteHref = this.questionsContainer.getAttribute('data-vote-href');
 
     const $questionsList = $(this.questionsList);
 
     $.get(href, function (response) {
+        // make shure there no listeners leak
+        this.removeQuestionListeners();
         $questionsList.empty();
+
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.classList.add('question-row');
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
-            const questionCreatedAt = document.createElement('small');
-            questionCreatedAt.classList.add('pull-right');
+
+            const questionAside = document.createElement('small');
+            questionAside.classList.add('pull-right', 'question-aside');
+
+            const likeBlock = document.createElement('div');
+            const voteCount = document.createElement('span');
+
+            if (+item.voteCount) {
+                voteCount.textContent = item.voteCount;
+                voteCount.classList.add('question-vote-count')
+            }
+
+            likeBlock.append(voteCount);
+
+            const likeBtn = document.createElement('i');
+            likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
+            likeBtn.setAttribute('data-question-id', item.questionId);
+
+            const onLikedClicked = function (event) {
+                const payload = {'questionId': event.currentTarget.getAttribute('data-question-id')};
+                $.post(voteHref, JSON.stringify(payload), (response) => {
+                    if (response.status === 'ok') {
+                        this.sendUpdateQuestionsSignal();
+                    } else {
+                        this.showError('Question vote failed');
+                    }
+                }, 'json');
+                event.currentTarget.classList.add('disabled');
+
+                // remove all listeners, they'll be added again on questions update
+                this.removeQuestionListeners();
+            }.bind(this);
+
+            if (item.canVote) {
+                likeBtn.addEventListener('click', onLikedClicked);
+                this.questionListeners.push([likeBtn, onLikedClicked]);
+
+                likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
+                likeBtn.title = item.isLiked ? this.questionUnvoteMessage : this.questionVoteMessage;
+            } else {
+                likeBtn.classList.add('btn-gray', 'disabled');
+                likeBtn.title = this.questionVoteDisabledMessage;
+            }
+            likeBlock.appendChild(likeBtn);
+
+            questionAside.append(likeBlock);
+
+            const questionCreatedAt = document.createElement('div');
             questionCreatedAt.textContent = item.createdAt;
-            contentEl.appendChild(questionCreatedAt);
+            questionAside.appendChild(questionCreatedAt);
+            contentEl.appendChild(questionAside);
             contentEl.appendChild(document.createTextNode(item.questionContent));
 
             const authorEl = rowEl.appendChild(document.createElement('div'));
@@ -883,6 +943,7 @@ Webinar.prototype.initQuestions = function () {
             }
 
             const avatarEl = authorEl.appendChild(document.createElement('span'));
+
             if (item.avatar) {
                 avatarEl.classList.add('question-author-avatar');
                 const imgEl = avatarEl.appendChild(document.createElement('img'));
@@ -912,16 +973,7 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormSubmit.disabled = false;
 
         if (response.status === 'ok') {
-            this.session.signal({
-                    type: 'QuestionsUpdate'
-                },
-                (error) => {
-                    if (error) {
-                        console.error('QuestionsUpdate signal error', error);
-                    }
-                }
-            );
-
+            this.sendUpdateQuestionsSignal();
             this.questionsList.scrollTop = 0;
 
             return;
@@ -935,6 +987,22 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormContent.value = questionContent;
         this.showError('Question creation failed');
     });
+}
+
+Webinar.prototype.sendUpdateQuestionsSignal = function () {
+    this.session.signal({
+        type: 'QuestionsUpdate'
+    },
+    (error) => {
+        if (error) {
+            console.error('QuestionsUpdate signal error', error);
+        }
+    });
+}
+
+Webinar.prototype.removeQuestionListeners = function () {
+    this.questionListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
+    this.questionListeners = [];
 }
 
 Webinar.prototype.isSidebarOpened = function () {
@@ -1064,5 +1132,38 @@ Webinar.prototype.maximizeAllSubscribers = function() {
     });
 };
 
-module.exports = Webinar;
+Webinar.prototype.autoMaximize = function(subscriber) {
+    var activity = null;
+    subscriber.on('audioLevelUpdated', function(event) {
+        if (this.hasMediaSharing) {
+            return;
+        }
+        if (this.subscribers.length < 2) {
+            return;
+        }
 
+        const now = Date.now();
+        if (event.audioLevel > 0.2) {
+            if (!activity) {
+                activity = {timestamp: now, talking: false};
+            } else if (activity.talking) {
+                activity.timestamp = now;
+            } else if (now - activity.timestamp > 1000) {
+                // detected audio activity for more than 1s for the first time.
+                activity.talking = true;
+                this.minimizeAllSubscribers();
+                this.maximize(subscriber.element);
+                this.layout();
+            }
+        } else if (activity && now - activity.timestamp > 2000) {
+            // detected low audio activity for more than 2s
+            if (activity.talking) {
+                this.maximizeAllSubscribers();
+                this.layout();
+            }
+            activity = null;
+        }
+    }.bind(this));
+};
+
+module.exports = Webinar;

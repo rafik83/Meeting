@@ -16,9 +16,29 @@
       padding: 10px;
     }
 
+    .question-aside {
+      text-align: right;
+
+      i {
+        cursor: pointer;
+      }
+    }
+
+    .question-vote-count {
+      background-color: $gray-lighter;
+      border-radius: 4px;
+      color: $gray-light;
+      font-size: 10px;
+      font-weight: bold;
+      margin-right: 4px;
+      padding: 2px 8px;
+      vertical-align: sub;
+    }
+
     .question-author {
       align-items: flex-end;
       background-color: $gray-lighter;
+      clear: right;
       display: flex;
       flex-wrap: nowrap;
       justify-content: flex-end;

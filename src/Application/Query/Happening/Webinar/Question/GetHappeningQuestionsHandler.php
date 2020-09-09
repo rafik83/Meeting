@@ -22,7 +22,7 @@ class GetHappeningQuestionsHandler
 
     public function handle(GetHappeningQuestions $query): array
     {
-        $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening());
+        $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening(), $query->getUser());
 
         $timezone = $this->getTimezoneHelper
             ->getTimezoneByEventAndUser($query->getHappening()->getEvent(), $query->getUser());
@@ -30,17 +30,22 @@ class GetHappeningQuestionsHandler
 
         $questionViews = [];
 
-        foreach ($questions as $question) {
+        foreach ($questions as [$question, $voteCount, $userVoteCount]) {
             $author = $question->getCreatedBy();
+            $canVote = $query->getUser()->getId() !== $author->getId();
 
             $questionViews[] = new QuestionView(
+                $question->getId(),
                 $question->getContent(),
                 $author->getFirstName(),
                 $author->getLastName(),
                 $author->getPosition(),
                 $author->getAvatar(),
                 $question->getSheet()->getTitle(),
-                $mediumHourFormatter->format($question->getCreatedAt())
+                $mediumHourFormatter->format($question->getCreatedAt()),
+                $voteCount,
+                $userVoteCount > 0,
+                $canVote
             );
         }
 
