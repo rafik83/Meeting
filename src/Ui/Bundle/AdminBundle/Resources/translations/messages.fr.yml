@@ -330,6 +330,7 @@ admin.happening.addTitle: 'Ajouter une conférence'
 admin.happening.button.category: 'Gérer les catégories'
 admin.happening.button.export: 'Exporter les conférences'
 admin.happening.button.speaker: 'Gérer les intervenants'
+admin.happening.download: 'Télécharger la vidéo'
 admin.happening.export.fields.happening_begin_hour: 'Heure de début'
 admin.happening.export.fields.happening_day: Jour
 admin.happening.export.fields.happening_end_hour: 'Heure de fin'
@@ -360,6 +361,7 @@ admin.happening.products: 'Ce sous-évènement est lié aux produits suivants'
 admin.happening.products.tooltip: 'Lié à des produits'
 admin.happening.title: Conférences
 admin.happening.type.interactiveWebinar: Webinaire interactif
+admin.happening.type.videoWebinar: 'Webinaire vidéo'
 admin.happening.type.webinar: Webinaire
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'

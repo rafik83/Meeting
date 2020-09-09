@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Command\Command;
@@ -19,6 +11,7 @@ class AbstractHappeningCommand implements Command
     public const TYPE_DEFAULT = 'default';
     public const TYPE_WEBINAR = 'webinar';
     public const TYPE_WEBINAR_INTERACTIVE = 'webinar_interactive';
+    public const TYPE_WEBINAR_VIDEO = 'webinar_video';
 
     /** @var Category */
     public $category;
@@ -56,12 +49,24 @@ class AbstractHappeningCommand implements Command
     /** @var string */
     public $happeningType = self::TYPE_DEFAULT;
 
+    /** @var bool */
+    public $webinarRecorded = true;
+
+    /** @var bool */
+    public $sidebarAllowed;
+
     public function isWebinar(): bool
     {
         return self::TYPE_WEBINAR === $this->happeningType || self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
     }
+
     public function isInteractiveWebinar(): bool
     {
         return self::TYPE_WEBINAR_INTERACTIVE === $this->happeningType;
+    }
+
+    public function isVideoWebinar(): bool
+    {
+        return self::TYPE_WEBINAR_VIDEO === $this->happeningType;
     }
 }

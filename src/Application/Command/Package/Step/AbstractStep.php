@@ -1,36 +1,20 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AbstractStep
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var null|int
-     */
+    /** @var null|int */
     public $currentStep;
 
-    /**
-     * @param Sheet $sheet
-     * @param int   $currentStep
-     */
-    public function __construct(Sheet $sheet, $currentStep = null)
+    public function __construct(Sheet $sheet, ?int $currentStep = null)
     {
-        $this->sheet       = $sheet;
+        $this->sheet = $sheet;
         $this->currentStep = $currentStep;
     }
 }

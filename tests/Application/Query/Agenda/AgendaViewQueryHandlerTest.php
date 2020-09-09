@@ -161,7 +161,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $property->setAccessible(false);
 
         $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
-        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant)->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant)->shouldBeCalled()->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
         $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
         $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
@@ -200,6 +201,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $expected = new AgendaView(
             [$dayView],
             'Europe/Paris',
+            'Paris',
             $sheet,
             $participant,
             true,
@@ -319,7 +321,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         ;
 
         $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
-        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->shouldBeCalled()->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
         $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
         $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
@@ -358,6 +361,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $expected = new AgendaView(
             [$dayView],
             'Europe/Paris',
+            'Paris',
             $sheet,
             $participant2,
             false,
@@ -529,7 +533,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         ;
 
         $getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
-        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->shouldBeCalled()->willReturn('Europe/Paris');
+        $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
         $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
         $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
@@ -566,6 +571,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $expected = new AgendaView(
             [$dayView],
             'Europe/Paris',
+            'Paris',
             $sheet,
             $participant2,
             false,

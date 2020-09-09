@@ -1,19 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Psr\Log\LoggerInterface;
+use function Sentry\captureEvent;
 
 class MailerAdapter implements MailerInterface
 {
@@ -26,16 +20,19 @@ class MailerAdapter implements MailerInterface
     /** @var TranslatorAdapter */
     private $translator;
 
-    /**
-     * @param \Swift_Mailer     $mailer
-     * @param \Twig_Environment $twig
-     * @param TranslatorAdapter $translator
-     */
-    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig, TranslatorAdapter $translator)
-    {
-        $this->mailer     = $mailer;
-        $this->twig       = $twig;
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(
+        \Swift_Mailer $mailer,
+        \Twig_Environment $twig,
+        TranslatorAdapter $translator,
+        LoggerInterface $logger
+    ) {
+        $this->mailer = $mailer;
+        $this->twig = $twig;
         $this->translator = $translator;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,7 +47,7 @@ class MailerAdapter implements MailerInterface
         $body = $template->render(['mail' => $mail]);
 
         if ($mail->hasToTranslateSubject()) {
-            $subject  = $this->translator->trans(
+            $subject = $this->translator->trans(
                 $mail->getSubject(),
                 $mail->getSubjectParameters(),
                 'mail',
@@ -62,15 +59,20 @@ class MailerAdapter implements MailerInterface
 
         $message = new \Swift_Message($subject);
         $message->setFrom($mail->getSender());
+        $receivers = array_unique($mail->getReceivers());
 
-        foreach ($mail->getReceivers() as $receiver) {
+        foreach ($receivers as $receiver) {
             $message->addTo($receiver);
         }
 
         if (true === $mail->sendToEmailTeam()
             && ($mail instanceof UserMail || $mail instanceof AbstractCustomizedMail)
         ) {
-            $message->setBcc($mail->getEvent()->getEmailTeam());
+            $mailTeam = $mail->getEvent()->getEmailTeam();
+
+            if (!in_array($mailTeam, $receivers, true)) {
+                $message->setBcc($mailTeam);
+            }
         }
 
         $message
@@ -79,7 +81,41 @@ class MailerAdapter implements MailerInterface
 
         $message->getHeaders()->addTextHeader('X-Message-ID', $mail->getMessageId());
 
-        $this->mailer->send($message);
+        $failedReceivers = [];
+        $this->mailer->send($message, $failedReceivers);
+
+        $this->handleResults(
+            $receivers,
+            $failedReceivers,
+            $subject,
+            $mail->getMessageId()
+        );
+    }
+
+    protected function handleResults(array $receivers, array $failedReceivers, string $subject, ?string $messageId = null)
+    {
+        $context = ['subject' => $subject, 'messageId' => $messageId];
+
+        foreach ($receivers as $receiver) {
+            if (in_array($receiver, $failedReceivers, true)) {
+                $errorMessage = sprintf('Failed to send email %s to %s', $messageId, $receiver);
+                $this->logger->error($errorMessage, $context + ['to' => $receiver]);
+                captureEvent(
+                    [
+                        'message' => $errorMessage,
+                        'level' => 'error',
+                        'extra' => ['to' => $receiver] + $context
+                    ]
+                );
+
+                continue;
+            }
+
+            $this->logger->info(
+                sprintf('Email sent to %s', $receiver),
+                $context + ['to' => $receiver]
+            );
+        }
     }
 
     protected function getMailer()

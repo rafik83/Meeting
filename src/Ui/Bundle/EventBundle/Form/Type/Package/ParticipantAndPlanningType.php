@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
@@ -21,14 +13,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParticipantAndPlanningType extends AbstractType
 {
-    /**
-     * @var QuantityMaxGuesser
-     */
+    /** @var QuantityMaxGuesser */
     private $quantityMaxGuesser;
 
-    /**
-     * @param QuantityMaxGuesser $quantityMaxGuesser
-     */
     public function __construct(QuantityMaxGuesser $quantityMaxGuesser)
     {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
@@ -37,7 +24,7 @@ class ParticipantAndPlanningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Sheet $sheet */
         $sheet = $options['sheet'];
@@ -48,10 +35,10 @@ class ParticipantAndPlanningType extends AbstractType
         foreach ($sheet->getParticipantsArray() as $participant) {
             $builder->add($participant->getId(), ChoiceType::class, [
                 'choices' => $participantProducts,
-                'choice_value' => function (Product $product = null) {
+                'choice_value' => static function (Product $product = null) {
                     return null !== $product ? $product->getId() : null;
                 },
-                'choice_label' => function (Product $product = null) use ($locale) {
+                'choice_label' => static function (Product $product = null) use ($locale) {
                     return null !== $product ? $product->getTitle($locale) : null;
                 },
                 'placeholder' => 'form.participantAndPlanning.participantProduct.selectAnOption',
@@ -60,12 +47,6 @@ class ParticipantAndPlanningType extends AbstractType
         }
 
         $maxErrorMessage = 'package.planning.quantityMax';
-
-        if (null !== $sheet->getPackage()->getPlanning()
-            && $sheet->countParticipants() < $sheet->getPackage()->getPlanning()->getQuantityMax()
-        ) {
-            $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
-        }
 
         if ($package->canPlanningBeBought()) {
             $builder->add('planningQuantity', QuantityAndParticipantsType::class, [
@@ -83,7 +64,7 @@ class ParticipantAndPlanningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $optionsResolver)
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setRequired(['sheet', 'locale']);
         $optionsResolver->addAllowedTypes('sheet', Sheet::class);

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
@@ -15,7 +7,7 @@ use Proximum\Vimeet\Domain\Helper\StringHelper;
 
 class UpdateHandler extends AbstractCreateHandler
 {
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         $admin = $update->admin;
         $update->email = StringHelper::trimSpacesAndNonBreakSpaces($update->email);
@@ -26,7 +18,7 @@ class UpdateHandler extends AbstractCreateHandler
         }
 
         if (null !== $update->password) {
-            $salt     = $this->saltGenerator->generate();
+            $salt = $this->saltGenerator->generate();
             $password = $this->encoder->encode($admin->updatePassword($salt, null), $update->password);
 
             $admin->updatePassword($salt, $password);

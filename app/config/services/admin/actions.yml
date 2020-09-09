@@ -235,6 +235,33 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
+    # Print Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\BuilderAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.print_template_resolver'
+            - '@templating.engine.twig'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Preview
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Preview\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+
+    #
     # Registration Template
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
@@ -313,6 +340,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '%infrastructure.export_form_template_user_data_path%'
+            - '@datetime'
+
+    #
+    # Count
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
 
     #
@@ -408,6 +443,20 @@ services:
             - '@adapter.router'
 
     #
+    # Account
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction:
+        arguments:
+            - '@templating.engine.twig'
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction:
+        arguments:
+            - '@form.factory'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+
+    #
     # Admin
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction:
@@ -417,6 +466,73 @@ services:
             - '@router.default'
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
+
+    #
+    # Operator
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
+
+    #
+    # Partner
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+            - '@error_factory'
 
     #
     # User
@@ -508,6 +624,14 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -522,6 +646,11 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '%tokbox_api_key%'
 
     #
     # Happening Category
@@ -696,6 +825,17 @@ services:
             - '@adapter.router'
             - '@templating.engine.twig'
             - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@query.participant.import.import_result_view_query_handler'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating.engine.twig'
+            - '@router.default'
+            - '@session.flash_bag'
+            - '@translator'
 
     #
     # Availability Time Range
@@ -1220,3 +1360,10 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.common_export_path%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.csrf_token'
+            - '@security.impersonate'
+            - '@adapter.event_url_generator'

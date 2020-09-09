@@ -5,3 +5,7 @@ Proximum\Vimeet\Application\Command\User\ChangeMail:
             - Email:
                 message: validators.email
                 strict: true
+        password:
+            - NotBlank: ~
+            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
+                message: validators.currentPassword

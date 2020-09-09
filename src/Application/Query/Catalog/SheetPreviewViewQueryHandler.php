@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
@@ -15,7 +7,6 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -23,50 +14,27 @@ use Proximum\Vimeet\Domain\Rule\Composer;
 
 class SheetPreviewViewQueryHandler
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var Preview
-     */
+    /** @var Preview */
     private $preview;
 
-    /**
-     * @var Composer
-     */
+    /** @var Composer */
     private $ruleComposer;
 
-    /**
-     * @var RuleRepositoryInterface
-     */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var MeetingPublishedAccessChecker
-     */
+    /** @var MeetingPublishedAccessChecker */
     private $meetingPublishedAccessChecker;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     private $router;
 
-    /**
-     * @param SheetInfoGuesser              $sheetInfoGuesser
-     * @param Composer                      $ruleComposer
-     * @param Preview                       $preview
-     * @param RuleRepositoryInterface       $ruleRepository
-     * @param RequestRepositoryInterface    $meetingRequestRepository
-     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
-     * @param RouterInterface               $router
-     */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         Composer $ruleComposer,

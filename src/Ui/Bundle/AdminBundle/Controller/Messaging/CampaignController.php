@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
@@ -63,7 +55,7 @@ class CampaignController extends Controller
             'attr' => ['class' => 'btn btn-default'],
         ]);
 
-        $filters = [];
+        $filters = $request->query->get('targetting') ?? [];
         $filterForm->handleRequest($request);
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
@@ -87,7 +79,7 @@ class CampaignController extends Controller
 
         $createCampaignCommand = new Create($event, $request->get($filterForm->getName(), []));
         $createCampaignForm = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
-            'sheet_ids' => array_map(function (SheetListView $sheet) { return $sheet->id; }, $sheets),
+            'sheet_ids' => array_map(static function (SheetListView $sheet) { return $sheet->id; }, $sheets),
             'action' => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
         ]);
 

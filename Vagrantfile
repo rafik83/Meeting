@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 $script = <<-SCRIPT
-printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+printf "deb http://httpredir.debian.org/debian/ stretch main\ndeb-src http://httpredir.debian.org/debian/ stretch main\ndeb http://security.debian.org stretch/updates main\ndeb-src http://security.debian.org stretch/updates main" > /etc/apt/sources.list
 echo '' > /etc/apt/sources.list.d/deb_debian_org_debian.list
 apt-get -o Acquire::Check-Valid-Until=false update
 SCRIPT
@@ -10,7 +10,7 @@ SCRIPT
 app = {
   :name        => 'vimeet',
   :box         => 'manala/app-dev-debian',
-  :box_version => '~> 3.0.0',
+  :box_version => '~> 4.0.6',
   :box_memory  => 2048
 }
 

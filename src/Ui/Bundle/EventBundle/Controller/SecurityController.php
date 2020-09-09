@@ -11,9 +11,11 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\User\ActivateAccount\SendActivateAccountFromLoginToken;
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Components\Security\LoginSecondStepAccessChecker;
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -144,8 +146,19 @@ class SecurityController extends Controller
 
         $this->addFlash('login_email', $email);
 
+        $eventExtraParam = $this->get('repository.event.extra_parameter_repository')->findByEventAndType(
+            $event,
+            Type::TYPE_TECH_EVENT_LOGIN_ENABLED
+        );
+
+        $actionUrl = $this->generateUrl('event_login_check');
+        if ($eventExtraParam instanceof Event\ExtraParameter) {
+            $actionUrl = $this->generateUrl(Route::TECH_EVENT_LOGIN_CHECK);
+        }
+
         $form = $this->createForm(LoginType::class, ['username' => $email], [
-            'action' => $this->generateUrl('event_login_check'),
+            'action' => $actionUrl,
+            'csrf_token_id' => 'authenticate'
         ]);
 
         if (null !== $error) {

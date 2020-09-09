@@ -1,24 +1,27 @@
 <div class="side-container hide">
-    <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i class="icon-Suivant_3"></i></button>
-    <div class="btn-group" role="group">
-        <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
-        <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
-    </div>
-    <div data-chat-container></div>
-    <div class="hide"
-        data-questions-container
-        data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-    >
-        <div class="questions-list">
-            {# content filled with javascript #}
+    {% if webinarView.sidebarAllowed %}
+        <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i class="icon-Suivant_3"></i></button>
+        <div class="btn-group" role="group">
+            <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
+            <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
         </div>
-        <form
-            action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            class="questions-form"
-            data-questions-form
+        <div data-chat-container></div>
+        <div class="hide"
+            data-questions-container
+            data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+            data-vote-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
         >
-            <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}" maxlength="250" autocomplete="off">
-            <button type="submit"></button>
-        </form>
-    </div>
+            <div class="questions-list">
+                {# content filled with javascript #}
+            </div>
+            <form
+                action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+                class="questions-form"
+                data-questions-form
+            >
+                <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}" maxlength="250" autocomplete="off">
+                <button type="submit"></button>
+            </form>
+        </div>
+    {% endif %}
 </div>

@@ -11,6 +11,7 @@ form.add_participant.children.data.label: 'Coordonnées du participant'
 form.add_participant.children.email.label: Email
 form.add_participant.children.submit.label: Envoyer
 form.add_products.children.submit.label: 'Valider les produits'
+form.admin_password.rules: 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 12 caractères.'
 form.registration_path_question.children.answers.label: Réponses
 form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
 form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'
@@ -155,6 +156,7 @@ form.category_update.children.submit.label: Enregistrer
 form.category_update.children.translations.prototype.children.title.label: Titre
 form.category_update.children.types.label: 'Sélectionner les types de participation'
 form.change_mail.children.mail.label: 'Saisir votre nouvel email'
+form.change_mail.children.password.label: 'Par mesure de sécurité, veuillez saisir votre mot de passe'
 form.change_mail.children.submit.label: Envoyer
 form.change_owner.children.owner.label: 'Choisir un propriétaire'
 form.change_owner.children.submit.label: Changer
@@ -399,6 +401,7 @@ form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
 form.extra_parameter_create.children.type.choices.tech_event_configuration: 'Configuration TechEvent'
+form.extra_parameter_create.children.type.choices.tech_event_login_enabled: 'TechEvent : Activation du login'
 form.extra_parameter_create.children.type.choices.tracking_code: 'Code de suivi'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
@@ -482,6 +485,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening.happeningType.default.label: 'En présentiel'
 form.happening.happeningType.webinar.label: Webinaire
 form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
+form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
@@ -494,6 +498,9 @@ form.happening_create.children.liveUrl.label: 'Url de l''iframe pour la diffusio
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
 form.happening_create.children.questionAllowed.label: 'Question des participants'
+form.happening_create.children.sidebarAllowed.answer.false: Non
+form.happening_create.children.sidebarAllowed.answer.true: Oui
+form.happening_create.children.sidebarAllowed.label: 'Activer les options d''interactions'
 form.happening_create.children.submit.label: Envoyer
 form.happening_create.children.talkings.label: Intervenants
 form.happening_create.children.talkings.label_add: Ajouter
@@ -506,6 +513,7 @@ form.happening_create.children.translations.prototype.children.webinarHeaderImag
 form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: Image actuelle
 form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
+form.happening_create.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
@@ -515,6 +523,7 @@ form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
+form.happening_update.children.sidebarAllowed.label: 'Activer les options d''interactions'
 form.happening_update.children.submit.label: Envoyer
 form.happening_update.children.talkings.label: Intervenants
 form.happening_update.children.talkings.label_add: Ajouter
@@ -526,6 +535,7 @@ form.happening_update.children.translations.prototype.children.title.label: Titr
 form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
+form.happening_update.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.import_mapping.children.submit.label: Importer
@@ -667,6 +677,7 @@ form.participant_import.children.allowMultiSheet.choice.yes: 'Oui'
 form.participant_import.children.allowMultiSheet.label: 'Autoriser le multi-fiche'
 form.participant_import.children.charset.label: Encodage
 form.participant_import.children.file.label: 'Fichier CSV'
+form.participant_import.children.mapping.label: 'Selectionner une correspondance enregistrée'
 form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
 form.participant_import.children.type.placeholder: 'Sélectionner un type'
@@ -1029,6 +1040,11 @@ form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
 form.sheet_filter.children.validationState.label: 'Statut fiche'
+form.sheet_import_mapping_create.children.submit.label: 'Enregistrer une nouvelle correspondance'
+form.sheet_import_mapping_create.children.title.label: 'Titre de la correspondance'
+form.sheet_import_mapping_result.text.diff: 'Vous avez effectué des modifications à la correspondance utilisée'
+form.sheet_import_mapping_result.text.save_title: 'Enregistrer sous une nouvelle correspondance'
+form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisée'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler
@@ -1242,6 +1258,7 @@ form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
 form.type_create.children.sheetTemplate.label: 'Template de présentation'
 form.type_create.children.submit.label: Enregistrer
+form.type_create.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_create.children.template.label: Template
 form.type_create.children.translations.prototype.children.description.label: Description
 form.type_create.children.translations.prototype.children.title.label: Titre
@@ -1299,6 +1316,7 @@ form.type_update.children.rank.label: Position
 form.type_update.children.registrationTemplate.label: 'Template d''inscription'
 form.type_update.children.sheetTemplate.label: 'Template de présentation'
 form.type_update.children.submit.label: Enregistrer
+form.type_update.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_update.children.translations.prototype.children.description.label: Description
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'

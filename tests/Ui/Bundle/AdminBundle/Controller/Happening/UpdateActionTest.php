@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use PHPUnit\Framework\TestCase;
@@ -72,7 +64,7 @@ class UpdateActionTest extends TestCase
     /** @var ObjectProphecy */
     private $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
@@ -91,7 +83,7 @@ class UpdateActionTest extends TestCase
         $this->translator = $this->prophesize(TranslatorInterface::class);
     }
 
-    public function testAccessDenied()
+    public function testAccessDenied(): void
     {
         $this->expectException(AccessDeniedException::class);
 
@@ -114,7 +106,7 @@ class UpdateActionTest extends TestCase
         $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);
     }
 
-    public function testAccessDeniedEventDifferent()
+    public function testAccessDeniedEventDifferent(): void
     {
         $this->expectException(AccessDeniedException::class);
 
@@ -141,7 +133,7 @@ class UpdateActionTest extends TestCase
         $action($this->request->reveal(), $this->event->reveal(), $this->happening->reveal(), $this->adminDomain);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
@@ -162,7 +154,11 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->happening->isSidebarAllowed()->willReturn(true);
+        $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -192,7 +188,8 @@ class UpdateActionTest extends TestCase
                 [
                     'event' => $this->event->reveal(),
                     'form' => $formView->reveal(),
-                    'products' => []
+                    'products' => [],
+                    'happening' => $this->happening->reveal(),
                 ]
             )
             ->shouldBeCalled()
@@ -214,7 +211,7 @@ class UpdateActionTest extends TestCase
         $this->assertInstanceOf(Response::class, $result);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $this->authorizationCheckerAdapter
             ->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
@@ -235,7 +232,11 @@ class UpdateActionTest extends TestCase
         $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinar()->shouldBeCalled()->willReturn(false);
         $this->happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->happening->isSidebarAllowed()->willReturn(true);
+        $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
         $update = new Update($this->happening->reveal());

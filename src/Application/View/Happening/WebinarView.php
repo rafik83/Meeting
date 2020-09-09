@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
@@ -59,6 +51,24 @@ class WebinarView
     /** @var string|null */
     public $liveUrl;
 
+    /** @var bool */
+    public $sidebarAllowed;
+
+    /** @var bool */
+    public $isVideoWebinarAndHasLiveUrl;
+
+    /** @var bool */
+    public $isVideoWebinarAndHappeningIsEnded;
+
+    /** @var bool */
+    public $isWebinarRecorded;
+
+    /** @var bool */
+    public $isWebinarRecording;
+
+    /** @var int */
+    public $timeRemainingBeforeStartInSeconds;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -67,6 +77,7 @@ class WebinarView
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
+        bool $isVideoWebinarAndHasLiveUrl,
         string $token,
         string $sessionId,
         string $apiKey,
@@ -77,8 +88,13 @@ class WebinarView
         \DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
+        int $timeRemainingBeforeStartInSeconds,
         ?string $headerImage,
-        ?string $liveUrl
+        ?string $liveUrl,
+        bool $sidebarAllowed,
+        bool $isVideoWebinarAndHappeningIsEnded,
+        bool $isWebinarRecorded,
+        bool $isWebinarRecording
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -95,6 +111,12 @@ class WebinarView
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
+        $this->sidebarAllowed = $sidebarAllowed;
+        $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
+        $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
+        $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->isWebinarRecording = $isWebinarRecording;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
     public function getSpeakerInfosByUserId(): string
@@ -129,5 +151,10 @@ class WebinarView
         }
 
         return json_encode($mapping);
+    }
+
+    public function isVideoWebinarAndHappeningIsEnded(): bool
+    {
+        return $this->isVideoWebinarAndHappeningIsEnded;
     }
 }

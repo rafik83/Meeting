@@ -364,10 +364,9 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    {{ macro.btnGroupAndRightMenuDropdown({
-                        ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
-                        ('admin.sheet.impersonate'|trans): app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet_default', {'sheet': sheet.id, '_switchto': sheet.impersonationToken})
-                    }) }}
+                    <a href="{{ path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.sheet.read'|trans }}
+                    </a>
                 </td>
             </tr>
         {% else %}

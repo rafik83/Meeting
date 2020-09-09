@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Event;
 
 final class Events
@@ -58,6 +50,7 @@ final class Events
     public const EVENT_LOCALE_CHANGED = 'event.locale_changed';
     public const EVENT_KEY_DATES_UPDATED = 'event.key_dates.updated';
     public const EVENT_SHEETS_DUPLICATED = 'event.sheets.updated';
+    public const USER_EMAIL_CHANGE_ACTIVATED = 'user.email_change.activated';
     public const USER_REGISTRATION = 'user.registration'; // First step completed
     public const USER_REGISTERED = 'user.registered';
     public const USER_RESET_PASSWORD_CONFIRMED = 'user.reset_password.confirm';
@@ -67,6 +60,7 @@ final class Events
     public const ADMIN_ACCOUNT_TEMPORARILY_DISABLED = 'admin.account_temporarily_disabled';
     public const ADMIN_PASSWORD_RESET = 'admin.password_reset';
     public const ADMIN_MEETINGS_DELETED_ALL = 'admin.meetings.deleted_all';
+    public const USER_EVENT_UPDATED = 'user.event.updated';
     public const USER_ACCOUNT_ACTIVATED = 'user.account_activated';
     public const USER_ACCOUNT_TEMPORARILY_DISABLED = 'user.account_temporarily_disabled';
     public const USER_ACCOUNT_ACTIVATED_FROM_LOGIN = 'user.account_activated_from_login';
@@ -91,12 +85,16 @@ final class Events
     public const PARTICIPANT_VISIO_TESTED = 'participant.visio.tested';
     public const PARTICIPANT_CREATED_BY_GROUP_MANAGER = 'participant.created_by_group_manager';
     public const PARTICIPANT_REMOVED_BY_GROUP_MANAGER = 'participant.removed_by_group_manager';
+    public const HAPPENING_CREATED = 'happening.created';
     public const HAPPENING_PARTICIPATED = 'happening.participated';
     public const HAPPENING_PARTICIPATE = 'happening.participate';
     public const HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED = 'happening.participation.automatically.updated';
     public const HAPPENING_UN_PARTICIPATE = 'happening.un_participate';
     public const HAPPENING_TYPES_UPDATED = 'happening.types.updated';
     public const HAPPENING_DATES_UPDATED = 'happening.dates.updated';
+    public const HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED = 'happening.webinar.not_zip_record_archive_prepared';
+    public const HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED = 'happening.webinar.zip_record_archive_prepared';
+    public const HAPPENING_RECORDING = 'happening.webinar.recording';
     public const UNAVAILABILITY_ADDED = 'unavailability.added';
     public const UNAVAILABILITY_REMOVED = 'unavailability.removed';
     public const REQUEST_PARTICIPATE = 'request.participate';

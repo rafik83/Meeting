@@ -91,4 +91,9 @@ class GroupView
     {
         $this->customRows[] = $customRow;
     }
+
+    public function hasProductOrCustomRow(): bool
+    {
+        return 0 < count($this->products) || 0 < count($this->customRows);
+    }
 }

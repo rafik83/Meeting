@@ -20,28 +20,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ImpersonateUrlGeneratorAdapter implements ImpersonateUrlGeneratorInterface
 {
-    /**
-     * @var Impersonate
-     */
+    /** @var Impersonate */
     private $impersonate;
 
-    /**
-     * @var EventUrlGeneratorInterface
-     */
+    /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
-    /**
-     * @var UrlGeneratorInterface
-     */
+    /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
-    /**
-     * ImpersonateUrlGeneratorAdapter constructor.
-     *
-     * @param Impersonate                $impersonate
-     * @param EventUrlGeneratorInterface $eventUrlGenerator
-     * @param UrlGeneratorInterface      $urlGenerator
-     */
     public function __construct(
         Impersonate $impersonate,
         EventUrlGeneratorInterface $eventUrlGenerator,

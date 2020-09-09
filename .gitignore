@@ -12,12 +12,14 @@
 /var/shared_uploaded_files
 /vendor/
 /bin/*
+!/bin/composer.phar
 /build/
 !bin/console
 !bin/symfony_requirements
 /composer.phar
 /*.sql
 /behat.yml
+/.phpunit.result.cache
 
 # Tests
 /var/tests/*

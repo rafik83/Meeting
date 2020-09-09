@@ -6,10 +6,98 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2156 - Remove explicit error about email on login (security)
+
+## [2.45.0] - 2020-09-09
+### Added
+- VIMEET-2175 - TechEvent Token Authenticator
+- VIMEET-2161 - Record webinar
+- VIMEET-2163 - Download webinar records for admin
+- VIMEET-2164 - Change layout with screenshare on record
+- VIMEET-2162 - Download webinar records for speaker
+- Adapt command to a route, to count media/upload element on sheets
+
+### Fixed
+- No sheet result on campaign page without filter
+- Hotfix: Fix datetime modification in AbstractTokenGenerator
+
+## [2.44.0] - 2020-09-03
+### Added
+- VIMEET-2169 - Live streaming myevent
+- VIMEET-2106 - The speaking user video is maximized based on audio level
+- Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
+- VIMEET 2178 - In a webinar, participant can vote for a question
+- Command to count media/upload element on sheets
+- VIMEET-2175 - TechEvent api changed to handle login data, add guard to check login data on login
+
+### Fixed
+- Tip content can be nullable, and tip translations affected on event come from the event locales.
+
+## [2.43.0] - 2020-08-27
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+- VIMEET-2174 - Do not ask a new password when user is logged with a token
+
+## [2.42.0] - 2020-07-31
+### Added
+- VIMEET-2168 - Video object on sheet template
+- Add fly system and google cloud storage adapter
+- VIMEET-2173 - Add option submit validation sheet
+- Add fly system and google cloud storage adapter
+- VIMEET-2170 - Upload Video on sheet
+
+## [2.41.0] - 2020-07-30
+### Fixed
+- Hotfix - allow text/* on csv participant import
+
+## [2.40.0] - 2020-07-30
+### Added
+- VIMEET-2159 - Add option sidebar webinar
+
+### Fixed
+- MV-247 - Do not show back link on registration pages when type is hidden
+- Hotfix - Profile avatar missing styles
+- MV-246 - Order option without group data
+- MV-228 - Fix missing bullet points in registration path forms
+- Add missing translation key for available priority request
+
+### Updated
+- MV-229 - Show cancel button when webinar has started
+
+## [2.39.0] - 2020-07-24
+### Added
+- VIMEET 2086 - Webinar video available available even when the happening is over
+- VIMEET-2155 - Password is required to change email in user account
+- VIMEET-2157 - Save import mapping
+
+### Updated
+- Update SncRedisBundle to 3.2.3
+
+### Fixed
+- VIMEET-2154 - securize impersonation
+- MV-239 - Fix batch action for paged filtered results, for all results selection
+- Hotfix - meeting slot duration in admin
+- Index users on mail change
+
+## [2.38.0] - 2020-07-22
+### Added
+- VIMEET-2200 - Allow more planning than participant
+- VIMEET-2161 - Record webinar
+
+## [2.37.0] - 2020-07-06
+### Added
+- VIMEET-2100 - Add composer.phar version 1.10.6 to the project
+
+## [2.36.0] - 2020-07-03
 ### Updated
 - Suppression de la librairie elao/form-bundle pour ramener sa logique en interne
+
 ### Fixed
+- MV-242 - Fix meeting / contact evaluations on event dashboard
 - MV-243 - Add media link in sheet pdf printing
+
+### Added
+- VIMEET-2149 - Change Admin password algorithm to argon2i and increase length
 
 ## [2.35.1] - 2020-06-30
 ### Fixed
@@ -19,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2171 - Add participant to meeting when accessing to a videoconference meeting
 - VIMEET 2110 - Add support to broadcast live video in webinar, using an iframe
-- VIMEET-2126 Add - Export all participants of sheet met
+- VIMEET-2126 - Add Export all participants of sheet met
 - VIMEET-2126 - Hide participants phone / email in contact export if evaluations are below a user-defined floor
 - VIMEET-2153 - secure cookies
 

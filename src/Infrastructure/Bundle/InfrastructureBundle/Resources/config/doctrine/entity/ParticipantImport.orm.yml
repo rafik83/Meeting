@@ -9,10 +9,17 @@ Proximum\Vimeet\Domain\Model\ParticipantImport:
     fields:
         result:
             type: json_array
+        mapping:
+            type: json_array
+            default: '{}'
         createdAt:
             type: datetime
     manyToOne:
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinColumn:
+                onDelete: CASCADE
+        importMapping:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\ImportMapping
             joinColumn:
                 onDelete: CASCADE

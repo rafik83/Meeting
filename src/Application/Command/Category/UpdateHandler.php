@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Category;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
@@ -17,33 +9,22 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
+    /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
-    /**
-     * @var JobQueueInterface
-     */
+    /** @var JobQueueInterface */
     private $jobQueue;
 
-    /**
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param TypeRepositoryInterface     $typeRepository
-     * @param JobQueueInterface           $jobQueue
-     */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
         TypeRepositoryInterface $typeRepository,
         JobQueueInterface $jobQueue
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->typeRepository     = $typeRepository;
+        $this->typeRepository = $typeRepository;
         $this->jobQueue = $jobQueue;
     }
 
@@ -52,9 +33,9 @@ class UpdateHandler
      *
      * @throws \Exception
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
-        $category   = $update->category;
+        $category = $update->category;
         $eventTypes = $this->typeRepository->getTypesByEvent($update->event);
 
         foreach ($update->translations as $locale => $translation) {
@@ -73,7 +54,7 @@ class UpdateHandler
         }
 
         $oldTypeIds = array_map(
-            function (Type $type) {
+            static function (Type $type) {
                 return $type->getId();
             },
             $category->getTypes()

@@ -51,6 +51,7 @@ template.object.telephone: Phone
 template.object.text: 'non modifiable text'
 template.object.upload: 'File upload'
 template.object.url: Link
+template.object.video: Video
 template.object.visibility.editable: 'Editable (editable and visible by the participant and the admin)'
 template.object.visibility.hidden: 'Hidden (editable and visible only by admin)'
 template.object.visibility.label: 'Visibility of the field'

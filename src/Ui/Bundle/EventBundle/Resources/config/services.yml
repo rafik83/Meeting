@@ -66,6 +66,15 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+
+    security.admin_user_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter
+        arguments:
+            - '@components.security.admin_sheet_access'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: security.voter }
+
     security_voter.happening_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
         arguments:
@@ -161,6 +170,13 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: 'form.type' }
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        tags:
+            - { name: 'form.type' }
+
     vimeet_app.form_type_participant.type_choice:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
         arguments:
@@ -510,6 +526,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -555,6 +573,7 @@ services:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
             - '%secret%'
+            - '@datetime'
 
     security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchUserListener
@@ -796,4 +815,9 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler:
         arguments:
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler:
+        arguments:
+            - '@form.factory'
             - '@adapter.router'

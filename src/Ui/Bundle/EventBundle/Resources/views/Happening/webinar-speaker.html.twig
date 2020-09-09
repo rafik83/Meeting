@@ -19,22 +19,59 @@
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
+         data-invisibleMode-quitConfirmation-message="{{ 'happening.webinar.invisibleMode.quitConfirmation'|trans }}"
+         data-invisibleMode-enableConfirmation-message="{{ 'happening.webinar.invisibleMode.enableConfirmation'|trans }}"
          data-media-share-url-video-message="{{ 'meeting.video.media.share.urlVideo'|trans }}"
          data-media-share-url-video-security-error-message="{{ 'meeting.video.media.share.urlVideo.securityError'|trans }}"
          data-media-share-url-video-loading-error-message="{{ 'meeting.video.media.share.urlVideo.loadingError'|trans }}"
          data-media-share-button-screenshare-message="{{ 'meeting.video.media.share.button.screenShare'|trans }}"
          data-media-share-button-videoshare-message="{{ 'meeting.video.media.share.button.videoShare'|trans }}"
          data-media-screenShareStatus-message="{{ 'meeting.video.media.share.screenShareStatus'|trans }}"
+         data-question-vote-message="{{ 'happening.webinar.questions.vote'|trans }}"
+         data-question-unvote-message="{{ 'happening.webinar.questions.unvote'|trans }}"
+         data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
+         data-time-remaining-before-start="{{ webinarView.timeRemainingBeforeStartInSeconds }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
+         data-time-remaining-before-start-message="{{ 'happening.webinar.messageWarningBeforeStart'|trans }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
          data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
+         data-sidebar-allowed="{{ webinarView.sidebarAllowed }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
+
+         data-webinar-stream-endpoint="{{ path(
+             'event_happening_webinar_stream',
+             {
+                 'sheet': sheet.id,
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+
+        {% if webinarView.isWebinarRecorded %}
+            data-webinar-recorded="true"
+            data-webinar-can-record="true"
+            data-webinar-record-endpoint="{{ path(
+                'event_happening_webinar_record',
+                {
+                    'sheet': sheet.id,
+                    'happening': webinarView.happeningId
+                }
+            ) }}"
+            data-webinar-stop-record-endpoint="{{ path(
+                'event_happening_webinar_stop_record',
+                {
+                    'sheet': sheet.id,
+                    'happening': webinarView.happeningId
+                }
+            ) }}"
+            data-webinar-is-recording="{{ webinarView.isWebinarRecording ? 'true' : 'false' }}"
+        {% endif %}
+
     >
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
@@ -64,11 +101,25 @@
                 </div>
             </div>
 
+            {% if webinarView.isWebinarRecorded %}
+                <button id="toggle-recording" class="btn btn-gray hide"
+                    title="{% if webinarView.isWebinarRecording%}{{ 'happening.webinar.recordingButtonTitle'|trans }}{% else %}{{ 'happening.webinar.recordButtonTitle'|trans }}{% endif %}"
+                    data-button-recording-title="{{ 'happening.webinar.recordingButtonTitle'|trans }}"
+                    data-button-record-title="{{ 'happening.webinar.recordButtonTitle'|trans }}"
+                >
+                    <span class="dot {% if webinarView.isWebinarRecording%}recording{% endif %}"></span>
+                </button>
+            {% endif %}
+
             <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>
             </button>
             <button id="toggle-video" class="btn hide">
                 <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+
+            <button id="invisible-mode-button" class="btn btn-off hide" title="{{ 'happening.webinar.invisibleMode.button'|trans }}">
+                <i class="glyphicon glyphicon-ban-circle icon-center"></i>
             </button>
 
             <button id="media-start-sharing" class="btn screensharing hide">
@@ -84,4 +135,3 @@
         </div>
     </div>
 {% endblock body %}
-

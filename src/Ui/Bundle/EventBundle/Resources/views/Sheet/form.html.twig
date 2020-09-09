@@ -9,21 +9,48 @@
     </h4>
 </div>
 
-{% if templateObjectView.templateObject.type == 'image' and templateObjectView.templateObject.image is not null %}
+{% set templateObject = templateObjectView.templateObject %}
+
+{% if templateObject.type == 'image' and templateObject.image is not null %}
     <div class="object--image--preview">
         <div class="object--image--header">{{ 'sheet.object.image.label'|trans }}</div>
-        <img src="{{ templateObjectView.templateObject.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
+        <img src="{{ templateObject.data.image|imagine_filter('event_sheet_image') }}" alt="logo sheet">
         <div class="object--image--footer">
             {{ macros.delete_button(
-            path('event_sheet_remove_image', {
-                'sheet': sheet.id,
-                'key': uid,
-                'locale': locale
-            }),
-            '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
-            {'class': 'btn btn-danger' }
+                path('event_sheet_remove_image', {
+                    'sheet': sheet.id,
+                    'key': uid,
+                    'locale': locale
+                }),
+                '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.image.remove'|trans,
+                {'class': 'btn btn-danger' }
             ) }}
         </div>
+    </div>
+{% endif %}
+
+{% if templateObject.isVideo %}
+    {% if templateObject.isVideoAndHasPath %}
+        <div class="object--video--preview">
+            <video width="380" height="auto" controls controlsList="nodownload">
+                <source src="{{ templateObject.path }}" type="{{ templateObject.mimeType }}">
+                Your browser does not support the video tag.
+            </video>
+            <div class="object--video--footer">
+                {{ macros.delete_button(
+                    path('event_sheet_remove_video', {
+                        'sheet': sheet.id,
+                        'key': uid,
+                        'locale': locale
+                    }),
+                    '<i class="glyphicon glyphicon-trash"></i> ' ~ 'sheet.object.video.remove'|trans,
+                    {'class': 'btn btn-danger' }
+                ) }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="text-center hide text-xl" id="sheet-modal-form-spinner">
+        <span class="glyphicon glyphicon-refresh spin"></span>
     </div>
 {% endif %}
 
@@ -31,7 +58,7 @@
 {{ form_errors(form) }}
 
     <div class="modal-body">
-        <div class="{{ (templateObjectView.templateObject.type == 'image') ? 'object--form--field' : '' }}">
+        <div class="{{ (templateObject.type == 'image') ? 'object--form--field' : '' }}">
             {% if form.vars.help|default(false) %}
                 {% if form.children.content is not defined or (form.children.content is defined  and form.children.content.vars.fallbackTranslation is not defined) %}
                     <p class="help-block">{{ form.vars.help }}</p>
@@ -42,14 +69,14 @@
                 {{ form_row(child) }}
             {% endfor %}
 
-            {% if form.selectedProduct is defined and templateObjectView.templateObject.buyableProducts is defined %}
+            {% if form.selectedProduct is defined and templateObject.buyableProducts is defined %}
                 <p class="info-block buyable-product text-center">
                     <i class="icon-Info_1"></i> {{ 'sheet.object.option.buyable.label'|trans }}
                 </p>
                 {{ form_label(form.selectedProduct) }}
                 {{ form_errors(form.selectedProduct) }}
                 <table class="table">
-                    {% for product in templateObjectView.templateObject.buyableProducts %}
+                    {% for product in templateObject.buyableProducts %}
                         <tr class="buyable-product-line">
                             <td class="col-xs-1">
                                 <div class="buyable-product-row">{{ form_widget(form.selectedProduct[product.id]) }}</div>
@@ -78,7 +105,11 @@
         <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
             <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
         </button>
-        {{ form_widget(form.submit) }}
+        {% set onClick = null %}
+        {% if templateObject.isVideo %}
+            {% set onClick = "document.getElementById('sheet-modal-form-spinner').classList.remove('hide')" %}
+        {% endif %}
+        {{ form_widget(form.submit, {'attr': {'onClick': onClick}}) }}
     </div>
 
 {{ form_end(form) }}

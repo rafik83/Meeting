@@ -41,30 +41,19 @@ class ParticipantView
     /** @var AvailabilityConfirmationView */
     public $availabilityConfirmationView;
 
-    /** @var string */
-    public $impersonationUrl;
+    /** @var int */
+    public $userId;
 
-    /**
-     * @param int                          $id
-     * @param string                       $email
-     * @param TemplateData                 $templateData
-     * @param bool                         $isOwner
-     * @param bool                         $visio
-     * @param AgendaConfirmationStatusView $agendaConfirmationStatus
-     * @param PhoneValidationStatusView    $phoneValidationStatusView
-     * @param AvailabilityConfirmationView $availabilityConfirmationView
-     * @param string                       $impersonationUrl
-     */
     public function __construct(
-        $id,
-        $email,
+        int $id,
+        string $email,
         TemplateData $templateData,
-        $isOwner,
+        bool $isOwner,
         bool $visio,
         AgendaConfirmationStatusView $agendaConfirmationStatus,
         PhoneValidationStatusView $phoneValidationStatusView,
         AvailabilityConfirmationView $availabilityConfirmationView,
-        string $impersonationUrl
+        int $userId
     ) {
         $this->id = $id;
         $this->templateData = $templateData;
@@ -74,6 +63,6 @@ class ParticipantView
         $this->agendaConfirmationStatus = $agendaConfirmationStatus;
         $this->phoneValidationStatusView = $phoneValidationStatusView;
         $this->availabilityConfirmationView = $availabilityConfirmationView;
-        $this->impersonationUrl = $impersonationUrl;
+        $this->userId = $userId;
     }
 }

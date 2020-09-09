@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use Doctrine\DBAL\Types\Types;
@@ -19,9 +11,6 @@ abstract class AbstractJobQueueAdapter
     /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -45,9 +34,6 @@ abstract class AbstractJobQueueAdapter
         return null !== $pendingJob;
     }
 
-    /**
-     * @param Job $job
-     */
     protected function setJob(Job $job): void
     {
         $command = $job->getCommand();
@@ -62,11 +48,25 @@ abstract class AbstractJobQueueAdapter
         $this->entityManager->flush($job);
     }
 
-    /**
-     * @param Job $job
-     */
     protected function updateJob(Job $job): void
     {
         $this->entityManager->flush($job);
+    }
+
+    protected function removeJob(string $command, array $args): void
+    {
+         $this->entityManager
+             ->createQueryBuilder()
+             ->delete()
+             ->from(Job::class, 'job')
+             ->where('job.command = :command')
+             ->andWhere('job.args = :args')
+             ->andWhere('job.state = :state')
+            ->setParameter('command', $command)
+            ->setParameter('args', $args, Types::JSON)
+            ->setParameter('state', Job::STATE_PENDING)
+            ->getQuery()
+            ->execute()
+        ;
     }
 }

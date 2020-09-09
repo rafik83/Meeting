@@ -207,7 +207,7 @@ event_sheet_form:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:form }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\FormAction
 
 event_sheet_objects_collection_update:
     path: /sheet/{sheet}/objects-collection/{key}
@@ -233,7 +233,8 @@ event_sheet_update:
         locale: '[a-z]{2}'
         key: \w+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Sheet:update }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\UpdateAction
+
 
 event_sheet_add_participant:
     path: /sheet/{sheet}/{locale}/{key}/participant/add/form
@@ -286,6 +287,15 @@ event_sheet_remove_image:
         key: \w+
     methods: [DELETE]
     defaults: { _controller: EventBundle:Sheet:removeImage }
+
+event_sheet_remove_video:
+    path: /sheet/{sheet}/{locale}/{key}/video/remove
+    requirements:
+        sheet: \d+
+        locale: '[a-z]{2}'
+        key: \w+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\RemoveVideoAction
 
 event_sheet_submit_validation:
     path: /sheet/{sheet}/validate
@@ -476,6 +486,11 @@ event_change_password:
         sheet: \d+
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
+
+event_tech_event_login_check:
+    path: /login-authentication-check
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\TechEvent\LoginCheckAction
 
 #
 # OAuth2
@@ -935,6 +950,45 @@ event_sheet_happening_webinar_question_add:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
+
+event_happening_webinar_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\RecordAction
+
+event_happening_webinar_stop_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stop-record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StopRecordAction
+
+event_sheet_happening_webinar_question_vote:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/vote
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods: [ POST ]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
+
+event_happening_webinar_download_record_archive:
+    path: /happening/{happening}/webinar/download/record
+    requirements:
+        happening: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\Download\DownloadAction
+    methods: [GET]
+
+event_happening_webinar_stream:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stream
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
 
 #
 # Unavailability

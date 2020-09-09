@@ -16,6 +16,7 @@ form.catalog_create_meeting_request.children.description.placeholder: 'Ecrire un
 form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
 form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_create_meeting_request.children.fromPriority.label: Prioritaire
+form.catalog_create_meeting_request.children.fromPriorityRemaining.label: '{0} (0/%total% restante) |{1} (1/%total% restante) |]1,Inf[ (%available%/%total% restantes)'
 form.catalog_create_meeting_request.children.tooltip.title: ' demandes de rdvs prioritaires restant sur '
 form.catalog_create_meeting_request.children.submit.label: 'Valider la demande de RDV'
 form.catalog_edit_meeting_request.children.description.label: 'Motiver votre demande de RDV'
@@ -171,6 +172,7 @@ form.sheet_media_data.children.type.video: Vidéo
 form.sheet_template_objects_collection_type.children.objectsCollection.label_add: Ajouter
 form.sheet_template_objects_collection_type.children.objectsCollection.label_delete: Supprimer
 form.sheet_template_objects_collection_type.children.submit.label: Enregistrer
+form.sheet_video_data.children.submit.label: Enregistrer
 form.sort_participants.children.submit.label: Enregistrer
 form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'

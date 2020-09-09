@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Sheet\Catalog;
 
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
@@ -45,8 +37,6 @@ abstract class AbstractSheetPreviewView
     public $sheet;
 
     /**
-     * AbstractSheetPreviewView constructor.
-     *
      * @param int           $id
      * @param string|null   $title
      * @param string|null   $type
