@@ -1248,6 +1248,17 @@ admin_export_form_template_user_data:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction
 
 #
+# Count template
+#
+admin_count_media_ressource:
+    path: /event/{event}/type/{type}/count/media/ressource
+    methods: [GET]
+    requirements:
+        event: \d+
+        type: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction
+
+#
 # Package
 #
 admin_package_list:

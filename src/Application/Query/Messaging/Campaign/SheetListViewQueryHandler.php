@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
@@ -17,9 +9,6 @@ class SheetListViewQueryHandler
     /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     */
     public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
     {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
@@ -30,8 +19,12 @@ class SheetListViewQueryHandler
      *
      * @return SheetListView[]
      */
-    public function handle(SheetListViewQuery $query)
+    public function handle(SheetListViewQuery $query): array
     {
+        if (empty($query->filters) && null === $query->condition) {
+            return [];
+        }
+
         $filters = array_merge($query->filters, $this->getDefaultFilters());
 
         return $this->sheetSearchAdapter->getSheetListView($query->event, $filters, $query->locale, $query->condition);
@@ -40,7 +33,7 @@ class SheetListViewQueryHandler
     /**
      * @return array
      */
-    private function getDefaultFilters()
+    private function getDefaultFilters(): array
     {
         return [
             'enabled' => true,
