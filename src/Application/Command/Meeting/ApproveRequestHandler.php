@@ -100,10 +100,9 @@ class ApproveRequestHandler
     {
         $approveRequest->request->setToPriority($approveRequest->toPriority);
 
-        if (!$this->permissionManager->isAllowedToApprove(
-            $approveRequest->request,
-            $approveRequest->sheet
-        )) {
+        if (!$this->permissionManager->isAllowedToApprove($approveRequest->request, $approveRequest->sheet)
+            && !$this->allowTransformRequestIntoMeeting->__invoke($approveRequest->request)
+        ) {
             throw new IsNotAllowedToApproveMeetingRequestException();
         }
 
