@@ -1,5 +1,4 @@
-import sortableLib from 'sortablejs';
-const Sortable = sortableLib.Sortable;
+import Sortable from 'sortablejs';
 
 function SortParticipants(element) {
   const rankInputsSelector = 'input[type="number"]';
