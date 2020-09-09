@@ -13,9 +13,6 @@ Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive:
             type: string
         createdAt:
             type: datetime
-        path:
-            type: text
-            nullable: true
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening

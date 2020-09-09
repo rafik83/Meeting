@@ -330,6 +330,7 @@ admin.happening.addTitle: 'Ajouter une conférence'
 admin.happening.button.category: 'Gérer les catégories'
 admin.happening.button.export: 'Exporter les conférences'
 admin.happening.button.speaker: 'Gérer les intervenants'
+admin.happening.download: 'Télécharger la vidéo'
 admin.happening.export.fields.happening_begin_hour: 'Heure de début'
 admin.happening.export.fields.happening_day: Jour
 admin.happening.export.fields.happening_end_hour: 'Heure de fin'

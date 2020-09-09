@@ -48,10 +48,8 @@ class ReconciliateHandler
 
                 if (!in_array($archive->status, RecordStatus::IS_RECORDING_STATUS, true)) {
                     $recordArchive->stop();
+                    $this->recordArchiveRepository->update($recordArchive);
                 }
-
-                $this->addPathToRecordArchive($archive, $recordArchive);
-                $this->recordArchiveRepository->update($recordArchive);
 
                 continue;
             }
@@ -63,18 +61,8 @@ class ReconciliateHandler
                 $this->dateTime
             );
             $recordArchive->stop();
-            $this->addPathToRecordArchive($archive, $recordArchive);
 
             $this->recordArchiveRepository->add($recordArchive);
-        }
-    }
-
-    private function addPathToRecordArchive(Archive $archive, RecordArchive $recordArchive): void
-    {
-        $archiveUrl = $archive->url;
-
-        if (!empty($archiveUrl)) {
-            $recordArchive->addPathToRecordArchive($archiveUrl);
         }
     }
 

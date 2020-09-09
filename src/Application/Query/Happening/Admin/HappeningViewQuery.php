@@ -15,6 +15,6 @@ class HappeningViewQuery
     public function __construct(Happening $happening, string $locale)
     {
         $this->happening = $happening;
-        $this->locale    = $locale;
+        $this->locale = $locale;
     }
 }

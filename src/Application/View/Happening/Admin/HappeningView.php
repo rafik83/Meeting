@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\View\Happening\Admin;
 
+use DateTimeInterface;
+
 class HappeningView
 {
     /** @var int */
@@ -13,10 +15,10 @@ class HappeningView
     /** @var string */
     public $categoryTitle;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     public $begin;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     public $end;
 
     /** @var bool */
@@ -49,12 +51,18 @@ class HappeningView
     /** @var bool */
     public $isWebinarRecorded;
 
+    /** @var bool */
+    public $isWebinarRecordAvailable;
+
+    /** @var string|null */
+    public $webinarRecordZipFileUrl;
+
     public function __construct(
         int $id,
         string $title,
         string $categoryTitle,
-        \DateTimeInterface $begin,
-        \DateTimeInterface $end,
+        DateTimeInterface $begin,
+        DateTimeInterface $end,
         bool $questionAllowed,
         ?int $limit = null,
         int $participations = 0,
@@ -64,7 +72,9 @@ class HappeningView
         bool $isWebinar = false,
         bool $isInteractiveWebinar = false,
         bool $isVideoWebinar = false,
-        bool $isWebinarRecorded = true
+        bool $isWebinarRecorded = true,
+        bool $isWebinarRecordAvailable = false,
+        ?string $webinarRecordZipFileUrl = null
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -81,10 +91,17 @@ class HappeningView
         $this->isInteractiveWebinar = $isInteractiveWebinar;
         $this->isVideoWebinar = $isVideoWebinar;
         $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->isWebinarRecordAvailable = $isWebinarRecordAvailable;
+        $this->webinarRecordZipFileUrl = $webinarRecordZipFileUrl;
     }
 
     public function hasLimit(): bool
     {
         return null !== $this->limit;
+    }
+
+    public function hasWebinarRecordZipFileUrl(): bool
+    {
+        return !empty($this->webinarRecordZipFileUrl);
     }
 }

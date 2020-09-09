@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
@@ -15,17 +16,22 @@ class StatusChangeCallbackHandler
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $dateTime;
+
+    /** @var PrepareZipRecordArchiveHandler */
+    private $prepareZipRecordArchiveHandler;
 
     public function __construct(
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         HappeningRepositoryInterface $happeningRepository,
-        \DateTimeInterface $dateTime
+        PrepareZipRecordArchiveHandler $prepareZipRecordArchiveHandler,
+        DateTimeInterface $dateTime
     ) {
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->happeningRepository = $happeningRepository;
         $this->dateTime = $dateTime;
+        $this->prepareZipRecordArchiveHandler = $prepareZipRecordArchiveHandler;
     }
 
     public function handle(StatusChangeCallback $statusChangeCallback): void
@@ -48,10 +54,18 @@ class StatusChangeCallbackHandler
 
             if (!in_array($status, RecordStatus::IS_RECORDING_STATUS, true)) {
                 $recordArchive->stop();
-                $this->addPathToRecordArchive($recordArchive, $statusChangeCallback->url);
             }
 
             $this->recordArchiveRepository->add($recordArchive);
+
+            if ($happening->hasWebinarRecordZipFileUrl()) {
+                $this->prepareZipRecordArchiveHandler->handle(
+                    new PrepareZipRecordArchive(
+                        $happening,
+                        true
+                    )
+                );
+            }
 
             return;
         }
@@ -71,14 +85,15 @@ class StatusChangeCallbackHandler
         }
 
         $recordArchive->stop();
-        $this->addPathToRecordArchive($recordArchive, $statusChangeCallback->url);
         $this->recordArchiveRepository->update($recordArchive);
-    }
 
-    private function addPathToRecordArchive(RecordArchive $recordArchive, ?string $url = null): void
-    {
-        if (!empty($url)) {
-            $recordArchive->addPathToRecordArchive($url);
+        if ($recordArchive->getHappening()->hasWebinarRecordZipFileUrl()) {
+            $this->prepareZipRecordArchiveHandler->handle(
+                new PrepareZipRecordArchive(
+                    $recordArchive->getHappening(),
+                    true
+                )
+            );
         }
     }
 }

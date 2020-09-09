@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter\Happening\Webinar;
 
-use Proximum\Vimeet\Domain\Model\Happening;
+use DateTimeInterface;
 
 interface RecordJobQueueInterface
 {
@@ -10,6 +10,6 @@ interface RecordJobQueueInterface
 
     public function prepareReconciliation(
         int $happeningId,
-        \DateTimeInterface $reconciliationDate
+        DateTimeInterface $reconciliationDate
     ): void;
 }

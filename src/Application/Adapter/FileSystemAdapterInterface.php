@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -20,7 +12,7 @@ interface FileSystemAdapterInterface
      *
      * @throws IOException If the file cannot be written to.
      */
-    public function dumpFile($filename, $content);
+    public function dumpFile(string $filename, string $content);
 
     /**
      * Checks the existence of files or directories.
@@ -74,4 +66,16 @@ interface FileSystemAdapterInterface
      * @throws IOException           When copy fails
      */
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void;
+
+    public function copyStream($stream, string $targetFile): void;
+
+    /**
+     * Create temporary directory and return path
+     */
+    public function createTempDir(): string;
+
+    /**
+     * Generate path to temporary file or directory (file is not created)
+     */
+    public function generateTemporaryPath(): string;
 }

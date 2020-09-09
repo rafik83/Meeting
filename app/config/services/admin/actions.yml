@@ -624,6 +624,14 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction:
         arguments:
             - '@adapter.authorization_checker'

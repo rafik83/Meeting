@@ -91,7 +91,6 @@ class StopRecordHandlerTest extends TestCase
             $dateTime
         );
         $expectedRecordArchive3->stop();
-        $expectedRecordArchive3->addPathToRecordArchive('http://example.net/path/to/file.mp4');
 
         $videoConferenceAdapter
             ->stopArchive('2516a93f-d04a-4ae9-b088-80efe9e48115')

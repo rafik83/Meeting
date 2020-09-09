@@ -2,15 +2,19 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 
+use DateTime;
 use OpenTok\Archive;
 use OpenTok\ArchiveList;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\RecordingEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
@@ -31,8 +35,14 @@ class RecordHandlerTest extends TestCase
 
         $videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
-        $dateTime = new \DateTime('2020-10-10 10:00:00.000');
+        $dateTime = new DateTime('2020-10-10 10:00:00.000');
         $logger = $this->prophesize(LoggerInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+
+        $eventDispatcher
+            ->dispatch(Events::HAPPENING_RECORDING, new RecordingEvent($happening->reveal()))
+            ->shouldBeCalled()
+        ;
 
         $archive = new Archive(
             [
@@ -48,12 +58,9 @@ class RecordHandlerTest extends TestCase
             ]
         );
         $videoConferenceAdapter
-            ->listArchives('azerty')
+            ->isRecording('azerty')
             ->shouldBeCalled()
-            ->willReturn(new ArchiveList(
-                ['count' => 0, 'items' => []],
-                ['apiKey' => 'azertyuiop', 'apiSecret' => 'poiuytreza', 'apiUrl' => 'https://example.net/azertyuiop']
-            ))
+            ->willReturn(false)
         ;
         $videoConferenceAdapter
             ->archive('azerty', 'Title of the happening')
@@ -85,7 +92,8 @@ class RecordHandlerTest extends TestCase
             $recordArchiveRepository->reveal(),
             $prepareReconciliationHandler->reveal(),
             $dateTime,
-            $logger->reveal()
+            $logger->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);
@@ -102,38 +110,14 @@ class RecordHandlerTest extends TestCase
 
         $videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
-        $dateTime = new \DateTime('2020-10-10 10:00:00.000');
+        $dateTime = new DateTime('2020-10-10 10:00:00.000');
         $logger = $this->prophesize(LoggerInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $videoConferenceAdapter
-            ->listArchives('azerty')
+            ->isRecording('azerty')
             ->shouldBeCalled()
-            ->willReturn(new ArchiveList(
-                ['count' => 0, 'items' => [
-                    [
-                        'id' => '2516a93f-d04a-4ae9-b088-80efe9e48115',
-                        'partnerId' => 1234567,
-                        'sessionId' => 'azerty',
-                        'status' => 'stopped',
-                        'url' => null,
-                    ],
-                    [
-                        'id' => '2516a93f-d04a-4ae9-b088-80efe9e48116',
-                        'partnerId' => 1234567,
-                        'sessionId' => 'azerty',
-                        'status' => 'stopped',
-                        'url' => null,
-                    ],
-                    [
-                        'id' => '2516a93f-d04a-4ae9-b088-80efe9e48117',
-                        'partnerId' => 1234567,
-                        'sessionId' => 'azerty',
-                        'status' => 'started',
-                        'url' => 'http://example.net/path/to/file.mp4'
-                    ],
-                ]],
-                ['apiKey' => 'azertyuiop', 'apiSecret' => 'poiuytreza', 'apiUrl' => 'https://example.net/azertyuiop']
-            ))
+            ->willReturn(true)
         ;
 
         $videoConferenceAdapter
@@ -158,7 +142,8 @@ class RecordHandlerTest extends TestCase
             $recordArchiveRepository->reveal(),
             $prepareReconciliationHandler->reveal(),
             $dateTime,
-            $logger->reveal()
+            $logger->reveal(),
+            $eventDispatcher->reveal()
         );
 
         $handler->handle($command);

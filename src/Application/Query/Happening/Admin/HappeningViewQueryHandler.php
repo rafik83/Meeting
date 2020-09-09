@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningView;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
@@ -13,41 +14,49 @@ class HappeningViewQueryHandler
     /** @var SpeakerViewQueryHandler */
     private $speakerViewQueryHandler;
 
+    /** @var DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         HappeningParticipationRepositoryInterface $participationRepository,
-        SpeakerViewQueryHandler $speakerViewQueryHandler
+        SpeakerViewQueryHandler $speakerViewQueryHandler,
+        DateTimeInterface $datetime
     ) {
         $this->participationRepository = $participationRepository;
         $this->speakerViewQueryHandler = $speakerViewQueryHandler;
+        $this->datetime = $datetime;
     }
 
     public function handle(HappeningViewQuery $query): HappeningView
     {
-        $speakers = $query->happening->getSpeakers();
+        $happening = $query->happening;
+        $speakers = $happening->getSpeakers();
 
         $speakerView = [];
         foreach ($speakers as $speaker) {
             $speakerView[] = $this->speakerViewQueryHandler->handle(new SpeakerViewQuery($speaker));
         }
 
-        $participation = $this->participationRepository->countParticipationByHappening($query->happening);
+        $participation = $this->participationRepository->countParticipationByHappening($happening);
 
         return new HappeningView(
-            $query->happening->getId(),
-            $query->happening->getTitle($query->locale),
-            $query->happening->getCategory()->getTitle($query->locale),
-            $query->happening->getBegin(),
-            $query->happening->getEnd(),
-            $query->happening->isQuestionAllowed(),
-            $query->happening->getLimitParticipant(),
+            $happening->getId(),
+            $happening->getTitle($query->locale),
+            $happening->getCategory()->getTitle($query->locale),
+            $happening->getBegin(),
+            $happening->getEnd(),
+            $happening->isQuestionAllowed(),
+            $happening->getLimitParticipant(),
             $participation,
             $speakerView,
-            $query->happening->isPrivate(),
-            $query->happening->hasProducts(),
-            $query->happening->isWebinar(),
-            $query->happening->isInteractiveWebinar(),
-            $query->happening->isVideoWebinar(),
-            $query->happening->isWebinarRecorded()
+            $happening->isPrivate(),
+            $happening->hasProducts(),
+            $happening->isWebinar(),
+            $happening->isInteractiveWebinar(),
+            $happening->isVideoWebinar(),
+            $happening->isWebinarRecorded(),
+            $happening->isWebinarRecorded() && $happening->getEnd() < $this->datetime,
+            $happening->getWebinarRecordZipFileUrl()
         );
     }
 }

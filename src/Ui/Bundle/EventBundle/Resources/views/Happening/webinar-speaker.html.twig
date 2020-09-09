@@ -94,11 +94,14 @@
             </div>
 
             {% if webinarView.isWebinarRecorded %}
-                <button id="toggle-recording" class="btn btn-gray hide" title="{{ 'happening.webinar.recordButtonTitle'|trans }}">
+                <button id="toggle-recording" class="btn btn-gray hide"
+                    title="{% if webinarView.isWebinarRecording%}{{ 'happening.webinar.recordingButtonTitle'|trans }}{% else %}{{ 'happening.webinar.recordButtonTitle'|trans }}{% endif %}"
+                    data-button-recording-title="{{ 'happening.webinar.recordingButtonTitle'|trans }}"
+                    data-button-record-title="{{ 'happening.webinar.recordButtonTitle'|trans }}"
+                >
                     <span class="dot {% if webinarView.isWebinarRecording%}recording{% endif %}"></span>
                 </button>
             {% endif %}
-
 
             <button id="toggle-audio" class="btn hide">
                 <i class="icon-Conference icon-center"></i>

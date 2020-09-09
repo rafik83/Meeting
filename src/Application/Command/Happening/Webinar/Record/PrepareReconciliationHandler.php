@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\Happening\Webinar\RecordJobQueueInterface;
 
 class PrepareReconciliationHandler
@@ -26,7 +27,7 @@ class PrepareReconciliationHandler
 
         $date = $prepareReconciliation->dueDate;
 
-        if (!$date instanceof \DateTimeInterface) {
+        if (!$date instanceof DateTimeInterface) {
             $date = clone $happening->getEnd();
             $date->modify('+5 minutes');
         }

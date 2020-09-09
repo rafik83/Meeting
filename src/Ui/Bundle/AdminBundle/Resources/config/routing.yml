@@ -1072,6 +1072,14 @@ happening_webinar_status_change_callback:
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction
 
+admin_happening_download:
+    path: /event/{event}/happening/{happening}/download
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction
+
 #
 # Happening Category
 #

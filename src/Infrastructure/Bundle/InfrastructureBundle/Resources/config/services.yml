@@ -2636,6 +2636,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
         arguments:
             - '@filesystem'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
 
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
@@ -3065,6 +3066,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@query.happening.admin.speaker_view_query_handler'
+            - '@datetime'
     query.happening.admin.happening_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQueryHandler
         arguments:
@@ -5899,6 +5901,12 @@ services:
             - '@vimeet_infrastructure.repository.happening_repository'
 
     Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed:
+        arguments:
+            - '@datetime'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible: ~
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser:
         arguments:
             - '@datetime'
 
