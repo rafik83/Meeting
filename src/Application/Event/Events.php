@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Event;
 
 final class Events
@@ -93,12 +85,16 @@ final class Events
     public const PARTICIPANT_VISIO_TESTED = 'participant.visio.tested';
     public const PARTICIPANT_CREATED_BY_GROUP_MANAGER = 'participant.created_by_group_manager';
     public const PARTICIPANT_REMOVED_BY_GROUP_MANAGER = 'participant.removed_by_group_manager';
+    public const HAPPENING_CREATED = 'happening.created';
     public const HAPPENING_PARTICIPATED = 'happening.participated';
     public const HAPPENING_PARTICIPATE = 'happening.participate';
     public const HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED = 'happening.participation.automatically.updated';
     public const HAPPENING_UN_PARTICIPATE = 'happening.un_participate';
     public const HAPPENING_TYPES_UPDATED = 'happening.types.updated';
     public const HAPPENING_DATES_UPDATED = 'happening.dates.updated';
+    public const HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED = 'happening.webinar.not_zip_record_archive_prepared';
+    public const HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED = 'happening.webinar.zip_record_archive_prepared';
+    public const HAPPENING_RECORDING = 'happening.webinar.recording';
     public const UNAVAILABILITY_ADDED = 'unavailability.added';
     public const UNAVAILABILITY_REMOVED = 'unavailability.removed';
     public const REQUEST_PARTICIPATE = 'request.participate';

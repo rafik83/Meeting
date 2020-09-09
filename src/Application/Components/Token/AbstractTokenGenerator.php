@@ -1,30 +1,28 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Token;
 
+use DateInterval;
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 
 abstract class AbstractTokenGenerator
 {
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     protected $expirateDate;
 
     /**
-     * @param \DateTimeInterface $dateTime
+     * @param DateTimeInterface $dateTime
      */
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(DateTimeInterface $dateTime)
     {
-        $this->expirateDate = $dateTime->add($this->getLifetime());
+        $date = DaysHelper::cloneDateTime($dateTime);
+        $date->add($this->getLifetime());
+
+        $this->expirateDate = $date;
     }
 
     /**
@@ -32,16 +30,13 @@ abstract class AbstractTokenGenerator
      *
      * @return string
      */
-    protected function generateToken(AbstractUser $user)
+    protected function generateToken(AbstractUser $user): string
     {
         return sha1(uniqid() . $user->getId() . uniqid() . $this->expirateDate->format('c'));
     }
 
-    /**
-     * @return \DateInterval
-     */
     protected function getLifetime()
     {
-        return new \DateInterval('P2D');
+        return new DateInterval('P2D');
     }
 }

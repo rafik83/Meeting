@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
@@ -28,33 +20,33 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
         $begin = new \DateTime('2016-01-27 00:00:00');
-        $end   = new \DateTime('2016-01-29 00:00:00');
+        $end = new \DateTime('2016-01-29 00:00:00');
 
         $newBegin = new \DateTime('2016-01-27 10:00:00');
-        $newEnd   = new \DateTime('2016-01-29 19:00:00');
+        $newEnd = new \DateTime('2016-01-29 19:00:00');
 
         // Current
-        $category        = new Category($event, 'picto1', 0, '#AABB56', '#123456');
+        $category = new Category($event, 'picto1', 0, '#AABB56', '#123456');
         $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
         $previousType = $this->prophesize(Type::class);
 
-        $happening             = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10, 'toto');
-        $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
+        $happening = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10, 'toto');
+        $happeningTranslation = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
         $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
         $happening->setTranslation($happeningTranslation);
         $happening->setTranslation($happeningTranslation2);
 
-        $newCategory        = new Category($event, 'picto3', 0, '#123123', '#456456');
+        $newCategory = new Category($event, 'picto3', 0, '#123123', '#456456');
         $newCatTranslation1 = new CategoryTranslation($newCategory, 'fr', 'trec');
         $newCatTranslation2 = new CategoryTranslation($newCategory, 'en', 'troc');
         $newCategory->setTranslation($newCatTranslation1);
@@ -68,7 +60,7 @@ class UpdateHandlerTest extends TestCase
             ->getMock();
 
         // Expected
-        $expectedSubEvent     = new Happening(
+        $expectedSubEvent = new Happening(
             $event,
             $newBegin,
             $newEnd,
@@ -76,9 +68,14 @@ class UpdateHandlerTest extends TestCase
             [$newType->reveal()],
             false,
             null,
-            'titi'
+            'titi',
+            true,
+            false,
+            false,
+            null,
+            true
         );
-        $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
+        $expectedTranslation = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
         $expectedTranslation2 = new Happening\HappeningTranslation(
             $expectedSubEvent,
             'en',
@@ -98,30 +95,32 @@ class UpdateHandlerTest extends TestCase
         $eventDispatcher->dispatch(Events::HAPPENING_DATES_UPDATED, new DatesUpdated($happening))->shouldBeCalled();
 
         // Command
-        $update                   = new Update($happening);
+        $update = new Update($happening);
         $update->questionAllowed  = false;
-        $update->category         = $newCategory;
-        $update->begin            = $newBegin;
-        $update->end              = $newEnd;
+        $update->category = $newCategory;
+        $update->begin = $newBegin;
+        $update->end = $newEnd;
         $update->limitParticipant = null;
-        $update->types            = [
+        $update->types = [
             $newType->reveal(),
         ];
-        $update->translations     = [
+        $update->translations = [
             'fr' => [
-                'title'       => 'test',
+                'title' => 'test',
                 'description' => 'ok',
                 'currentWebinarHeaderImage' => null,
                 'webinarHeaderImage' => null,
             ],
             'en' => [
-                'title'       => 'tset',
+                'title' => 'tset',
                 'description' => 'ko',
                 'currentWebinarHeaderImage' => '/path/currentWebinarHeaderImageEn.jpg',
                 'webinarHeaderImage' => $webinarHeaderImageEn,
             ],
         ];
         $update->invitationCode = 'titi';
+        $update->webinarRecorded = true;
+        $update->happeningType = 'webinar';
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage

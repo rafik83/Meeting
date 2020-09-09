@@ -10,7 +10,9 @@ use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantI
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandler
@@ -24,14 +26,24 @@ class GetWebinarViewQueryHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var RecordArchiveRepositoryInterface */
+    private $recordArchiveRepository;
+
+    /** @var IsRecordingAllowed */
+    private $isRecordingAllowed;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        RecordArchiveRepositoryInterface $recordArchiveRepository,
+        IsRecordingAllowed $isRecordingAllowed,
         \DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
+        $this->isRecordingAllowed = $isRecordingAllowed;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -40,7 +52,14 @@ class GetWebinarViewQueryHandler
         $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
 
         $sessionAndTokenView = $this->getSessionAndToken($happening, $isSpeaker);
-        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
+        $timeRemainingInSeconds = max(
+            0,
+            $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+        $timeRemainingBeforeStartInSeconds = max(
+            0,
+            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
 
         return new WebinarView(
             $happening->getId(),
@@ -57,10 +76,13 @@ class GetWebinarViewQueryHandler
             $this->dateTime,
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
+            $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $happening->getLiveUrl(),
             $happening->isSidebarAllowed(),
-            $this->isVideoWebinarAndHappeningIsEnded($happening)
+            $this->isVideoWebinarAndHappeningIsEnded($happening),
+            $this->isRecordingAllowed->isSatisfiedBy($happening),
+            $this->isWebinarRecording($happening)
         );
     }
 
@@ -156,5 +178,14 @@ class GetWebinarViewQueryHandler
         }
 
         return $speakerViews;
+    }
+
+    private function isWebinarRecording(Happening $happening): bool
+    {
+        if (!$happening->isWebinarRecorded()) {
+            return false;
+        }
+
+        return $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening);
     }
 }

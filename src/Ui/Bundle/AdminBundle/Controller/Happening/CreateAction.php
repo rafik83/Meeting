@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -30,7 +22,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 
 class CreateAction
 {
-    const TEMPLATE = 'AdminBundle:Happening:create.html.twig';
+    public const TEMPLATE = 'AdminBundle:Happening:create.html.twig';
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -53,15 +45,6 @@ class CreateAction
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param EngineInterface                      $engine
-     * @param RouterInterface                      $router
-     * @param CommandBusInterface                  $commandBus
-     * @param FlashBagInterface                    $flashBag
-     * @param TranslatorInterface                  $translator
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
@@ -80,13 +63,6 @@ class CreateAction
         $this->translator = $translator;
     }
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param AdminDomain $adminDomain
-     *
-     * @return Response
-     */
     public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
@@ -94,9 +70,9 @@ class CreateAction
         }
 
         $create = new Create($event);
-        $form   = $this->formFactory->create(CreateType::class, $create, [
-            'admin'  => $adminDomain->getAdmin(),
-            'event'  => $event,
+        $form = $this->formFactory->create(CreateType::class, $create, [
+            'admin' => $adminDomain->getAdmin(),
+            'event' => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
@@ -110,14 +86,16 @@ class CreateAction
                     $this->router->generate('admin_happening_list', ['event' => $event->getId()])
                 );
             } catch (SpeakerNotUserException $speakerNotUserException) {
-                $error = new FormError($this->translator->trans('form.happening_create.speaker_not_user.error', [], 'forms'));
+                $error = new FormError(
+                    $this->translator->trans('form.happening_create.speaker_not_user.error', [], 'forms')
+                );
                 $form->addError($error);
             }
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }

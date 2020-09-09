@@ -33,8 +33,6 @@ class AbstractCategoryTranslation
     protected $title;
 
     /**
-     * AbstractCategoryTranslation constructor.
-     *
      * @param AbstractCategory $category
      * @param string           $locale
      * @param string           $title

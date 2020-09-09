@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2175 - TechEvent Token Authenticator
+- VIMEET-2161 - Record webinar
+- VIMEET-2163 - Download webinar records for admin
+- VIMEET-2162 - Download webinar records for speaker
+- Adapt command to a route, to count media/upload element on sheets
+
+### Fixed
+- No sheet result on campaign page without filter
+- Hotfix: Fix datetime modification in AbstractTokenGenerator
 
 ## [2.44.0] - 2020-09-03
 ### Added
@@ -29,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2168 - Video object on sheet template
 - Add fly system and google cloud storage adapter
 - VIMEET-2173 - Add option submit validation sheet
+- Add fly system and google cloud storage adapter
 - VIMEET-2170 - Upload Video on sheet
 
 ## [2.41.0] - 2020-07-30
@@ -67,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.38.0] - 2020-07-22
 ### Added
 - VIMEET-2200 - Allow more planning than participant
+- VIMEET-2161 - Record webinar
 
 ## [2.37.0] - 2020-07-06
 ### Added
