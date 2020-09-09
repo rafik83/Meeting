@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Adapt command to a route, to count media/upload element on sheets
 
+### Fixed
+- Hotfix: Fix datetime modification in AbstractTokenGenerator
+
 ## [2.44.0] - 2020-09-03
 ### Added
 - VIMEET-2106 - The speaking user video is maximized based on audio level
