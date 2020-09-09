@@ -61,6 +61,14 @@ class GetWebinarViewQueryHandler
             $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
         );
 
+        $liveUrl = $happening->getLiveUrl();
+
+        if (strpos($liveUrl, '_firstname_') !== false || strpos($liveUrl, '_lastname_') !== false) {
+            $placeholders = ['_firstname_','_lastname_'];
+            $values = [urlencode($query->getUser()->getFirstName()),urlencode($query->getUser()->getLastName())];
+            $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        }
+
         return new WebinarView(
             $happening->getId(),
             $query->getUser()->getId(),
@@ -78,7 +86,7 @@ class GetWebinarViewQueryHandler
             round($timeRemainingInSeconds * 0.2),
             $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
-            $happening->getLiveUrl(),
+            $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $this->isRecordingAllowed->isSatisfiedBy($happening),
