@@ -343,6 +343,14 @@ services:
             - '@datetime'
 
     #
+    # Count
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+
+    #
     # Content
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
