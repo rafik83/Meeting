@@ -47,7 +47,7 @@
                 <div class="pull-right mg-tp" style="margin-right: 5px;">
                     <a href="{{ path('event_participant_timezone', { 'sheet': sheet.id, 'participant': participant.id }) }}" class="btn btn-primary">
                         <i class="icon-Horaire"></i>
-                        {{ participant.timezoneFormatted }}
+                        {{ agenda.timezoneTranslated }}
                     </a>
                 </div>
             {% endif %}

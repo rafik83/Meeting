@@ -19,6 +19,11 @@ Clone the project in your workspace, and launch setup
 
         $ make setup
 
+If an error occurs when installing ansible roles, remove alt-galaxy:
+
+        $ vagrant ssh
+        $ sudo rm /usr/bin/alt-galaxy
+
 You should access the project via http://admin.vimeet.proximum/app_dev.php/fr/event
 
 Load Vimeet fixtures:

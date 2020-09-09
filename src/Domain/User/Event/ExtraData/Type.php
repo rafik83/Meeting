@@ -45,6 +45,11 @@ final class Type
     public const IMPORTED_FROM_TECH_EVENT = 'imported_from_tech_event';
 
     /**
+     * Data to use to log the user from Tech Event.
+     */
+    public const TECH_EVENT_LOGIN_DATA = 'tech_event_login_data';
+
+    /**
      * Protected key to encrypt / decrypt files for this user in the event
      */
     public const PROTECTED_KEY = 'protected_key';

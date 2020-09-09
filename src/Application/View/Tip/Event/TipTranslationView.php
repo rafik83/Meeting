@@ -15,10 +15,10 @@ class TipTranslationView
     /** @var int */
     public $id;
 
-    /** @var string */
+    /** @var string|null */
     public $title;
 
-    /** @var string */
+    /** @var string|null */
     public $content;
 
     /** @var string */
@@ -53,8 +53,8 @@ class TipTranslationView
 
     public function __construct(
         int $id,
-        string $title,
-        string $content,
+        ?string $title = null,
+        ?string $content = null,
         string $adminTitle,
         string $display,
         ?bool $conditionHasCart = null,

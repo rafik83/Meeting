@@ -9,10 +9,10 @@ Feature: Update meeting spot and slot in agenda via the API
     And the event "Best of web" is created
     And I am logged as admin
     And there is 1 slot in this event
-    And there is an active spot "A1" with meeting capacity of 1, seat capacity of 2
-    And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
-    And there is an active spot "A3" with meeting capacity of 1, seat capacity of 2
-    And there is an active spot "A4" with meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A1" with size of 1, meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A2" with size of 1, meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A3" with size of 1, meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A4" with size of 1, meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A2"
     # Create another sheet not concerned by the meeting
     And there is a sheet
@@ -105,9 +105,9 @@ Feature: Update meeting spot and slot in agenda via the API
     And the event "Best of web" is created
     And I am logged as admin
     And there is 1 slot in this event
-    And there is an active spot "A1" with meeting capacity of 1, seat capacity of 2
-    And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
-    And there is an active spot "A3" with meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A1" with size of 1, meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A2" with size of 1, meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A3" with size of 1, meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
     When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
@@ -131,8 +131,8 @@ Feature: Update meeting spot and slot in agenda via the API
     And the event "Best of web" is created
     And I am logged as admin
     And there is 1 slot in this event
-    And there is an active spot "A1" with meeting capacity of 2, seat capacity of 4
-    And there is an active spot "A2" with meeting capacity of 1, seat capacity of 2
+    And there is an active spot "A1" with size of 1, meeting capacity of 2, seat capacity of 4
+    And there is an active spot "A2" with size of 1, meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
     When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
@@ -184,7 +184,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And the event "Best of web" is created
     And I am logged as admin
     And there are 2 slots in this event
-    And there is an active spot "A1" with meeting capacity of 2, seat capacity of 4
+    And there is an active spot "A1" with size of 1, meeting capacity of 2, seat capacity of 4
     And there is a sheet
     And there is a participant for this sheet
     And there is a meeting on slot "1" and spot "A1" for this participant

@@ -160,3 +160,11 @@ services:
             - '@event_dispatcher'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\MediaResourceCountCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: console.command }

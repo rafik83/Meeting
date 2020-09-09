@@ -4,28 +4,19 @@ Feature: Partner available features
 
   Scenario: I can see the sheet participation list
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Order.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
-      | Partner.yml                                                              |
+    And the event "Les rendez-vous CARNOT 2016" is created
+    And the admin "partner@proximumgroup.com" with role "ROLE_PARTNER" is created
+    And this admin can access this event
+    And there is a type "Fournisseur" in this event
+    And the user "alice@example.com" is created
+    And this user is declared in this event
+    And the user "bob@example.com" is created
+    And this user is declared in this event
+    And there is a sheet
+    And there is a participant for this sheet and this user
     And elastica is populate
-    And I am logged with "partner@proximumgroup.com" on admin
+    And I am logged with this admin
     And I go to this page "/fr/event"
-    When I go to this page "/fr/event/past"
-    Then I should see "ASD Days"
     And I should see "Les rendez-vous CARNOT 2016"
     And I should see "admin.users.link"
     And I should see "admin.sheet.link"
@@ -48,7 +39,7 @@ Feature: Partner available features
     And I should see "admin.sheet.details.dashboard.title"
     And I should see "admin.sheet.details.historic.title"
     And I should not see "admin.sheet.details.orders_and_transactions.title"
-    
+
   Scenario: Partner can only access to sheet, account and login/logout
     Given I am logged with "partner@proximumgroup.com" on admin
     When I go to "/fr/event/1/sheet"
@@ -74,6 +65,6 @@ Feature: Partner available features
   Scenario: I can see users list
     Given I am logged with "partner@proximumgroup.com" on admin
     When I go to "/fr/event/1/users"
-    And I should see "admin.users.title"
-    And I should see "user_asddays_1@proximum.com"
-    And I should not see "user_asddays_4@proximum.com"
+    Then I should see "admin.users.title"
+    And I should see "bob@example.com"
+    And I should not see "alice@example.com"

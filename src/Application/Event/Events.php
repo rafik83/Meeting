@@ -60,6 +60,7 @@ final class Events
     public const ADMIN_ACCOUNT_TEMPORARILY_DISABLED = 'admin.account_temporarily_disabled';
     public const ADMIN_PASSWORD_RESET = 'admin.password_reset';
     public const ADMIN_MEETINGS_DELETED_ALL = 'admin.meetings.deleted_all';
+    public const USER_EVENT_UPDATED = 'user.event.updated';
     public const USER_ACCOUNT_ACTIVATED = 'user.account_activated';
     public const USER_ACCOUNT_TEMPORARILY_DISABLED = 'user.account_temporarily_disabled';
     public const USER_ACCOUNT_ACTIVATED_FROM_LOGIN = 'user.account_activated_from_login';

@@ -4,6 +4,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2161 - Record webinar
+- VIMEET-2163 - Download webinar records for admin
+- Adapt command to a route, to count media/upload element on sheets
+
+### Fixed
+- No sheet result on campaign page without filter
+- Hotfix: Fix datetime modification in AbstractTokenGenerator
+
+## [2.44.0] - 2020-09-03
+### Added
+- VIMEET-2106 - The speaking user video is maximized based on audio level
+- Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
+- VIMEET 2178 - In a webinar, participant can vote for a question
+- Command to count media/upload element on sheets
+- VIMEET-2175 - TechEvent api changed to handle login data, add guard to check login data on login
+
+### Fixed
+- Tip content can be nullable, and tip translations affected on event come from the event locales.
+
+## [2.43.0] - 2020-08-27
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+- VIMEET-2174 - Do not ask a new password when user is logged with a token
 
 ## [2.42.0] - 2020-07-31
 ### Added
@@ -36,7 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET 2086 - Webinar video available available even when the happening is over
 - VIMEET-2155 - Password is required to change email in user account
 - VIMEET-2157 - Save import mapping
-- VIMEET-2161 - Record webinar
 
 ### Updated
 - Update SncRedisBundle to 3.2.3

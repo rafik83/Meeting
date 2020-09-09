@@ -49,4 +49,24 @@ class RuleContext implements Context
 
         $this->ruleContextProxy->getRuleManager()->create($type, $event);
     }
+
+    /**
+     * @Given there is a rule between this type and :otherTypeName
+     */
+    public function createWith2Types($otherTypeName)
+    {
+        $event = $this->ruleContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $type = $this->ruleContextProxy->getStorage()->get('type');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing Type');
+        }
+
+        $this->ruleContextProxy->getRuleManager()->createWith2Types($type, $otherTypeName, $event);
+    }
 }

@@ -41,7 +41,7 @@ parameters:
 
     domain: vimeet.proximum
     admin_domain: admin.vimeet.proximum
-    scheme: http
+    scheme: https
 
     timezone_default: Europe/Paris
 
@@ -110,7 +110,7 @@ parameters:
     agenda_version_diff_dday_notification_time_in_minutes: 10
 
     # Features flag
-    feature_video_conference_enabled: false
+    feature_video_conference_enabled: true
     feature_video_conference_date_security_enabled: false
     feature_event_dates_to_current_date_enabled: false
     feature_dday_enabled: false
