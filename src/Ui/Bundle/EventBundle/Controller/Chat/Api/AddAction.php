@@ -14,7 +14,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AddAction
 {
@@ -49,7 +49,7 @@ class AddAction
         $user = $userDomain->getUser();
 
         if (!$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedHttpException();
         }
 
         /** @var ChatMessageLinkableInterface $object */
@@ -58,7 +58,7 @@ class AddAction
         );
 
         if ($event !== $object->getEvent()) {
-            throw new AccessDeniedException('Object not in this event');
+            throw new AccessDeniedHttpException('Object not in this event');
         }
 
         $data = json_decode($request->getContent(), true);
