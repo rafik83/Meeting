@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Command\Command;
@@ -59,6 +51,9 @@ class AbstractHappeningCommand implements Command
 
     /** @var bool */
     public $sidebarAllowed;
+
+    /** @var bool */
+    public $webinarRecorded = true;
 
     public function isWebinar(): bool
     {

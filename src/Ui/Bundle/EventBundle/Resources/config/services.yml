@@ -526,6 +526,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
         tags:
             - { name: kernel.event_subscriber }
 

@@ -875,6 +875,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@adapter.local_file_storage'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Create }
     command.happening.update_handler:
@@ -2609,6 +2610,9 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_validation_validate_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter:
         arguments:
             - '@doctrine.orm.entity_manager'
 
@@ -5893,6 +5897,10 @@ services:
     Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed:
+        arguments:
+            - '@datetime'
 
     #
     # Serializer: normalizers and encoders

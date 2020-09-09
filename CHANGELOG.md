@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2161 - Record webinar
 - Adapt command to a route, to count media/upload element on sheets
 
 ### Fixed

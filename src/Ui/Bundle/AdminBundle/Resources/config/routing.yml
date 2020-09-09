@@ -1067,6 +1067,11 @@ admin_happening_update:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
 
+happening_webinar_status_change_callback:
+    path: /happening/webinar/record/archive/status-change
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction
+
 #
 # Happening Category
 #

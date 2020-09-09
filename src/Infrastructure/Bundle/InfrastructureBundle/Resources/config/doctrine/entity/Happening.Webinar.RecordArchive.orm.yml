@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive:
+    type:  entity
+    table: happening_webinar_record_archive
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        archiveId:
+            type: string
+        status:
+            type: string
+        createdAt:
+            type: datetime
+        path:
+            type: text
+            nullable: true
+    manyToOne:
+        happening:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            joinColumn:
+                onDelete: CASCADE

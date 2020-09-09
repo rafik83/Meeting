@@ -1,18 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening;
 
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler;
 use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Created;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -25,16 +20,17 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     /** @var UserParticipantAvailabilityReAggregator */
     private $participantAvailabilityReAggregator;
 
-    /**
-     * @param DisableEnableParticipation              $disableEnableParticipation
-     * @param UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator
-     */
+    /** @var PrepareReconciliationHandler */
+    private $prepareReconciliationHandler;
+
     public function __construct(
         DisableEnableParticipation $disableEnableParticipation,
-        UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator
+        UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator,
+        PrepareReconciliationHandler $prepareReconciliationHandler
     ) {
         $this->disableEnableParticipation = $disableEnableParticipation;
         $this->participantAvailabilityReAggregator = $participantAvailabilityReAggregator;
+        $this->prepareReconciliationHandler = $prepareReconciliationHandler;
     }
 
     /**
@@ -45,22 +41,28 @@ class HappeningEventSubscriber implements EventSubscriberInterface
         return [
             Events::HAPPENING_TYPES_UPDATED => 'onTypesUpdated',
             Events::HAPPENING_DATES_UPDATED => 'onDatesUpdated',
+            Events::HAPPENING_CREATED => 'onHappeningCreation',
         ];
     }
 
-    /**
-     * @param TypesUpdated $event
-     */
-    public function onTypesUpdated(TypesUpdated $event)
+    public function onHappeningCreation(Created $event): void
+    {
+        $this->prepareReconciliationHandler->handle(
+            new PrepareReconciliation($event->getHappening(), null)
+        );
+    }
+
+    public function onTypesUpdated(TypesUpdated $event): void
     {
         $this->disableEnableParticipation->resolveParticipations($event->getHappening());
     }
 
-    /**
-     * @param DatesUpdated $event
-     */
-    public function onDatesUpdated(DatesUpdated $event)
+    public function onDatesUpdated(DatesUpdated $event): void
     {
         $this->participantAvailabilityReAggregator->recalculateAvailabilityAggregator($event->getHappening());
+
+        $this->prepareReconciliationHandler->handle(
+            new PrepareReconciliation($event->getHappening(), null)
+        );
     }
 }
