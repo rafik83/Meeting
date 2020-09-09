@@ -122,6 +122,8 @@ function Webinar(element, isSpeaker) {
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
 
+    this.streamEndpoint = element.getAttribute('data-webinar-stream-endpoint');
+
     this.isWebinarRecorded = element.getAttribute('data-webinar-recorded');
     this.canRecordWebinar = element.getAttribute('data-webinar-can-record');
     this.recordEndpoint = element.getAttribute('data-webinar-record-endpoint');
@@ -507,6 +509,13 @@ Webinar.prototype.publishStream = function () {
     });
 
     publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
+    publisher.on('streamCreated', (event) => {
+        this.handleStream(event.stream, 'video');
+    });
+    publisher.on('streamDestroyed', (event) => {
+        this.handleStopStream(event.stream, 'video');
+    });
+
 
     this.session.publish(publisher, this.handlePublish.bind(this));
     publisher.publishVideo(this.enableVideo);
@@ -648,6 +657,14 @@ Webinar.prototype.shareVideo = function () {
             this.showElement(this.endSharingButton);
             this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
             this.layout();
+
+            publisher.on('streamCreated', (event) => {
+                this.handleStream(event.stream, this.typeCustomShare);
+            });
+
+            publisher.on('streamDestroyed', (event) => {
+                this.handleStopStream(event.stream, this.typeCustomShare);
+            });
         }
     };
 
@@ -657,6 +674,38 @@ Webinar.prototype.shareVideo = function () {
     this.minimizeAllSubscribers();
     this.maximize(videoElement);
     this.layout();
+};
+
+Webinar.prototype.handleStream = function(
+    stream,
+    type
+) {
+    const streamId = stream.streamId;
+
+    $.post(this.streamEndpoint, {
+        streamId: streamId,
+        type: type,
+        action: 'start'
+    }, (response) => {})
+    .fail((error) => {
+        console.error(error);
+    });
+};
+
+Webinar.prototype.handleStopStream = function(
+    stream,
+    type
+) {
+    const streamId = stream.streamId;
+
+    $.post(this.streamEndpoint, {
+        streamId: streamId,
+        type: type,
+        action: 'stop'
+    }, (response) => {})
+    .fail((error) => {
+        console.error(error);
+    });
 };
 
 Webinar.prototype.liveVideo = function () {
@@ -732,6 +781,13 @@ Webinar.prototype.screenshare = function () {
         this.minimizeAllSubscribers();
         this.maximize(this.screenElement);
         this.layout();
+
+        publisherScreen.on('streamCreated', (event) => {
+            this.handleStream(event.stream, this.typeScreenShare);
+        });
+        publisherScreen.on('streamDestroyed', (event) => {
+            this.handleStopStream(event.stream, this.typeScreenShare);
+        });
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
     }.bind(this));

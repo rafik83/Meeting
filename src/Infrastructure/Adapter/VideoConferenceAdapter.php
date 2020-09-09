@@ -71,6 +71,16 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         $this->openTok->setArchiveLayout($archiveId, $layout);
     }
 
+    public function changeArchiveToVertical(string $archiveId): void
+    {
+        $this->openTok->setArchiveLayout($archiveId, Layout::getVerticalPresentation());
+    }
+
+    public function changeArchiveToBestFit(string $archiveId): void
+    {
+        $this->openTok->setArchiveLayout($archiveId, Layout::getBestFit());
+    }
+
     public function changeStreamClassList(string $sessionId, string $streamId, string $class): void
     {
         $this->openTok->updateStream(
