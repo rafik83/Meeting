@@ -40,11 +40,21 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, int $chatMessageId): void
+    public function publishChatMessageNotification(ChatMessageLinkableInterface $object): void
     {
         $postData = [
             'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
-            'data' => json_encode(['action' => 'add_chat_message', 'messageId' => $chatMessageId]),
+            'data' => json_encode(['action' => 'add_chat_message']),
+        ];
+
+        $this->publishMessage($postData);
+    }
+
+    public function publishChatVoteNotification(ChatMessageLinkableInterface $object, int $chatMessageId, array $votes): void
+    {
+        $postData = [
+            'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
+            'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessageId, 'votes' => $votes]),
         ];
 
         $this->publishMessage($postData);

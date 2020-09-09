@@ -58,6 +58,6 @@ class VoteAction
             throw new AccessDeniedHttpException($e->getMessage(), $e);
         }
 
-        return new JsonResponse(['status' => 'ok', 'message' => $payload]);
+        return new JsonResponse(['status' => 'ok']);
     }
 }

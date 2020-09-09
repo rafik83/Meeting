@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Chat;
 
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Chat\VoteChatMessage;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
@@ -26,16 +27,21 @@ class VoteChatMessageHandler
     /** @var GuessChatMessageLinkableObjectHandler */
     private $guessChatMessageLinkableObjectHandler;
 
+    /** @var NotificationPublisherInterface */
+    private $notificationPublisher;
+
     public function __construct(
         ChatMessageRepositoryInterface $chatMessageRepository,
         ChatMessageVoteRepositoryInterface $chatMessageVoteRepository,
         CheckAccessToChatMessages $checkAccessToChatMessages,
-        GuessChatMessageLinkableObjectHandler $guessChatMessageLinkableObjectHandler
+        GuessChatMessageLinkableObjectHandler $guessChatMessageLinkableObjectHandler,
+        NotificationPublisherInterface $notificationPublisher
     ) {
         $this->chatMessageRepository = $chatMessageRepository;
         $this->chatMessageVoteRepository = $chatMessageVoteRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
         $this->guessChatMessageLinkableObjectHandler = $guessChatMessageLinkableObjectHandler;
+        $this->notificationPublisher = $notificationPublisher;
     }
 
     /**
@@ -64,7 +70,9 @@ class VoteChatMessageHandler
 
         if ($chatMessageVote) {
             $this->chatMessageVoteRepository->remove($chatMessageVote);
-            // todo: add notification publish
+
+            $votesCount = $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage);
+            $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage->getId(), $votesCount);
 
             return;
         }
@@ -75,7 +83,11 @@ class VoteChatMessageHandler
             $command->getType()
         );
 
+        // remove previous vote, in case user changes the type of his vote
+        $this->chatMessageVoteRepository->removeVotes($chatMessage, $command->getUser());
         $this->chatMessageVoteRepository->add($chatMessageVote);
-        // todo: add notification publish
+
+        $votesCount = $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage);
+        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage->getId(), $votesCount);
     }
 }

@@ -406,6 +406,7 @@ Webinar.prototype.initChat = function () {
         $addChatFormList.empty();
         response.forEach((item) => {
             const rowEl = document.createElement('div');
+            rowEl.id = `chat-message-${item.id}`;
             rowEl.classList.add('chat-row');
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
@@ -417,18 +418,16 @@ Webinar.prototype.initChat = function () {
             const emoticonBlock = document.createElement('div');
 
             const onLikedClicked = function (event) {
-                const payload = {'messageId': event.currentTarget.getAttribute('data-message-id'),
-                    'messageType': event.currentTarget.getAttribute('data-message-type')};
+                const payload = {
+                    'messageId': event.currentTarget.getAttribute('data-message-id'),
+                    'messageType': event.currentTarget.getAttribute('data-message-type')
+                };
                 $.post(voteChatHref, JSON.stringify(payload), (response) => {
                     if (response.status !== 'ok') {
-
                         this.showError('Message vote failed');
                     }
                 }, 'json');
                 event.currentTarget.classList.add('disabled');
-
-                // remove all listeners, they'll be added again on chat update
-                this.removeChatListeners();
             }.bind(this);
 
             const chatCreatedAt = document.createElement('div');
@@ -454,11 +453,11 @@ Webinar.prototype.initChat = function () {
             imgEl.setAttribute('src', item.avatar);
 
             const element = {
-                '&#x1F44D;' :'like',
-                '&#128079;' : 'acclaim',
-                '&#x2764;&#xFE0F' : 'heart',
-                '&#128161;' : 'instructive',
-                '&#128522;' : 'happy'
+                '&#x1F44D;': 'like',
+                '&#128079;': 'acclaim',
+                '&#x2764;&#xFE0F': 'heart',
+                '&#128161;': 'instructive',
+                '&#128522;': 'happy'
             };
 
             for (let smileyCode in element) {
@@ -469,13 +468,12 @@ Webinar.prototype.initChat = function () {
                 emoticonBtn.setAttribute('data-message-type', element[smileyCode]);
 
                 const voteChat = document.createElement('span');
-                emoticonBtn.append(voteChat);
+                voteChat.classList.add('chat-vote-count');
 
                 if (item.votes[element[smileyCode]]) {
                     voteChat.textContent = item.votes[element[smileyCode]];
-                    voteChat.classList.add('chat-vote-count');
                 }
-                emoticonEl.appendChild(emoticonBlock);
+                emoticonBtn.append(voteChat);
 
                 if (!item.isAuthor) {
                     emoticonBtn.addEventListener('click', onLikedClicked);
@@ -486,9 +484,15 @@ Webinar.prototype.initChat = function () {
                 } else {
                     emoticonBtn.classList.add('btn-gray','disabled');
                     emoticonBtn.title = this.chatVoteDisabledMessage;
+
+                    rowEl.classList.add('chat-row-on');
+                    contentEl.classList.add('chat-content-on');
+                    authorEl.classList.add('chat-author-on');
+                    authorNameEl.classList.add('chat-author-name-on');
                 }
                 emoticonBlock.appendChild(emoticonBtn);
-            };
+                emoticonEl.appendChild(emoticonBlock);
+            }
 
             if (item.sheetTitle) {
                 const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
@@ -500,13 +504,6 @@ Webinar.prototype.initChat = function () {
                 }
             }
 
-            if (item.isAuthor) {
-                rowEl.classList.add('chat-row-on');
-                contentEl.classList.add('chat-content-on');
-                authorEl.classList.add('chat-author-on');
-                authorNameEl.classList.add('chat-author-name-on');
-            }
-
             $addChatFormList[0].appendChild(rowEl);
         });
 
@@ -514,7 +511,7 @@ Webinar.prototype.initChat = function () {
         this.chatLoaded = true;
 
         const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', `https://vimeet.events/event/${this.event}/notifications/happening/${this.happeningId}`);
+        url.searchParams.append('topic', `https://vimeet.events/event/${this.eventId}/notifications/happening/${this.happeningId}`);
 
         var eventSource = new esPolyfill.EventSourcePolyfill(url, {
             headers: {
@@ -523,9 +520,19 @@ Webinar.prototype.initChat = function () {
         });
         eventSource.onmessage = (event) => {
             const payload = JSON.parse(event.data);
+
             if (payload.action === 'add_chat_message') {
                 this.chatLoaded = false;
                 this.initChat();
+            }
+
+            if (payload.action === 'update_chat_message_votes') {
+                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
+                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
+                voteCounts.forEach((voteCount) => {
+                    const voteType = voteCount.getAttribute('data-message-type');
+                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
+                });
             }
         }
 

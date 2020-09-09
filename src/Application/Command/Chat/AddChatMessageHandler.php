@@ -55,6 +55,6 @@ class AddChatMessageHandler
             )
         );
 
-        $this->notificationPublisher->publishChatMessageNotification($command->object, $chatMessage->getId());
+        $this->notificationPublisher->publishChatMessageNotification($command->object);
     }
 }

@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Chat;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Chat\VoteChatMessage;
 use Proximum\Vimeet\Application\Command\Chat\VoteChatMessageHandler;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
@@ -32,18 +33,26 @@ class VoteChatMessageHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $checkAccessToChatMessages;
 
+    /** @var ObjectProphecy */
+    private $guessChatMessageLinkableObjectHandler;
+
+    /** @var ObjectProphecy */
+    private $notificationPublisher;
+
     public function setUp()
     {
         $this->chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $this->chatMessageVoteRepository = $this->prophesize(ChatMessageVoteRepositoryInterface::class);
         $this->checkAccessToChatMessages = $this->prophesize(CheckAccessToChatMessages::class);
         $this->guessChatMessageLinkableObjectHandler = $this->prophesize(GuessChatMessageLinkableObjectHandler::class);
+        $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
 
         $this->voteChatMessageHandler = new VoteChatMessageHandler(
             $this->chatMessageRepository->reveal(),
             $this->chatMessageVoteRepository->reveal(),
             $this->checkAccessToChatMessages->reveal(),
-            $this->guessChatMessageLinkableObjectHandler->reveal()
+            $this->guessChatMessageLinkableObjectHandler->reveal(),
+            $this->notificationPublisher->reveal()
         );
     }
 
@@ -65,6 +74,7 @@ class VoteChatMessageHandlerTest extends TestCase
         $author = $this->prophesize(User::class);
         $author->getId()->shouldBeCalled()->willReturn(456);
         $chatMessage = $this->prophesize(ChatMessage::class);
+        $chatMessage->getId()->shouldBeCalled()->willReturn(1);
         $chatMessage->getCreatedBy()->shouldBeCalled()->willReturn($author->reveal());
         $chatMessage->getObjectType()->willReturn('happening');
         $chatMessage->getObjectId()->willReturn(4224);
@@ -83,7 +93,11 @@ class VoteChatMessageHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
+        $this->chatMessageVoteRepository->removeVotes($chatMessage->reveal(), $user->reveal())->shouldBeCalled();
         $this->chatMessageVoteRepository->add(Argument::type(ChatMessageVote::class))->shouldBeCalled();
+        $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage->reveal())->shouldBeCalled()->willReturn(['like' => 1]);
+
+        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject->reveal(), 1, ['like' => 1])->shouldBeCalled();
 
         $this->voteChatMessageHandler->handle($voteChatMessage->reveal());
     }
@@ -106,6 +120,7 @@ class VoteChatMessageHandlerTest extends TestCase
         $author = $this->prophesize(User::class);
         $author->getId()->shouldBeCalled()->willReturn(456);
         $chatMessage = $this->prophesize(ChatMessage::class);
+        $chatMessage->getId()->shouldBeCalled()->willReturn(1);
         $chatMessage->getCreatedBy()->shouldBeCalled()->willReturn($author->reveal());
         $chatMessage->getObjectType()->willReturn('happening');
         $chatMessage->getObjectId()->willReturn(4224);
@@ -129,6 +144,9 @@ class VoteChatMessageHandlerTest extends TestCase
 
         $this->chatMessageVoteRepository->remove($chatMessageVote->reveal())->shouldBeCalled();
         $this->chatMessageVoteRepository->add(Argument::any())->shouldNotBeCalled();
+        $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage->reveal())->shouldBeCalled()->willReturn([]);
+
+        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject->reveal(), 1, [])->shouldBeCalled();
 
         $this->voteChatMessageHandler->handle($voteChatMessage->reveal());
     }

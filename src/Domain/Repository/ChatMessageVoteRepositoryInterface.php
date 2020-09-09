@@ -8,9 +8,14 @@ use Proximum\Vimeet\Domain\Model\User;
 
 interface ChatMessageVoteRepositoryInterface
 {
-    public function add(ChatMessageVote $chatMessageVote);
+    public function add(ChatMessageVote $chatMessageVote): void;
 
-    public function remove(ChatMessageVote $chatMessageVote);
+    public function remove(ChatMessageVote $chatMessageVote): void;
+
+    public function removeVotes(ChatMessage $chatMessage, User $user): void;
 
     public function getByChatMessageAndUser(ChatMessage $chatMessage, User $user, string $type): ?ChatMessageVote;
+
+    public function getVotesCountByChatMessage(ChatMessage $chatMessage): array;
+
 }
