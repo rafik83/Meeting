@@ -10,11 +10,13 @@ use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchiveHandler;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\MissingSessionIdException;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarIsNotRecordedException;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarIsRecordingException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 class ZipRecordArchiveHandlerTest extends TestCase
 {
@@ -32,7 +34,7 @@ class ZipRecordArchiveHandlerTest extends TestCase
 
     public function testHandleWebinarNotRecorded(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(WebinarIsNotRecordedException::class);
         $happening = $this->prophesize(Happening::class);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
 
@@ -51,10 +53,32 @@ class ZipRecordArchiveHandlerTest extends TestCase
 
     public function testHandleNoSessionId(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(MissingSessionIdException::class);
         $happening = $this->prophesize(Happening::class);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $happening->getWebinarSessionId()->shouldBeCalled()->willReturn(null);
+
+        $command = new ZipRecordArchive($happening->reveal(), true);
+
+        $handler = new ZipRecordArchiveHandler(
+            $this->zipRecordArchiveStorage->reveal(),
+            $this->fileSystem->reveal(),
+            $this->videoConferenceAdapter->reveal(),
+            $this->happeningRepository->reveal(),
+            $this->logger->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleIsRecording(): void
+    {
+        $this->expectException(WebinarIsRecordingException::class);
+        $happening = $this->prophesize(Happening::class);
+        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('session-id');
+
+        $this->videoConferenceAdapter->isRecording('session-id')->shouldBeCalled()->willReturn(true);
 
         $command = new ZipRecordArchive($happening->reveal(), true);
 
@@ -109,6 +133,7 @@ class ZipRecordArchiveHandlerTest extends TestCase
             '3789e4be-168c-49ac-9ad1-c853409d5b0f',
         ];
         $this->videoConferenceAdapter->listArchiveIds('session-id')->shouldBeCalled()->willReturn($urls);
+        $this->videoConferenceAdapter->isRecording('session-id')->shouldBeCalled()->willReturn(false);
 
         $this->fileSystem->createTempDir()
             ->shouldBeCalled()

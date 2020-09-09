@@ -2,8 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\RecordingEvent;
 use Proximum\Vimeet\Domain\Model\Happening\Webinar\RecordArchive;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -25,18 +27,23 @@ class RecordHandler
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         PrepareReconciliationHandler $prepareReconciliationHandler,
         \DateTimeInterface $dateTime,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->prepareReconciliationHandler = $prepareReconciliationHandler;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     public function handle(Record $record): void
@@ -44,12 +51,7 @@ class RecordHandler
         $happening = $record->happening;
         $event = $happening->getEvent();
 
-        $existingArchives = $this->videoConferenceAdapter->listArchives($happening->getWebinarSessionId());
-        $startedArchives = array_filter($existingArchives->getItems(), static function ($archiveItem) {
-            return in_array($archiveItem->status, RecordStatus::IS_RECORDING_STATUS, true);
-        });
-
-        if (count($startedArchives) > 0) {
+        if ($this->videoConferenceAdapter->isRecording($happening->getWebinarSessionId())) {
             $this->logger->warning(sprintf('Webinar #%d: Start record failed because another archive is already started', $happening->getId()));
 
             $this->prepareReconciliationHandler->handle(
@@ -84,5 +86,10 @@ class RecordHandler
         );
 
         $this->logger->info(sprintf('Webinar #%d: Start record webinar archive', $happening->getId()));
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::HAPPENING_RECORDING,
+            new RecordingEvent($happening)
+        );
     }
 }

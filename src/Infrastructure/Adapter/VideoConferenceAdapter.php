@@ -13,6 +13,7 @@ use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
+use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
@@ -126,6 +127,16 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         }
 
         return $ids;
+    }
+
+    public function isRecording(string $sessionId): bool
+    {
+        $existingArchives = $this->listArchives($sessionId);
+        $startedArchives = array_filter($existingArchives->getItems(), static function ($archiveItem) {
+            return in_array($archiveItem->status, RecordStatus::IS_RECORDING_STATUS, true);
+        });
+
+        return 0 < count($startedArchives);
     }
 
     /**

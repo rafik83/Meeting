@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchiveNotPreparedEvent;
 use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchivePreparedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingsDeletedAllEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
@@ -40,11 +41,14 @@ use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\AccountTemporarilyDisabledMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\ZipRecordArchivePreparedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\AdminZipRecordArchiveNotPreparedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\AdminZipRecordArchivePreparedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\ZipRecordArchiveAvailableForSpeakerMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
@@ -437,6 +441,53 @@ class MailEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function onHappeningZipRecordArchivePrepared(ZipRecordArchivePreparedEvent $event): void
+    {
+        $domainEvent = $event->getEvent();
+        $happening = $event->getHappening();
+
+        if ($event->hasAdmin()) {
+            $this->mailer->send(
+                new AdminZipRecordArchivePreparedMail(
+                    $happening,
+                    $domainEvent,
+                    $this->sender->generate($domainEvent),
+                    $event->getAdmin()->getEmail(),
+                    $event->getLocale()
+                )
+            );
+        } else {
+            foreach ($happening->getSpeakers() as $speaker) {
+                $speakerUser = $speaker->getUser();
+
+                if ($speakerUser instanceof User) {
+                    $this->mailer->send(
+                        new ZipRecordArchiveAvailableForSpeakerMail(
+                            $happening,
+                            $domainEvent,
+                            $this->sender->generate($domainEvent),
+                            $speakerUser->getEmail(),
+                            $domainEvent->getAvailableLocale($speakerUser->getLocale())
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+    public function onHappeningZipRecordArchiveNotPrepared(ZipRecordArchiveNotPreparedEvent $event): void
+    {
+        $this->mailer->send(
+            new AdminZipRecordArchiveNotPreparedMail(
+                $event->getHappening(),
+                $event->getEvent(),
+                $this->sender->generate($event->getEvent()),
+                $event->getAdmin()->getEmail(),
+                $event->getLocale()
+            )
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -463,20 +514,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
             Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated',
             Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED => 'onHappeningZipRecordArchivePrepared',
+            Events::HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED => 'onHappeningZipRecordArchiveNotPrepared',
         ];
-    }
-
-    public function onHappeningZipRecordArchivePrepared(ZipRecordArchivePreparedEvent $event): void
-    {
-        $this->mailer->send(
-            new ZipRecordArchivePreparedMail(
-                $event->getHappening(),
-                $event->getEvent(),
-                $this->sender->generate($event->getEvent()),
-                $event->getAdmin()->getEmail(),
-                $event->getLocale()
-            )
-        );
     }
 
     /**

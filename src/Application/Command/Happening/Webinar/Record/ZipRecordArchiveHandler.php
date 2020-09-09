@@ -5,6 +5,10 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Record;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ZipRecordArchiveStorageInterface;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\MissingSessionIdException;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarHasNoRecordedFileException;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarIsNotRecordedException;
+use Proximum\Vimeet\Domain\Exception\Happening\Webinar\WebinarIsRecordingException;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -44,11 +48,16 @@ class ZipRecordArchiveHandler
         $happening = $command->happening;
 
         if (!$happening->isWebinarRecorded()) {
-            throw new \RuntimeException('This webinar has not the recorded option');
+            throw new WebinarIsNotRecordedException($happening);
         }
 
-        if (empty($happening->getWebinarSessionId())) {
-            throw new \RuntimeException('This webinar has no session id');
+        $sessionId = $happening->getWebinarSessionId();
+        if (empty($sessionId)) {
+            throw new MissingSessionIdException($happening);
+        }
+
+        if ($this->videoConferenceAdapter->isRecording($sessionId)) {
+            throw new WebinarIsRecordingException($happening);
         }
 
         if ($command->regenerate && $happening->hasWebinarRecordZipFileUrl()) {
@@ -73,7 +82,7 @@ class ZipRecordArchiveHandler
         }
 
         if (empty($files)) {
-            throw new \RuntimeException('This webinar has no recorded file');
+            throw new WebinarHasNoRecordedFileException($happening);
         }
 
         $fileName = sprintf('webinar-%d.zip', $happening->getId());

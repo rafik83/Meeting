@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
+use DateTime;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -26,7 +27,8 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\She
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ZipRecordArchiveCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\CreateZipRecordArchiveCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ForceZipRecordArchiveCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand;
@@ -534,9 +536,23 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             }
         }
         $job = new Job(
-            ZipRecordArchiveCommand::NAME,
+            ForceZipRecordArchiveCommand::NAME,
             $arguments
         );
+
+        $this->setJob($job);
+    }
+
+    public function planDownloadRecordArchive(
+        Happening $happening,
+        DateTime $dueDate
+    ): void {
+        $job = new Job(
+            CreateZipRecordArchiveCommand::NAME,
+            [$happening->getId()]
+        );
+
+        $job->setExecuteAfter($dueDate);
 
         $this->setJob($job);
     }

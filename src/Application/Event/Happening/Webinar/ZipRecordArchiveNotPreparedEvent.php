@@ -7,7 +7,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
-class ZipRecordArchivePreparedEvent extends SymfonyEvent
+class ZipRecordArchiveNotPreparedEvent extends SymfonyEvent
 {
     /** @var Happening */
     private $happening;
@@ -46,10 +46,5 @@ class ZipRecordArchivePreparedEvent extends SymfonyEvent
     public function getLocale(): ?string
     {
         return $this->locale;
-    }
-
-    public function hasAdmin(): bool
-    {
-        return null !== $this->admin;
     }
 }
