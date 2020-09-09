@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ChatMessageVoteRepositoryInterface;
 
 class ListChatMessagesHandlerTest extends TestCase
 {
@@ -25,6 +26,8 @@ class ListChatMessagesHandlerTest extends TestCase
     private $happening;
     /** @var ObjectProphecy|ChatMessageRepositoryInterface */
     private $chatMessageRepository;
+    /** @var ObjectProphecy|ChatMessageVoteRepositoryInterface */
+    private $chatMessageVoteRepository;
     /** @var ObjectProphecy|CheckAccessToChatMessages */
     private $checkAccessToChatMessages;
     /** @var ObjectProphecy|GetTimezoneHelper */
@@ -40,12 +43,14 @@ class ListChatMessagesHandlerTest extends TestCase
         $this->happening = $this->prophesize(Happening::class);
 
         $this->chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
+        $this->chatMessageVoteRepository = $this->prophesize(ChatMessageVoteRepositoryInterface::class);
         $this->checkAccessToChatMessages = $this->prophesize(CheckAccessToChatMessages::class);
         $this->getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
         $this->routerAdapter = $this->prophesize(RouterInterface::class);
 
         $this->listChatMessagesHandler = new ListChatMessagesHandler(
             $this->chatMessageRepository->reveal(),
+            $this->chatMessageVoteRepository->reveal(),
             $this->checkAccessToChatMessages->reveal(),
             $this->getTimezoneHelper->reveal(),
             $this->routerAdapter->reveal()
@@ -79,6 +84,10 @@ class ListChatMessagesHandlerTest extends TestCase
                 new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), null, 007, 'Leeloo', 'Fifth Element'),
             ]
         );
+        $this->happening->getId()->shouldBeCalled()->willReturn(42);
+        $this->happening->getObjectType()->shouldBeCalled()->willReturn('happening');
+        $this->chatMessageVoteRepository->getVotesByUser('happening', 42, $this->user->reveal())
+            ->shouldBeCalled()->willReturn([2 => 'like']);
 
         $event = $this->prophesize(Event::class);
         $this->happening->getEvent()->shouldBeCalled()->willReturn($event);
@@ -100,6 +109,7 @@ class ListChatMessagesHandlerTest extends TestCase
         $result1->formattedCreatedAt = '14:00:00';
 
         $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), '/fr/chat/avatar?Leeloo', 007, 'Leeloo', 'Fifth Element');
+        $result2->selfVote = 'like';
         $result2->formattedCreatedAt = '14:05:00';
 
         $this->assertEquals([$result1, $result2], $chatMessageViews);

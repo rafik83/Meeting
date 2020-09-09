@@ -36,6 +36,9 @@ class ChatMessageView
     /** @var array */
     public $votes = [];
 
+    /** @var string $selfVote if user has voted for this message, the type of vote */
+    public $selfVote;
+
     public function __construct(
         int $id,
         string $content,

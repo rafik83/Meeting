@@ -66,10 +66,28 @@ class ChatMessageVoteRepository implements ChatMessageVoteRepositoryInterface
             ->setParameter('message', $chatMessage)
             ->addGroupBy('vote.type')
             ->getQuery()
-            ->getResult()
+            ->getArrayResult()
         ;
 
         return array_column($votesCount, 'count', 'type');
+    }
+
+    public function getVotesByUser(string $chatLinkableObjectType, int $chatLinkableObjectId, User $user): array
+    {
+        $votes = $this->entityManager
+            ->createQueryBuilder()
+            ->select('vote.type, chatMessage.id AS messageId')
+            ->from(ChatMessageVote::class, 'vote')
+            ->join('vote.chatMessage', 'chatMessage', 'WITH', 'chatMessage.objectType=:objectType AND chatMessage.objectId=:objectId')
+            ->setParameter('objectType', $chatLinkableObjectType)
+            ->setParameter('objectId', $chatLinkableObjectId)
+            ->where('vote.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_column($votes, 'type', 'messageId');
     }
 
     private function getVotesQb(ChatMessage $chatMessage, User $user): QueryBuilder

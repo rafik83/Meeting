@@ -126,6 +126,7 @@ services:
     Proximum\Vimeet\Application\Query\Chat\ListChatMessagesHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
             - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@adapter.router'

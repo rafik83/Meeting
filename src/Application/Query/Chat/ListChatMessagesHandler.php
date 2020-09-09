@@ -9,11 +9,15 @@ use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ChatMessageVoteRepositoryInterface;
 
 class ListChatMessagesHandler
 {
     /** @var ChatMessageRepositoryInterface */
     private $chatMessageRepository;
+
+    /** @var ChatMessageVoteRepositoryInterface */
+    private $chatMessageVoteRepository;
 
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
@@ -26,11 +30,13 @@ class ListChatMessagesHandler
 
     public function __construct(
         ChatMessageRepositoryInterface $chatMessageRepository,
+        ChatMessageVoteRepositoryInterface $chatMessageVoteRepository,
         CheckAccessToChatMessages $checkAccessToChatMessages,
         GetTimezoneHelper $getTimezoneHelper,
         RouterInterface $routerAdapter
     ) {
         $this->chatMessageRepository = $chatMessageRepository;
+        $this->chatMessageVoteRepository = $chatMessageVoteRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->routerAdapter = $routerAdapter;
@@ -51,12 +57,15 @@ class ListChatMessagesHandler
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndUser($query->object->getEvent(), $query->user);
         $mediumHourFormatter = DayHelper::getMediumHourFormatter($query->locale, $timezone);
 
+        $selfVotes = $this->chatMessageVoteRepository->getVotesByUser($query->object->getObjectType(), $query->object->getId(), $query->user);
+
         foreach ($chatMessagesViews as $chatMessagesView) {
             $chatMessagesView->formattedCreatedAt = $mediumHourFormatter->format($chatMessagesView->createdAt);
             $chatMessagesView->isAuthor = $query->user->getId() === $chatMessagesView->authorId;
             if (null === $chatMessagesView->avatar) {
                 $chatMessagesView->avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $chatMessagesView->authorName]);
             }
+            $chatMessagesView->selfVote = $selfVotes[$chatMessagesView->id] ?? null;
         }
 
         return $chatMessagesViews;

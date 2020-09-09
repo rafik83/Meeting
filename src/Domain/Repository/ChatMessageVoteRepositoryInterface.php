@@ -18,4 +18,5 @@ interface ChatMessageVoteRepositoryInterface
 
     public function getVotesCountByChatMessage(ChatMessage $chatMessage): array;
 
+    public function getVotesByUser(string $chatLinkableObjectType, int $chatLinkableObjectId, User $user): array;
 }
