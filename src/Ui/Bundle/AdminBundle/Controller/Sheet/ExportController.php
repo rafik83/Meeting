@@ -48,8 +48,10 @@ class ExportController extends Controller
             $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet')
         );
 
+        $result = $this->get('query.sheet.export_handler')->handle($exportQuery);
+
         return new CsvFileResponse(
-            $this->get('query.sheet.export_handler')->handle($exportQuery),
+            $result,
             sprintf('export_event_sheets_%s.csv', date('Y_m_d_His')),
             Response::HTTP_OK,
             [],

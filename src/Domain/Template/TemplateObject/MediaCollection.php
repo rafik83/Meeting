@@ -167,11 +167,24 @@ class MediaCollection extends TemplateObject
         return false;
     }
 
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * This object does not inherit ExportableObjectInterface
+     * But can be exported in some case
+     */
     public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
-        $exportableContents = array_map(static function (Media $media) {
-            return $media->url ?? '';
-        }, $this->getMedias());
+        $exportableContents = [];
+
+        foreach ($this->getMedias() as $media) {
+            if (!empty($media->url)) {
+                $exportableContents[] = $media->url;
+            }
+        }
 
         return implode(';', $exportableContents);
     }

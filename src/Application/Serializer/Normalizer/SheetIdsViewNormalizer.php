@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -383,17 +384,17 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         $context = array_merge($context, ['taggedData' => $taggedData]);
 
+        /** @var ExportableObjectInterface|MultiUploadCollectionObject|MediaCollection $presentationObject */
         foreach ($presentationTemplateData->getExportableObjectsWithMediaAndUpload() as $presentationObject) {
             $data = null;
+            $key = $presentationObject->getKey();
+
+            if (!isset($this->sheetFields[$key])) {
+                $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
+                $this->sheetFields[$key] = $fieldName;
+            }
 
             if ($presentationObject instanceof ExportableObjectInterface) {
-                $key = $presentationObject->getKey();
-
-                if (!isset($this->sheetFields[$key])) {
-                    $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
-                    $this->sheetFields[$key] = $fieldName;
-                }
-
                 $data = $this->getExportableContent($presentationObject, $context);
 
                 if($presentationObject instanceof Image && $data !== '') {
@@ -401,12 +402,14 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 }
             } elseif ($presentationObject instanceof MediaCollection) {
                 $data = $presentationObject->getExportableContent();
+            } elseif ($presentationObject instanceof MultiUploadCollectionObject) {
+                $data = $presentationObject->getExportableUploads($eventUrl, $fallbackLocale);
             }
 
             $rawData[$key] = $data;
         }
 
-        unset($presentationObject, $taggedData);
+        unset($presentationTemplateData, $taggedData);
     }
 
     /**

@@ -98,4 +98,26 @@ class MultiUploadCollectionObject extends TemplateObject
 
         return $data;
     }
+
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * This object does not inherit ExportableObjectInterface
+     * But can be exported in some case
+     */
+    public function getExportableUploads(string $eventUrl, string $locale): string
+    {
+        $exportableContents = [];
+
+        foreach ($this->getUploads() as $upload) {
+            if (!empty($upload->getPath())) {
+                $exportableContents[] = $eventUrl . '/' . $locale . '/external-file/show' . $upload->getPath();
+            }
+        }
+
+        return implode(';', $exportableContents);
+    }
 }

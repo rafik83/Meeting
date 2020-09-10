@@ -43,6 +43,10 @@ services:
             - '@template.template_data_factory'
             - '%shared_uploaded_files%'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ExternalShowUploadedFileAction:
+        arguments:
+            - '%shared_uploaded_files%'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\FormAction:
         arguments:
             - '@adapter.authorization_checker'
