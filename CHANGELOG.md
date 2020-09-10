@@ -5,6 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.46.0] - 2020-09-10
+### Added
+- VIMEET-2169 - Live streaming myevent
+
+### Fixed
+- Extra Data for token can be nullable on TechEventTokenAuthenticator
+
 ## [2.45.0] - 2020-09-09
 ### Added
 - VIMEET-2175 - TechEvent Token Authenticator
@@ -20,7 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.44.0] - 2020-09-03
 ### Added
-- VIMEET-2169 - Live streaming myevent
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 - VIMEET-2213 - Translate timezones
