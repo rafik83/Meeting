@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -62,7 +54,7 @@ class MultiUploadCollectionObject extends TemplateObject
     private function buildUploads(array $data): void
     {
         $this->uploads = array_map(
-            function (array $upload) {
+            static function (array $upload) {
                 return new MultiUploadObject($upload['uniqId'], $upload['title'], $upload['path']);
             }, array_values($data)
         );

@@ -166,4 +166,13 @@ class MediaCollection extends TemplateObject
     {
         return false;
     }
+
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
+    {
+        $exportableContents = array_map(static function (Media $media) {
+            return $media->url ?? '';
+        }, $this->getMedias());
+
+        return implode(';', $exportableContents);
+    }
 }

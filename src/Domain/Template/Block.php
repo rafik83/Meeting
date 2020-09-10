@@ -10,6 +10,8 @@ use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContai
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
@@ -260,6 +262,16 @@ class Block extends AbstractChild
     {
         return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\ExportableObjectInterface;
+        });
+    }
+
+    public function getExportableObjectsWithMediaAndUpload(): array
+    {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
+            return $object instanceof TemplateObject\ExportableObjectInterface
+                || $object instanceof MediaCollection
+                || $object instanceof MultiUploadCollectionObject
+            ;
         });
     }
 

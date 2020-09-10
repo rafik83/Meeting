@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -382,18 +383,24 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         $context = array_merge($context, ['taggedData' => $taggedData]);
 
-        foreach ($presentationTemplateData->getExportableObjects() as $presentationObject) {
-            $key = $presentationObject->getKey();
+        foreach ($presentationTemplateData->getExportableObjectsWithMediaAndUpload() as $presentationObject) {
+            $data = null;
 
-            if (!isset($this->sheetFields[$key])) {
-                $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
-                $this->sheetFields[$key] = $fieldName;
-            }
+            if ($presentationObject instanceof ExportableObjectInterface) {
+                $key = $presentationObject->getKey();
 
-            $data = $this->getExportableContent($presentationObject, $context);
+                if (!isset($this->sheetFields[$key])) {
+                    $fieldName = $presentationObject->getExportableFieldname($availableLocale, $fallbackLocale);
+                    $this->sheetFields[$key] = $fieldName;
+                }
 
-            if($presentationObject instanceof Image && $data !== '') {
-                $data = $eventUrl.$data;
+                $data = $this->getExportableContent($presentationObject, $context);
+
+                if($presentationObject instanceof Image && $data !== '') {
+                    $data = $eventUrl.$data;
+                }
+            } elseif ($presentationObject instanceof MediaCollection) {
+                $data = $presentationObject->getExportableContent();
             }
 
             $rawData[$key] = $data;
