@@ -93,7 +93,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         Event $event,
         string $name,
         $value
-    ): ExtraData {
+    ): ?ExtraData {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('extraData')
             ->from(ExtraData::class, 'extraData')

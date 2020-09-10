@@ -33,7 +33,7 @@ interface ExtraDataRepositoryInterface
         Event $event,
         string $name,
         $value
-    ): ExtraData;
+    ): ?ExtraData;
 
     /**
      * @param ExtraData $extraData
