@@ -411,12 +411,12 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         // Filter items to keep only lowest-level ones (items with the max depth):
-        $leaves = array_filter($allItemPaths, function ($item) use ($maxDepth) {
+        $leaves = array_filter($allItemPaths, static function ($item) use ($maxDepth) {
             return \count($item) === $maxDepth;
         });
 
         // Implode inner content (each item's path):
-        $leaves = array_map(function ($leave) {
+        $leaves = array_map(static function ($leave) {
             return implode('>', str_replace('>', '', $leave));
         }, $leaves);
 
