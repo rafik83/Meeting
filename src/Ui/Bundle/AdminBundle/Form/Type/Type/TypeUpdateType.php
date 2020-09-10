@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Update;
@@ -138,6 +130,12 @@ class TypeUpdateType extends AbstractType
             ->add('canSubmitValidation', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('displayAnalyticsOnSheet', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('displayAnalyticsOnMeetingList', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 
@@ -147,7 +145,7 @@ class TypeUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => Update::class,
+            'data_class' => Update::class,
             'csrf_token_id' => 'type_update',
         ]);
 
