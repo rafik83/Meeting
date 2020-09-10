@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Components\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
-class AllowTransformRequestIntoMeeting
+class AllowTransformAutomaticallyRequestIntoMeeting
 {
     /**
      * @var RuleRepositoryInterface

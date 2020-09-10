@@ -673,7 +673,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
             - '@vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler'
-            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting'
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -743,7 +743,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
-            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting'
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
@@ -2917,7 +2917,7 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
-    Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting:
+    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
         arguments:
             - '@repository.rule_repository'
 

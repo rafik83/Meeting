@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
@@ -40,20 +40,20 @@ class CreateRequestHandler
     private $approveRequestHandler;
 
     /**
-     * @var AllowTransformRequestIntoMeeting
+     * @var AllowTransformAutomaticallyRequestIntoMeeting
      */
-    private $allowTransformRequestIntoMeeting;
+    private $allowTransformAutomaticallyRequestIntoMeeting;
 
     public function __construct(
         ApproveRequestHandler $approveRequestHandler,
-        AllowTransformRequestIntoMeeting $allowTransformRequestIntoMeeting,
+        AllowTransformAutomaticallyRequestIntoMeeting $allowTransformAutomaticallyRequestIntoMeeting,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->approveRequestHandler = $approveRequestHandler;
-        $this->allowTransformRequestIntoMeeting = $allowTransformRequestIntoMeeting;
+        $this->allowTransformAutomaticallyRequestIntoMeeting = $allowTransformAutomaticallyRequestIntoMeeting;
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher = $eventDispatcher;
@@ -99,7 +99,7 @@ class CreateRequestHandler
             new CreateRequestEvent($request)
         );
 
-        if ($this->allowTransformRequestIntoMeeting->__invoke($request)) {
+        if ($this->allowTransformAutomaticallyRequestIntoMeeting->__invoke($request)) {
             return $this->approveRequestHandler->handle(new ApproveRequest($createRequest->creator, $request, $createRequest->from, $createRequest->locale));
         }
 

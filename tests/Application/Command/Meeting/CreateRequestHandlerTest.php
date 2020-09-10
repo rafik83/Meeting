@@ -8,7 +8,7 @@ use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestResult;
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -60,13 +60,13 @@ class CreateRequestHandlerTest extends TestCase
 
         $approveRequestHandler = $this->prophesize(ApproveRequestHandler::class);
 
-        $allowTransformRequestIntoMeeting = $this->prophesize(AllowTransformRequestIntoMeeting::class);
-        $allowTransformRequestIntoMeeting->__invoke($expectedRequest)->willReturn(false);
+        $allowTransformAutomaticallyRequestIntoMeeting = $this->prophesize(AllowTransformAutomaticallyRequestIntoMeeting::class);
+        $allowTransformAutomaticallyRequestIntoMeeting->__invoke($expectedRequest)->willReturn(false);
 
         // Handler
         $handler = new CreateRequestHandler(
             $approveRequestHandler->reveal(),
-            $allowTransformRequestIntoMeeting->reveal(),
+            $allowTransformAutomaticallyRequestIntoMeeting->reveal(),
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal(),

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Meeting;
 
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
-use Proximum\Vimeet\Application\Components\Meeting\AllowTransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
@@ -61,12 +61,12 @@ class ApproveRequestHandler
     private $meetingDDayViewQueryHandler;
 
     /**
-     * @var AllowTransformRequestIntoMeeting
+     * @var AllowTransformAutomaticallyRequestIntoMeeting
      */
-    private $allowTransformRequestIntoMeeting;
+    private $allowTransformAutomaticallyRequestIntoMeeting;
 
     public function __construct(
-        AllowTransformRequestIntoMeeting $allowTransformRequestIntoMeeting,
+        AllowTransformAutomaticallyRequestIntoMeeting $allowTransformAutomaticallyRequestIntoMeeting,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $permissionManager,
@@ -77,16 +77,16 @@ class ApproveRequestHandler
         MeetingDDayViewQueryHandler $meetingDDayViewQueryHandler,
         \DateTimeInterface $datetime
     ) {
-        $this->requestRepository                  = $requestRepository;
-        $this->permissionManager                  = $permissionManager;
-        $this->messageRepository                  = $messageRepository;
-        $this->eventDispatcher                    = $eventDispatcher;
-        $this->datetime                           = $datetime;
-        $this->validationRequiredChecker          = $validationRequiredChecker;
+        $this->allowTransformAutomaticallyRequestIntoMeeting = $allowTransformAutomaticallyRequestIntoMeeting;
+        $this->requestRepository = $requestRepository;
+        $this->permissionManager = $permissionManager;
+        $this->messageRepository = $messageRepository;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->datetime = $datetime;
+        $this->validationRequiredChecker = $validationRequiredChecker;
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
-        $this->ddayGuesser                        = $ddayGuesser;
+        $this->ddayGuesser = $ddayGuesser;
         $this->meetingDDayViewQueryHandler = $meetingDDayViewQueryHandler;
-        $this->allowTransformRequestIntoMeeting = $allowTransformRequestIntoMeeting;
     }
 
     /**
@@ -99,9 +99,10 @@ class ApproveRequestHandler
     public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
     {
         $approveRequest->request->setToPriority($approveRequest->toPriority);
+        $hasRuleToAutoAccept = $this->allowTransformAutomaticallyRequestIntoMeeting->__invoke($approveRequest->request);
 
         if (!$this->permissionManager->isAllowedToApprove($approveRequest->request, $approveRequest->sheet)
-            && !$this->allowTransformRequestIntoMeeting->__invoke($approveRequest->request)
+            && !$hasRuleToAutoAccept
         ) {
             throw new IsNotAllowedToApproveMeetingRequestException();
         }
@@ -140,12 +141,12 @@ class ApproveRequestHandler
             new ApprovedRequestEvent($approveRequest->request)
         );
 
-        if ($this->allowTransformRequestIntoMeeting->__invoke($approveRequest->request)
-            || ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())
-                && false === $this->validationRequiredChecker->handle(
+        if ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())
+            && (false === $this->validationRequiredChecker->handle(
                         $approveRequest->sheet,
                         $approveRequest->editor
                     )
+                || $hasRuleToAutoAccept
                 )
         ) {
             $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
@@ -160,7 +161,7 @@ class ApproveRequestHandler
             }
         }
 
-        return null;
+        return new ApproveRequestResult(null, !$hasRuleToAutoAccept, $approveRequest->request);
     }
 
     /**
