@@ -101,8 +101,8 @@ class ApproveRequestHandler
         $approveRequest->request->setToPriority($approveRequest->toPriority);
         $hasRuleToAutoAccept = $this->allowTransformAutomaticallyRequestIntoMeeting->__invoke($approveRequest->request);
 
-        if (!$this->permissionManager->isAllowedToApprove($approveRequest->request, $approveRequest->sheet)
-            && !$hasRuleToAutoAccept
+        if (!$hasRuleToAutoAccept
+            && !$this->permissionManager->isAllowedToApprove($approveRequest->request, $approveRequest->sheet)
         ) {
             throw new IsNotAllowedToApproveMeetingRequestException();
         }
@@ -142,11 +142,11 @@ class ApproveRequestHandler
         );
 
         if ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())
-            && (false === $this->validationRequiredChecker->handle(
+            && ($hasRuleToAutoAccept
+                || false === $this->validationRequiredChecker->handle(
                         $approveRequest->sheet,
                         $approveRequest->editor
                     )
-                || $hasRuleToAutoAccept
                 )
         ) {
             $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
