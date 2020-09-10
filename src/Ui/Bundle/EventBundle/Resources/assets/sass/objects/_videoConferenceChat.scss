@@ -252,6 +252,17 @@
   overflow-y: scroll;
   padding-right: 5px;
 
+  .btn.btn-gray {
+    background-color: #D1D1D1 !important;
+    height: 30px;
+    width: 33px;
+  }
+
+  .glyphicon {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+
   .chat-row {
     border: 1px solid $border-light;
     border-radius: 8px;
@@ -275,14 +286,17 @@
     }
 
     .chat-vote-count {
-      background-color: $gray-lighter;
       border-radius: 0;
-      color: $gray-light;
+      color: white;
       font-size: 10px;
       font-weight: bold;
       margin-right: 0;
       padding: 0;
       vertical-align: sub;
+    }
+
+    .chat-vote-count-on {
+      color: white;
     }
 
     .chat-emoticon {
@@ -336,11 +350,6 @@
       }
     }
   }
-}
-
-.btn-gray {
-  height: 30px !important;
-  width: 33px !important;
 }
 
 .chat-row-on {
@@ -405,11 +414,6 @@
   button:hover {
     background-color: #999;
   }
-}
-
-.glyphicon {
-  margin-right: 0 !important;
-  margin-left: 8px;
 }
 
 @media screen and (max-width: 767px) {
