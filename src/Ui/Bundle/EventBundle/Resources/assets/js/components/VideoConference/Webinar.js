@@ -513,8 +513,6 @@ Webinar.prototype.initChat = function () {
 
                     rowEl.classList.add('chat-row-on');
                     contentEl.classList.add('chat-content-on');
-                    authorEl.classList.add('chat-author-on');
-                    authorNameEl.classList.add('chat-author-name-on');
                 }
                 emoticonBlock.appendChild(emoticonBtn);
                 emoticonEl.appendChild(emoticonBlock);
