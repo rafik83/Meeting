@@ -41,8 +41,9 @@ class TransactionRepository implements TransactionRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('transaction')
+            ->select('transaction, payment')
             ->from(Transaction::class, 'transaction')
+            ->leftJoin('transaction.payment', 'payment') // Payment is a oneToOne and is always fetch even when no used.
             ->where('transaction.sheet = :sheet')
             ->andWhere('transaction.hidden = false')
             ->setParameter('sheet', $sheet)
@@ -145,7 +146,7 @@ class TransactionRepository implements TransactionRepositoryInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('transaction, sheet')
+            ->select('transaction, sheet, payment')
             ->from(Transaction::class, 'transaction')
             ->join(
                 'transaction.sheet',
@@ -153,6 +154,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'WITH',
                 'sheet.id IN (:sheetIds) AND sheet.event = :event AND transaction.hidden = false'
             )
+            ->leftJoin('transaction.payment', 'payment') // Payment is a oneToOne and is always fetch even when no used.
             ->setParameter('event', $event)
             ->setParameter('sheetIds', $sheetIds)
         ;
