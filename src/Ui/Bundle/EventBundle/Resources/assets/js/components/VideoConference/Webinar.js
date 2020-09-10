@@ -39,8 +39,23 @@ function Webinar(element, isSpeaker) {
     this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
+    this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
+    this.timeRemainingBeforeStartMessage = element.getAttribute('data-time-remaining-before-start-message');
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
+    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
+        const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
+
+        const timerInterval = setInterval(() => {
+            const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
+
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                alert(this.timeRemainingBeforeStartMessage);
+            }
+        }, 500);
+    }
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
@@ -128,6 +143,21 @@ function Webinar(element, isSpeaker) {
     this.viewersCount = 0;
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
+
+    this.streamEndpoint = element.getAttribute('data-webinar-stream-endpoint');
+
+    this.isWebinarRecorded = element.getAttribute('data-webinar-recorded');
+    this.canRecordWebinar = element.getAttribute('data-webinar-can-record');
+    this.recordEndpoint = element.getAttribute('data-webinar-record-endpoint');
+    this.stopRecordEndpoint = element.getAttribute('data-webinar-stop-record-endpoint');
+    this.toggleRecordingButton = element.querySelector('#toggle-recording');
+    this.isRecording = false;
+
+    const recordStatus = element.getAttribute('data-webinar-is-recording');
+    if (this.isWebinarRecorded && this.canRecordWebinar && recordStatus) {
+        this.isRecording = recordStatus === 'true';
+        this.toggleRecording(this.isRecording);
+    }
 
     this.subscribers = [];
     this.subscribersNameMapping = element.getAttribute('data-subscriber-mapping');
@@ -299,6 +329,8 @@ Webinar.prototype.init = function () {
     }.bind(this));
 
     this.connect();
+
+    this.prepareRecordButtons();
 };
 
 Webinar.prototype.updateViewers = function () {
@@ -369,6 +401,82 @@ Webinar.prototype.initShareMedia = function () {
         const shareVideoButton = this.element.querySelector('[data-share-video]');
         shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
     });
+};
+
+Webinar.prototype.prepareRecordButtons = function() {
+    if (!this.isWebinarRecorded || !this.canRecordWebinar) {
+        return;
+    }
+
+    this.toggleRecordingButton.classList.remove('hide');
+    this.toggleRecordingButton.addEventListener('click', () => {
+        if (!this.isRecording) {
+            // call endpoint record
+            this.toggleRecording(true);
+
+            $.post(this.recordEndpoint, JSON.stringify({}), (response) => {
+                this.session.signal({
+                        type: 'startRecording'
+                    },
+                    (error) => {
+                        if (error) {
+                            console.error('startRecording signal error', error);
+                        }
+                    }
+                );
+            })
+            .fail((error) => {
+                this.toggleRecording(false);
+                this.showError({name: `${error.status}: ${error.statusText}`, message:'Could not start recording'});
+                console.error(error.status, error.statusText, this.recordEndpoint);
+            });
+        } else {
+            // call endpoint stop record
+            this.toggleRecording(false);
+
+            $.post(this.stopRecordEndpoint, JSON.stringify({}), (response) => {
+                this.session.signal({
+                        type: 'stopRecording'
+                    },
+                    (error) => {
+                        if (error) {
+                            console.error('stopRecording signal error', error);
+                        }
+                    }
+                );
+            })
+            .fail(() => {
+                this.toggleRecording(true);
+                this.showError('Could not stop recording');
+            });
+        }
+    });
+
+    this.session.on('signal:startRecording', (event) => {
+        this.toggleRecording(true);
+    });
+
+    this.session.on('signal:stopRecording', (event) => {
+        this.toggleRecording(false);
+    });
+};
+
+Webinar.prototype.toggleRecording = function(recording) {
+    this.isRecording = recording;
+
+    if (recording) {
+        this.toggleRecordingButton.classList.add('recording');
+        this.toggleRecordingButton.setAttribute(
+            'title',
+            this.toggleRecordingButton.getAttribute('data-button-recording-title')
+        );
+    } else {
+        this.toggleRecordingButton.classList.remove('recording');
+        this.toggleRecordingButton.setAttribute(
+            'title',
+            this.toggleRecordingButton.getAttribute('data-button-record-title')
+        );
+    }
 };
 
 Webinar.prototype.hideElement = function (element) {
@@ -583,6 +691,13 @@ Webinar.prototype.publishStream = function () {
     });
 
     publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
+    publisher.on('streamCreated', (event) => {
+        this.handleStream(event.stream, 'video');
+    });
+    publisher.on('streamDestroyed', (event) => {
+        this.handleStopStream(event.stream, 'video');
+    });
+
 
     this.session.publish(publisher, this.handlePublish.bind(this));
     publisher.publishVideo(this.enableVideo);
@@ -637,7 +752,7 @@ Webinar.prototype.showError = function (error) {
             alert(this.accessDeniedErrorMessage);
             break;
         default:
-            alert('There was an error: ' + error.name + ', ' + error.message);
+            alert('There was an error: ' + (error.name ? error.name : error) + (error.message ? (', ' + error.message) : ''));
             break;
     }
 };
@@ -724,6 +839,14 @@ Webinar.prototype.shareVideo = function () {
             this.showElement(this.endSharingButton);
             this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
             this.layout();
+
+            publisher.on('streamCreated', (event) => {
+                this.handleStream(event.stream, this.typeCustomShare);
+            });
+
+            publisher.on('streamDestroyed', (event) => {
+                this.handleStopStream(event.stream, this.typeCustomShare);
+            });
         }
     };
 
@@ -733,6 +856,38 @@ Webinar.prototype.shareVideo = function () {
     this.minimizeAllSubscribers();
     this.maximize(videoElement);
     this.layout();
+};
+
+Webinar.prototype.handleStream = function(
+    stream,
+    type
+) {
+    const streamId = stream.streamId;
+
+    $.post(this.streamEndpoint, {
+        streamId: streamId,
+        type: type,
+        action: 'start'
+    }, (response) => {})
+    .fail((error) => {
+        console.error(error);
+    });
+};
+
+Webinar.prototype.handleStopStream = function(
+    stream,
+    type
+) {
+    const streamId = stream.streamId;
+
+    $.post(this.streamEndpoint, {
+        streamId: streamId,
+        type: type,
+        action: 'stop'
+    }, (response) => {})
+    .fail((error) => {
+        console.error(error);
+    });
 };
 
 Webinar.prototype.liveVideo = function () {
@@ -808,6 +963,13 @@ Webinar.prototype.screenshare = function () {
         this.minimizeAllSubscribers();
         this.maximize(this.screenElement);
         this.layout();
+
+        publisherScreen.on('streamCreated', (event) => {
+            this.handleStream(event.stream, this.typeScreenShare);
+        });
+        publisherScreen.on('streamDestroyed', (event) => {
+            this.handleStopStream(event.stream, this.typeScreenShare);
+        });
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
     }.bind(this));

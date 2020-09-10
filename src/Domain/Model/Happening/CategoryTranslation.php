@@ -15,8 +15,6 @@ use Proximum\Vimeet\Domain\Model\AbstractCategoryTranslation;
 class CategoryTranslation extends AbstractCategoryTranslation
 {
     /**
-     * CategoryTranslation constructor.
-     *
      * @param Category $category
      * @param string   $locale
      * @param string   $title
@@ -31,7 +29,7 @@ class CategoryTranslation extends AbstractCategoryTranslation
      *
      * @return CategoryTranslation
      */
-    public function update($title)
+    public function update($title): CategoryTranslation
     {
         $this->title = $title;
 

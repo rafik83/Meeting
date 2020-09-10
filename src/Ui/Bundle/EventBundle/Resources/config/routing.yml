@@ -951,13 +951,44 @@ event_sheet_happening_webinar_question_add:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
 
+event_happening_webinar_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\RecordAction
+
+event_happening_webinar_stop_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stop-record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StopRecordAction
+
 event_sheet_happening_webinar_question_vote:
     path: /sheet/{sheet}/happening/{happening}/webinar/question/vote
     requirements:
         sheet: \d+
         happening: \d+
-    methods:  [POST]
+    methods: [ POST ]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
+
+event_happening_webinar_download_record_archive:
+    path: /happening/{happening}/webinar/download/record
+    requirements:
+        happening: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\Download\DownloadAction
+    methods: [GET]
+
+event_happening_webinar_stream:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stream
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
 
 #
 # Unavailability

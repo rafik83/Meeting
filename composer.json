@@ -70,6 +70,8 @@
         "superbalist/flysystem-google-storage": "^7.2",
         "ramsey/uuid": "^4.1",
         "yohang88/letter-avatar": "^2.2"
+        "ramsey/uuid": "^4.1",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7",

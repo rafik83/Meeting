@@ -1,0 +1,5 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    <p>{{ 'mail.happening.webinar.admin.zip_record_archive_not_prepared.content'|trans({'%happeningTitle%': mail.happeningTitle}, 'mail', mail.locale) }}</p>
+{% endblock %}

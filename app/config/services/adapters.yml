@@ -35,6 +35,14 @@ services:
         arguments:
             - '%google_cloud_storage_config%'
 
+    Proximum\Vimeet\Infrastructure\Adapter\TokboxRecordS3StorageAdapter:
+        arguments:
+            - '%aws_s3_key%'
+            - '%aws_s3_secret%'
+            - '%aws_s3_bucket_name%'
+            - '%aws_s3_region%'
+            - '%tokbox_api_key%'
+
     Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator: ~
 
     Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter:
@@ -62,3 +70,12 @@ services:
     # Auto avatar (with initials)
     #
     Proximum\Vimeet\Infrastructure\Adapter\AvatarAdapter: ~
+
+    Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
+            - '%google_cloud_storage_video_uri%'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
+            - '@adapter.file_system_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\TokboxRecordS3StorageAdapter'
+            - '@logger'

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -40,10 +32,7 @@ class UpdateHandler
         $this->fileStorage = $fileStorage;
     }
 
-    /**
-     * @param Update $update
-     */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         if ($update->isWebinar()) {
             foreach ($update->talkings as $talking) {
@@ -55,7 +44,7 @@ class UpdateHandler
 
         $previousTypes = $update->happening->getTypes();
         $previousBegin = $update->happening->getBegin();
-        $previousEnd   = $update->happening->getEnd();
+        $previousEnd = $update->happening->getEnd();
 
         $happening = $update->happening;
         $happening->update(
@@ -70,7 +59,8 @@ class UpdateHandler
             $update->isVideoWebinar(),
             $update->invitationCode,
             $update->liveUrl,
-            $update->sidebarAllowed
+            $update->sidebarAllowed,
+            $update->isWebinar() && $update->webinarRecorded
         );
 
         foreach ($update->translations as $locale => $translation) {
@@ -93,15 +83,19 @@ class UpdateHandler
             );
         }
 
-        array_walk($update->talkings, function (array &$talking, $key) {
+        array_walk($update->talkings, static function (array &$talking, $key) {
             $talking['position'] += $key;
         });
 
         // Sort speakers by position
-        usort($update->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
+        usort($update->talkings, static function (array $one, array $another) { return $one['position'] - $another['position']; });
 
         // Set speakers
-        $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
+        $happening->setSpeakers(
+            array_map(static function (array $talking) {
+                return $talking['speaker'];
+            }, $update->talkings)
+        );
 
         $this->happeningRepository->set($happening);
 

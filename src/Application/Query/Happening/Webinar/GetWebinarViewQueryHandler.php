@@ -12,7 +12,9 @@ use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
@@ -30,16 +32,26 @@ class GetWebinarViewQueryHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var RecordArchiveRepositoryInterface */
+    private $recordArchiveRepository;
+
+    /** @var IsRecordingAllowed */
+    private $isRecordingAllowed;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         NotificationSubscriberInterface $notificationSubscriber,
+        RecordArchiveRepositoryInterface $recordArchiveRepository,
+        IsRecordingAllowed $isRecordingAllowed,
         \DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->recordArchiveRepository = $recordArchiveRepository;
         $this->notificationSubscriber = $notificationSubscriber;
         $this->dateTime = $dateTime;
+        $this->isRecordingAllowed = $isRecordingAllowed;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -48,7 +60,22 @@ class GetWebinarViewQueryHandler
         $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
 
         $sessionAndTokenView = $this->getSessionAndToken($happening, $isSpeaker);
-        $timeRemainingInSeconds = max(0, $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp());
+        $timeRemainingInSeconds = max(
+            0,
+            $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+        $timeRemainingBeforeStartInSeconds = max(
+            0,
+            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+
+        $liveUrl = $happening->getLiveUrl();
+
+        if (strpos($liveUrl, '_firstname_') !== false || strpos($liveUrl, '_lastname_') !== false) {
+            $placeholders = ['_firstname_','_lastname_'];
+            $values = [urlencode($query->getUser()->getFirstName()),urlencode($query->getUser()->getLastName())];
+            $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        }
 
         $notificationView = new NotificationView(
             $this->notificationSubscriber->getUrl(),
@@ -72,10 +99,13 @@ class GetWebinarViewQueryHandler
             $this->dateTime,
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
+            $timeRemainingBeforeStartInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
-            $happening->getLiveUrl(),
+            $liveUrl,
             $happening->isSidebarAllowed(),
-            $this->isVideoWebinarAndHappeningIsEnded($happening)
+            $this->isVideoWebinarAndHappeningIsEnded($happening),
+            $this->isRecordingAllowed->isSatisfiedBy($happening),
+            $this->isWebinarRecording($happening)
         );
     }
 
@@ -171,5 +201,14 @@ class GetWebinarViewQueryHandler
         }
 
         return $speakerViews;
+    }
+
+    private function isWebinarRecording(Happening $happening): bool
+    {
+        if (!$happening->isWebinarRecorded()) {
+            return false;
+        }
+
+        return $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening);
     }
 }

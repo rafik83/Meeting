@@ -93,6 +93,43 @@ class GoogleCloudStorageAdapter
         $flySystem->write($path, $content);
     }
 
+    public function upload(string $localFile, string $remotePath): void
+    {
+        $flySystem = $this->init();
+
+        $fh = fopen($localFile, 'r');
+        if (!$flySystem->writeStream($remotePath, $fh)) {
+            throw new \RunTimeException(sprintf('File [%s] upload error', $remotePath));
+        }
+    }
+
+    public function download(string $remotePath, $localPath): bool
+    {
+        $flySystem = $this->init();
+
+        if (!$flySystem->has($remotePath)) {
+            return false;
+        }
+
+        $remoteStream = $flySystem->readStream($remotePath);
+        if (!$remoteStream) {
+            return false;
+        }
+
+        $fh = fopen($localPath, 'w');
+        $result = (bool) stream_copy_to_stream($remoteStream, $fh);
+        fclose($fh);
+
+        return $result;
+    }
+
+    public function has(string $remotePath): bool
+    {
+        $flySystem = $this->init();
+
+        return $flySystem->has($remotePath);
+    }
+
     public function delete(string $path): void
     {
         $flySystem = $this->init();
@@ -102,5 +139,12 @@ class GoogleCloudStorageAdapter
         } catch (FileNotFoundException $exception) {
             return;
         }
+    }
+
+    public function signedUrl(string $url, \DateTimeInterface $date, array $options = []): string
+    {
+        $flySystem = $this->init();
+
+        return $flySystem->getAdapter()->getTemporaryUrl($url, $date, $options);
     }
 }

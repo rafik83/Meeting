@@ -21,7 +21,7 @@ class StartWebinarSessionCommandHandler
         $this->happeningRepository = $happeningRepository;
     }
 
-    public function handle(StartWebinarSessionCommand $command)
+    public function handle(StartWebinarSessionCommand $command): void
     {
         $happening = $command->getHappening();
 

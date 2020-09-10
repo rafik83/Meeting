@@ -206,6 +206,10 @@ h1 .label {
   box-shadow: none;
 }
 
+.dropdown-min-width {
+  min-width: 106px;
+}
+
 button, a {
   &:active, &:hover, &:focus, &:link, &:target, &:visited {
     outline:none !important;

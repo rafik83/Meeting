@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -21,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ListAction
 {
-    const TEMPLATE = 'AdminBundle:Happening:list.html.twig';
+    public const TEMPLATE = 'AdminBundle:Happening:list.html.twig';
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -32,11 +24,6 @@ class ListAction
     /** @var EngineInterface */
     private $engine;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,

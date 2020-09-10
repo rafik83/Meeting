@@ -43,6 +43,8 @@ services:
             - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }

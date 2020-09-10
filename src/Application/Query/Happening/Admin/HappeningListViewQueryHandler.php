@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningListView;
@@ -15,20 +7,12 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningListViewQueryHandler
 {
-    /**
-     * @var HappeningRepositoryInterface
-     */
+    /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
-    /**
-     * @var HappeningViewQueryHandler
-     */
+    /** @var HappeningViewQueryHandler */
     private $happeningHandler;
 
-    /**
-     * @param HappeningRepositoryInterface $happeningRepository
-     * @param HappeningViewQueryHandler    $happeningHandler
-     */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         HappeningViewQueryHandler $happeningHandler
@@ -37,11 +21,6 @@ class HappeningListViewQueryHandler
         $this->happeningHandler = $happeningHandler;
     }
 
-    /**
-     * @param HappeningListViewQuery $query
-     *
-     * @return HappeningListView
-     */
     public function handle(HappeningListViewQuery $query): HappeningListView
     {
         $list = $this->happeningRepository->findListByEvent($query->event, $query->locale);

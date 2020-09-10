@@ -22,7 +22,7 @@ class StartWebinarSessionCommandHandlerTest extends TestCase
     /** @var StartWebinarSessionCommandHandler */
     private $startWebinarSessionCommandHandler;
 
-    protected function setUp()
+    public function setUp(): void
     {
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
@@ -32,7 +32,7 @@ class StartWebinarSessionCommandHandlerTest extends TestCase
         );
     }
 
-    public function test_happening_have_session()
+    public function test_happening_have_session(): void
     {
         $happening = $this->prophesize(Happening::class);
         $happening->isWebinar()->shouldBeCalled()->willReturn(true);
@@ -44,7 +44,7 @@ class StartWebinarSessionCommandHandlerTest extends TestCase
         $this->startWebinarSessionCommandHandler->handle(new StartWebinarSessionCommand($happening->reveal()));
     }
 
-    public function test_happening_have_not_session()
+    public function test_happening_have_not_session(): void
     {
         $happening = $this->prophesize(Happening::class);
         $happening->isWebinar()->shouldBeCalled()->willReturn(true);

@@ -169,7 +169,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
 
-
     #
     # Sheet object
     #
@@ -201,3 +200,76 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VoteChatMessage }
+
+    #
+    # Webinar
+    #
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+            - '@datetime'
+            - '@logger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecord }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ReconciliateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallbackHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchiveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
+            - '@adapter.file_system_adapter'
+            - '@adapter.video_conference_adapter'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@logger'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }
+

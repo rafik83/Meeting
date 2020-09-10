@@ -145,10 +145,35 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ReconciliationCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ForceZipRecordArchiveCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@repository.admin_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@event_dispatcher'
+        tags:
+            - { name: console.command }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\MediaResourceCountCommand:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\CreateZipRecordArchiveCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@event_dispatcher'
+            - '@datetime'
         tags:
             - { name: console.command }

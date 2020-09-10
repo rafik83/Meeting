@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\ZipArchiveAdapterInterface;
+use Symfony\Component\Finder\SplFileInfo;
 
 class ZipArchiveAdapter implements ZipArchiveAdapterInterface
 {
@@ -35,7 +28,7 @@ class ZipArchiveAdapter implements ZipArchiveAdapterInterface
         $directoryStructure = explode('/', $rootDir);
         $rootDirId = end($directoryStructure);
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($files as $file) {
             $relativePath = sprintf('%s/%s', $rootDirId, $file->getRelativePathname());
 

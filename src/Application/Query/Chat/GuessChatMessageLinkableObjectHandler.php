@@ -31,7 +31,7 @@ class GuessChatMessageLinkableObjectHandler
     public function handle(GuessChatMessageLinkableObject $query): ChatMessageLinkableInterface
     {
         if ('happening' === $query->objectType) {
-            $happening = $this->happeningRepository->findById($query->objectId);
+            $happening = $this->happeningRepository->getById($query->objectId);
 
             if (null === $happening) {
                 throw new HappeningNotFoundException('Happening not found for given id.');
