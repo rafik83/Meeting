@@ -26,7 +26,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         return $this->mercureHubUrl;
     }
 
-    public function getHappeningSubscriberKey(Happening $happening, array $types): string
+    public function getHappeningSubscriberKey(Happening $happening, int $userId, array $types): string
     {
         if (empty($types)) {
             throw new InvalidArgumentException('Types array cannot be empty');
@@ -37,6 +37,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
                 'subscriber' => array_map(function ($type) use ($happening) {
                     return ['topic' => $this->getHappeningTopic($happening->getId(), $type)];
                 }, $types),
+                'payload' => ['userId' => $userId],
             ]
         ], $this->mercureSubscriberKey);
     }
