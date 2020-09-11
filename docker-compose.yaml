@@ -72,5 +72,6 @@ services:
             SUBSCRIBER_JWT_KEY: "secretkey"
             ALLOW_ANONYMOUS: "0"
             CORS_ALLOWED_ORIGINS: "*"
+            SUBSCRIPTIONS: "1"
         networks:
             - proxy
