@@ -382,6 +382,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         // the tagged data are used in case of empty field
         $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
 
+        $sheetId = $sheet->getId();
         $context = array_merge($context, ['taggedData' => $taggedData]);
 
         /** @var ExportableObjectInterface|MultiUploadCollectionObject|MediaCollection $presentationObject */
@@ -403,7 +404,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             } elseif ($presentationObject instanceof MediaCollection) {
                 $data = $presentationObject->getExportableContent();
             } elseif ($presentationObject instanceof MultiUploadCollectionObject) {
-                $data = $presentationObject->getExportableUploads($eventUrl, $fallbackLocale);
+                $data = $presentationObject->getExportableUploads($eventUrl, $sheetId, $fallbackLocale);
             }
 
             $rawData[$key] = $data;

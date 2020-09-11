@@ -108,13 +108,20 @@ class MultiUploadCollectionObject extends TemplateObject
      * This object does not inherit ExportableObjectInterface
      * But can be exported in some case
      */
-    public function getExportableUploads(string $eventUrl, string $locale): string
+    public function getExportableUploads(string $eventUrl, int $sheetId, string $locale): string
     {
         $exportableContents = [];
 
         foreach ($this->getUploads() as $upload) {
             if (!empty($upload->getPath())) {
-                $exportableContents[] = $eventUrl . '/' . $locale . '/external-file/show' . $upload->getPath();
+                $exportableContents[] = sprintf(
+                    '%s/%s/file/%s/%s%s',
+                    $eventUrl,
+                    $locale,
+                    $this->key,
+                    $sheetId,
+                    $upload->getPath()
+                );
             }
         }
 

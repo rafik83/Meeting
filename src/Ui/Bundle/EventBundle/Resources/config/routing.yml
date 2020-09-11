@@ -226,13 +226,6 @@ event_sheet_show_uploaded_file:
     methods:  [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ShowUploadedFileAction
 
-event_external_show_uploaded_file:
-    path: /external-file/show/{path}
-    requirements:
-        path: .*
-    methods:  [GET]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ExternalShowUploadedFileAction
-
 event_sheet_update:
     path: /sheet/{sheet}/{locale}/{key}
     requirements:
