@@ -84,8 +84,9 @@ class CreateAction
         }
 
         $create = new Create($event, $event->getAvailableLocale($request->getLocale()));
-        $form   = $this->formFactory->create(TypeCreateType::class, $create, [
+        $form = $this->formFactory->create(TypeCreateType::class, $create, [
             'event' => $event,
+            'analytics' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
             'submit' => true,
         ]);
 
@@ -110,7 +111,7 @@ class CreateAction
 
         return $this->engine->renderResponse('AdminBundle:Type:create.html.twig', [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }

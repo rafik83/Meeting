@@ -92,18 +92,22 @@
             {{ form_widget(form.canSubmitValidation) }}
         </div>
     </div>
+    {% if form.displayAnalyticsOnSheet is defined %}
     <div class="form-group">
         {{ form_label(form.displayAnalyticsOnSheet, null, { label_attr: { class: 'control-label col-md-3' }}) }}
         <div class="col-md-9 checkbox">
             {{ form_widget(form.displayAnalyticsOnSheet) }}
         </div>
     </div>
+    {% endif %}
+    {% if form.displayAnalyticsOnMeetingList is defined %}
     <div class="form-group">
         {{ form_label(form.displayAnalyticsOnMeetingList, null, { label_attr: { class: 'control-label col-md-3' }}) }}
         <div class="col-md-9 checkbox">
             {{ form_widget(form.displayAnalyticsOnMeetingList) }}
         </div>
     </div>
+    {% endif %}
 
 {% endblock form_content %}
 

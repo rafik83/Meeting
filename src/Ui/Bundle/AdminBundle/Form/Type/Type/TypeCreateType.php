@@ -118,13 +118,17 @@ class TypeCreateType extends AbstractType
             ->add('canSubmitValidation', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('displayAnalyticsOnSheet', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('displayAnalyticsOnMeetingList', CheckboxType::class, [
-                'required' => false,
-            ])
         ;
+        if ($options['analytics']) {
+            $builder
+                ->add('displayAnalyticsOnSheet', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('displayAnalyticsOnMeetingList', CheckboxType::class, [
+                    'required' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -137,7 +141,9 @@ class TypeCreateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Create::class,
             'csrf_token_id' => 'type_create',
+            'analytics' => false,
         ]);
+        $resolver->setAllowedTypes('analytics', 'bool');
     }
 
     /**
