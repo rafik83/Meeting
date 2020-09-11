@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.46.0] - 2020-09-10
 ### Added
 - VIMEET-2169 - Live streaming myevent
+- VIMEET-2204 - Hidden contact menu
 
 ### Fixed
 - Extra Data for token can be nullable on TechEventTokenAuthenticator
