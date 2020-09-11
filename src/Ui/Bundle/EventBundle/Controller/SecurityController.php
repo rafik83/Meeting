@@ -124,9 +124,19 @@ class SecurityController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $email = $this->get('session')->getFlashBag()->get('login_email');
+        $email = null;
+        $emails = $this->get('session')->getFlashBag()->get('login_email');
 
-        if (empty($email) || null === ($email = array_shift($email))
+        if (is_array($emails)) {
+            if (empty($emails)) {
+                $email = null;
+            } else {
+                $email = array_shift($emails);
+            }
+        }
+
+        if (empty($email)
+            || null === $email
             || !$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)
         ) {
             $user = null;
