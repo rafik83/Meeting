@@ -287,7 +287,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
-        $sheetIds = array_map(function (Result $result) {
+        $sheetIds = array_map(static function (Result $result) {
             return $result->id;
         }, $results);
 

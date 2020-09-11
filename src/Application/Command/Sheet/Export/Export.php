@@ -1,10 +1,11 @@
 <?php
 
-namespace Proximum\Vimeet\Application\Query\Sheet\Export;
+namespace Proximum\Vimeet\Application\Command\Sheet\Export;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ExportQuery
+class Export
 {
     /** @var Event */
     public $event;
@@ -18,8 +19,12 @@ class ExportQuery
     /** @var int[] */
     public $sheetIds;
 
+    /** @var Admin */
+    public $admin;
+
     public function __construct(
         Event $event,
+        Admin $admin,
         string $locale,
         array $sheetIds,
         bool $displayNomenclatureIds = false
@@ -28,5 +33,6 @@ class ExportQuery
         $this->locale  = $locale;
         $this->sheetIds = $sheetIds;
         $this->displayNomenclatureIds = $displayNomenclatureIds;
+        $this->admin = $admin;
     }
 }

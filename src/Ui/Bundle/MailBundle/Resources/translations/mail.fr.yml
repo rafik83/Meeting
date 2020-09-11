@@ -23,6 +23,9 @@ admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de pas
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
+admin.mail.export_sheets.content: "Bonjour,\n\nVous pouvez télécharger le fichier CSV des fiches sélectionnées en cliquant sur le bouton ci-dessous."
+admin.mail.export_sheets.linkTitle: "Télécharger le fichier"
+admin.mail.export_sheets.subject: '%event% : Votre export de fiches est prêt'
 admin.mail.translations.downloaded.body: "Bonjour,\nLes traductions ont été téléchargés depuis openl10n.\n"
 admin.mail.translations.downloaded.subject: 'Téléchargement des traductions'
 admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'

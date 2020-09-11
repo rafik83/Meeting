@@ -3858,6 +3858,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
+            - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery }
 
@@ -3865,7 +3866,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
-            - '@adapter.sheet_search_adapter'
 
     query.event.event_list_query_handler:
         class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler

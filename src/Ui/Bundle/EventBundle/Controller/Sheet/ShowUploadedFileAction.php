@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -42,6 +34,17 @@ class ShowUploadedFileAction
         $this->sharedUploadedFiles = $sharedUploadedFiles;
     }
 
+    /**
+     * Used to show file on sheet and to export MultiUploadCollectionObject
+     *
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param int         $sheetToDisplayId
+     * @param string      $objectKey
+     * @param string      $path
+     *
+     * @return Response
+     */
     public function __invoke(
         Request $request,
         EventDomain $eventDomain,

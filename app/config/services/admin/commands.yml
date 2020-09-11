@@ -742,3 +742,30 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import\UpdateMapping }
+
+    #
+    # Sheet Export
+    #
+    Proximum\Vimeet\Application\Command\Sheet\Export\PrepareExportHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Export\PrepareExport }
+
+    Proximum\Vimeet\Application\Command\Sheet\Export\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Export\Notify }
+
+    Proximum\Vimeet\Application\Command\Sheet\Export\ExportHandler:
+        arguments:
+            - '@query.sheet.export_handler'
+            - '@Proximum\Vimeet\Application\Command\File\PersistContentHandler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\Export\NotifyHandler'
