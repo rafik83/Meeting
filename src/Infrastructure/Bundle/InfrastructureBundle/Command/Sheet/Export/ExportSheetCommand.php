@@ -52,7 +52,7 @@ class ExportSheetCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Generate html for the participants plannings')
+            ->setDescription('Export the sheets in a csv file and notify the admin who requested it.')
             ->addOption('eventId', null, InputOption::VALUE_REQUIRED, 'Event id')
             ->addOption('extraDataWithSheetIds', null, InputOption::VALUE_REQUIRED, 'id of the Extra Data that contains the ids of the sheet')
             ->addOption('adminId', null, InputOption::VALUE_REQUIRED, 'admin to notify at the end of the command')
