@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet\Export;
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Domain\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 
@@ -45,7 +46,7 @@ class PrepareExportHandler
 
         $extraData = new ExtraData(
             $prepareExport->event,
-            '',
+            Type::ADMIN_SHEET_EXPORT_IDS,
             implode(',', $sheetIdsView->sheetIds),
             $this->dateTime
         );
