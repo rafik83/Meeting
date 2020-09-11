@@ -37,6 +37,10 @@ class ContactsSubmenuViewQueryHandler
             return null;
         }
 
+        if ($query->sheet->isInInternalCatalog() !== true || $query->sheet->getType()->canScanParticipant() !== true) {
+            return null;
+        }
+
         $contactTitle = 'navigation.category.contact';
 
         if (isset($query->staticFormulationsIndexedByCategory[Category::CONTACT_LIST])) {
