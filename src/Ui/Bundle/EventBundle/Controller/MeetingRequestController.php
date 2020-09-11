@@ -365,7 +365,7 @@ class MeetingRequestController extends Controller
                 return new JsonResponse($this->createJsonResponseData(
                     true,
                     null === $result || (null !== $result && null === $result->meetingView && !$result->hasError),
-                    $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
+                    $this->renderView('EventBundle:MeetingRequest\Button:approvedRequest.html.twig', [
                         'sheet'                        => $sheet,
                         'meetingRequest'               => $result->request,
                         'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
