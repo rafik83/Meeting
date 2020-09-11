@@ -79,7 +79,7 @@ class GetWebinarViewQueryHandler
 
         $notificationView = new NotificationView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getHappeningSubscriberKey($happening, [AbstractNotification::TYPE_QUESTIONS])
+            $this->notificationSubscriber->getHappeningSubscriberKey($happening, $query->getUser()->getId(), [AbstractNotification::TYPE_QUESTIONS])
         );
 
         return new WebinarView(

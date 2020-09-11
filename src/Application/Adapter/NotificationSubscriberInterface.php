@@ -7,5 +7,5 @@ use Proximum\Vimeet\Domain\Model\Happening;
 interface NotificationSubscriberInterface
 {
     public function getUrl(): string;
-    public function getHappeningSubscriberKey(Happening $happening, array $types): string;
+    public function getHappeningSubscriberKey(Happening $happening, int $userId, array $types): string;
 }
