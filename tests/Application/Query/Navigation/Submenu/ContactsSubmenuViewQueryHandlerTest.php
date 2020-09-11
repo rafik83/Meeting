@@ -39,8 +39,6 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
-
-
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
         $navigationBuilder->getRoute(
             'event_contact_index',
