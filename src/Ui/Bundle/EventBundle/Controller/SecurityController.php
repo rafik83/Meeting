@@ -135,10 +135,9 @@ class SecurityController extends Controller
             }
         }
 
-        if (empty($email)
-            || null === $email
-            || !$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)
-        ) {
+        if (empty($email)) {
+            return $this->redirectToRoute('event_login');
+        } else if (!$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)) {
             $user = null;
         } else {
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
