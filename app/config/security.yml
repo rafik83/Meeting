@@ -80,7 +80,7 @@ security:
             logout_on_user_change: true
             user_checker: security.app.user_checker
             form_login:
-                login_path: event_login_second_step
+                login_path: event_login
                 check_path: event_login_check
                 username_parameter: "login[username]"
                 password_parameter: "login[password]"
