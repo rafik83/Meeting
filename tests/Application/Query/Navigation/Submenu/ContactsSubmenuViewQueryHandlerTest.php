@@ -34,7 +34,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $canScanParticipant->isSatisfiedBy()->willReturn(true);
+        $canScanParticipant->isSatisfiedBy($sheet)->willReturn(true);
 
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
