@@ -241,6 +241,8 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler:
         arguments:
             - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchive }
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler:
         arguments:
