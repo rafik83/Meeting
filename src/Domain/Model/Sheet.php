@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\Analytics;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
@@ -197,6 +198,9 @@ class Sheet implements TraceableInterface
     /** @var LinkedSheets|null */
     private $linkedSheets;
 
+    /** @var Analytics */
+    private $analytics;
+
     /**
      * Sheet constructor.
      *
@@ -227,6 +231,8 @@ class Sheet implements TraceableInterface
         $this->completeness = 0;
         $this->group        = $group;
         $this->availableSlots = new ArrayCollection();
+
+        $this->analytics = new Analytics();
     }
 
     public function __tostring()

@@ -16,6 +16,24 @@ services:
     #
     # Sheet
     #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\DisplaySheetAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@repository.rule_repository'
+            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
+            - '@template.sheet.sheet_info_getter'
+            - '@template.tagged_data_factory'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+            - '@domain.user.phone.validation_required_checker'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction:
         arguments:
             - '@adapter.authorization_checker'

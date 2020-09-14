@@ -1,0 +1,241 @@
+<?php
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog;
+
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add as AddSheetViewed;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetViewedEvent;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
+use Proximum\Vimeet\Domain\Sheet\SheetInfoGetter;
+use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Templating\EngineInterface;
+
+/**
+ * Display a sheet.
+ */
+class DisplaySheetAction
+{
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
+    /** @var EngineInterface */
+    private $engine;
+
+    /** @var RouterInterface */
+    private $router;
+
+    /** @var CommandBusInterface */
+    private $commandBus;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var RuleRepositoryInterface */
+    private $ruleRepository;
+
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var CanSeeSheet */
+    private $canSeeSheet;
+
+    /** @var SheetInfoGetter */
+    private $sheetInfoGetter;
+
+    /** @var TaggedDataFactory */
+    private $taggedDataFactory;
+
+    /** @var MeetingPublishedAccessChecker */
+    private $meetingPublishedAccessChecker;
+
+    /** @var MeetingRequestAccessChecker */
+    private $meetingRequestAccessChecker;
+
+    /** @var AnsweringMeetingRequestAccessChecker */
+    private $answeringMeetingRequestAccessChecker;
+
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
+        EngineInterface $engine,
+        RouterInterface $router,
+        CommandBusInterface $commandBus,
+        SheetRepositoryInterface $sheetRepository,
+        RuleRepositoryInterface $ruleRepository,
+        RequestRepositoryInterface $requestRepository,
+        CanSeeSheet $canSeeSheet,
+        SheetInfoGetter $sheetInfoGetter,
+        TaggedDataFactory $taggedDataFactory,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        ValidationRequiredChecker $validationRequiredChecker,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
+    ) {
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->engine = $engine;
+        $this->router = $router;
+        $this->commandBus = $commandBus;
+        $this->sheetRepository = $sheetRepository;
+        $this->ruleRepository = $ruleRepository;
+        $this->requestRepository = $requestRepository;
+        $this->canSeeSheet = $canSeeSheet;
+        $this->sheetInfoGetter = $sheetInfoGetter;
+        $this->taggedDataFactory = $taggedDataFactory;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->validationRequiredChecker = $validationRequiredChecker;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
+    }
+
+    public function __invoke(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        int $sheetToDisplayId,
+        UserDomain $userDomain
+    ): Response {
+        if (
+            !$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
+        ) {
+            throw new AccessDeniedHttpException('Access denied to this sheet');
+        }
+
+        $user = $userDomain->getUser();
+        $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
+        if ($event !== $sheet->getEvent()) {
+            throw new NotFoundHttpException('Sheet not in this event');
+        }
+
+        if (!$sheet->isInInternalCatalog()) {
+            throw new NotFoundHttpException('Sheet not in catalog');
+        }
+
+        $sheetToDisplay = $this->sheetRepository->getSheetById($sheetToDisplayId);
+
+        if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
+            throw new NotFoundHttpException('Sheet not found');
+        }
+
+        if (!$sheetToDisplay->isInInternalCatalog()) {
+            throw new NotFoundHttpException('Sheet to display not in catalog');
+        }
+
+        if (false === $this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
+            throw new NotFoundHttpException('You do not have the right to see this sheet');
+        }
+
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
+
+        // legacy analytics
+        $this->commandBus->handle(new AddSheetViewed($user, $sheetToDisplay));
+        // analytics
+        $this->delayedEventDispatcher->dispatch(Events::SHEET_VIEWED, new SheetViewedEvent($sheetToDisplay, $user));
+
+        try {
+            list($nomenclatures, $participants, $taggedData) = $this
+                ->sheetInfoGetter
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw new AccessDeniedHttpException();
+        }
+
+        // Build sheet template data and attach tagged data view to template object with tags
+        $templateData = $this->taggedDataFactory
+            ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
+
+        $ruleApplyer = $this->get('domain.rule.applyer');
+        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+        $ruleApplyer->applyRuleForCardList($participants, $rules);
+
+        $isMeetingPublished = false;
+        $isMeetingRequestUpdateLocked = false;
+        $isMeetingRequestClosed = false;
+        $isAnsweringMeetingRequestClosed = false;
+
+        if ($sheet === $sheetToDisplay) {
+            $meetingRequest = null;
+        } else {
+            $meetingRequest = $this->requestRepository->getRequestBetweenSheets($sheetToDisplay, $sheet);
+
+            $isMeetingPublished = $this->meetingPublishedAccessChecker->allowedToAccess($event);
+
+            $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
+            $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
+            $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
+        }
+
+        $isPhoneValidationRequired = $this->validationRequiredChecker->handle($sheet, $user, $locale);
+
+        if (true === $isPhoneValidationRequired) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if (null !== $participant) {
+                $phoneValidationLink = $this->router->generate('event_user_phone_redirect_to_validation', [
+                    'sheet' => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo' => $this->router->generate('event_catalog_complete_sheet', [
+                        'sheet' => $sheet->getId(),
+                        'sheetToDisplay' => $sheetToDisplay->getId(),
+                    ]),
+                ]);
+            }
+        }
+
+        return new Response($this->engine->render('@Event/Catalog/displaySheet.html.twig', [
+            'event' => $event,
+            'sheet' => $sheet,
+            'participant' => $sheet->getUserParticipant($user),
+            'sheetToDisplay' => $sheetToDisplay,
+            'taggedData' => $taggedData,
+            'locale' => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants' => $participants,
+            'templateData' => $templateData,
+            'meetingRequest' => $meetingRequest,
+            'isMeetingPublished' => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked' => $isMeetingRequestUpdateLocked,
+            'isMeetingRequestClosed' => $isMeetingRequestClosed,
+            'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isPhoneValidationRequired' => $isPhoneValidationRequired,
+            'phoneValidationLink' => $phoneValidationLink ?? null,
+            'isRequestMeetingEnabled' => $sheet !== $sheetToDisplay,
+            'isCatalog' => true,
+        ]));
+    }
+}

@@ -552,12 +552,12 @@ event_catalog_select_items_from_nomenclatures:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\SelectItemsFromNomenclaturesAction }
 
 event_catalog_complete_sheet:
-    path: /sheet/{sheet}/catalog/display/{sheetToDisplay}
+    path: /sheet/{sheet}/catalog/display/{sheetToDisplayId}
     requirements:
         sheet: \d+
-        sheetToDisplay: \d+
+        sheetToDisplayId: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Catalog:displaySheet }
+    defaults: { _controller:  }
 
 event_catalog_sheet_meeting_request:
     path: /sheet/{sheet}/catalog/sheet/{toSheet}/request-meeting

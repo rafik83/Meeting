@@ -1,20 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
-namespace Proximum\Vimeet\Application\Command\Sheet\SheetViewed;
+namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Add implements Command
+class AddView implements Command
 {
     /** @var User */
     public $user;
