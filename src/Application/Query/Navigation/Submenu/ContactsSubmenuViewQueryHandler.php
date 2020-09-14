@@ -43,7 +43,7 @@ class ContactsSubmenuViewQueryHandler
             return null;
         }
 
-        if ($query->sheet->isInInternalCatalog() !== true && $this->canScanParticipant->isSatisfiedBy() !== true) {
+        if ($query->sheet->isInInternalCatalog() !== true && $this->canScanParticipant->isSatisfiedBy($query->sheet) !== true) {
             return null;
         }
 
