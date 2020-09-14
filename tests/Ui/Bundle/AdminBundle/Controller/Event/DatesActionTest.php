@@ -98,6 +98,8 @@ class DatesActionTest extends TestCase
         $configuration->getAgendaOnlineDate()->shouldBeCalled()->willReturn(null);
         $configuration->getRegistrationOpenDate()->shouldBeCalled()->willReturn(null);
         $configuration->getRegistrationCloseDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getNetworkingOpenDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getNetworkingCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableBadgeForParticipantDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableVisioTestMenuButtonDate()->shouldBeCalled()->willReturn(null);
         $this->event->getConfiguration()->willReturn($configuration->reveal());
@@ -162,6 +164,8 @@ class DatesActionTest extends TestCase
         $configuration->getAgendaOnlineDate()->shouldBeCalled()->willReturn(null);
         $configuration->getRegistrationOpenDate()->shouldBeCalled()->willReturn(null);
         $configuration->getRegistrationCloseDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getNetworkingOpenDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getNetworkingCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableBadgeForParticipantDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableVisioTestMenuButtonDate()->shouldBeCalled()->willReturn(null);
         $this->event->getConfiguration()->willReturn($configuration->reveal());

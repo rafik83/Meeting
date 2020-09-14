@@ -268,6 +268,8 @@ form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Active l
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Active l''affichage du badge pour le participant'
 form.event_configure_date.children.enableVisioTestMenuButtonDate.label: 'Active l''affichage du bouton de test de visio dans le menu'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
+form.event_configure_date.children.networkingCloseDate.label: 'Date de clôture du networking'
+form.event_configure_date.children.networkingOpenDate.label: 'Date d''ouverture du networking'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'

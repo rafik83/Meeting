@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
 - VIMEET-2156 - Remove explicit error about email on login (security)
+- VIMEET-2217 - Activate / deactivate the networking tab by key date
 
 ## [2.46.0] - 2020-09-10
 ### Added

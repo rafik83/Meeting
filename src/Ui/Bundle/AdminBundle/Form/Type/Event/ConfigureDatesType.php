@@ -31,6 +31,8 @@ class ConfigureDatesType extends AbstractType
         'registrationCloseDate',
         'enableBadgeForParticipantDate',
         'enableVisioTestMenuButtonDate',
+        'networkingOpenDate',
+        'networkingCloseDate',
     ];
 
     private const CONFIGURATION_DATES_HELP = [

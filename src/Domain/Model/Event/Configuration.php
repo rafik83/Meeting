@@ -137,6 +137,12 @@ class Configuration
     /** @var bool */
     private $visio = false;
 
+    /** @var \DateTimeInterface|null "Date d'ouverture du networking" */
+    private $networkingOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture du networking" */
+    private $networkingCloseDate;
+
     public function __construct()
     {
         $this->meetingRequestUpdateLocked = false;
@@ -396,7 +402,9 @@ class Configuration
         \DateTimeInterface $registrationOpenDate = null,
         \DateTimeInterface $registrationCloseDate = null,
         \DateTimeInterface $enableBadgeForParticipantDate = null,
-        \DateTimeInterface $enableVisioTestMenuButtonDate = null
+        \DateTimeInterface $enableVisioTestMenuButtonDate = null,
+        \DateTimeInterface $networkingOpenDate = null,
+        \DateTimeInterface $networkingCloseDate = null
     ): self {
         $this->catalogOnlineDate = $catalogOnlineDate;
         $this->happeningsOpenDate = $happeningsOpenDate;
@@ -409,6 +417,8 @@ class Configuration
         $this->registrationCloseDate = $registrationCloseDate;
         $this->enableBadgeForParticipantDate = $enableBadgeForParticipantDate;
         $this->enableVisioTestMenuButtonDate = $enableVisioTestMenuButtonDate;
+        $this->networkingOpenDate = $networkingOpenDate;
+        $this->networkingCloseDate = $networkingCloseDate;
 
         return $this;
     }
@@ -596,5 +606,21 @@ class Configuration
     ): void {
         $this->displayParticipantNameOnPlanning = $displayParticipantNameOnPlanning;
         $this->displayParticipantPositionOnPlanning = $displayParticipantPositionOnPlanning;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getNetworkingOpenDate(): ?\DateTimeInterface
+    {
+        return $this->networkingOpenDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getNetworkingCloseDate(): ?\DateTimeInterface
+    {
+        return $this->networkingCloseDate;
     }
 }
