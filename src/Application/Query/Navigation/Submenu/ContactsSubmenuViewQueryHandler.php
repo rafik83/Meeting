@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 
 class ContactsSubmenuViewQueryHandler
 {
@@ -23,12 +24,17 @@ class ContactsSubmenuViewQueryHandler
     /** @var EventOpenAccessChecker */
     private $eventOpenAccessChecker;
 
+    /** @var CanScanParticipant */
+    private $canScanParticipant;
+
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        EventOpenAccessChecker $eventOpenAccessChecker
+        EventOpenAccessChecker $eventOpenAccessChecker,
+        CanScanParticipant $canScanParticipant
     ) {
         $this->navigationBuilder = $navigationBuilder;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
+        $this->canScanParticipant = $canScanParticipant;
     }
 
     public function handle(ContactsSubmenuViewQuery $query): ?SubmenuButtonView
@@ -37,7 +43,7 @@ class ContactsSubmenuViewQueryHandler
             return null;
         }
 
-        if ($query->sheet->isInInternalCatalog() !== true || $query->sheet->getType()->canScanParticipant() !== true) {
+        if ($query->sheet->isInInternalCatalog() !== true && $this->canScanParticipant->isSatisfiedBy() !== true) {
             return null;
         }
 
