@@ -198,7 +198,7 @@ class Sheet implements TraceableInterface
     /** @var LinkedSheets|null */
     private $linkedSheets;
 
-    /** @var Analytics */
+    /** @var Analytics|null */
     private $analytics;
 
     /**
@@ -1332,5 +1332,18 @@ class Sheet implements TraceableInterface
     public function changeOwner(User $owner): void
     {
         $this->owner = $owner;
+    }
+
+    /**
+     * @return Analytics
+     */
+    public function getAnalytics(): Analytics
+    {
+        // Backward compatibility - sheets may not have analytics
+        if ($this->analytics === null) {
+            $this->analytics = new Analytics();
+        }
+
+        return $this->analytics;
     }
 }

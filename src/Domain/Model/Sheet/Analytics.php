@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
+use Proximum\Vimeet\Domain\Model\User;
+
 class Analytics
 {
     /** @var int */
@@ -22,12 +24,13 @@ class Analytics
         $this->clickedElements = [];
     }
 
-    public function incrementViews(int $userId)
+    public function incrementViews(User $user): void
     {
+        $userId = $user->getId();
         $this->views++;
         if (!in_array($userId, $this->viewers, true)) {
-            $this->viewers++;
-            array_unshift($this->uniqueViewers, $userId);
+            $this->uniqueViews++;
+            array_unshift($this->viewers, $userId);
         }
     }
 

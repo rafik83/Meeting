@@ -1114,6 +1114,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddComment }
+    Proximum\Vimeet\Application\Command\Sheet\AddViewHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@impersonating_user_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddView }
     command.sheet.batch_assign_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
         arguments:

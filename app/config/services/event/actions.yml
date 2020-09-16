@@ -16,15 +16,15 @@ services:
     #
     # Sheet
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\DisplaySheetAction:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\DisplaySheetAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@repository.rule_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
             - '@template.sheet.sheet_info_getter'
             - '@template.tagged_data_factory'
@@ -33,6 +33,7 @@ services:
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
             - '@domain.user.phone.validation_required_checker'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@domain.rule.applyer'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction:
         arguments:

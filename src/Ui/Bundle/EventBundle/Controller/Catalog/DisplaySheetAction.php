@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\SheetInfoGetter;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
@@ -80,6 +81,9 @@ class DisplaySheetAction
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
+    /** @var Applyer */
+    private $applyer;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EngineInterface $engine,
@@ -95,7 +99,8 @@ class DisplaySheetAction
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
-        DelayedEventDispatcherInterface $delayedEventDispatcher
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        Applyer $applyer
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->engine = $engine;
@@ -112,13 +117,14 @@ class DisplaySheetAction
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->applyer = $applyer;
     }
 
     public function __invoke(
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        int $sheetToDisplayId,
+        int $sheetToDisplay,
         UserDomain $userDomain
     ): Response {
         if (
@@ -140,34 +146,34 @@ class DisplaySheetAction
             throw new NotFoundHttpException('Sheet not in catalog');
         }
 
-        $sheetToDisplay = $this->sheetRepository->getSheetById($sheetToDisplayId);
+        $seingSheet = $this->sheetRepository->getSheetById($sheetToDisplay);
 
-        if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
+        if (null === $seingSheet || $event !== $seingSheet->getEvent()) {
             throw new NotFoundHttpException('Sheet not found');
         }
 
-        if (!$sheetToDisplay->isInInternalCatalog()) {
+        if (!$seingSheet->isInInternalCatalog()) {
             throw new NotFoundHttpException('Sheet to display not in catalog');
         }
 
-        if (false === $this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
+        if (false === $this->canSeeSheet->isSatisfiedBy($sheet, $seingSheet)) {
             throw new NotFoundHttpException('You do not have the right to see this sheet');
         }
 
-        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
+        $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $seingSheet);
 
         // legacy analytics
-        $this->commandBus->handle(new AddSheetViewed($user, $sheetToDisplay));
+        $this->commandBus->handle(new AddSheetViewed($user, $seingSheet));
         // analytics
-        $this->delayedEventDispatcher->dispatch(Events::SHEET_VIEWED, new SheetViewedEvent($sheetToDisplay, $user));
+        $this->delayedEventDispatcher->dispatch(Events::SHEET_VIEWED, new SheetViewedEvent($seingSheet, $user));
 
         try {
-            list($nomenclatures, $participants, $taggedData) = $this
+            [$nomenclatures, $participants, $taggedData] = $this
                 ->sheetInfoGetter
                 ->sheetInfos(
                     $eventDomain->getEvent(),
                     $sheet,
-                    $sheetToDisplay,
+                    $seingSheet,
                     $user,
                     $locale
                 );
@@ -177,21 +183,20 @@ class DisplaySheetAction
 
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->taggedDataFactory
-            ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
+            ->buildTaggedDataView($seingSheet, $locale, $rules);
 
-        $ruleApplyer = $this->get('domain.rule.applyer');
-        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
-        $ruleApplyer->applyRuleForCardList($participants, $rules);
+        $this->applyer->applyRuleForTemplate($templateData, $rules);
+        $this->applyer->applyRuleForCardList($participants, $rules);
 
         $isMeetingPublished = false;
         $isMeetingRequestUpdateLocked = false;
         $isMeetingRequestClosed = false;
         $isAnsweringMeetingRequestClosed = false;
 
-        if ($sheet === $sheetToDisplay) {
+        if ($sheet === $seingSheet) {
             $meetingRequest = null;
         } else {
-            $meetingRequest = $this->requestRepository->getRequestBetweenSheets($sheetToDisplay, $sheet);
+            $meetingRequest = $this->requestRepository->getRequestBetweenSheets($seingSheet, $sheet);
 
             $isMeetingPublished = $this->meetingPublishedAccessChecker->allowedToAccess($event);
 
@@ -211,7 +216,7 @@ class DisplaySheetAction
                     'participant' => $participant->getId(),
                     'redirectTo' => $this->router->generate('event_catalog_complete_sheet', [
                         'sheet' => $sheet->getId(),
-                        'sheetToDisplay' => $sheetToDisplay->getId(),
+                        'sheetToDisplay' => $seingSheet->getId(),
                     ]),
                 ]);
             }
@@ -221,7 +226,7 @@ class DisplaySheetAction
             'event' => $event,
             'sheet' => $sheet,
             'participant' => $sheet->getUserParticipant($user),
-            'sheetToDisplay' => $sheetToDisplay,
+            'sheetToDisplay' => $seingSheet,
             'taggedData' => $taggedData,
             'locale' => $locale,
             'nomenclatures' => $nomenclatures,
@@ -234,7 +239,7 @@ class DisplaySheetAction
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
             'isPhoneValidationRequired' => $isPhoneValidationRequired,
             'phoneValidationLink' => $phoneValidationLink ?? null,
-            'isRequestMeetingEnabled' => $sheet !== $sheetToDisplay,
+            'isRequestMeetingEnabled' => $sheet !== $seingSheet,
             'isCatalog' => true,
         ]));
     }
