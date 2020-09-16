@@ -7,14 +7,16 @@
     {% endif %}
     <div class="section__content">
         <ul class="list list--medias">
-            {% for media in item.data['medias']|default([]) %}
+            {% for index, media in item.data['medias']|default([]) %}
                 <li>
                     {% if media['type'] is defined and media['type'] == 'video' %}
                         <i class="icon-Video_1"></i>
                     {% else %}
                         <i class="icon-Document_1"></i>
                     {% endif %}
-                    <a href="{{ media['url'] }}" target="_blank">{{ media['title']|localize(locale, fallback) }}</a>
+                    <a href="{{ path('event_catalog_sheet_follow_link', {sheet: sheet.id, objectId: item.uid, index: index}) }}" target="_blank">
+                        {{ media['title']|localize(locale, fallback) }}
+                    </a>
                 </li>
             {% endfor %}
         </ul>

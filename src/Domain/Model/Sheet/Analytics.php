@@ -34,6 +34,33 @@ class Analytics
         }
     }
 
+    public function incrementClicks(User $user, string $objectId, ?int $index): void
+    {
+        $userId = $user->getId();
+
+        $indices = [$objectId];
+
+        // if index is defined, this is a collection of links
+        if (null !== $index) {
+            $indices[] = $index;
+        }
+
+        // set initial values if empty
+        $currentAnalytics = &$this->clickedElements;
+        for ($i = 0; $i < count($indices); $i++) {
+            if (!isset($currentAnalytics[$indices[$i]])) {
+                $currentAnalytics[$indices[$i]] = isset($indices[$i+1]) ? [$indices[$i+1] =>null] : ['views' => 0, 'uniqueViews' => 0, 'viewers' => []];
+            }
+            $currentAnalytics = &$currentAnalytics[$indices[$i]];
+        }
+
+        $currentAnalytics['views']++;
+        if (!in_array($userId, $currentAnalytics['viewers'], true)) {
+            $currentAnalytics['uniqueViews']++;
+            array_unshift($currentAnalytics['viewers'], $userId);
+        }
+    }
+
     /**
      * Get the value of views
      */

@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TrackingUrlTransformer;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -86,6 +87,7 @@ class TaggedDataFactoryTest extends TestCase
         // Mock
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $applyer = $this->prophesize(Applyer::class);
+        $trackingUrlTransformer = $this->prophesize(TrackingUrlTransformer::class);
 
         $templateDataFactory
             ->createRegistrationFromSheet($sheet, $locale)
@@ -103,7 +105,8 @@ class TaggedDataFactoryTest extends TestCase
         $taggedDataFactory = new TaggedDataFactory(
             $templateDataFactory->reveal(),
             $printTemplateResolver->reveal(),
-            $applyer->reveal()
+            $applyer->reveal(),
+            $trackingUrlTransformer->reveal()
         );
 
         $sheetTemplateData = $taggedDataFactory->buildTaggedDataView($sheet, $locale);

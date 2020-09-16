@@ -559,6 +559,15 @@ event_catalog_complete_sheet:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\DisplaySheetAction }
 
+event_catalog_sheet_follow_link:
+    path: /sheet/{sheet}/forward-link/object/{objectId}/{index}
+    requirements:
+        sheet: \d+
+        objectId: \w+
+        index: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\FollowLinkAction, index: null }
+
 event_catalog_sheet_meeting_request:
     path: /sheet/{sheet}/catalog/sheet/{toSheet}/request-meeting
     requirements:

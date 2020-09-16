@@ -91,6 +91,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\FollowLinkAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@logger'
+
     #
     # Package
     #

@@ -31,21 +31,19 @@ class TaggedDataFactory
     /** @var PrintTemplateResolver */
     private $printTemplateResolver;
 
-    /**
-     * TaggedDataFactory constructor.
-     *
-     * @param TemplateDataFactory   $templateDataFactory
-     * @param PrintTemplateResolver $printTemplateResolver
-     * @param Applyer               $applyer
-     */
+    /** @var TrackingUrlTransformer */
+    private $trackingUrlTransformer;
+
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         PrintTemplateResolver $printTemplateResolver,
-        Applyer $applyer
+        Applyer $applyer,
+        TrackingUrlTransformer $trackingUrlTransformer
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->applyer             = $applyer;
         $this->printTemplateResolver = $printTemplateResolver;
+        $this->trackingUrlTransformer = $trackingUrlTransformer;
     }
 
     /**
@@ -133,6 +131,8 @@ class TaggedDataFactory
                     } else {
                         $value = $object->getFormattedDate($locale);
                     }
+                } elseif ($object instanceof TemplateObject\Url) {
+                    $value = $this->trackingUrlTransformer->transform($sheet, $object);
                 } else {
                     $value = $object->getContentValueLocalize($locale);
                 }

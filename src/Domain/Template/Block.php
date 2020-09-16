@@ -123,6 +123,8 @@ class Block extends AbstractChild
             $this->handleObjectsCollection($child);
         }
 
+        $child->setUid($name);
+
         $this->children[$column][$name] = $child;
 
         return $this;

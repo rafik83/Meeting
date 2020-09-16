@@ -1114,12 +1114,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddComment }
-    Proximum\Vimeet\Application\Command\Sheet\AddViewHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@impersonating_user_checker'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddView }
     command.sheet.batch_assign_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler
         arguments:
@@ -3109,10 +3103,15 @@ services:
             - '@template.template_data_factory'
             - '@template.print_template_resolver'
             - '@domain.rule.applyer'
+            - '@Proximum\Vimeet\Domain\Template\TrackingUrlTransformer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
+
+    Proximum\Vimeet\Domain\Template\TrackingUrlTransformer:
+        arguments:
+            - '@adapter.router'
 
     template.registration.registration_template_validator:
         class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
