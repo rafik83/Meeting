@@ -131,7 +131,7 @@ class TypeUpdateType extends AbstractType
                 'required' => false,
             ])
         ;
-        if ($options['analytics']) {
+        if ($options['showAnalyticsSettings']) {
             $builder
                 ->add('displayAnalyticsOnSheet', CheckboxType::class, [
                     'required' => false,
@@ -151,13 +151,12 @@ class TypeUpdateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Update::class,
             'csrf_token_id' => 'type_update',
-            'analytics' => false,
         ]);
 
-        $resolver->setRequired(['event', 'type']);
+        $resolver->setRequired(['event', 'type', 'showAnalyticsSettings']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setAllowedTypes('type', Type::class);
-        $resolver->setAllowedTypes('analytics', 'bool');
+        $resolver->setAllowedTypes('showAnalyticsSettings', 'bool');
     }
 
     /**

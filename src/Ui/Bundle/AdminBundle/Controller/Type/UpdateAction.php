@@ -89,7 +89,7 @@ class UpdateAction
         $form = $this->formFactory->create(TypeUpdateType::class, $update, [
             'event' => $event,
             'type' => $type,
-            'analytics' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
+            'showAnalyticsSettings' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
             'submit' => true,
         ]);
 

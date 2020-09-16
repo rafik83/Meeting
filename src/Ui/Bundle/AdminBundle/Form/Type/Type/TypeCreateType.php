@@ -119,7 +119,7 @@ class TypeCreateType extends AbstractType
                 'required' => false,
             ])
         ;
-        if ($options['analytics']) {
+        if ($options['showAnalyticsSettings']) {
             $builder
                 ->add('displayAnalyticsOnSheet', CheckboxType::class, [
                     'required' => false,
@@ -136,14 +136,13 @@ class TypeCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'showAnalyticsSettings']);
         $resolver->setAllowedTypes('event', Model\Event::class);
+        $resolver->setAllowedTypes('showAnalyticsSettings', 'bool');
         $resolver->setDefaults([
             'data_class' => Create::class,
             'csrf_token_id' => 'type_create',
-            'analytics' => false,
         ]);
-        $resolver->setAllowedTypes('analytics', 'bool');
     }
 
     /**
