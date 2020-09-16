@@ -72,9 +72,8 @@ class ConfigureDatesType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'showDateNetworking']);
         $resolver->setAllowedTypes('event', Event::class);
-        $resolver->setRequired(['showDateNetworking']);
         $resolver->setAllowedTypes('showDateNetworking', 'bool');
         $resolver->setDefaults([
             'data_class' => ConfigureDates::class,
