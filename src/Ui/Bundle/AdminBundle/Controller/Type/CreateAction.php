@@ -86,7 +86,7 @@ class CreateAction
         $create = new Create($event, $event->getAvailableLocale($request->getLocale()));
         $form = $this->formFactory->create(TypeCreateType::class, $create, [
             'event' => $event,
-            'analytics' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
+            'showAnalyticsSettings' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
             'submit' => true,
         ]);
 
