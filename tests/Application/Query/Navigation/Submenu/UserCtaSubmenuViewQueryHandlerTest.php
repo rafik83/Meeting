@@ -13,7 +13,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
-use Symfony\Component\Translation\Translator;
 
 class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 {
@@ -24,17 +23,25 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(42);
+        $user->getEmail()->willReturn('test@yahoo.fr');
 
         $event = $this->prophesize(Event::class);
         $event->getId()->willReturn(137);
 
-        $translator = $this->prophesize(Translator::class);
-
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(true);
+        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter->getValue()->shouldBeCalled()->willReturn('
+        {
+             "link": "https://example.net/%userId%/%userEmail%",
+             "concerned_type_ids": [689, 746, 747, 748, 749, 750],
+             "button-label": {
+             "fr": "Mon bouton",
+             "en": "My button"
+             }
+        }');
+        $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
-            $translator->reveal(),
             $extraParameterRepository->reveal()
         );
 
@@ -49,8 +56,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 
         $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
         Category::CUSTOM_BUTTON_ICON,
-            'mon bouton',
-            'https://www.google.fr',
+            'Mon bouton',
+            'https://example.net/42/test%40yahoo.fr',
             false,
             null,
             false,
@@ -58,5 +65,36 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
     );
 
         $this->assertEquals($expectedCustomButtonSubmenuButtonView, $result);
+    }
+
+    public function testCustomButtonNull()
+    {
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->willReturn(1337);
+
+        $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(42);
+        $user->getEmail()->willReturn('test@yahoo.fr');
+
+        $event = $this->prophesize(Event::class);
+        $event->getId()->willReturn(137);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+
+        $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
+            $extraParameterRepository->reveal()
+        );
+
+        $result = $userCtaSubmenuViewQueryHandler->handle(
+            new UserCtaSubmenuViewQuery(
+                $user->reveal(),
+                $event->reveal(),
+                'fr',
+                $sheet->reveal()
+            )
+        );
+
+        $this->assertEquals(null, $result);
     }
 }

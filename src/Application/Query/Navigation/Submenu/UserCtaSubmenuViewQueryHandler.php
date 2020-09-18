@@ -3,7 +3,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -11,19 +10,14 @@ use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 
 class UserCtaSubmenuViewQueryHandler
 {
-    /** @var TranslatorInterface */
-    private $translator;
 
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
 
     public function __construct(
-        TranslatorInterface $translator,
         ExtraParameterRepositoryInterface $extraParameterRepository
-
     ) {
-        $this->translator = $translator;
         $this->extraParameterRepository = $extraParameterRepository;
     }
 
@@ -34,16 +28,16 @@ class UserCtaSubmenuViewQueryHandler
 //            return null;
 //        }
 
-        $customUserIdExtraData = $this->extraParameterRepository->findByEventAndType(
+        $customUserIdExtraParameter = $this->extraParameterRepository->findByEventAndType(
         $query->event,
         Type::TYPE_CUSTOM_BUTTON
         );
 
-        if (null === $customUserIdExtraData) {
+        if (null === $customUserIdExtraParameter) {
             return null;
         }
 
-        $parameters = json_decode($customUserIdExtraData->getValue(), true);
+        $parameters = json_decode($customUserIdExtraParameter->getValue(), true);
         $placeholders = ['%userId%','%userEmail%'];
         $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail())];
         $customButton = str_replace($placeholders, $values, $parameters['link']);
