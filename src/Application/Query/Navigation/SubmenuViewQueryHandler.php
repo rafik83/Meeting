@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery;
@@ -138,6 +139,21 @@ class SubmenuViewQueryHandler
         );
 
         $buttonsViews = array_merge($buttonsViews, $agendaButtonViews);
+
+        $networkingButtonViews = $this->queryBus->handle(
+            new NetworkingSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::NETWORKING] ?? null
+            )
+        );
+
+        if (null !== $networkingButtonViews) {
+            $buttonsViews[] = $networkingButtonViews;
+        }
 
         $packageSubmenuButtonView = $this->queryBus->handle(
             new PackageSubmenuButtonViewQuery(

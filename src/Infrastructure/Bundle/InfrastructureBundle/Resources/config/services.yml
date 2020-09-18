@@ -4614,6 +4614,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
 
+    query.navigation.networking_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
+
+
     ##
     # Mass Assignment query handler
     ##
@@ -5585,6 +5594,11 @@ services:
 
     domain.key_dates.checker.registration_close_date_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
+        arguments:
+            - '@datetime'
+            -
+    domain.key_dates.checker.networking_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
         arguments:
             - '@datetime'
 

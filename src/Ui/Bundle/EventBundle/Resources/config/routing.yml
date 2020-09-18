@@ -633,6 +633,16 @@ event_contact_show:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
 
 #
+# Networking
+#
+event_networking:
+    path: /sheet/{sheet}/networking
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    #defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
