@@ -19,14 +19,10 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
     public function testCustomButton()
     {
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn(1337);
-
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(42);
         $user->getEmail()->willReturn('test@yahoo.fr');
-
         $event = $this->prophesize(Event::class);
-        $event->getId()->willReturn(137);
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameter = $this->prophesize(Event\ExtraParameter::class);
@@ -70,14 +66,9 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
     public function testCustomButtonNull()
     {
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn(1337);
-
         $user = $this->prophesize(User::class);
-        $user->getId()->willReturn(42);
         $user->getEmail()->willReturn('test@yahoo.fr');
-
         $event = $this->prophesize(Event::class);
-        $event->getId()->willReturn(137);
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);

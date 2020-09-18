@@ -17,11 +17,13 @@ class UserCtaSubmenuViewQueryHandler
 
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository
-    ) {
+    )
+    {
         $this->extraParameterRepository = $extraParameterRepository;
     }
 
-    public function handle(UserCtaSubmenuViewQuery $query): ?SubmenuButtonView {
+    public function handle(UserCtaSubmenuViewQuery $query): ?SubmenuButtonView
+    {
 
 //        todo {gestion des types de fiches}
 //        if (false === $this->availableChecker->isSatisfiedBy($query->sheet)) {
@@ -29,8 +31,8 @@ class UserCtaSubmenuViewQueryHandler
 //        }
 
         $customUserIdExtraParameter = $this->extraParameterRepository->findByEventAndType(
-        $query->event,
-        Type::TYPE_CUSTOM_BUTTON
+            $query->event,
+            Type::TYPE_CUSTOM_BUTTON
         );
 
         if (null === $customUserIdExtraParameter) {
@@ -38,14 +40,14 @@ class UserCtaSubmenuViewQueryHandler
         }
 
         $parameters = json_decode($customUserIdExtraParameter->getValue(), true);
-        $placeholders = ['%userId%','%userEmail%'];
+        $placeholders = ['%userId%', '%userEmail%'];
         $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail())];
-        $customButton = str_replace($placeholders, $values, $parameters['link']);
+        $link = str_replace($placeholders, $values, $parameters['link']);
 
         return new SubmenuButtonView(
             Category::CUSTOM_BUTTON_ICON,
             $parameters['button-label'][$query->locale],
-            $customButton,
+            $link,
             false,
             null,
             false,
