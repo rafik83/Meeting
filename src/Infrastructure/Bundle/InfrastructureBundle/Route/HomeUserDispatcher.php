@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route;
 
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
@@ -16,6 +8,8 @@ use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
+use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
@@ -41,13 +35,21 @@ class HomeUserDispatcher
     /** @var AgendaAccessChecker */
     private $agendaAccessChecker;
 
+    /** @var IsValidatedTransactionMissing */
+    private $isValidatedTransactionMissing;
+
+    /** @var IsValidatedRequiredPackageMissing */
+    private $isValidatedRequiredPackageMissing;
+
     public function __construct(
         Router $router,
         HomeDispatch $homeDispatch,
         HomeDispatchAnonymousUser $homeDispatchAnonynmousUser,
         AuthorizationCheckerAdapter $authorizationChecker,
         DDayGuesser $dayGuesser,
-        AgendaAccessChecker $agendaAccessChecker
+        AgendaAccessChecker $agendaAccessChecker,
+        IsValidatedTransactionMissing $isValidatedTransactionMissing,
+        IsValidatedRequiredPackageMissing $isValidatedRequiredPackageMissing
     ) {
         $this->router = $router;
         $this->homeDispatch = $homeDispatch;
@@ -55,6 +57,8 @@ class HomeUserDispatcher
         $this->authorizationChecker = $authorizationChecker;
         $this->dayGuesser = $dayGuesser;
         $this->agendaAccessChecker = $agendaAccessChecker;
+        $this->isValidatedTransactionMissing = $isValidatedTransactionMissing;
+        $this->isValidatedRequiredPackageMissing = $isValidatedRequiredPackageMissing;
     }
 
     /**
@@ -97,16 +101,23 @@ class HomeUserDispatcher
             }
 
             if ($homeDispatchView->isOneSheet()) {
-                if ($this->dayGuesser->isItDDay($event) && $this->agendaAccessChecker->allowedToAccess($event)) {
-                    return new RedirectResponse($this->router->generate(
-                        'event_agenda',
-                        ['sheet' => $homeDispatchView->getSheet()->getId()]
-                    ));
+                $sheet = $homeDispatchView->getSheet();
+
+                if ($this->dayGuesser->isItDDay($event)){
+                    if (!$this->isValidatedRequiredPackageMissing->isSatisfiedBy($sheet)
+                        && !$this->isValidatedTransactionMissing->isSatisfiedBy($sheet)
+                        && $this->agendaAccessChecker->allowedToAccess($event)
+                    ) {
+                        return new RedirectResponse($this->router->generate(
+                            'event_agenda',
+                            ['sheet' => $sheet->getId()]
+                        ));
+                    }
                 }
 
                 return new RedirectResponse($this->router->generate(
                     'event_sheet_default',
-                    ['sheet' => $homeDispatchView->getSheet()->getId()]
+                    ['sheet' => $sheet->getId()]
                 ));
             }
 
