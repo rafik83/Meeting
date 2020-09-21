@@ -76,7 +76,8 @@ class PreviewTest extends TestCase
             'test',
             'TAG_1',
             false,
-            null
+            null,
+            'r@nd0m'
         );
         $taggedDataView2 = new TaggedDataView(
             AbstractChild::TEMPLATE_OBJECT_TYPE_COUNTRY,
@@ -85,7 +86,8 @@ class PreviewTest extends TestCase
             'FR',
             'TAG_2',
             false,
-            null
+            null,
+            'r@nd0m'
         );
         $tagObject->getTaggedDataViews()->willReturn([
             $taggedDataView1,

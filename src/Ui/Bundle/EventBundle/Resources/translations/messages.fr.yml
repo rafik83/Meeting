@@ -42,6 +42,8 @@ agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
 agenda.unavailability.remove: Supprimer
+analytics.click_counter: '{0}0 click|{1} 1 click|]1,Inf[%clicks% clicks par %uniqueClicks% visiteurs uniques'
+analytics.view_counter: '{0}0 vue|{1} 1 vue|]1,Inf[%views% vues par %uniqueViews% visiteurs uniques'
 authentication.remaining_attempt: '{1} Dernière tentative avant que votre compte soit bloqué pour 15 minutes.|]1,Inf[ %remainingAttempt% tentatives restantes'
 authentication.account_temporarily_disabled: 'Votre compte a été bloqué pour une durée de 15 minutes.'
 availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'

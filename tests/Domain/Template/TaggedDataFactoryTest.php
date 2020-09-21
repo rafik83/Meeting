@@ -73,7 +73,8 @@ class TaggedDataFactoryTest extends TestCase
             'Lorem ipsum ec74be5e fr',
             Tag::SHEET_TITLE,
             false,
-            null
+            null,
+            '0aea62b2'
         );
         $expectedTaggedDataViewObject2 = new TaggedDataView(
             'editable-text',
@@ -82,7 +83,8 @@ class TaggedDataFactoryTest extends TestCase
             'Lorem ipsum ec74be5e fr',
             'sheet_generic_tag_1',
             false,
-            null
+            null,
+            '0aea62b3'
         );
 
         // Mock

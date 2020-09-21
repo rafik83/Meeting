@@ -213,7 +213,7 @@ class SheetElasticTransformerTest extends TestCase
         $sheetTemplateWithTaggedDataFr = new TemplateData('root', [], 'fr', 'fr');
         $sheetTemplateWithTaggedDataFr->addChild(0, '811f6edf', $blockFr);
         $sheetTemplateWithTaggedDataFr->setTaggedDataViews(
-            [new TaggedDataView('editable-text', false, [], 'sheet_generic_tag_1', 'Tagged data from registration', false, null)]
+            [new TaggedDataView('editable-text', false, [], 'sheet_generic_tag_1', 'Tagged data from registration', false, null, 'r@nd0m')]
         );
 
         $editableTextSheetEn = new EditableText(
@@ -231,7 +231,7 @@ class SheetElasticTransformerTest extends TestCase
         $sheetTemplateWithTaggedDataEn = new TemplateData('root', [], 'en', 'fr');
         $sheetTemplateWithTaggedDataEn->addChild(0, '811f6edf', $blockEn);
         $sheetTemplateWithTaggedDataEn->setTaggedDataViews(
-            [new TaggedDataView('editable-text', false, [], 'sheet_generic_tag_1', 'Tagged data from registration', false, null)]
+            [new TaggedDataView('editable-text', false, [], 'sheet_generic_tag_1', 'Tagged data from registration', false, null, 'r@nd0m')]
         );
 
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);

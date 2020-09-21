@@ -1,3 +1,4 @@
+{% import '@Event/Sheet/macro.html.twig' as macros %}
 <section id="object-{{ uid }}" class="object object--media section">
     {% set label = item.label(locale, fallback) %}
     {% if label %}
@@ -17,6 +18,8 @@
                     <a href="{{ path('event_catalog_sheet_follow_link', {sheet: sheet.id, objectId: item.uid, index: index}) }}" target="_blank">
                         {{ media['title']|localize(locale, fallback) }}
                     </a>
+
+                    {{ macros.badge_click_analytics(sheet, uid, index) }}
                 </li>
             {% endfor %}
         </ul>
