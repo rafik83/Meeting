@@ -1,6 +1,8 @@
 <div id="object-{{ uid }}" class="object object--button-link {{ 'style--' ~ item.style }}">
     <p>
-        <a href="{{ item.data['url']|default('#') }}" class="btn btn-primary"><i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}</a>
+        <a href="{{ item.data['url']?path('event_catalog_sheet_follow_link', {'sheet': sheet.id, 'objectId': item.uid}):'#' }}" class="btn btn-primary">
+            <i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}
+        </a>
     </p>
     <footer>
         {% if not isCatalog %}

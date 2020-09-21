@@ -24,6 +24,8 @@ class TrackingUrlTransformerTest extends TestCase
             ['sheet' => 1, 'objectId' => 2]
         )->shouldBeCalled()->willReturn('http://example.org');
 
-        new TrackingUrlTransformer($router->reveal());
+        $transformer = new TrackingUrlTransformer($router->reveal());
+        $url = $transformer->transform($sheet->reveal(), $object->reveal());
+        $this->assertEquals('http://example.org', $url);
     }
 }

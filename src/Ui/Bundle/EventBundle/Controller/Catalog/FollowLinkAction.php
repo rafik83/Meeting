@@ -4,45 +4,41 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\AddClick;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\Sheet\Template\TemplateObjectUrlQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FollowLinkAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var SheetInfoGuesser */
-    private $sheetInfoGuesser;
-
-    /** @var LoggerInterface */
-    private $logger;
-
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        CommandBusInterface $commandBus,
-        SheetInfoGuesser $sheetInfoGuesser,
-        LoggerInterface $logger
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->logger = $logger;
     }
 
     public function __invoke(
         Sheet $sheet,
         string $objectId,
         ?int $index = null,
+        EventDomain $eventDomain,
         UserDomain $userDomain
     ): RedirectResponse {
         if (
@@ -52,22 +48,15 @@ class FollowLinkAction
         }
 
         $user = $userDomain->getUser();
-        if (null === $index) {
-            $registrationData = $sheet->getRegistrationData();
-            if (!isset($registrationData[$objectId])) {
-                $this->logger->error(sprintf('ObjectId %s not found in sheet #%d registration data', $objectId, $sheet->getId()));
-                throw new NotFoundHttpException('Url to redirect to not found');
-            }
-            $url = $registrationData[$objectId]['url'];
-        } else {
-            $data = $sheet->getData();
-            if (!isset($data[$objectId])) {
-                $this->logger->error(sprintf('ObjectId %s not found in sheet #%d registration data', $objectId, $sheet->getId()));
-                throw new NotFoundHttpException('Url to redirect to not found');
-            }
-            $url = $data[$objectId]['medias'][$index]['url'];
+        $event = $eventDomain->getEvent();
 
-        }
+        $url = $this->queryBus->handle(new TemplateObjectUrlQuery(
+            $sheet,
+            $event,
+            $user->getLocale(),
+            $objectId,
+            $index
+        ));
 
         $addClick = new AddClick($user, $sheet, $objectId, $index);
         $this->commandBus->handle($addClick);
