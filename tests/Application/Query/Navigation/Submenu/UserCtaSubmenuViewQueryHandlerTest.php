@@ -8,17 +8,22 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 {
     public function testCustomButton()
     {
+        $type = $this->prophesize(Type::class);
+        $type->getId()->shouldBeCalled()->willReturn(746);
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(42);
         $user->getEmail()->willReturn('test@yahoo.fr');
@@ -35,18 +40,22 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
              "en": "My button"
              }
         }');
-        $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
+
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
-            $extraParameterRepository->reveal()
+            $extraParameterRepository->reveal(),
+            $sheetRepository->reveal()
         );
 
         $result = $userCtaSubmenuViewQueryHandler->handle(
             new UserCtaSubmenuViewQuery(
                 $user->reveal(),
                 $event->reveal(),
-                'fr',
-                $sheet->reveal()
+                'fr'
             )
         );
 
@@ -71,10 +80,14 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository->findByEventAndType($event->reveal(), Type::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn(false);
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
-            $extraParameterRepository->reveal()
+            $extraParameterRepository->reveal(),
+            $sheetRepository->reveal()
         );
 
         $result = $userCtaSubmenuViewQueryHandler->handle(
