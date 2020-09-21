@@ -74,16 +74,29 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 
     public function testCustomButtonNull()
     {
+        $type = $this->prophesize(Type::class);
+        $type->getId()->shouldBeCalled()->willReturn(701);
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $user = $this->prophesize(User::class);
         $user->getEmail()->willReturn('test@yahoo.fr');
         $event = $this->prophesize(Event::class);
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter->getValue()->shouldBeCalled()->willReturn('
+        {
+             "link": "https://example.net/%userId%/%userEmail%",
+             "concerned_type_ids": [689, 746, 747, 748, 749, 750],
+             "button-label": {
+             "fr": "Mon bouton",
+             "en": "My button"
+             }
+        }');
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn(false);
+        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -94,8 +107,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             new UserCtaSubmenuViewQuery(
                 $user->reveal(),
                 $event->reveal(),
-                'fr',
-                $sheet->reveal()
+                'fr'
             )
         );
 
