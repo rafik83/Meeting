@@ -66,8 +66,9 @@ class SheetController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Sheet       $sheet
-     * @param string      $locale
+     * @param string|null $locale
      *
      * @return RedirectResponse|Response
      */
