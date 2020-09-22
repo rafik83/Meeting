@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2217 - Activate / deactivate the networking tab by key date
 - VIMEET-2204 - Hidden contact menu
 
 ## [2.47.0] - 2020-09-11
