@@ -1,28 +1,27 @@
-var _ = require('lodash'),
-    Vue = require('vue'),
-    axios = require('axios'),
+import _ from 'lodash';
+import Vue from 'vue';
+import axios from 'axios';
+import options from '../../vueComponents/options';
+import sheetAgenda from './SheetAgenda';
+import filterModal from './modal/filterModal';
+import meetingUpdateModal from './modal/MeetingUpdateModal';
+import massAssignmentModal from './modal/massAssignmentModal';
+import updateParticipantModal from './modal/updateParticipantModal';
+import userAgendaVersionModal from './modal/agendaVersionModal';
+import sortModal from './modal/sortModal';
+import eventDispatcher from '../../vueComponents/EventDispatcher';
+import AgendaApiEndpoints from '../../components/_AgendaApiEndpoints';
+import SheetFilter from './../filters/_SheetsFilter';
+import SortSheets from "../../components/_SortSheets";
 
-    options = require('../../vueComponents/options'),
-    sheetAgenda = require('./SheetAgenda'),
-    filterModal = require('./modal/filterModal'),
-    meetingUpdateModal = require('./modal/MeetingUpdateModal'),
-    massAssignmentModal = require('./modal/massAssignmentModal'),
-    updateParticipantModal = require('./modal/updateParticipantModal'),
-    userAgendaVersionModal = require('./modal/agendaVersionModal'),
-    sortModal = require('./modal/sortModal'),
-    eventDispatcher = require('../../vueComponents/EventDispatcher'),
-    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
-    SheetFilter = require('./../filters/_SheetsFilter'),
-    SortSheets = require('../../components/_SortSheets'),
-
-    api = new AgendaApiEndpoints();
+var api = new AgendaApiEndpoints();
 
 /**
  * Pass axios to Vue
  */
 Vue.prototype.$http = axios;
 
-module.exports = {
+export default {
     template: '#meetings-agenda',
     delimiters: options.delimiters,
     components: {

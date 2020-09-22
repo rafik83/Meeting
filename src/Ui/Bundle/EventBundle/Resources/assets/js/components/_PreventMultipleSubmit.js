@@ -1,4 +1,3 @@
-
 function PreventMultipleSubmit(element)
 {
     this.element = element;
@@ -16,4 +15,4 @@ PreventMultipleSubmit.prototype.onSubmit = function ()
     }.bind(this), 1);
 };
 
-module.exports = PreventMultipleSubmit;
+export default PreventMultipleSubmit;

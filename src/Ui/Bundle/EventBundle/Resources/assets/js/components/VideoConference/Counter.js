@@ -40,4 +40,4 @@ function Counter(
     }, 500);
 }
 
-module.exports = Counter;
+export default Counter;

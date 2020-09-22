@@ -28,4 +28,4 @@ EventEmitter.prototype.emit = function(name) {
     this.element.dispatchEvent(event);
 };
 
-module.exports = EventEmitter;
+export default EventEmitter;

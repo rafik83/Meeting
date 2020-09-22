@@ -1,5 +1,5 @@
-var Form = require('./../template/_Form'),
-  TemplateTaggableObject = require('./../template/_TemplateTaggableObject');
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
 
 /**
  * EditableTextObject
@@ -65,4 +65,4 @@ EditableTextObject.prototype.save = function ()
   return true;
 };
 
-module.exports = EditableTextObject;
+export default EditableTextObject;

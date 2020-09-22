@@ -1,7 +1,7 @@
-var options = require('../../vueComponents/options');
-var slotAgenda = require('./SlotAgenda.js');
+import options from '../../vueComponents/options';
+import slotAgenda from './SlotAgenda';
 
-module.exports = {
+export default {
     template: '#spot-agenda',
     delimiters: options.delimiters,
     props: {

@@ -1,16 +1,15 @@
 'use strict';
 
-var TokboxInstance = require('./TokboxInstance').TokboxInstance;
-var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
-var initLayoutContainer = require('opentok-layout-js');
-var openTokTextChat = require('opentok-text-chat');
-var Publisher = require('./Publisher');
-var Subscriber = require('./Subscriber');
-var Counter = require('./Counter');
-var $ = require('jquery');
-var Settings = require('./Settings');
+import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import initLayoutContainer from 'opentok-layout-js';
+import openTokTextChat from 'opentok-text-chat';
+import Publisher from './Publisher';
+import Subscriber from './Subscriber';
+import Counter from './Counter';
+import $ from 'jquery';
+import Settings from './Settings';
 
-require('bootstrap/js/modal');
+import 'bootstrap/js/modal';
 
 /**
  * @constructor
@@ -665,4 +664,4 @@ VideoConference.prototype.showElement = function (element) {
     element.classList.remove('hide');
 };
 
-module.exports = VideoConference;
+export default VideoConference;

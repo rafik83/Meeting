@@ -1,6 +1,6 @@
-var options = require('../../../vueComponents/options');
+import options from '../../../vueComponents/options';
 
-module.exports = {
+export default {
     template: '#filter-sheet-form',
     props: ['sheets', 'filters'],
     delimiters: options.delimiters,

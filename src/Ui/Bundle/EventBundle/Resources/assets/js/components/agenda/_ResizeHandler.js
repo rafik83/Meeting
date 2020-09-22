@@ -1,4 +1,4 @@
-var EventEmitter = require('./_EventEmitter');
+import EventEmitter from "./_EventEmitter";
 
 /**
  * Risze handler
@@ -54,4 +54,4 @@ ResizeHandler.prototype.onResized = function() {
     this.emit('resized');
 };
 
-module.exports = ResizeHandler;
+export default ResizeHandler;

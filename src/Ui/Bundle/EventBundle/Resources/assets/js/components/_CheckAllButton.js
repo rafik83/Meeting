@@ -1,4 +1,3 @@
-
 function CheckAllButton(element, selector, check)
 {
     this.element  = element;
@@ -15,4 +14,4 @@ CheckAllButton.prototype.checkAll = function ()
     }.bind(this));
 };
 
-module.exports = CheckAllButton;
+export default CheckAllButton;

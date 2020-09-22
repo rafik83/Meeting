@@ -1,11 +1,10 @@
 'use strict';
 
-var $ = require('jquery'),
-    TokboxInstance = require('./TokboxInstance').TokboxInstance,
-    CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL,
-    TokBoxNetworkTest = require('opentok-network-test-js').default,
-    VideoConference = require('./VideoConference'),
-    isEdge = require('./../browser/isEdge');
+import $ from 'jquery';
+import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import TokBoxNetworkTest from 'opentok-network-test-js';
+import VideoConference from './VideoConference';
+import isEdge from './../browser/isEdge';
 
 function VideoConferenceTest(element) {
     this.element = element;
@@ -147,4 +146,4 @@ VideoConferenceTest.prototype.end = function() {
     new VideoConference(this.videoConferencePreview, false);
 };
 
-module.exports = VideoConferenceTest;
+export default VideoConferenceTest;

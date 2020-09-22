@@ -1,5 +1,5 @@
-var axio = require('axios'),
-    querystring = require('querystring');
+import axios from 'axios';
+import querystring from 'querystring';
 
 function ParticipantVisio(element)
 {
@@ -14,7 +14,7 @@ ParticipantVisio.prototype.onChange = function ()
 {
     var data = this.input.checked;
 
-    axio.post(this.action,
+    axios.post(this.action,
         querystring.stringify({
             isVisio: data
         })
@@ -25,4 +25,4 @@ ParticipantVisio.prototype.onChange = function ()
     });
 };
 
-module.exports = ParticipantVisio;
+export default ParticipantVisio;

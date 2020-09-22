@@ -16,4 +16,4 @@ ShowPaymentInfo.prototype.onChange = function (event) {
     this.target.classList.add('hide');
 };
 
-module.exports = ShowPaymentInfo;
+export default ShowPaymentInfo;

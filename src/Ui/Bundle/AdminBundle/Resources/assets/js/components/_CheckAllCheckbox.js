@@ -46,4 +46,4 @@ CheckAllCheckbox.prototype.updateState = function () {
     this.element.checked = this.count() === this.all.length;
 };
 
-module.exports = CheckAllCheckbox;
+export default CheckAllCheckbox;

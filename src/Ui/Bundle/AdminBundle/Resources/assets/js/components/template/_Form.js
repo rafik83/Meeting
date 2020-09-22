@@ -207,4 +207,4 @@ Form.prototype.bind = function (name, value)
     }
 };
 
-module.exports = Form;
+export default Form;

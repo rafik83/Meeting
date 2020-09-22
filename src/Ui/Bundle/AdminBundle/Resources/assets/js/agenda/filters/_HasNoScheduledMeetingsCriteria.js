@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {bool} filter
@@ -25,4 +25,4 @@ HasNoScheduledMeetingsCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = HasNoScheduledMeetingsCriteria;
+export default HasNoScheduledMeetingsCriteria;

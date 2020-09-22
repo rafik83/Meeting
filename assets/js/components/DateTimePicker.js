@@ -1,6 +1,6 @@
-require('eonasdan-bootstrap-datetimepicker');
-var $      = require('jquery'),
-    moment = require('moment');
+import 'eonasdan-bootstrap-datetimepicker';
+import $ from 'jquery';
+import moment from 'moment';
 
 function DateTimePicker(element, customConfig)
 {
@@ -103,4 +103,4 @@ DateTimePicker.prototype.bindRangeElement = function ()
     }
 };
 
-module.exports = DateTimePicker;
+export default DateTimePicker;

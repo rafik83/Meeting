@@ -15,4 +15,4 @@ UrlParameterGuesser.prototype.has = function (name) {
     return this.get(name) !== null;
 };
 
-module.exports = UrlParameterGuesser;
+export default UrlParameterGuesser;

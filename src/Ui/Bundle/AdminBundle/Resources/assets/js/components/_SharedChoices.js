@@ -1,7 +1,5 @@
-
-var $ = require('jquery');
-
-require('elao-form.js');
+import $ from 'jquery';
+import 'elao-form.js';
 
 function SharedChoices(element, selector)
 {
@@ -43,4 +41,4 @@ SharedChoices.prototype.refresh = function ()
     });
 };
 
-module.exports = SharedChoices;
+export default SharedChoices;

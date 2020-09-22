@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function CatalogSheetCardRequestCheckbox(element)
 {
@@ -68,4 +68,4 @@ CatalogSheetCardRequestCheckbox.prototype.count = function ()
     }, 0);
 };
 
-module.exports = CatalogSheetCardRequestCheckbox;
+export default CatalogSheetCardRequestCheckbox;
