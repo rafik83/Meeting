@@ -1,64 +1,45 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\View\Template;
 
 class TaggedDataView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $type;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $translatable;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $translations;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $content;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $tag;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isTextarea;
 
-    /**
-     * TaggedDataView constructor.
-     *
-     * @param string $type
-     * @param bool   $translatable
-     * @param array  $translations
-     * @param string $content
-     * @param string $tag
-     * @param bool   $isTextarea
-     */
-    public function __construct($type, $translatable, array $translations, $content, $tag, $isTextarea)
-    {
-        $this->type         = $type;
+    /** @var string|null */
+    public $originalUrl;
+
+    public function __construct(
+        string $type,
+        bool $translatable,
+        array $translations,
+        string $content,
+        string $tag,
+        bool $isTextarea,
+        ?string $originalUrl
+    ) {
+        $this->type = $type;
         $this->translatable = $translatable;
         $this->translations = $translations;
-        $this->content      = $content;
-        $this->tag          = $tag;
-        $this->isTextarea   = $isTextarea;
+        $this->content = $content;
+        $this->tag = $tag;
+        $this->isTextarea = $isTextarea;
+        $this->originalUrl = $originalUrl;
     }
 }

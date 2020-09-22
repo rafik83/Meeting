@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TrackingUrlTransformer;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
@@ -73,7 +72,8 @@ class TaggedDataFactoryTest extends TestCase
             ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
             'Lorem ipsum ec74be5e fr',
             Tag::SHEET_TITLE,
-            false
+            false,
+            null
         );
         $expectedTaggedDataViewObject2 = new TaggedDataView(
             'editable-text',
@@ -81,7 +81,8 @@ class TaggedDataFactoryTest extends TestCase
             [],
             'Lorem ipsum ec74be5e fr',
             'sheet_generic_tag_1',
-            false
+            false,
+            null
         );
 
         // Mock
