@@ -43,8 +43,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
-
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -55,7 +53,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             new UserCtaSubmenuViewQuery(
                 $user->reveal(),
                 $event->reveal(),
-                'fr'
+                'fr',
+                $sheet->reveal()
             )
         );
 
@@ -96,7 +95,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $sheetRepository->getSheetsByUserAndEvent($user->reveal(), $event->reveal())->shouldBeCalled()->willReturn([$sheet->reveal()]);
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -107,7 +105,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             new UserCtaSubmenuViewQuery(
                 $user->reveal(),
                 $event->reveal(),
-                'fr'
+                'fr',
+                $sheet->reveal()
             )
         );
 

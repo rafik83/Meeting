@@ -129,7 +129,8 @@ class SubmenuViewQueryHandler
             new UserCtaSubmenuViewQuery(
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
-                $submenuViewQuery->locale
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet
             )
         );
 

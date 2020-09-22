@@ -42,15 +42,7 @@ class UserCtaSubmenuViewQueryHandler
         $parameters = json_decode($customUserIdExtraParameter->getValue(), true);
 
         if (isset($parameters['concerned_type_ids'])) {
-            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
-            $found = false;
-            foreach ($sheets as $sheet) {
-                $found = in_array($sheet->getType()->getId(), $parameters['concerned_type_ids'], false);
-                if ($found) {
-                    break;
-                }
-            }
-
+            $found = in_array($query->sheet->getType()->getId(), $parameters['concerned_type_ids'], false);
             if (!$found) {
                 return null;
             }
