@@ -451,9 +451,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param ExportableObjectInterface $exportableObject
      * @param array                     $context
      *
-     * @return string
+     * @return string|null
      */
-    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context): string
+    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context): ?string
     {
         $displayNomenclatureIds = $context['displayNomenclatureIds'] ?? false;
 
