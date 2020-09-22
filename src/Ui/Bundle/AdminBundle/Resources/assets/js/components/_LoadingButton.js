@@ -20,4 +20,4 @@ LoadingButton.prototype.stop = function ()
     this.element.classList.remove('disabled');
 };
 
-module.exports = LoadingButton;
+export default LoadingButton;

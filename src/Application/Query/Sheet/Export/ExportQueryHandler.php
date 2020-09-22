@@ -1,55 +1,29 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet\Export;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 
 class ExportQueryHandler
 {
     /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
-    /** @var SheetSearchAdapterInterface */
-    private $sheetSearchAdapter;
-
-    /**
-     * @param SerializerAdapterInterface  $serializerAdapter
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     */
     public function __construct(
-        SerializerAdapterInterface $serializerAdapter,
-        SheetSearchAdapterInterface $sheetSearchAdapter
+        SerializerAdapterInterface $serializerAdapter
     ) {
         $this->serializerAdapter  = $serializerAdapter;
-        $this->sheetSearchAdapter = $sheetSearchAdapter;
     }
 
-    /**
-     * @param ExportQuery $exportQuery
-     *
-     * @return string
-     */
-    public function handle(ExportQuery $exportQuery)
+    public function handle(ExportQuery $exportQuery): string
     {
-        $sheetIdsView = $this->sheetSearchAdapter->getSheetIdsView(
-            $exportQuery->event,
-            $exportQuery->filters,
-            $exportQuery->locale,
-            $exportQuery->condition
-        );
+        $sheetIdsView = new SheetIdsView($exportQuery->sheetIds);
 
         return $this->serializerAdapter->serialize($sheetIdsView, 'csv', [
             'locale' => $exportQuery->locale,
-            'charset' => $exportQuery->charset,
+            'charset' => Charset::WINDOWS_1252,
             'event' => $exportQuery->event,
             'displayNomenclatureIds' => $exportQuery->displayNomenclatureIds,
             'csv_delimiter' => ';',

@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {null|array} followers
@@ -15,10 +15,9 @@ NoFollowerCriteria.prototype = new Criteria();
  * @returns {array}
  */
 NoFollowerCriteria.prototype.meetCriteria = function(sheets) {
+    let noFollowerFilter = false;
 
-    noFollowerFilter = false;
     if (typeof this.followers !== 'undefined' && this.followers.length > 0) {
-
         this.followers.forEach(function (follower) {
             if (follower === 'follower_unassigned') {
                 noFollowerFilter = true;
@@ -39,4 +38,4 @@ NoFollowerCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = NoFollowerCriteria;
+export default NoFollowerCriteria;

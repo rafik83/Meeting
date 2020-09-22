@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -77,18 +69,13 @@ class SecurityController extends Controller
             [];
 
         return $this->render('AdminBundle:Security:login.html.twig', [
-            'error'     => $error,
-            'form'      => $form->createView(),
-            'admins'    => $admins,
+            'error' => $error,
+            'form' => $form->createView(),
+            'admins' => $admins,
         ]);
     }
 
-    /**
-     * @param Admin $admin
-     *
-     * @return RedirectResponse
-     */
-    public function loginUserAction(Admin $admin)
+    public function loginUserAction(Admin $admin): RedirectResponse
     {
         $this->get('adapter.authentication_manager')->authenticate($admin, 'admin');
 

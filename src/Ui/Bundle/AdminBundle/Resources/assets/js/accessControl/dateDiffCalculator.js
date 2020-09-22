@@ -5,4 +5,4 @@ function dateDiffCalculator(serverDateInISOString) {
     return currentDate.getTime() - serverDate.getTime();
 }
 
-module.exports = dateDiffCalculator;
+export default dateDiffCalculator;

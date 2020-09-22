@@ -1,5 +1,5 @@
-var Form = require('./../template/_Form'),
-  TemplateTaggableObject = require('./../template/_TemplateTaggableObject');
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
 
 /**
  * CountryObject
@@ -52,4 +52,4 @@ CountryObject.prototype.save = function ()
   return true;
 };
 
-module.exports = CountryObject;
+export default CountryObject;

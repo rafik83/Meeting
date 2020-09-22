@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 /**
  * @param form the form surrounding the select
@@ -65,4 +65,4 @@ SelectPreviousNextMover.prototype.dispatchChangeEvent = function()
 };
 
 
-module.exports = SelectPreviousNextMover;
+export default SelectPreviousNextMover;

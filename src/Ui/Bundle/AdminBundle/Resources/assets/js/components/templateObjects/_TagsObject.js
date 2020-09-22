@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-  Form = require('./../template/_Form');
+import $ from 'jquery';
+import Form from './../template/_Form';
 
 /**
  * TagsObject
@@ -89,4 +89,4 @@ TagsObject.prototype.save = function ()
   return true;
 };
 
-module.exports = TagsObject;
+export default TagsObject;

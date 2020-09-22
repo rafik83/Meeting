@@ -177,3 +177,12 @@ services:
             - '@datetime'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Export\ExportSheetCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\Export\ExportHandler'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@repository.admin_repository'
+        tags:
+            - { name: console.command }

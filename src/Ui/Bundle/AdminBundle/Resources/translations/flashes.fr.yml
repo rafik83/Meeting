@@ -137,6 +137,7 @@ flash.admin.sheet_batch.validation.validate.success: '{0} aucune fiche n''a ét�
 flash.admin.sheet.add_comment.success: 'Votre commentaire a bien été ajouté'
 flash.admin.sheet.change_type.success: 'Le type de participation a bien été changé'
 flash.admin.sheet.comment.remove.success: 'Le commentaire a été supprimé avec succès'
+flash.admin.sheet.export.prepared: 'L''export des fiches est en cours, vous receverez un mail avec le fichier.'
 flash.admin.sheet.participant.import.error: 'Impossible d''importer le fichier. Vérifiez la structure et son contenu.'
 flash.admin.sheet.participant.import.success: 'Félicitations, %users% comptes et %sheet% fiches ont été créés'
 flash.admin.sheet.unavailablePage.warning: 'La page que vous recherchez n''existe pas, vous avez été redirigé sur la première page'

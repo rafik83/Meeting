@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {Criteria} firstCriteria
@@ -46,4 +46,4 @@ function contains(array, element) {
     return false;
 }
 
-module.exports = OrCriteria;
+export default OrCriteria;

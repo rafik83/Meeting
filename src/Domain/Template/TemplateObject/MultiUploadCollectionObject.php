@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -62,7 +54,7 @@ class MultiUploadCollectionObject extends TemplateObject
     private function buildUploads(array $data): void
     {
         $this->uploads = array_map(
-            function (array $upload) {
+            static function (array $upload) {
                 return new MultiUploadObject($upload['uniqId'], $upload['title'], $upload['path']);
             }, array_values($data)
         );
@@ -105,5 +97,34 @@ class MultiUploadCollectionObject extends TemplateObject
         }
 
         return $data;
+    }
+
+    public function getExportableFieldname($locale, $fallback)
+    {
+        return $this->getLabel($locale, $fallback);
+    }
+
+    /**
+     * This object does not inherit ExportableObjectInterface
+     * But can be exported in some case
+     */
+    public function getExportableUploads(string $eventUrl, int $sheetId, string $locale): string
+    {
+        $exportableContents = [];
+
+        foreach ($this->getUploads() as $upload) {
+            if (!empty($upload->getPath())) {
+                $exportableContents[] = sprintf(
+                    '%s/%s/file/%s/%s%s',
+                    $eventUrl,
+                    $locale,
+                    $this->key,
+                    $sheetId,
+                    $upload->getPath()
+                );
+            }
+        }
+
+        return implode(';', $exportableContents);
     }
 }

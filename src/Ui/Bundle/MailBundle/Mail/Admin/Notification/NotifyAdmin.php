@@ -17,7 +17,7 @@ class NotifyAdmin extends AdminMail
     protected $template = self::TEMPLATE;
 
     /** @var string */
-    protected $messageId = Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED;
+    protected $messageId = 'admin.notify_file_download';
 
     /** @var bool */
     protected $sendToEmailTeam = true;

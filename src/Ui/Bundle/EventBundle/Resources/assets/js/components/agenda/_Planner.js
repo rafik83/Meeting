@@ -1,4 +1,4 @@
-var Group = require('./_Group');
+import Group from "./_Group";
 
 /**
  * Planner
@@ -102,4 +102,4 @@ Planner.prototype.displayMeet = function(meet) {
     meet.display();
 };
 
-module.exports = Planner;
+export default Planner;

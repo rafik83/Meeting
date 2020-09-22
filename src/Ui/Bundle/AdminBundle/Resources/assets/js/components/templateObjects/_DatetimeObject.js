@@ -1,7 +1,6 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject'),
-    DateTimeManipulation = require('./../_DateTimeManipulation')
-;
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
+import DateTimeManipulation from './../_DateTimeManipulation';
 
 /**
  * DatetimeObject
@@ -90,4 +89,4 @@ DatetimeObject.prototype.save = function ()
     return true;
 };
 
-module.exports = DatetimeObject;
+export default DatetimeObject;

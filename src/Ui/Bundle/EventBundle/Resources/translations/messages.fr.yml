@@ -399,7 +399,7 @@ navigation.menu: Menu
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
 new_password.help.reset: 'A l''aide de ce message, vous pouvez réinitialiser votre mot de passe'
-new_password.mail.title: 'Un e-mail vous a été envoyé !'
+new_password.mail.title: 'Si votre email correspond à un utilisateur enregistré, vous allez recevoir un message.'
 new_password.needHelp: 'Besoin d''aide'
 nomenclature.back_to_sheet: 'Retour à la fiche'
 nomenclature.select_all: 'Tout sélectionner'

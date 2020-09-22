@@ -106,4 +106,4 @@ FilterByType.prototype.showElement = function (element)
     element.style.display = 'flex';
 };
 
-module.exports = FilterByType;
+export default FilterByType;

@@ -42,6 +42,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\E
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Export\ExportSheetCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -553,6 +554,27 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         );
 
         $job->setExecuteAfter($dueDate);
+
+        $this->setJob($job);
+    }
+
+    public function exportSheet(
+        Event $event,
+        Admin $admin,
+        Event\ExtraData $extraData,
+        string $locale,
+        bool $displayNomenclatureIds
+    ): void {
+        $job = new Job(
+            ExportSheetCommand::NAME,
+            [
+                sprintf('--eventId=%s', $event->getId()),
+                sprintf('--extraDataWithSheetIds=%s', $extraData->getId()),
+                sprintf('--adminId=%s', $admin->getId()),
+                sprintf('--locale=%s', $locale),
+                sprintf('--displayNomenclatureIds=%s', $displayNomenclatureIds ? 'true' : 'false'),
+            ]
+        );
 
         $this->setJob($job);
     }

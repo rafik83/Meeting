@@ -1,5 +1,5 @@
-var $      = require('jquery'),
-    PubSub = require('pubsub-js');
+import $ from 'jquery';
+import PubSub from 'pubsub-js';
 
 function CatalogFilters(field, filterForm, catalog)
 {
@@ -33,4 +33,4 @@ function CatalogFilters(field, filterForm, catalog)
     return false;
 }
 
-module.exports = CatalogFilters;
+export default CatalogFilters;

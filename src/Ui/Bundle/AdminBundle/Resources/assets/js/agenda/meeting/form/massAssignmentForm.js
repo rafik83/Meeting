@@ -1,15 +1,15 @@
-var options = require('../../../vueComponents/options'),
-    DateTimePicker = require('../../../../../../../../../../assets/js/components/DateTimePicker'),
-    AgendaApiEndpoints = require('../../../components/_AgendaApiEndpoints'),
-    moment = require('moment'),
-    $ = require('jquery');
+import options from '../../../vueComponents/options';
+import DateTimePicker from "../../../../../../../../../../assets/js/components/DateTimePicker";
+import AgendaApiEndpoints from "../../../components/_AgendaApiEndpoints";
+import moment from 'moment';
+import $ from 'jquery';
 
 var api = new AgendaApiEndpoints();
 
-require('moment/locale/fr');
-require('moment/locale/en-gb');
+import 'moment/locale/fr';
+import 'moment/locale/en-gb';
 
-module.exports = {
+export default {
     template: '#mass-assignment-form',
     delimiters: options.delimiters,
     props: [],

@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.47.0] - 2020-09-11
+### Added 
+- VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
+- VIMEET-2156 - Remove explicit error about email on login (security)
+
 ## [2.46.0] - 2020-09-10
 ### Added
 - VIMEET-2169 - Live streaming myevent

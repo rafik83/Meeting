@@ -60,33 +60,25 @@ class SecurityController extends Controller
         $form  = $this->createForm(EmailType::class, $email);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            // clear potential previous email before setting new one
+            $this->get('session')->getFlashBag()->get('login_email');
+            $this->addFlash('login_email', $email->email);
             if ($this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email->email)) {
-                // clear potential previous email before setting new one
-                $this->get('session')->getFlashBag()->get('login_email');
-                $this->addFlash('login_email', $email->email);
 
                 if ($this->get(CanPasswordBeDefinedWithActivationEmail::class)->isSatisfiedBy($event, $email->email)) {
                     return $this->redirectToRoute('event_login_send_activation_mail');
                 }
 
-                return $this->redirectToRoute('event_login_second_step');
             }
 
-            $error = new FormError($this->get('translator')->trans(
-                'validators.login.email_not_exists',
-                [],
-                'validators',
-                $request->getLocale()
-            ));
-
-            $form->get('email')->addError($error);
+            return $this->redirectToRoute('event_login_second_step');
         }
 
         $users = 'dev' === $this->get('kernel')->getEnvironment() && 'true' === $request->get('oneClickLogin') ?
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
-        $hasError = 0 < \count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
+        $hasError = 0 < count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
 
         $ssoComexposiumView = !$hasError
             ? $this->get(QueryBus::class)->handle(new SSOComexposiumViewQuery($event, $request->getLocale()))
@@ -130,28 +122,38 @@ class SecurityController extends Controller
         }
 
         $authenticationUtils = $this->get('security.authentication_utils');
-        $error               = $authenticationUtils->getLastAuthenticationError();
+        $error = $authenticationUtils->getLastAuthenticationError();
 
-        $email = $this->get('session')->getFlashBag()->get('login_email');
+        $email = null;
+        $emails = $this->get('session')->getFlashBag()->get('login_email');
 
-        if (empty($email) || null === ($email = array_shift($email))
-            || !$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)
-        ) {
+        if (is_array($emails)) {
+            if (empty($emails)) {
+                $email = null;
+            } else {
+                $email = array_shift($emails);
+            }
+        }
+
+        if (empty($email)) {
             return $this->redirectToRoute('event_login');
+        } else if (!$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)) {
+            $user = null;
+        } else {
+            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+
+            if (null !== $user && $user->isTemporarilyDisabledDueToFailedAuthentication($now)) {
+                return $this->render(
+                    '@Event/Security/account_temporarily_disabled.html.twig', [
+                    'event' => $event,
+                    'username' => $email,
+                    'typeId' => $typeId,
+                    'type' => $type,
+                ]);
+            }
         }
 
         $this->addFlash('login_email', $email);
-        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
-
-        if (null !== $user && $user->isTemporarilyDisabledDueToFailedAuthentication($now)) {
-            return $this->render(
-                '@Event/Security/account_temporarily_disabled.html.twig', [
-                'event' => $event,
-                'username' => $email,
-                'typeId' => $typeId,
-                'type' => $type,
-            ]);
-        }
 
         $eventExtraParam = $this->get('repository.event.extra_parameter_repository')->findByEventAndType(
             $event,

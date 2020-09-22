@@ -1,19 +1,18 @@
-var TypeCriteria                                        = require('./_TypeCriteria'),
-    HasMeetingToApproveCriteria                         = require('./_HasMeetingToApproveCriteria'),
-    HasNotEnoughAvailableSlotCriteria                   = require('./_HasNotEnoughAvailableSlotCriteria'),
-    HasSentMeetingRequestCriteria                       = require('./_HasSentMeetingRequestCriteria'),
-    HasNotSentMeetingRequestCriteria                    = require('./_HasNotSentMeetingRequestCriteria'),
-    HasScheduledMeetingsCriteria                        = require('./_HasScheduledMeetingsCriteria'),
-    HasNoScheduledMeetingsCriteria                      = require('./_HasNoScheduledMeetingsCriteria'),
-    FollowerCriteria                                    = require('./_FollowerCriteria'),
-    NoFollowerCriteria                                  = require('./_NoFollowerCriteria'),
-    OrCriteria                                          = require('./_OrCriteria'),
-    ParticipantDataCriteria                             = require('./_ParticipantDataCriteria'),
-    SheetTitleCriteria                                  = require('./_SheetTitleCriteria'),
-    HasAvailableSlots                                   = require('./_HasAvailableSlots'),
-    HasValidatedRequestNotScheduled                     = require('./_HasValidatedRequestNotScheduled'),
-    HasParticipantUnavailableWithMeetingRequestCriteria = require('./_HasParticipantUnavailableWithMeetingRequestCriteria')
-;
+import TypeCriteria from "./_TypeCriteria";
+import HasMeetingToApproveCriteria from "./_HasMeetingToApproveCriteria";
+import HasNotEnoughAvailableSlotCriteria from "./_HasNotEnoughAvailableSlotCriteria";
+import HasSentMeetingRequestCriteria from "./_HasSentMeetingRequestCriteria";
+import HasNotSentMeetingRequestCriteria from "./_HasNotSentMeetingRequestCriteria";
+import HasScheduledMeetingsCriteria from "./_HasScheduledMeetingsCriteria";
+import HasNoScheduledMeetingsCriteria from "./_HasNoScheduledMeetingsCriteria";
+import FollowerCriteria from "./_FollowerCriteria";
+import NoFollowerCriteria from "./_NoFollowerCriteria";
+import OrCriteria from "./_OrCriteria";
+import ParticipantDataCriteria from "./_ParticipantDataCriteria";
+import SheetTitleCriteria from "./_SheetTitleCriteria";
+import HasAvailableSlots from "./_HasAvailableSlots";
+import HasValidatedRequestNotScheduled from "./_HasValidatedRequestNotScheduled";
+import HasParticipantUnavailableWithMeetingRequestCriteria from "./_HasParticipantUnavailableWithMeetingRequestCriteria";
 
 /**
  * @param {array} filters
@@ -62,4 +61,4 @@ SheetsFilter.prototype.filter = function (sheets)
     return sheets;
 };
 
-module.exports = SheetsFilter;
+export default SheetsFilter;

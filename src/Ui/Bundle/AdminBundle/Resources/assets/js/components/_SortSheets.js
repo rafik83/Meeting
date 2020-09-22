@@ -114,4 +114,4 @@ SortSheets.prototype.getValueToSort = function () {
     return null;
 };
 
-module.exports = SortSheets;
+export default SortSheets;
