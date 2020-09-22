@@ -97,6 +97,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\VideoPlayCallbackAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     #
     # Package
     #
