@@ -916,6 +916,13 @@ happening_program:
     methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
 
+event_agenda_program_redirect:
+    path: /sheet/{sheet}/program-agenda
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Redirect\AgendaOrProgramRedirectAction
+
 #
 # Happening
 #
