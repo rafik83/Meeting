@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Template;
 
+use Proximum\Vimeet\Application\Exception\Sheet\Template\TemplateObjectUrlObjectIdNotFoundException;
+use Proximum\Vimeet\Application\Exception\Sheet\Template\TemplateObjectUrlUnsupportedTypeException;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ButtonLink;
@@ -40,7 +42,7 @@ class TemplateObjectUrlQueryHandler
 
         if (!isset($sheetData[$query->objectId])) {
             $this->logger->error(sprintf('ObjectId %s not found in sheet #%d data', $query->objectId, $query->sheet->getId()));
-            throw new \RunTimeException('Url to redirect to not found');
+            throw new TemplateObjectUrlObjectIdNotFoundException('Url to redirect to not found');
         }
 
         if ($sheetData[$query->objectId] instanceof Url) {
@@ -61,6 +63,6 @@ class TemplateObjectUrlQueryHandler
         }
 
         $this->logger->error(sprintf('ObjectId %s in sheet #%d registration data has not support for redirection', $query->objectId, $query->sheet->getId()));
-        throw new \RuntimeException('Unsupported type from sheet data object');
+        throw new TemplateObjectUrlUnsupportedTypeException('Unsupported type from sheet data object');
     }
 }
