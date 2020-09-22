@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function ParticipantPresence(element)
 {
@@ -28,4 +28,4 @@ ParticipantPresence.prototype.getParticipantPresence = function () {
     });
 };
 
-module.exports = ParticipantPresence;
+export default ParticipantPresence;

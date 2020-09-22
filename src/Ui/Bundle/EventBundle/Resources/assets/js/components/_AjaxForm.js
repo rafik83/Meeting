@@ -1,5 +1,4 @@
-
-var PubSub = require('pubsub-js');
+import PubSub from 'pubsub-js';
 
 function AjaxForm(element)
 {
@@ -27,4 +26,4 @@ AjaxForm.prototype.onLoaded = function (event)
     PubSub.publish('dom.added', this.target);
 };
 
-module.exports = AjaxForm;
+export default AjaxForm;

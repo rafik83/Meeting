@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function AnchorFocuser(element, anchor)
 {
@@ -34,4 +34,4 @@ AnchorFocuser.prototype.focusField = function ()
     }
 };
 
-module.exports = AnchorFocuser;
+export default AnchorFocuser;

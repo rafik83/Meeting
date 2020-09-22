@@ -1,45 +1,44 @@
-var $ = require('jquery'),
-    PubSub = require('pubsub-js'),
-    Confirm = require('./components/_Confirm'),
-    ChoiceDescription = require('./components/_ChoiceDescription'),
-    ShowPaymentInfo = require('./components/_ShowPaymentInfo'),
-    AjaxForm = require('./components/_AjaxForm'),
-    AjaxAutocomplete = require('./components/_AjaxAutocomplete'),
-    CheckAllButton = require('./components/_CheckAllButton'),
-    SelectParent = require('./components/_SelectParent'),
-    UploadPreview = require('./components/_UploadPreview'),
-    EditableTextIndicator = require('./components/_EditableTextIndicator'),
-    ProductSelector = require('./components/_ProductSelector'),
-    QuantitySelector = require('./components/_QuantitySelector'),
-    CatalogSheetCard = require('./components/_CatalogSheetCard'),
-    Agenda = require('./components/agenda'),
-    AgendaRefresh = require('./components/agenda/_Refresh'),
-    AgendaAllSheet = require('./components/agenda/_AgendaAllSheet'),
-    Program = require('./components/agenda/_Program'),
-    ShowMore = require('./components/_ShowMore'),
-    ShowMoreParticipants = require('./components/_ShowMoreParticipants'),
-    CatalogFilters = require('./components/_CatalogFilters'),
-    CatalogMobileFilters = require('./components/catalog/_CatalogMobileFilters'),
-    MeetingRequestMobileFilters = require('./components/MeetingRequest/_MeetingRequestMobileFilters'),
-    AnchorFocuser = require('./components/_AnchorFocuser'),
-    Happening = require('./components/_Happening'),
-    ToggleVisibility = require('./components/_ToggleVisibility'),
-    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
-    FilterRequestByType = require('./components/MeetingRequest/_FilterByType'),
-    CatalogPagination = require('./components/_CatalogPagination'),
-    IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
-    PackageParticipantProducts = require('./components/_PackageParticipantProducts'),
-    CatalogSelectFromNomenclaturesField = require('./components/_CatalogSelectFromNomenclaturesField'),
-    SortParticipants = require('./components/_SortParticipants'),
-    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker'),
-    addSubmitEventListenerOnElementChange = require('./components/form/_AddSubmitEventListenerOnElementChange')
-;
+import '@babel/polyfill';
+import $ from 'jquery';
+import PubSub from 'pubsub-js';
+import Confirm from './components/_Confirm';
+import ChoiceDescription from './components/_ChoiceDescription';
+import ShowPaymentInfo from './components/_ShowPaymentInfo';
+import AjaxForm from './components/_AjaxForm';
+import AjaxAutocomplete from './components/_AjaxAutocomplete';
+import CheckAllButton from './components/_CheckAllButton';
+import SelectParent from './components/_SelectParent';
+import UploadPreview from './components/_UploadPreview';
+import EditableTextIndicator from './components/_EditableTextIndicator';
+import ProductSelector from './components/_ProductSelector';
+import QuantitySelector from './components/_QuantitySelector';
+import CatalogSheetCard from './components/_CatalogSheetCard';
+import {init as initAgenda} from './components/agenda';
+import AgendaRefresh from './components/agenda/_Refresh';
+import AgendaAllSheet from './components/agenda/_AgendaAllSheet';
+import Program from './components/agenda/_Program';
+import ShowMore from './components/_ShowMore';
+import ShowMoreParticipants from './components/_ShowMoreParticipants';
+import CatalogFilters from './components/_CatalogFilters';
+import CatalogMobileFilters from './components/catalog/_CatalogMobileFilters';
+import MeetingRequestMobileFilters from './components/MeetingRequest/_MeetingRequestMobileFilters';
+import AnchorFocuser from './components/_AnchorFocuser';
+import Happening from './components/_Happening';
+import ToggleVisibility from './components/_ToggleVisibility';
+import PreventMultipleSubmit from './components/_PreventMultipleSubmit';
+import FilterRequestByType from './components/MeetingRequest/_FilterByType';
+import CatalogPagination from './components/_CatalogPagination';
+import IgnorePhoneConfirmation from './components/agenda/_IgnorePhoneConfirmation';
+import PackageParticipantProducts from './components/_PackageParticipantProducts';
+import CatalogSelectFromNomenclaturesField from './components/_CatalogSelectFromNomenclaturesField';
+import SortParticipants from './components/_SortParticipants';
+import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
+import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
 
-require('bootstrap');
-require('elao-form.js');
-require('intl-tel-input');
-require('select2');
-require('@babel/polyfill');
+import 'bootstrap';
+import 'elao-form.js';
+import 'intl-tel-input';
+import 'select2';
 
 function init (target) {
     // always first one in order to avoid collision
@@ -123,7 +122,7 @@ function init (target) {
     const agendaElement = document.getElementById('agenda');
 
     if (agendaElement) {
-        Agenda.init(target, agendaElement);
+        initAgenda(target, agendaElement);
     }
 
     const agendaAllSheetElement = document.getElementById('agendaAllSheet');

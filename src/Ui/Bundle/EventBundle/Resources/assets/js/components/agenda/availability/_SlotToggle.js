@@ -1,4 +1,4 @@
-var Toggle = require('./../../_Toggle');
+import Toggle from "../../_Toggle";
 
 /**
  * SlotToggle constructor
@@ -122,4 +122,4 @@ SlotToggle.prototype.doesParticipantDeclareUnavailability = function () {
     return this.checked !== true;
 };
 
-module.exports = SlotToggle;
+export default SlotToggle;

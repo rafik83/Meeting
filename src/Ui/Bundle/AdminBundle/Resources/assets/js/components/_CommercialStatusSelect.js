@@ -1,5 +1,5 @@
-var $ = require('jquery');
-require('select2');
+import $ from 'jquery';
+import 'select2';
 
 function CommercialStatusSelect(element)
 {
@@ -25,4 +25,4 @@ CommercialStatusSelect.prototype.formatResult = function(status)
 };
 
 
-module.exports = CommercialStatusSelect;
+export default CommercialStatusSelect;

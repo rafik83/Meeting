@@ -220,4 +220,4 @@ Group.prototype.getMeetMaxWidth = function() {
     return this.meets[0].agenda.getMeetMaxWidth();
 };
 
-module.exports = Group;
+export default Group;

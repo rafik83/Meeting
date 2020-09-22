@@ -356,13 +356,13 @@ class Event implements EventInterface, TraceableInterface
      *
      * @return string
      */
-    public function getAvailableLocale($locale)
+    public function getAvailableLocale($locale): string
     {
         if (\in_array($locale, $this->getLocales(), true)) {
             return $locale;
         }
 
-        return $this->getFallback();
+        return $this->getLocaleFallback();
     }
 
     /**

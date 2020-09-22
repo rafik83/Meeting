@@ -1,11 +1,11 @@
-var options = require('../../vueComponents/options');
-var AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
-var spotAgenda = require('./SpotAgenda.js');
-var eventDispatcher = require('../../vueComponents/EventDispatcher');
+import options from '../../vueComponents/options';
+import AgendaApiEndpoints from "../../components/_AgendaApiEndpoints";
+import spotAgenda from './SpotAgenda';
+import eventDispatcher from '../../vueComponents/EventDispatcher';
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#spots-agenda',
     delimiters: options.delimiters,
     components: {

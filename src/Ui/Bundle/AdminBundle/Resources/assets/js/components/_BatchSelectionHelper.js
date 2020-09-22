@@ -80,4 +80,4 @@ BatchSelectionHelper.prototype.triggerChange = function (totalSelection) {
     this.batchForm.dispatchEvent(htmlEvent);
 };
 
-module.exports = BatchSelectionHelper;
+export default BatchSelectionHelper;

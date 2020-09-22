@@ -1,16 +1,16 @@
 'use strict';
 
-var TokboxInstance = require('./TokboxInstance').TokboxInstance;
-var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
-var initLayoutContainer = require('opentok-layout-js');
-var Publisher = require('./Publisher');
-var Subscriber = require('./Subscriber');
-var Counter = require('./Counter');
-var Settings = require('./Settings');
-var $ = require('jquery');
-require('bootstrap/js/tooltip');
-require('bootstrap/js/popover'); // popover require tooltip
-const esPolyfill = require('event-source-polyfill');
+import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import initLayoutContainer from 'opentok-layout-js';
+import Publisher from './Publisher';
+import Subscriber from './Subscriber';
+import Counter from './Counter';
+import $ from 'jquery';
+import Settings from './Settings';
+
+import 'bootstrap/js/tooltip';
+import 'bootstrap/js/popover'; // popover require tooltip
+import {EventSourcePolyfill} from  'event-source-polyfill';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -645,7 +645,7 @@ Webinar.prototype.initChat = function () {
         const url = new URL(this.notificationProviderUrl);
         url.searchParams.append('topic', `https://vimeet.events/event/${this.eventId}/notifications/happening/${this.happeningId}`);
 
-        var eventSource = new esPolyfill.EventSourcePolyfill(url, {
+        var eventSource = new EventSourcePolyfill(url, {
             headers: {
                 'Authorization': `Bearer ${this.notificationSubscriberKey}`
             }
@@ -1303,7 +1303,7 @@ Webinar.prototype.initQuestions = function () {
         const url = new URL(this.notificationProviderUrl);
         url.searchParams.append('topic', `https://vimeet.events/happening/${this.happeningId}/webinar/questions`);
 
-        var eventSource = new esPolyfill.EventSourcePolyfill(url, {
+        var eventSource = new EventSourcePolyfill(url, {
             headers: {
                 'Authorization': `Bearer ${this.notificationSubscriberKey}`
             }
@@ -1561,4 +1561,4 @@ Webinar.prototype.autoMaximize = function(subscriber) {
     }.bind(this));
 };
 
-module.exports = Webinar;
+export default Webinar;

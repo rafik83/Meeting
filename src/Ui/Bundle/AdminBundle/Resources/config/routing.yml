@@ -892,12 +892,13 @@ admin_event_qr_code_reader:
     path: /event/{event}/access
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction }
+
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet/Export:exportSheet }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Export\PrepareExportAction
 
 admin_participant_prepare_export:
     path: /event/{event}/sheet/export/participant/prepare

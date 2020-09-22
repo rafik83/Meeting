@@ -1,15 +1,15 @@
-var slotAgenda = require('./SlotAgenda'),
-    options = require('../../vueComponents/options'),
-    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints');
+import SlotAgenda from './SlotAgenda';
+import options from '../../vueComponents/options';
+import AgendaApiEndpoints from "../../components/_AgendaApiEndpoints";
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#sheet-agenda',
     delimiters: options.delimiters,
     props: ['sheet', 'focused-sheet'],
     components: {
-        'slot-agenda': slotAgenda
+        'slot-agenda': SlotAgenda
     },
     data: function () {
         return {

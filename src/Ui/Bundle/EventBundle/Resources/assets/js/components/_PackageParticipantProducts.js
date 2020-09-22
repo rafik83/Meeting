@@ -1,4 +1,4 @@
-var PackageParticipantRow = require('./_PackageParticipantRow');
+import PackageParticipantRow from "./_PackageParticipantRow";
 
 function PackageParticipantProducts(element)
 {
@@ -123,7 +123,7 @@ PackageParticipantProducts.prototype.hasOnlyOneProduct = function ()
   return 1 === count;
 };
 
-module.exports = PackageParticipantProducts;
+export default PackageParticipantProducts;
 
 function PackageParticipantProductModel(parent, participantProduct)
 {

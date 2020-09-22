@@ -867,6 +867,15 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Export\PrepareExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     #
     # OMZ
     #

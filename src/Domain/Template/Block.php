@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,6 +10,8 @@ use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContai
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainNomenclatureObjectWithDepthHigherThanOneException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectsCollectionBlockCanNotContainOtherBlockException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
@@ -161,8 +155,8 @@ class Block extends AbstractChild
      */
     public function getBlocks()
     {
-        return array_reduce($this->children, function ($carry, $columns) {
-            return array_merge($carry, array_values(array_filter($columns, function (AbstractChild $child) {
+        return array_reduce($this->children, static function ($carry, $columns) {
+            return array_merge($carry, array_values(array_filter($columns, static function (AbstractChild $child) {
                 return $child instanceof Block;
             })));
         }, []);
@@ -170,7 +164,7 @@ class Block extends AbstractChild
 
     public function getBlocksIndexedByUid()
     {
-        return array_reduce($this->children, function (array $carry, array $column) {
+        return array_reduce($this->children, static function (array $carry, array $column) {
             foreach ($column as $childKey => $child) {
 
                 if ($child instanceof Block) {
@@ -216,7 +210,7 @@ class Block extends AbstractChild
      */
     public function getObjects($key = null)
     {
-        return array_reduce($this->children, function (array $carry, array $column) use ($key) {
+        return array_reduce($this->children, static function (array $carry, array $column) use ($key) {
             foreach ($column as $childKey => $child) {
                 if (null !== $key && $childKey !== $key) {
                     continue;
@@ -256,7 +250,7 @@ class Block extends AbstractChild
      */
     public function getContentObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\ContentObjectInterface;
         });
     }
@@ -266,8 +260,18 @@ class Block extends AbstractChild
      */
     public function getExportableObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\ExportableObjectInterface;
+        });
+    }
+
+    public function getExportableObjectsWithMediaAndUpload(): array
+    {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
+            return $object instanceof TemplateObject\ExportableObjectInterface
+                || $object instanceof MediaCollection
+                || $object instanceof MultiUploadCollectionObject
+            ;
         });
     }
 
@@ -276,7 +280,7 @@ class Block extends AbstractChild
      */
     public function getEditableObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isEditable() && $object->isVisibilityEditable();
         });
     }
@@ -286,7 +290,7 @@ class Block extends AbstractChild
      */
     public function getHiddenAndReadOnlyObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isVisibilityHidden() || $object->isVisibilityReadOnly();
         });
     }
@@ -296,7 +300,7 @@ class Block extends AbstractChild
      */
     public function getReadOnlyObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isVisibilityReadOnly();
         });
     }
@@ -306,7 +310,7 @@ class Block extends AbstractChild
      */
     public function getObjectsEditableByAdmin(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return ($object->isEditable() && $object->isVisibilityEditable())
                 || $object->isVisibilityHidden()
                 || $object->isVisibilityReadOnly();
@@ -318,7 +322,7 @@ class Block extends AbstractChild
      */
     public function getProfileObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && !$object instanceof TemplateObject\Image;
         });
     }
@@ -328,7 +332,7 @@ class Block extends AbstractChild
      */
     public function getEditableSheetDataExceptedImageObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::SHEET_DATA) && !$object instanceof TemplateObject\Image;
         });
     }
@@ -338,7 +342,7 @@ class Block extends AbstractChild
      */
     public function getSheetObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->hasTag(Tag::SHEET_DATA);
         });
     }
@@ -348,7 +352,7 @@ class Block extends AbstractChild
      */
     public function getParticipantAndSheetDataExceptedImageObject()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             if ($object instanceof TemplateObject\Image) {
                 return false;
             }
@@ -362,7 +366,7 @@ class Block extends AbstractChild
      */
     public function getEditableTextAndNomenclatureObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isEditable()
                 && ($object instanceof TemplateObject\EditableText || $object instanceof TemplateObject\Nomenclature)
             ;
@@ -384,7 +388,7 @@ class Block extends AbstractChild
      */
     public function getAvatarObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object->isEditable() && $object->hasTag(Tag::PARTICIPANT_DATA) && $object->hasTag(Tag::PARTICIPANT_AVATAR) && $object instanceof TemplateObject\Image;
         });
     }
@@ -466,7 +470,7 @@ class Block extends AbstractChild
      */
     public function getBlocksCount(): int
     {
-        return \count(array_filter($this->getBlocks(), function (Block $block) {
+        return \count(array_filter($this->getBlocks(), static function (Block $block) {
             return \count($block->getObjects()) > 0;
         }));
     }
@@ -576,7 +580,7 @@ class Block extends AbstractChild
      */
     public function getUploadAndImageObjects(): array
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof UploadableObjectInterface;
         });
     }
@@ -586,7 +590,7 @@ class Block extends AbstractChild
      */
     public function getMediaCollectionObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\MediaCollection;
         });
     }
@@ -596,7 +600,7 @@ class Block extends AbstractChild
      */
     public function getNomenclatureObjects()
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) {
             return $object instanceof TemplateObject\Nomenclature;
         });
     }
@@ -608,7 +612,7 @@ class Block extends AbstractChild
      */
     public function getNomenclatureObjectsByObjective($objective)
     {
-        return array_filter($this->getObjects(), function (TemplateObject $object) use ($objective) {
+        return array_filter($this->getObjects(), static function (TemplateObject $object) use ($objective) {
             return $object instanceof TemplateObject\Nomenclature && $object->getObjective() === $objective;
         });
     }
@@ -654,8 +658,8 @@ class Block extends AbstractChild
             'component' => 'block',
             'type'      => $this->type,
             'config'    => $this->config,
-            'children'  => array_map(function (array $column) {
-                return array_map(function (AbstractChild $child) {
+            'children'  => array_map(static function (array $column) {
+                return array_map(static function (AbstractChild $child) {
                     return $child->normalize();
                 }, $column);
             }, $this->children),
@@ -669,7 +673,7 @@ class Block extends AbstractChild
      */
     public function getData()
     {
-        return array_map(function (TemplateObject $object) {
+        return array_map(static function (TemplateObject $object) {
             return $object->getData();
         }, $this->getObjects());
     }
@@ -679,7 +683,7 @@ class Block extends AbstractChild
      */
     public function getSheetData()
     {
-        return array_map(function (TemplateObject $object) {
+        return array_map(static function (TemplateObject $object) {
             return $object->getData();
         }, $this->getSheetObjects());
     }
@@ -689,7 +693,7 @@ class Block extends AbstractChild
      */
     public function clear(): void
     {
-        array_map(function (TemplateObject $object) {
+        array_map(static function (TemplateObject $object) {
             $object->setData([]);
         }, $this->getObjects());
     }
@@ -846,7 +850,7 @@ class Block extends AbstractChild
                 foreach ($values as $index => $value) {
                     if ($object->isMultiple()) {
                         $objectsContent[$index][$uid] = array_map(
-                            function (string $key) use ($object) {
+                            static function (string $key) use ($object) {
                                 return $object->getLabelForKey($key);
                             },
                             $value

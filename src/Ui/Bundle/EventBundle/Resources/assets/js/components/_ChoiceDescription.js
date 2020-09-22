@@ -20,4 +20,4 @@ ChoiceDescription.prototype.onChange = function (event) {
     this.target.classList.add('hide');
 };
 
-module.exports = ChoiceDescription;
+export default ChoiceDescription;

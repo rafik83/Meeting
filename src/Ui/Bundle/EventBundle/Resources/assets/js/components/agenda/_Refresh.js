@@ -28,4 +28,4 @@ Refresh.prototype.checkForRefresh = function() {
     location.href = this.getCurrentUrlWithoutFragment();
 };
 
-module.exports = Refresh;
+export default Refresh;

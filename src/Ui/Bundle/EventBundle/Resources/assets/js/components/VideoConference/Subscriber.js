@@ -97,4 +97,4 @@ Subscriber.prototype.handleError = function (error) {
   }
 };
 
-module.exports = Subscriber;
+export default Subscriber;

@@ -12,4 +12,4 @@ function addSubmitEventListenerOnElementChange(target, formName, elementName) {
     }
 }
 
-module.exports = addSubmitEventListenerOnElementChange;
+export default addSubmitEventListenerOnElementChange;

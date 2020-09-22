@@ -1,4 +1,4 @@
-var axios = require('axios');
+import axios from 'axios';
 
 /**
  * Storage constructor
@@ -69,4 +69,4 @@ Storage.prototype.getData = function () {
     return result;
 };
 
-module.exports = Storage;
+export default Storage;
