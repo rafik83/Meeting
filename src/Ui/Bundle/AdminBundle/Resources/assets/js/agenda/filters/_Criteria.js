@@ -11,4 +11,4 @@ Criteria.prototype.meetCriteria = function(sheets) {};
 /**
  * @type {Criteria}
  */
-module.exports = Criteria;
+export default Criteria;

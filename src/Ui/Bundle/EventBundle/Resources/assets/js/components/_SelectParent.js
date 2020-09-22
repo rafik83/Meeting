@@ -1,6 +1,5 @@
-var $ = require('jquery');
-
-require('elao-form.js');
+import $ from 'jquery';
+import 'elao-form.js';
 
 function SelectParent(element)
 {
@@ -26,4 +25,4 @@ SelectParent.prototype.refresh = function ()
     }
 };
 
-module.exports = SelectParent;
+export default SelectParent;

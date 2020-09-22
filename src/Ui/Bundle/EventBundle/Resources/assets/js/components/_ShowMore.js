@@ -47,4 +47,4 @@ ShowMore.prototype.toggle = function(event)
     this.showState ? this.hide() : this.show();
 };
 
-module.exports = ShowMore;
+export default ShowMore;

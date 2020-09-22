@@ -1,6 +1,6 @@
 'use strict';
 
-var tokbox = require('@opentok/client');
+import tokbox from '@opentok/client';
 
 var STREAM_TYPE_SCREENSHARE = 'screen';
 
@@ -67,4 +67,4 @@ Publisher.prototype.handleError = function(error) {
   }
 };
 
-module.exports = Publisher;
+export default Publisher;

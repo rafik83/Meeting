@@ -148,4 +148,4 @@ AgendaApiEndpoints.prototype.purgeUserAgendaVersion = function (participantId) {
     return this.getPathname() + '/participant/' + participantId + '/agenda/version/purge';
 };
 
-module.exports = AgendaApiEndpoints;
+export default AgendaApiEndpoints;

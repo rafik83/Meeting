@@ -47,4 +47,4 @@ ToggleVisibility.prototype.hide = function (element)
     element.style.display = 'none';
 };
 
-module.exports = ToggleVisibility;
+export default ToggleVisibility;

@@ -38,4 +38,4 @@ MessagingMessagePreview.prototype.updatePreview = function()
     this.targetIFrame.style.display = 'block';
 };
 
-module.exports = MessagingMessagePreview;
+export default MessagingMessagePreview;

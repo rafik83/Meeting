@@ -1,5 +1,5 @@
-var $ = require('jquery');
-var PubSub = require('pubsub-js');
+import $ from 'jquery';
+import PubSub from 'pubsub-js';
 
 function CatalogPagination(element)
 {
@@ -23,7 +23,7 @@ CatalogPagination.prototype.loadNextPage = function ()
             var seeMoreButton = $('.see-more');
 
             seeMoreButton.removeAttr('disabled');
-            
+
             if (!json.seeMoreButton) {
                 seeMoreButton.hide();
             }
@@ -38,4 +38,4 @@ CatalogPagination.prototype.loadNextPage = function ()
     })
 };
 
-module.exports = CatalogPagination;
+export default CatalogPagination;

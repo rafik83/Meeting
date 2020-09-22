@@ -5,4 +5,4 @@ function guidGenerator() {
   return (S4()+S4());
 }
 
-module.exports = guidGenerator;
+export default guidGenerator;

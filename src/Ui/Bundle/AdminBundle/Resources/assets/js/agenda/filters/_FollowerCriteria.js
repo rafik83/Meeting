@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {null|array} followers
@@ -27,4 +27,4 @@ FollowerCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = FollowerCriteria;
+export default FollowerCriteria;

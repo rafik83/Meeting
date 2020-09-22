@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 /**
  * ButtonLinkObject
@@ -39,4 +39,4 @@ ButtonLinkObject.prototype.save = function ()
   return true;
 };
 
-module.exports = ButtonLinkObject;
+export default ButtonLinkObject;

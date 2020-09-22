@@ -1,7 +1,6 @@
-var VideoConference = require('./components/VideoConference/VideoConference'),
-    VideoConferenceTest = require('./components/VideoConference/VideoTest'),
-    Webinar = require('./components/VideoConference/Webinar')
-;
+import VideoConference from './components/VideoConference/VideoConference';
+import VideoConferenceTest from './components/VideoConference/VideoTest';
+import Webinar from './components/VideoConference/Webinar';
 
 function init(target) {
     [].forEach.call(target.querySelectorAll('.video-conference'), function (element) {

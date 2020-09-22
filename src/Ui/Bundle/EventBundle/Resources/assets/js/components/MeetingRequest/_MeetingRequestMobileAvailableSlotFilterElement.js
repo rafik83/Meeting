@@ -12,4 +12,4 @@ MeetingRequestMobileAvailableSlotFilterElement.prototype.active = function() {
     this.element.getElementsByTagName('a')[0].classList.remove('btn-inactive');
 };
 
-module.exports = MeetingRequestMobileAvailableSlotFilterElement;
+export default MeetingRequestMobileAvailableSlotFilterElement;

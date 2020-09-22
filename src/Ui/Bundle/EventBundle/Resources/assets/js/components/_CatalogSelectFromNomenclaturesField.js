@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    CheckAllButton = require('./_CheckAllButton');
+import $ from 'jquery';
+import CheckAllButton from "./_CheckAllButton";
 
 function CatalogSelectFromNomenclaturesField(element, modal) {
     this.element = element;
@@ -160,4 +160,4 @@ CatalogSelectFromNomenclaturesField.prototype.getCheckedValues = function () {
     });
 };
 
-module.exports = CatalogSelectFromNomenclaturesField;
+export default CatalogSelectFromNomenclaturesField;

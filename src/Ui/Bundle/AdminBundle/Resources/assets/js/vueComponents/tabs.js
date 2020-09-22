@@ -1,6 +1,6 @@
-var options = require('../vueComponents/options');
-var Vue = require('vue');
-var eventDispatcher = require('./EventDispatcher');
+import options from '../vueComponents/options';
+import Vue from 'vue';
+import eventDispatcher from "./EventDispatcher";
 
 var tab = {
     delimiters: options.delimiters,

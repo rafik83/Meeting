@@ -1,10 +1,9 @@
-var LoadingButton = require('./../_LoadingButton'),
-    TemplateBlock = require('./_TemplateBlock'),
-    guidGenerator = require('./_GuidGenerator'),
-    normalizeTemplate = require('./_NormalizeTemplate'),
-    Sortable = require('./../_Sortable'),
-    TemplateObject = require('./_TemplateObject')
-;
+import LoadingButton from "../_LoadingButton";
+import TemplateBlock from "./_TemplateBlock";
+import guidGenerator from "./_GuidGenerator";
+import normalizeTemplate from "./_NormalizeTemplate";
+import * as Sortable from "./../_Sortable";
+import TemplateObject from './_TemplateObject';
 
 /**
  * TemplateBuilder
@@ -202,4 +201,4 @@ FormTemplateBuilder.prototype.afterMoveBlock = function (event) {
     this.addAddButtons();
 };
 
-module.exports = FormTemplateBuilder;
+export default FormTemplateBuilder;

@@ -13,4 +13,4 @@ MeetingRequestMobileStateTypeFilterElement.prototype.active = function() {
     this.element.getElementsByTagName('a')[0].classList.remove('btn-inactive');
 };
 
-module.exports = MeetingRequestMobileStateTypeFilterElement;
+export default MeetingRequestMobileStateTypeFilterElement;

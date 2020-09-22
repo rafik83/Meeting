@@ -1,16 +1,16 @@
 'use strict';
 
-var TokboxInstance = require('./TokboxInstance').TokboxInstance;
-var CHROME_EXTENSION_URL = require('./TokboxInstance').CHROME_EXTENSION_URL;
-var initLayoutContainer = require('opentok-layout-js');
-var openTokTextChat = require('opentok-text-chat');
-var Publisher = require('./Publisher');
-var Subscriber = require('./Subscriber');
-var Counter = require('./Counter');
-var Settings = require('./Settings');
-var $ = require('jquery');
-require('bootstrap/js/tooltip');
-require('bootstrap/js/popover'); // popover require tooltip
+import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import initLayoutContainer from 'opentok-layout-js';
+import openTokTextChat from 'opentok-text-chat';
+import Publisher from './Publisher';
+import Subscriber from './Subscriber';
+import Counter from './Counter';
+import $ from 'jquery';
+import Settings from './Settings';
+
+import 'bootstrap/js/tooltip';
+import 'bootstrap/js/popover'; // popover require tooltip
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -1328,4 +1328,4 @@ Webinar.prototype.autoMaximize = function(subscriber) {
     }.bind(this));
 };
 
-module.exports = Webinar;
+export default Webinar;

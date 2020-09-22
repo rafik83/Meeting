@@ -24,4 +24,4 @@ function RadioGroupAjax(element) {
     }.bind(this));
 }
 
-module.exports = RadioGroupAjax;
+export default RadioGroupAjax;

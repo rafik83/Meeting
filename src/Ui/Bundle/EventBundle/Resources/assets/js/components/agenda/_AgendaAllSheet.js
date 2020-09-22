@@ -1,4 +1,4 @@
-var Meet = require('./_Meet');
+import Meet from "./_Meet";
 
 function AgendaAllSheet(element) {
     this.element = element;
@@ -11,4 +11,4 @@ AgendaAllSheet.prototype.addMeet = function (element) {
     new Meet(null, element, this.meetingModal);
 };
 
-module.exports = AgendaAllSheet;
+export default AgendaAllSheet;
