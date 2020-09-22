@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- VIMEET-2228 - Button custom menu
 
 ## [2.48.2]
 ### Fixed
@@ -31,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
 - VIMEET-2156 - Remove explicit error about email on login (security)
-- VIMEET-2228 - Button custom menu
 
 ## [2.46.0] - 2020-09-10
 ### Added
