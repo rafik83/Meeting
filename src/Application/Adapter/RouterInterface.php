@@ -8,10 +8,7 @@ interface RouterInterface
 {
     public function generate($path, array $parameters = []): string;
 
-    /**
-     * Generate absolute url
-     */
-    public function url($path, array $parameters = []): string;
+    public function generateAbsoluteUrl($path, array $parameters = []): string;
 
     public function getContext(): RequestContext;
 }

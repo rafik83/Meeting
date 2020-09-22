@@ -47,7 +47,7 @@ class NotifyHandlerTest extends TestCase
             ->willReturn('lien')
         ;
 
-        $router->url(
+        $router->generateAbsoluteUrl(
                 'admin_file_download',
                 [
                     'event' => 12,

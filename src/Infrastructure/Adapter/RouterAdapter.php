@@ -25,7 +25,7 @@ class RouterAdapter implements RouterInterface
         return $this->router->generate($path, $parameters);
     }
 
-    public function url($path, array $parameters = []): string
+    public function generateAbsoluteUrl($path, array $parameters = []): string
     {
         $this->router->getContext()->setScheme($this->scheme);
         return $this->router->generate($path, $parameters, SymfonyRouterInterface::ABSOLUTE_URL);

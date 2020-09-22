@@ -46,7 +46,7 @@ class NotifyHandler
             $command->admin->getEmail(),
             $command->locale,
             $this->translator->trans('admin.mail.export_sheets.content', [], 'mail', $command->locale),
-            $this->router->url(
+            $this->router->generateAbsoluteUrl(
                 'admin_file_download',
                 [
                     'event' => $command->event->getId(),
