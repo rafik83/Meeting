@@ -261,6 +261,8 @@ form.event_billing_configuration.children.translations.prototype.children.paymen
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.label: 'Pied de page'
 form.event_billing_configuration.children.translations.prototype.children.paymentFooter.placeholder: 'Exemple adresse, siret, capital ...'
 form.event_configure_date.children.agendaOnlineDate.label: 'Mise en ligne de l''agenda'
+form.event_configure_date.children.callVisioCloseDate.label: 'Date de clôture des call visio dans l''onglet networking'
+form.event_configure_date.children.callVisioOpenDate.label: 'Date d''ouverture des call visio dans l''onglet networking'
 form.event_configure_date.children.catalogOnlineDate.label: 'Mise en ligne du catalogue'
 form.event_configure_date.children.closeAnsweringMeetingRequestDate.label: 'Bloquer les acceptations/refus des RDV'
 form.event_configure_date.children.closeMeetingRequestDate.label: 'Bloquer la demande de rendez-vous'
