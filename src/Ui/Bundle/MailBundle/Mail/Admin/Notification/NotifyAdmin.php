@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\Notification;
 
 use Proximum\Vimeet\Application\Components\Mail\AdminMail;
-use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 
 class NotifyAdmin extends AdminMail

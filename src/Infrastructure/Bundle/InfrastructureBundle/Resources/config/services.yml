@@ -2546,6 +2546,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
+            - '%scheme%'
 
     Proximum\Vimeet\Application\Adapter\RouterInterface: '@adapter.router'
 
