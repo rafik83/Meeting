@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Url;
 use Proximum\Vimeet\Domain\Template\TrackingUrlTransformer;
+use Symfony\Component\Routing\RequestContext;
 
 class TrackingUrlTransformerTest extends TestCase
 {
@@ -21,8 +22,11 @@ class TrackingUrlTransformerTest extends TestCase
         $router = $this->prophesize(RouterInterface::class);
         $router->generate(
             'event_catalog_sheet_follow_link',
-            ['sheet' => 1, 'objectId' => 2]
+            ['sheet' => 1, 'objectId' => 2, '_locale'=>'fr']
         )->shouldBeCalled()->willReturn('http://example.org');
+        $context = $this->prophesize(RequestContext::class);
+        $context->getParameter('_locale')->willReturn('fr');
+        $router->getContext()->shouldBeCalled()->willReturn($context->reveal());
 
         $transformer = new TrackingUrlTransformer($router->reveal());
         $url = $transformer->transform($sheet->reveal(), $object->reveal());
