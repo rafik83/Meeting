@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2204 - Hidden contact menu
 
 ## [2.47.0] - 2020-09-11
-### Added 
+### Added
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
 - VIMEET-2156 - Remove explicit error about email on login (security)
+- VIMEET-1925 - New version of chat and questions decoupled from Tokbox
 
 ## [2.46.0] - 2020-09-10
 ### Added
