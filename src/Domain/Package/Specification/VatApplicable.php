@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Package\Specification;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,12 +19,6 @@ class VatApplicable
      */
     private $billingInfoRepository;
 
-    /**
-     * VatApplicable constructor.
-     *
-     * @param BillingInfoRepositoryInterface $billingInfoRepository
-     * @param array                          $europeanCountries
-     */
     public function __construct(BillingInfoRepositoryInterface $billingInfoRepository, array $europeanCountries)
     {
         $this->billingInfoRepository = $billingInfoRepository;
@@ -46,7 +32,7 @@ class VatApplicable
      *
      * @return bool
      */
-    public function onSheet(Sheet $sheet)
+    public function onSheet(Sheet $sheet): bool
     {
         $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
 

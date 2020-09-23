@@ -93,4 +93,4 @@ Toggle.prototype.refresh = function () {
 
 Toggle.defaultLabels = {disabled: 'disabled', yes: 'yes', no: 'no'};
 
-module.exports = Toggle;
+export default Toggle;

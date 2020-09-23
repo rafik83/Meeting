@@ -24,4 +24,4 @@ Program.prototype.toggleOpen = function(event) {
     this.element.classList.toggle('open');
 };
 
-module.exports = Program;
+export default Program;

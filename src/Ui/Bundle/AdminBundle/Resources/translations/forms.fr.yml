@@ -268,6 +268,8 @@ form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Active l
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Active l''affichage du badge pour le participant'
 form.event_configure_date.children.enableVisioTestMenuButtonDate.label: 'Active l''affichage du bouton de test de visio dans le menu'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
+form.event_configure_date.children.networkingCloseDate.label: 'Date de clôture du networking'
+form.event_configure_date.children.networkingOpenDate.label: 'Date d''ouverture du networking'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
@@ -889,6 +891,7 @@ form.registration_template_duplicate.children.event.label: 'Événement de desti
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'

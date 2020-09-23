@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2217 - Activate / deactivate the networking tab by key date
+- VIMEET-2204 - Hidden contact menu
+- VIMEET-2203 - Request Automatically Transformed Into Meeting
+
+## [2.47.0] - 2020-09-11
+### Added
+- VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
+- VIMEET-2156 - Remove explicit error about email on login (security)
 
 ## [2.46.0] - 2020-09-10
 ### Added

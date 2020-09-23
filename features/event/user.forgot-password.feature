@@ -16,7 +16,6 @@ Feature: Forgot Password
     And I fill in "form.forgotten_password.children.email.label" with "not-known-user@example.net"
     And I press "form.forgotten_password.children.submit.label"
     Then the response status code should be 200
-    And I should see "validators.emailDoesNotExist"
 
   Scenario: I can request a token for an existent account and change the password
     When I go to "http://rdv-carnot-2016.vimeet.proximum/fr/forgotten_password"

@@ -1,4 +1,4 @@
-const Sortable = require('sortablejs').Sortable;
+import Sortable from 'sortablejs';
 
 function SortParticipants(element) {
   const rankInputsSelector = 'input[type="number"]';
@@ -22,4 +22,4 @@ function SortParticipants(element) {
   });
 }
 
-module.exports = SortParticipants;
+export default SortParticipants;

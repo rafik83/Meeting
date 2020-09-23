@@ -1,7 +1,7 @@
-var filterSheetForm = require('./../form/filterSheetForm'),
-    options         = require('../../../vueComponents/options');
+import filterSheetForm from './../form/filterSheetForm';
+import options from '../../../vueComponents/options';
 
-module.exports = {
+export default {
     template: '#filter-modal',
     delimiters: options.delimiters,
     props: ['sheets', 'show'],

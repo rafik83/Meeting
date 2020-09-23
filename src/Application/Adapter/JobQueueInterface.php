@@ -236,4 +236,12 @@ interface JobQueueInterface
         Happening $happening,
         DateTime $dueDate
     ): void;
+
+    public function exportSheet(
+        Event $event,
+        Admin $admin,
+        Event\ExtraData $extraData,
+        string $locale,
+        bool $displayNomenclatureIds
+    ): void;
 }

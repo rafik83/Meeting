@@ -1,10 +1,9 @@
-var Vue                    = require('vue'),
-    store                  = require('./agenda/store/index'),
-    options                = require('./vueComponents/options'),
-    spot                   = require('./agenda/spot/Spot'),
-    meeting                = require('./agenda/meeting/Meeting');
-
-var tabs = require('./vueComponents/tabs');
+import Vue     from 'vue';
+import store   from './agenda/store/index';
+import options from './vueComponents/options';
+import spot    from './agenda/spot/Spot';
+import meeting from './agenda/meeting/Meeting';
+import tabs from './vueComponents/tabs';
 
 Vue.component('Modal', {
     template: '#modal-template',

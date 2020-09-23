@@ -1,4 +1,4 @@
-var Chart = require('chart.js');
+import Chart from 'chart.js';
 
 function Bar(element) {
     this.element = element;
@@ -43,4 +43,4 @@ function Bar(element) {
     });
 }
 
-module.exports = Bar;
+export default Bar;

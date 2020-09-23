@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function AnchorFocuser(element, location)
 {
@@ -24,4 +24,4 @@ AnchorFocuser.prototype.focusOnAnchor = function ()
     }
 };
 
-module.exports = AnchorFocuser;
+export default AnchorFocuser;

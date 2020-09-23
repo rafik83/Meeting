@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {boolean} filter
@@ -26,4 +26,4 @@ HasParticipantUnavailableWithMeetingRequestCriteria.prototype.meetCriteria = fun
     return sheets;
 };
 
-module.exports = HasParticipantUnavailableWithMeetingRequestCriteria;
+export default HasParticipantUnavailableWithMeetingRequestCriteria;

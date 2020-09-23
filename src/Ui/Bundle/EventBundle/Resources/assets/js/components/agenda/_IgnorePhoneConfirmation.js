@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 /**
  * @param {Node} element
@@ -19,4 +19,4 @@ IgnorePhoneConfirmation.prototype.ignore = function() {
   });
 };
 
-module.exports = IgnorePhoneConfirmation;
+export default IgnorePhoneConfirmation;

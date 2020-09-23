@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {boolean} filter
@@ -25,4 +25,4 @@ HasMeetingToApproveCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = HasMeetingToApproveCriteria;
+export default HasMeetingToApproveCriteria;

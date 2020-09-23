@@ -672,6 +672,8 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler'
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -741,6 +743,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
@@ -2546,6 +2549,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
+            - '%scheme%'
 
     Proximum\Vimeet\Application\Adapter\RouterInterface: '@adapter.router'
 
@@ -2912,6 +2916,10 @@ services:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+
+    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
+        arguments:
+            - '@repository.rule_repository'
 
     application.components.messaging.message_factory:
         class: Proximum\Vimeet\Application\Components\Messaging\MessageFactory
@@ -3858,6 +3866,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
+            - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery }
 
@@ -3865,7 +3874,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
-            - '@adapter.sheet_search_adapter'
 
     query.event.event_list_query_handler:
         class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler
@@ -4550,6 +4558,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -6923,6 +6932,8 @@ services:
             - '@adapter.authorization_checker'
             - '@domain.event.day.dday_guesser'
             - '@domain.key_dates.checker.agenda_access_checker'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
 
     #
     # Event Day service

@@ -23,4 +23,4 @@ function ButtonGroupDefaultStateChanger(element) {
     }.bind(this))
 }
 
-module.exports = ButtonGroupDefaultStateChanger;
+export default ButtonGroupDefaultStateChanger;

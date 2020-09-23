@@ -1,8 +1,8 @@
-var Meet = require('./_Meet'),
-    Slot = require('./_Slot'),
-    Planner = require('./_Planner'),
-    ResizeHandler = require('./_ResizeHandler'),
-    moment = require('moment');
+import Meet from './_Meet';
+import Slot from './_Slot';
+import Planner from './_Planner';
+import ResizeHandler from './_ResizeHandler';
+import moment from 'moment';
 
 /**
  * Agenda
@@ -209,4 +209,4 @@ Agenda.prototype.getMeetMaxWidth = function() {
     return this.meetMaxWidth;
 };
 
-module.exports = Agenda;
+export default Agenda;

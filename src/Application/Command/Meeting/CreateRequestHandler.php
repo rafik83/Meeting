@@ -1,17 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -41,29 +35,35 @@ class CreateRequestHandler
     private $eventDispatcher;
 
     /**
-     * CreateRequestHandler constructor.
-     *
-     * @param RequestRepositoryInterface $requestRepository
-     * @param MessageRepositoryInterface $messageRepository
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $dateTime
+     * @var ApproveRequestHandler
      */
+    private $approveRequestHandler;
+
+    /**
+     * @var AllowTransformAutomaticallyRequestIntoMeeting
+     */
+    private $allowTransformAutomaticallyRequestIntoMeeting;
+
     public function __construct(
+        ApproveRequestHandler $approveRequestHandler,
+        AllowTransformAutomaticallyRequestIntoMeeting $allowTransformAutomaticallyRequestIntoMeeting,
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
+        $this->approveRequestHandler = $approveRequestHandler;
+        $this->allowTransformAutomaticallyRequestIntoMeeting = $allowTransformAutomaticallyRequestIntoMeeting;
         $this->requestRepository = $requestRepository;
         $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->dateTime          = $dateTime;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->dateTime = $dateTime;
     }
 
     /**
      * @param CreateRequest $createRequest
      *
-     * @return CreateRequestResult
+     * @return CreateRequestResult|ApproveRequestResult
      */
     public function handle(CreateRequest $createRequest)
     {
@@ -98,6 +98,10 @@ class CreateRequestHandler
             Events::MEETING_REQUEST_CREATED,
             new CreateRequestEvent($request)
         );
+
+        if ($this->allowTransformAutomaticallyRequestIntoMeeting->__invoke($request)) {
+            return $this->approveRequestHandler->handle(new ApproveRequest($createRequest->creator, $request, $createRequest->from, $createRequest->locale));
+        }
 
         return new CreateRequestResult($request);
     }

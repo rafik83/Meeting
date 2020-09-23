@@ -89,7 +89,7 @@ class Balance
     /**
      * @param Event $event
      */
-    public function loadAllOrderVatViews(Event $event)
+    public function loadAllOrderVatViews(Event $event): void
     {
         $orderVatViews = $this->orderVatViewsByEventQueryHandler->handle(new OrderVatViewsByEventQuery($event));
 
@@ -102,7 +102,7 @@ class Balance
      * @param Event $event
      * @param int[] $sheetIds
      */
-    public function loadAllOrderVatViewsForSheetIds(Event $event, array $sheetIds)
+    public function loadAllOrderVatViewsForSheetIds(Event $event, array $sheetIds): void
     {
         $orderVatViews = $this->orderVatViewsBySheetIdsQueryHandler->handle(
             new OrderVatViewsBySheetIdsQuery($event, $sheetIds)
@@ -116,7 +116,7 @@ class Balance
     /**
      * @param Event $event
      */
-    public function loadAllForEvent(Event $event)
+    public function loadAllForEvent(Event $event): void
     {
         $this->loadAllOrderVatViews($event);
         $this->loadAllTransactions($event);
@@ -126,7 +126,7 @@ class Balance
      * @param Event $event
      * @param int[] $sheetIds
      */
-    public function loadAllForSheetIds(Event $event, array $sheetIds)
+    public function loadAllForSheetIds(Event $event, array $sheetIds): void
     {
         $this->loadAllOrderVatViewsForSheetIds($event, $sheetIds);
         $this->loadAllTransactionsForSheetIds($event, $sheetIds);
@@ -157,7 +157,7 @@ class Balance
     {
         $orderVatViews = $this->getOrderVatViews($sheet);
 
-        return array_filter($orderVatViews, function (OrderVatView $orderVatView) {
+        return array_filter($orderVatViews, static function (OrderVatView $orderVatView) {
             return !$orderVatView->isCancelled;
         });
     }

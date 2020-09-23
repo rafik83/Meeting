@@ -13,4 +13,4 @@ CatalogMobileTypeFilterElement.prototype.active = function() {
     this.element.getElementsByTagName('a')[0].classList.remove('btn-inactive');
 };
 
-module.exports = CatalogMobileTypeFilterElement;
+export default CatalogMobileTypeFilterElement;

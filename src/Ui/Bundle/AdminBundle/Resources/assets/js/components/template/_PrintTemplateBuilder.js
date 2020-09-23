@@ -1,9 +1,8 @@
-var guidGenerator = require('./_GuidGenerator'),
-    LoadingButton = require('./../_LoadingButton'),
-    normalizeTemplate = require('./_NormalizeTemplate'),
-    Sortable      = require('./../_Sortable'),
-    TemplateBlock = require('./_TemplateBlock')
-;
+import LoadingButton from "../_LoadingButton";
+import TemplateBlock from "./_TemplateBlock";
+import guidGenerator from "./_GuidGenerator";
+import normalizeTemplate from "./_NormalizeTemplate";
+import * as Sortable from "./../_Sortable";
 
 /**
  * PrintTemplateBuilder
@@ -294,4 +293,4 @@ PrintTemplateObject.prototype.normalize = function () {
   };
 };
 
-module.exports = PrintTemplateBuilder;
+export default PrintTemplateBuilder;

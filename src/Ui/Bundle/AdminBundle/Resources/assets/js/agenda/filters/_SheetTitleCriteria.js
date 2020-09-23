@@ -1,4 +1,4 @@
-var Criteria = require('./_Criteria');
+import Criteria from "./_Criteria";
 
 /**
  * @param {string} sheetTitle
@@ -25,4 +25,4 @@ SheetTitleCriteria.prototype.meetCriteria = function(sheets) {
     return sheets;
 };
 
-module.exports = SheetTitleCriteria;
+export default SheetTitleCriteria;

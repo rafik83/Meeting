@@ -1,7 +1,7 @@
-var options = require('../../vueComponents/options');
-var eventDispatcher = require('../../vueComponents/EventDispatcher');
+import options from '../../vueComponents/options';
+import eventDispatcher from '../../vueComponents/EventDispatcher';
 
-module.exports = {
+export default {
     template: '#spot-slot-agenda',
     delimiters: options.delimiters,
     props: {

@@ -1,6 +1,5 @@
-
-var $        = require('jquery'),
-    Sortable = require('./_Sortable');
+import $ from 'jquery';
+import * as Sortable from "./_Sortable";
 
 function SortableCollection(element, group)
 {
@@ -19,4 +18,4 @@ SortableCollection.prototype.update = function ()
     });
 };
 
-module.exports = SortableCollection;
+export default SortableCollection;

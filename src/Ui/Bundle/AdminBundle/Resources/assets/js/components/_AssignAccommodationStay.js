@@ -1,7 +1,6 @@
-var $ = require('jquery'),
-    axios = require('axios'),
-    DateTimeManipulation = require('./_DateTimeManipulation')
-;
+import $ from 'jquery';
+import axios from 'axios';
+import DateTimeManipulation from "./_DateTimeManipulation";
 
 function AssignAccommodationStay(element)
 {
@@ -121,4 +120,4 @@ AssignAccommodationStay.prototype.onChangePeriod = function(e) {
     }.bind(this)).catch(alert);
 };
 
-module.exports = AssignAccommodationStay;
+export default AssignAccommodationStay;

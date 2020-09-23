@@ -46,7 +46,7 @@ class NotifyHandler
             $command->admin->getEmail(),
             $command->locale,
             $this->translator->trans('admin.mail.export_happening_participants.content', [], 'mail', $command->locale),
-            $this->router->generate(
+            $this->router->generateAbsoluteUrl(
                 'admin_file_download',
                 [
                     'event' => $command->event->getId(),

@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\Notification;
 
 use Proximum\Vimeet\Application\Components\Mail\AdminMail;
-use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Admin;
 
 class NotifyAdmin extends AdminMail
@@ -17,7 +16,7 @@ class NotifyAdmin extends AdminMail
     protected $template = self::TEMPLATE;
 
     /** @var string */
-    protected $messageId = Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED;
+    protected $messageId = 'admin.notify_file_download';
 
     /** @var bool */
     protected $sendToEmailTeam = true;

@@ -1,7 +1,6 @@
-var $ = require('jquery');
-var PubSub = require('pubsub-js');
-
-require('select2');
+import $ from 'jquery';
+import PubSub from 'pubsub-js';
+import 'select2';
 
 /**
  * @param {Node} element
@@ -165,4 +164,4 @@ AjaxAutocomplete.prototype.onSuccess = function (data) {
     return { results: results };
 };
 
-module.exports = AjaxAutocomplete;
+export default AjaxAutocomplete;

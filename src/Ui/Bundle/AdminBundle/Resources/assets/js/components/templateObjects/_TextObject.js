@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 /**
  * TextObject
@@ -39,4 +39,4 @@ TextObject.prototype.save = function ()
   return true;
 };
 
-module.exports = TextObject;
+export default TextObject;

@@ -1,15 +1,15 @@
-var guidGenerator = require('./_GuidGenerator'),
-    LoadingButton = require('./../_LoadingButton'),
-    normalizeTemplate = require('./_NormalizeTemplate'),
-    Sortable      = require('./../_Sortable'),
-    TemplateBlock = require('./_TemplateBlock'),
-    TemplateObject = require('./_TemplateObject')
-;
+import LoadingButton from "../_LoadingButton";
+import TemplateBlock from "./_TemplateBlock";
+import guidGenerator from "./_GuidGenerator";
+import normalizeTemplate from "./_NormalizeTemplate";
+import * as Sortable from "./../_Sortable";
+import TemplateObject from './_TemplateObject';
 
 /**
  * TemplateBuilder
  *
  * @param element
+ * @param builderType
  * @constructor
  */
 function TemplateBuilder(element, builderType)
@@ -226,4 +226,4 @@ TemplateBuilder.prototype.normalize = function (item)
     return normalizeTemplate(this, item);
 };
 
-module.exports = TemplateBuilder;
+export default TemplateBuilder;

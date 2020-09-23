@@ -1,4 +1,4 @@
-var EventEmitter = require('./_EventEmitter');
+import EventEmitter from "./_EventEmitter";
 
 /**
  * Slot
@@ -201,4 +201,4 @@ Slot.prototype.hasUnavailabilities = function() {
     return result;
 };
 
-module.exports = Slot;
+export default Slot;

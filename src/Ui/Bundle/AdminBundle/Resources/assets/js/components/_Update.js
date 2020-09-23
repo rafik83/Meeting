@@ -153,4 +153,4 @@ Update.prototype.keyupped = function (event)
     }
 };
 
-module.exports = Update;
+export default Update;

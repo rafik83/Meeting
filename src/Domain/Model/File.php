@@ -1,14 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
+
+use DateTimeInterface;
 
 class File
 {
@@ -17,8 +11,9 @@ class File
     public const TYPE_EXPORT_FORM_TEMPLATE_DATA = 'export_form_template_data';
     public const TYPE_EXPORT_ROOMING_LIST = 'export_rooming_list';
     public const TYPE_EXPORT_PRODUCT_LIST = 'export_product_list';
+    public const TYPE_EXPORT_SHEET_LIST = 'export_sheet_list';
     public const TYPE_PRINT_INVOICES = 'print_invoices';
-    
+
     /** @var int */
     private $id;
 
@@ -28,10 +23,10 @@ class File
     /** @var string */
     private $type;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $createdAt;
 
-    public function __construct(string $path, \DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
+    public function __construct(string $path, DateTimeInterface $createdAt, string $type = self::TYPE_UNKNOWN)
     {
         $this->path = $path;
         $this->createdAt = $createdAt;
@@ -39,7 +34,7 @@ class File
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -60,9 +55,9 @@ class File
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }

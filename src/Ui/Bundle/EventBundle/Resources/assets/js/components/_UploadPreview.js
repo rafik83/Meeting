@@ -28,4 +28,4 @@ UploadPreview.prototype.readFile = function () {
   }
 };
 
-module.exports = UploadPreview;
+export default UploadPreview;

@@ -1,5 +1,5 @@
-var EventEmitter = require('./../_EventEmitter'),
-    Toggle = require('./../../_Toggle');
+import EventEmitter from "../_EventEmitter";
+import Toggle from "../../_Toggle";
 
 /**
  * DayToggle constructor
@@ -99,4 +99,4 @@ DayToggle.prototype.doesParticipantDeclareUnavailability = function () {
     return this.checked !== true;
 };
 
-module.exports = DayToggle;
+export default DayToggle;
