@@ -19,9 +19,14 @@ class TrackingUrlTransformer
 
     public function transform(Sheet $sheet, TemplateObject\Url $object): string
     {
+        $locale = $this->router->getContext()->getParameter('_locale');
+        if (empty($locale)) {
+            $locale = $sheet->getEvent()->getLocaleFallback();
+        }
+
         return $this->router->generate(
             'event_catalog_sheet_follow_link',
-            ['sheet' => $sheet->getId(), 'objectId' => $object->getUid()]
+            ['sheet' => $sheet->getId(), 'objectId' => $object->getUid(), '_locale' => $locale]
         );
     }
 }
