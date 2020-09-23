@@ -3,12 +3,14 @@
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
     <header class="sheet-header">
 
-        <div class="row">
-            <div class="col-md-12 tip" role="contentinfo">
-                <i class="glyphicon glyphicon-stats"></i>
-                {{ 'analytics.view_counter'|transchoice(sheet.analytics.views, {'%views%': sheet.analytics.views, '%uniqueViews%': sheet.analytics.uniqueViews}) }}
+        {% if displayAnalyticsStat|default(false) %}
+            <div class="row">
+                <div class="col-md-12 tip" role="contentinfo">
+                    <i class="glyphicon glyphicon-stats"></i>
+                    {{ 'analytics.view_counter'|transchoice(sheet.analytics.views, {'%views%': sheet.analytics.views, '%uniqueViews%': sheet.analytics.uniqueViews}) }}
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
@@ -81,6 +83,7 @@
                 'phoneValidationLink': link,
                 'hideMeetingRequest': hideMeetingRequest|default(false),
                 'canAddParticipant': canAddParticipant|default(false),
+                'displayAnalyticsStat': displayAnalyticsStat|default(false),
             }, false) }}
         {% endfor %}
     </div>

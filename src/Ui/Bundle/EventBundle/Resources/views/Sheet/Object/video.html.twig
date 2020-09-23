@@ -12,7 +12,7 @@
             {% if item.isVideoAndHasPath %}
                 <div class="edit-video">
                     <i class="icon-Video_2"></i> {{ 'sheet.edit.object'|trans({ '%label%': item.label(locale, fallback) }) }}
-                    {{ macros.badge_click_analytics(sheet, item.uid) }}
+                    {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, item.uid) }}
                 </div>
             {% else %}
                 <div class="placeholder">

@@ -19,7 +19,7 @@
                         {{ media['title']|localize(locale, fallback) }}
                     </a>
 
-                    {{ macros.badge_click_analytics(sheet, uid, index) }}
+                    {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, uid, index) }}
                 </li>
             {% endfor %}
         </ul>

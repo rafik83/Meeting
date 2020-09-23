@@ -4,7 +4,7 @@
         <a href="{{ item.data['url'] is defined?path('event_catalog_sheet_follow_link', {'sheet': sheet.id, 'objectId': item.uid}):'#' }}" class="btn btn-primary">
             <i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}
 
-            {{ macros.badge_click_analytics(sheet, item.uid) }}
+            {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, item.uid) }}
         </a>
     </p>
     <footer>

@@ -3556,6 +3556,8 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
+
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
             - '@adapter.sheet_search_adapter'

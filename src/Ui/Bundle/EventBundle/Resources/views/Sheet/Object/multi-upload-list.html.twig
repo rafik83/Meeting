@@ -5,7 +5,7 @@
             <a href="{{ path('event_catalog_sheet_follow_link', {'sheet': sheet.id, 'objectId': item.uid, 'index': index}) }}" target="_blank">
                 {{ media['title'] }}
 
-                {{ macros.badge_click_analytics(sheet, item.uid, index) }}
+                {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, item.uid, index) }}
             </a>
         </li>
     {% endfor %}
