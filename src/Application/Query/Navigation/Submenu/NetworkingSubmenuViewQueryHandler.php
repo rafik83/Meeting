@@ -40,7 +40,7 @@ class NetworkingSubmenuViewQueryHandler
             return new SubmenuButtonView(
                 Category::NETWORKING_ICON,
                 $networkingTitle,
-                $this->navigationBuilder->getRoute('event_networking', ['sheet' => $query->sheet->getId()]),
+                $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
                 Route::isNetworking($query->route),
                 null,
                 true

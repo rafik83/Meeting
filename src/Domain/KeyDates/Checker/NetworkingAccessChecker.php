@@ -14,10 +14,10 @@ class NetworkingAccessChecker extends AccessChecker
      */
     public function allowedToAccess(Event $event)
     {
-        if (null === $event->getConfiguration()->getNetworkingOpenDate()) {
+        if (null === $event->getConfiguration()->getNetworkingOpenDate() && null === $event->getConfiguration()->getNetworkingCloseDate()) {
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getNetworkingOpenDate();
+        return $this->datetime <= $event->getConfiguration()->getNetworkingCloseDate() && $this->datetime >= $event->getConfiguration()->getNetworkingOpenDate();
     }
 }

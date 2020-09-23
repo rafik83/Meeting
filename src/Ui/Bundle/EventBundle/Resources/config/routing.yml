@@ -635,12 +635,12 @@ event_contact_show:
 #
 # Networking
 #
-event_networking:
+event_networking_index:
     path: /sheet/{sheet}/networking
     requirements:
         sheet: \d+
     methods: [GET]
-    #defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\IndexAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\IndexAction }
 
 #
 # Meeting Request

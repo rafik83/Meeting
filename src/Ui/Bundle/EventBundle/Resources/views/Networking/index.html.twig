@@ -1,0 +1,26 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'networking.title'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block content %}
+
+    {% if tipTranslationViews is defined %}
+        {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
+    {% endif %}
+
+    <div class="networking__content">
+        <header>
+            <h1>
+                <i class="icon-Travail"></i> {{ 'networking.title'|trans }}
+            </h1>
+        </header>
+
+        <div class="main__content">
+            <h2>Chat général</h2>
+            <h2>Liste des participants</h2>
+            <p class="name"></p>
+        </div>
+    </div>
+{% endblock %}

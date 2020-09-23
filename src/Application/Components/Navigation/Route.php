@@ -91,7 +91,7 @@ final class Route
     public const VISIO_TEST_SHEET_CREATE_TEST = 'event_sheet_video_conference_create_network_test';
     public const VISIO_TEST_SHEET_CONFIGURATION = 'event_sheet_video_conference_network_test';
 
-    public const NETWORKING = 'event_networking';
+    public const NETWORKING = 'event_networking_index';
 
     public static function isSheet(string $route): bool
     {
