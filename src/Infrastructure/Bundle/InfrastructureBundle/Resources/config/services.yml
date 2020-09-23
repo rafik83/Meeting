@@ -4705,6 +4705,8 @@ services:
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
             - '@domain.user.phone.validation_required_checker'
+            - '@repository.sheet.sheet_viewed_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 

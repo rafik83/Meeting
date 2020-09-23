@@ -367,6 +367,36 @@ class RequestRepository implements RequestRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getAllRequestBySheetAndSheets(
+        Sheet $sheet,
+        array $sheets,
+        array $filters = [],
+        array $slotsToFilter = []
+    ): array {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet')
+            ->setParameter('event', $sheet->getEvent())
+            ->setParameter('sheets', $sheets)
+        ;
+
+        if (!empty($filters) && isset($filters['disabled'])) {
+            $queryBuilder->where('request.disabled = :disabled')
+                ->setParameter('disabled', $filters['disabled']);
+        }
+
+        $queryBuilder
+            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)');
+
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -85,6 +85,24 @@
 
         </div>
     {% endif %}
+
+    {% if searchForm.sheetVisit is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.sheetVisit.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+            <ul class="radio">
+                {% for state in searchForm.children.sheetVisit %}
+                    <li class="filter__item">
+                        <label class="checkbox-inline">
+                            <span class="filter-label">
+                                {{ form_widget(state) }}
+                                {{ state.vars.label|trans({}, state.vars.translation_domain) }}
+                            </span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}

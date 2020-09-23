@@ -85,6 +85,13 @@ interface RequestRepositoryInterface
      */
     public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array;
 
+    public function getAllRequestBySheetAndSheets(
+        Sheet $sheet,
+        array $sheets,
+        array $filters = [],
+        array $slotsToFilter = []
+    ): array;
+
     /**
      * @param Sheet $sheet
      *
@@ -403,7 +410,7 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
-  
+
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 
     /**

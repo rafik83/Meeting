@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet\Viewed;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,8 +14,6 @@ class ViewedSheetListViewQuery
     public $sheets;
 
     /**
-     * ViewedSheetListViewQuery constructor.
-     *
      * @param User    $user
      * @param Sheet[] $sheets
      */

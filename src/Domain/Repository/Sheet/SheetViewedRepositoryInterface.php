@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\Sheet;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Model\User;
@@ -17,15 +10,9 @@ use Proximum\Vimeet\Domain\Model\User;
 interface SheetViewedRepositoryInterface
 {
     /** @param SheetViewed $sheetViewed */
-    public function add(SheetViewed $sheetViewed);
+    public function add(SheetViewed $sheetViewed): void;
 
-    /**
-     * @param User  $user
-     * @param Sheet $sheet
-     *
-     * @return bool
-     */
-    public function isSheetAlreadySeenByUser(User $user, Sheet $sheet);
+    public function isSheetAlreadySeenByUser(User $user, Sheet $sheet): bool;
 
     /**
      * @param User  $user
@@ -33,5 +20,20 @@ interface SheetViewedRepositoryInterface
      *
      * @return SheetViewed[]
      */
-    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds);
+    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds): array;
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return int[]
+     */
+    public function getSheetsSeenByUserAndEvent(User $user, Event $event): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return int[]
+     */
+    public function getUsersWhoViewedSheet(Sheet $sheet): array;
 }

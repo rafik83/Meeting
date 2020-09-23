@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet\Viewed;
 
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
@@ -17,11 +9,6 @@ class ViewedSheetListViewQueryHandler
     /** @var SheetViewedRepositoryInterface */
     public $sheetViewedRepository;
 
-    /**
-     * ViewedSheetListViewQueryHandler constructor.
-     *
-     * @param SheetViewedRepositoryInterface $sheetViewedRepository
-     */
     public function __construct(SheetViewedRepositoryInterface $sheetViewedRepository)
     {
         $this->sheetViewedRepository = $sheetViewedRepository;
@@ -32,7 +19,7 @@ class ViewedSheetListViewQueryHandler
      *
      * @return array array of seen sheets indexed by seenSheet id
      */
-    public function handle(ViewedSheetListViewQuery $viewedSheetListViewQuery)
+    public function handle(ViewedSheetListViewQuery $viewedSheetListViewQuery): array
     {
         $seenSheets = $this->sheetViewedRepository->getSheetsAlreadySeenByUser(
             $viewedSheetListViewQuery->user,
