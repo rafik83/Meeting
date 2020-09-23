@@ -5,7 +5,7 @@
 
         {% if displayAnalyticsStat|default(false) %}
             <div class="row">
-                <div class="col-md-12 tip" role="contentinfo">
+                <div class="col-md-12 tip tip--stats" role="contentinfo">
                     <i class="glyphicon glyphicon-stats"></i>
                     {{ 'analytics.view_counter'|transchoice(sheet.analytics.views, {'%views%': sheet.analytics.views, '%uniqueViews%': sheet.analytics.uniqueViews}) }}
                 </div>
