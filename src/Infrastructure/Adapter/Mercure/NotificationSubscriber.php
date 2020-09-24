@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use InvalidArgumentException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 
 class NotificationSubscriber extends AbstractNotification implements NotificationSubscriberInterface
@@ -42,4 +43,19 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         ], $this->mercureSubscriberKey);
     }
 
+    public function getNetworkingSubscriberKey(Event $event, int $userId, array $types): string
+    {
+        if (empty($types)) {
+            throw new InvalidArgumentException('Types array cannot be empty');
+        }
+
+        return JWT::encode([
+            'mercure' => [
+                'subscriber' => array_map(function ($type) use ($event) {
+                    return ['topic' => $this->getNetworkingTopic($event->getId(), $type)];
+                }, $types),
+                'payload' => ['userId' => $userId],
+            ]
+        ], $this->mercureSubscriberKey);
+    }
 }

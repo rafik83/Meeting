@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Networking\NetworkingParticipantListView;
+use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
@@ -68,10 +69,13 @@ class IndexAction
         );
         $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
+        $networkingView = $this->queryBus->handle(new NetworkingQuery($event, $user));
+
         return new Response(
             $this->engine->render(
                 '@Event/Networking/index.html.twig',
                 [
+                    'networkingView' => $networkingView,
                     'participant' => $participants,
                     'sheet' => $sheet,
                     'event' => $event,

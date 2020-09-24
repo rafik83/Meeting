@@ -80,7 +80,7 @@ function Webinar(element, isSpeaker) {
     this.sideContainer = element.querySelector('.side-container');
 
     if (this.sidebarAllowed) {
-        this.chat = new Chat(element);
+        this.chat = new Chat(element, `https://vimeet.events/event/${this.eventId}/notifications/happening/${this.happeningId}`);
 
         this.questionsContainer = element.querySelector('[data-questions-container]');
         this.questionsList = this.questionsContainer.querySelector('.questions-list');

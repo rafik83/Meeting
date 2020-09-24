@@ -122,6 +122,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject }
 

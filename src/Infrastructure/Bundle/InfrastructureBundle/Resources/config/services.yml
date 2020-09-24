@@ -7198,3 +7198,13 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
+            - '@domain.key_dates.checker.networking_access_checker'
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+        tags:
+            - { name: tactician.handler, typehints: true }

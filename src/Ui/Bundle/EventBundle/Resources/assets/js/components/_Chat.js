@@ -3,7 +3,8 @@
 import $ from "jquery";
 import {EventSourcePolyfill} from "event-source-polyfill";
 
-function Chat(element){
+function Chat(element, topicUrl){
+    this.topicUrl = topicUrl;
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.addChatForm = element.querySelector('[data-chat-form]');
     this.addChatFormContent = this.addChatForm.querySelector('input[name="content"]');
@@ -29,9 +30,6 @@ function Chat(element){
 
     this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
-
-    this.eventId = element.getAttribute('data-event-id');
-    this.happeningId = element.getAttribute('data-happening-id');
 
     this.chatListeners = [];
 }
@@ -213,7 +211,7 @@ Chat.prototype.initChat = function () {
         this.chatLoaded = true;
 
         const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', `https://vimeet.events/event/${this.eventId}/notifications/happening/${this.happeningId}`);
+        url.searchParams.append('topic', this.topicUrl);
 
         var eventSource = new EventSourcePolyfill(url, {
             headers: {

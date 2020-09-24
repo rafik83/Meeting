@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
 /**
  * "Evènement".
  */
-class Event implements EventInterface, TraceableInterface
+class Event implements EventInterface, TraceableInterface, ChatMessageLinkableInterface
 {
     /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
@@ -977,5 +977,15 @@ class Event implements EventInterface, TraceableInterface
             $notificationImageExtension
         );
         $this->translations->set($locale, $eventTranslation);
+    }
+
+    public function getObjectType(): string
+    {
+        return 'networking';
+    }
+
+    public function getEvent(): Event
+    {
+        return $this;
     }
 }
