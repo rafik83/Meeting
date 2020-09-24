@@ -25,13 +25,32 @@
   }
 }
 
-.networking__content {
+.main__content {
   max-width: auto;
   margin: 25px auto 0 auto;
   padding-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
-  .chat {
-    max-width: 65%;
+  h2 {
+    text-transform: none;
+  }
+
+  .networking_chat {
+    max-width: 40%;
+    width: 40%;
+  }
+
+  .networking_list {
+    max-width: 58%;
+    width: 58%;
+    padding: 25px 25px;
+    margin-bottom: 0px;
+    border-radius: 5px;
+    background: #E8E8E9;
+    margin-right: -15px;
+    margin-left: -15px;
   }
 
   .avatar {
@@ -69,6 +88,114 @@
       list-style-type: disc;
     }
   }
+
+  .chat-list {
+    height: calc(100vh - 160px);
+    margin-top: 10px;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-right: 5px;
+
+    .btn.btn-gray {
+      background-color: #D1D1D1 !important;
+      height: 30px;
+      width: 33px;
+    }
+
+    .glyphicon {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+
+    .chat-row {
+      border: 1px solid $color-highlighted;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      margin-right: 30px;
+
+      .chat-content {
+        font-size: 16px;
+        padding: 10px;
+        color: $color-highlighted;
+      }
+
+
+      .chat-aside {
+        text-align: right;
+
+        i {
+          cursor: pointer;
+          color: #333;
+        }
+      }
+
+      .chat-vote-count {
+        border-radius: 0;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        margin-right: 0;
+        padding: 0;
+        vertical-align: sub;
+      }
+
+      .chat-vote-count-on {
+        color: white;
+      }
+
+      .chat-emoticon {
+        align-items: flex-end;
+        background-color: white;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        padding: 10px;
+        text-align: right;
+        clear: right;
+      }
+
+      .chat-author {
+        align-items: flex-end;
+        @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+        color: $button-text-color;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        padding: 4px 10px;
+        text-align: right;
+        clear: right;
+      }
+
+      .chat-author-name {
+        align-items: flex-end;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .chat-author-title {
+        display: inline-block;
+        margin-left: 5px;
+        font-style: italic;
+        text-align: right;
+      }
+
+      .chat-author-avatar {
+        align-self: center;
+        margin-left: 10px;
+        border-radius: 50%;
+
+        img {
+          display: inline-block;
+          height: 32px;
+          object-fit: cover;
+          width: 32px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
 }
 
 .preview {
@@ -99,5 +226,24 @@
         margin-right: 5px;
       }
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .main__content {
+    display: block;
+    margin: 20px;
+
+    .networking_chat {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .networking_list {
+      width: 100%;
+      max-width: 100%;
+      margin: 20px 0 0 0;
+    }
+
   }
 }
