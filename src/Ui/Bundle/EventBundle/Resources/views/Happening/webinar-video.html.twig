@@ -7,10 +7,19 @@
         {% if webinarView.headerImage %}
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
         {% endif %}
-
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}>
-            <iframe src="{{ webinarView.liveUrl }}" frameborder="0" width="100%" height="100%"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            {% if (
+                    webinarView.liveUrl|slice(0, 31) == 'https://video-cdn.vimeet.events'
+                    or webinarView.liveUrl|slice(0, 28) == 'https://upload.vimeet.events'
+                )
+                and webinarView.liveUrl|slice(-4) == '.mp4' %}
+                <video id="webinar-video-video" width="100%" height="100%" controls autoplay controlsList="nodownload">
+                    <source src="{{ webinarView.liveUrl }}" type="video/mp4"/>
+                </video>
+            {% else %}
+                <iframe id="webinar-video-frame" src="{{ webinarView.liveUrl }}" frameborder="0" width="100%" height="100%"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            {% endif %}
         </div>
 
         <div class="buttons-container">
@@ -19,5 +28,15 @@
             </a>
         </div>
     </div>
+    <script>
+        const video = document.getElementById("webinar-video-video");
+        if (video) {
+            video.addEventListener('contextmenu', function(e) {
+                if (e.target.nodeName === "VIDEO") {
+                    e.preventDefault();
+                }
+            }, false);
+        }
+    </script>
 {% endblock body %}
 
