@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2204 - Hidden contact menu
 - VIMEET-2203 - Request Automatically Transformed Into Meeting
 - VIMEET-2231 - Redirect to program or agenda after webinar
+- VIMEET-2233 - Disable right click on webinar video
 
 ## [2.47.0] - 2020-09-11
 ### Added 
