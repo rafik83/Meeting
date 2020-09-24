@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.48.2]
 ### Fixed
+- Allow fullscreen in iframe (js)
+
+## [2.48.2] - 2020-09-24
+### Fixed
 - Allow fullscreen in iframe (webinars)
 
 ## [2.48.1] - 2020-09-24
