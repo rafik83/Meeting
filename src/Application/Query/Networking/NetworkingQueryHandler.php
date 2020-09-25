@@ -28,7 +28,7 @@ class NetworkingQueryHandler
 
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
     {
-        dump($this->notificationSubscriptions->getSubscriptions());
+
         return new NetworkingView(
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user->getId(), [AbstractNotification::TYPE_QUESTIONS]),
