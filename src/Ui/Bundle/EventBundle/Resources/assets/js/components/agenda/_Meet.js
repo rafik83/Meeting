@@ -1,4 +1,4 @@
-var EventEmitter = require('./_EventEmitter');
+import EventEmitter from "./_EventEmitter";
 
 /**
  * Meet
@@ -332,4 +332,4 @@ Meet.prototype.guessType = function() {
     return 'unknown';
 };
 
-module.exports = Meet;
+export default Meet;

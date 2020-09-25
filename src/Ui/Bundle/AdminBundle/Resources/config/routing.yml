@@ -892,12 +892,13 @@ admin_event_qr_code_reader:
     path: /event/{event}/access
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction }
+
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet/Export:exportSheet }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Export\PrepareExportAction
 
 admin_participant_prepare_export:
     path: /event/{event}/sheet/export/participant/prepare
@@ -1066,6 +1067,19 @@ admin_happening_update:
         happening: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
+
+happening_webinar_status_change_callback:
+    path: /happening/webinar/record/archive/status-change
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction
+
+admin_happening_download:
+    path: /event/{event}/happening/{happening}/download
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction
 
 #
 # Happening Category
@@ -1241,6 +1255,17 @@ admin_export_form_template_user_data:
         file: \d+
         hash: .+
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction
+
+#
+# Count template
+#
+admin_count_media_ressource:
+    path: /event/{event}/type/{type}/count/media/ressource
+    methods: [GET]
+    requirements:
+        event: \d+
+        type: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction
 
 #
 # Package

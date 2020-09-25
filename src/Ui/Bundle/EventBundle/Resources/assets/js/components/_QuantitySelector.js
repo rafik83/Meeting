@@ -108,4 +108,4 @@ QuantitySelector.prototype.updateTotalPrice = function (value)
     this.totalPrice.innerHTML = this.unitPrice * newValue;
 };
 
-module.exports = QuantitySelector;
+export default QuantitySelector;

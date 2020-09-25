@@ -1,17 +1,7 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet\Export;
 
-use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class ExportQuery
@@ -19,34 +9,24 @@ class ExportQuery
     /** @var Event */
     public $event;
 
-    /** @var array */
-    public $filters;
-
     /** @var string */
     public $locale;
-
-    /** @var null|RuleInterface */
-    public $condition;
-
-    /** @var string */
-    public $charset;
 
     /** @var bool */
     public $displayNomenclatureIds;
 
+    /** @var int[] */
+    public $sheetIds;
+
     public function __construct(
         Event $event,
-        array $filters,
         string $locale,
-        bool $displayNomenclatureIds = false,
-        ?RuleInterface $condition = null,
-        string $charset = Charset::WINDOWS_1252
+        array $sheetIds,
+        bool $displayNomenclatureIds = false
     ) {
         $this->event = $event;
-        $this->filters = $filters;
         $this->locale  = $locale;
-        $this->condition = $condition;
-        $this->charset = $charset;
+        $this->sheetIds = $sheetIds;
         $this->displayNomenclatureIds = $displayNomenclatureIds;
     }
 }

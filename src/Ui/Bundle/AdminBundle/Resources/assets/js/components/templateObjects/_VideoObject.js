@@ -1,6 +1,5 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
-;
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
 
 /**
  * VideoObject
@@ -55,4 +54,4 @@ VideoObject.prototype.save = function ()
     return true;
 };
 
-module.exports = VideoObject;
+export default VideoObject;

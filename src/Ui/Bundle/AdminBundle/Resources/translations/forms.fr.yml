@@ -268,6 +268,8 @@ form.event_configure_date.children.enableBadgeForParticipantDate.help: 'Active l
 form.event_configure_date.children.enableBadgeForParticipantDate.label: 'Active l''affichage du badge pour le participant'
 form.event_configure_date.children.enableVisioTestMenuButtonDate.label: 'Active l''affichage du bouton de test de visio dans le menu'
 form.event_configure_date.children.happeningsOpenDate.label: 'Ouverture des inscriptions aux sous-événements'
+form.event_configure_date.children.networkingCloseDate.label: 'Date de clôture du networking'
+form.event_configure_date.children.networkingOpenDate.label: 'Date d''ouverture du networking'
 form.event_configure_date.children.registrationCloseDate.label: 'Date de clôture des inscriptions'
 form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouverture des inscriptions'
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
@@ -390,6 +392,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexp
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
+form.extra_parameter_create.children.type.choices.custom_button: 'Bouton custom'
 form.extra_parameter_create.children.type.choices.leni_badge_link: 'LENI lien pour le badge'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
 form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'
@@ -401,6 +404,7 @@ form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save
 form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
 form.extra_parameter_create.children.type.choices.tech_event_configuration: 'Configuration TechEvent'
+form.extra_parameter_create.children.type.choices.tech_event_login_enabled: 'TechEvent : Activation du login'
 form.extra_parameter_create.children.type.choices.tracking_code: 'Code de suivi'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
@@ -512,6 +516,7 @@ form.happening_create.children.translations.prototype.children.webinarHeaderImag
 form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: Image actuelle
 form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
+form.happening_create.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
@@ -533,6 +538,7 @@ form.happening_update.children.translations.prototype.children.title.label: Titr
 form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
+form.happening_update.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
 form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.import_mapping.children.submit.label: Importer
@@ -886,6 +892,7 @@ form.registration_template_duplicate.children.event.label: 'Événement de desti
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -19,23 +11,15 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function add(Happening $happening)
+    public function add(Happening $happening): void
     {
         $this->entityManager->persist($happening);
         $this->entityManager->flush($happening);
@@ -45,10 +29,7 @@ class HappeningRepository implements HappeningRepositoryInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function set(Happening $happening)
+    public function set(Happening $happening): void
     {
         $this->entityManager->flush($happening);
 
@@ -59,6 +40,21 @@ class HappeningRepository implements HappeningRepositoryInterface
         foreach ($happening->getTalkings() as $talking) {
             $this->entityManager->flush($talking);
         }
+    }
+
+    public function getById(int $id): ?Happening
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->where('happening.id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -215,6 +211,22 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->setParameter('type', $type)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function findWebinarBySessionId(string $sessionId): ?Happening
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->where('happening.webinar = true')
+            ->andWhere('happening.webinarSessionId = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 }

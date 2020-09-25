@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Happening;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
+use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
@@ -100,19 +101,30 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByHappeningDuringWebinar(Happening $happening): array
+    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser): array
     {
         return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('question')
+            ->addSelect('COUNT(vote)')
+            ->addSelect('COUNT(DISTINCT userVote.user)')
             ->from(Question::class, 'question')
+            ->leftJoin(QuestionVote::class, 'vote', 'WITH', 'vote.question = question')
+            ->leftJoin(QuestionVote::class, 'userVote', 'WITH', 'userVote.question = question AND userVote.user = :user')
+            ->setParameter('user', $currentUser)
             ->where('question.happening = :happening')
-            ->andWhere('question.askedDuringWebinar = true')
             ->setParameter('happening', $happening)
+            ->andWhere('question.askedDuringWebinar = true')
+            ->groupBy('question.id')
             ->orderBy('question.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findById(int $id): ?Question
+    {
+        return $this->entityManager->find(Question::class, $id);
     }
 }

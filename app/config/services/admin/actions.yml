@@ -343,6 +343,14 @@ services:
             - '@datetime'
 
     #
+    # Count
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+
+    #
     # Content
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
@@ -616,6 +624,14 @@ services:
             - '@session.flash_bag'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible'
+            - '@adapter.router'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -630,6 +646,11 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '%tokbox_api_key%'
 
     #
     # Happening Category
@@ -844,6 +865,15 @@ services:
             - '@form.factory'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Export\PrepareExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter'
+            - '@Proximum\Vimeet\Domain\ConditionRules\Storage\RuleSessionStorage'
+            - '@adapter.router'
             - '@session.flash_bag'
 
     #

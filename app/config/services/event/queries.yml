@@ -42,6 +42,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
             - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
@@ -111,3 +113,12 @@ services:
     Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }
+
+    #
+    # User Cta
+    #
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }

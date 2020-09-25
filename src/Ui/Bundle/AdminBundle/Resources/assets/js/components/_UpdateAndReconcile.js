@@ -155,4 +155,4 @@ UpdateAndReconcile.prototype.keyupped = function (event)
     }
 };
 
-module.exports = UpdateAndReconcile;
+export default UpdateAndReconcile;

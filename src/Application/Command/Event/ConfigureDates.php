@@ -69,6 +69,12 @@ class ConfigureDates implements Command
      */
     public $enableVisioTestMenuButtonDate;
 
+    /** @var \DateTimeInterface|null "Date de d'ouverture du networking" */
+    public $networkingOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture du networking" */
+    public $networkingCloseDate;
+
     /**
      * @param Event $event
      */
@@ -86,6 +92,8 @@ class ConfigureDates implements Command
         $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
         $this->enableBadgeForParticipantDate    = $event->getConfiguration()->getEnableBadgeForParticipantDate();
         $this->enableVisioTestMenuButtonDate    = $event->getConfiguration()->getEnableVisioTestMenuButtonDate();
+        $this->networkingOpenDate               = $event->getConfiguration()->getNetworkingOpenDate();
+        $this->networkingCloseDate              = $event->getConfiguration()->getNetworkingCloseDate();
     }
 
     public function addCatalogOnlineDateButEventHasNoDate(): bool

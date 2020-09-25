@@ -170,6 +170,13 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: 'form.type' }
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        tags:
+            - { name: 'form.type' }
+
     vimeet_app.form_type_participant.type_choice:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
         arguments:
@@ -519,6 +526,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
         tags:
             - { name: kernel.event_subscriber }
 

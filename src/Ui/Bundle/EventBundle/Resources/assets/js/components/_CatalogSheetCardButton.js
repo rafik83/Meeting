@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function CatalogSheetCardButton(element)
 {
@@ -6,4 +6,4 @@ function CatalogSheetCardButton(element)
   this.link    = element.getAttribute('data-modal-load');
 }
 
-module.exports = CatalogSheetCardButton;
+export default CatalogSheetCardButton;

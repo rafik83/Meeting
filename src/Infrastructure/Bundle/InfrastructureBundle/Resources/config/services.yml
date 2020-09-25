@@ -102,6 +102,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.happening_question_vote_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Happening\QuestionVoteRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
     vimeet_infrastructure.repository.notification_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\NotificationRepository
         arguments:
@@ -668,6 +672,8 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler'
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -737,6 +743,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
@@ -871,6 +878,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@adapter.local_file_storage'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Create }
     command.happening.update_handler:
@@ -2541,6 +2549,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
+            - '%scheme%'
 
     Proximum\Vimeet\Application\Adapter\RouterInterface: '@adapter.router'
 
@@ -2607,6 +2616,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter:
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     adapter.serializer_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
@@ -2628,6 +2640,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter
         arguments:
             - '@filesystem'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
 
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
@@ -2904,6 +2917,10 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
+    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
+        arguments:
+            - '@repository.rule_repository'
+
     application.components.messaging.message_factory:
         class: Proximum\Vimeet\Application\Components\Messaging\MessageFactory
         arguments:
@@ -3057,6 +3074,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@query.happening.admin.speaker_view_query_handler'
+            - '@datetime'
     query.happening.admin.happening_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQueryHandler
         arguments:
@@ -3848,6 +3866,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@query.order.order_vat_view_query_handler'
+            - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQuery }
 
@@ -3855,7 +3874,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Export\ExportQueryHandler
         arguments:
             - '@adapter.serializer_adapter'
-            - '@adapter.sheet_search_adapter'
 
     query.event.event_list_query_handler:
         class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler
@@ -4540,6 +4558,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -5605,6 +5624,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
     domain.event.has_sheet:
         class: Proximum\Vimeet\Domain\Event\HasSheet
         arguments:
@@ -5888,6 +5908,16 @@ services:
     Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed:
+        arguments:
+            - '@datetime'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible: ~
+
+    Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser:
+        arguments:
+            - '@datetime'
 
     #
     # Serializer: normalizers and encoders
@@ -6902,6 +6932,8 @@ services:
             - '@adapter.authorization_checker'
             - '@domain.event.day.dday_guesser'
             - '@domain.key_dates.checker.agenda_access_checker'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
 
     #
     # Event Day service
@@ -6988,7 +7020,6 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@datetime'
-            - '@Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler'
 
     #
     # QRCode

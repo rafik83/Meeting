@@ -1,9 +1,9 @@
-var options = require('../../../vueComponents/options'),
-    AgendaApiEndpoints = require('../../../components/_AgendaApiEndpoints');
+import options from '../../../vueComponents/options';
+import AgendaApiEndpoints from "../../../components/_AgendaApiEndpoints";
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#meeting-update-modal-template',
     delimiters: options.delimiters,
     props: {

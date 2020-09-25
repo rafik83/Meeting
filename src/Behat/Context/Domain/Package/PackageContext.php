@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain\Package;
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\PackageContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PackageContext implements Context
 {
@@ -133,5 +134,20 @@ class PackageContext implements Context
         }
 
         $this->packageContextProxy->getPackageManager()->setPlanningNotSelectable($package);
+    }
+
+    /**
+     * @Given /^the package of this sheet is enabled$/
+     */
+    public function thePackageOfThisSheetIsEnabled()
+    {
+        /** @var Sheet */
+        $sheet = $this->packageContextProxy->getStorage()->get('sheet');
+
+        if (null === $sheet) {
+            throw new \InvalidArgumentException('Missing Sheet');
+        }
+
+        $this->packageContextProxy->getPackageManager()->enable($sheet->getPackage());
     }
 }

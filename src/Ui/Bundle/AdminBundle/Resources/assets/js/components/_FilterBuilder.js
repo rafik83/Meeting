@@ -1,6 +1,6 @@
-var $ = require('jquery');
-require('jQuery-QueryBuilder');
-var frTranslations = require('../vendor/jQuery-QueryBuilder/i18n/fr');
+import $ from 'jquery';
+import 'jQuery-QueryBuilder';
+import frTranslations from '../vendor/jQuery-QueryBuilder/i18n/fr'
 
 function FilterBuilder(hiddenInput, builder, submitRules) {
     this.builder = $(builder);
@@ -31,4 +31,4 @@ FilterBuilder.prototype.getRules = function() {
     }
 };
 
-module.exports = FilterBuilder;
+export default FilterBuilder;

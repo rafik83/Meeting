@@ -25,7 +25,7 @@ class InvoiceFactory
      *
      * @return Invoice
      */
-    public static function create($numero, Sheet $sheet = null)
+    public static function create($numero, Sheet $sheet = null): Invoice
     {
         if (null === $sheet) {
             $sheet = SheetFactory::create();

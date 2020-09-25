@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Order\OrderVat;
 
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
+use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 
@@ -22,14 +15,17 @@ class OrderVatViewsBySheetIdsQueryHandler
     /** @var OrderVatViewQueryHandler */
     private $orderVatViewQueryHandler;
 
-    /**
-     * @param OrderRepositoryInterface $orderRepository
-     * @param OrderVatViewQueryHandler $orderVatViewQueryHandler
-     */
-    public function __construct(OrderRepositoryInterface $orderRepository, OrderVatViewQueryHandler $orderVatViewQueryHandler)
-    {
+    /** @var BillingInfoRepositoryInterface */
+    private $billingInfoRepository;
+
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        OrderVatViewQueryHandler $orderVatViewQueryHandler,
+        BillingInfoRepositoryInterface $billingInfoRepository
+    ) {
         $this->orderRepository = $orderRepository;
         $this->orderVatViewQueryHandler = $orderVatViewQueryHandler;
+        $this->billingInfoRepository = $billingInfoRepository;
     }
 
     /**
@@ -39,12 +35,14 @@ class OrderVatViewsBySheetIdsQueryHandler
      *
      * @return OrderVatView[]
      */
-    public function handle(OrderVatViewsBySheetIdsQuery $orderVatViewsBySheetIdsQuery)
+    public function handle(OrderVatViewsBySheetIdsQuery $orderVatViewsBySheetIdsQuery): array
     {
         $orders = $this->orderRepository->findByEventAndSheetIds(
             $orderVatViewsBySheetIdsQuery->event,
             $orderVatViewsBySheetIdsQuery->sheetIds
         );
+
+        $this->billingInfoRepository->loadBySheets($orderVatViewsBySheetIdsQuery->sheetIds);
 
         $orderVatViews = [];
 

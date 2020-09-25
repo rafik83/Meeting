@@ -487,6 +487,11 @@ event_change_password:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:ChangePassword:changePassword }
 
+event_tech_event_login_check:
+    path: /login-authentication-check
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\TechEvent\LoginCheckAction
+
 #
 # OAuth2
 #
@@ -911,6 +916,13 @@ happening_program:
     methods: [GET]
     defaults: { _controller: EventBundle:Program:index }
 
+event_agenda_program_redirect:
+    path: /sheet/{sheet}/program-agenda
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Redirect\AgendaOrProgramRedirectAction
+
 #
 # Happening
 #
@@ -945,6 +957,45 @@ event_sheet_happening_webinar_question_add:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
+
+event_happening_webinar_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\RecordAction
+
+event_happening_webinar_stop_record:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stop-record
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StopRecordAction
+
+event_sheet_happening_webinar_question_vote:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/vote
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods: [ POST ]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\VoteHappeningQuestionAction
+
+event_happening_webinar_download_record_archive:
+    path: /happening/{happening}/webinar/download/record
+    requirements:
+        happening: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\Download\DownloadAction
+    methods: [GET]
+
+event_happening_webinar_stream:
+    path: /sheet/{sheet}/happening/{happening}/webinar/stream
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
 
 #
 # Unavailability

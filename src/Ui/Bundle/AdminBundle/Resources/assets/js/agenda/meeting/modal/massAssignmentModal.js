@@ -1,11 +1,11 @@
-var options = require('../../../vueComponents/options'),
-    massAssignmentForm = require('./../form/massAssignmentForm'),
-    AgendaApiEndpoints = require('../../../components/_AgendaApiEndpoints'),
-    querystring = require('querystring');
+import options from '../../../vueComponents/options';
+import massAssignmentForm from './../form/massAssignmentForm';
+import AgendaApiEndpoints from "../../../components/_AgendaApiEndpoints";
+import querystring from 'querystring';
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#mass-assignment-modal-template',
     delimiters: options.delimiters,
     props: ['show'],

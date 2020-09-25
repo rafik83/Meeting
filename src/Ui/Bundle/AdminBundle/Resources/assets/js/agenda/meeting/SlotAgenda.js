@@ -1,10 +1,10 @@
-var options = require('../../vueComponents/options'),
-    AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
-    eventDispatcher = require('../../vueComponents/EventDispatcher');
+import options from '../../vueComponents/options';
+import AgendaApiEndpoints from "../../components/_AgendaApiEndpoints";
+import eventDispatcher from '../../vueComponents/EventDispatcher';
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#slot-agenda',
     delimiters: options.delimiters,
     props: ['agendaSlot', 'sheet', 'participant', 'isAvailableForMeeting', 'highlight', 'slotToBeMoved'],

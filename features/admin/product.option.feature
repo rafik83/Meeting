@@ -6,19 +6,11 @@ Feature: Handle Product
 
   Scenario: I can create a product linked to an event
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admins.yml                                                               |
-    And I am logged with "test2@test.com" on admin
-    And I go to this page "/fr/event"
-    When I go to this page "/fr/event/past"
-    Then I follow "admin.product.link"
-    And I should be on this page "/fr/event/1/product"
+    And the event "TedX" is created
+    And I am logged as admin
+    When I go to this page "/fr/event"
+    And I follow "admin.product.link"
+    Then I should be on this page "/fr/event/1/product"
     And I should see "admin.zero-result"
     Then I follow "admin.product_create.option.title"
     And I should be on this page "/fr/event/1/product/create/option"
@@ -34,6 +26,6 @@ Feature: Handle Product
     And I should see "admin.product.create.success"
 
   Scenario: I see the list of products of an event
-    Given I am logged with "test2@test.com" on admin
+    Given I am logged as admin
     And I go to this page "/fr/event/1/product"
     Then I should see "ProductTitre"

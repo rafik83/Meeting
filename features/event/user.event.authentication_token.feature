@@ -19,12 +19,7 @@
     And there is a sheet
     And there is a participant for this sheet and this user
     And there is an authentication token "1337ABCD2018" for this user on this event
-    And I go to this page "http://super-event.vimeet.proximum/login?token=1337ABCD2018"
-    And I should see "event.activateAccount.password"
-    And I fill in the following:
-      | form.activate_account_password.children.password.children.first.label | myP1ssword |
-      | form.activate_account_password.children.password.children.second.label | myP1ssword |
-    And I press "common.validate"
+    When I go to this page "http://super-event.vimeet.proximum/login?token=1337ABCD2018"
     Then I should be on this page "/fr/account/sheet/1/participant/1/profile"
 
   Scenario: I attempt to login with a bad token

@@ -1,4 +1,4 @@
-var Vue = require('vue');
+import Vue from 'vue';
 
 function EventDispatcher(vueInstance) {
     this.vue = vueInstance;
@@ -22,4 +22,4 @@ EventDispatcher.prototype.listen = function (event, callback) {
     this.vue.$on(event, callback);
 };
 
-module.exports = new EventDispatcher(new Vue());
+export default new EventDispatcher(new Vue());

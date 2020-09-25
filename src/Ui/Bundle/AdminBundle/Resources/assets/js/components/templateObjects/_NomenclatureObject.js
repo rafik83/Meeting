@@ -1,7 +1,6 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject'),
-    { isSheetTemplateBuilder } = require('./../template/_BuilderTypeChecker')
-;
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
+import {isSheetTemplateBuilder} from '../template/_BuilderTypeChecker';
 
 /**
  * NomenclatureObject
@@ -69,4 +68,4 @@ NomenclatureObject.prototype.save = function ()
   return true;
 };
 
-module.exports = NomenclatureObject;
+export default NomenclatureObject;

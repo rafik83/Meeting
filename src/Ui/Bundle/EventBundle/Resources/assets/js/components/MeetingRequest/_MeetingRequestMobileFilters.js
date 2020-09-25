@@ -1,6 +1,5 @@
-var StateFilterElement = require('./_MeetingRequestMobileStateFilterElement'),
-    AvailableSlotFilterElement = require('./_MeetingRequestMobileAvailableSlotFilterElement')
-;
+import StateFilterElement from './_MeetingRequestMobileStateFilterElement';
+import AvailableSlotFilterElement from './_MeetingRequestMobileAvailableSlotFilterElement';
 
 /**
  * @param {HTMLElement} meetingRequestFilterZone the zone where the filters will be displayed
@@ -166,4 +165,4 @@ MeetingRequestMobileFilters.prototype.dispatchChangeAndCloseMenu = function(butt
     });
 };
 
-module.exports = MeetingRequestMobileFilters;
+export default MeetingRequestMobileFilters;

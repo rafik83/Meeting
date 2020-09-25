@@ -5,11 +5,80 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.49.0] - 2020-09-25
+### Added
+- VIMEET-2228 - Button custom menu
+
+## [2.48.3] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (js)
+
+## [2.48.2] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (webinars)
+
+## [2.48.1] - 2020-09-24
+### Added
+- VIMEET-2231 - Redirect to program or agenda after webinar
+
+### Updated
+- Exclude from Sentry alert AccessDeniedHttpException
+
+## [2.48.0] - 2020-09-24
+### Added
+- VIMEET-2217 - Activate / deactivate the networking tab by key date
+- VIMEET-2204 - Hidden contact menu
+- VIMEET-2203 - Request Automatically Transformed Into Meeting
+- VIMEET-2233 - Disable right click on webinar video
+
+## [2.47.0] - 2020-09-11
+### Added
+- VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
+- VIMEET-2156 - Remove explicit error about email on login (security)
+
+## [2.46.0] - 2020-09-10
+### Added
+- VIMEET-2169 - Live streaming myevent
+
+### Fixed
+- Extra Data for token can be nullable on TechEventTokenAuthenticator
+
+## [2.45.0] - 2020-09-09
+### Added
+- VIMEET-2175 - TechEvent Token Authenticator
+- VIMEET-2161 - Record webinar
+- VIMEET-2163 - Download webinar records for admin
+- VIMEET-2164 - Change layout with screenshare on record
+- VIMEET-2162 - Download webinar records for speaker
+- Adapt command to a route, to count media/upload element on sheets
+
+### Fixed
+- No sheet result on campaign page without filter
+- Hotfix: Fix datetime modification in AbstractTokenGenerator
+
+## [2.44.0] - 2020-09-03
+### Added
+- VIMEET-2106 - The speaking user video is maximized based on audio level
+- Deploy: DB migration without interaction
+- VIMEET-2213 - Translate timezones
+- VIMEET 2178 - In a webinar, participant can vote for a question
+- Command to count media/upload element on sheets
+- VIMEET-2175 - TechEvent api changed to handle login data, add guard to check login data on login
+
+### Fixed
+- Tip content can be nullable, and tip translations affected on event come from the event locales.
+
+## [2.43.0] - 2020-08-27
+### Added
+- VIMEET-2187 - Invisible mode for webinar speaker
+- VIMEET-2174 - Do not ask a new password when user is logged with a token
+
 ## [2.42.0] - 2020-07-31
 ### Added
 - VIMEET-2168 - Video object on sheet template
 - Add fly system and google cloud storage adapter
 - VIMEET-2173 - Add option submit validation sheet
+- Add fly system and google cloud storage adapter
 - VIMEET-2170 - Upload Video on sheet
 
 ## [2.41.0] - 2020-07-30
@@ -48,6 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.38.0] - 2020-07-22
 ### Added
 - VIMEET-2200 - Allow more planning than participant
+- VIMEET-2161 - Record webinar
 
 ## [2.37.0] - 2020-07-06
 ### Added

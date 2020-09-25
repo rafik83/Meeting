@@ -58,4 +58,4 @@ var translations = {
   "NOT": "NON"
 };
 
-module.exports = translations;
+export default translations;

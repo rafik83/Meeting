@@ -159,12 +159,12 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
 
         return array_filter(
             array_map(
-                function (Item $item) {
+                static function (Item $item) {
                     return $item->getTitle();
                 },
                 $this->items
             ),
-            function ($title) {
+            static function ($title) {
                 return null !== $title;
             }
         );

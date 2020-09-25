@@ -1,4 +1,4 @@
-var axios = require('axios');
+import axios from 'axios';
 
 /**
  * @param {element} element
@@ -61,4 +61,4 @@ TipPreview.prototype.displayPreviewData = function ()
         });
 };
 
-module.exports = TipPreview;
+export default TipPreview;

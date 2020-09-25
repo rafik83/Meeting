@@ -1,35 +1,27 @@
 @admin
 @agenda
 
-Feature: I can update a dispatched mass assignment unavaibility vie the API
+Feature: I can update a dispatched mass assignment unavaibility via the API
 
   Scenario: I can see a dispatched mass assignment unavaibility
     Given the database is purged
-    And the following fixtures files are loaded:
-      | Admin.yml                                                                            |
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                              |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml                    |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml                         |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml                       |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml                      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/User.yml                                      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Spot.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml                         |
-      | SheetWhichHaveAnAssignedSpot.yml                                                     |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-MeetingSlot.yml                   |
-      | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/Meeting/ASDDays2016-Meeting.yml               |
-    And I am logged with "test@test.com" on admin
+    And the event "Best of Planner" is created
+    And there is a type "Fournisseur" in this event
+    And the user "user_asddays_2@proximum.com" is created
+    And this event occurs the "2016-10-12" from "08:00" to "18:00"
+    And there is a mass unavailability category called "Pause" for this event
+    And there is a mass unavailability "Cocktail" for this type the 2016-10-12 from 11:00 to 12:00
+    And there is a meeting slot from 2016-10-12 11:30:00 to 2016-10-12 11:40:00
+    And this slot is assigned to this mass unavailability for this user
+    And there is a meeting slot from 2016-10-12 11:50:00 to 2016-10-12 12:00:00
+    And this slot is assigned to this mass unavailability for this user
+    And I am logged as admin
     When I send a GET request to "/fr/event/1/agenda/mass/1/detail"
     Then the JSON should be equal to:
       """
       {
           "id": 1,
-          "title": "",
+          "title": "Cocktail",
           "massBegin": {
             "date": "2016-10-12 13:00:00.000000",
             "timezone_type": 3,
@@ -41,12 +33,12 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
             "timezone": "Europe/Paris"
           },
           "begin": {
-            "date": "2016-10-12 13:00:00.000000",
+            "date": "2016-10-12 13:30:00.000000",
             "timezone_type": 3,
             "timezone": "Europe/Paris"
           },
           "end": {
-            "date": "2016-10-12 14:00:00.000000",
+            "date": "2016-10-12 13:40:00.000000",
             "timezone_type": 3,
             "timezone": "Europe/Paris"
           },
@@ -57,7 +49,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
       """
 
   Scenario: I can update a dispatched mass assignment
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
     | key     | value            |
     | begin   | 12/10/2016 13:30 |
@@ -66,7 +58,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Then the response status code should be 204
 
   Scenario: I can disable a dispatched mass assignment
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 13:00 |
@@ -75,7 +67,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Then the response status code should be 204
 
   Scenario: I cannot update a dispatched mass assignment that overlap on meeting
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 09:00 |
@@ -98,7 +90,7 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     """
 
   Scenario: I cannot update a dispatched mass assignment out of bounded mass
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update" with parameters:
       | key     | value            |
       | begin   | 12/10/2016 10:15 |
@@ -107,11 +99,11 @@ Feature: I can update a dispatched mass assignment unavaibility vie the API
     Then the response status code should be 422
     And the JSON should be equal to:
     """
-      "admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot"
+      "admin.agenda.meeting.updateMassAssignment.outOfMassSlot"
     """
 
   Scenario: I cannot update a dispatched mass assignment without POST parameters:
-    Given I am logged with "test@test.com" on admin
+    Given I am logged as admin
     When I send a POST request to "/fr/event/1/agenda/mass/1/update"
     Then the response status code should be 422
     And the JSON should be equal to:

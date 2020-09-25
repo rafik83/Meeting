@@ -331,3 +331,21 @@
 .reduce-padding {
   padding: 10px 15px 0px 15px;
 }
+
+.dot {
+  height: 18px;
+  width: 18px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.recording {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

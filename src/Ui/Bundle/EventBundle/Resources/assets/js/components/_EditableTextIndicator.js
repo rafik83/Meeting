@@ -36,4 +36,4 @@ EditableTextIndicator.prototype.count = function ()
   }
 };
 
-module.exports = EditableTextIndicator;
+export default EditableTextIndicator;

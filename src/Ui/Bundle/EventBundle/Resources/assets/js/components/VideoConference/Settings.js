@@ -6,7 +6,8 @@ const WEBAUDIO_ANALYZER_SMOOTHING_TIME = 0.8;
  */
 function Settings(
     videoSettingsContainer,
-    settingsValidateCallback
+    settingsValidateCallback,
+    enableInvisibleMode
 ) {
     this.videoSettingsContainer = videoSettingsContainer;
     this.settingsValidateCallback = settingsValidateCallback;
@@ -16,6 +17,12 @@ function Settings(
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
+    this.invisibleModeOption = this.videoSettingsContainer.querySelector('#invisible-mode-option');
+    this.enableInvisibleMode = enableInvisibleMode;
+
+    if (enableInvisibleMode) {
+        showElement(this.invisibleModeOption);
+    }
 
     this.audioDeviceId = null;
     this.videoDeviceId = null;
@@ -298,7 +305,8 @@ Settings.prototype.prepareEventListener = function () {
 
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
-        this.settingsValidateCallback();
+        const invisibleMode = this.enableInvisibleMode && this.invisibleModeOption.querySelector('input[type=checkbox]').checked;
+        this.settingsValidateCallback(invisibleMode);
     });
 
     // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
@@ -375,7 +383,7 @@ Settings.prototype.init = function () {
  * @param samples
  * @returns {number}
  */
-timeDomainDataToAudioLevel = function (samples) {
+function timeDomainDataToAudioLevel(samples) {
     let maxVolume = 0;
 
     const length = samples.length;
@@ -396,7 +404,7 @@ timeDomainDataToAudioLevel = function (samples) {
  *
  * @returns {number}
  */
-animateLevel = function (newLevel, lastLevel) {
+function animateLevel(newLevel, lastLevel) {
     let value = 0;
     const diff = lastLevel - newLevel;
 
@@ -411,12 +419,12 @@ animateLevel = function (newLevel, lastLevel) {
     return parseFloat(value.toFixed(3));
 }
 
-showElement = function(element) {
+function showElement(element) {
     element.classList.remove('hide');
-};
+}
 
-hideElement = function (element) {
+function hideElement(element) {
     element.classList.add('hide');
-};
+}
 
-module.exports = Settings;
+export default Settings;

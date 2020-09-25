@@ -1,0 +1,14 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    <p>{{ 'mail.happening.webinar.admin.zip_record_archive_prepared.intro'|trans({'%happeningTitle%': mail.happeningTitle}, 'mail', mail.locale) }}</p>
+    <br>
+    {{ macros.button(
+        'mail.happening.webinar.admin.zip_record_archive_prepared.link'|trans({},'mail', mail.locale),
+        mail.webinarRecordZipFileUrl
+    ) }}
+    <br>
+    <p>{{ 'mail.happening.webinar.admin.zip_record_archive_prepared.outro'|trans({}, 'mail', mail.locale) }}</p>
+{% endblock %}

@@ -14,3 +14,6 @@
   - [Forfait de participation `Package`](Domain/Package.md)
   - [Demande de RDV `Meeting\Request`](Domain/MeetingRequest.md)
   - [Validation du numéro de téléphone](Domain/PhoneValidation.md)
+
+- External platforms
+  - [Tokbox](Tokbox/Troubleshoot.md)

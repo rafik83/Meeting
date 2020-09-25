@@ -23,6 +23,9 @@ admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de pas
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
+admin.mail.export_sheets.content: "Bonjour,\n\nVous pouvez télécharger le fichier CSV des fiches sélectionnées en cliquant sur le bouton ci-dessous."
+admin.mail.export_sheets.linkTitle: "Télécharger le fichier"
+admin.mail.export_sheets.subject: '%event% : Votre export de fiches est prêt'
 admin.mail.translations.downloaded.body: "Bonjour,\nLes traductions ont été téléchargés depuis openl10n.\n"
 admin.mail.translations.downloaded.subject: 'Téléchargement des traductions'
 admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
@@ -71,6 +74,16 @@ mail.happening.participation.intro: 'Liste des participants mis à jour automati
 mail.happening.participation.register: '%name% inscrit'
 mail.happening.participation.subject: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.unregister: '%name% désinscrit'
+mail.happening.webinar.admin.zip_record_archive_not_prepared.content: "Bonjour,\n\n Le fichier de l''enregistrement du webinar %happeningTitle% n''est pas encore disponible au téléchargement car le webinar est toujours en cours d''enregistrement. Veuillez réessayer ultérieurement ou attendre la génération automatique."
+mail.happening.webinar.admin.zip_record_archive_not_prepared.subject: '%happeningTitle% : L''enregistrement ne peut pas être télécharger pour le moment'
+mail.happening.webinar.admin.zip_record_archive_prepared.intro: "Bonjour,\n\n Le fichier de l'enregistrement du webinar %happeningTitle% est disponible au téléchargement :"
+mail.happening.webinar.admin.zip_record_archive_prepared.link: 'Télécharger l''enregistrement'
+mail.happening.webinar.admin.zip_record_archive_prepared.outro: 'Bonne journée'
+mail.happening.webinar.admin.zip_record_archive_prepared.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
+mail.happening.webinar.zip_record_archive_available_for_speaker.intro: "Bonjour,\n\n Le fichier de l'enregistrement du webinar %happeningTitle% est disponible au téléchargement. Attention, ce lien est valide que pour 7 jours."
+mail.happening.webinar.zip_record_archive_available_for_speaker.link: 'Télécharger l''enregistrement'
+mail.happening.webinar.zip_record_archive_available_for_speaker.outro: 'Bonne journée'
+mail.happening.webinar.zip_record_archive_available_for_speaker.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
 mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
 mail.omz.export.link.click: 'Télécharger le fichier des participants OMZ'
 mail.omz.export.subject: 'Fichier d''export OMZ'

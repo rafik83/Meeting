@@ -48,23 +48,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /** @var \DateTimeInterface */
     private $now;
 
-    /** @var ActivateAccountTokenByUserAndSheetGuesserHandler */
-    private $generateActivateAccountTokenByUserAndSheetHandler;
-
     public function __construct(
         EventByHostResolver $eventByHostResolver,
         UserRepositoryInterface $userRepository,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        \DateTimeInterface $now,
-        ActivateAccountTokenByUserAndSheetGuesserHandler $generateActivateAccountTokenByUserAndSheetHandler
+        \DateTimeInterface $now
     ) {
         $this->eventByHostResolver = $eventByHostResolver;
         $this->userRepository = $userRepository;
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->now = $now;
-        $this->generateActivateAccountTokenByUserAndSheetHandler = $generateActivateAccountTokenByUserAndSheetHandler;
     }
 
     public function start(Request $request, AuthenticationException $authException = null): JsonResponse
@@ -105,31 +100,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        if (!$user->getPassword()) {
-            try {
-                $activateAccountToken = $this->generateActivateAccountTokenByUserAndSheetHandler->handle(
-                    new ActivateAccountTokenByUserAndSheetGuesser($user, $credentials['event'])
-                );
-
-                throw new NullableUserPasswordAuthenticationException($activateAccountToken);
-            } catch (SheetNotFoundException $sheetNotFoundException) {
-                throw new AuthenticationException('Sheet not found.');
-            }
-        }
-
         return true;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
     {
-        if ($exception instanceof NullableUserPasswordAuthenticationException) {
-            return new RedirectResponse(
-                $this->router->generate('event_activate_account', [
-                    'token' => $exception->getActivateAccountToken()->getToken(),
-                ])
-            );
-        }
-
         $this->flashBag->add('error', 'flash.authentication_token.invalid_link');
 
         return new RedirectResponse($this->router->generate('event_login'));
