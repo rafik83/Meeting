@@ -652,6 +652,10 @@ admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
 admin.participant.export.fields.user_id: 'ID User'
+admin.participant.export.fields.viewed_sheets: 'Nombre de fiches visitées'
+admin.participant.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques des fiches'
+admin.participant.export.fields.requested_meetings: 'Nombre de demande de rendez-vous faites'
+admin.participant.export.fields.scheduled_meetings: 'Nombre de rendez-vous programmés'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non

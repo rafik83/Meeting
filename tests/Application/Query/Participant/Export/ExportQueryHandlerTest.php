@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Participant\Export;
 
 use PHPUnit\Framework\TestCase;
@@ -25,6 +17,8 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -88,6 +82,12 @@ class ExportQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $happeningRepository;
 
+    /** @var ObjectProphecy */
+    private $requestRepository;
+
+    /** @var ObjectProphecy */
+    private $meetingRepository;
+
     public function setUp()
     {
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
@@ -95,9 +95,11 @@ class ExportQueryHandlerTest extends TestCase
         $this->templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $this->productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
 
         $this->event = $this->prophesize(Event::class);
-        $this->event->getFallback()->willReturn('en');
+        $this->event->getLocaleFallback()->willReturn('en');
 
         $this->day = $this->prophesize(Event\Day::class);
         $this->event->getDays()->willReturn([$this->day->reveal()]);
@@ -229,6 +231,9 @@ class ExportQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$happening->reveal()]);
 
+        $this->requestRepository->loadParticipantRequestsCount([1, 2, 3])->shouldBeCalled();
+        $this->meetingRepository->loadParticipantMeetingsCount([1, 2, 3])->shouldBeCalled();
+
         $query = new ExportQuery($this->event->reveal(), [1, 2, 3], 'fr');
 
         $handler = new ExportQueryHandler(
@@ -236,7 +241,9 @@ class ExportQueryHandlerTest extends TestCase
             $this->participantViewQueryHandler->reveal(),
             $this->templateDataFactory->reveal(),
             $this->productRepository->reveal(),
-            $this->happeningRepository->reveal()
+            $this->happeningRepository->reveal(),
+            $this->requestRepository->reveal(),
+            $this->meetingRepository->reveal()
         );
 
         $result = $handler->handle($query);

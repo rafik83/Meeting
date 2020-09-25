@@ -61,20 +61,13 @@ class Analytics
         }
     }
 
-    /**
-     * Get the value of views
-     */
     public function getViews(): int
     {
         return $this->views;
     }
 
-    /**
-     * Get the value of uniqueViews
-     */
     public function getUniqueViews(): int
     {
         return $this->uniqueViews;
     }
-
 }
