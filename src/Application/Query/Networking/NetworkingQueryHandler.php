@@ -29,11 +29,13 @@ class NetworkingQueryHandler
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
     {
 
+        $topic = $this->notificationSubscriber->getNotificationTopic($networkingQuery->event->getId());
+
         return new NetworkingView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user->getId(), [AbstractNotification::TYPE_QUESTIONS]),
-            $this->notificationSubscriber->getNotificationTopic($networkingQuery->event->getId()),
-            $this->notificationSubscriptions->getSubscriptions()
+            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user, [AbstractNotification::TYPE_QUESTIONS]),
+            $topic,
+            $this->notificationSubscriptions->getSubscriptions($topic)
         );
     }
 }

@@ -37,7 +37,8 @@ class IndexAction
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker
-    ) {
+    )
+    {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -49,7 +50,8 @@ class IndexAction
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Sheet $sheet
-    ) {
+    )
+    {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
         ) {

@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 
 class NotificationSubscriber extends AbstractNotification implements NotificationSubscriberInterface
 {
@@ -43,7 +44,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         ], $this->mercureSubscriberKey);
     }
 
-    public function getNetworkingSubscriberKey(Event $event, int $userId, array $types): string
+    public function getNetworkingSubscriberKey(Event $event, User $user, $types): string
     {
         if (empty($types)) {
             throw new InvalidArgumentException('Types array cannot be empty');
@@ -54,7 +55,14 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
                 'subscriber' => array_map(function ($type) use ($event) {
                     return ['topic' => $this->getNetworkingTopic($event->getId(), $type)];
                 }, $types),
-                'payload' => ['userId' => $userId],
+                'payload' => [
+                    'userId' => $user->getId(),
+                    'userLastName' => $user->getLastName(),
+                    'userFirstName' => $user->getFirstName(),
+                    'userPosition' => $user->getPosition(),
+                    'userAvatar' => $user->getAvatar(),
+                    'userCompany' => $user->getAccount()->getCompany()
+                ]
             ]
         ], $this->mercureSubscriberKey);
     }
