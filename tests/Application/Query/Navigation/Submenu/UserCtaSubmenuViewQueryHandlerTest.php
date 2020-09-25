@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Proximum\Vimeet\Tests\Application\Query\Navigation\Submenu;
 
 use PHPUnit\Framework\TestCase;
@@ -14,11 +13,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 {
-    public function testCustomButton()
+    public function testCustomButton(): void
     {
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(746);
@@ -42,11 +40,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         }');
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
-            $extraParameterRepository->reveal(),
-            $sheetRepository->reveal()
+            $extraParameterRepository->reveal()
         );
 
         $result = $userCtaSubmenuViewQueryHandler->handle(
@@ -71,7 +66,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
 
-    public function testCustomButtonNull()
+    public function testCustomButtonNull(): void
     {
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(701);
@@ -94,11 +89,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         }');
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
-            $extraParameterRepository->reveal(),
-            $sheetRepository->reveal()
+            $extraParameterRepository->reveal()
         );
 
         $result = $userCtaSubmenuViewQueryHandler->handle(
