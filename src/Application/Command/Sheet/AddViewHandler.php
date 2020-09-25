@@ -31,9 +31,7 @@ class AddViewHandler implements Command
             return;
         }
 
-        $isParticipantOfSeeingSheet = null !== $addView->sheet->hasUser($addView->user);
-
-        if ($isParticipantOfSeeingSheet) {
+        if ($addView->sheet->hasUser($addView->user)) {
             return;
         }
 

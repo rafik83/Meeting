@@ -1,7 +1,12 @@
 <div class="col-md-4">
     <div class="catalog__item">
         <div class="content__sheet-card">
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: true }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', {
+                title: catalogSheetPreviewView.title,
+                preview: catalogSheetPreviewView.preview,
+                isCatalog: true,
+                sheetToDisplayId: catalogSheetPreviewView.id
+            }, false) }}
         </div>
         <footer>
             <div class="actions">

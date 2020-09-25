@@ -11,7 +11,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class FollowLinkAction
 {
@@ -39,27 +38,24 @@ class FollowLinkAction
         string $objectId,
         ?int $index = null,
         EventDomain $eventDomain,
-        UserDomain $userDomain
+        ?UserDomain $userDomain
     ): RedirectResponse {
-        if (
-            !$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
-        ) {
-            throw new AccessDeniedHttpException('Access denied to this sheet');
-        }
-
-        $user = $userDomain->getUser();
+        $user = $userDomain ? $userDomain->getUser() : null;
         $event = $eventDomain->getEvent();
 
         $url = $this->queryBus->handle(new TemplateObjectUrlQuery(
             $sheet,
             $event,
-            $user->getLocale(),
+            $user ? $user->getLocale() : $event->getLocaleFallback(),
             $objectId,
             $index
         ));
 
-        $addClick = new AddClick($user, $sheet, $objectId, $index);
-        $this->commandBus->handle($addClick);
+        // No click added if catalog is public and user is not authenticated
+        if ($this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $addClick = new AddClick($user, $sheet, $objectId, $index);
+            $this->commandBus->handle($addClick);
+        }
 
         return new RedirectResponse($url);
     }

@@ -31,9 +31,7 @@ class AddClickHandler implements Command
             return;
         }
 
-        $isParticipantOfSeeingSheet = null !== $addClick->sheet->hasUser($addClick->user);
-
-        if ($isParticipantOfSeeingSheet) {
+        if ($addClick->sheet->hasUser($addClick->user)) {
             return;
         }
 
