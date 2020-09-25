@@ -37,6 +37,11 @@ class ConfigureDatesType extends AbstractType
         'enableBadgeForParticipantDate' => 'form.event_configure_date.children.enableBadgeForParticipantDate.help',
     ];
 
+    private const CONFIGURATION_DATES_NETWORKING = [
+        'networkingOpenDate',
+        'networkingCloseDate',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -50,6 +55,16 @@ class ConfigureDatesType extends AbstractType
                     'help' => self::CONFIGURATION_DATES_HELP[$configurationDate] ?? null,
                 ]);
         }
+
+        if ($options['showDateNetworking']) {
+            foreach (self::CONFIGURATION_DATES_NETWORKING as $configurationDateNetworking) {
+                $builder
+                    ->add($configurationDateNetworking, DateTimePickerType::class, [
+                        'view_timezone' => $options['event']->getTimezone(),
+                        'required' => false,
+                    ]);
+            }
+        }
     }
 
     /**
@@ -57,8 +72,9 @@ class ConfigureDatesType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'showDateNetworking']);
         $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('showDateNetworking', 'bool');
         $resolver->setDefaults([
             'data_class' => ConfigureDates::class,
         ]);
