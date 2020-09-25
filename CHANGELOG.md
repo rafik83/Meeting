@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.49.1] - 2020-09-25
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available (side effect of VIMEET-2203)
+
 ## [2.49.0] - 2020-09-25
 ### Added
 - VIMEET-2228 - Button custom menu
