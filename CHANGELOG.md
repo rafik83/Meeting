@@ -5,11 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.49.0]
+## [2.49.0] - 2020-09-25
 ### Added
 - VIMEET-2228 - Button custom menu
 
-## [2.48.3]
+## [2.48.3] - 2020-09-24
 ### Fixed
 - Allow fullscreen in iframe (js)
 
