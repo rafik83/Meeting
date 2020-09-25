@@ -96,7 +96,7 @@ class ApproveRequestHandler
      *
      * @return null|ApproveRequestResult
      */
-    public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
+    public function handle(ApproveRequest $approveRequest): ApproveRequestResult
     {
         $approveRequest->request->setToPriority($approveRequest->toPriority);
         $hasRuleToAutoAccept = $this->allowTransformAutomaticallyRequestIntoMeeting->__invoke($approveRequest->request);
