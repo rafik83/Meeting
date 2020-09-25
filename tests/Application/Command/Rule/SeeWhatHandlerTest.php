@@ -29,12 +29,13 @@ class SeeWhatHandlerTest extends TestCase
         $event   = EventFactory::createEvent();
         $seer    = new Type($event);
         $seable  = new Type($event);
-        $rule    = new Rule($event, $seer, $seable, ['participant_position'], 2);
+        $rule    = new Rule($event, $seer, $seable, ['participant_position'], 2, false);
         $seeWhat = new SeeWhat($rule);
         $seeWhat->priority = 2;
         $seeWhat->seeWhat  = ['participant_firstname', 'participant_lastname'];
+        $seeWhat->requestAutomaticallyTransformedIntoMeeting = true;
 
-        $expectedRule = new Rule($event, $seer, $seable, ['participant_firstname', 'participant_lastname'], 2);
+        $expectedRule = new Rule($event, $seer, $seable, ['participant_firstname', 'participant_lastname'], 2, true);
 
         // Mock
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
@@ -54,12 +55,13 @@ class SeeWhatHandlerTest extends TestCase
         $event   = EventFactory::createEvent();
         $seer    = new Type($event);
         $seable  = new Type($event);
-        $rule    = new Rule($event, $seer, $seable, ['participant_position'], 2);
+        $rule    = new Rule($event, $seer, $seable, ['participant_position'], 2, false);
         $seeWhat = new SeeWhat($rule);
         $seeWhat->priority = 4;
         $seeWhat->seeWhat  = ['participant_firstname', 'participant_lastname'];
+        $seeWhat->requestAutomaticallyTransformedIntoMeeting = true;
 
-        $expectedRule = new Rule($event, $seer, $seable, ['participant_firstname', 'participant_lastname'], 4);
+        $expectedRule = new Rule($event, $seer, $seable, ['participant_firstname', 'participant_lastname'], 4, true);
 
         // Mock
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);

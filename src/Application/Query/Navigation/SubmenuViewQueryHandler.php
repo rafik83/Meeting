@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuVie
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
 
@@ -124,6 +125,19 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->staticFormulationsIndexByCategories
             )
         );
+
+        $customButtonView = $this->queryBus->handle(
+            new UserCtaSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet
+            )
+        );
+
+        if (null !== $customButtonView) {
+            $buttonsViews[] = $customButtonView;
+        }
 
         $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
 

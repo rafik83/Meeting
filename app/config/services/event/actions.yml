@@ -290,6 +290,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating.engine.twig'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Redirect\AgendaOrProgramRedirectAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.router'
+
     #
     # Badge
     #

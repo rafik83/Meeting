@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
+
 class ApproveRequestResult
 {
     /**
@@ -23,14 +25,14 @@ class ApproveRequestResult
     public $hasError;
 
     /**
-     * TransformRequestIntoMeetingView constructor.
-     *
-     * @param null|MeetingDdayView $meetingView
-     * @param bool                 $hasError
+     * @var Request
      */
-    public function __construct(MeetingDdayView $meetingView = null, bool $hasError = false)
+    public $request;
+
+    public function __construct(?MeetingDdayView $meetingView, bool $hasError, Request $request)
     {
         $this->meetingView = $meetingView;
         $this->hasError    = $hasError;
+        $this->request = $request;
     }
 }
