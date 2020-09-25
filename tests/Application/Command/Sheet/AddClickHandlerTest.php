@@ -37,7 +37,7 @@ class AddClickHandlerTest extends TestCase
 
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getAnalytics()->willReturn($this->analytics->reveal());
-        $this->sheet->getUserParticipant($this->user->reveal())->willReturn(null);
+        $this->sheet->hasUser($this->user->reveal())->willReturn(null);
 
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->impersonatingUserChecker = $this->prophesize(ImpersonatingUserCheckerInterface::class);
@@ -60,7 +60,7 @@ class AddClickHandlerTest extends TestCase
         $this->analytics->incrementClicks(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         $participant = $this->prophesize(Participant::class);
-        $this->sheet->getUserParticipant($this->user->reveal())->willReturn($participant->reveal());
+        $this->sheet->hasUser($this->user->reveal())->willReturn($participant->reveal());
 
         $query = new AddClick($this->user->reveal(), $this->sheet->reveal(), 1337, null);
 
