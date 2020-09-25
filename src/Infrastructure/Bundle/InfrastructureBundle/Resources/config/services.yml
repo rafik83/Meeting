@@ -7206,5 +7206,6 @@ services:
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
         tags:
             - { name: tactician.handler, typehints: true }

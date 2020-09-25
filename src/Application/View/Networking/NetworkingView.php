@@ -15,10 +15,14 @@ class NetworkingView
     /** @var string */
     public $topic;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic)
+    /** @var array */
+    public $subscriptions;
+
+    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions)
     {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;
+        $this->subscriptions = $subscriptions;
     }
 }

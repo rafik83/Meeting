@@ -24,7 +24,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter
-    ) {
+    )
+    {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
@@ -43,7 +44,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
     public function publishChatMessageNotification(ChatMessageLinkableInterface $object): void
     {
         $postData = [
-            'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
+            'topic' => $this->getNotificationTopic($object->getEvent()->getId()),
             'data' => json_encode(['action' => 'add_chat_message']),
         ];
 
@@ -53,7 +54,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, int $chatMessageId, array $votes): void
     {
         $postData = [
-            'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
+            'topic' => $this->getNotificationTopic($object->getEvent()->getId()),
             'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessageId, 'votes' => $votes]),
         ];
 
@@ -69,9 +70,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
         ];
 
         $this->httpAdapter->post($this->mercureHubUrl, [
-                'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
-                'Content-type' => 'application/x-www-form-urlencoded',
-            ],
+            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
+            'Content-type' => 'application/x-www-form-urlencoded',
+        ],
             http_build_query($postData)
         );
     }

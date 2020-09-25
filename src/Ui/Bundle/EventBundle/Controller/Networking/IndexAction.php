@@ -5,7 +5,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Networking\NetworkingParticipantListView;
 use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
