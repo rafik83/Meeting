@@ -40,7 +40,7 @@ Feature: Admin Transaction
     Given I am logged as admin
     And I am on this page "/fr/event/1/sheet"
     When I go to this page "/fr/event/1/sheet/1"
-    And I follow "admin.transaction.edit"
+    And I follow "update_transaction_1_link"
     Then I should be on this page "/fr/event/1/sheet/1/transaction/1/update"
     And I fill in the following:
       | form.update_transaction.children.amount.label | 525 |

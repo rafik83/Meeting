@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
@@ -16,27 +8,27 @@ use Symfony\Component\Routing\RouterInterface as SymfonyRouterInterface;
 
 class RouterAdapter implements RouterInterface
 {
-    /**
-     * @var SymfonyRouterInterface
-     */
+    /** @var SymfonyRouterInterface */
     private $router;
 
-    /**
-     * RouterAdapter constructor.
-     *
-     * @param SymfonyRouterInterface $router
-     */
-    public function __construct(SymfonyRouterInterface $router)
+    /** @var string */
+    private $scheme;
+
+    public function __construct(SymfonyRouterInterface $router, string $scheme)
     {
         $this->router = $router;
+        $this->scheme = $scheme;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generate($path, array $parameters = [])
+    public function generate($path, array $parameters = []): string
     {
         return $this->router->generate($path, $parameters);
+    }
+
+    public function generateAbsoluteUrl($path, array $parameters = []): string
+    {
+        $this->router->getContext()->setScheme($this->scheme);
+        return $this->router->generate($path, $parameters, SymfonyRouterInterface::ABSOLUTE_URL);
     }
 
     /**

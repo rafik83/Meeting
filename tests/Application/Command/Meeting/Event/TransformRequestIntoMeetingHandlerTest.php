@@ -62,6 +62,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $spot    = $this->prophesize(Spot::class);
 
         $request->getEvent()->willReturn($event);
+        $request->setMeeting(Argument::type(Meeting::class))->shouldBeCalled();
         $request->getFromParticipantsArray()->willReturn([$fromParticipant->reveal()]);
         $request->getToParticipantsArray()->willReturn([$toParticipant->reveal()]);
         $request->hasNoPreference($fromSheet)->willReturn(false);
@@ -194,6 +195,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $fromParticipantTwo->getId()->willReturn(3);
 
         $request->getEvent()->willReturn($event);
+        $request->setMeeting(Argument::type(Meeting::class))->shouldBeCalled();
         $request->getFromParticipantsArray()->willReturn([$fromParticipant->reveal()]);
         $request->getToParticipantsArray()->willReturn([$toParticipant->reveal()]);
         $request->hasNoPreference($fromSheet)->willReturn(true);
@@ -374,6 +376,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $request->getFromSheet()->willReturn($fromSheet->reveal());
         $request->getToSheet()->willReturn($toSheet->reveal());
         $request->getEvent()->willReturn($event);
+        $request->setMeeting(Argument::type(Meeting::class))->shouldBeCalled();
         $request->getFromParticipantsArray()->willReturn([]);
         $request->getToParticipantsArray()->willReturn([]);
         $request->hasNoPreference($fromSheet->reveal())->willReturn(true);
@@ -865,6 +868,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $request->getFromSheet()->shouldBeCalled()->willReturn($fromSheet->reveal());
         $request->getToSheet()->shouldBeCalled()->willReturn($toSheet->reveal());
         $request->getEvent()->shouldBeCalled()->willReturn($event);
+        $request->setMeeting(Argument::type(Meeting::class))->shouldBeCalled();
 
         $slot = $this->prophesize(MeetingSlot::class);
         $slot->getId()->shouldBeCalled()->willReturn(111);

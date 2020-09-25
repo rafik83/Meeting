@@ -37,7 +37,7 @@ class AddViewHandlerTest extends TestCase
 
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getAnalytics()->willReturn($this->analytics->reveal());
-        $this->sheet->getUserParticipant($this->user->reveal())->willReturn(null);
+        $this->sheet->hasUser($this->user->reveal())->willReturn(null);
 
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->impersonatingUserChecker = $this->prophesize(ImpersonatingUserCheckerInterface::class);
@@ -60,7 +60,7 @@ class AddViewHandlerTest extends TestCase
         $this->analytics->incrementViews(Argument::any())->shouldNotBeCalled();
 
         $participant = $this->prophesize(Participant::class);
-        $this->sheet->getUserParticipant($this->user->reveal())->willReturn($participant->reveal());
+        $this->sheet->hasUser($this->user->reveal())->willReturn($participant->reveal());
 
         $query = new AddView($this->user->reveal(), $this->sheet->reveal());
 
