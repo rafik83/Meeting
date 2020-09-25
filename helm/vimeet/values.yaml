@@ -264,6 +264,8 @@ elasticsearch:
   image: "elasticsearch"
   imageTag: "1.7.6"
 
+  clusterName: "local-elastic"
+
   # Permit co-located instances for solitary minikube virtual machines.
   antiAffinity: "soft"
 
@@ -276,9 +278,9 @@ elasticsearch:
       discovery:
         zen.ping.multicast.enabled: false
         zen.ping.unicast.hosts:
-          - staging-master-0.staging-master-headless.vimeet.svc.cluster.local:9300
-          - staging-master-1.staging-master-headless.vimeet.svc.cluster.local:9300
-          - staging-master-2.staging-master-headless.vimeet.svc.cluster.local:9300
+          - local-master-0.local-master-headless.vimeet.svc.cluster.local:9300
+          - local-master-1.local-master-headless.vimeet.svc.cluster.local:9300
+          - local-master-2.local-master-headless.vimeet.svc.cluster.local:9300
 
   # Allocate smaller chunks of memory per pod.
   resources:
