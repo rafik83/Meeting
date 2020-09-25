@@ -113,3 +113,12 @@ services:
     Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }
+
+    #
+    # User Cta
+    #
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }
