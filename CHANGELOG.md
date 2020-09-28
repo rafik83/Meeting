@@ -4,9 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.50.0] - 2020-09-28
 ### Added
-- VIMEET-2205 - Display analytics on sheet
 - VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2205 - Display analytics on sheet
+- VIMEET-2206 - Add analytics and number of meeting requests in participants export
+
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
 
 ## [2.49.1] - 2020-09-25
 ### Fixed
