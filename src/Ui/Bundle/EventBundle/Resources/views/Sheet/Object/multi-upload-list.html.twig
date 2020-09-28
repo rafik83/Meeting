@@ -1,7 +1,12 @@
+{% import '@Event/Sheet/macro.html.twig' as macros %}
 <ul class="list list--medias">
-    {% for media in item.data|default([]) if media.path is defined and media.title is defined %}
+    {% for index, media in item.data|default([]) if media.path is defined and media.title is defined %}
         <li>
-            <a href="{{ eventUrl(sheet.event, 'event_sheet_show_uploaded_file', { sheetToDisplayId: sheet.id, objectKey: item.key, path: media['path'], '_locale': locale }) }}" target="_blank">{{ media['title'] }}</a>
+            <a href="{{ path('event_catalog_sheet_follow_link', {'sheet': sheet.id, 'objectId': item.uid, 'index': index}) }}" target="_blank">
+                {{ media['title'] }}
+
+                {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, item.uid, index) }}
+            </a>
         </li>
     {% endfor %}
 </ul>

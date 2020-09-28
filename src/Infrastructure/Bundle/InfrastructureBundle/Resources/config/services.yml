@@ -3111,10 +3111,15 @@ services:
             - '@template.template_data_factory'
             - '@template.print_template_resolver'
             - '@domain.rule.applyer'
+            - '@Proximum\Vimeet\Domain\Template\TrackingUrlTransformer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
+
+    Proximum\Vimeet\Domain\Template\TrackingUrlTransformer:
+        arguments:
+            - '@adapter.router'
 
     template.registration.registration_template_validator:
         class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
@@ -3558,6 +3563,8 @@ services:
             - '@query.catalog.sheet_preview_external_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
 
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:

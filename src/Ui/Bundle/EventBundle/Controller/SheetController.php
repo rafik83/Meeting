@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -66,8 +67,9 @@ class SheetController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Sheet       $sheet
-     * @param string      $locale
+     * @param string|null $locale
      *
      * @return RedirectResponse|Response
      */
@@ -105,7 +107,7 @@ class SheetController extends Controller
             );
         }
 
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
             $locale
@@ -126,6 +128,8 @@ class SheetController extends Controller
 
         $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
 
+        $displayAnalyticsStat = $this->get(CanDisplayAnalyticsStat::class)->isSatisfiedBy($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
@@ -136,11 +140,12 @@ class SheetController extends Controller
             'participants'            => $participants,
             'templateData'            => $templateData,
             'popinWelcome'            => $popinWelcome,
-            'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'sheetValidationView'     => $sheetValidationView ?? null,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
+            'displayAnalyticsStat' => $displayAnalyticsStat,
         ]);
     }
 
@@ -219,7 +224,7 @@ class SheetController extends Controller
             $locale
         );
 
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
             $user,
             $locale

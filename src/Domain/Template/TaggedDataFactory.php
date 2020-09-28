@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
@@ -31,21 +23,19 @@ class TaggedDataFactory
     /** @var PrintTemplateResolver */
     private $printTemplateResolver;
 
-    /**
-     * TaggedDataFactory constructor.
-     *
-     * @param TemplateDataFactory   $templateDataFactory
-     * @param PrintTemplateResolver $printTemplateResolver
-     * @param Applyer               $applyer
-     */
+    /** @var TrackingUrlTransformer */
+    private $trackingUrlTransformer;
+
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         PrintTemplateResolver $printTemplateResolver,
-        Applyer $applyer
+        Applyer $applyer,
+        TrackingUrlTransformer $trackingUrlTransformer
     ) {
         $this->templateDataFactory = $templateDataFactory;
-        $this->applyer             = $applyer;
+        $this->applyer = $applyer;
         $this->printTemplateResolver = $printTemplateResolver;
+        $this->trackingUrlTransformer = $trackingUrlTransformer;
     }
 
     /**
@@ -88,12 +78,9 @@ class TaggedDataFactory
     /**
      * Build taggedDataView for all registration template objects
      *
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
      * @see TaggedDataView
      */
-    private function createTaggedDataView(Sheet $sheet, $locale)
+    private function createTaggedDataView(Sheet $sheet, string $locale)
     {
         $registerTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
 
@@ -125,6 +112,8 @@ class TaggedDataFactory
                     continue;
                 }
 
+                $originalUrl = null;
+
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $value = implode(', ', $object->getNomenclatureLabelOfItems());
                 } elseif ($object instanceof TemplateObject\DateTime) {
@@ -133,6 +122,9 @@ class TaggedDataFactory
                     } else {
                         $value = $object->getFormattedDate($locale);
                     }
+                } elseif ($object instanceof TemplateObject\Url) {
+                    $originalUrl = $object->getUrl();
+                    $value = $this->trackingUrlTransformer->transform($sheet, $object);
                 } else {
                     $value = $object->getContentValueLocalize($locale);
                 }
@@ -143,7 +135,9 @@ class TaggedDataFactory
                     $object instanceof TranslatableInterface ? $object->getTranslations($eventLocales) : [],
                     $value,
                     $tag,
-                    $object instanceof EditableText ? $object->isTextarea() : false
+                    $object instanceof EditableText ? $object->isTextarea() : false,
+                    $originalUrl,
+                    $object->getUid()
                 );
 
                 $this->addTaggedDataView($sheet, $tag, $taggedDataView);
