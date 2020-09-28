@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2205 - Display analytics on sheet
+- VIMEET-2206 - Add option to activate analytics depending on participation type
 
 ## [2.49.0] - 2020-09-25
 ### Added
