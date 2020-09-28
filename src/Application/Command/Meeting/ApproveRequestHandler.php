@@ -161,7 +161,7 @@ class ApproveRequestHandler
             }
         }
 
-        return new ApproveRequestResult(null, !$hasRuleToAutoAccept, $approveRequest->request);
+        return new ApproveRequestResult(null, false, $approveRequest->request);
     }
 
     /**
