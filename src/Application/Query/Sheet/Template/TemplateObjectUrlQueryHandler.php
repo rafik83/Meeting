@@ -34,7 +34,7 @@ class TemplateObjectUrlQueryHandler
         $this->logger = $logger;
     }
 
-    public function handle(TemplateObjectUrlQuery $query): string
+    public function handle(TemplateObjectUrlQuery $query): ?string
     {
         $presentationData = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
         $registrationData = $this->templateDataFactory->createRegistrationFromSheet($query->sheet, $query->locale);
