@@ -136,7 +136,8 @@ class TaggedDataFactory
                     $value,
                     $tag,
                     $object instanceof EditableText ? $object->isTextarea() : false,
-                    $originalUrl
+                    $originalUrl,
+                    $object->getUid()
                 );
 
                 $this->addTaggedDataView($sheet, $tag, $taggedDataView);

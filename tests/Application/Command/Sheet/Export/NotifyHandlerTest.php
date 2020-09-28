@@ -12,7 +12,6 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\Notification\NotifyAdmin;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Spot\NotifyExportMail;
 
 class NotifyHandlerTest extends TestCase
 {
@@ -48,7 +47,7 @@ class NotifyHandlerTest extends TestCase
             ->willReturn('lien')
         ;
 
-        $router->generate(
+        $router->generateAbsoluteUrl(
                 'admin_file_download',
                 [
                     'event' => 12,

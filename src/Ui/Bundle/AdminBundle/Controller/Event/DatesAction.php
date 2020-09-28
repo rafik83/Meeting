@@ -59,7 +59,11 @@ class DatesAction
         }
 
         $command = new ConfigureDates($event);
-        $form = $this->formFactory->create(ConfigureDatesType::class, $command, ['event' => $event, 'submit' => true]);
+        $form = $this->formFactory->create(ConfigureDatesType::class, $command, [
+            'event' => $event,
+            'submit' => true,
+            'showDateNetworking' => $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN'),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($command);

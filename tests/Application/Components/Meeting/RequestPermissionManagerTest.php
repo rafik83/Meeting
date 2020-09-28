@@ -17,8 +17,8 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -46,10 +46,10 @@ class RequestPermissionManagerTest extends TestCase
      */
     public function setUp()
     {
-        $this->requestRepository                    = $this->prophesize(RequestRepositoryInterface::class);
-        $this->meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
         $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
-        $this->event                                = EventFactory::createEvent();
+        $this->event = EventFactory::createEvent();
     }
 
     /**

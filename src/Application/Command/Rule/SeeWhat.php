@@ -40,6 +40,11 @@ class SeeWhat
     public $emailAccessMinEvaluation;
 
     /**
+     * @var bool
+     */
+    public $requestAutomaticallyTransformedIntoMeeting;
+
+    /**
      * @param Rule $rule
      */
     public function __construct(Rule $rule)
@@ -49,5 +54,6 @@ class SeeWhat
         $this->seeWhat = $rule->getWhat();
         $this->phoneAccessMinEvaluation = $rule->getPhoneAccessMinEvaluation();
         $this->emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
+        $this->requestAutomaticallyTransformedIntoMeeting = $rule->getRequestAutomaticallyTransformedIntoMeeting();
     }
 }

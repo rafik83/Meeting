@@ -17,7 +17,9 @@ use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
 class ContactsSubmenuViewQueryHandlerTest extends TestCase
@@ -26,9 +28,13 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
     {
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn(1337);
+        $sheet->isInInternalCatalog()->willReturn(true);
 
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
+
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
+        $canScanParticipant->isSatisfiedBy($sheet)->willReturn(true);
 
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -44,7 +50,8 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal()
+            $accessChecker->reveal(),
+            $canScanParticipant->reveal()
         );
         $result = $badgeSubmenuViewQueryHandler->handle(
             new ContactsSubmenuViewQuery(
@@ -78,11 +85,15 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
         $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
 
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
+        $canScanParticipant->isSatisfiedBy()->willReturn(true);
+
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal()
+            $accessChecker->reveal(),
+            $canScanParticipant->reveal()
         );
 
         $this->assertNull(

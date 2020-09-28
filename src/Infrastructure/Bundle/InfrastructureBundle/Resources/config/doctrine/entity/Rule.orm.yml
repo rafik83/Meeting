@@ -36,6 +36,10 @@ Proximum\Vimeet\Domain\Model\Rule:
         emailAccessMinEvaluation:
             type: smallint
             nullable: true
+        requestAutomaticallyTransformedIntoMeeting:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

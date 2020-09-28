@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2205 - Display analytics on sheet
 
+## [2.49.0] - 2020-09-25
+### Added
+- VIMEET-2228 - Button custom menu
+
+## [2.48.3] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (js)
+
+## [2.48.2] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (webinars)
+
+## [2.48.1] - 2020-09-24
+### Added
+- VIMEET-2231 - Redirect to program or agenda after webinar
+
+### Updated
+- Exclude from Sentry alert AccessDeniedHttpException
+
+## [2.48.0] - 2020-09-24
+### Added
+- VIMEET-2217 - Activate / deactivate the networking tab by key date
+- VIMEET-2204 - Hidden contact menu
+- VIMEET-2203 - Request Automatically Transformed Into Meeting
+- VIMEET-2233 - Disable right click on webinar video
+
 ## [2.47.0] - 2020-09-11
 ### Added
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export

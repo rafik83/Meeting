@@ -8,7 +8,6 @@ use Proximum\Vimeet\Application\Command\Sheet\AddClick;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class VideoPlayCallbackAction
 {
@@ -29,12 +28,14 @@ class VideoPlayCallbackAction
     public function __invoke(
         Sheet $sheet,
         string $objectId,
-        UserDomain $userDomain
+        ?UserDomain $userDomain
     ): JsonResponse {
         if (
             !$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ) {
-            throw new AccessDeniedHttpException('Access denied to this sheet');
+            return new JsonResponse([
+                'status' => 'anonymous',
+            ]);
         }
 
         $user = $userDomain->getUser();
