@@ -1322,7 +1322,6 @@ class SheetRepository implements SheetRepositoryInterface
 
         $analyticsByUser = [];
 
-        /** @var Analytics $analytics */
         foreach ($queryBuilder->getQuery()->iterate(null, Query::HYDRATE_ARRAY) as $row) {
             $analytics = reset($row);
             foreach ($analytics['analytics.viewers'] as $userId) {
