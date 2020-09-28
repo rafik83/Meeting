@@ -1339,6 +1339,10 @@ class Sheet implements TraceableInterface
      */
     public function getAnalytics(): Analytics
     {
+        if (null === $this->analytics) {
+            $this->analytics = new Analytics();
+        }
+
         return $this->analytics;
     }
 }
