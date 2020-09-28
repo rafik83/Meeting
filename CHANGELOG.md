@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.50.2] - 2020-09-28
+### Fixed
+- Don't show website url if value is empty to avoid exception on redirect page
+
 ## [2.50.1] - 2020-09-28
 ### Fixed
 - Avoid exception by allowing null for some return types and arguments
