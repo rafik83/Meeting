@@ -47,26 +47,15 @@
             </div>
             <div class="networking_list">
                 <h2>Liste des participants</h2>
-
                 <table class="list list--users table table-striped table-bordered table-hover">
+                    {% for subscription in networkingView.subscriptions %}
                     <tr>
                         <td>
-                            <img src="/uploads/2019/10/5da074dbc78f4_0-1.jpg" alt="avatar">
-                            <p>prénom + nom + fonction + company name du participant</p>
+                            <img src="{{ subscription.userAvatar }}" alt="avatar">
+                            <p>{{ subscription.userFirstName }} + {{ subscription.userLastName }} + {{ subscription.userPosition }} + {{ subscription.userCompany }}</p>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <img src="/uploads/2019/10/5da074dbc78f4_0-1.jpg" alt="avatar">
-                            <p>prénom + nom + fonction + company name du participant</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="/uploads/2019/10/5da074dbc78f4_0-1.jpg" alt="avatar">
-                            <p>prénom + nom + fonction + company name du participant</p>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
