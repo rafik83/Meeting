@@ -32,7 +32,7 @@ class TaggedDataView
         string $type,
         bool $translatable,
         array $translations,
-        string $content,
+        ?string $content,
         string $tag,
         bool $isTextarea,
         ?string $originalUrl,
