@@ -19,6 +19,7 @@ RUN set -eux \
   libpng-dev \
   libxml2-dev \
   libxslt-dev \
+  libmagickwand-dev \
   unzip \
   msmtp \
   python-minimal \
@@ -54,7 +55,8 @@ RUN set -x \
   zip
 
 RUN pecl install redis apcu lzf \
-  && docker-php-ext-enable redis apcu lzf \
+  && yes '' | pecl install imagick \
+  && docker-php-ext-enable redis apcu lzf imagick \
   && rm -rf /tmp/pear
 
 # Install New Relic but disable it by default
@@ -124,6 +126,10 @@ RUN mkdir -p /var/www/.composer && \
     chown www-data:www-data /var/www/.yarnrc && \
     mkdir -p /var/www/.yarn && \
     chown www-data:www-data /var/www/.yarn
+
+# General symlink for the shared folder
+WORKDIR /var/www/proximum-vimeet.project.local
+RUN ln -sf /share/shared
 
 # Working directory
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs/current
