@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.50.1] - 2020-09-28
+### Fixed
+- Avoid exception by allowing null for some return types and arguments
+
 ## [2.50.0] - 2020-09-28
 ### Added
 - VIMEET-2206 - Add option to activate analytics depending on participation type
