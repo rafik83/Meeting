@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -491,4 +483,9 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function filterWithScheduledMeetings(array $sheets): array;
+
+    /**
+     * Get analytics (views and clicks) indexed by userId
+     */
+    public function getAnalyticsByUser(Event $event): array;
 }

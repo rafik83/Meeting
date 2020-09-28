@@ -33,7 +33,7 @@ class TaggedDataFactory
         TrackingUrlTransformer $trackingUrlTransformer
     ) {
         $this->templateDataFactory = $templateDataFactory;
-        $this->applyer             = $applyer;
+        $this->applyer = $applyer;
         $this->printTemplateResolver = $printTemplateResolver;
         $this->trackingUrlTransformer = $trackingUrlTransformer;
     }
