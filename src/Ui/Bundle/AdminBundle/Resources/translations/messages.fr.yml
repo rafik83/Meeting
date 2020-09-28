@@ -269,6 +269,7 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO Salon'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO SessionSalon'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 admin.extraParameter.type.crisp_site_id: 'Crisp site ID'
+admin.extraParameter.type.custom_button: 'Bouton custom'
 admin.extraParameter.type.leni_badge_link: 'LENI lien pour le badge'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
@@ -652,6 +653,10 @@ admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
 admin.participant.export.fields.user_id: 'ID User'
+admin.participant.export.fields.viewed_sheets: 'Nombre de fiches visitées'
+admin.participant.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques des fiches'
+admin.participant.export.fields.requested_meetings: 'Nombre de demande de rendez-vous faites'
+admin.participant.export.fields.scheduled_meetings: 'Nombre de rendez-vous programmés'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non

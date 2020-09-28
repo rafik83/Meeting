@@ -392,6 +392,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexp
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
+form.extra_parameter_create.children.type.choices.custom_button: 'Bouton custom'
 form.extra_parameter_create.children.type.choices.leni_badge_link: 'LENI lien pour le badge'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
 form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'

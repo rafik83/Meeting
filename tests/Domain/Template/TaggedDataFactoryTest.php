@@ -17,8 +17,8 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TrackingUrlTransformer;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -72,7 +72,9 @@ class TaggedDataFactoryTest extends TestCase
             ['fr' => 'Lorem ipsum ec74be5e fr', 'en' => 'Lorem ipsum ec74be5e en'],
             'Lorem ipsum ec74be5e fr',
             Tag::SHEET_TITLE,
-            false
+            false,
+            null,
+            '0aea62b2'
         );
         $expectedTaggedDataViewObject2 = new TaggedDataView(
             'editable-text',
@@ -80,12 +82,15 @@ class TaggedDataFactoryTest extends TestCase
             [],
             'Lorem ipsum ec74be5e fr',
             'sheet_generic_tag_1',
-            false
+            false,
+            null,
+            '0aea62b3'
         );
 
         // Mock
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $applyer = $this->prophesize(Applyer::class);
+        $trackingUrlTransformer = $this->prophesize(TrackingUrlTransformer::class);
 
         $templateDataFactory
             ->createRegistrationFromSheet($sheet, $locale)
@@ -103,7 +108,8 @@ class TaggedDataFactoryTest extends TestCase
         $taggedDataFactory = new TaggedDataFactory(
             $templateDataFactory->reveal(),
             $printTemplateResolver->reveal(),
-            $applyer->reveal()
+            $applyer->reveal(),
+            $trackingUrlTransformer->reveal()
         );
 
         $sheetTemplateData = $taggedDataFactory->buildTaggedDataView($sheet, $locale);

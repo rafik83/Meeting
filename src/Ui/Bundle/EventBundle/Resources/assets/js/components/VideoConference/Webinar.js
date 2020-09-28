@@ -712,7 +712,8 @@ Webinar.prototype.liveVideo = function () {
     const liveElement = document.createElement('iframe');
     liveElement.setAttribute('src', this.liveUrl);
     liveElement.setAttribute('frameborder', '0');
-    liveElement.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+    liveElement.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen');
+    liveElement.setAttribute('allowfullscreen', '1');
     this.layoutContainer.appendChild(liveElement);
 
     this.minimizeAllSubscribers();
