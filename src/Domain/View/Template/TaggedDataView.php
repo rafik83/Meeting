@@ -25,6 +25,9 @@ class TaggedDataView
     /** @var string|null */
     public $originalUrl;
 
+    /** @var string */
+    public $objectId;
+
     public function __construct(
         string $type,
         bool $translatable,
@@ -32,7 +35,8 @@ class TaggedDataView
         string $content,
         string $tag,
         bool $isTextarea,
-        ?string $originalUrl
+        ?string $originalUrl,
+        string $objectId
     ) {
         $this->type = $type;
         $this->translatable = $translatable;
@@ -41,5 +45,6 @@ class TaggedDataView
         $this->tag = $tag;
         $this->isTextarea = $isTextarea;
         $this->originalUrl = $originalUrl;
+        $this->objectId = $objectId;
     }
 }

@@ -77,4 +77,22 @@ class Analytics
         return $this->uniqueViews;
     }
 
+    public function getClickedElementsViews(string $objectId, int $index = null): array
+    {
+        if (!isset($this->clickedElements[$objectId])) {
+            return ['views' => 0, 'uniqueViews' => 0, 'viewers' => []];
+        }
+
+        $clickedViews = $this->clickedElements[$objectId];
+
+        if ($index !== null) {
+            if (!isset($clickedViews[$index])) {
+                return ['views' => 0, 'uniqueViews' => 0, 'viewers' => []];
+            }
+
+            return $clickedViews[$index];
+        }
+
+        return $clickedViews;
+    }
 }
