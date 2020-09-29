@@ -756,7 +756,7 @@ Webinar.prototype.screenshare = function () {
         this.publisherScreen = new Publisher(null);
         const publisherScreen = this.publisherScreen.create({
             videoSource: this.typeScreenShare,
-            publishAudio: true,
+            publishAudio: false,
             name: this.currentUserId,
             insertDefaultUI: false,
         });
