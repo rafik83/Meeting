@@ -46,4 +46,6 @@ data:
         {{- else }}
     REDIS_ENABLED: "false"
         {{- end }}
-
+  {{- if .Values.jenkins.agent.url }}
+    JENKINS_URL: {{ .Values.jenkins.agent.url }}
+  {{- end }}

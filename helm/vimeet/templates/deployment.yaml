@@ -33,6 +33,9 @@ spec:
       - ip: "127.0.0.1"
         hostnames:
         - "status.localhost"
+      - ip: "10.11.0.95"
+        hostnames:
+          - "optaplanner"
 {{- if .Values.initContainers }}
       initContainers:
 {{- range $key, $value := .Values.initContainers }}

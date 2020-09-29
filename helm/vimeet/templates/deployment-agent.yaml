@@ -2,25 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "vimeet.fullname" . }}-worker
+  name: {{ template "vimeet.fullname" . }}-agent
   labels:
     app: "{{ template "vimeet.name" . }}"
-    tier: worker
+    tier: agent
     chart: "{{ template "vimeet.chart" . }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
-  replicas: {{ .Values.hpaWorker.minReplicas }}
+  replicas: 1
   selector:
     matchLabels:
       app: {{ template "vimeet.name" . }}
-      tier: worker
+      tier: agent
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
         app: "{{ template "vimeet.name" . }}"
-        tier: worker
+        tier: agent
         chart: "{{ template "vimeet.chart" . }}"
         release: {{ .Release.Name | quote }}
 {{- if .Values.podAnnotations }}
@@ -48,11 +48,27 @@ spec:
         image: {{ template "vimeet.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         securityContext:
-          runAsUser: 33
+          runAsUser: 0
         command:
-          - "sh"
+          - "/bin/sh"
+        args:
           - "-c"
-          - {{ .Values.worker.command | quote }}
+          - |
+            apt-get update
+
+            mkdir -p /usr/share/man/man1
+
+            apt-get install -y openjdk-11-jre-headless wget
+
+            mkdir -p /opt/jenkins
+
+            cd /opt/jenkins
+
+            wget -qO agent.jar "$JENKINS_URL/jnlpJars/agent.jar"
+
+            echo "$JENKINS_SECRET" > secret-file
+
+            java -jar agent.jar -jnlpUrl $JENKINS_URL/computer/k8s/slave-agent.jnlp -secret @secret-file -workDir /opt/jenkins
         envFrom:
           - configMapRef:
               name: {{ template "vimeet.fullname" . }}
