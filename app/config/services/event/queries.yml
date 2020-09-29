@@ -116,7 +116,6 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }
 
     #
-<<<<<<< HEAD
     # Chat
     #
     Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler:
