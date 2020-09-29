@@ -12,7 +12,6 @@ function Chat(element, topicUrl){
     this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
     this.addChatFormList = this.chatContainer.querySelector('.chat-list');
 
-    this.chatInstance = null;
     this.chatLoaded = false;
 
     this.addChatForm.addEventListener('submit', this.submitChat.bind(this));

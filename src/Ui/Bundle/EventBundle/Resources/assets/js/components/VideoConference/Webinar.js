@@ -1197,7 +1197,6 @@ Webinar.prototype.toggleSideBar = function () {
 
     this.element.classList.remove('chat-opened');
     this.hideElement(this.sideContainer);
-    this.chat.chatInstance.hideTextChat();
     this.initQuestions();
     this.layout();
 };
