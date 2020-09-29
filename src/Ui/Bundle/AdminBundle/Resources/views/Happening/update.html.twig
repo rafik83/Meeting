@@ -64,11 +64,14 @@
         });
     </script>
     {% endif %}
-    <div class="help-happening hide">
-        {% if happening.hasWebinarSessionId %}
-        <p>Happening Webinar Session Id : {{ happening.getWebinarSessionId }}</p>
-        {% endif %}
-    </div>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="help-happening hide">
+            {% if happening.hasWebinarSessionId %}
+            <p>Happening Webinar Session Id : {{ happening.getWebinarSessionId }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock form_content %}
 
 {% block goback_link path('admin_happening_list', { 'event': event.id }) %}
