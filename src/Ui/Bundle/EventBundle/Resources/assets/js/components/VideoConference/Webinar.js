@@ -759,6 +759,7 @@ Webinar.prototype.screenshare = function () {
             publishAudio: true,
             name: this.currentUserId,
             insertDefaultUI: false,
+            maxResolution: { width: 1280, height: 720 },
         });
 
         const endSharingButton = document.createElement('button');
@@ -776,7 +777,6 @@ Webinar.prototype.screenshare = function () {
 
         this.screenElement.appendChild(screenCenteredElement);
         this.layoutContainer.appendChild(this.screenElement);
-
         this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
 
         this.minimizeAllSubscribers();
