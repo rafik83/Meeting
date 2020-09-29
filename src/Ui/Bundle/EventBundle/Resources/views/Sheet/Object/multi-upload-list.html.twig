@@ -2,7 +2,7 @@
 <ul class="list list--medias">
     {% for index, media in item.data|default([]) if media.path is defined and media.title is defined %}
         <li>
-            <a href="{{ path('event_catalog_sheet_follow_link', {
+            <a href="{{ url('event_catalog_sheet_follow_link', {
                     'sheet': sheet.id,
                     'objectId': item.uid,
                     'index': index,
