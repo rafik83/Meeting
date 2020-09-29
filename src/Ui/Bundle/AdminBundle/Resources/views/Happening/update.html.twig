@@ -36,7 +36,7 @@
     <hr>
     {{ form_row(form.invitationCode, {widget_columns: 2}) }}
     {{ form_row(form.questionAllowed) }}
-    {{ form_row(form.sidebarAllowed) }}    
+    {{ form_row(form.sidebarAllowed) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
 
@@ -64,6 +64,11 @@
         });
     </script>
     {% endif %}
+    <div class="help-happening hide">
+        {% if happening.hasWebinarSessionId %}
+        <p>Happening Webinar Session Id : {{ happening.getWebinarSessionId }}</p>
+        {% endif %}
+    </div>
 {% endblock form_content %}
 
 {% block goback_link path('admin_happening_list', { 'event': event.id }) %}
