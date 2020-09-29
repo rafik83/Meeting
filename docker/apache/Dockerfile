@@ -128,7 +128,7 @@ RUN mkdir -p /var/www/.composer && \
     chown www-data:www-data /var/www/.yarn
 
 # General symlink for the shared folder
-WORKDIR /var/www/proximum-vimeet.project.local
+WORKDIR /var/www/proximum-vimeet.project.local/htdocs
 RUN ln -sf /share/shared
 
 # Working directory
