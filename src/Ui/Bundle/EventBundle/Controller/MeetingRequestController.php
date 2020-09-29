@@ -459,7 +459,7 @@ class MeetingRequestController extends Controller
             /** @var ApproveRequestResult $approveRequestResult */
             $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if (null !== $approveRequestResult) {
+            if ($approveRequestResult->hasError || $approveRequestResult->meetingView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $approveRequestResult->meetingView,
                     'error'           => $approveRequestResult->hasError,
@@ -468,7 +468,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                null === $approveRequestResult || (null !== $approveRequestResult && null === $approveRequestResult->meetingView && !$approveRequestResult->hasError),
+                null === $approveRequestResult->meetingView && !$approveRequestResult->hasError,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,

@@ -1,6 +1,15 @@
+{% import '@Event/Sheet/macro.html.twig' as macros %}
 <div id="object-{{ uid }}" class="object object--button-link {{ 'style--' ~ item.style }}">
     <p>
-        <a href="{{ item.data['url']|default('#') }}" class="btn btn-primary"><i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}</a>
+        <a href="{{ item.data['url'] is defined?path('event_catalog_sheet_follow_link', {
+                'sheet': sheet.id,
+                'objectId': item.uid,
+                '_locale': locale
+            }):'#' }}" class="btn btn-primary">
+            <i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}
+
+            {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, item.uid) }}
+        </a>
     </p>
     <footer>
         {% if not isCatalog %}

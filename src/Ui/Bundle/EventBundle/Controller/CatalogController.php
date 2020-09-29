@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
@@ -15,13 +14,11 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
-use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
@@ -49,13 +46,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class CatalogController extends Controller
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function redirectAction(Request $request, EventDomain $eventDomain)
+    public function redirectAction(Request $request, EventDomain $eventDomain): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
@@ -69,16 +60,9 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param UserDomain  $userDomain
-     *
      * @throws NotFoundHttpException
-     *
-     * @return Response
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -251,14 +235,8 @@ class CatalogController extends Controller
 
     /**
      * Get localization asynchronously
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return Response
      */
-    public function searchLocalizationAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function searchLocalizationAction(Request $request, EventDomain $eventDomain, Sheet $sheet): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException();
@@ -285,14 +263,7 @@ class CatalogController extends Controller
         return new JsonResponse($localizationView);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return JsonResponse
-     */
-    public function searchKeywordsAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function searchKeywordsAction(Request $request, EventDomain $eventDomain, Sheet $sheet): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException();
@@ -317,151 +288,6 @@ class CatalogController extends Controller
         );
 
         return new JsonResponse($keywordView);
-    }
-
-    /**
-     * Display a sheet.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param int         $sheetToDisplay id of Sheet
-     * @param UserDomain  $userDomain
-     *
-     * @return Response
-     */
-    public function displaySheetAction(
-        Request $request,
-        EventDomain $eventDomain,
-        Sheet $sheet,
-        int $sheetToDisplay,
-        UserDomain $userDomain
-    ) {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $user = $userDomain->getUser();
-        $event = $eventDomain->getEvent();
-        $locale = $request->getLocale();
-
-        if ($event !== $sheet->getEvent()) {
-            throw $this->createAccessDeniedException('Sheet not in this event');
-        }
-
-        if (!$sheet->isInInternalCatalog()) {
-            throw $this->createAccessDeniedException('Sheet not in catalog');
-        }
-
-        $sheetToDisplay = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetById($sheetToDisplay);
-
-        if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
-            throw $this->createAccessDeniedException('Sheet not found');
-        }
-
-        if (!$sheetToDisplay->isInInternalCatalog()) {
-            throw $this->createAccessDeniedException('Sheet to display not in catalog');
-        }
-
-        $canSeeSheet = $this->get(CanSeeSheet::class);
-
-        if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
-            throw $this->createNotFoundException('You do not have the right to see this sheet');
-        }
-
-        $rules = $this
-            ->get('repository.rule_repository')
-            ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
-
-        $this->get('command.sheet.sheet_viewed.add_handler')->handle(new Add($user, $sheetToDisplay));
-
-        try {
-            list($nomenclatures, $participants, $taggedData) = $this
-                ->get('template.sheet.sheet_info_getter')
-                ->sheetInfos(
-                    $eventDomain->getEvent(),
-                    $sheet,
-                    $sheetToDisplay,
-                    $user,
-                    $locale
-                );
-        } catch (AccessDeniedException $exception) {
-            throw $this->createAccessDeniedException();
-        }
-
-        // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')
-            ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
-
-        $ruleApplyer = $this->get('domain.rule.applyer');
-        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
-        $ruleApplyer->applyRuleForCardList($participants, $rules);
-
-        $isMeetingPublished           = false;
-        $isMeetingRequestUpdateLocked = false;
-        $isMeetingRequestClosed       = false;
-        $isAnsweringMeetingRequestClosed = false;
-
-        if ($sheet === $sheetToDisplay) {
-            $meetingRequest = null;
-        } else {
-            $meetingRequest = $this
-                ->get('vimeet_infrastructure.repository.meeting.request_repository')
-                ->getRequestBetweenSheets($sheetToDisplay, $sheet);
-
-            $isMeetingPublished = $this
-                ->get('domain.key_dates.checker.meeting_published_access_checker')
-                ->allowedToAccess($event);
-
-            $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
-            $isMeetingRequestClosed          = !$this
-                ->get('domain.key_dates.checker.meeting_request_access_checker')
-                ->allowedToAccess($event)
-            ;
-            $isAnsweringMeetingRequestClosed = !$this
-                ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
-                ->allowedToAccess($event)
-            ;
-        }
-
-        $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
-            ->handle($sheet, $user, $locale);
-
-        if (true === $isPhoneValidationRequired) {
-            $participant = $sheet->getUserParticipant($user);
-
-            if (null !== $participant) {
-                $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
-                    'sheet'       => $sheet->getId(),
-                    'participant' => $participant->getId(),
-                    'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
-                        'sheet'          => $sheet->getId(),
-                        'sheetToDisplay' => $sheetToDisplay->getId(),
-                    ]),
-                ]);
-            }
-        }
-
-        return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
-            'event'                           => $event,
-            'sheet'                           => $sheet,
-            'participant'                     => $sheet->getUserParticipant($user),
-            'sheetToDisplay'                  => $sheetToDisplay,
-            'taggedData'                      => $taggedData,
-            'locale'                          => $locale,
-            'nomenclatures'                   => $nomenclatures,
-            'participants'                    => $participants,
-            'templateData'                    => $templateData,
-            'meetingRequest'                  => $meetingRequest,
-            'isMeetingPublished'              => $isMeetingPublished,
-            'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
-            'isMeetingRequestClosed'          => $isMeetingRequestClosed,
-            'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
-            'isPhoneValidationRequired'       => $isPhoneValidationRequired,
-            'phoneValidationLink'             => $phoneValidationLink ?? null,
-            'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
-            'isCatalog'                       => true,
-        ]);
     }
 
     /**
@@ -518,24 +344,10 @@ class CatalogController extends Controller
         ]);
     }
 
-    /**
-     * @param Event                    $event
-     * @param Sheet                    $sheet
-     * @param string                   $locale
-     * @param array                    $filters
-     * @param array                    $currentAggregations
-     * @param CatalogFilterViewsResult $catalogFilterViewsResult
-     * @param bool                     $filterAvailableSlotIds
-     * @param MeetingSlot|null         $specificSlot
-     * @param array                    $availableSlotsIds
-     * @param array                    $sheetsToExclude
-     *
-     * @return FormInterface
-     */
     private function getFilteredSearchForm(
         Event $event,
         Sheet $sheet,
-        $locale,
+        string $locale,
         array $filters,
         array $currentAggregations,
         CatalogFilterViewsResult $catalogFilterViewsResult,
@@ -543,7 +355,7 @@ class CatalogController extends Controller
         MeetingSlot $specificSlot = null,
         array $availableSlotsIds = [],
         array $sheetsToExclude = []
-    ) {
+    ): FormInterface {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
             new FilteredFieldsQuery(

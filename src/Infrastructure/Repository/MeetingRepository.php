@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -28,26 +20,18 @@ use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\MeetingQueryBuilder;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @var Paginator
-     */
+    /** @var Paginator */
     private $paginator;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @param EntityManager    $entityManager
-     * @param Paginator        $paginator
-     * @param SheetInfoGuesser $sheetInfoGuesser
-     */
+    /** @var array|null $scheduledMeetingsCount used to preload results in memory */
+    private $scheduledMeetingsCount;
+
     public function __construct(
         EntityManager $entityManager,
         Paginator $paginator,
@@ -981,5 +965,43 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function loadParticipantMeetingsCount(array $participantIds): void
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('from_participant.id, COUNT(meeting.id) as nb')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromParticipants', 'from_participant', 'WITH', 'from_participant IN (:participants)')
+            ->setParameter('participants', $participantIds)
+            ->groupBy('from_participant')
+        ;
+        $participantsFromMeetingsCount = array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('to_participants.id, COUNT(meeting.id) as nb')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.toParticipants', 'to_participants', 'WITH', 'to_participants IN (:participants)')
+            ->setParameter('participants', $participantIds)
+            ->groupBy('to_participants')
+        ;
+
+        $this->scheduledMeetingsCount = array_reduce($queryBuilder->getQuery()->getArrayResult(), function ($carry, $row) {
+            $carry[$row['id']] = ($carry[$row['id']] ?? 0) + $row['nb'];
+            return $carry;
+        }, $participantsFromMeetingsCount);
+    }
+
+    public function getParticipantMeetingsCount(Participant $participant): int
+    {
+        if (null === $this->scheduledMeetingsCount) {
+            throw new \RuntimeException('Meeting counts not loaded, loadParticipantMeetingsCount should be called before this method');
+        }
+
+        return $this->scheduledMeetingsCount[$participant->getId()]??0;
     }
 }

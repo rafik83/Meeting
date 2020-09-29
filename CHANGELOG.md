@@ -5,6 +5,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.50.4] - 2020-09-28
+### Added
+- Disable right click on webinar video for LM
+
+## [2.50.3] - 2020-09-28
+### Fixed
+- Add _locale parameters in links to avoid exception when pdf is generated with cli
+
+## [2.50.2] - 2020-09-28
+### Fixed
+- Don't show website url if value is empty to avoid exception on redirect page
+
+## [2.50.1] - 2020-09-28
+### Fixed
+- Avoid exception by allowing null for some return types and arguments
+
+## [2.50.0] - 2020-09-28
+### Added
+- VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2205 - Display analytics on sheet
+- VIMEET-2206 - Add analytics and number of meeting requests in participants export
+
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
+
+## [2.49.1] - 2020-09-25
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available (side effect of VIMEET-2203)
+
 ## [2.49.0] - 2020-09-25
 ### Added
 - VIMEET-2228 - Button custom menu

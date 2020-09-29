@@ -123,5 +123,7 @@ class ExportParticipantCommand extends Command
         );
 
         $this->exportHandler->handle($command);
+
+        $output->writeln('<info>Memory peak usage: '.memory_get_peak_usage().'</info>');
     }
 }

@@ -179,6 +179,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
 
+    Proximum\Vimeet\Application\Command\Sheet\AddViewHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@impersonating_user_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddView }
+
+    Proximum\Vimeet\Application\Command\Sheet\AddClickHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@impersonating_user_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddClick }
+
     #
     # Chat
     #
@@ -274,4 +288,3 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }
-
