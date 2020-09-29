@@ -1,7 +1,7 @@
 {% import '@Event/Sheet/macro.html.twig' as macros %}
 <div id="object-{{ uid }}" class="object object--button-link {{ 'style--' ~ item.style }}">
     <p>
-        <a href="{{ item.data['url'] is defined?path('event_catalog_sheet_follow_link', {
+        <a href="{{ item.data['url'] is defined?url('event_catalog_sheet_follow_link', {
                 'sheet': sheet.id,
                 'objectId': item.uid,
                 '_locale': locale
