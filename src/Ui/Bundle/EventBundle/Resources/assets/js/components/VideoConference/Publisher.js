@@ -23,8 +23,8 @@ Publisher.prototype.create = function(options) {
   var publisherOptions = {
     insertMode: 'append',
     showControls: false,
-    width: '100%',
-    height: '100%',
+    width: '1280',
+    height: '720',
   };
 
   publisherOptions = Object.assign(options, publisherOptions);
