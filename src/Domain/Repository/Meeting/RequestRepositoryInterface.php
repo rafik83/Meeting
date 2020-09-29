@@ -407,5 +407,6 @@ interface RequestRepositoryInterface
     public function getDashboardRequestViewsByEvent(Event $event): array;
 
     public function loadParticipantRequestsCount(array $participantIds): void;
+
     public function getParticipantRequestsCount(Participant $participant): int;
 }
