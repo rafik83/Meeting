@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.50.6] - 2020-09-29
+### Fixed
+- Use absolute urls in sheet for pdf export
+
 ## [2.50.5] - 2020-09-29
 ### Fixed
 - Limit resolution for webinar screen sharing
