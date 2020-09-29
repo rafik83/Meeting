@@ -21,7 +21,7 @@ class TrackingUrlTransformerTest extends TestCase
         $object->getUid()->willReturn(2);
 
         $router = $this->prophesize(RouterInterface::class);
-        $router->generate(
+        $router->generateAbsoluteUrl(
             'event_catalog_sheet_follow_link',
             ['sheet' => 1, 'objectId' => 2, '_locale'=>'fr']
         )->shouldBeCalled()->willReturn('http://example.org');
@@ -50,7 +50,7 @@ class TrackingUrlTransformerTest extends TestCase
 
         $router = $this->prophesize(RouterInterface::class);
         $router->getContext()->willReturn($requestContext->reveal());
-        $router->generate(
+        $router->generateAbsoluteUrl(
             'event_catalog_sheet_follow_link',
             ['sheet' => 1, 'objectId' => 2, '_locale' => 'cn']
         )->shouldBeCalled()->willReturn('http://example.org');

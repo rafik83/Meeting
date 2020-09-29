@@ -24,7 +24,7 @@ class TrackingUrlTransformer
             $locale = $sheet->getEvent()->getLocaleFallback();
         }
 
-        return $this->router->generate(
+        return $this->router->generateAbsoluteUrl(
             'event_catalog_sheet_follow_link',
             ['sheet' => $sheet->getId(), 'objectId' => $object->getUid(), '_locale' => $locale]
         );
