@@ -12,24 +12,33 @@ use Symfony\Component\Routing\RequestContext;
 
 class TrackingUrlTransformerTest extends TestCase
 {
-    public function testRequestContextHasLocale()
+    public function testRequestContextHasLocale(): void
     {
+        $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
         $object = $this->prophesize(Url::class);
 
         $sheet->getId()->willReturn(1);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
         $object->getUid()->willReturn(2);
 
         $router = $this->prophesize(RouterInterface::class);
-        $router->generateAbsoluteUrl(
-            'event_catalog_sheet_follow_link',
-            ['sheet' => 1, 'objectId' => 2, '_locale'=>'fr']
-        )->shouldBeCalled()->willReturn('http://example.org');
+
         $context = $this->prophesize(RequestContext::class);
         $context->getParameter('_locale')->willReturn('fr');
         $router->getContext()->shouldBeCalled()->willReturn($context->reveal());
+        $eventUrlGenerator = $this->prophesize(Event\EventUrlGeneratorInterface::class);
 
-        $transformer = new TrackingUrlTransformer($router->reveal());
+        $eventUrlGenerator->generateEventAbsoluteUrl(
+            $event->reveal(),
+            'event_catalog_sheet_follow_link',
+            ['sheet' => 1, 'objectId' => 2, '_locale'=>'fr']
+        )->shouldBeCalled()->willReturn('http://example.org');
+
+        $transformer = new TrackingUrlTransformer(
+            $router->reveal(),
+            $eventUrlGenerator->reveal()
+        );
         $url = $transformer->transform($sheet->reveal(), $object->reveal());
         $this->assertEquals('http://example.org', $url);
     }
@@ -49,13 +58,16 @@ class TrackingUrlTransformerTest extends TestCase
         $requestContext->getParameter('_locale')->willReturn(null);
 
         $router = $this->prophesize(RouterInterface::class);
+        $eventUrlGenerator = $this->prophesize(Event\EventUrlGeneratorInterface::class);
+
         $router->getContext()->willReturn($requestContext->reveal());
-        $router->generateAbsoluteUrl(
+        $eventUrlGenerator->generateEventAbsoluteUrl(
+            $event->reveal(),
             'event_catalog_sheet_follow_link',
             ['sheet' => 1, 'objectId' => 2, '_locale' => 'cn']
         )->shouldBeCalled()->willReturn('http://example.org');
 
-        $transformer = new TrackingUrlTransformer($router->reveal());
+        $transformer = new TrackingUrlTransformer($router->reveal(), $eventUrlGenerator->reveal());
         $url = $transformer->transform($sheet->reveal(), $object->reveal());
         $this->assertEquals('http://example.org', $url);
     }
