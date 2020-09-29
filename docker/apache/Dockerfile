@@ -148,6 +148,7 @@ RUN make install@prod
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
     rm -f web/*_dev.php && \
+    rm -f web/*_test.php && \
     rm -rf web/uploads && \
     rm -rf web/css && \
     rm -rf var/logs
