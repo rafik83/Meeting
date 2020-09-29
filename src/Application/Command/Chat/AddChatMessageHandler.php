@@ -44,7 +44,7 @@ class AddChatMessageHandler
             throw new ChatMessageNotAllowedException('Access denied to this chat messages');
         }
 
-        $chatMessage = $this->messageRepository->add(
+        $this->messageRepository->add(
             new ChatMessage(
                 $command->object,
                 $command->user,
