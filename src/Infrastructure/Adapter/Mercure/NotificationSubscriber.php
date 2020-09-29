@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use InvalidArgumentException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
@@ -17,10 +18,14 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
     /** @var string */
     private $mercureSubscriberKey;
 
-    public function __construct(string $mercureHubUrl, string $mercureSubscriberKey)
+    /** @var RouterInterface */
+    private $routerAdapter;
+
+    public function __construct(string $mercureHubUrl, string $mercureSubscriberKey, RouterInterface $routerAdapter)
     {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercureSubscriberKey = $mercureSubscriberKey;
+        $this->routerAdapter = $routerAdapter;
     }
 
     public function getUrl(): string
@@ -50,6 +55,11 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
             throw new InvalidArgumentException('Types array cannot be empty');
         }
 
+        $avatar = $user->getAvatar();
+        if ($avatar === null) {
+            $avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $user->getAccount()->getCompleteName()]);
+        }
+
         return JWT::encode([
             'mercure' => [
                 'subscriber' => array_map(function ($type) use ($event) {
@@ -60,7 +70,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
                     'userLastName' => $user->getLastName(),
                     'userFirstName' => $user->getFirstName(),
                     'userPosition' => $user->getPosition(),
-                    'userAvatar' => $user->getAvatar(),
+                    'userAvatar' => $avatar,
                     'userCompany' => $user->getAccount()->getCompany()
                 ]
             ]

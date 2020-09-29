@@ -51,8 +51,9 @@
                     {% for subscription in networkingView.subscriptions %}
                     <tr>
                         <td>
-                            <img src="{{ subscription.userAvatar }}" alt="avatar">
-                            <p>{{ subscription.userFirstName }} + {{ subscription.userLastName }} + {{ subscription.userPosition }} + {{ subscription.userCompany }}</p>
+                            <img src="{{ subscription.userAvatar }}">
+                            <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
+
                         </td>
                     </tr>
                     {% endfor %}

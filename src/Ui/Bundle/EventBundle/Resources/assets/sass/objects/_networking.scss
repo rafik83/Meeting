@@ -53,6 +53,28 @@
     margin-left: -15px;
   }
 
+  td {
+    display: flex;
+
+    p {
+      align-items: flex-end;
+      display: flex;
+      margin: 0;
+
+      em {
+        padding-left: 5px;
+      }
+    }
+
+    img {
+      margin-right: 10px;
+      display: inline-block;
+      height: 32px;
+      object-fit: cover;
+      width: 32px;
+      border-radius: 50%;
+    }
+  }
   .avatar {
     overflow: hidden;
     width: 70px;
@@ -60,6 +82,7 @@
     margin: 0 auto 10px;
     border-radius: 100%;
     background: $bg-container-darkened-color;
+
 
     > img {
       display: block;

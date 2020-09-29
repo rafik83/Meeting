@@ -156,6 +156,7 @@ Chat.prototype.initChat = function () {
             const imgEl = avatarEl.appendChild(document.createElement('img'));
             imgEl.setAttribute('src', item.avatar);
 
+
             for (let smileyCode in element) {
                 const emoticonBtn = document.createElement('i');
                 emoticonBtn.classList.add('glyphicon', 'btn', 'btn-xs');
