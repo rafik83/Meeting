@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:sms-reminder:send",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-sms-reminder-send",
+    "cronEnabled": "true",
+    "cronExpression": "H/10 * * * *",
+    "cronCommand": "bin/console vimeet:sms-reminder:send --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:sms-reminder:send",
+  "stages": []
+}

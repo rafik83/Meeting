@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:api:leni-import-data",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-leni-import-data",
+    "cronEnabled": "true",
+    "cronExpression": "H/10 * * * *",
+    "cronCommand": "bin/console vimeet:api:leni-get-call --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:api:leni-import-data",
+  "stages": []
+}

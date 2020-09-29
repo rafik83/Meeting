@@ -2,11 +2,13 @@
 
 https://www.spinnaker.io/setup/spin/
 
+Note: spin CLI >= 1.18.x is required for Spinnaker >= 1.22.x
+
 # Get the spin CLI credential file
 
 ```
-gsutil cp gs://vimeet-config-staging/spin.yaml spin-staging.yaml
-gsutil cp gs://vimeet-config-prod/spin.yaml spin-prod.yaml
+gsutil cp gs://vimeet-values-staging/spin-staging.yaml spin-staging.yaml
+gsutil cp gs://vimeet-values-prod/spin-prod.yaml spin-prod.yaml
 ```
 
 # Save updated pipelines and pipeline templates

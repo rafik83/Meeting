@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:user:update-phone-blacklist",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-user-update-phone-blacklist",
+    "cronEnabled": "true",
+    "cronExpression": "@hourly",
+    "cronCommand": "bin/console vimeet:user:update-phone-blacklist --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:user:update-phone-blacklist",
+  "stages": []
+}

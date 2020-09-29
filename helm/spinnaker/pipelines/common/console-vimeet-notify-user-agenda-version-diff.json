@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:user:notify-agenda-version-diff",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-notify-user-agenda-version-diff",
+    "cronEnabled": "true",
+    "cronExpression": "H/5 * * * *",
+    "cronCommand": "bin/console vimeet:user:notify-agenda-version-diff --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:user:notify-agenda-version-diff",
+  "stages": []
+}

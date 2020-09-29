@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:event:generate-agenda-versions-for-events",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-generate-agenda-versions",
+    "cronEnabled": "true",
+    "cronExpression": "H 5 * * *",
+    "cronCommand": "bin/console vimeet:event:generate-agenda-versions-for-events --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:event:generate-agenda-versions-for-events",
+  "stages": []
+}
