@@ -37,7 +37,7 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
-        $needParticipantId = strpos('%participantId%', $parameters['link']) !== false;
+        $needParticipantId = strpos($parameters['link'], '%participantId%') !== false;
 
         $participant = $query->sheet->getUserParticipant($query->user);
 
@@ -46,7 +46,7 @@ class UserCtaSubmenuViewQueryHandler
         }
 
         $placeholders = ['%userId%', '%userEmail%', '%participantId%'];
-        $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail()), $participant->getId()];
+        $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail()), $participant ? $participant->getId() : null];
         $link = str_replace($placeholders, $values, $parameters['link']);
 
         return new SubmenuButtonView(

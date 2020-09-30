@@ -70,6 +70,57 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
 
+    public function testCustomButtonWhenParticipantIdNotNeeded(): void
+    {
+        $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(42);
+        $user->getEmail()->willReturn('test@yahoo.fr');
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $type->getId()->shouldBeCalled()->willReturn(746);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $sheet->getUserParticipant($user->reveal())->willReturn(null);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter->getValue()->shouldBeCalled()->willReturn('
+        {
+             "link": "https://example.net/%userId%/%userEmail%",
+             "concerned_type_ids": [689, 746, 747, 748, 749, 750],
+             "button-label": {
+             "fr": "Mon bouton",
+             "en": "My button"
+             }
+        }');
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+
+        $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
+            $extraParameterRepository->reveal()
+        );
+
+        $result = $userCtaSubmenuViewQueryHandler->handle(
+            new UserCtaSubmenuViewQuery(
+                $user->reveal(),
+                $event->reveal(),
+                'fr',
+                $sheet->reveal()
+            )
+        );
+
+        $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
+            Category::CUSTOM_BUTTON_ICON,
+            'Mon bouton',
+            'https://example.net/42/test%40yahoo.fr',
+            false,
+            null,
+            false,
+            ['target' => '_blank']
+        );
+
+        self::assertEquals($expectedCustomButtonSubmenuButtonView, $result);
+    }
+
     public function testCustomButtonNullWhenTypeNotConcerned(): void
     {
         $type = $this->prophesize(Type::class);
@@ -117,6 +168,47 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+
+        $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
+            $extraParameterRepository->reveal()
+        );
+
+        $result = $userCtaSubmenuViewQueryHandler->handle(
+            new UserCtaSubmenuViewQuery(
+                $user->reveal(),
+                $event->reveal(),
+                'fr',
+                $sheet->reveal()
+            )
+        );
+
+        self::assertNull($result);
+    }
+
+    public function testCustomButtonNullWhenNotParticipant(): void
+    {
+        $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(42);
+        $user->getEmail()->willReturn('test@yahoo.fr');
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $type->getId()->shouldBeCalled()->willReturn(746);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $sheet->getUserParticipant($user->reveal())->willReturn(null);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter->getValue()->shouldBeCalled()->willReturn('
+        {
+             "link": "https://example.net/%userId%/%userEmail%/%participantId%",
+             "concerned_type_ids": [689, 746, 747, 748, 749, 750],
+             "button-label": {
+             "fr": "Mon bouton",
+             "en": "My button"
+             }
+        }');
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal()
