@@ -39,7 +39,7 @@ class UserCtaSubmenuViewQueryHandler
 
         $needParticipantId = strpos($parameters['link'], '%participantId%') !== false;
 
-        $participant = $query->sheet->getUserParticipant($query->user);
+        $participant = $needParticipantId ? $query->sheet->getUserParticipant($query->user) : null;
 
         if ($needParticipantId && $participant === null) {
             return null;
