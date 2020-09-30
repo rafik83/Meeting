@@ -52,6 +52,25 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
             - '@adapter.local_file_storage'
 
+    #
+    # Webinar Notifications (Mercure)
+    #
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher:
+        arguments:
+            - '%mercure_hub_publisher_url%'
+            - '%mercure_publisher_key%'
+            - '@adapter.http_adapter'
+
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber:
+        arguments:
+            - '%mercure_hub_subscriber_url%'
+            - '%mercure_subscriber_key%'
+
+    #
+    # Auto avatar (with initials)
+    #
+    Proximum\Vimeet\Infrastructure\Adapter\AvatarAdapter: ~
+
     Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
