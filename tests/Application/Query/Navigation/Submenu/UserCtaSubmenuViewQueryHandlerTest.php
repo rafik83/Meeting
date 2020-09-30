@@ -70,7 +70,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
 
-    public function testCustomButtonNull(): void
+    public function testCustomButtonNullWhenTypeNotConcerned(): void
     {
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(701);
@@ -107,5 +107,30 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         );
 
         $this->assertEquals(null, $result);
+    }
+
+    public function testCustomButtonNullWhenNotConfigured(): void
+    {
+        $sheet = $this->prophesize(Sheet::class);
+        $user = $this->prophesize(User::class);
+        $event = $this->prophesize(Event::class);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+
+        $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
+            $extraParameterRepository->reveal()
+        );
+
+        $result = $userCtaSubmenuViewQueryHandler->handle(
+            new UserCtaSubmenuViewQuery(
+                $user->reveal(),
+                $event->reveal(),
+                'fr',
+                $sheet->reveal()
+            )
+        );
+
+        self::assertNull($result);
     }
 }
