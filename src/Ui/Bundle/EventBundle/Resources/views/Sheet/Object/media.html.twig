@@ -15,7 +15,10 @@
                     {% else %}
                         <i class="icon-Document_1"></i>
                     {% endif %}
-                    <a href="{{ url('event_catalog_sheet_follow_link', {
+                    <a href="{{ eventUrl(
+                        sheet.event,
+                        'event_catalog_sheet_follow_link',
+                        {
                             'sheet': sheet.id,
                             'objectId': item.uid,
                             'index': index,

@@ -3120,6 +3120,7 @@ services:
     Proximum\Vimeet\Domain\Template\TrackingUrlTransformer:
         arguments:
             - '@adapter.router'
+            - '@adapter.event_url_generator'
 
     template.registration.registration_template_validator:
         class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
