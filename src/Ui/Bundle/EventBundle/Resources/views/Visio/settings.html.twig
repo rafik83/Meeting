@@ -4,6 +4,20 @@
     </header>
 
     <div class="main__content">
+        <div id="visio-chrome-required" class="row hide">
+            <div class="col-md-12 text-center">
+                <p class="important fail">
+                    <strong>{{ 'event.visio.settings.chromeRequired'|trans }}</strong>
+                </p>
+                <p>
+                    <a href="https://www.google.com/chrome/" target="_blank">{{ 'event.visio.settings.chromeInstall'|trans }}</a>
+                </p>
+                <p>
+                    <input type="checkbox" id="visio-chrome-required-bypass">
+                    <small class="font-italic pointer"><em>{{ 'event.visio.settings.chromeInstallUnavailable'|trans }}</em></small>
+                </p>
+            </div>
+        </div>
         <div id="visio-request-permission" class="row">
             <div class="col-md-12 text-center">
                 <p>{{ 'event.visio.settings.askPermissionsDescription'|trans|nl2br }}</p>

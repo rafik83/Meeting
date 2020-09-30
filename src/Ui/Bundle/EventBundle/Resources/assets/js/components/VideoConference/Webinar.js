@@ -228,7 +228,7 @@ function Webinar(element, isSpeaker) {
       this.onSettingsValidate.bind(this),
       true
     );
-    this.settings.init();
+    this.settings.init(true);
 }
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {

@@ -215,6 +215,9 @@ event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions p
 event.visio.settings.askPermissionsDeviceNotFound: 'Une erreur s''est produite lors de la demande d''acceptation des permissions, vérifiez que vous disposez bien d''au moins un micro branché à votre terminal.'
 event.visio.settings.askPermissionsMicNotFound: 'Vous devez au moins avoir un micro branché pour rejoindre un rendez-vous visio. Branchez ou activez un micro sur votre terminal et rafraichissez la page pour rejoindre le rendez-vous.'
 event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre un rendez-vous visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la posibilité de les désactiver à n'importe quel moment du rendez-vous."
+event.visio.settings.chromeRequired: 'Pour une diffusion optimale, merci d''utiliser le navigateur Chrome.'
+event.visio.settings.chromeInstall: 'Installer Chrome.'
+event.visio.settings.chromeInstallUnavailable: 'Je ne peux pas installer Chrome'
 event.visio.settings.preview: 'Aperçu de vos règlages :'
 event.visio.settings.selectAudio: 'Sélectionner votre micro :'
 event.visio.settings.selectVideo: 'Sélectionner votre caméra :'
