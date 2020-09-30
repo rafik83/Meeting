@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -18,20 +19,23 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
 {
     public function testCustomButton(): void
     {
-        $type = $this->prophesize(Type::class);
-        $type->getId()->shouldBeCalled()->willReturn(746);
-        $sheet = $this->prophesize(Sheet::class);
-        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $participant = $this->prophesize(Participant::class);
+        $participant->getId()->shouldBeCalled()->willReturn(123);
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(42);
         $user->getEmail()->willReturn('test@yahoo.fr');
         $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $type->getId()->shouldBeCalled()->willReturn(746);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
+        $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameter = $this->prophesize(Event\ExtraParameter::class);
         $extraParameter->getValue()->shouldBeCalled()->willReturn('
         {
-             "link": "https://example.net/%userId%/%userEmail%",
+             "link": "https://example.net/%userId%/%userEmail%/%participantId%",
              "concerned_type_ids": [689, 746, 747, 748, 749, 750],
              "button-label": {
              "fr": "Mon bouton",
@@ -56,7 +60,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
         Category::CUSTOM_BUTTON_ICON,
             'Mon bouton',
-            'https://example.net/42/test%40yahoo.fr',
+            'https://example.net/42/test%40yahoo.fr/123',
             false,
             null,
             false,

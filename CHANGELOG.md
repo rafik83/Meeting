@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV255 - move question css to event guideline css
 - MV255 - separate button chat and button question
 
+### Added
+- VIMEET-2236 - Add participant id for custom button
+
 ## [2.57.0] - 2010-10-13
 ### Added
 - VIMEET-2218 - Networking tab and page

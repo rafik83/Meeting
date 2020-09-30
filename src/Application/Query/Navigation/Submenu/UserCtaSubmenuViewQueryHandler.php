@@ -4,8 +4,8 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class UserCtaSubmenuViewQueryHandler
 {
@@ -37,8 +37,16 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
-        $placeholders = ['%userId%', '%userEmail%'];
-        $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail())];
+        $needParticipantId = strpos('%participantId%', $parameters['link']) !== false;
+
+        $participant = $query->sheet->getUserParticipant($query->user);
+
+        if ($needParticipantId && $participant === null) {
+            return null;
+        }
+
+        $placeholders = ['%userId%', '%userEmail%', '%participantId%'];
+        $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail()), $participant->getId()];
         $link = str_replace($placeholders, $values, $parameters['link']);
 
         return new SubmenuButtonView(
