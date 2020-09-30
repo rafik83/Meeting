@@ -35,6 +35,7 @@ import SortParticipants from './components/_SortParticipants';
 import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
 import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
 import SheetVideo from './components/_SheetVideo';
+import UserConnectionRegister from './components/_UserConnectionRegister';
 
 import 'bootstrap';
 import 'elao-form.js';

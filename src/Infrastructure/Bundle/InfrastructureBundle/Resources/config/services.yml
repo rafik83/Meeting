@@ -7217,6 +7217,13 @@ services:
     #
     # Networking
     #
+    Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'

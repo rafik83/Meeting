@@ -33,7 +33,7 @@ class NetworkingQueryHandler
 
         return new NetworkingView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user, [AbstractNotification::TYPE_QUESTIONS]),
+            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic,
             $this->notificationSubscriptions->getSubscriptions($topic)
         );
