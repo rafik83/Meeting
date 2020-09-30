@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.51.0] - 2020-09-30
+### Added
+- VIMEET-1925 - New version of chat and questions decoupled from Tokbox
+
 ## [2.50.6] - 2020-09-29
 ### Fixed
 - Use absolute urls in sheet for pdf export
@@ -34,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2206 - Add option to activate analytics depending on participation type
 - VIMEET-2205 - Display analytics on sheet
-- VIMEET-2206 - Add analytics and number of meeting requests in participants export
+- VIMEET-2207 - Add analytics and number of meeting requests in participants export
 
 ### Fixed
 - Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
@@ -73,7 +77,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
 - VIMEET-2156 - Remove explicit error about email on login (security)
-- VIMEET-1925 - New version of chat and questions decoupled from Tokbox
 
 ## [2.46.0] - 2020-09-10
 ### Added
