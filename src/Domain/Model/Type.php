@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -117,6 +109,12 @@ class Type implements WhoInterface, TypeInterface
 
     /** @var bool */
     public $canSubmitValidation = true;
+
+    /** @var bool */
+    public $displayAnalyticsOnSheet = false;
+
+    /** @var bool */
+    public $displayAnalyticsOnMeetingList = false;
 
     public function __construct(Event $event)
     {
@@ -462,7 +460,9 @@ class Type implements WhoInterface, TypeInterface
         ?int $numberMaxOfMeetingsPerSheet = null,
         bool $canEvaluateMeeting = true,
         bool $mustEvaluateMeeting = false,
-        bool $canSubmitValidation = true
+        bool $canSubmitValidation = true,
+        bool $displayAnalyticsOnSheet = false,
+        bool $displayAnalyticsOnMeetingList = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -480,6 +480,8 @@ class Type implements WhoInterface, TypeInterface
         $this->canEvaluateMeeting = $canEvaluateMeeting;
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
         $this->canSubmitValidation = $canSubmitValidation;
+        $this->displayAnalyticsOnSheet = $displayAnalyticsOnSheet;
+        $this->displayAnalyticsOnMeetingList = $displayAnalyticsOnMeetingList;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int

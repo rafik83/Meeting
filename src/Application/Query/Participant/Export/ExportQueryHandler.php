@@ -1,19 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -36,28 +30,37 @@ class ExportQueryHandler
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         ProductRepositoryInterface $productRepository,
-        HappeningRepositoryInterface $happeningRepository
+        HappeningRepositoryInterface $happeningRepository,
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->templateDataFactory = $templateDataFactory;
         $this->productRepository = $productRepository;
         $this->happeningRepository = $happeningRepository;
+        $this->requestRepository = $requestRepository;
+        $this->meetingRepository = $meetingRepository;
     }
 
-    /**
-     * @param ExportQuery $exportQuery
-     *
-     * @return ParticipantListView
-     */
     public function handle(ExportQuery $exportQuery): ParticipantListView
     {
         $participants = $this->participantRepository->findByIds($exportQuery->participantIds);
+
+        // preload data to improve performance
+        $this->requestRepository->loadParticipantRequestsCount($exportQuery->participantIds);
+        $this->meetingRepository->loadParticipantMeetingsCount($exportQuery->participantIds);
 
         $registrationColumns = [];
         $typesHandled = [];
@@ -76,7 +79,7 @@ class ExportQueryHandler
                     $registrationColumns,
                     $participant->getSheet()->getType(),
                     $exportQuery->locale,
-                    $exportQuery->event->getFallback()
+                    $exportQuery->event->getLocaleFallback()
                 );
 
                 $typesHandled[$participant->getSheet()->getType()->getId()] = true;

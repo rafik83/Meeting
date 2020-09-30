@@ -134,3 +134,23 @@ services:
             - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\ListChatMessages }
+
+    #
+    # Sheet
+    #
+    Proximum\Vimeet\Application\Query\Sheet\Template\TemplateObjectUrlQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@adapter.event_url_generator'
+            - '@logger'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Template\TemplateObjectUrlQuery }
+
+    #
+    # User Cta
+    #
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }

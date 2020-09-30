@@ -7,12 +7,14 @@
 <div class="modal-body">
     {% if not error %}
         <div class="important success">
+        {% if meetingDdayView %}
             {{ 'event.meeting.request.transformIntoMeeting.success'|trans({
                 '%date%': meetingDdayView.date,
                 '%time%': meetingDdayView.time,
                 '%spot%': meetingDdayView.spotName,
                 '%participants%': meetingDdayView.participants
             }) }}
+        {% endif %}
         </div>
     {% else %}
         <div class="important fail">

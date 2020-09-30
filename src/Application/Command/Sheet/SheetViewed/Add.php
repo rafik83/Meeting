@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\SheetViewed;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Add
+class Add implements Command
 {
     /** @var User */
     public $user;

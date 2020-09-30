@@ -392,6 +392,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexp
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
+form.extra_parameter_create.children.type.choices.custom_button: 'Bouton custom'
 form.extra_parameter_create.children.type.choices.leni_badge_link: 'LENI lien pour le badge'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
 form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'
@@ -891,6 +892,7 @@ form.registration_template_duplicate.children.event.label: 'Événement de desti
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
@@ -1241,6 +1243,8 @@ form.type_create.children.canEvaluateMeeting.label: 'Le participant peut noter s
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
+form.type_create.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
+form.type_create.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
 form.type_create.children.formTemplates.status.draft: brouillon
@@ -1301,6 +1305,8 @@ form.type_update.children.canEvaluateMeeting.label: 'Le participant peut noter s
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_update.children.canScanParticipant.label: 'Peut scanner un autre participant'
+form.type_update.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
+form.type_update.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
 form.type_update.children.hidden.label: Caché

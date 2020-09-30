@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
@@ -395,28 +387,26 @@ interface RequestRepositoryInterface
     public function hasAssignedRequestByParticipant(Participant $participant);
 
     /**
-     * @param Event    $event
      * @param Sheet[]  $sheets
      * @param string[] $states
-     * @param bool     $withoutMeeting
      *
      * @return Request[]
      */
     public function findBySheets(Event $event, array $sheets, array $states, bool $withoutMeeting): array;
-  
+
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 
     /**
-     * @param Event $event
-     *
      * @return Request[]
      */
     public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array;
 
     /**
-     * @param Event $event
-     *
      * @return DashboardRequestView[]
      */
     public function getDashboardRequestViewsByEvent(Event $event): array;
+
+    public function loadParticipantRequestsCount(array $participantIds): void;
+
+    public function getParticipantRequestsCount(Participant $participant): int;
 }

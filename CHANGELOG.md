@@ -4,9 +4,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.50.6] - 2020-09-29
+### Fixed
+- Use absolute urls in sheet for pdf export
+- Use event url generator for absolute link on sheet pdf
+
+## [2.50.5] - 2020-09-29
+### Fixed
+- Limit resolution for webinar screen sharing
+
+## [2.50.4] - 2020-09-28
+### Added
+- Disable right click on webinar video for LM
+
+## [2.50.3] - 2020-09-28
+### Fixed
+- Add _locale parameters in links to avoid exception when pdf is generated with cli
+
+## [2.50.2] - 2020-09-28
+### Fixed
+- Don't show website url if value is empty to avoid exception on redirect page
+
+## [2.50.1] - 2020-09-28
+### Fixed
+- Avoid exception by allowing null for some return types and arguments
+
+## [2.50.0] - 2020-09-28
+### Added
+- VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2205 - Display analytics on sheet
+- VIMEET-2206 - Add analytics and number of meeting requests in participants export
+
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
+
+## [2.49.1] - 2020-09-25
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available (side effect of VIMEET-2203)
+
+## [2.49.0] - 2020-09-25
+### Added
+- VIMEET-2228 - Button custom menu
+
+## [2.48.3] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (js)
+
+## [2.48.2] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (webinars)
+
+## [2.48.1] - 2020-09-24
+### Added
+- VIMEET-2231 - Redirect to program or agenda after webinar
+
+### Updated
+- Exclude from Sentry alert AccessDeniedHttpException
+
+## [2.48.0] - 2020-09-24
 ### Added
 - VIMEET-2217 - Activate / deactivate the networking tab by key date
 - VIMEET-2204 - Hidden contact menu
+- VIMEET-2203 - Request Automatically Transformed Into Meeting
+- VIMEET-2233 - Disable right click on webinar video
 
 ## [2.47.0] - 2020-09-11
 ### Added

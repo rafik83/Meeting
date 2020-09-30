@@ -51,6 +51,11 @@ abstract class AbstractChild
     protected $fallback;
 
     /**
+     * @var string|null
+     */
+    private $uid;
+
+    /**
      * AbstractChild constructor.
      *
      * @param string $type
@@ -156,4 +161,14 @@ abstract class AbstractChild
      * @return array
      */
     abstract public function normalize();
+
+    public function setUid(string $name): void
+    {
+        $this->uid = $name;
+    }
+
+    public function getUid(): ?string
+    {
+        return $this->uid;
+    }
 }

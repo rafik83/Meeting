@@ -672,6 +672,8 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.create_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler
         arguments:
+            - '@vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler'
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -741,6 +743,7 @@ services:
     vimeet_infrastructure.vimeet.application.command.meeting.approve_request_handler:
         class: Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler
         arguments:
+            - '@Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@meeting.request_permission_manager'
@@ -2914,6 +2917,10 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
+    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
+        arguments:
+            - '@repository.rule_repository'
+
     Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
         arguments:
             - '@components.security.video_meeting_access'
@@ -3108,10 +3115,16 @@ services:
             - '@template.template_data_factory'
             - '@template.print_template_resolver'
             - '@domain.rule.applyer'
+            - '@Proximum\Vimeet\Domain\Template\TrackingUrlTransformer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
+
+    Proximum\Vimeet\Domain\Template\TrackingUrlTransformer:
+        arguments:
+            - '@adapter.router'
+            - '@adapter.event_url_generator'
 
     template.registration.registration_template_validator:
         class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
@@ -3555,6 +3568,8 @@ services:
             - '@query.catalog.sheet_preview_external_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
 
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
