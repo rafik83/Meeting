@@ -6,7 +6,9 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
@@ -69,6 +71,16 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $postData = [
             'topic' => $topic,
             'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessageId, 'votes' => $votes]),
+        ];
+
+        $this->publishMessage($postData);
+    }
+
+    public function publishUserConnectionNotification(Event $event, User $user): void
+    {
+        $postData = [
+            'topic' => $this->getNotificationTopic($event->getId()),
+            'data' => json_encode(['action' => 'user_connection', 'userName' => 'ricardo']),
         ];
 
         $this->publishMessage($postData);
