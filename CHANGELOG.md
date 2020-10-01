@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.51.2] - 2020-10-01
+### Added
+- Hotfix - force refresh chat and questions in webinars
+
 ## [2.51.1] - 2020-10-01
 ### Added
 - Hotfix - add message to force speakers to use chrome
