@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
+use Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
 {
@@ -22,15 +23,20 @@ class NotificationPublisher extends AbstractNotification implements Notification
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
+    /** @var RouterAdapter */
+    private $routerAdapter;
+
     public function __construct(
         string $mercureHubUrl,
         string $mercurePublisherKey,
-        HttpAdapterInterface $httpAdapter
+        HttpAdapterInterface $httpAdapter,
+        RouterAdapter $routerAdapter
     )
     {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
+        $this->routerAdapter = $routerAdapter;
     }
 
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void
@@ -78,9 +84,21 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
     public function publishUserConnectionNotification(Event $event, User $user): void
     {
+        $avatar = $user->getAvatar();
+        if ($avatar === null) {
+            $avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $user->getAccount()->getCompleteName()]);
+        }
+
         $postData = [
             'topic' => $this->getNotificationTopic($event->getId()),
-            'data' => json_encode(['action' => 'user_connection', 'userName' => 'ricardo']),
+            'data' => json_encode([
+                'action' => 'user_connection',
+                'userId' => $user->getId(),
+                'userLastName' => $user->getLastName(),
+                'userFirstName' => $user->getFirstName(),
+                'userPosition' => $user->getPosition(),
+                'userAvatar' => $avatar,
+                'userCompany' => $user->getAccount()->getCompany()]),
         ];
 
         $this->publishMessage($postData);

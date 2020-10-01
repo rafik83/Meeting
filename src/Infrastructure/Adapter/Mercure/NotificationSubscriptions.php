@@ -51,13 +51,17 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
             if ($subscription['topic'] !== $topic) {
                 continue;
             }
-
-            $payload = $subscription['payload'];
-
-            unset($payload['userId']);
-
-            $users[$subscription['payload']['userId']] = $payload;
+            $users[$subscription['payload']['userId']] = $subscription['payload'];
         }
+
+        usort($users, function($user1, $user2) {
+            $compareResult = strcmp($user1['userLastName'], $user2['userLastName']);
+
+            if ($compareResult === 0) {
+                $compareResult = strcmp($user1['userFirstName'], $user2['userFirstName']);
+            }
+            return $compareResult;
+        });
 
         return $users;
     }

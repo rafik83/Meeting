@@ -1,8 +1,8 @@
 import {EventSourcePolyfill} from "event-source-polyfill";
 
 class ParticipantList {
-    constructor(element, notificationProviderUrl, topic, notificationSubscriberKey) {
-        this.element = element;
+    constructor(target, notificationProviderUrl, topic, notificationSubscriberKey) {
+        this.target = target;
 
         this.notificationProviderUrl = notificationProviderUrl;
         this.topic = topic;
@@ -22,7 +22,28 @@ class ParticipantList {
             const payload = JSON.parse(event.data);
 
             if (payload.action === 'user_connection') {
-                alert(payload.userName)
+
+                const matchedUserTR = this.target.querySelectorAll('[data-participant-user-id="'+ payload.userId +'"]');
+                if (matchedUserTR.length > 0) {
+                    return;
+                }
+
+                const userCompany = payload.userCompany || ' ';
+                const tbody = document.getElementById('ParticipantList');
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-participant-user-id', payload.userId);
+                const td = document.createElement('td');
+                const img = document.createElement('img');
+                const p = document.createElement('p');
+
+                tbody.insertBefore(tr, tbody.firstChild);
+                tr.appendChild(td);
+                td.appendChild(img);
+                td.appendChild(p);
+
+                img.setAttribute('src', payload.userAvatar);
+                p.innerHTML = payload.userFirstName+' '+ payload.userLastName+' - '+ userCompany + ' - <em>'+ payload.userPosition+'</em>';
+
             }
         }
     }

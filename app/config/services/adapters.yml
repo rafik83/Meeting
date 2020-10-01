@@ -60,6 +60,7 @@ services:
             - '%mercure_hub_publisher_url%'
             - '%mercure_publisher_key%'
             - '@adapter.http_adapter'
+            - '@adapter.router'
 
     Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber:
         arguments:

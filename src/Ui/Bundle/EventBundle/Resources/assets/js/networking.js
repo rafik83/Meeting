@@ -15,7 +15,7 @@ function init(target) {
         const subscriberKey = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-subscriber-key');
         const providerUrl = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-provider-url');
 
-        const participantList = new ParticipantList(element, providerUrl, topic, subscriberKey);
+        const participantList = new ParticipantList(target, providerUrl, topic, subscriberKey);
         participantList.init();
     });
 }
