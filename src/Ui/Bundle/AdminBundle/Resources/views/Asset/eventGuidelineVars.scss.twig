@@ -9,6 +9,9 @@ $color-notification: #FF4902;
 $button-text-color: #FFFFFF;
 $button-bg-color-inactive: rgba(#FFFFFF, .15);
 $button-bg-color-inactive-hover: rgba(#FFFFFF, .3);
+$gray-base: #000 !default;
+$gray-light: lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter: lighten($gray-base, 93.5%) !default; // #eee
 
 $image-path: '{{ imagePath }}';
 $gradient-header-button-left-color: {{ gradientHeaderButtonLeftColor }};
@@ -49,6 +52,7 @@ $color-highlighted: {{ colorHighLighted }};
 @import "{{ bundleGuidelinePath }}/objects/product";
 @import "{{ bundleGuidelinePath }}/objects/tunnel-step";
 @import "{{ bundleGuidelinePath }}/objects/catalog";
+@import "{{ bundleGuidelinePath }}/objects/_videoConferenceQuestions";
 
 .text-highlighted {
   color: $color-highlighted;
