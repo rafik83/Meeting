@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.51.1] - 2020-10-01
+### Added
+- Hotfix - add message to force speakers to use chrome
+
 ## [2.51.0] - 2020-09-30
 ### Added
 - VIMEET-1925 - New version of chat and questions decoupled from Tokbox
