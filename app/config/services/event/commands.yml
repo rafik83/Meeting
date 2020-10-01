@@ -61,7 +61,6 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }
@@ -70,7 +69,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@vimeet_infrastructure.repository.happening_question_vote_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion }
 
@@ -192,28 +190,6 @@ services:
             - '@impersonating_user_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddClick }
-
-    #
-    # Chat
-    #
-    Proximum\Vimeet\Application\Command\Chat\AddChatMessageHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
-            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
-            - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }
-
-    Proximum\Vimeet\Application\Command\Chat\VoteChatMessageHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
-            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
-            - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VoteChatMessage }
 
     #
     # Webinar

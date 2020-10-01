@@ -2,14 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
-use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
-use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionVoteRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class VoteHappeningQuestionHandler
 {
@@ -19,17 +16,12 @@ class VoteHappeningQuestionHandler
     /** @var QuestionVoteRepositoryInterface */
     private $questionVoteRepository;
 
-    /** @var NotificationPublisherInterface */
-    private $notificationPublisher;
-
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
-        QuestionVoteRepositoryInterface $questionVoteRepository,
-        NotificationPublisherInterface $notificationPublisher
+        QuestionVoteRepositoryInterface $questionVoteRepository
     ) {
         $this->questionRepository = $questionRepository;
         $this->questionVoteRepository = $questionVoteRepository;
-        $this->notificationPublisher = $notificationPublisher;
     }
 
     public function handle(VoteHappeningQuestion $command): void
@@ -48,7 +40,6 @@ class VoteHappeningQuestionHandler
 
         if ($questionVote) {
             $this->questionVoteRepository->remove($questionVote);
-            $this->publishUpdate($question);
 
             return;
         }
@@ -59,13 +50,5 @@ class VoteHappeningQuestionHandler
         );
 
         $this->questionVoteRepository->add($questionVote);
-        $this->publishUpdate($question);
-    }
-
-    private function publishUpdate(Question $question)
-    {
-        $this->notificationPublisher->publishHappeningNotification($question->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
-            'action' => 'update',
-        ]);
     }
 }

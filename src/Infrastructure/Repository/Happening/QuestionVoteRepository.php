@@ -21,13 +21,13 @@ class QuestionVoteRepository implements QuestionVoteRepositoryInterface
     public function add(QuestionVote $questionVote)
     {
         $this->entityManager->persist($questionVote);
-        $this->entityManager->flush();
+        $this->entityManager->flush($questionVote);
     }
 
     public function remove(QuestionVote $questionVote)
     {
         $this->entityManager->remove($questionVote);
-        $this->entityManager->flush();
+        $this->entityManager->flush($questionVote);
     }
 
     public function getByQuestionAndUser(Question $question, User $user): ?QuestionVote

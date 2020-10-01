@@ -322,22 +322,6 @@ event-build-guideline-asset@preprod:
 event-build-guideline-asset@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
-import-preprod-db@local:
-	bin/console doctrine:database:drop --force
-	bin/console doctrine:database:create
-	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.wip')"
-	make post-import-db
-
-post-import-db:
-	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
-	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
-	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
-	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
-	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console vimeet:event:build-guideline-asset
-	bin/console vimeet:elasticsearch:index --env=dev
-
 # next targets must be run in VM
 ifeq ($(HOST), vimeet)
 
@@ -380,14 +364,23 @@ import-preprod-db@vm:
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
-	make post-import-db
+	make post-import-db@vm
 
 import-prod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < prod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
-	make post-import-db
+	make post-import-db@vm
+
+post-import-db@vm:
+	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
+	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
+	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
+	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
+	bin/console doctrine:migrations:migrate --no-interaction
+	bin/console vimeet:event:build-guideline-asset
+	bin/console vimeet:elasticsearch:index --env=dev
 
 sync-db-from-prod@preprod:
 	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \

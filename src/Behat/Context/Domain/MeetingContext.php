@@ -161,22 +161,4 @@ class MeetingContext implements Context
         $this->meetingContextProxy->getMeetingManager()
             ->createMeetingFromRequest($event, $request, $slot, $spot);
     }
-
-    /**
-     * @Given /^there is a video meeting for this participant$/
-     */
-    public function thereIsAVideoMeetingForThisParticipant()
-    {
-        /** @var Participant|null $participant */
-        $participant = $this->meetingContextProxy->getStorage()->get('participant');
-        $event = $this->meetingContextProxy->getStorage()->get('event');
-
-        if (null === $participant) {
-            throw new \InvalidArgumentException('Missing Participant');
-        }
-
-        $meetingManager = $this->meetingContextProxy->getMeetingManager();
-        $meeting = $meetingManager->createVideoMeetingForParticipant($event, $participant);
-        $this->meetingContextProxy->getStorage()->set('meeting', $meeting);
-    }
 }

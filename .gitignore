@@ -55,7 +55,3 @@ ansible.cfg
 
 # php-git-hooks tool.
 .guard_coverage
-
-# IDE
-/.idea/
-/.vscode/
