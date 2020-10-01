@@ -81,6 +81,7 @@ class Update extends AbstractEvent
         $this->linkedinLoginEnabled = $event->isLinkedinLoginEnabled();
         $this->accessControlEnabled = $event->isAccessControlEnabled();
         $this->showCheckinStatus = $event->showCheckinStatus();
+        $this->autoArchiveWebinar = $event->getAutoArchiveWebinar();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

@@ -89,7 +89,8 @@ class CreateHandler
             $create->duplicatedFrom,
             $create->welcomeEnabled,
             $create->disabledEmailChanging,
-            $create->disabledPasswordChanging
+            $create->disabledPasswordChanging,
+            $create->autoArchiveWebinar
         );
 
         $event->getConfiguration()->setVisio($create->visio);
