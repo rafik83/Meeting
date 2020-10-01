@@ -457,6 +457,7 @@ class MailEventSubscriber implements EventSubscriberInterface
                 )
             );
         } else {
+            /*
             foreach ($happening->getSpeakers() as $speaker) {
                 $speakerUser = $speaker->getUser();
 
@@ -472,6 +473,7 @@ class MailEventSubscriber implements EventSubscriberInterface
                     );
                 }
             }
+            */
         }
     }
 
