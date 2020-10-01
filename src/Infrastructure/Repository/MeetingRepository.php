@@ -59,20 +59,6 @@ class MeetingRepository implements MeetingRepositoryInterface
         $this->entityManager->flush($meeting);
     }
 
-    public function findById(int $id): ?Meeting
-    {
-        return $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('meeting')
-            ->from(Meeting::class, 'meeting')
-            ->where('meeting.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
     /**
      * {@inheritdoc}
      */

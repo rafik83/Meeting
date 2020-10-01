@@ -30,8 +30,10 @@ class UserContext implements Context
 
     /**
      * @Given /^the user "(?P<email>[^"]+)" is created$/
+     *
+     * @param string $email
      */
-    public function create(string $email): User
+    public function create($email)
     {
         $user = $this->userContextProxy->getUserManager()->find($email);
 
@@ -40,19 +42,6 @@ class UserContext implements Context
         }
 
         $this->userContextProxy->getStorage()->set('user', $user);
-
-        return $user;
-    }
-
-    /**
-     * @Given /^the user is created with email "(?P<email>[^"]+)", firstname "(?P<firstname>[^"]+)" and lastname "(?P<lastname>[^"]+)"$/
-     */
-    public function createWithEmailFirstnameAndLastname(string $email, string $firstname, string $lastname): User
-    {
-        $user = $this->create($email);
-        $this->userContextProxy->getUserManager()->fillInformation($user, $firstname, $lastname);
-
-        return $user;
     }
 
     /**
