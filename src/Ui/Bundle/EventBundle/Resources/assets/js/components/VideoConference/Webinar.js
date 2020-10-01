@@ -668,6 +668,12 @@ Webinar.prototype.initChat = function () {
             }
         }
 
+        setTimeout(() => {
+            this.chatLoaded = false;
+            this.initChat();
+        }, 5000);
+
+
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar chat');
@@ -1315,6 +1321,10 @@ Webinar.prototype.initQuestions = function () {
                 this.initQuestions();
             }
         }
+
+        setTimeout(() => {
+            this.initQuestions();
+        }, 5000);
 
     }.bind(this))
     .fail(function () {
