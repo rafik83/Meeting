@@ -62,17 +62,17 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
     private function publishMessage(array $postData)
     {
-        $authPayload = [
-            'mercure' => [
-                'publish' => ['*'],
-            ]
-        ];
+        // $authPayload = [
+        //     'mercure' => [
+        //         'publish' => ['*'],
+        //     ]
+        // ];
 
-        $this->httpAdapter->post($this->mercureHubUrl, [
-                'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
-                'Content-type' => 'application/x-www-form-urlencoded',
-            ],
-            http_build_query($postData)
-        );
+        // $this->httpAdapter->post($this->mercureHubUrl, [
+        //         'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
+        //         'Content-type' => 'application/x-www-form-urlencoded',
+        //     ],
+        //     http_build_query($postData)
+        // );
     }
 }
