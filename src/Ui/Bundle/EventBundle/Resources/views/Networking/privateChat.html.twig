@@ -1,0 +1,22 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'networking.chat.title'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/networking.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+        <div class="main__content privateChat">
+            <h2>Chat privé avec {% for subscription in privateChatView.subscriptions %}
+                {{ subscription.userFirstName }} {{ subscription.userLastName }} </h2>
+                <p>{{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em><p>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

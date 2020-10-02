@@ -7230,3 +7230,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\PrivateChatQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+        tags:
+            - { name: tactician.handler, typehints: true }

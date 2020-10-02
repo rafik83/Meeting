@@ -56,6 +56,17 @@
   td {
     display: flex;
 
+    a {
+      align-items: flex-end;
+      display: flex;
+      text-decoration: none;
+      color: black;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     p {
       align-items: flex-end;
       display: flex;
@@ -111,6 +122,10 @@
       list-style-type: disc;
     }
   }
+}
+
+.privateChat {
+  display: block;
 }
 
 @media (max-width: 1024px) {

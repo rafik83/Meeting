@@ -48,14 +48,13 @@
             <div class="networking_list">
                 <h2>Participants connectés</h2>
                 <table class="list list--users table table-striped table-bordered table-hover">
-                    {% for subscription in networkingView.subscriptions %}
-                    <tr>
-                        <td>
-                            <img src="{{ subscription.userAvatar }}">
-                            <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
-
-                        </td>
-                    </tr>
+                    {% for userId, subscription in networkingView.subscriptions %}
+                        <tr>
+                            <td>
+                                <img src="{{ subscription.userAvatar }}">
+                                <a href="{{ path('event_networking_chat', {sheet: sheet.id, toUser: userId}) }}"><p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p></a>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </table>
             </div>
