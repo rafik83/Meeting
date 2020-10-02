@@ -65,9 +65,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     public function testHandle(): void
     {
         $user = $this->prophesize(User::class);
-        $user->getId()->shouldBeCalled()->willReturn(111);
         $user->getFirstname()->shouldBeCalled()->willReturn('Michel');
         $user->getLastname()->shouldBeCalled()->willReturn('Dupont');
+        $user->getId()->shouldBeCalled()->willReturn(111);
 
         $user1 = $this->prophesize(User::class);
         $user2 = $this->prophesize(User::class);
@@ -91,7 +91,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $speaker2,
         ];
 
+        $event = $this->prophesize(Event::class);
+        $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $happening = $this->prophesize(Happening::class);
+        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Webinar: how to work remotely during the Covid-19 crisis'
@@ -107,7 +110,6 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.google.com/iframe?u=_firstname_%20_lastname_');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
-        $happening->getEvent()->shouldNotBeCalled();
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
 
@@ -160,9 +162,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 0,
+                1585571400,
                 '/path/image.jpg',
                 'https://www.google.com/iframe?u=Michel%20Dupont',
                 true,
+                false,
                 false,
                 false,
                 false
@@ -175,6 +179,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
     public function testHandleBeforeStart(): void
     {
+        $event = $this->prophesize(Event::class);
+        $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $date = new \DateTime('2020-03-30 11:50:00');
         $user = $this->prophesize(User::class);
         $user->getFirstname()->willReturn('Michel');
@@ -218,7 +224,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
-        $happening->getEvent()->shouldNotBeCalled();
+        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
@@ -280,9 +286,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 1500,
                 300,
                 300,
+                1585571400,
                 '/path/image.jpg',
                 null,
                 true,
+                false,
                 false,
                 false,
                 false
@@ -321,6 +329,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         ];
 
         $event = $this->prophesize(Event::class);
+        $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $happening = $this->prophesize(Happening::class);
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
@@ -329,7 +338,6 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->hasWebinarSessionId()->shouldBeCalled()->willReturn(true);
         $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
         $happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(true);
-        $happening->hasSpeaker($user->reveal())->shouldNotBeCalled();
         $happening->getSpeakers()->shouldBeCalled()->willReturn($speakers);
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
@@ -415,12 +423,14 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 900,
                 180,
                 0,
+                1585571400,
                 '/path/image.jpg',
                 null,
                 true,
                 false,
                 true,
-                true
+                true,
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -433,7 +443,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(111);
 
+        $event = $this->prophesize(Event::class);
+        $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $happening = $this->prophesize(Happening::class);
+        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Video Webinar: how to work remotely during the Covid-19 crisis'
@@ -446,7 +459,6 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:00:00'));
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:45:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
-        $happening->getEvent()->shouldNotBeCalled();
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
@@ -477,10 +489,12 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 0,
                 0,
+                1585569600,
                 '/path/image.jpg',
                 'https://www.utube.com/embed/whatever',
                 true,
                 true,
+                false,
                 false,
                 false
             ),
