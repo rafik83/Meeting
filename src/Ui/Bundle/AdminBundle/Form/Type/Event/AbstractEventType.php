@@ -172,6 +172,9 @@ abstract class AbstractEventType extends AbstractType
             ->add('disabledPasswordChanging', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('autoArchiveWebinar', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

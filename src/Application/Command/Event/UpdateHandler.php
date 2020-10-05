@@ -75,7 +75,8 @@ class UpdateHandler
             $update->googleLoginEnabled,
             $update->linkedinLoginEnabled,
             $update->accessControlEnabled,
-            $update->showCheckinStatus
+            $update->showCheckinStatus,
+            $update->autoArchiveWebinar
         );
 
         $event->getConfiguration()->setVisio($update->visio);

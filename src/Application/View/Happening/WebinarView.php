@@ -36,6 +36,9 @@ class WebinarView
     /** @var int */
     public $warningTimeRemainingInSeconds;
 
+    /** @var int $endTimestamp used to stop record automatically */
+    public $stopTimestamp;
+
     /** @var string|null */
     public $headerImage;
 
@@ -66,6 +69,9 @@ class WebinarView
     /** @var bool */
     public $isWebinarRecording;
 
+    /** @var bool */
+    public $isWebinarRecordAutoStart;
+
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
 
@@ -89,12 +95,14 @@ class WebinarView
         int $timeRemainingInSeconds,
         int $warningTimeRemainingInSeconds,
         int $timeRemainingBeforeStartInSeconds,
+        int $stopTimestamp,
         ?string $headerImage,
         ?string $liveUrl,
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
-        bool $isWebinarRecording
+        bool $isWebinarRecording,
+        bool $isWebinarRecordAutoStart
     ) {
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
@@ -106,6 +114,8 @@ class WebinarView
         $this->slot = $slot;
         $this->currentTime = $currentTime;
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
+        $this->stopTimestamp = $stopTimestamp;
         $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->headerImage = $headerImage;
         $this->speakers = $speakers;
@@ -116,7 +126,7 @@ class WebinarView
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->isWebinarRecorded = $isWebinarRecorded;
         $this->isWebinarRecording = $isWebinarRecording;
-        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
+        $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
     }
 
     public function getSpeakerInfosByUserId(): string

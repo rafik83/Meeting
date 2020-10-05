@@ -55,6 +55,8 @@
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"
             data-webinar-can-record="true"
+            data-webinar-auto-start="{{ webinarView.isWebinarRecordAutoStart }}"
+            data-webinar-stop-timestamp="{{ webinarView.stopTimestamp }}"
             data-webinar-record-endpoint="{{ path(
                 'event_happening_webinar_record',
                 {
