@@ -6,6 +6,7 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
@@ -47,6 +48,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
     {
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } elseif ($object instanceof ChatSession) {
+            $topic = $this->getChatSessionTopic($object);
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }
@@ -64,6 +67,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } elseif ($object instanceof ChatSession) {
+            $topic = $this->getChatSessionTopic($object);
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }

@@ -219,6 +219,7 @@ Chat.prototype.initChat = function () {
             }
         });
         eventSource.onmessage = (event) => {
+            console.log(event);
             const payload = JSON.parse(event.data);
 
             if (payload.action === 'add_chat_message') {

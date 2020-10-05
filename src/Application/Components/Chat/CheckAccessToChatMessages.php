@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -44,6 +45,10 @@ class CheckAccessToChatMessages
 
         if ($object instanceof Event) {
             return $this->networkingAccessChecker->allowedToAccess($object);
+        }
+
+        if ($object instanceof ChatSession) {
+            return $object->isUserInChat($user);
         }
 
         return false;

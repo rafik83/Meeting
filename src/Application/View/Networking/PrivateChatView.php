@@ -15,14 +15,34 @@ class PrivateChatView
     /** @var string */
     public $topic;
 
-    /** @var array */
-    public $subscriptions;
+    /** @var string */
+    public $toUserFirstName;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions)
+    /** @var string */
+    public $toUserLastName;
+
+    /** @var string */
+    public $toUserCompany;
+
+    /** @var string */
+    public $toUserPosition;
+
+    /** @var int */
+    public $toUserId;
+
+    /** @var int */
+    public $chatSessionId;
+
+    public function __construct(string $providerUrl, string $subscriberKey, string $topic, string $toUserFirstName, string $toUserLastName, string $toUserCompany, string $toUserPosition, int $toUserId, int $chatSessionId)
     {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;
-        $this->subscriptions = $subscriptions;
+        $this->toUserFirstName = $toUserFirstName;
+        $this->toUserLastName = $toUserLastName;
+        $this->toUserCompany = $toUserCompany;
+        $this->toUserPosition = $toUserPosition;
+        $this->toUserId = $toUserId;
+        $this->chatSessionId = $chatSessionId;
     }
 }

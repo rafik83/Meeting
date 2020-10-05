@@ -13,14 +13,19 @@ class PrivateChatQuery implements Query
     public $event;
 
     /** @var User */
-    public $user;
+    public $toUser;
+
+    /** @var User */
+    public $fromUser;
 
     public function __construct(
         Event $event,
-        User $user
+        User $fromUser,
+        User $toUser
     )
     {
         $this->event = $event;
-        $this->user = $user;
+        $this->toUser = $toUser;
+        $this->fromUser = $fromUser;
     }
 }

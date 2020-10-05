@@ -1,11 +1,11 @@
 <?php
 
-
 namespace Proximum\Vimeet\Application\Query\Networking;
 
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
-use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\View\Networking\PrivateChatView;
+use Proximum\Vimeet\Domain\Model\ChatSession;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class PrivateChatQueryHandler
@@ -13,28 +13,51 @@ class PrivateChatQueryHandler
     /** @var NotificationSubscriberInterface */
     private $notificationSubscriber;
 
-    /** @var NotificationSubscriptionsInterface */
-    private $notificationSubscriptions;
+    /** @var ChatSessionRepositoryInterface */
+    private $chatSessionRepository;
 
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
-        NotificationSubscriptionsInterface $notificationSubscriptions
-    )
-    {
+        ChatSessionRepositoryInterface $chatSessionRepository
+    ) {
         $this->notificationSubscriber = $notificationSubscriber;
-        $this->notificationSubscriptions = $notificationSubscriptions;
+        $this->chatSessionRepository = $chatSessionRepository;
     }
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
     {
+        $chatSession = $this->chatSessionRepository->findOneByEventAndUsers(
+            $privateChatQuery->event,
+            $privateChatQuery->fromUser,
+            $privateChatQuery->toUser
+        );
 
-        $topic = $this->notificationSubscriber->getNotificationTopic($privateChatQuery->event->getId());
+        if (null === $chatSession) {
+            $chatSession = new ChatSession(
+                $privateChatQuery->event,
+                $privateChatQuery->fromUser,
+                $privateChatQuery->toUser
+            );
+
+            $this->chatSessionRepository->add($chatSession);
+        }
+
+        $topic = $this->notificationSubscriber->getChatSessionTopic($chatSession);
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getNetworkingSubscriberKey($privateChatQuery->event, $privateChatQuery->user, [AbstractNotification::TYPE_CHAT]),
+            $this->notificationSubscriber->getNetworkingSubscriberKey(
+                $privateChatQuery->event,
+                $privateChatQuery->toUser,
+                [AbstractNotification::TYPE_CHAT]
+            ),
             $topic,
-            $this->notificationSubscriptions->getSubscriptions($topic)
+            $privateChatQuery->toUser->getFirstName(),
+            $privateChatQuery->toUser->getLastName(),
+            $privateChatQuery->toUser->getAccount()->getCompany(),
+            $privateChatQuery->toUser->getPosition(),
+            $privateChatQuery->toUser->getId(),
+            $chatSession->getId()
         );
     }
 }

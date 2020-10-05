@@ -2,10 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Chat;
 
+use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\Exception\Happening\HappeningNotFoundException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
 use Proximum\Vimeet\Domain\Exception\Event\EventNotFoundException;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -21,20 +23,26 @@ class GuessChatMessageLinkableObjectHandler
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
+    /** @var ChatSessionRepositoryInterface */
+    private $chatSessionRepository;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         HappeningRepositoryInterface $happeningRepository,
-        EventRepositoryInterface $eventRepository
+        EventRepositoryInterface $eventRepository,
+        ChatSessionRepositoryInterface $chatSessionRepository
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->happeningRepository = $happeningRepository;
         $this->eventRepository = $eventRepository;
+        $this->chatSessionRepository = $chatSessionRepository;
     }
 
     /**
      * @throws HappeningNotFoundException
      * @throws MeetingNotFoundException
      * @throws EventNotFoundException
+     * @throws ChatSessionNotFoundException
      */
     public function handle(GuessChatMessageLinkableObject $query): ChatMessageLinkableInterface
     {
@@ -66,6 +74,16 @@ class GuessChatMessageLinkableObjectHandler
             }
 
             return $event;
+        }
+
+        if ('private_chat' === $query->objectType) {
+            $chatSession = $this->chatSessionRepository->findOneById($query->objectId);
+
+            if (null === $chatSession) {
+                throw new ChatSessionNotFoundException();
+            }
+
+            return $chatSession;
         }
 
         throw new \InvalidArgumentException('Invalid ObjectType.');

@@ -68,7 +68,7 @@ class PrivateChatAction
             throw new AccessDeniedException();
         }
 
-        $chatView = $this->queryBus->handle(new PrivateChatQuery($event, $toUser));
+        $chatView = $this->queryBus->handle(new PrivateChatQuery($event, $userDomain->getUser(), $toUser));
 
         return new Response(
             $this->engine->render(
@@ -77,7 +77,6 @@ class PrivateChatAction
                     'privateChatView' => $chatView,
                     'sheet' => $sheet,
                     'event' => $event,
-                    'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
                 ]
             )
         );

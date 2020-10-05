@@ -104,6 +104,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
