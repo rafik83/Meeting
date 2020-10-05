@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.53.0] - 2020-10-05
+### Added
+- VIMEET-2237 - Option to record webinars automatically
+
 ## [2.52.0] - 2020-10-01
 ### Revert
 - VIMEET-1925 - Revert chat and questions with Mercure, reintroduce chat and questions from Tokbox
