@@ -5,17 +5,25 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as TypeExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 
 class UserCtaSubmenuViewQueryHandler
 {
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     public function __construct(
-        ExtraParameterRepositoryInterface $extraParameterRepository
-    ) {
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        ExtraDataRepositoryInterface $extraDataRepository
+    )
+    {
         $this->extraParameterRepository = $extraParameterRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     public function handle(UserCtaSubmenuViewQuery $query): ?SubmenuButtonView
@@ -45,8 +53,25 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
-        $placeholders = ['%userId%', '%userEmail%', '%participantId%'];
-        $values = [urlencode($query->user->getId()), urlencode($query->user->getEmail()), $participant ? $participant->getId() : null];
+        $needTechEventIdContact = strpos($parameters['link'], '%techEventIdContact%') !== false;
+
+        $techEventIdContact = $needTechEventIdContact ? $this->extraDataRepository->getExtraDataForEventNameAndUser(
+            $query->event,
+            TypeExtraData::IMPORTED_FROM_TECH_EVENT,
+            $query->user
+        ) : null;
+
+        if ($needTechEventIdContact && $techEventIdContact === null) {
+            return null;
+        }
+
+        $placeholders = ['%userId%', '%userEmail%', '%participantId%', '%techEventIdContact%'];
+        $values = [
+            urlencode($query->user->getId()),
+            urlencode($query->user->getEmail()),
+            $participant ? $participant->getId() : null,
+            $techEventIdContact ? $techEventIdContact->getId() : null
+        ];
         $link = str_replace($placeholders, $values, $parameters['link']);
 
         return new SubmenuButtonView(
