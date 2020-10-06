@@ -34,6 +34,8 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraData = $this->prophesize(User\Event\ExtraData::class);
+        $extraData->getValue()->shouldBeCalled()->willReturn(123456789);
         $extraParameter = $this->prophesize(Event\ExtraParameter::class);
         $extraParameter->getValue()->shouldBeCalled()->willReturn('
         {
@@ -47,7 +49,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
-        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn($extraData->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -66,14 +68,14 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
         Category::CUSTOM_BUTTON_ICON,
             'Mon bouton',
-            'https://example.net/42/test%40yahoo.fr/123',
+            'https://example.net/42/test%40yahoo.fr/123/123456789',
             false,
             null,
             false,
             ['target' => '_blank']
     );
 
-        $this->assertEquals($expectedCustomButtonSubmenuButtonView, $result);
+        self::assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
 
     public function testCustomButtonWhenParticipantIdNotNeeded(): void
@@ -102,7 +104,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
-        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -155,7 +156,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
-        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -171,7 +171,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        $this->assertEquals(null, $result);
+        self::assertEquals(null, $result);
     }
 
     public function testCustomButtonNullWhenNotConfigured(): void
@@ -184,8 +184,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
-        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn(null);
-
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
@@ -230,7 +228,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
-        $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::IMPORTED_FROM_TECH_EVENT, $user->reveal())->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $userCtaSubmenuViewQueryHandler = new UserCtaSubmenuViewQueryHandler(
             $extraParameterRepository->reveal(),
