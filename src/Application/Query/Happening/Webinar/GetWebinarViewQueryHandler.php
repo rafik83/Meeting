@@ -8,11 +8,15 @@ use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundExcepti
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
+use Proximum\Vimeet\Application\View\Happening\Webinar\SpeakerWebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
-use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\WebinarView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
@@ -33,10 +37,14 @@ class GetWebinarViewQueryHandler
     /** @var IsRecordingAllowed */
     private $isRecordingAllowed;
 
+    /** @var HappeningBroadcastRepositoryInterface */
+    private $happeningBroadcastRepository;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
+        HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
         \DateTimeInterface $dateTime
     ) {
@@ -45,6 +53,7 @@ class GetWebinarViewQueryHandler
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->dateTime = $dateTime;
         $this->isRecordingAllowed = $isRecordingAllowed;
+        $this->happeningBroadcastRepository = $happeningBroadcastRepository;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -62,15 +71,37 @@ class GetWebinarViewQueryHandler
             $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
         );
 
-        $liveUrl = $happening->getLiveUrl();
+        $liveUrl = $this->getLiveUrl($happening, $query->getUser());
 
-        if (strpos($liveUrl, '_firstname_') !== false || strpos($liveUrl, '_lastname_') !== false) {
-            $placeholders = ['_firstname_','_lastname_'];
-            $values = [urlencode($query->getUser()->getFirstName()),urlencode($query->getUser()->getLastName())];
-            $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        if ($isSpeaker) {
+            return new SpeakerWebinarView(
+                $happening->getId(),
+                $query->getUser()->getId(),
+                $happening->getTitle($query->getLocale()),
+                $happening->isVideoWebinarAndHasLiveUrl(),
+                $sessionAndTokenView->token,
+                $sessionAndTokenView->sessionId,
+                $sessionAndTokenView->apiKey,
+                $this->getSpeakerViews($happening, $query->getLocale()),
+                $this->getParticipantViews($happening, $query->getLocale()),
+                new TimeRangeView($happening->getBegin(), $happening->getEnd()),
+                $this->dateTime,
+                $timeRemainingInSeconds,
+                round($timeRemainingInSeconds * 0.2),
+                $timeRemainingBeforeStartInSeconds,
+                $happening->getEnd()->getTimestamp() + 60*15,
+                $happening->getWebinarHeaderImage($query->getLocale()),
+                $liveUrl,
+                $happening->isSidebarAllowed(),
+                $this->isVideoWebinarAndHappeningIsEnded($happening),
+                $this->isRecordingAllowed->isSatisfiedBy($happening),
+                $this->isWebinarRecording($happening),
+                $happening->getEvent()->getAutoArchiveWebinar(),
+                $happening->allowWebinarOnHLS()
+            );
         }
 
-        return new WebinarView(
+        return new ViewerWebinarView(
             $happening->getId(),
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),
@@ -78,24 +109,45 @@ class GetWebinarViewQueryHandler
             $sessionAndTokenView->token,
             $sessionAndTokenView->sessionId,
             $sessionAndTokenView->apiKey,
-            $isSpeaker,
             $this->getSpeakerViews($happening, $query->getLocale()),
             $this->getParticipantViews($happening, $query->getLocale()),
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),
             $this->dateTime,
             $timeRemainingInSeconds,
-            round($timeRemainingInSeconds * 0.2),
-            $timeRemainingBeforeStartInSeconds,
-            $happening->getEnd()->getTimestamp() + 60*15,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
-            $this->isRecordingAllowed->isSatisfiedBy($happening),
-            $this->isWebinarRecording($happening),
-            $happening->getEvent()->getAutoArchiveWebinar(),
-            $happening->allowWebinarOnHLS()
+            $this->getHLSUrl($happening)
         );
+    }
+
+    private function getHLSUrl(Happening $happening): ?string
+    {
+        if (false === $happening->allowWebinarOnHLS()) {
+            return null;
+        }
+
+        $broadcast = $this->happeningBroadcastRepository->getByHappening($happening);
+
+        if (null === $broadcast || $broadcast->isStopped()) {
+            return null;
+        }
+
+        return $broadcast->getHlsUrl();
+    }
+
+    private function getLiveUrl(Happening $happening, User $user): ?string
+    {
+        $liveUrl = $happening->getLiveUrl();
+
+        if (strpos($liveUrl, '_firstname_') !== false || strpos($liveUrl, '_lastname_') !== false) {
+            $placeholders = ['_firstname_','_lastname_'];
+            $values = [urlencode($user->getFirstName()), urlencode($user->getLastName())];
+            $liveUrl = str_replace($placeholders, $values, $happening->getLiveUrl());
+        }
+
+        return $liveUrl;
     }
 
     private function isVideoWebinarAndHappeningIsEnded(Happening $happening): bool

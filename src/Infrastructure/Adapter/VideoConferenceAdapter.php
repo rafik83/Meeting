@@ -21,8 +21,8 @@ use Proximum\Vimeet\Infrastructure\Tokbox\Client;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    const DELAY_AFTER_END_TIME = '+15 minutes';
-    const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
+    public const DELAY_AFTER_END_TIME = '+15 minutes';
+    public const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
     /** @var OpenTok */
     private $openTok;

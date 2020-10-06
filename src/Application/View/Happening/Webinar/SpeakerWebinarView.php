@@ -1,0 +1,95 @@
+<?php
+
+namespace Proximum\Vimeet\Application\View\Happening\Webinar;
+
+use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
+use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use DateTimeInterface;
+
+class SpeakerWebinarView extends WebinarView
+{
+    /** @var bool */
+    public $isSpeaker = true;
+
+    /** @var int */
+    public $timeRemainingInSeconds;
+
+    /** @var int */
+    public $warningTimeRemainingInSeconds;
+
+    /** @var bool */
+    public $isVideoWebinarAndHasLiveUrl;
+
+    /** @var bool */
+    public $isWebinarRecorded;
+
+    /** @var bool */
+    public $isWebinarRecording;
+
+    /** @var bool */
+    public $isWebinarRecordAutoStart;
+
+    /** @var int */
+    public $timeRemainingBeforeStartInSeconds;
+
+    /** @var bool */
+    public $allowWebinarOnHLS;
+
+    /**
+     * @param WebinarSpeakerView[]     $speakers
+     * @param WebinarParticipantView[] $participantViews
+     */
+    public function __construct(
+        int $happeningId,
+        int $currentUserId,
+        string $happeningTitle,
+        bool $isVideoWebinarAndHasLiveUrl,
+        string $token,
+        string $sessionId,
+        string $apiKey,
+        array $speakers,
+        array $participantViews,
+        TimeRangeView $slot,
+        DateTimeInterface $currentTime,
+        int $timeRemainingInSeconds,
+        int $warningTimeRemainingInSeconds,
+        int $timeRemainingBeforeStartInSeconds,
+        int $stopTimestamp,
+        ?string $headerImage,
+        ?string $liveUrl,
+        bool $sidebarAllowed,
+        bool $isVideoWebinarAndHappeningIsEnded,
+        bool $isWebinarRecorded,
+        bool $isWebinarRecording,
+        bool $isWebinarRecordAutoStart,
+        bool $allowWebinarOnHLS = false
+    ) {
+        parent::__construct(
+            $happeningId,
+            $currentUserId,
+            $happeningTitle,
+            $isVideoWebinarAndHasLiveUrl,
+            $token,
+            $sessionId,
+            $apiKey,
+            $speakers,
+            $participantViews,
+            $slot,
+            $currentTime,
+            $headerImage,
+            $liveUrl,
+            $sidebarAllowed,
+            $isVideoWebinarAndHappeningIsEnded
+        );
+
+        $this->timeRemainingInSeconds = $timeRemainingInSeconds;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
+        $this->stopTimestamp = $stopTimestamp;
+        $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
+        $this->isWebinarRecorded = $isWebinarRecorded;
+        $this->isWebinarRecording = $isWebinarRecording;
+        $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
+        $this->allowWebinarOnHLS = $allowWebinarOnHLS;
+    }
+}
