@@ -3,16 +3,16 @@
 import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
 import Publisher from './Publisher';
-import Subscriber from './Subscriber';
+import VideoSubscriber from './Subscriber';
 import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
 
 import 'bootstrap/js/tooltip';
 import 'bootstrap/js/popover'; // popover require tooltip
-import {EventSourcePolyfill} from  'event-source-polyfill';
 
 import Chat from '../_Chat.js';
+import NotificationSubscriber from '../_Subscriber';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -38,7 +38,10 @@ function Webinar(element, isSpeaker) {
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
-    this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    const notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    this.notificationSubscriber = new NotificationSubscriber(notificationProviderUrl);
+    this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
+    this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -80,7 +83,7 @@ function Webinar(element, isSpeaker) {
     this.sideContainer = element.querySelector('.side-container');
 
     if (this.sidebarAllowed) {
-        this.chat = new Chat(element, `https://vimeet.events/happening/${this.happeningId}/webinar/chat`);
+        this.chat = new Chat(element);
 
         this.questionsContainer = element.querySelector('[data-questions-container]');
         this.questionsList = this.questionsContainer.querySelector('.questions-list');
@@ -253,7 +256,7 @@ Webinar.prototype.init = function () {
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
 
-        const subscriberManager = new Subscriber(
+        const subscriberManager = new VideoSubscriber(
             this.session,
             this.layoutContainer,
             this.subscribersNameMapping
@@ -313,6 +316,10 @@ Webinar.prototype.init = function () {
     }.bind(this));
 
     this.connect();
+
+    if (!this.mobile) {
+        this.addChatSubscriber();
+    }
 
     this.prepareRecordButtons();
 };
@@ -984,6 +991,29 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
+Webinar.prototype.addChatSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicChat,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'add_chat_message') {
+                this.chat.reload();
+            }
+
+            if (payload.action === 'update_chat_message_votes') {
+                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
+                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
+                voteCounts.forEach((voteCount) => {
+                    const voteType = voteCount.getAttribute('data-message-type');
+                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
+                });
+            }
+        }
+    );
+}
+
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
 
@@ -994,6 +1024,8 @@ Webinar.prototype.showChat = function (event) {
     this.hideElement(this.questionsContainer);
     this.showElement(this.chat.chatContainer);
     this.chat.initChat();
+    this.addChatSubscriber();
+    this.notificationSubscriber.removeSubscriber(this.topicQuestions);
 };
 
 Webinar.prototype.showQuestions = function (event) {
@@ -1005,9 +1037,21 @@ Webinar.prototype.showQuestions = function (event) {
     this.questionsButton.classList.add('btn-primary');
 
     this.hideElement(this.chat.chatContainer);
+    this.notificationSubscriber.removeSubscriber(this.topicChat);
     this.showElement(this.questionsContainer);
 
     this.initQuestions();
+
+    this.notificationSubscriber.addSubscriber(
+        this.topicQuestions,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+            if (payload.action === 'update') {
+                this.initQuestions();
+            }
+        }
+    );
 };
 
 Webinar.prototype.initQuestions = function () {
@@ -1105,22 +1149,6 @@ Webinar.prototype.initQuestions = function () {
 
             $questionsList[0].appendChild(rowEl);
         });
-
-        const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', `https://vimeet.events/happening/${this.happeningId}/webinar/questions`);
-
-        var eventSource = new EventSourcePolyfill(url, {
-            headers: {
-                'Authorization': `Bearer ${this.notificationSubscriberKey}`
-            }
-        });
-        eventSource.onmessage = (event) => {
-            const payload = JSON.parse(event.data);
-            if (payload.action === 'update') {
-                this.initQuestions();
-            }
-        }
-
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar questions');
