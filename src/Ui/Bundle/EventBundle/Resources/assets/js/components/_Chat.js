@@ -1,10 +1,8 @@
 'use strict';
 
 import $ from "jquery";
-import {EventSourcePolyfill} from "event-source-polyfill";
 
-function Chat(element, topicUrl){
-    this.topicUrl = topicUrl;
+function Chat(element){
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.addChatForm = element.querySelector('[data-chat-form]');
     this.addChatFormContent = this.addChatForm.querySelector('input[name="content"]');
@@ -209,38 +207,16 @@ Chat.prototype.initChat = function () {
 
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
-
-        const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', this.topicUrl);
-
-        var eventSource = new EventSourcePolyfill(url, {
-            headers: {
-                'Authorization': `Bearer ${this.notificationSubscriberKey}`
-            }
-        });
-        eventSource.onmessage = (event) => {
-            const payload = JSON.parse(event.data);
-
-            if (payload.action === 'add_chat_message') {
-                this.chatLoaded = false;
-                this.initChat();
-            }
-
-            if (payload.action === 'update_chat_message_votes') {
-                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
-                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
-                voteCounts.forEach((voteCount) => {
-                    const voteType = voteCount.getAttribute('data-message-type');
-                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
-                });
-            }
-        }
-
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar chat');
         }.bind(this));
 };
+
+Chat.prototype.reload = function () {
+    this.chatLoaded = false;
+    this.initChat();
+}
 
 Chat.prototype.removeChatListeners = function () {
     this.chatListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
