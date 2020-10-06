@@ -7,6 +7,7 @@ RUN set -eux \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
   ca-certificates \
+  curl \
   gettext-base \
   libbz2-dev \
   libfreetype6-dev \
@@ -23,6 +24,7 @@ RUN set -eux \
   unzip \
   msmtp \
   python-minimal \
+  vim \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -130,6 +132,12 @@ RUN mkdir -p /var/www/.composer && \
 # General symlink for the shared folder
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs
 RUN ln -sf /share/shared
+
+# OpenL10N
+RUN curl -sSL https://sdk.cloud.google.com > /tmp/google-cloud-sdk && \
+    bash /tmp/google-cloud-sdk --disable-prompts && \
+    /root/google-cloud-sdk/bin/gsutil cp gs://vimeet-build-staging/openl10n.yml /var/www/proximum-vimeet.project.local/htdocs/current/ && \
+    rm -rf /root/google-cloud-sdk /tmp/google-cloud-sdk
 
 # Working directory
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs/current
