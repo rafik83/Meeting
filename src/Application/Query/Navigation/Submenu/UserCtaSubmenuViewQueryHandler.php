@@ -70,7 +70,7 @@ class UserCtaSubmenuViewQueryHandler
             urlencode($query->user->getId()),
             urlencode($query->user->getEmail()),
             $participant ? $participant->getId() : null,
-            $techEventIdContact ? $techEventIdContact->getId() : null
+            $techEventIdContact ? $techEventIdContact->getValue() : null
         ];
         $link = str_replace($placeholders, $values, $parameters['link']);
 
