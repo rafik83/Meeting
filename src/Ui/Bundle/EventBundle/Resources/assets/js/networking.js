@@ -1,5 +1,6 @@
 import Chat from './components/_Chat';
 import ParticipantList from './components/_ParticipantList';
+import ParticipantListFilter from './components/_ParticipantListFilter';
 
 function init(target) {
 
@@ -10,7 +11,9 @@ function init(target) {
     });
 
 
-    [].forEach.call(target.querySelectorAll('.participantList'), function (element) {
+    const participantList = target.querySelectorAll('.participantList');
+
+    [].forEach.call(participantList, function (element) {
         const topic = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-topic');
         const subscriberKey = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-subscriber-key');
         const providerUrl = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-provider-url');
@@ -18,6 +21,9 @@ function init(target) {
         const participantList = new ParticipantList(element, providerUrl, topic, subscriberKey);
         participantList.init();
     });
+
+    new ParticipantListFilter(document.getElementById('networking_list_search_input'), target.querySelectorAll('.networking_list_row'));
+
 }
 
 init(document);

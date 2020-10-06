@@ -46,11 +46,16 @@
                 </div>
             </div>
             <div class="networking_list">
-                <h2>Participants connectés</h2>
+                <div class="networking_list_header">
+                    <h2>{{ 'networking.participants.title'|trans }}</h2>
+                    <div class="networking_list_search">
+                        <input id="networking_list_search_input" type="search" placeholder="{{ 'networking.participants.search'|trans }}">
+                    </div>
+                </div>
                 <table class="list list--users table table-striped table-bordered table-hover">
                     {% for subscription in networkingView.subscriptions %}
                     <tr>
-                        <td>
+                        <td class="networking_list_row">
                             <img src="{{ subscription.userAvatar }}">
                             <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
 
