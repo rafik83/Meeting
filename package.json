@@ -20,6 +20,7 @@
     "dexie": "^2.0.4",
     "elao-form.js": "0.1.*",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "hls.js": "^0.14.13",
     "intl-tel-input": "8.5.2",
     "jQuery-QueryBuilder": "^2.5.2",
     "jquery": "2.1.1",

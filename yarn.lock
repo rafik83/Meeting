@@ -2518,6 +2518,11 @@ eventemitter3@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
 
+eventemitter3@^4.0.3:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
+  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
 events@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
@@ -3331,6 +3336,14 @@ hawk@~6.0.2:
     cryptiles "3.x.x"
     hoek "4.x.x"
     sntp "2.x.x"
+
+hls.js@^0.14.13:
+  version "0.14.13"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.14.13.tgz#824395a0631c8e32bf0e8de06873f1d89774bada"
+  integrity sha512-0u61R0t6DcgJ7Ofr0RUlfrNrkP2gn5pHL+5clKmITY1P7pztyj5aoVw2/9SbeoM6k4shg5iPyuZb+7I32ZzqFQ==
+  dependencies:
+    eventemitter3 "^4.0.3"
+    url-toolkit "^2.1.6"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -7084,6 +7097,11 @@ url-parse@^1.4.3:
   dependencies:
     querystringify "^2.0.0"
     requires-port "^1.0.0"
+
+url-toolkit@^2.1.6:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.2.0.tgz#9a57b89f315d4b7dc340e150bcfa548ddf5f5ce9"
+  integrity sha512-Rde0c9S4fJK3FaHim3DSgdQ8IFrSXcZCpAJo9T7/FA+BoQGhK0ow3mpwGQLJCPYsNn6TstpW7/7DzMpSpz9F9w==
 
 url@^0.11.0:
   version "0.11.0"
