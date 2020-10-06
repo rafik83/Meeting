@@ -136,6 +136,7 @@ RUN ln -sf /share/shared
 # OpenL10N
 RUN curl -sSL https://sdk.cloud.google.com > /tmp/google-cloud-sdk && \
     bash /tmp/google-cloud-sdk --disable-prompts && \
+    /root/google-cloud-sdk/bin/gcloud auth list && \
     /root/google-cloud-sdk/bin/gsutil cp gs://vimeet-build-staging/openl10n.yml /var/www/proximum-vimeet.project.local/htdocs/current/ && \
     rm -rf /root/google-cloud-sdk /tmp/google-cloud-sdk
 
@@ -152,6 +153,9 @@ RUN make install@prod
 # Symfony
 #RUN bin/console cache:clear --env=prod && \
 #    bin/console cache:warmup --env=prod
+
+# OpenL10N fetch
+RUN php bin/console vimeet:translations:update
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
