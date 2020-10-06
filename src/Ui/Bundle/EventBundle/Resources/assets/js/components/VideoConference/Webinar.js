@@ -1023,7 +1023,7 @@ Webinar.prototype.showChat = function (event) {
     this.chatButton.classList.add('btn-primary');
     this.hideElement(this.questionsContainer);
     this.showElement(this.chat.chatContainer);
-    this.chat.initChat();
+    this.chat.reloadChat();
     this.addChatSubscriber();
     this.notificationSubscriber.removeSubscriber(this.topicQuestions);
 };
