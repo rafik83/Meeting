@@ -40,6 +40,6 @@ class ChatSession implements ChatMessageLinkableInterface
 
     public function isUserInChat(User $user): bool
     {
-        return $user === $this->toUser || $user === $this->fromUser;
+        $user->getId() === $this->toUser->getId() || $user->getId() === $this->fromUser->getId();
     }
 }
