@@ -9,7 +9,6 @@ use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
 {
@@ -22,20 +21,20 @@ class NotificationPublisher extends AbstractNotification implements Notification
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
-    /** @var RouterAdapter */
-    private $routerAdapter;
+    /** @var UserPayloadBuilder */
+    private $userPayloadBuilder;
 
     public function __construct(
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter,
-        RouterAdapter $routerAdapter
+        UserPayloadBuilder $userPayloadBuilder
     )
     {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
-        $this->routerAdapter = $routerAdapter;
+        $this->userPayloadBuilder = $userPayloadBuilder;
     }
 
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void
@@ -83,21 +82,11 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
     public function publishUserConnectionNotification(Sheet $sheet, User $user): void
     {
-        $avatar = $user->getAvatar();
-        if ($avatar === null) {
-            $avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $user->getAccount()->getCompleteName()]);
-        }
-
         $postData = [
             'topic' => $this->getNotificationTopic($sheet->getEvent()->getId()),
-            'data' => json_encode([
-                'action' => 'user_connection',
-                'userId' => $user->getId(),
-                'userLastName' => $user->getLastName(),
-                'userFirstName' => $user->getFirstName(),
-                'userPosition' => $user->getPosition(),
-                'userAvatar' => $avatar,
-                'userCompany' => $sheet->getTitle()]),
+            'data' => json_encode(
+                array_merge(['action' => 'user_connection',], $this->userPayloadBuilder->get($sheet, $user))
+            ),
         ];
 
         $this->publishMessage($postData);
