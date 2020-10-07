@@ -45,6 +45,7 @@
                     </div>
                     <hr>
 
+                    {% if networkingView.privateChatSessions|length %}
                     <h2>{{ 'networking.chat.title'|trans }}</h2>
                     <table class="list list--private-messages table table-condensed table-hover">
                     {% for chatSessionView in networkingView.privateChatSessions %}
@@ -69,6 +70,7 @@
                         </tr>
                     {% endfor %}
                     </table>
+                    {% endif %}
                 </div>
             </div>
             <div class="networking_list">
