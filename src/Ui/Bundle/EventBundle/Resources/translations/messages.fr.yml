@@ -409,7 +409,10 @@ navigation.links.sheet.locale: Version
 navigation.links.termsOfSale: 'Conditions générales de vente'
 navigation.menu: Menu
 networking.chat.add: 'Ajoutez votre message'
+networking.chat.global.title: 'Chat général'
+networking.chat.messages.count: '{0} Aucun message|{1} Un message|]1,Inf[ %count% messages'
 networking.chat.title: 'Chat privé'
+networking.chat.with: 'Chat privé avec %user%'
 networking.title: Networking
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'

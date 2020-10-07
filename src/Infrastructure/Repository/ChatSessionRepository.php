@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -28,7 +29,7 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('session')
-            ->from('Entity:ChatSession', 'session')
+            ->from(ChatSession::class, 'session')
             ->where('session.event = :event')
             ->andWhere('
                 (session.fromUser = :aUser AND session.toUser = :anotherUser)
@@ -42,11 +43,36 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function findByEventAndUser(Event $event, User $user): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session.id AS sessionId,
+                CASE WHEN fromUser=:user THEN toUser ELSE fromUser END AS otherUserId,
+                NEW \DateTimeImmutable(MAX(message.createdAt)) AS latestMessageDate,
+                COUNT(message) as messagesCount')
+            ->from(ChatSession::class, 'session')
+            ->join('session.fromUser', 'fromUser')
+            ->join('session.toUser', 'toUser')
+            ->leftJoin(ChatMessage::class, 'message', 'WITH', 'message.objectId=session.id AND message.objectType=:objectType')
+            ->addGroupBy('session.id')
+            ->setParameter('objectType', ChatSession::OBJECT_TYPE)
+            ->where('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     public function findOneById(int $id): ?ChatSession
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('session')
-            ->from('Entity:ChatSession', 'session')
+            ->from(ChatSession::class, 'session')
             ->where('session.id = :id')
             ->setParameter('id', $id);
 

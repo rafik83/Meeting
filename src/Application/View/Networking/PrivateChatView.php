@@ -21,7 +21,7 @@ class PrivateChatView
     /** @var string */
     public $toUserLastName;
 
-    /** @var string */
+    /** @var string|null */
     public $toUserCompany;
 
     /** @var string */
@@ -33,8 +33,17 @@ class PrivateChatView
     /** @var int */
     public $chatSessionId;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic, string $toUserFirstName, string $toUserLastName, string $toUserCompany, string $toUserPosition, int $toUserId, int $chatSessionId)
-    {
+    public function __construct(
+        string $providerUrl,
+        string $subscriberKey,
+        string $topic,
+        ?string $toUserFirstName,
+        ?string $toUserLastName,
+        ?string $toUserCompany,
+        ?string $toUserPosition,
+        int $toUserId,
+        int $chatSessionId
+    ) {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;

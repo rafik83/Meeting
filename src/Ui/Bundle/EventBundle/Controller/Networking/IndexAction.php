@@ -11,7 +11,6 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -49,18 +48,15 @@ class IndexAction
     }
 
     public function __invoke(
-        Request $request,
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Sheet $sheet
     )
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
-        ) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
         }
 
-        $participants = $sheet->getParticipants();
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
 
@@ -75,9 +71,9 @@ class IndexAction
                 '@Event/Networking/index.html.twig',
                 [
                     'networkingView' => $networkingView,
-                    'participant' => $participants,
                     'sheet' => $sheet,
                     'event' => $event,
+                    'currentUser' => $user,
                     'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
                 ]
             )

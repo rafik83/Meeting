@@ -12,9 +12,12 @@
 {% block content %}
 
         <div class="main__content privateChat">
-            <h2>Chat privé avec
-                {{ privateChatView.toUserFirstName }} {{ privateChatView.toUserLastName }} </h2>
-                <p>{{ privateChatView.toUserCompany }} - <em> {{ privateChatView.toUserPosition }}</em><p>
+            <h2>{{ 'networking.chat.with'|trans({'%user%': privateChatView.toUserFirstName~' '~privateChatView.toUserLastName}) }}
+            </h2>
+            <p>
+                {% if privateChatView.toUserCompany %}{{ privateChatView.toUserCompany }} - {% endif %}
+                {% if privateChatView.toUserPosition %}<em> {{ privateChatView.toUserPosition }}</em>{% endif %}
+            <p>
             <div data-chat-networking
                  data-topic="{{ privateChatView.topic }}"
                  data-chat-vote-like="{{ 'chat.vote.like'|trans }}"

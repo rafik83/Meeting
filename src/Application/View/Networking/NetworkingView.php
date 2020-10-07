@@ -3,6 +3,7 @@
 
 namespace Proximum\Vimeet\Application\View\Networking;
 
+use Proximum\Vimeet\Domain\Model\ChatSession;
 
 class NetworkingView
 {
@@ -18,11 +19,18 @@ class NetworkingView
     /** @var array */
     public $subscriptions;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions)
+    /** @var ChatSession[] */
+    public $privateChatSessions;
+
+    /**
+     * @param ChatSession[] $privateChatSessions
+     */
+    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions, array $privateChatSessions)
     {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;
         $this->subscriptions = $subscriptions;
+        $this->privateChatSessions = $privateChatSessions;
     }
 }

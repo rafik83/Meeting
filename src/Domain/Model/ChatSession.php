@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class ChatSession implements ChatMessageLinkableInterface
 {
+    const OBJECT_TYPE = 'private_chat';
+
     /** @var int */
     private $id;
 
@@ -30,12 +32,17 @@ class ChatSession implements ChatMessageLinkableInterface
 
     public function getObjectType(): string
     {
-        return 'private_chat';
+        return self::OBJECT_TYPE;
     }
 
     public function getEvent(): Event
     {
         return $this->event;
+    }
+
+    public function getOtherUser(User $currentUser): User
+    {
+        return $currentUser->getId() === $this->fromUser->getId() ? $this->toUser : $this->fromUser;
     }
 
     public function isUserInChat(User $user): bool

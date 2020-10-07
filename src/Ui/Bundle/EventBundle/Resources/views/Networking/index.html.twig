@@ -13,7 +13,6 @@
 
         <div class="main__content">
             <div class="networking_chat">
-                <h2>Chat général</h2>
                 <div data-chat-networking
                      data-topic="{{ networkingView.topic }}"
                      data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
@@ -27,6 +26,7 @@
                      data-notifications-provider-url="{{ networkingView.providerUrl }}"
                      data-notifications-subscriber-key="{{ networkingView.subscriberKey }}"
                 >
+                    <h2>{{ 'networking.chat.global.title'|trans }}</h2>
                     <div data-chat-container
                          data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'networking', objectId: sheet.event.id}) }}"
                          data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
@@ -43,6 +43,32 @@
                             <button type="submit"></button>
                         </form>
                     </div>
+                    <hr>
+
+                    <h2>{{ 'networking.chat.title'|trans }}</h2>
+                    <table class="list list--private-messages table table-condensed table-hover">
+                    {% for chatSessionView in networkingView.privateChatSessions %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('event_networking_chat', {
+                                        'sheet': sheet.id,
+                                        'toUser': chatSessionView.otherUser.id,
+                                    }) }}">
+                                    <div>
+                                        <em>{{ chatSessionView.latestMessageDate | localizeddate('short', 'short') }}</em>
+                                    </div>
+                                    <div>
+                                        <img src="{{ chatSessionView.otherUser.avatar }}">
+                                    {{ chatSessionView.otherUser.fullName }}
+                                    </div>
+                                </a>
+                            </td>
+                            <td class="text-right">
+                                {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
                 </div>
             </div>
             <div class="networking_list">

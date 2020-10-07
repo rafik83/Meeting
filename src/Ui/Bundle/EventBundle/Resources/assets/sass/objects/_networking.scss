@@ -40,6 +40,11 @@
   .networking_chat {
     max-width: 40%;
     width: 40%;
+
+    .chat-list {
+      height: auto;
+      max-height: calc(100vh - 420px);
+    }
   }
 
   .networking_list {
@@ -53,27 +58,31 @@
     margin-left: -15px;
   }
 
-  td {
-    display: flex;
+  .list {
+    &--users td {
+      display: flex;
+      a {
+        align-items: flex-end;
+        display: flex;
+      }
+
+      p {
+        align-items: flex-end;
+        display: flex;
+        margin: 0;
+
+        em {
+          padding-left: 5px;
+        }
+      }
+    }
 
     a {
-      align-items: flex-end;
-      display: flex;
       text-decoration: none;
       color: black;
-    }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    p {
-      align-items: flex-end;
-      display: flex;
-      margin: 0;
-
-      em {
-        padding-left: 5px;
+      &:hover {
+        text-decoration: underline;
       }
     }
 
@@ -86,6 +95,7 @@
       border-radius: 50%;
     }
   }
+
   .avatar {
     overflow: hidden;
     width: 70px;
