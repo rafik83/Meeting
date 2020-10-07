@@ -9,6 +9,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '--file=docker/apache/Dockerfile'
       - '--build-arg=OPENL10N_UPDATE=${_OPENL10N_UPDATE}'
       - '--build-arg=OPENL10N_HOSTNAME=${_OPENL10N_HOSTNAME}'
       - '--build-arg=OPENL10N_SSL=${_OPENL10N_SSL}'
