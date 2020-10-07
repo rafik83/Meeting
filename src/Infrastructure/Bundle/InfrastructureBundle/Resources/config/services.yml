@@ -4633,6 +4633,7 @@ services:
         arguments:
             - '@navigation.navigation_builder'
             - '@domain.key_dates.checker.networking_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
 

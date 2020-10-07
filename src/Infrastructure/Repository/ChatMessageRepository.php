@@ -7,12 +7,17 @@ use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageVote;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ChatMessageRepository implements ChatMessageRepositoryInterface
 {
     /** @var EntityManager */
     private $entityManager;
+
+    const OBJECT_TYPES = [
+        'NETWORKING' => 'networking'
+    ];
 
     public function __construct(EntityManager $entityManager)
     {
@@ -45,13 +50,12 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
                 )
             )
             ->from(ChatMessage::class, 'chatMessage')
-            ->join('chatMessage.createdBy' , 'createdBy')
+            ->join('chatMessage.createdBy', 'createdBy')
             ->where('chatMessage.objectType = :objectType AND chatMessage.objectId = :objectId')
             ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
             ->orderBy('chatMessage.createdAt', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         $votes = $this->entityManager
             ->createQueryBuilder()
@@ -64,8 +68,7 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->addGroupBy('chatMessage.id')
             ->addGroupBy('vote.type')
             ->getQuery()
-            ->getArrayResult()
-        ;
+            ->getArrayResult();
 
         if (count($votes)) {
             $indexedVotes = array_reduce($votes, function ($carry, $row) {
@@ -73,7 +76,7 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
                 return $carry;
             });
             foreach ($messages as $message) {
-                $message->votes = $indexedVotes[$message->id]??[];
+                $message->votes = $indexedVotes[$message->id] ?? [];
             }
         }
 
@@ -83,5 +86,17 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
     public function findById(int $id): ?ChatMessage
     {
         return $this->entityManager->find(ChatMessage::class, $id);
+    }
+
+    public function getMessagesCountByEvent(Event $event): int
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(chatMessage.id) as count')
+            ->from(ChatMessage::class, 'chatMessage')
+            ->where('chatMessage.objectType = :objectType')
+            ->andWhere('chatMessage.objectId = :eventId')
+            ->setParameters(['eventId' => $event->getId(), 'objectType' => Self::OBJECT_TYPES['NETWORKING']])
+            ->getQuery()->getSingleScalarResult();
     }
 }

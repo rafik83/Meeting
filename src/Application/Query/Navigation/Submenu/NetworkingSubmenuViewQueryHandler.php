@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class NetworkingSubmenuViewQueryHandler
 {
@@ -18,18 +19,21 @@ class NetworkingSubmenuViewQueryHandler
     /** @var NetworkingAccessChecker */
     private $networkingAccessChecker;
 
+    /** @var ChatMessageRepositoryInterface */
+    private $chatMessageRepository;
+
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        NetworkingAccessChecker $networkingAccessChecker
-    )
-    {
+        NetworkingAccessChecker $networkingAccessChecker,
+        ChatMessageRepositoryInterface $chatMessageRepository
+    ) {
         $this->navigationBuilder = $navigationBuilder;
         $this->networkingAccessChecker = $networkingAccessChecker;
+        $this->chatMessageRepository = $chatMessageRepository;
     }
 
     public function handle(NetworkingSubmenuViewQuery $query): ?SubmenuButtonView
     {
-
         if ($this->networkingAccessChecker->allowedToAccess($query->event)) {
             $networkingTitle = 'navigation.category.networking';
 
@@ -42,7 +46,7 @@ class NetworkingSubmenuViewQueryHandler
                 $networkingTitle,
                 $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
                 Route::isNetworking($query->route),
-                null,
+                $this->chatMessageRepository->getMessagesCountByEvent($query->event),
                 true
             );
         }
