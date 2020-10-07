@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV255 - move chat css to event guideline css
+- MV255 - move question css to event guideline css
+- MV255 - separate button chat and button question
 
 ## [2.51.2] - 2020-10-01
 ### Added
