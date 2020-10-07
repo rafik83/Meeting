@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Networking;
 
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
+use Proximum\Vimeet\Application\Exception\Chat\PrivateChatInvalidToUser;
 use Proximum\Vimeet\Application\View\Networking\PrivateChatView;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
