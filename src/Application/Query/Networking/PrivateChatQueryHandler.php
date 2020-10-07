@@ -27,7 +27,7 @@ class PrivateChatQueryHandler
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
     {
-        if ($privateChatQuery->fromUser->getId() !== $privateChatQuery->toUser->getId()) {
+        if ($privateChatQuery->fromUser->getId() === $privateChatQuery->toUser->getId()) {
             throw new PrivateChatInvalidToUser('User cannot open a chat session with himself');
         }
 

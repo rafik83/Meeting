@@ -8,7 +8,6 @@ use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\View\Networking\ChatSessionView;
 use Proximum\Vimeet\Application\View\Networking\NetworkingView;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class NetworkingQueryHandler
@@ -23,20 +22,14 @@ class NetworkingQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
-    /** @var UserRepositoryInterface */
-    private $userRepository;
-
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
         NotificationSubscriptionsInterface $notificationSubscriptions,
-        ChatSessionRepositoryInterface $chatSessionRepository,
-        UserRepositoryInterface $userRepository
-    )
-    {
+        ChatSessionRepositoryInterface $chatSessionRepository
+    ) {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->notificationSubscriptions = $notificationSubscriptions;
         $this->chatSessionRepository = $chatSessionRepository;
-        $this->userRepository = $userRepository;
     }
 
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
@@ -47,7 +40,7 @@ class NetworkingQueryHandler
         $privateChatSessions = array_map(
             function ($row) {
                 return new ChatSessionView(
-                    $this->userRepository->findOneById($row['otherUserId']),
+                    $row['otherUser'],
                     $row['latestMessageDate'],
                     $row['messagesCount']
                 );

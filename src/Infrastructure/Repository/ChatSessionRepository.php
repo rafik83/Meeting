@@ -49,13 +49,14 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
     public function findByEventAndUser(Event $event, User $user): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('session.id AS sessionId,
-                CASE WHEN fromUser=:user THEN toUser ELSE fromUser END AS otherUserId,
+            ->select('
+                other AS otherUser,
                 NEW \DateTimeImmutable(MAX(message.createdAt)) AS latestMessageDate,
-                COUNT(message) as messagesCount')
+                COUNT(message) AS messagesCount')
             ->from(ChatSession::class, 'session')
             ->join('session.fromUser', 'fromUser')
             ->join('session.toUser', 'toUser')
+            ->join(User::class, 'other', 'WITH', 'other = (CASE WHEN fromUser=:user THEN toUser ELSE fromUser END)')
             ->leftJoin(ChatMessage::class, 'message', 'WITH', 'message.objectId=session.id AND message.objectType=:objectType')
             ->addGroupBy('session.id')
             ->setParameter('objectType', ChatSession::OBJECT_TYPE)
