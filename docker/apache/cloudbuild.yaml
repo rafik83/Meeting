@@ -1,0 +1,40 @@
+timeout: 1800s
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+
+steps:
+
+  # Build image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg=OPENL10N_UPDATE=${_OPENL10N_UPDATE}'
+      - '--build-arg=OPENL10N_HOSTNAME=${_OPENL10N_HOSTNAME}'
+      - '--build-arg=OPENL10N_SSL=${_OPENL10N_SSL}'
+      - '--build-arg=OPENL10N_USERNAME=${_OPENL10N_USERNAME}'
+      - '--build-arg=OPENL10N_PASSWORD=${_OPENL10N_PASSWORD}'
+      - '--tag=eu.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+      - '.'
+    waitFor: ['-']
+
+  # Create custom image tag and write to file /workspace/_TAG
+  - name: 'ubuntu'
+    args: ['bash', '-c', "echo `echo $BRANCH_NAME | sed 's,/,-,g' | awk '{print tolower($0)}'`_$(date -u +%Y%m%dT%H%M)_$SHORT_SHA > _TAG; echo $(cat _TAG)"]
+
+  # Tag image with custom tag
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Tagging image'
+    entrypoint: '/bin/bash'
+    args: ['-c', "docker tag eu.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA eu.gcr.io/$PROJECT_ID/$REPO_NAME:$(cat _TAG)"]
+
+substitutions:
+  _OPENL10N_UPDATE: "false"
+  _OPENL10N_HOSTNAME: "localhost"
+  _OPENL10N_SSL: "true"
+  _OPENL10N_USERNAME: "guest"
+  _OPENL10N_PASSWORD: "guest"
+
+images: [
+    'eu.gcr.io/$PROJECT_ID/$REPO_NAME'
+]
