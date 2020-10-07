@@ -68,7 +68,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
 
         $directory = (null === $directoryPath) ? $this->publicDir . $path : $directoryPath . $path;
 
-        $extension = '.' . $file->getClientOriginalExtension();
+        $extension = '.' . $file->guessExtension();
         $prefix    = uniqid() . '_';
         $filename  = $prefix . Transliterator::urlize(basename($file->getClientOriginalName(), $extension)) . $extension;
 
