@@ -78,6 +78,9 @@ class Participant implements MailRecipientInterface
     /** @var \DateTimeInterface */
     private $registrationDate;
 
+    /** @var \DateTimeInterface */
+    private $networkingChatViewedAt;
+
     /** @var int */
     private $rank = 0;
 
@@ -86,13 +89,15 @@ class Participant implements MailRecipientInterface
         User $user,
         array $data,
         $active,
-        \DateTimeInterface $registrationDate
+        \DateTimeInterface $registrationDate,
+        \DateTimeInterface $networkingChatViewedAt
     ) {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
         $this->registrationDate = $registrationDate;
+        $this->networkingChatViewedAt = $networkingChatViewedAt;
     }
 
     /**
@@ -354,7 +359,8 @@ class Participant implements MailRecipientInterface
             $participant->getUser(),
             $participant->getData(),
             $participant->isActive(),
-            $registrationDate
+            $registrationDate,
+            $participant->getNetworkingChatViewedAt()
         );
 
         $duplicatedParticipant->setImported(true);
@@ -380,6 +386,11 @@ class Participant implements MailRecipientInterface
     public function getRegistrationDate(): \DateTimeInterface
     {
         return $this->registrationDate;
+    }
+
+    public function getNetworkingChatViewedAt(): ?\DateTimeInterface
+    {
+        return $this->networkingChatViewedAt;
     }
 
     public function getRank(): int
