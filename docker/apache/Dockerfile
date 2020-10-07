@@ -105,6 +105,7 @@ ARG PHP_VARIANT=apache
 # Application specific code
 COPY --chown=www-data:www-data . /var/www/proximum-vimeet.project.local/htdocs/current
 COPY --chown=www-data:www-data app/config/parameters.yml.dist /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml
+COPY --chown=www-data:www-data docker/apache/symfony/openl10n.yml /var/www/proximum-vimeet.project.local/htdocs/current/openl10n.yml
 
 # Spinnaker CLI binary + Templates
 COPY --from=spinnaker /usr/local/bin/spin /usr/local/bin/spin
@@ -133,13 +134,6 @@ RUN mkdir -p /var/www/.composer && \
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs
 RUN ln -sf /share/shared
 
-# OpenL10N
-RUN curl -sSL https://sdk.cloud.google.com > /tmp/google-cloud-sdk && \
-    bash /tmp/google-cloud-sdk --disable-prompts && \
-    /root/google-cloud-sdk/bin/gcloud auth list && \
-    /root/google-cloud-sdk/bin/gsutil cp gs://vimeet-build-staging/openl10n.yml /var/www/proximum-vimeet.project.local/htdocs/current/ && \
-    rm -rf /root/google-cloud-sdk /tmp/google-cloud-sdk
-
 # Working directory
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs/current
 USER www-data
@@ -155,7 +149,14 @@ RUN make install@prod
 #    bin/console cache:warmup --env=prod
 
 # OpenL10N fetch
-RUN php bin/console vimeet:translations:update
+ARG OPENL10N_UPDATE="false"
+ARG OPENL10N_HOSTNAME
+ARG OPENL10N_SSL
+ARG OPENL10N_USERNAME
+ARG OPENL10N_PASSWORD
+RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
+      php bin/console vimeet:translations:update; \
+    fi
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
