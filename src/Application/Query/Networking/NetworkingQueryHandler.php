@@ -29,11 +29,11 @@ class NetworkingQueryHandler
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
     {
 
-        $topic = $this->notificationSubscriber->getNotificationTopic($networkingQuery->event->getId());
+        $topic = $this->notificationSubscriber->getNotificationTopic($networkingQuery->sheet->getEvent()->getId());
 
         return new NetworkingView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->event, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
+            $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->sheet, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic,
             $this->notificationSubscriptions->getSubscriptions($topic)
         );

@@ -6,10 +6,9 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 use Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
@@ -82,7 +81,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishUserConnectionNotification(Event $event, User $user): void
+    public function publishUserConnectionNotification(Sheet $sheet, User $user): void
     {
         $avatar = $user->getAvatar();
         if ($avatar === null) {
@@ -90,7 +89,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
         }
 
         $postData = [
-            'topic' => $this->getNotificationTopic($event->getId()),
+            'topic' => $this->getNotificationTopic($sheet->getEvent()->getId()),
             'data' => json_encode([
                 'action' => 'user_connection',
                 'userId' => $user->getId(),
@@ -98,7 +97,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
                 'userFirstName' => $user->getFirstName(),
                 'userPosition' => $user->getPosition(),
                 'userAvatar' => $avatar,
-                'userCompany' => $user->getAccount()->getCompany()]),
+                'userCompany' => $sheet->getTitle()]),
         ];
 
         $this->publishMessage($postData);

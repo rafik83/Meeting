@@ -21,7 +21,9 @@
 
         {% if event is defined %}
             {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Event\\ExtraHeaderAction', {'event': event})) }}
-            {{ networking_template_snippet.generate(event, app.user) | raw }}
+        {% endif %}
+        {% if sheet is defined %}
+            {{ networking_template_snippet.generate(sheet, app.user) | raw }}
         {% endif %}
     </head>
     <body {% block body_attributes '' %}>
