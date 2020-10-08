@@ -18,6 +18,9 @@ class ViewerWebinarView extends WebinarView
     /** @var string|null */
     public $hlsUrl;
 
+    /** @var bool */
+    public $isWebinarHls;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -39,6 +42,7 @@ class ViewerWebinarView extends WebinarView
         ?string $liveUrl,
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
+        bool $isWebinarHls,
         ?string $hlsUrl
     ) {
         parent::__construct(
@@ -62,5 +66,6 @@ class ViewerWebinarView extends WebinarView
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->hlsUrl = $hlsUrl;
+        $this->isWebinarHls = $isWebinarHls;
     }
 }

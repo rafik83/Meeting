@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use DateTimeInterface;
+use LogicException;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -46,7 +47,7 @@ class GetWebinarViewQueryHandler
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
-        \DateTimeInterface $dateTime
+        DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
@@ -66,14 +67,15 @@ class GetWebinarViewQueryHandler
             0,
             $happening->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
         );
-        $timeRemainingBeforeStartInSeconds = max(
-            0,
-            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
-        );
 
         $liveUrl = $this->getLiveUrl($happening, $query->getUser());
 
         if ($isSpeaker) {
+            $timeRemainingBeforeStartInSeconds = max(
+                0,
+                $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+            );
+
             return new SpeakerWebinarView(
                 $happening->getId(),
                 $query->getUser()->getId(),
@@ -87,9 +89,9 @@ class GetWebinarViewQueryHandler
                 new TimeRangeView($happening->getBegin(), $happening->getEnd()),
                 $this->dateTime,
                 $timeRemainingInSeconds,
-                round($timeRemainingInSeconds * 0.2),
+                $this->getWarningTimeRemainingInSeconds($timeRemainingInSeconds),
                 $timeRemainingBeforeStartInSeconds,
-                $happening->getEnd()->getTimestamp() + 60*15,
+                $this->getStopTimestamp($happening),
                 $happening->getWebinarHeaderImage($query->getLocale()),
                 $liveUrl,
                 $happening->isSidebarAllowed(),
@@ -118,8 +120,21 @@ class GetWebinarViewQueryHandler
             $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
+            $happening->allowWebinarOnHLS(),
             $this->getHLSUrl($happening)
         );
+    }
+
+    private function getWarningTimeRemainingInSeconds($timeRemainingInSeconds): int
+    {
+        return round($timeRemainingInSeconds * 0.2);
+    }
+
+    private function getStopTimestamp(Happening $happening): int
+    {
+        // Stop is 15 minutes after the end of the webinar.
+
+        return $happening->getEnd()->getTimestamp() + 60 * 15;
     }
 
     private function getHLSUrl(Happening $happening): ?string
@@ -163,7 +178,7 @@ class GetWebinarViewQueryHandler
         }
 
         if (!$happening->hasWebinarSessionId()) {
-            throw new \LogicException('Happening webinar session id not created');
+            throw new LogicException('Happening webinar session id not created');
         }
 
         $session = $this->videoConferenceAdapter->getSession($happening->getWebinarSessionId());
