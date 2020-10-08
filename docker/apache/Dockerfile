@@ -154,7 +154,7 @@ ARG OPENL10N_SSL
 ARG OPENL10N_USERNAME
 ARG OPENL10N_PASSWORD
 RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
-      envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml
+      envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml && \
       php bin/console vimeet:translations:update; \
     fi
 
