@@ -154,9 +154,9 @@ ARG OPENL10N_HOSTNAME
 ARG OPENL10N_SSL
 ARG OPENL10N_USERNAME
 ARG OPENL10N_PASSWORD
-RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
-      php bin/console vimeet:translations:update; \
-    fi
+#RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
+#      php bin/console vimeet:translations:update; \
+#    fi
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
