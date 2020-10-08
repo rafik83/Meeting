@@ -319,5 +319,8 @@ interface MeetingRepositoryInterface
     ): ?Meeting;
 
     public function loadParticipantMeetingsCount(array $participantIds): void;
+
     public function getParticipantMeetingsCount(Participant $participant): int;
+
+    public function getSheetScheduledMeetingsCount(array $sheetIds): array;
 }
