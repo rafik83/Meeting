@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardMeetingContactEvaluationView;
@@ -325,4 +317,7 @@ interface MeetingRepositoryInterface
         Participant $participant,
         \DateTimeInterface $begin
     ): ?Meeting;
+
+    public function loadParticipantMeetingsCount(array $participantIds): void;
+    public function getParticipantMeetingsCount(Participant $participant): int;
 }

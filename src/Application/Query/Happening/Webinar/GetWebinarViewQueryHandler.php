@@ -85,12 +85,14 @@ class GetWebinarViewQueryHandler
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
             $timeRemainingBeforeStartInSeconds,
+            $happening->getEnd()->getTimestamp() + 60*15,
             $happening->getWebinarHeaderImage($query->getLocale()),
             $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $this->isRecordingAllowed->isSatisfiedBy($happening),
-            $this->isWebinarRecording($happening)
+            $this->isWebinarRecording($happening),
+            $happening->getEvent()->getAutoArchiveWebinar()
         );
     }
 

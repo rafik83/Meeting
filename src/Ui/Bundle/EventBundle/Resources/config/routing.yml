@@ -557,7 +557,24 @@ event_catalog_complete_sheet:
         sheet: \d+
         sheetToDisplay: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Catalog:displaySheet }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\DisplaySheetAction }
+
+event_catalog_sheet_follow_link:
+    path: /forward/{sheet}/object/{objectId}/{index}
+    requirements:
+        sheet: \d+
+        objectId: \w+
+        index: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\FollowLinkAction, index: null }
+
+event_catalog_sheet_video_play_callback:
+    path: /video-play-callback/{sheet}/object/{objectId}
+    requirements:
+        sheet: \d+
+        objectId: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\VideoPlayCallbackAction }
 
 event_catalog_sheet_meeting_request:
     path: /sheet/{sheet}/catalog/sheet/{toSheet}/request-meeting

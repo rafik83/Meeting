@@ -504,6 +504,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Analytics\SheetsUserActivityEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\AddViewHandler'
+        tags:
+            - { name: kernel.event_subscriber }
+
     event_listener.sheet.phone.phone_validation_status_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone\PhoneValidationStatusEventSubscriber
         arguments:

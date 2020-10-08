@@ -34,6 +34,7 @@ import CatalogSelectFromNomenclaturesField from './components/_CatalogSelectFrom
 import SortParticipants from './components/_SortParticipants';
 import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
 import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
+import SheetVideo from './components/_SheetVideo';
 
 import 'bootstrap';
 import 'elao-form.js';
@@ -141,6 +142,10 @@ function init (target) {
         if (buttons !== null) {
             new FilterRequestByType(element, buttons);
         }
+    });
+
+    target.querySelectorAll('[data-video-listener]').forEach((element) => {
+        new SheetVideo(element);
     });
 
     $('.dropdown-menu', target).on('click', function (e) {

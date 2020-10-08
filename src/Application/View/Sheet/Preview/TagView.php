@@ -21,22 +21,18 @@ class TagView
     /** @var string */
     public $content;
 
-    /**
-     * @param string $type
-     * @param string $label
-     * @param string $content
-     */
-    public function __construct($type, $label, $content)
+    /** @var string|null */
+    public $originalUrl;
+
+    public function __construct(string $type, string $label, string $content, ?string $originalUrl)
     {
-        $this->type    = $type;
-        $this->label   = $label;
+        $this->type = $type;
+        $this->label = $label;
         $this->content = $content;
+        $this->originalUrl = $originalUrl;
     }
 
-    /**
-     * @return bool
-     */
-    public function isLink()
+    public function isLink(): bool
     {
         return 'url' === $this->type;
     }

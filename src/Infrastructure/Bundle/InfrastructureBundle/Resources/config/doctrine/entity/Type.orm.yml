@@ -76,6 +76,14 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: true
+        displayAnalyticsOnSheet:
+            type: boolean
+            options:
+                default: false
+        displayAnalyticsOnMeetingList:
+            type: boolean
+            options:
+                default: false
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

@@ -138,6 +138,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $showCheckinStatus;
 
+    /** @var bool */
+    private $autoArchiveWebinar;
+
     public function __construct(
         string $title,
         string $fallback,
@@ -159,7 +162,8 @@ class Event implements EventInterface, TraceableInterface
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
-        bool $showCheckinStatus = false
+        bool $showCheckinStatus = false,
+        bool $autoArchiveWebinar = false
     ) {
         $this->translations = new ArrayCollection();
         $this->configuration = new Configuration();
@@ -189,6 +193,7 @@ class Event implements EventInterface, TraceableInterface
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
+        $this->autoArchiveWebinar = $autoArchiveWebinar;
     }
 
     /**
@@ -494,7 +499,8 @@ class Event implements EventInterface, TraceableInterface
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
-        bool $showCheckinStatus = false
+        bool $showCheckinStatus = false,
+        bool $autoArchiveWebinar = false
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -516,6 +522,7 @@ class Event implements EventInterface, TraceableInterface
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
+        $this->autoArchiveWebinar = $autoArchiveWebinar;
     }
 
     /**
@@ -977,5 +984,10 @@ class Event implements EventInterface, TraceableInterface
             $notificationImageExtension
         );
         $this->translations->set($locale, $eventTranslation);
+    }
+
+    public function getAutoArchiveWebinar(): bool
+    {
+        return $this->autoArchiveWebinar;
     }
 }

@@ -5,6 +5,73 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.55.0] - 2010-10-08
+### Fixed
+- Hotfix - Prevent invalid extensions (especially php) on uploaded files
+
+## [2.54.0] - 2010-10-07
+### Fixed
+- MV-254 - Display bullet point in help message
+- Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)
+
+## [2.53.0] - 2020-10-05
+### Added
+- VIMEET-2237 - Option to record webinars automatically
+
+## [2.52.0] - 2020-10-01
+### Revert
+- VIMEET-1925 - Revert chat and questions with Mercure, reintroduce chat and questions from Tokbox
+
+## [2.51.2] - 2020-10-01
+### Added
+- Hotfix - force refresh chat and questions in webinars
+
+## [2.51.1] - 2020-10-01
+### Added
+- Hotfix - add message to force speakers to use chrome
+
+## [2.51.0] - 2020-09-30
+### Added
+- VIMEET-1925 - New version of chat and questions decoupled from Tokbox
+
+## [2.50.6] - 2020-09-29
+### Fixed
+- Use absolute urls in sheet for pdf export
+- Use event url generator for absolute link on sheet pdf
+
+## [2.50.5] - 2020-09-29
+### Fixed
+- Limit resolution for webinar screen sharing
+
+## [2.50.4] - 2020-09-28
+### Added
+- Disable right click on webinar video for LM
+
+## [2.50.3] - 2020-09-28
+### Fixed
+- Add _locale parameters in links to avoid exception when pdf is generated with cli
+
+## [2.50.2] - 2020-09-28
+### Fixed
+- Don't show website url if value is empty to avoid exception on redirect page
+
+## [2.50.1] - 2020-09-28
+### Fixed
+- Avoid exception by allowing null for some return types and arguments
+
+## [2.50.0] - 2020-09-28
+### Added
+- VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2205 - Display analytics on sheet
+- VIMEET-2207 - Add analytics and number of meeting requests in participants export
+
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
+
+## [2.49.1] - 2020-09-25
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available (side effect of VIMEET-2203)
+
 ## [2.49.0] - 2020-09-25
 ### Added
 - VIMEET-2228 - Button custom menu

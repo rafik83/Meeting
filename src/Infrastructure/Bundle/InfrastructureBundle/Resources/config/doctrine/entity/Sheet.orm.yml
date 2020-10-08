@@ -111,3 +111,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             cascade: ['persist', 'remove']
             mappedBy: sheet
             orphanRemoval: true
+    embedded:
+        analytics:
+            class: Proximum\Vimeet\Domain\Model\Sheet\Analytics

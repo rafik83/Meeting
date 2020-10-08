@@ -1,0 +1,7 @@
+{% macro badge_click_analytics(sheet, objectId, index) %}
+    <span class="badge analyticsCard">
+        <i class="glyphicon glyphicon-stats"></i>
+        {%- set stats = sheet.analytics.getClickedElementsViews(objectId, index) -%}
+        {{ 'analytics.click_counter'|transchoice(stats.views, {'%clicks%': stats.views, '%uniqueClicks%': stats.uniqueViews}) }}
+    </span>
+{% endmacro %}

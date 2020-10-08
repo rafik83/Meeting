@@ -47,7 +47,7 @@ class CheckboxesType extends AbstractType
                 return null === $item ? null : $item->getCleanKey();
             },
             'choice_value'              => function (NomenclatureItem $item = null) {
-                return null === $item ? null : $item->getKey();
+                return null === $item ? null : mb_strtolower($item->getKey());
             },
             'choice_label'              => function (Options $options) {
                 return function (NomenclatureItem $item) use ($options) {
