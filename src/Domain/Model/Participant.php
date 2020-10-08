@@ -90,7 +90,7 @@ class Participant implements MailRecipientInterface
         array $data,
         $active,
         \DateTimeInterface $registrationDate,
-        \DateTimeInterface $networkingChatViewedAt
+        ?\DateTimeInterface $networkingChatViewedAt = null
     ) {
         $this->sheet  = $sheet;
         $this->user   = $user;

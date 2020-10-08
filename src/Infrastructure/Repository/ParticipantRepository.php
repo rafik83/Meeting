@@ -484,8 +484,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.event = :event')
             ->setParameter('sheetIds', $sheetIds)
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -526,8 +525,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
             ->andWhere('NOT EXISTS (SELECT m.id FROM ' . MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
-            ->setParameter('mass', $mass)
-        ;
+            ->setParameter('mass', $mass);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -669,8 +667,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->join('participant.user', 'user')
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -690,5 +687,10 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->groupBy('participantProduct.id')
             ->getQuery()
             ->getResult();
+    }
+
+    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event)
+    {
+        // créer une requète qui met à jour tout les participants lié un Event donné
     }
 }

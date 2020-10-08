@@ -216,7 +216,7 @@ interface ParticipantRepositoryInterface
      */
     public function getParticipantsByEvent(Event $event, $locale);
 
-    public function getParticipantsFromEnabledSheetsByEvent(Event $event,string  $locale): array;
+    public function getParticipantsFromEnabledSheetsByEvent(Event $event, string  $locale): array;
 
     /**
      * @param Participant[]      $participants
@@ -267,4 +267,6 @@ interface ParticipantRepositoryInterface
     public function getParticipantEmailsForEvent(Event $event): array;
 
     public function getProductIdsOfUserForEvent(User $user, Event $event): array;
+
+    public function updateAllNetworkingChatViewedAt(User  $user, EventInterface $event);
 }

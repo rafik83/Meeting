@@ -24,6 +24,6 @@ class UpdateNetworkingChatViewedAtHandler
 
     public function handle(UpdateNetworkingChatViewedAt $command): void
     {
-        // TODO
+        $this->participantRepository->updateAllNetworkingChatViewedAt($command->user, $command->sheet->getEvent());
     }
 }
