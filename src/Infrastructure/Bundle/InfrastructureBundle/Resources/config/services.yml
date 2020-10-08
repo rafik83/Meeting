@@ -7095,7 +7095,8 @@ services:
     #
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PushHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PullHandler'
             - '%kernel.cache_dir%'
         tags:
             - { name: console.command }
