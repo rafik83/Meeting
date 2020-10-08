@@ -46,7 +46,7 @@ class AddChatMessageHandlerTest extends TestCase
         $checkAccessToChatMessages->isSatisfiedBy($meeting->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
         $notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
-        $notificationPublisher->publishChatMessageNotification($meeting->reveal())->shouldBeCalled();
+        $notificationPublisher->publishChatMessageNotification($meeting->reveal(), $savedChatMesssage->reveal())->shouldBeCalled();
 
         $addChatMessageHandler = new AddChatMessageHandler(
             $messageRepository->reveal(),

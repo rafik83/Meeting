@@ -2,7 +2,7 @@
 
 import $ from "jquery";
 
-function Chat(element){
+function Chat(element) {
     this.chatContainer = element.querySelector('[data-chat-container]');
     this.addChatForm = element.querySelector('[data-chat-form]');
     this.addChatFormContent = this.addChatForm.querySelector('input[name="content"]');
@@ -25,9 +25,6 @@ function Chat(element){
     this.chatUnVoteMessage = element.getAttribute('data-chat-unvote-message');
     this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
 
-    this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
-    this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
-
     this.chatListeners = [];
 }
 
@@ -46,6 +43,7 @@ Chat.prototype.submitChat = function (event) {
         this.addChatFormSubmit.disabled = false;
 
         if (response.status === 'ok') {
+            this.reload();
             return;
         }
 

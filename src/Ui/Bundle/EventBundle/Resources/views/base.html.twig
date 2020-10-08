@@ -21,7 +21,9 @@
 
         {% if event is defined %}
             {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Event\\ExtraHeaderAction', {'event': event})) }}
-            {{ networking_template_snippet.generate(event, app.user) | raw }}
+            {% if is_granted('ROLE_USER') %}
+                {{ networking_template_snippet.generate(event, app.user) | raw }}
+            {% endif %}
         {% endif %}
     </head>
     <body {% block body_attributes '' %}>
@@ -52,6 +54,22 @@
 
         {% if event is defined %}
             {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
+        {% endif %}
+
+        {% if sheet is defined %}
+            {# notification toast #}
+            <div id="notification-toast"
+                class="hide"
+                data-notification-toast
+                data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id}) }}"
+            >
+                <p class="message-content"></p>
+                <p><em class="message-author"></em></p>
+                <p>
+                    <a class="message-link" href="#">{{ 'networking.chat.notification.open'|trans }}</a>
+                </p>
+            </div>
+
         {% endif %}
 
         {% block javascripts %}

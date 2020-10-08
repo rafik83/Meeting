@@ -411,6 +411,7 @@ navigation.menu: Menu
 networking.chat.add: 'Ajoutez votre message'
 networking.chat.global.title: 'Chat général'
 networking.chat.messages.count: '{0} Aucun message|{1} Un message|]1,Inf[ %count% messages'
+networking.chat.notification.open: 'Ouvrir dans le chat'
 networking.chat.title: 'Chat privé'
 networking.chat.with: 'Chat privé avec %user%'
 networking.title: Networking

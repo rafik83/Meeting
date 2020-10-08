@@ -33,7 +33,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         return $this->mercureHubUrl;
     }
 
-    public function getHappeningSubscriberKey(Happening $happening, int $userId, array $types): string
+    public function getHappeningSubscriberKey(Happening $happening, User $user, array $types): string
     {
         if (empty($types)) {
             throw new InvalidArgumentException('Types array cannot be empty');
@@ -41,10 +41,10 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
 
         return JWT::encode([
             'mercure' => [
-                'subscriber' => array_map(function ($type) use ($happening) {
-                    return ['topic' => $this->getHappeningTopic($happening->getId(), $type)];
+                'subscribe' => array_map(function ($type) use ($happening) {
+                    return $this->getHappeningTopic($happening->getId(), $type);
                 }, $types),
-                'payload' => ['userId' => $userId],
+                'payload' => $this->getUserPayload($user),
             ]
         ], $this->mercureSubscriberKey);
     }
@@ -55,25 +55,48 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
             throw new InvalidArgumentException('Types array cannot be empty');
         }
 
+        return JWT::encode([
+            'mercure' => [
+                'subscribe' => array_map(function ($type) use ($event) {
+                    return $this->getNetworkingTopic($event->getId(), $type);
+                }, $types),
+                'payload' => $this->getUserPayload($user),
+            ]
+        ], $this->mercureSubscriberKey);
+    }
+
+    /**
+     * Generate JWT token for all topics a user can be interested in
+     * @param ChatSession[] $sessions
+     */
+    public function getEventSubscriberKey(Event $event, User $user): string
+    {
+        $topics[] = $this->getChatSessionTopic($user->getId());
+
+        $topics[] = $this->getNotificationTopic($event->getId());
+
+        return JWT::encode([
+            'mercure' => [
+                'subscribe' => $topics,
+                'payload' => $this->getUserPayload($user),
+            ]
+        ], $this->mercureSubscriberKey);
+    }
+
+    private function getUserPayload(User $user): array
+    {
         $avatar = $user->getAvatar();
         if ($avatar === null) {
             $avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $user->getAccount()->getCompleteName()]);
         }
 
-        return JWT::encode([
-            'mercure' => [
-                'subscriber' => array_map(function ($type) use ($event) {
-                    return ['topic' => $this->getNetworkingTopic($event->getId(), $type)];
-                }, $types),
-                'payload' => [
-                    'userId' => $user->getId(),
-                    'userLastName' => $user->getLastName(),
-                    'userFirstName' => $user->getFirstName(),
-                    'userPosition' => $user->getPosition(),
-                    'userAvatar' => $avatar,
-                    'userCompany' => $user->getAccount()->getCompany()
-                ]
-            ]
-        ], $this->mercureSubscriberKey);
+        return [
+            'userId' => $user->getId(),
+            'userLastName' => $user->getLastName(),
+            'userFirstName' => $user->getFirstName(),
+            'userPosition' => $user->getPosition(),
+            'userAvatar' => $avatar,
+            'userCompany' => $user->getAccount()->getCompany()
+        ];
     }
 }

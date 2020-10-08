@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
+use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,8 +28,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter
-    )
-    {
+    ) {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
@@ -44,38 +44,44 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object): void
+    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message): void
     {
+        $payload = ['action' => 'add_chat_message'];
+
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getChatSessionTopic($object);
+            $topic = $this->getChatSessionTopic($object->getOtherUser($message->getCreatedBy())->getId());
+            $payload['content'] = $message->getContent();
+            $payload['author'] = $message->getCreatedBy()->getFullname();
+            $payload['authorId'] = $message->getCreatedBy()->getId();
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }
 
         $postData = [
             'topic' => $topic,
-            'data' => json_encode(['action' => 'add_chat_message']),
+            'data' => json_encode($payload),
+            'private' => true,
         ];
 
         $this->publishMessage($postData);
     }
 
-    public function publishChatVoteNotification(ChatMessageLinkableInterface $object, int $chatMessageId, array $votes): void
+    public function publishChatVoteNotification(ChatMessageLinkableInterface $object, ChatMessage $chatMessage, array $votes): void
     {
 
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getChatSessionTopic($object);
+            $topic = $this->getChatSessionTopic($object->getOtherUser($chatMessage->getCreatedBy())->getId());
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }
 
         $postData = [
             'topic' => $topic,
-            'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessageId, 'votes' => $votes]),
+            'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessage->getId(), 'votes' => $votes]),
         ];
 
         $this->publishMessage($postData);

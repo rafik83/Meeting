@@ -74,7 +74,6 @@ class VoteChatMessageHandlerTest extends TestCase
         $author = $this->prophesize(User::class);
         $author->getId()->shouldBeCalled()->willReturn(456);
         $chatMessage = $this->prophesize(ChatMessage::class);
-        $chatMessage->getId()->shouldBeCalled()->willReturn(1);
         $chatMessage->getCreatedBy()->shouldBeCalled()->willReturn($author->reveal());
         $chatMessage->getObjectType()->willReturn('happening');
         $chatMessage->getObjectId()->willReturn(4224);
@@ -97,7 +96,11 @@ class VoteChatMessageHandlerTest extends TestCase
         $this->chatMessageVoteRepository->add(Argument::type(ChatMessageVote::class))->shouldBeCalled();
         $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage->reveal())->shouldBeCalled()->willReturn(['like' => 1]);
 
-        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject->reveal(), 1, ['like' => 1])->shouldBeCalled();
+        $this->notificationPublisher->publishChatVoteNotification(
+            $chatMessageLinkableObject->reveal(),
+            $chatMessage->reveal(),
+            ['like' => 1]
+        )->shouldBeCalled();
 
         $this->voteChatMessageHandler->handle($voteChatMessage->reveal());
     }
@@ -120,7 +123,6 @@ class VoteChatMessageHandlerTest extends TestCase
         $author = $this->prophesize(User::class);
         $author->getId()->shouldBeCalled()->willReturn(456);
         $chatMessage = $this->prophesize(ChatMessage::class);
-        $chatMessage->getId()->shouldBeCalled()->willReturn(1);
         $chatMessage->getCreatedBy()->shouldBeCalled()->willReturn($author->reveal());
         $chatMessage->getObjectType()->willReturn('happening');
         $chatMessage->getObjectId()->willReturn(4224);
@@ -146,7 +148,7 @@ class VoteChatMessageHandlerTest extends TestCase
         $this->chatMessageVoteRepository->add(Argument::any())->shouldNotBeCalled();
         $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage->reveal())->shouldBeCalled()->willReturn([]);
 
-        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject->reveal(), 1, [])->shouldBeCalled();
+        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject->reveal(), $chatMessage->reveal(), [])->shouldBeCalled();
 
         $this->voteChatMessageHandler->handle($voteChatMessage->reveal());
     }

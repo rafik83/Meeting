@@ -153,7 +153,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         ];
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['chat', 'questions'])
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), ['chat', 'questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
@@ -283,7 +283,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         );
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['chat', 'questions'])
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), ['chat', 'questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
@@ -398,7 +398,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['chat', 'questions'])
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), ['chat', 'questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
@@ -497,7 +497,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
-        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['chat', 'questions'])
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), ['chat', 'questions'])
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
