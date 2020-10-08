@@ -4,7 +4,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
+use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler;
 use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
@@ -32,27 +35,30 @@ class IndexAction
     /** @var NetworkingAccessChecker */
     private $networkingAccessChecker;
 
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     public function __construct(
         QueryBusInterface $queryBus,
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker,
-        NetworkingAccessChecker $networkingAccessChecker
-    )
-    {
+        NetworkingAccessChecker $networkingAccessChecker,
+        CommandBusInterface $commandBus
+    ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
         $this->networkingAccessChecker = $networkingAccessChecker;
+        $this->commandBus = $commandBus;
     }
 
     public function __invoke(
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Sheet $sheet
-    )
-    {
+    ) {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
         }
@@ -65,6 +71,8 @@ class IndexAction
         }
 
         $networkingView = $this->queryBus->handle(new NetworkingQuery($event, $user));
+
+        $this->commandBus->handle(new UpdateNetworkingChatViewedAt($sheet, $user));
 
         return new Response(
             $this->engine->render(

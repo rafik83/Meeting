@@ -4,8 +4,9 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Application\Command\Command;
 
-class UpdateNetworkingChatViewedAt
+class UpdateNetworkingChatViewedAt implements Command
 {
     /** @var Sheet */
     public $sheet;
