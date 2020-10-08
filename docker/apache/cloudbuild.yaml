@@ -7,6 +7,7 @@ steps:
 
   # Build image
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build image'
     args:
       - 'build'
       - '--file=docker/apache/Dockerfile'
@@ -21,11 +22,12 @@ steps:
 
   # Create custom image tag and write to file /workspace/_TAG
   - name: 'ubuntu'
+    id: 'Prepare tag name'
     args: ['bash', '-c', "echo `echo $BRANCH_NAME | sed 's,/,-,g' | awk '{print tolower($0)}'`-$(date -u +%Y%m%dT%H%M)-$SHORT_SHA > _TAG; echo $(cat _TAG)"]
 
   # Tag image with custom tag
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Tagging image'
+    id: 'Tag image'
     entrypoint: '/bin/bash'
     args: ['-c', "docker tag eu.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA eu.gcr.io/$PROJECT_ID/$REPO_NAME:$(cat _TAG)"]
 
