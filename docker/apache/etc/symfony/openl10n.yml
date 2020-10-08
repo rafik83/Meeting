@@ -1,9 +1,9 @@
 # Server configuration
 server:
-  hostname: %env(OPENL10N_HOSTNAME)%
-  use_ssl:  %env(OPENL10N_SSL)%
-  username: %env(OPENL10N_USERNAME)%
-  password: %env(OPENL10N_PASSWORD)%
+  hostname: $OPENL10N_HOSTNAME
+  use_ssl:  $OPENL10N_SSL
+  username: $OPENL10N_USERNAME
+  password: $OPENL10N_PASSWORD
 
 # Project identifier
 project: vimeet

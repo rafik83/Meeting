@@ -105,7 +105,6 @@ ARG PHP_VARIANT=apache
 # Application specific code
 COPY --chown=www-data:www-data . /var/www/proximum-vimeet.project.local/htdocs/current
 COPY --chown=www-data:www-data app/config/parameters.yml.dist /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml
-COPY --chown=www-data:www-data docker/apache/etc/symfony/openl10n.yml /var/www/proximum-vimeet.project.local/htdocs/current/openl10n.yml
 
 # Spinnaker CLI binary + Templates
 COPY --from=spinnaker /usr/local/bin/spin /usr/local/bin/spin
@@ -154,9 +153,10 @@ ARG OPENL10N_HOSTNAME
 ARG OPENL10N_SSL
 ARG OPENL10N_USERNAME
 ARG OPENL10N_PASSWORD
-#RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
-#      php bin/console vimeet:translations:update; \
-#    fi
+RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
+      envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml
+      php bin/console vimeet:translations:update; \
+    fi
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
@@ -172,7 +172,6 @@ RUN ln -sfn /share/shared/web/media web/ && \
     ln -sfn /share/shared/web/css web/ && \
     ln -sfn /share/shared/var/logs var/ && \
     ln -sfn /share/shared/var/shared_uploaded_files var/ && \
-    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml && \
-    ln -sfn /share/shared/openl10n.yml openl10n.yml
+    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml
 
 USER root
