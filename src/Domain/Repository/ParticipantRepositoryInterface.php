@@ -268,5 +268,5 @@ interface ParticipantRepositoryInterface
 
     public function getProductIdsOfUserForEvent(User $user, Event $event): array;
 
-    public function updateAllNetworkingChatViewedAt(User  $user, EventInterface $event);
+    public function updateAllNetworkingChatViewedAt(User  $user, EventInterface $event, \DateTime $now);
 }

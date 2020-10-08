@@ -689,7 +689,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->getResult();
     }
 
-    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event)
+    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event, \DateTime $now)
     {
         // créer une requète qui met à jour tout les participants lié un Event donné
     }

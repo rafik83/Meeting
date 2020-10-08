@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
@@ -25,6 +17,8 @@ class UpdateNetworkingChatViewedAtHandlerTest extends TestCase
         $user  = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
+
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->updateAllNetworkingChatViewedAt($user->reveal(), $event->reveal())->shouldBeCalled();

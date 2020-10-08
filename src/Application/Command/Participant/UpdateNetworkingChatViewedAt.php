@@ -14,10 +14,6 @@ class UpdateNetworkingChatViewedAt implements Command
     /** @var User */
     public $user;
 
-    /**
-     * @param Sheet    $sheet
-     * @param User     $user
-     */
     public function __construct(
         Sheet $sheet,
         User $user
