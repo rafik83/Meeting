@@ -7,6 +7,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
+use Proximum\Vimeet\Domain\Model\User;
 
 
 class NotificationSubscriptions extends AbstractNotification implements NotificationSubscriptionsInterface
@@ -31,7 +32,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getSubscriptions(string $topic): array
+    public function getSubscriptions(string $topic, User $user): array
     {
         $authPayload = [
             'mercure' => [
@@ -49,6 +50,9 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
 
         foreach ($result['subscriptions'] as $subscription) {
             if ($subscription['topic'] !== $topic) {
+                continue;
+            }
+            if ($user->getId() === $subscription['payload']['userId']) {
                 continue;
             }
             $users[$subscription['payload']['userId']] = $subscription['payload'];

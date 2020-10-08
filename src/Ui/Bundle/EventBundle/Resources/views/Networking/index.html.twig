@@ -48,7 +48,7 @@
             <div class="networking_list">
                 <h2>Participants connectés</h2>
                 <table class="list list--users table table-striped table-bordered table-hover participantList">
-                    <tbody id="ParticipantList">
+                    <tbody id="ParticipantList" data-user-current="{{ networkingView.userCurrentId }}">
                     {% for subscription in networkingView.subscriptions %}
                     <tr data-participant-user-id="{{ subscription.userId }}">
                         <td>

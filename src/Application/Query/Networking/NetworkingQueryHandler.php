@@ -35,7 +35,8 @@ class NetworkingQueryHandler
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->sheet, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic,
-            $this->notificationSubscriptions->getSubscriptions($topic)
+            $this->notificationSubscriptions->getSubscriptions($topic, $networkingQuery->user),
+            $networkingQuery->user->getId()
         );
     }
 }

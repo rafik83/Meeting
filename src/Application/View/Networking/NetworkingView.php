@@ -4,6 +4,8 @@
 namespace Proximum\Vimeet\Application\View\Networking;
 
 
+use Proximum\Vimeet\Domain\Model\User;
+
 class NetworkingView
 {
     /** @var string */
@@ -18,11 +20,15 @@ class NetworkingView
     /** @var array */
     public $subscriptions;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions)
+    /** @var int */
+    public $userCurrentId;
+
+    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions, int $userCurrentId)
     {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;
         $this->subscriptions = $subscriptions;
+        $this->userCurrentId = $userCurrentId;
     }
 }

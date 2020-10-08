@@ -1,12 +1,12 @@
 import {EventSourcePolyfill} from "event-source-polyfill";
 
 class ParticipantList {
-    constructor(target, notificationProviderUrl, topic, notificationSubscriberKey) {
+    constructor(target, notificationProviderUrl, topic, notificationSubscriberKey, userCurrentId) {
         this.target = target;
-
         this.notificationProviderUrl = notificationProviderUrl;
         this.topic = topic;
-        this.notificationSubscriberKey = notificationSubscriberKey
+        this.notificationSubscriberKey = notificationSubscriberKey;
+        this.userCurrentId = userCurrentId;
     }
 
     init() {
@@ -22,6 +22,10 @@ class ParticipantList {
             const payload = JSON.parse(event.data);
 
             if (payload.action === 'user_connection') {
+
+                if (parseInt(this.userCurrentId) === payload.userId) {
+                    return;
+                }
 
                 const matchedUserTR = this.target.querySelectorAll('[data-participant-user-id="'+ payload.userId +'"]');
                 if (matchedUserTR.length > 0) {
