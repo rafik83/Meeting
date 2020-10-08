@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -61,18 +53,6 @@ class SearchType extends AbstractType
                 'choice_label' => function ($state) {
                     return 'form.search.meeting.state.' . $state;
                 },
-            ])
-            ->add('sheetVisit', ChoiceType::class, [
-                'label' => 'form.search.meeting.sheetVisit.label',
-                'expanded' => true,
-                'multiple' => false,
-                'choices' => Meeting\Constant::getAllSheetVisitChoices(),
-                'choice_value' => function ($state) {
-                    return $state;
-                },
-                'choice_label' => function ($choice) {
-                    return 'form.search.meeting.sheetVisit.choice.' . $choice;
-                }
             ])
         ;
 

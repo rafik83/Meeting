@@ -122,10 +122,6 @@ form.search.meeting.availableSlot.choice.everyone: Tous
 form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
 form.search.meeting.availableSlot.label: 'Qui est disponible ?'
 form.search.meeting.state.all: 'Tous les statuts'
-form.search.meeting.sheetVisit.label: 'Visites'
-form.search.meeting.sheetVisit.choice.all: 'Toutes les participations'
-form.search.meeting.sheetVisit.choice.sheetSaw: 'Profils que j''ai consulté'
-form.search.meeting.sheetVisit.choice.viewedBySheet: 'A consulté mon profil'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
 form.search.meeting.state.label: 'Gestion RDV'
@@ -143,6 +139,10 @@ form.search.orderBy.label: TRIER
 form.search.orderBy.relevance: Pertinence
 form.search.organizationCategory.label: Structure
 form.search.position.label: Fonctions
+form.search.sheetVisit.label: 'Visites'
+form.search.sheetVisit.choice.all: 'Toutes les participations'
+form.search.sheetVisit.choice.sheetSaw: 'Profils que j''ai consulté'
+form.search.sheetVisit.choice.viewedBySheet: 'A consulté mon profil'
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'

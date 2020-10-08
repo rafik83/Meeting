@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
@@ -26,20 +18,11 @@ interface RequestRepositoryInterface
     const ORDER_BY_STATE_UPDATED_AT_ASC  = 'state_updated_at_asc';
     const ORDER_BY_STATE_UPDATED_AT_DESC = 'state_updated_at_desc';
 
-    /**
-     * @param Request $request
-     */
-    public function add(Request $request);
+    public function add(Request $request): void;
 
-    /**
-     * @param Request $request
-     */
-    public function set(Request $request);
+    public function set(Request $request): void;
 
-    /**
-     * @param Request $request
-     */
-    public function remove(Request $request);
+    public function remove(Request $request): void;
 
     /**
      * @param Request $request
@@ -84,13 +67,6 @@ interface RequestRepositoryInterface
      * @return Request[]
      */
     public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array;
-
-    public function getAllRequestBySheetAndSheets(
-        Sheet $sheet,
-        array $sheets,
-        array $filters = [],
-        array $slotsToFilter = []
-    ): array;
 
     /**
      * @param Sheet $sheet

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 
 use Doctrine\ORM\EntityManager;
@@ -32,22 +24,12 @@ use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\RequestQueryBuil
 
 class RequestRepository implements RequestRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * @var Paginator
-     */
+    /** @var Paginator */
     private $paginator;
 
-    /**
-     * RequestRepository constructor.
-     *
-     * @param EntityManager $entityManager
-     * @param Paginator     $paginator
-     */
     public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
@@ -57,7 +39,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Request $request)
+    public function add(Request $request): void
     {
         $this->entityManager->persist($request);
         $this->entityManager->flush($request);
@@ -66,7 +48,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function set(Request $request)
+    public function set(Request $request): void
     {
         $this->entityManager->flush($request);
     }
@@ -74,7 +56,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function remove(Request $request)
+    public function remove(Request $request): void
     {
         $this->entityManager
             ->createQueryBuilder()
@@ -361,36 +343,6 @@ class RequestRepository implements RequestRepositoryInterface
             $queryBuilder->where('request.disabled = :disabled')
                 ->setParameter('disabled', $filters['disabled']);
         }
-
-        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    public function getAllRequestBySheetAndSheets(
-        Sheet $sheet,
-        array $sheets,
-        array $filters = [],
-        array $slotsToFilter = []
-    ): array {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request')
-            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
-            ->join('request.to', 'toSheet')
-            ->setParameter('event', $sheet->getEvent())
-            ->setParameter('sheets', $sheets)
-        ;
-
-        if (!empty($filters) && isset($filters['disabled'])) {
-            $queryBuilder->where('request.disabled = :disabled')
-                ->setParameter('disabled', $filters['disabled']);
-        }
-
-        $queryBuilder
-            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)');
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
 

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -41,7 +33,20 @@ class SearchType extends AbstractSearchType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ]);
+            ])
+            ->add('sheetVisit', ChoiceType::class, [
+                'label' => 'form.search.sheetVisit.label',
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => CatalogConstant::getAllSheetVisitChoices(),
+                'choice_value' => function ($state) {
+                    return $state;
+                },
+                'choice_label' => function ($choice) {
+                    return 'form.search.sheetVisit.choice.' . $choice;
+                }
+            ])
+        ;
 
         $objectiveFilters = [];
         if (in_array(Nomenclature::OBJECTIVE_SUPPLY, $options['objectiveFilters'])) {

@@ -8,14 +8,9 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class MeetingRequestListViewQueryHandler
@@ -41,12 +36,6 @@ class MeetingRequestListViewQueryHandler
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
-    /** @var SheetViewedRepositoryInterface */
-    private $sheetViewedRepository;
-
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
-
     public function __construct(
         RequestRepositoryInterface $meetingRequestRepository,
         MeetingRequestViewQueryHandler $meetingRequestViewQueryHandler,
@@ -54,9 +43,7 @@ class MeetingRequestListViewQueryHandler
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
-        ValidationRequiredChecker $validationRequiredChecker,
-        SheetViewedRepositoryInterface $sheetViewedRepository,
-        SheetRepositoryInterface $sheetRepository
+        ValidationRequiredChecker $validationRequiredChecker
     ) {
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->meetingRequestViewQueryHandler = $meetingRequestViewQueryHandler;
@@ -65,16 +52,12 @@ class MeetingRequestListViewQueryHandler
         $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->validationRequiredChecker = $validationRequiredChecker;
-        $this->sheetViewedRepository = $sheetViewedRepository;
-        $this->sheetRepository = $sheetRepository;
     }
 
     public function handle(MeetingRequestListViewQuery $query): MeetingRequestListView
     {
         $meetingRequests = $this->getMeetingRequest(
             $query->sheet,
-            $query->user,
-            $query->event,
             $query->filters,
             $query->slotsToFilter
         );
@@ -128,38 +111,13 @@ class MeetingRequestListViewQueryHandler
 
     private function getMeetingRequest(
         Sheet $sheet,
-        User $user,
-        Event $event,
         array $filters = [],
         array $slotsToFilter = []
     ): array {
-        if (isset($filters['sheetVisit'])
-            && in_array(
-                $filters['sheetVisit'],
-                [Constant::FILTER_SHEET_VISIT_SAW, Constant::FILTER_SHEET_VISIT_VIEWED_BY],
-                true
-            )
-        ) {
-            $sheets = [];
-            if ($filters['sheetVisit'] === Constant::FILTER_SHEET_VISIT_SAW) {
-                $sheets = $this->sheetViewedRepository->getSheetsSeenByUserAndEvent($user, $event);
-            }
-
-            if ($filters['sheetVisit'] === Constant::FILTER_SHEET_VISIT_VIEWED_BY) {
-                $users = $this->sheetViewedRepository->getUsersWhoViewedSheet($sheet);
-                $sheets = $this->sheetRepository->getSheetsByUsersAndEvent($users, $event);
-            }
-
-            return $this
-                ->meetingRequestRepository
-                ->getAllRequestBySheetAndSheets($sheet, $sheets, $filters, $slotsToFilter)
-                ;
-        }
-
         return $this
             ->meetingRequestRepository
             ->getAllRequestBySheet($sheet, $filters, $slotsToFilter)
-            ;
+        ;
     }
 
     private function isPhoneValidationRequiredForUser(MeetingRequestListViewQuery $query): bool
