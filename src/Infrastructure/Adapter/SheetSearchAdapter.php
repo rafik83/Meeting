@@ -220,6 +220,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query = new Query();
         $query->setRawQuery($queryToArray);
+        // Other field are useless in this case.
+        $query->setSource('id');
 
         try {
             $result = $this->finder->findPaginated($query)->setMaxPerPage($limit)->setCurrentPage($page);
@@ -346,6 +348,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query->addAggregation($countryAggregations);
         $query->setSize(0);
+        $query->setSource('countryCode');
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -552,6 +555,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }
 
         $query->setSize(0);
+        // The aggregation does not need all the fields...
+        $query->setSource('id');
 
         $result = $this->searchable->search($query);
 
