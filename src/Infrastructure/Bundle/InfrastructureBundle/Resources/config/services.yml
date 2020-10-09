@@ -2917,13 +2917,13 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
-    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
-        arguments:
-            - '@repository.rule_repository'
-
     Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
         arguments:
             - '@components.security.video_meeting_access'
+
+    Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
+        arguments:
+            - '@repository.rule_repository'
 
     application.components.messaging.message_factory:
         class: Proximum\Vimeet\Application\Components\Messaging\MessageFactory
@@ -4629,6 +4629,15 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
 
+    query.navigation.networking_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
+
+
     ##
     # Mass Assignment query handler
     ##
@@ -5600,6 +5609,11 @@ services:
 
     domain.key_dates.checker.registration_close_date_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
+        arguments:
+            - '@datetime'
+            -
+    domain.key_dates.checker.networking_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
         arguments:
             - '@datetime'
 
@@ -7201,3 +7215,21 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
+            - '@domain.key_dates.checker.networking_access_checker'
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+        tags:
+            - { name: tactician.handler, typehints: true }

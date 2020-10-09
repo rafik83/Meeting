@@ -1,0 +1,64 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'networking.title'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/networking.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+        <div class="main__content">
+            <div class="networking_chat">
+                <h2>Chat général</h2>
+                <div data-chat-networking
+                     data-topic="{{ networkingView.topic }}"
+                     data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+                     data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+                     data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+                     data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+                     data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+                     data-chat-vote-message="{{ 'chat.vote'|trans }}"
+                     data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+                     data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+                     data-notifications-provider-url="{{ networkingView.providerUrl }}"
+                     data-notifications-subscriber-key="{{ networkingView.subscriberKey }}"
+                >
+                    <div data-chat-container
+                         data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'networking', objectId: sheet.event.id}) }}"
+                         data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
+                    >
+                        <div class="chat-list">
+                            {# content filled with javascript #}
+                        </div>
+                        <form
+                                action="{{ path('event_chat_messages_add', {sheet: sheet.id, objectType: 'networking', objectId: sheet.event.id}) }}"
+                                class="chat-form"
+                                data-chat-form
+                        >
+                            <input type="text" name="content" placeholder="{{ 'networking.chat.add'|trans }}" maxlength="250" autocomplete="off">
+                            <button type="submit"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="networking_list">
+                <h2>Participants connectés</h2>
+                <table class="list list--users table table-striped table-bordered table-hover">
+                    {% for subscription in networkingView.subscriptions %}
+                    <tr>
+                        <td>
+                            <img src="{{ subscription.userAvatar }}">
+                            <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface NotificationPublisherInterface
 {
@@ -12,4 +14,6 @@ interface NotificationPublisherInterface
     public function publishChatMessageNotification(ChatMessageLinkableInterface $object): void;
 
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, int $chatMessageId, array $votes): void;
+
+    public function publishUserConnectionNotification(Event $event, User $user): void;
 }

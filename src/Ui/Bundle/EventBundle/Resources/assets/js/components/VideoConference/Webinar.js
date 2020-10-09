@@ -3,14 +3,16 @@
 import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
 import Publisher from './Publisher';
-import Subscriber from './Subscriber';
+import VideoSubscriber from './Subscriber';
 import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
 
 import 'bootstrap/js/tooltip';
 import 'bootstrap/js/popover'; // popover require tooltip
-import {EventSourcePolyfill} from  'event-source-polyfill';
+
+import Chat from '../_Chat.js';
+import NotificationSubscriber from '../_Subscriber';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -36,7 +38,10 @@ function Webinar(element, isSpeaker) {
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
-    this.notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    const notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    this.notificationSubscriber = new NotificationSubscriber(notificationProviderUrl);
+    this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
+    this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -78,12 +83,8 @@ function Webinar(element, isSpeaker) {
     this.sideContainer = element.querySelector('.side-container');
 
     if (this.sidebarAllowed) {
-        this.chatContainer = element.querySelector('[data-chat-container]');
-        this.addChatForm = element.querySelector('[data-chat-form]');
-        this.addChatFormContent = this.addChatForm.querySelector('input[name="content"]');
-        this.addChatFormAction = this.addChatForm.getAttribute('action');
-        this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
-        this.addChatFormList = this.chatContainer.querySelector('.chat-list');
+        this.chat = new Chat(element);
+
         this.questionsContainer = element.querySelector('[data-questions-container]');
         this.questionsList = this.questionsContainer.querySelector('.questions-list');
         this.questionsForm = element.querySelector('[data-questions-form]');
@@ -91,32 +92,18 @@ function Webinar(element, isSpeaker) {
         this.questionsFormAction = this.questionsForm.getAttribute('action');
         this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
 
-        this.chatInstance = null;
-        this.chatLoaded = false;
         this.chatButton = element.querySelector('[data-chat-button]');
-
         this.chatButton.addEventListener('click', this.showChat.bind(this));
-        this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
+
         this.questionVoteMessage = element.getAttribute('data-question-vote-message');
         this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
         this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
-
-        this.chatVoteMessage = {
-            'like' : element.getAttribute('data-chat-vote-like'),
-            'acclaim' : element.getAttribute('data-chat-vote-acclaim'),
-            'heart' : element.getAttribute('data-chat-vote-heart'),
-            'instructive' : element.getAttribute('data-chat-vote-instructive'),
-            'happy' : element.getAttribute('data-chat-vote-happy')
-        };
-
-        this.chatUnVoteMessage = element.getAttribute('data-chat-unvote-message');
-        this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
 
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
         this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
         this.questionListeners = [];
-        this.chatListeners = [];
+
     }
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
@@ -226,9 +213,9 @@ function Webinar(element, isSpeaker) {
     this.publisher = new Publisher(this.layoutContainer);
 
     this.settings = new Settings(
-      this.settingsContainer.querySelector('#video-settings-section'),
-      this.onSettingsValidate.bind(this),
-      true
+        this.settingsContainer.querySelector('#video-settings-section'),
+        this.onSettingsValidate.bind(this),
+        true
     );
     this.settings.init(true);
 }
@@ -271,7 +258,7 @@ Webinar.prototype.init = function () {
     this.session.on('streamCreated', function (event) {
         this.hideElement(this.helperContainer);
 
-        const subscriberManager = new Subscriber(
+        const subscriberManager = new VideoSubscriber(
             this.session,
             this.layoutContainer,
             this.subscribersNameMapping
@@ -331,6 +318,10 @@ Webinar.prototype.init = function () {
     }.bind(this));
 
     this.connect();
+
+    if (!this.mobile) {
+        this.addChatSubscriber();
+    }
 
     this.prepareRecordButtons();
 };
@@ -521,185 +512,6 @@ Webinar.prototype.showElement = function (element) {
     }
 
     element.classList.remove('hide');
-};
-
-/**
- * Open chat
- */
-
-Webinar.prototype.initChat = function () {
-    if (this.chatLoaded) {
-        return;
-    }
-
-    const href = this.chatContainer.getAttribute('data-href');
-    const voteChatHref = this.chatContainer.getAttribute('data-vote-chat-href');
-
-    const $addChatFormList = $(this.addChatFormList);
-
-    $.get(href, function (response) {
-        this.removeChatListeners();
-        $addChatFormList.empty();
-        response.forEach((item) => {
-            const rowEl = document.createElement('div');
-            rowEl.id = `chat-message-${item.id}`;
-            rowEl.classList.add('chat-row');
-
-            const contentEl = rowEl.appendChild(document.createElement('div'));
-            contentEl.classList.add('chat-content');
-
-            const chatAside = document.createElement('small');
-            chatAside.classList.add('pull-right', 'chat-aside');
-
-            const emoticonBlock = document.createElement('div');
-
-            const element = {
-                '&#x1F44D;': 'like',
-                '&#128079;': 'acclaim',
-                '&#x2764;&#xFE0F': 'heart',
-                '&#128161;': 'instructive',
-                '&#128522;': 'happy'
-            };
-
-            const onLikedClicked = function (event) {
-                const payload = {
-                    'messageId': event.currentTarget.getAttribute('data-message-id'),
-                    'messageType': event.currentTarget.getAttribute('data-message-type')
-                };
-                $.post(voteChatHref, JSON.stringify(payload), (response) => {
-                    if (response.status !== 'ok') {
-                        this.showError('Message vote failed');
-                    }
-                }, 'json');
-
-                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
-                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
-
-                if (event.currentTarget.classList.contains('btn-primary')) {
-                    event.currentTarget.classList.remove('btn-primary', 'disabled');
-                    event.currentTarget.classList.add('btn-gray');
-                    const voteType = event.currentTarget.getAttribute('data-message-type');
-                    event.currentTarget.title = this.chatVoteMessage[voteType];
-                }  else {
-                    voteCounts.forEach((voteCount) => {
-                        voteCount.classList.add('btn-gray');
-                        voteCount.classList.remove('btn-primary', 'disabled');
-                        const voteType = voteCount.getAttribute('data-message-type');
-                        voteCount.title = this.chatVoteMessage[voteType];
-                    });
-                    event.currentTarget.classList.add('btn-primary', 'disabled');
-                    event.currentTarget.classList.remove('btn-gray');
-                    event.currentTarget.title = this.chatUnVoteMessage;
-                }
-
-            }.bind(this);
-
-            const chatCreatedAt = document.createElement('div');
-            chatCreatedAt.textContent = item.formattedCreatedAt;
-            chatAside.appendChild(chatCreatedAt);
-
-            contentEl.appendChild(chatAside);
-            contentEl.appendChild(document.createTextNode(item.content));
-
-            const emoticonEl = rowEl.appendChild(document.createElement('div'));
-            emoticonEl.classList.add('chat-emoticon');
-
-            const authorEl = rowEl.appendChild(document.createElement('div'));
-            authorEl.classList.add('chat-author');
-            const authorNameEl = authorEl.appendChild(document.createElement('span'));
-            authorNameEl.classList.add('chat-author-name');
-            const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
-            authorNameTextEl.textContent = item.authorName;
-
-            const avatarEl = authorEl.appendChild(document.createElement('span'));
-            avatarEl.classList.add('chat-author-avatar');
-            const imgEl = avatarEl.appendChild(document.createElement('img'));
-            imgEl.setAttribute('src', item.avatar);
-
-            for (let smileyCode in element) {
-                const emoticonBtn = document.createElement('i');
-                emoticonBtn.classList.add('glyphicon', 'btn', 'btn-xs');
-                emoticonBtn.innerHTML = smileyCode;
-                emoticonBtn.setAttribute('data-message-id', item.id);
-                emoticonBtn.setAttribute('data-message-type', element[smileyCode]);
-
-                const voteChat = document.createElement('span');
-                voteChat.classList.add('chat-vote-count');
-
-                if (item.votes[element[smileyCode]]) {
-                    voteChat.textContent = item.votes[element[smileyCode]];
-                }
-                emoticonBtn.append(voteChat);
-
-                if (!item.isAuthor) {
-                    emoticonBtn.addEventListener('click', onLikedClicked);
-                    this.chatListeners.push([emoticonBtn, onLikedClicked]);
-
-                    if (item.selfVote === element[smileyCode]) {
-                        emoticonBtn.classList.add('btn-primary', 'disabled');
-                        emoticonBtn.title = this.chatUnVoteMessage;
-                    } else {
-                        emoticonBtn.classList.add('btn-gray');
-                        emoticonBtn.title = this.chatVoteMessage[element[smileyCode]];
-                    }
-
-                } else {
-                    emoticonBtn.classList.add('btn-gray', 'disabled');
-                    emoticonBtn.title = this.chatVoteDisabledMessage;
-
-                    rowEl.classList.add('chat-row-on');
-                    contentEl.classList.add('chat-content-on');
-                }
-                emoticonBlock.appendChild(emoticonBtn);
-                emoticonEl.appendChild(emoticonBlock);
-            }
-
-            if (item.sheetTitle) {
-                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
-                authorTitleEl.textContent = [item.sheetTitle].filter((item) => !!item).join(', ');
-                authorTitleEl.classList.add('chat-author-title');
-
-                if (item.isAuthor) {
-                    authorTitleEl.classList.add('chat-author-title-on');
-                }
-            }
-
-            $addChatFormList[0].appendChild(rowEl);
-        });
-
-        this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
-        this.chatLoaded = true;
-
-        const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', `https://vimeet.events/event/${this.eventId}/notifications/happening/${this.happeningId}`);
-
-        var eventSource = new EventSourcePolyfill(url, {
-            headers: {
-                'Authorization': `Bearer ${this.notificationSubscriberKey}`
-            }
-        });
-        eventSource.onmessage = (event) => {
-            const payload = JSON.parse(event.data);
-
-            if (payload.action === 'add_chat_message') {
-                this.chatLoaded = false;
-                this.initChat();
-            }
-
-            if (payload.action === 'update_chat_message_votes') {
-                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
-                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
-                voteCounts.forEach((voteCount) => {
-                    const voteType = voteCount.getAttribute('data-message-type');
-                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
-                });
-            }
-        }
-
-    }.bind(this))
-        .fail(function () {
-            console.error('Failed to load webinar chat');
-        }.bind(this));
 };
 
 /**
@@ -897,9 +709,9 @@ Webinar.prototype.handleStream = function(
         type: type,
         action: 'start'
     }, (response) => {})
-    .fail((error) => {
-        console.error(error);
-    });
+        .fail((error) => {
+            console.error(error);
+        });
 };
 
 Webinar.prototype.handleStopStream = function(
@@ -913,9 +725,9 @@ Webinar.prototype.handleStopStream = function(
         type: type,
         action: 'stop'
     }, (response) => {})
-    .fail((error) => {
-        console.error(error);
-    });
+        .fail((error) => {
+            console.error(error);
+        });
 };
 
 Webinar.prototype.liveVideo = function () {
@@ -1123,9 +935,9 @@ Webinar.prototype.createFullscreenButton = function () {
 
         const element = this.layoutContainer;
         const rfs = element.requestFullscreen
-          || element.webkitRequestFullScreen
-          || element.mozRequestFullScreen
-          || element.msRequestFullscreen
+            || element.webkitRequestFullScreen
+            || element.mozRequestFullScreen
+            || element.msRequestFullscreen
         ;
         rfs.call(element);
 
@@ -1207,6 +1019,29 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
+Webinar.prototype.addChatSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicChat,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'add_chat_message') {
+                this.chat.reload();
+            }
+
+            if (payload.action === 'update_chat_message_votes') {
+                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
+                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
+                voteCounts.forEach((voteCount) => {
+                    const voteType = voteCount.getAttribute('data-message-type');
+                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
+                });
+            }
+        }
+    );
+}
+
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
 
@@ -1215,8 +1050,10 @@ Webinar.prototype.showChat = function (event) {
     this.chatButton.classList.remove('btn-gray');
     this.chatButton.classList.add('btn-primary');
     this.hideElement(this.questionsContainer);
-    this.showElement(this.chatContainer);
-    this.initChat();
+    this.showElement(this.chat.chatContainer);
+    this.chat.reloadChat();
+    this.addChatSubscriber();
+    this.notificationSubscriber.removeSubscriber(this.topicQuestions);
 };
 
 Webinar.prototype.showQuestions = function (event) {
@@ -1227,10 +1064,22 @@ Webinar.prototype.showQuestions = function (event) {
     this.questionsButton.classList.remove('btn-gray');
     this.questionsButton.classList.add('btn-primary');
 
-    this.hideElement(this.chatContainer);
+    this.hideElement(this.chat.chatContainer);
+    this.notificationSubscriber.removeSubscriber(this.topicChat);
     this.showElement(this.questionsContainer);
 
     this.initQuestions();
+
+    this.notificationSubscriber.addSubscriber(
+        this.topicQuestions,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+            if (payload.action === 'update') {
+                this.initQuestions();
+            }
+        }
+    );
 };
 
 Webinar.prototype.initQuestions = function () {
@@ -1328,26 +1177,10 @@ Webinar.prototype.initQuestions = function () {
 
             $questionsList[0].appendChild(rowEl);
         });
-
-        const url = new URL(this.notificationProviderUrl);
-        url.searchParams.append('topic', `https://vimeet.events/happening/${this.happeningId}/webinar/questions`);
-
-        var eventSource = new EventSourcePolyfill(url, {
-            headers: {
-                'Authorization': `Bearer ${this.notificationSubscriberKey}`
-            }
-        });
-        eventSource.onmessage = (event) => {
-            const payload = JSON.parse(event.data);
-            if (payload.action === 'update') {
-                this.initQuestions();
-            }
-        }
-
     }.bind(this))
-    .fail(function () {
-        console.error('Failed to load webinar questions');
-    }.bind(this));
+        .fail(function () {
+            console.error('Failed to load webinar questions');
+        }.bind(this));
 }
 
 Webinar.prototype.submitQuestion = function (event) {
@@ -1373,52 +1206,25 @@ Webinar.prototype.submitQuestion = function (event) {
         this.questionsFormContent.value = questionContent;
         this.showError('Question creation failed');
     })
-    .fail(() => {
-        this.questionsFormSubmit.disabled = false;
-        this.questionsFormContent.value = questionContent;
-        this.showError('Question creation failed');
-    });
-}
-
-
-Webinar.prototype.submitChat = function (event) {
-    event.preventDefault();
-    const chatContent = this.addChatFormContent.value;
-
-    if ('' === chatContent) {
-        window.setTimeout(() => this.addChatFormSubmit.disabled = false, 100);
-        return;
-    }
-
-    this.addChatFormContent.value = '';
-
-    $.post(this.addChatFormAction, JSON.stringify({content: chatContent}), (response) => {
-        this.addChatFormSubmit.disabled = false;
-
-        if (response.status === 'ok') {
-            return;
-        }
-
-        this.addChatFormContent.value = content;
-        this.showError('Message creation failed');
-    })
-
         .fail(() => {
-            this.addChatFormSubmit.disabled = false;
-            this.addChatFormContent.value = content;
-            this.showError('Message creation failed');
+            this.questionsFormSubmit.disabled = false;
+            this.questionsFormContent.value = questionContent;
+            this.showError('Question creation failed');
         });
 }
 
+
+
+
 Webinar.prototype.sendUpdateQuestionsSignal = function () {
     this.session.signal({
-        type: 'QuestionsUpdate'
-    },
-    (error) => {
-        if (error) {
-            console.error('QuestionsUpdate signal error', error);
-        }
-    });
+            type: 'QuestionsUpdate'
+        },
+        (error) => {
+            if (error) {
+                console.error('QuestionsUpdate signal error', error);
+            }
+        });
 }
 
 Webinar.prototype.removeQuestionListeners = function () {
@@ -1426,10 +1232,7 @@ Webinar.prototype.removeQuestionListeners = function () {
     this.questionListeners = [];
 }
 
-Webinar.prototype.removeChatListeners = function () {
-    this.chatListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
-    this.chatListeners = [];
-}
+
 
 Webinar.prototype.isSidebarOpened = function () {
     return !this.sideContainer.classList.contains('hide');
@@ -1441,7 +1244,7 @@ Webinar.prototype.toggleSideBar = function () {
     }
     if (!this.isSidebarOpened()) {
         this.showElement(this.sideContainer);
-        this.initChat();
+        this.chat.initChat();
         this.element.classList.add('chat-opened');
         this.layout();
 
@@ -1450,7 +1253,6 @@ Webinar.prototype.toggleSideBar = function () {
 
     this.element.classList.remove('chat-opened');
     this.hideElement(this.sideContainer);
-    this.chatInstance.hideTextChat();
     this.initQuestions();
     this.layout();
 };

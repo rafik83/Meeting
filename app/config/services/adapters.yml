@@ -65,6 +65,13 @@ services:
         arguments:
             - '%mercure_hub_subscriber_url%'
             - '%mercure_subscriber_key%'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions:
+        arguments:
+            - '%mercure_hub_publisher_url%'
+            - '%mercure_subscriber_key%'
+            - '@adapter.http_adapter'
 
     #
     # Auto avatar (with initials)

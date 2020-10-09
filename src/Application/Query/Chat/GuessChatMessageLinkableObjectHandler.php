@@ -4,7 +4,9 @@ namespace Proximum\Vimeet\Application\Query\Chat;
 
 use Proximum\Vimeet\Application\Exception\Happening\HappeningNotFoundException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
+use Proximum\Vimeet\Domain\Exception\Event\EventNotFoundException;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -16,17 +18,23 @@ class GuessChatMessageLinkableObjectHandler
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
-        HappeningRepositoryInterface $happeningRepository
+        HappeningRepositoryInterface $happeningRepository,
+        EventRepositoryInterface $eventRepository
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->happeningRepository = $happeningRepository;
+        $this->eventRepository = $eventRepository;
     }
 
     /**
      * @throws HappeningNotFoundException
      * @throws MeetingNotFoundException
+     * @throws EventNotFoundException
      */
     public function handle(GuessChatMessageLinkableObject $query): ChatMessageLinkableInterface
     {
@@ -48,6 +56,16 @@ class GuessChatMessageLinkableObjectHandler
             }
 
             return $meeting;
+        }
+
+        if ('networking' === $query->objectType) {
+            $event = $this->eventRepository->getById($query->objectId);
+
+            if (null === $event) {
+                throw new EventNotFoundException('Event not found for given id.');
+            }
+
+            return $event;
         }
 
         throw new \InvalidArgumentException('Invalid ObjectType.');

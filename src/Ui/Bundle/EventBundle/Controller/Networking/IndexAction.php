@@ -1,18 +1,15 @@
 <?php
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Application\Query\Contact\ContactListView;
-use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,22 +30,22 @@ class IndexAction
     /** @var EventOpenAccessChecker */
     private $eventOpenAccessChecker;
 
-    /** @var RouterInterface */
-    private $routerAdapter;
+    /** @var NetworkingAccessChecker */
+    private $networkingAccessChecker;
 
     public function __construct(
         QueryBusInterface $queryBus,
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker,
-        RouterInterface $routerAdapter
+        NetworkingAccessChecker $networkingAccessChecker
     )
     {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
-        $this->routerAdapter = $routerAdapter;
+        $this->networkingAccessChecker = $networkingAccessChecker;
     }
 
     public function __invoke(
@@ -59,39 +56,29 @@ class IndexAction
     )
     {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
-            || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
         ) {
             throw new AccessDeniedException();
         }
 
-        // if owner is logged and is not a participant, it fallback to one of the participant
-        $participant = $sheet->getUserParticipant($userDomain->getUser()) ?? $sheet->getFirstParticipant();
-
+        $participants = $sheet->getParticipants();
         $event = $eventDomain->getEvent();
-
-        /** @var ContactListView $contactListView */
-        $contactListView = $this->queryBus->handle(
-            new GetContactListViewQuery($event, $participant, $request->getLocale())
-        );
-
         $user = $userDomain->getUser();
-        $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet,
-            $user,
-            TipTranslationViewQueryHandler::CONTEXT_CONTACTS,
-            $request->getLocale()
-        );
-        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
+
+        if (!$this->networkingAccessChecker->allowedToAccess($event)) {
+            throw new AccessDeniedException();
+        }
+
+        $networkingView = $this->queryBus->handle(new NetworkingQuery($event, $user));
 
         return new Response(
             $this->engine->render(
-                '@Event/Contact/index.html.twig',
+                '@Event/Networking/index.html.twig',
                 [
-                    'contactListView' => $contactListView,
+                    'networkingView' => $networkingView,
+                    'participant' => $participants,
                     'sheet' => $sheet,
                     'event' => $event,
                     'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
-                    'tipTranslationViews' => $tipTranslationViews,
                 ]
             )
         );

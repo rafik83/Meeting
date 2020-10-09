@@ -6,7 +6,9 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
@@ -24,7 +26,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter
-    ) {
+    )
+    {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
@@ -42,8 +45,14 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
     public function publishChatMessageNotification(ChatMessageLinkableInterface $object): void
     {
+        if ($object instanceof Happening) {
+            $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } else {
+            $topic = $this->getNotificationTopic($object->getEvent()->getId());
+        }
+
         $postData = [
-            'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
+            'topic' => $topic,
             'data' => json_encode(['action' => 'add_chat_message']),
         ];
 
@@ -52,9 +61,26 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, int $chatMessageId, array $votes): void
     {
+
+        if ($object instanceof Happening) {
+            $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } else {
+            $topic = $this->getNotificationTopic($object->getEvent()->getId());
+        }
+
         $postData = [
-            'topic' => $this->getNotificationTopic($object->getEvent()->getId(), $object->getObjectType(), $object->getId()),
+            'topic' => $topic,
             'data' => json_encode(['action' => 'update_chat_message_votes', 'messageId' => $chatMessageId, 'votes' => $votes]),
+        ];
+
+        $this->publishMessage($postData);
+    }
+
+    public function publishUserConnectionNotification(Event $event, User $user): void
+    {
+        $postData = [
+            'topic' => $this->getNotificationTopic($event->getId()),
+            'data' => json_encode(['action' => 'user_connection', 'userName' => 'ricardo']),
         ];
 
         $this->publishMessage($postData);
@@ -69,9 +95,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
         ];
 
         $this->httpAdapter->post($this->mercureHubUrl, [
-                'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
-                'Content-type' => 'application/x-www-form-urlencoded',
-            ],
+            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
+            'Content-type' => 'application/x-www-form-urlencoded',
+        ],
             http_build_query($postData)
         );
     }
