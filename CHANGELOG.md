@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Remove command bus usage for translations update commands to prevent DB connections
 
+## [2.56.0] - 2010-10-09
+### Added
+- VIMET-2177 - Add metrics to sheet export
+
 ## [2.55.0] - 2010-10-08
 ### Fixed
 - Hotfix - Prevent invalid extensions (especially php) on uploaded files

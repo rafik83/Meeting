@@ -5946,6 +5946,8 @@ services:
             - '@order.balance'
             - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
             - '@adapter.event_url_generator'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: serializer.normalizer }
 
