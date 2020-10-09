@@ -32,14 +32,14 @@ class PrivateChatQueryHandler
         }
 
         $chatSession = $this->chatSessionRepository->findOneByEventAndUsers(
-            $privateChatQuery->event,
+            $privateChatQuery->sheet->getEvent(),
             $privateChatQuery->fromUser,
             $privateChatQuery->toUser
         );
 
         if (null === $chatSession) {
             $chatSession = new ChatSession(
-                $privateChatQuery->event,
+                $privateChatQuery->sheet->getEvent(),
                 $privateChatQuery->fromUser,
                 $privateChatQuery->toUser
             );
@@ -52,7 +52,7 @@ class PrivateChatQueryHandler
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getNetworkingSubscriberKey(
-                $privateChatQuery->event,
+                $privateChatQuery->sheet,
                 $privateChatQuery->toUser,
                 [AbstractNotification::TYPE_CHAT]
             ),

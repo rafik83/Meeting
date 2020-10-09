@@ -39,8 +39,7 @@ class PrivateChatAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker,
         NetworkingAccessChecker $networkingAccessChecker
-    )
-    {
+    ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -53,10 +52,8 @@ class PrivateChatAction
         UserDomain $userDomain,
         Sheet $sheet,
         User $toUser
-    )
-    {
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
-        ) {
+    ) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
         }
 
@@ -66,7 +63,7 @@ class PrivateChatAction
             throw new AccessDeniedException();
         }
 
-        $chatView = $this->queryBus->handle(new PrivateChatQuery($event, $userDomain->getUser(), $toUser));
+        $chatView = $this->queryBus->handle(new PrivateChatQuery($sheet, $userDomain->getUser(), $toUser));
 
         return new Response(
             $this->engine->render(

@@ -2,6 +2,9 @@
 export default class ParticipantListFilter {
 
     constructor(searchElement, participantList) {
+        if (!searchElement) {
+            return;
+        }
         this.searchElement = searchElement;
         this.searchElement.addEventListener('keyup', this.onChange.bind(this));
         this.currentFilterText = this.searchElement.value;

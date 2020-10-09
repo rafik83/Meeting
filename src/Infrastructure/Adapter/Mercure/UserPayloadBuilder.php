@@ -40,10 +40,14 @@ class UserPayloadBuilder
             );
         }
 
-        $position = $this->participantInfoGuesserCache->guessParticipantPosition(
-            $sheet->getUserParticipant($user),
-            $this->locale
-        );
+        $position = '';
+        $sheetParticipant = $sheet->getUserParticipant($user);
+        if ($sheetParticipant) {
+            $position = $this->participantInfoGuesserCache->guessParticipantPosition(
+                $sheetParticipant,
+                $this->locale
+            );
+        }
 
         return [
             'userId' => $user->getId(),

@@ -25,8 +25,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         string $mercureHubUrl,
         string $mercureSubscriberKey,
         HttpAdapterInterface $httpAdapter
-    )
-    {
+    ) {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercureSubscriberKey = $mercureSubscriberKey;
         $this->httpAdapter = $httpAdapter;
@@ -41,10 +40,9 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         ];
 
         $response = $this->httpAdapter->get($this->mercureHubUrl . '/subscriptions', [
-                'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercureSubscriberKey)),
-                'Content-type' => 'application/x-www-form-urlencoded',
-            ]
-        );
+            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercureSubscriberKey)),
+            'Content-type' => 'application/x-www-form-urlencoded',
+        ]);
         $result = json_decode($response->body, true);
         $users = [];
 
@@ -58,7 +56,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
             $users[$subscription['payload']['userId']] = $subscription['payload'];
         }
 
-        usort($users, function($user1, $user2) {
+        uasort($users, function ($user1, $user2) {
             $compareResult = strcmp($user1['userLastName'], $user2['userLastName']);
 
             if ($compareResult === 0) {

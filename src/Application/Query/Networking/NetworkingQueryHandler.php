@@ -45,7 +45,7 @@ class NetworkingQueryHandler
                     $row['messagesCount']
                 );
             },
-            $this->chatSessionRepository->findByEventAndUser($networkingQuery->event, $networkingQuery->user)
+            $this->chatSessionRepository->findByEventAndUser($networkingQuery->sheet->getEvent(), $networkingQuery->user)
         );
 
         return new NetworkingView(
@@ -53,7 +53,8 @@ class NetworkingQueryHandler
             $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->sheet, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic,
             $this->notificationSubscriptions->getSubscriptions($topic, $networkingQuery->user),
-            $networkingQuery->user->getId()
+            $networkingQuery->user->getId(),
+            $privateChatSessions
         );
     }
 }
