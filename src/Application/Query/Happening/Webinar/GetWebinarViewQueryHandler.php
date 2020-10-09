@@ -81,7 +81,7 @@ class GetWebinarViewQueryHandler
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getHappeningSubscriberKey(
                 $happening,
-                $query->getUser()->getId(),
+                $query->getUser(),
                 [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS]
             )
         );

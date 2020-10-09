@@ -72,7 +72,7 @@ class VoteChatMessageHandler
             $this->chatMessageVoteRepository->remove($chatMessageVote);
 
             $votesCount = $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage);
-            $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage->getId(), $votesCount);
+            $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage, $votesCount);
 
             return;
         }
@@ -88,6 +88,6 @@ class VoteChatMessageHandler
         $this->chatMessageVoteRepository->add($chatMessageVote);
 
         $votesCount = $this->chatMessageVoteRepository->getVotesCountByChatMessage($chatMessage);
-        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage->getId(), $votesCount);
+        $this->notificationPublisher->publishChatVoteNotification($chatMessageLinkableObject, $chatMessage, $votesCount);
     }
 }

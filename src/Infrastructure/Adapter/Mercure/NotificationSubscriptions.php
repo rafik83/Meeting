@@ -50,6 +50,10 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
             if ($subscription['topic'] !== $topic) {
                 continue;
             }
+            if (!isset($subscription['payload']['userId'])) {
+                continue;
+            }
+            // exclude current user
             if ($user->getId() === $subscription['payload']['userId']) {
                 continue;
             }

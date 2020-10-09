@@ -32,7 +32,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         return $this->mercureHubUrl;
     }
 
-    public function getHappeningSubscriberKey(Happening $happening, int $userId, array $types): string
+    public function getHappeningSubscriberKey(Happening $happening, User $user, array $types): string
     {
         if (empty($types)) {
             throw new InvalidArgumentException('Types array cannot be empty');
@@ -40,10 +40,11 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
 
         return JWT::encode([
             'mercure' => [
-                'subscriber' => array_map(function ($type) use ($happening) {
-                    return ['topic' => $this->getHappeningTopic($happening->getId(), $type)];
+                'subscribe' => array_map(function ($type) use ($happening) {
+                    return $this->getHappeningTopic($happening->getId(), $type);
                 }, $types),
-                'payload' => ['userId' => $userId],
+                // todo: add payload
+                // 'payload' => $this->userPayloadBuilder->get($user),
             ]
         ], $this->mercureSubscriberKey);
     }
@@ -59,6 +60,24 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
                 'subscriber' => array_map(function ($type) use ($sheet) {
                     return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId(), $type)];
                 }, $types),
+                'payload' => $this->userPayloadBuilder->get($sheet, $user),
+            ]
+        ], $this->mercureSubscriberKey);
+    }
+
+    /**
+     * Generate JWT token for all topics a user can be interested in
+     * @param ChatSession[] $sessions
+     */
+    public function getEventSubscriberKey(Sheet $sheet, User $user): string
+    {
+        $topics[] = $this->getChatSessionTopic($user->getId());
+
+        $topics[] = $this->getNotificationTopic($sheet->getEvent()->getId());
+
+        return JWT::encode([
+            'mercure' => [
+                'subscribe' => $topics,
                 'payload' => $this->userPayloadBuilder->get($sheet, $user),
             ]
         ], $this->mercureSubscriberKey);

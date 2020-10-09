@@ -1,7 +1,10 @@
-import { EventSourcePolyfill } from "event-source-polyfill";
+import NotificationSubscriber from './_Subscriber';
+
 class UserConnectionRegister {
 
-    constructor() { }
+    constructor() {
+        this.listeners = [];
+    }
 
     getRegistrationParameters() {
         const rawData = document.getElementById("user-context");
@@ -18,17 +21,18 @@ class UserConnectionRegister {
         if (!registrationsParameters) {
             return null
         }
+        console.log(registrationsParameters);
 
-        const { topic, subscriberKey, providerUrl } = registrationsParameters
+        const { topic, subscriberKey, providerUrl } = registrationsParameters;
 
-        const url = new URL(providerUrl);
-        url.searchParams.append('topic', topic);
-
-        new EventSourcePolyfill(url, {
-            headers: {
-                'Authorization': `Bearer ${subscriberKey}`
-            }
+        const subscriber = new NotificationSubscriber(providerUrl);
+        subscriber.addSubscriber(topic, subscriberKey, (event) => {
+            this.listeners.forEach((callback) => callback(event));
         });
+    }
+
+    addListener(callback) {
+        this.listeners.push(callback);
     }
 }
 export default UserConnectionRegister;

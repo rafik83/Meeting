@@ -1,13 +1,22 @@
 import Chat from './components/_Chat';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
+import NotificationSubscriber from './components/_Subscriber';
 
 function init(target) {
 
-    [].forEach.call(target.querySelectorAll('[data-chat-networking]'), function (element) {
-        const topicUrl =  element.getAttribute('data-topic');
-        const chat = new Chat(element, topicUrl);
-        chat.initChat();
+    const chatNetworkingElement = target.querySelector('[data-chat-networking]');
+
+    const notificationProviderUrl = chatNetworkingElement.getAttribute('data-notifications-provider-url');
+    const notificationSubscriberKey = chatNetworkingElement.getAttribute('data-notifications-subscriber-key');
+    const topic = chatNetworkingElement.getAttribute('data-topic');
+
+    const chat = new Chat(chatNetworkingElement);
+    chat.initChat();
+
+    const subscriber = new NotificationSubscriber(notificationProviderUrl);
+    subscriber.addSubscriber(topic, notificationSubscriberKey, () => {
+        chat.reload();
     });
 
 

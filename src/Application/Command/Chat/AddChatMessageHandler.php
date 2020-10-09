@@ -44,17 +44,15 @@ class AddChatMessageHandler
             throw new ChatMessageNotAllowedException('Access denied to this chat messages');
         }
 
-        $this->messageRepository->add(
-            new ChatMessage(
-                $command->object,
-                $command->user,
-                $this->now,
-                $command->content,
-                $command->user->getFullname(),
-                $command->sheet->getTitle()
-            )
-        );
+        $message = $this->messageRepository->add(new ChatMessage(
+            $command->object,
+            $command->user,
+            $this->now,
+            $command->content,
+            $command->user->getFullname(),
+            $command->sheet->getTitle()
+        ));
 
-        $this->notificationPublisher->publishChatMessageNotification($command->object);
+        $this->notificationPublisher->publishChatMessageNotification($command->object, $message);
     }
 }

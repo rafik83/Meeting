@@ -36,6 +36,7 @@ import DateTimePicker from '../../../../../../../assets/js/components/DateTimePi
 import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
 import SheetVideo from './components/_SheetVideo';
 import UserConnectionRegister from './components/_UserConnectionRegister';
+import NotificationToast from './components/_NotificationToast';
 
 import 'bootstrap';
 import 'elao-form.js';
@@ -281,7 +282,10 @@ function init(target) {
     });
 
     const userConnectionRegister = new UserConnectionRegister();
-    userConnectionRegister.connect()
+    userConnectionRegister.connect();
+
+    new NotificationToast(target.querySelector('[data-notification-toast]'), userConnectionRegister);
+
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

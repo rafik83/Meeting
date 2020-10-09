@@ -17,5 +17,7 @@ interface ChatSessionRepositoryInterface
      */
     public function findByEventAndUser(Event $event, User $user): array;
 
+    public function findIdsByEventAndUser(Event $event, User $user): array;
+
     public function findOneById(int $id): ?ChatSession;
 }

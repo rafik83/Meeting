@@ -69,6 +69,22 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findIdsByEventAndUser(Event $event, User $user): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session.id')
+            ->from(ChatSession::class, 'session')
+            ->join('session.fromUser', 'fromUser')
+            ->join('session.toUser', 'toUser')
+            ->where('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+    }
+
     public function findOneById(int $id): ?ChatSession
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
