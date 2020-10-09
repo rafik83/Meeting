@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use DateTime;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class UpdateNetworkingChatViewedAtHandler
@@ -17,6 +16,6 @@ class UpdateNetworkingChatViewedAtHandler
 
     public function handle(UpdateNetworkingChatViewedAt $command): void
     {
-        $this->participantRepository->updateAllNetworkingChatViewedAt($command->user, $command->sheet->getEvent(), new DateTime());
+        $this->participantRepository->updateAllNetworkingChatViewedAt($command->user, $command->sheet->getEvent(), $command->updateTime);
     }
 }

@@ -90,6 +90,8 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
 
     public function getMessagesCountByEvent(Event $event): int
     {
+        // Mettre à jour la query pour ne prendre que les messages non lu à la Participant NetworkingChatViewedAt
+
         return $this->entityManager
             ->createQueryBuilder()
             ->select('COUNT(chatMessage.id) as count')

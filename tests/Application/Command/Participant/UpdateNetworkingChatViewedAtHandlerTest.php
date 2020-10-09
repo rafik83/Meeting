@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
 use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler;
@@ -21,9 +22,11 @@ class UpdateNetworkingChatViewedAtHandlerTest extends TestCase
         $sheet->getEvent()->shouldBeCalled()->willReturn($event);
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->updateAllNetworkingChatViewedAt($user->reveal(), $event->reveal())->shouldBeCalled();
+        $participantRepository->updateAllNetworkingChatViewedAt($user->reveal(), $event->reveal());
 
-        $command = new UpdateNetworkingChatViewedAt($sheet->reveal(), $user->reveal());
+        $updateTime = new DateTime();
+
+        $command = new UpdateNetworkingChatViewedAt($sheet->reveal(), $user->reveal(), $updateTime);
         $handler = new UpdateNetworkingChatViewedAtHandler($participantRepository->reveal());
 
         $handler->handle($command);
