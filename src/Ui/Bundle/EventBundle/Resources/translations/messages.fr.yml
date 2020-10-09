@@ -92,6 +92,14 @@ catalog.selectItemsFromNomenclatures.unSelectAll: 'Tout désélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
+chat.vote.acclaim: 'Applaudir'
+chat.vote.happy: 'Content'
+chat.vote.heart: 'J''adore'
+chat.vote.instructive: 'Instructif'
+chat.vote.like: 'J''aime'
+chat.unvote: 'Retirer mon vote'
+chat.vote: 'Voter pour ce message'
+chat.voteDisabled: 'Vous ne pouvez pas voter pour ce message'
 common.back: Retour
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
@@ -264,6 +272,7 @@ happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y p
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.chat.tab: 'Chat'
+happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.end: 'Arrêter'
 happening.webinar.endingAt: 'Fin dans'
 happening.webinar.invisibleMode.button: 'Mode invisible'

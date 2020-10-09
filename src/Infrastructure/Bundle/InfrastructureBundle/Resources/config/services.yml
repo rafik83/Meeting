@@ -2921,6 +2921,10 @@ services:
         arguments:
             - '@repository.rule_repository'
 
+    Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
+        arguments:
+            - '@components.security.video_meeting_access'
+
     application.components.messaging.message_factory:
         class: Proximum\Vimeet\Application\Components\Messaging\MessageFactory
         arguments:
@@ -7189,3 +7193,11 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'

@@ -1232,6 +1232,40 @@ event_meeting_evaluation:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction
 
 #
+# Chat
+#
+event_chat_messages_list:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/list
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
+
+event_chat_messages_add:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/add
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction
+
+event_chat_avatar:
+    path: /chat/avatar
+    requirements:
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction
+
+event_chat_messages_vote:
+    path: /sheet/{sheet}/chat/vote
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\VoteAction
+
+#
 # Custom
 #
 event_styleguide:

@@ -7,11 +7,13 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\ParticipantView;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
@@ -27,11 +29,14 @@ use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class GetWebinarViewQueryHandlerTest extends TestCase
 {
-    /** @var ObjectProphecy|GetUserParticipantInfosHandler */
+    /** @var ObjectProphecy */
     private $getUserParticipantInfosHandler;
 
-    /** @var ObjectProphecy|VideoConferenceAdapterInterface */
+    /** @var ObjectProphecy */
     private $videoConferenceAdapter;
+
+    /** @var ObjectProphecy */
+    private $notificationSubscriber;
 
     /** @var GetWebinarViewQueryHandler */
     private $getWebinarViewQueryHandler;
@@ -49,6 +54,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     {
         $this->getUserParticipantInfosHandler = $this->prophesize(GetUserParticipantInfosHandler::class);
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
+        $this->notificationSubscriber = $this->prophesize(NotificationSubscriberInterface::class);
         $this->recordArchiveRepository = $this->prophesize(RecordArchiveRepositoryInterface::class);
         $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
@@ -56,6 +62,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->notificationSubscriber->reveal(),
             $this->recordArchiveRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $this->dateTime
@@ -93,6 +100,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
+        $event->getId()->shouldBeCalled()->willReturn(137);
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
@@ -145,8 +153,14 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ),
         ];
 
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['questions'])
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
+
         $this->assertEquals(
             new WebinarView(
+                137,
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
@@ -154,6 +168,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'User token',
                 'webinar-session-id',
                 'api key',
+                new NotificationView('http://localhost:8088/.well-known/mercure', 'xxxxyyy'),
                 true,
                 $speakerViews,
                 [],
@@ -181,6 +196,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
+        $event->getId()->shouldBeCalled()->willReturn(137);
         $date = new \DateTime('2020-03-30 11:50:00');
         $user = $this->prophesize(User::class);
         $user->getFirstname()->willReturn('Michel');
@@ -264,13 +280,20 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
             $this->videoConferenceAdapter->reveal(),
+            $this->notificationSubscriber->reveal(),
             $this->recordArchiveRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $date
         );
 
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['questions'])
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
+
         $this->assertEquals(
             new WebinarView(
+                137,
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
@@ -278,6 +301,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'User token',
                 'webinar-session-id',
                 'api key',
+                new NotificationView('http://localhost:8088/.well-known/mercure', 'xxxxyyy'),
                 true,
                 $speakerViews,
                 [],
@@ -330,6 +354,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
+        $event->getId()->shouldBeCalled()->willReturn(137);
         $happening = $this->prophesize(Happening::class);
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
@@ -378,13 +403,18 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new ParticipantView($participant1->reveal(), 'Amélie', 'POULAIN', 'Administrator', null));
 
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['questions'])
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
+
         $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening->reveal())
             ->shouldBeCalled()
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
 
         $this->assertEquals(
             new WebinarView(
+                137,
                 1,
                 111,
                 'Webinar: how to work remotely during the Covid-19 crisis',
@@ -392,6 +422,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'User token',
                 'webinar-session-id',
                 'api key',
+                new NotificationView('http://localhost:8088/.well-known/mercure', 'xxxxyyy'),
                 true,
                 [
                     new WebinarSpeakerView(
@@ -445,6 +476,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
+        $event->getId()->shouldBeCalled()->willReturn(137);
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
@@ -472,8 +504,14 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getParticipations()->shouldNotBeCalled();
         $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
 
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://localhost:8088/.well-known/mercure');
+        $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), 111, ['questions'])
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
+
         $this->assertEquals(
             new WebinarView(
+                137,
                 1,
                 111,
                 'Video Webinar: how to work remotely during the Covid-19 crisis',
@@ -481,6 +519,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 '',
                 '',
                 '',
+                new NotificationView('http://localhost:8088/.well-known/mercure', 'xxxxyyy'),
                 false,
                 [],
                 [],
@@ -503,5 +542,4 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             )
         );
     }
-
 }

@@ -93,6 +93,8 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Transaction\TransactionContext:
                     - '@Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\HappeningContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\HappeningContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Template\RegistrationTemplateContext:
                     - '@Proximum\Vimeet\Behat\Proxy\Template\RegistrationTemplateContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Template\SheetTemplateContext:
