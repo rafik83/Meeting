@@ -416,6 +416,8 @@ networking.chat.global.title: 'Chat général'
 networking.chat.messages.count: '{0} Aucun message|{1} Un message|]1,Inf[ %count% messages'
 networking.chat.title: 'Chat privé'
 networking.chat.with: 'Chat privé avec %user%'
+networking.participants.search: 'Chercher dans les participants'
+networking.participants.title: 'Participants connectés'
 networking.title: Networking
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
