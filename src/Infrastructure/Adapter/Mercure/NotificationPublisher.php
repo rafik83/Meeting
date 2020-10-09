@@ -6,10 +6,9 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
 {
@@ -22,15 +21,20 @@ class NotificationPublisher extends AbstractNotification implements Notification
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
+    /** @var UserPayloadBuilder */
+    private $userPayloadBuilder;
+
     public function __construct(
         string $mercureHubUrl,
         string $mercurePublisherKey,
-        HttpAdapterInterface $httpAdapter
+        HttpAdapterInterface $httpAdapter,
+        UserPayloadBuilder $userPayloadBuilder
     )
     {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
+        $this->userPayloadBuilder = $userPayloadBuilder;
     }
 
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void
@@ -76,11 +80,13 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishUserConnectionNotification(Event $event, User $user): void
+    public function publishUserConnectionNotification(Sheet $sheet, User $user): void
     {
         $postData = [
-            'topic' => $this->getNotificationTopic($event->getId()),
-            'data' => json_encode(['action' => 'user_connection', 'userName' => 'ricardo']),
+            'topic' => $this->getNotificationTopic($sheet->getEvent()->getId()),
+            'data' => json_encode(
+                array_merge(['action' => 'user_connection',], $this->userPayloadBuilder->get($sheet, $user))
+            ),
         ];
 
         $this->publishMessage($postData);

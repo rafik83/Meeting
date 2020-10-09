@@ -47,16 +47,17 @@
             </div>
             <div class="networking_list">
                 <h2>Participants connectés</h2>
-                <table class="list list--users table table-striped table-bordered table-hover">
+                <table class="list list--users table table-striped table-bordered table-hover participantList">
+                    <tbody id="ParticipantList" data-user-current="{{ networkingView.userCurrentId }}">
                     {% for subscription in networkingView.subscriptions %}
-                    <tr>
+                    <tr data-participant-user-id="{{ subscription.userId }}">
                         <td>
                             <img src="{{ subscription.userAvatar }}">
                             <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }} - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
-
                         </td>
                     </tr>
                     {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>

@@ -5,9 +5,8 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use InvalidArgumentException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class NotificationSubscriber extends AbstractNotification implements NotificationSubscriberInterface
@@ -18,14 +17,14 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
     /** @var string */
     private $mercureSubscriberKey;
 
-    /** @var RouterInterface */
-    private $routerAdapter;
+    /** @var UserPayloadBuilder */
+    private $userPayloadBuilder;
 
-    public function __construct(string $mercureHubUrl, string $mercureSubscriberKey, RouterInterface $routerAdapter)
+    public function __construct(string $mercureHubUrl, string $mercureSubscriberKey, UserPayloadBuilder $userPayloadBuilder)
     {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercureSubscriberKey = $mercureSubscriberKey;
-        $this->routerAdapter = $routerAdapter;
+        $this->userPayloadBuilder = $userPayloadBuilder;
     }
 
     public function getUrl(): string
@@ -49,30 +48,18 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         ], $this->mercureSubscriberKey);
     }
 
-    public function getNetworkingSubscriberKey(Event $event, User $user, $types): string
+    public function getNetworkingSubscriberKey(Sheet $sheet, User $user, $types): string
     {
         if (empty($types)) {
             throw new InvalidArgumentException('Types array cannot be empty');
         }
 
-        $avatar = $user->getAvatar();
-        if ($avatar === null) {
-            $avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $user->getAccount()->getCompleteName()]);
-        }
-
         return JWT::encode([
             'mercure' => [
-                'subscriber' => array_map(function ($type) use ($event) {
-                    return ['topic' => $this->getNetworkingTopic($event->getId(), $type)];
+                'subscriber' => array_map(function ($type) use ($sheet) {
+                    return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId(), $type)];
                 }, $types),
-                'payload' => [
-                    'userId' => $user->getId(),
-                    'userLastName' => $user->getLastName(),
-                    'userFirstName' => $user->getFirstName(),
-                    'userPosition' => $user->getPosition(),
-                    'userAvatar' => $avatar,
-                    'userCompany' => $user->getAccount()->getCompany()
-                ]
+                'payload' => $this->userPayloadBuilder->get($sheet, $user),
             ]
         ], $this->mercureSubscriberKey);
     }

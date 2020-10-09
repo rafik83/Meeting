@@ -14,8 +14,9 @@ function init(target) {
         const topic = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-topic');
         const subscriberKey = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-subscriber-key');
         const providerUrl = target.querySelectorAll('[data-chat-networking]')[0].getAttribute('data-notifications-provider-url');
+        const userCurrentId = target.querySelectorAll('[data-user-current]')[0].getAttribute('data-user-current');
+        const participantList = new ParticipantList(target, providerUrl, topic, subscriberKey, userCurrentId);
 
-        const participantList = new ParticipantList(element, providerUrl, topic, subscriberKey);
         participantList.init();
     });
 }

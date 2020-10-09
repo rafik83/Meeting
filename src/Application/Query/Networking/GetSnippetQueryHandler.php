@@ -27,15 +27,15 @@ class GetSnippetQueryHandler
 
     public function handle(GetSnippetQuery $getSnippetQuery)
     {
-        if (!$this->networkingAccessChecker->allowedToAccess($getSnippetQuery->event)) {
+        if (!$this->networkingAccessChecker->allowedToAccess($getSnippetQuery->sheet->getEvent())) {
             throw new ClosedNetworkingException();
         }
 
-        $topic = $this->notificationSubscriber->getNotificationTopic($getSnippetQuery->event->getId());
+        $topic = $this->notificationSubscriber->getNotificationTopic($getSnippetQuery->sheet->getEvent()->getId());
 
         return new GetSnippetView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getNetworkingSubscriberKey($getSnippetQuery->event, $getSnippetQuery->user, [AbstractNotification::TYPE_CHAT]),
+            $this->notificationSubscriber->getNetworkingSubscriberKey($getSnippetQuery->sheet, $getSnippetQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic
         );
     }

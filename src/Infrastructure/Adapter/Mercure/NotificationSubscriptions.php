@@ -7,6 +7,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
+use Proximum\Vimeet\Domain\Model\User;
 
 
 class NotificationSubscriptions extends AbstractNotification implements NotificationSubscriptionsInterface
@@ -31,7 +32,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getSubscriptions(string $topic): array
+    public function getSubscriptions(string $topic, User $user): array
     {
         $authPayload = [
             'mercure' => [
@@ -51,13 +52,20 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
             if ($subscription['topic'] !== $topic) {
                 continue;
             }
-
-            $payload = $subscription['payload'];
-
-            unset($payload['userId']);
-
-            $users[$subscription['payload']['userId']] = $payload;
+            if ($user->getId() === $subscription['payload']['userId']) {
+                continue;
+            }
+            $users[$subscription['payload']['userId']] = $subscription['payload'];
         }
+
+        usort($users, function($user1, $user2) {
+            $compareResult = strcmp($user1['userLastName'], $user2['userLastName']);
+
+            if ($compareResult === 0) {
+                $compareResult = strcmp($user1['userFirstName'], $user2['userFirstName']);
+            }
+            return $compareResult;
+        });
 
         return $users;
     }

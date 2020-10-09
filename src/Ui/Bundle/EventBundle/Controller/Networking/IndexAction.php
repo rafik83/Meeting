@@ -68,7 +68,7 @@ class IndexAction
             throw new AccessDeniedException();
         }
 
-        $networkingView = $this->queryBus->handle(new NetworkingQuery($event, $user));
+        $networkingView = $this->queryBus->handle(new NetworkingQuery($sheet, $user));
 
         return new Response(
             $this->engine->render(
