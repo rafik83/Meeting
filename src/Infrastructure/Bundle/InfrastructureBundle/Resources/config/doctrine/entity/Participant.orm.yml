@@ -37,7 +37,7 @@ Proximum\Vimeet\Domain\Model\Participant:
                 default: 0
         networkingChatViewedAt:
             type: datetime
-            nullable: true        
+            nullable: true
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

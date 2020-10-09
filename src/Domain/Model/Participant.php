@@ -89,15 +89,13 @@ class Participant implements MailRecipientInterface
         User $user,
         array $data,
         $active,
-        \DateTimeInterface $registrationDate,
-        ?\DateTimeInterface $networkingChatViewedAt = null
+        \DateTimeInterface $registrationDate
     ) {
         $this->sheet  = $sheet;
         $this->user   = $user;
         $this->data   = $data;
         $this->active = $active;
         $this->registrationDate = $registrationDate;
-        $this->networkingChatViewedAt = $networkingChatViewedAt;
     }
 
     /**
@@ -359,8 +357,7 @@ class Participant implements MailRecipientInterface
             $participant->getUser(),
             $participant->getData(),
             $participant->isActive(),
-            $registrationDate,
-            $participant->getNetworkingChatViewedAt()
+            $registrationDate
         );
 
         $duplicatedParticipant->setImported(true);

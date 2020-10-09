@@ -51,6 +51,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@datetime'
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
@@ -445,8 +446,9 @@ services:
     Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt }        
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt }
 
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:

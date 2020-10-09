@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,9 +20,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class ParticipantRepository implements ParticipantRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
     /**
@@ -689,8 +680,29 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->getResult();
     }
 
-    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event, \DateTime $now)
+    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event, DateTimeInterface $date)
     {
-        // créer une requète qui met à jour tout les participants lié un Event donné
+        $sheetIds = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getScalarResult();
+
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(Participant::class, 'participant')
+            ->set('participant.networkingChatViewedAt', ':date')
+            ->setParameter('date', $date)
+            ->where('participant.sheet IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('participant.user IN (:user)')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
     }
 }

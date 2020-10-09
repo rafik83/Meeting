@@ -27,7 +27,7 @@ class UpdateNetworkingChatViewedAtHandlerTest extends TestCase
         $updateTime = new DateTime();
 
         $command = new UpdateNetworkingChatViewedAt($sheet->reveal(), $user->reveal(), $updateTime);
-        $handler = new UpdateNetworkingChatViewedAtHandler($participantRepository->reveal());
+        $handler = new UpdateNetworkingChatViewedAtHandler($participantRepository->reveal(), new \DateTime());
 
         $handler->handle($command);
     }

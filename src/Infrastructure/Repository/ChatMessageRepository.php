@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
@@ -88,17 +89,25 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
         return $this->entityManager->find(ChatMessage::class, $id);
     }
 
-    public function getMessagesCountByEvent(Event $event): int
+    public function getMessagesCountByEvent(Event $event, ?DateTimeInterface $viewedAfter): int
     {
-        // Mettre à jour la query pour ne prendre que les messages non lu à la Participant NetworkingChatViewedAt
-
-        return $this->entityManager
+        $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('COUNT(chatMessage.id) as count')
             ->from(ChatMessage::class, 'chatMessage')
             ->where('chatMessage.objectType = :objectType')
             ->andWhere('chatMessage.objectId = :eventId')
-            ->setParameters(['eventId' => $event->getId(), 'objectType' => Self::OBJECT_TYPES['NETWORKING']])
-            ->getQuery()->getSingleScalarResult();
+            ->setParameters([
+                'eventId' => $event->getId(),
+                'objectType' => Self::OBJECT_TYPES['NETWORKING'],
+            ]);
+
+        if ($viewedAfter) {
+            $queryBuilder
+                ->andWhere('chatMessage.createdAt > :viewedAfter')
+                ->setParameter('viewedAfter', $viewedAfter);
+        }
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 }

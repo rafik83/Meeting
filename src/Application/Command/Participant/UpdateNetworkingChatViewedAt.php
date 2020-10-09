@@ -19,11 +19,9 @@ class UpdateNetworkingChatViewedAt implements Command
 
     public function __construct(
         Sheet $sheet,
-        User $user,
-        \DateTime $updateTime
+        User $user
     ) {
         $this->sheet = $sheet;
         $this->user = $user;
-        $this->updateTime = $updateTime;
     }
 }

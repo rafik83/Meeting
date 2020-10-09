@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQu
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
@@ -26,6 +27,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
 
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
+        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($this->prophesize(Participant::class));
 
         $accessChecker = $this->prophesize(NetworkingAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -40,18 +42,10 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             ->willReturn('/url/to/contacts');
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal())->shouldBeCalled()->willReturn(0);
+        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), null)->shouldBeCalled()->willReturn(0);
 
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler($navigationBuilder->reveal(), $accessChecker->reveal(),  $chatMessageRepository->reveal());
 
-
-        $result = $networkingSubMenuQueryHandler->handle(new NetworkingSubmenuViewQuery(
-            $user->reveal(),
-            $event->reveal(),
-            'fr',
-            $sheet->reveal(),
-            'event_contact_index'
-        ));
 
         $expectedSubButtonView = new SubmenuButtonView(
             Category::NETWORKING_ICON,
@@ -61,6 +55,14 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             null,
             true
         );
+
+        $result = $networkingSubMenuQueryHandler->handle(new NetworkingSubmenuViewQuery(
+            $user->reveal(),
+            $event->reveal(),
+            'fr',
+            $sheet->reveal(),
+            'event_contact_index'
+        ));
 
         $this->assertEquals($expectedSubButtonView, $result);
     }
@@ -73,14 +75,21 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn($sheetId);
 
+        $lastViewDate = new \DateTime('2020-03-14T03:14:15');
+
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getNetworkingChatViewedAt()->shouldBeCalled()->willReturn($lastViewDate);
+        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
 
         $accessChecker = $this->prophesize(NetworkingAccessChecker::class);
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal())->shouldBeCalled()->willReturn($expectedMessagesCount);
+        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), $lastViewDate)
+            ->shouldBeCalled()
+            ->willReturn($expectedMessagesCount);
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $navigationBuilder->getRoute(
@@ -94,14 +103,6 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler($navigationBuilder->reveal(), $accessChecker->reveal(), $chatMessageRepository->reveal());
 
 
-        $result = $networkingSubMenuQueryHandler->handle(new NetworkingSubmenuViewQuery(
-            $user->reveal(),
-            $event->reveal(),
-            'fr',
-            $sheet->reveal(),
-            'event_contact_index'
-        ));
-
         $expectedSubButtonView = new SubmenuButtonView(
             Category::NETWORKING_ICON,
             'navigation.category.networking',
@@ -110,6 +111,14 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $expectedMessagesCount,
             true
         );
+
+        $result = $networkingSubMenuQueryHandler->handle(new NetworkingSubmenuViewQuery(
+            $user->reveal(),
+            $event->reveal(),
+            'fr',
+            $sheet->reveal(),
+            'event_contact_index'
+        ));
 
         $this->assertEquals($expectedSubButtonView, $result);
     }

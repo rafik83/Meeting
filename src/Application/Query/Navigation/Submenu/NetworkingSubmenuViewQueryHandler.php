@@ -46,7 +46,10 @@ class NetworkingSubmenuViewQueryHandler
                 $networkingTitle,
                 $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
                 Route::isNetworking($query->route),
-                $this->chatMessageRepository->getMessagesCountByEvent($query->event),
+                $this->chatMessageRepository->getMessagesCountByEvent(
+                    $query->event,
+                    $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
+                ),
                 true
             );
         }

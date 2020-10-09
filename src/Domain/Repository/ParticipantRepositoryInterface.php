@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -268,5 +269,5 @@ interface ParticipantRepositoryInterface
 
     public function getProductIdsOfUserForEvent(User $user, Event $event): array;
 
-    public function updateAllNetworkingChatViewedAt(User  $user, EventInterface $event, \DateTime $now);
+    public function updateAllNetworkingChatViewedAt(User  $user, EventInterface $event, DateTimeInterface $date);
 }

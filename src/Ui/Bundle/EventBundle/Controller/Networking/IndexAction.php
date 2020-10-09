@@ -7,7 +7,6 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
-use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler;
 use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
