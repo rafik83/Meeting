@@ -5,17 +5,18 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
+use Proximum\Vimeet\Application\Query\Networking\PrivateChatQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
-class IndexAction
+class PrivateChatAction
 {
     /** @var EngineInterface */
     private $engine;
@@ -50,31 +51,30 @@ class IndexAction
     public function __invoke(
         EventDomain $eventDomain,
         UserDomain $userDomain,
-        Sheet $sheet
+        Sheet $sheet,
+        User $toUser
     )
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+        ) {
             throw new AccessDeniedException();
         }
 
         $event = $eventDomain->getEvent();
-        $user = $userDomain->getUser();
 
         if (!$this->networkingAccessChecker->allowedToAccess($event)) {
             throw new AccessDeniedException();
         }
 
-        $networkingView = $this->queryBus->handle(new NetworkingQuery($sheet, $user));
+        $chatView = $this->queryBus->handle(new PrivateChatQuery($event, $userDomain->getUser(), $toUser));
 
         return new Response(
             $this->engine->render(
-                '@Event/Networking/index.html.twig',
+                '@Event/Networking/privateChat.html.twig',
                 [
-                    'networkingView' => $networkingView,
+                    'privateChatView' => $chatView,
                     'sheet' => $sheet,
                     'event' => $event,
-                    'currentUser' => $user,
-                    'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
                 ]
             )
         );

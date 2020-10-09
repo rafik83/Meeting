@@ -659,6 +659,14 @@ event_networking_index:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\IndexAction }
 
+event_networking_chat:
+    path: /sheet/{sheet}/networking/{toUser}/chat
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction }
+
 #
 # Meeting Request
 #

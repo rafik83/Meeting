@@ -6,6 +6,7 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -29,8 +30,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter,
         UserPayloadBuilder $userPayloadBuilder
-    )
-    {
+    ) {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
@@ -51,6 +51,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
     {
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } elseif ($object instanceof ChatSession) {
+            $topic = $this->getChatSessionTopic($object);
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }
@@ -68,6 +70,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
 
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
+        } elseif ($object instanceof ChatSession) {
+            $topic = $this->getChatSessionTopic($object);
         } else {
             $topic = $this->getNotificationTopic($object->getEvent()->getId());
         }
@@ -100,10 +104,12 @@ class NotificationPublisher extends AbstractNotification implements Notification
             ]
         ];
 
-        $this->httpAdapter->post($this->mercureHubUrl, [
-            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
-            'Content-type' => 'application/x-www-form-urlencoded',
-        ],
+        $this->httpAdapter->post(
+            $this->mercureHubUrl,
+            [
+                'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercurePublisherKey)),
+                'Content-type' => 'application/x-www-form-urlencoded',
+            ],
             http_build_query($postData)
         );
     }

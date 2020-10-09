@@ -457,3 +457,11 @@ services:
             - '@adapter.authorization_checker'
             - '@domain.key_dates.checker.event_open_access_checker'
             - '@domain.key_dates.checker.networking_access_checker'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@domain.key_dates.checker.networking_access_checker'

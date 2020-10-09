@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 
+use Proximum\Vimeet\Domain\Model\ChatSession;
+
 class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
@@ -25,5 +27,10 @@ class AbstractNotification
     public function getUserConnectionTopic(int $eventId): string
     {
         return sprintf('https://vimeet.events/event/%d/user/connection', $eventId);
+    }
+
+    public function getChatSessionTopic(ChatSession $chatSession): string
+    {
+        return sprintf('https://vimeet.events/private_chat/%d', $chatSession->getId());
     }
 }
