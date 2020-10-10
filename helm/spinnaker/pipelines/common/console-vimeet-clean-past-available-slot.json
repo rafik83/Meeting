@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-clean-past-available-slot",
     "cronEnabled": "true",
-    "cronExpression": "H 4 * * *",
+    "cronExpression": "0 0 4 ? * * *",
     "cronCommand": "bin/console vimeet:clean:past-available-slot --env=prod"
   },
   "exclude": [],

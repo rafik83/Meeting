@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-generate-agenda-versions",
     "cronEnabled": "true",
-    "cronExpression": "H 5 * * *",
+    "cronExpression": "0 0 5 ? * * *",
     "cronCommand": "bin/console vimeet:event:generate-agenda-versions-for-events --env=prod"
   },
   "exclude": [],

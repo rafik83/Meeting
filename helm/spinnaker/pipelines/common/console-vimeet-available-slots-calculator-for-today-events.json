@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-available-slots-calculator-for-today-events",
     "cronEnabled": "true",
-    "cronExpression": "H 4 * * *",
+    "cronExpression": "0 0 4 ? * * *",
     "cronCommand": "bin/console vimeet:event:available-slots-calculator-for-current-event --env=prod"
   },
   "exclude": [],

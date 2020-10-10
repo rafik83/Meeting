@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-vianeo-export-data",
     "cronEnabled": "true",
-    "cronExpression": "H/5 * * * *",
+    "cronExpression": "0 0/5 * ? * * *",
     "cronCommand": "bin/console vimeet:api:vianeo-export-data --env=prod"
   },
   "exclude": [],

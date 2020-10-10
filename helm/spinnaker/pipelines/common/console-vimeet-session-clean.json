@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-session-clean",
     "cronEnabled": "true",
-    "cronExpression": "H 4 * * *",
+    "cronExpression": "0 0 4 ? * * *",
     "cronCommand": "bin/console vimeet:session:clean --env=prod"
   },
   "exclude": [],

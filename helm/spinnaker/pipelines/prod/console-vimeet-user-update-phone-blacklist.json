@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-user-update-phone-blacklist",
     "cronEnabled": "true",
-    "cronExpression": "@hourly",
+    "cronExpression": "0 0 * ? * * *",
     "cronCommand": "bin/console vimeet:user:update-phone-blacklist --env=prod"
   },
   "exclude": [],

@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-leni-import-data",
     "cronEnabled": "true",
-    "cronExpression": "H/10 * * * *",
+    "cronExpression": "0 0/10 * ? * * *",
     "cronCommand": "bin/console vimeet:api:leni-get-call --env=prod"
   },
   "exclude": [],

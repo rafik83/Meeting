@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-jobs-cleanup",
     "cronEnabled": "true",
-    "cronExpression": "H/10 * * * *",
+    "cronExpression": "0 0/10 * ? * * *",
     "cronCommand": "bin/console jms-job-queue:clean-up --env=prod"
   },
   "exclude": [],

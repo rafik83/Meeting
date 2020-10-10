@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-api-tech-event-import-sheets",
     "cronEnabled": "true",
-    "cronExpression": "H/10 * * * *",
+    "cronExpression": "0 0/10 * ? * * *",
     "cronCommand": "bin/console vimeet:api:tech-event-import-sheets --env=prod"
   },
   "exclude": [],

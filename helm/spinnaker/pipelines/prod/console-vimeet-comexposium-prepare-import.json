@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-comexposium-prepare-import",
     "cronEnabled": "true",
-    "cronExpression": "H/10 * * * *",
+    "cronExpression": "0 0/10 * ? * * *",
     "cronCommand": "bin/console vimeet:comexposium:prepare-import --env=prod"
   },
   "exclude": [],

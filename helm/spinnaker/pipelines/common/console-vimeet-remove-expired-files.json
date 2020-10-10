@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-remove-expired-files",
     "cronEnabled": "true",
-    "cronExpression": "H 4 * * *",
+    "cronExpression": "0 0 4 ? * * *",
     "cronCommand": "bin/console vimeet:remove:expired_files --env=prod"
   },
   "exclude": [],

@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-notify-user-agenda-version-diff-dday",
     "cronEnabled": "true",
-    "cronExpression": "H/5 * * * *",
+    "cronExpression": "0 0/5 * ? * * *",
     "cronCommand": "bin/console vimeet:user:notify-agenda-version-diff-dday --env=prod"
   },
   "exclude": [],

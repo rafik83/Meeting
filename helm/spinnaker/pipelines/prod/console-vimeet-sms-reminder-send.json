@@ -10,7 +10,7 @@
   "variables": {
     "jobName": "console-vimeet-sms-reminder-send",
     "cronEnabled": "true",
-    "cronExpression": "H/10 * * * *",
+    "cronExpression": "0 0/10 * ? * * *",
     "cronCommand": "bin/console vimeet:sms-reminder:send --env=prod"
   },
   "exclude": [],
