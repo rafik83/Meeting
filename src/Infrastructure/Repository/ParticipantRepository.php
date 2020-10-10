@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -27,9 +20,7 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class ParticipantRepository implements ParticipantRepositoryInterface
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
     /**
@@ -484,8 +475,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.event = :event')
             ->setParameter('sheetIds', $sheetIds)
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -526,8 +516,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
             ->andWhere('NOT EXISTS (SELECT m.id FROM ' . MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
-            ->setParameter('mass', $mass)
-        ;
+            ->setParameter('mass', $mass);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -669,8 +658,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->from(Participant::class, 'participant')
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->join('participant.user', 'user')
-            ->setParameter('event', $event)
-        ;
+            ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -690,5 +678,31 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->groupBy('participantProduct.id')
             ->getQuery()
             ->getResult();
+    }
+
+    public function updateAllNetworkingChatViewedAt(User $user, EventInterface $event, DateTimeInterface $date)
+    {
+        $sheetIds = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getScalarResult();
+
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(Participant::class, 'participant')
+            ->set('participant.networkingChatViewedAt', ':date')
+            ->setParameter('date', $date)
+            ->where('participant.sheet IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('participant.user IN (:user)')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
     }
 }

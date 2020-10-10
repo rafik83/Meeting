@@ -48,8 +48,7 @@ class ParticipantDenormalizerTest extends TestCase
         $emailValidator,
         $synchronizer,
         $translatorAdapter,
-        $participantOfSheetWithPackageParticipantAndPlanningDisabled
-    ;
+        $participantOfSheetWithPackageParticipantAndPlanningDisabled;
 
     /** @var \DateTime */
     private $dateTime;
@@ -106,8 +105,7 @@ class ParticipantDenormalizerTest extends TestCase
                 1 => [
                     'email' => 'martine@gmail.com'
                 ]
-            ])
-        ;
+            ]);
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
 
@@ -173,13 +171,11 @@ class ParticipantDenormalizerTest extends TestCase
         $this->templateDataFactory
             ->createRegistrationFromType($type, $locale)
             ->shouldBeCalled()
-            ->willReturn($templateData)
-        ;
+            ->willReturn($templateData);
         $this->templateDataFactory
             ->createSheetTemplateFromType($type, $locale)
             ->shouldBeCalled()
-            ->willReturn($sheetTemplateData)
-        ;
+            ->willReturn($sheetTemplateData);
 
         $mapping = [
             'Nom participant' => 'lastname',
@@ -229,18 +225,15 @@ class ParticipantDenormalizerTest extends TestCase
                 Argument::that(
                     static function (Sheet $sheet) {
                         return 'User already exists in DB' === $sheet->getTitle()
-                            && $sheet->isImported()
-                        ;
+                            && $sheet->isImported();
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($userAlreadyExists->reveal(), $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData1 = [
             'participant_firstname' => 'Julie',
             'participant_lastname' => 'KL',
@@ -249,8 +242,7 @@ class ParticipantDenormalizerTest extends TestCase
         ];
         $this->synchronizer
             ->set($templateData->setTaggedData($taggedData1), $userAlreadyExists->reveal())
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         // Add sheet for "Ma Petite Tribu" for jean@gmail.com
         $user2 = new User('jean@gmail.com', '', '', 'fr');
@@ -281,13 +273,11 @@ class ParticipantDenormalizerTest extends TestCase
                 Argument::that(
                     static function (Sheet $sheet) {
                         return 'Ma Petite Tribu' === $sheet->getTitle()
-                            && $sheet->isImported()
-                        ;
+                            && $sheet->isImported();
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $callBackParticipant1 = Argument::that(
             static function (Participant $participant) {
@@ -298,8 +288,7 @@ class ParticipantDenormalizerTest extends TestCase
         );
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant1)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $callBackParticipant2 = Argument::that(
             static function (Participant $participant) {
@@ -311,17 +300,14 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->participantRepository
             ->add($callBackParticipant2)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant2)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($user2, $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData2 = [
             'participant_firstname' => 'Jean',
             'participant_lastname' => 'CD',
@@ -337,17 +323,14 @@ class ParticipantDenormalizerTest extends TestCase
                 1 => [
                     'email' => 'email-not-used@gmail.com',
                 ]
-            ])
-        ;
+            ]);
 
         $this->participantRepository
-            ->add(Argument::that(static function(Participant $participant) {
+            ->add(Argument::that(static function (Participant $participant) {
                 return $participant->getEmail() === 'jean@gmail.com'
-                    || $participant->getEmail() === 'julie@gmail.com'
-                ;
+                    || $participant->getEmail() === 'julie@gmail.com';
             }))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         // Configure Serializer
         $serializer = new Serializer(
@@ -421,25 +404,21 @@ class ParticipantDenormalizerTest extends TestCase
         $this->userRepository
             ->findByEmail('existing-user-without-group@example.net')
             ->shouldBeCalled()
-            ->willReturn($existingUserWithoutGroup->reveal())
-        ;
+            ->willReturn($existingUserWithoutGroup->reveal());
         $this->userRepository
             ->findByEmail('existing-user-with-group@example.net')
             ->shouldBeCalled()
-            ->willReturn($existingUserWithGroup->reveal())
-        ;
+            ->willReturn($existingUserWithGroup->reveal());
 
         $this->userRepository
             ->findByEmail('new-user-1@example.net')
             ->shouldBeCalled()
-            ->willReturn(null)
-        ;
+            ->willReturn(null);
 
         $this->userRepository
             ->findByEmail('new-user-2@example.net')
             ->shouldBeCalled()
-            ->willReturn(null)
-        ;
+            ->willReturn(null);
 
         $errorMessages = [
             'validators.admin.sheet.import_participant.error.country',
@@ -458,8 +437,7 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->sheetRepository
             ->getOwnerEmails($event->reveal())
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
         $block = new Block('12', [], 'fr', 'fr');
@@ -497,13 +475,11 @@ class ParticipantDenormalizerTest extends TestCase
         $this->templateDataFactory
             ->createRegistrationFromType($type, $locale)
             ->shouldBeCalled()
-            ->willReturn($templateData)
-        ;
+            ->willReturn($templateData);
         $this->templateDataFactory
             ->createSheetTemplateFromType($type, $locale)
             ->shouldBeCalled()
-            ->willReturn($sheetTemplateData)
-        ;
+            ->willReturn($sheetTemplateData);
 
         $mapping = [
             'first_anme' => 'lastname',
@@ -536,22 +512,19 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->groupRepository->getByUserAndEvent($existingUserWithoutGroup->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn(null)
-        ;
+            ->willReturn(null);
         $this->groupRepository->add($newGroup)->shouldBeCalled();
         $this->sheetRepository->set(Argument::that(
             static function (Sheet $sheet) {
                 return $sheet->getTitle() === 'previous sheet'
-                    && $sheet->hasGroup() === true
-                ;
+                    && $sheet->hasGroup() === true;
             }
         ))->shouldBeCalled();
 
         $this->sheetRepository
             ->getSheetsByUserAndEvent($existingUserWithoutGroup->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([$existingSheetWithoutGroup])
-        ;
+            ->willReturn([$existingSheetWithoutGroup]);
         $sheet1 = new Sheet(
             $event->reveal(),
             $type->reveal(),
@@ -583,18 +556,15 @@ class ParticipantDenormalizerTest extends TestCase
                         return 'EDM' === $sheet->getTitle()
                             && $sheet->isImported()
                             && $sheet->hasGroup()
-                            && $sheet->getGroupTitle() === 'New Group'
-                        ;
+                            && $sheet->getGroupTitle() === 'New Group';
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($existingUserWithoutGroup->reveal(), $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData1 = [
             'participant_firstname' => 'Élisabeth',
             'participant_lastname' => 'De Monnier',
@@ -602,8 +572,7 @@ class ParticipantDenormalizerTest extends TestCase
         ];
         $this->synchronizer
             ->set($templateData->setTaggedData($taggedData1), $existingUserWithoutGroup->reveal())
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         // Add sheet for existing user with group
         $existingSheetWithGroup = $this->prophesize(Sheet::class);
@@ -614,8 +583,7 @@ class ParticipantDenormalizerTest extends TestCase
         $this->sheetRepository
             ->getSheetsByUserAndEvent($existingUserWithGroup->reveal(), $event->reveal())
             ->shouldBeCalled()
-            ->willReturn([$existingSheetWithGroup->reveal()])
-        ;
+            ->willReturn([$existingSheetWithGroup->reveal()]);
 
         $sheet2 = new Sheet(
             $event->reveal(),
@@ -644,13 +612,11 @@ class ParticipantDenormalizerTest extends TestCase
                     static function (Sheet $sheet) {
                         return 'DH' === $sheet->getTitle()
                             && $sheet->isImported()
-                            && $sheet->hasGroup() === true
-                        ;
+                            && $sheet->hasGroup() === true;
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $callBackParticipant1 = Argument::that(
             static function (Participant $participant) {
@@ -661,8 +627,7 @@ class ParticipantDenormalizerTest extends TestCase
         );
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant1)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $callBackParticipant2 = Argument::that(
             static function (Participant $participant) {
@@ -674,17 +639,14 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->participantRepository
             ->add($callBackParticipant2)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant2)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($existingUserWithGroup->reveal(), $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData2 = [
             'participant_firstname' => 'Daniel',
             'participant_lastname' => 'Hamel',
@@ -697,17 +659,14 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->participantRepository
             ->getParticipantEmailsForEvent($event->reveal())
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $this->participantRepository
-            ->add(Argument::that(static function(Participant $participant) {
+            ->add(Argument::that(static function (Participant $participant) {
                 return $participant->getEmail() === 'existing-user-without-group@example.net'
-                    || $participant->getEmail() === 'existing-user-with-group@example.net'
-                ;
+                    || $participant->getEmail() === 'existing-user-with-group@example.net';
             }))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         // Add sheet for new user without creating a group
         $newUser = new User('new-user-1@example.net', '', '', 'fr');
@@ -717,8 +676,7 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->sheetRepository
             ->getSheetsByUserAndEvent($newUser, $event->reveal())
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $sheet3 = new Sheet(
             $event->reveal(),
@@ -746,13 +704,11 @@ class ParticipantDenormalizerTest extends TestCase
                     static function (Sheet $sheet) {
                         return 'Lion SA' === $sheet->getTitle()
                             && $sheet->isImported()
-                            && $sheet->hasGroup() === false
-                            ;
+                            && $sheet->hasGroup() === false;
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $callBackParticipant3 = Argument::that(
             static function (Participant $participant) {
@@ -764,17 +720,14 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->participantRepository
             ->add($callBackParticipant3)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant3)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($newUser, $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData3 = [
             'participant_firstname' => 'Alix',
             'participant_lastname' => 'Vincent',
@@ -803,14 +756,12 @@ class ParticipantDenormalizerTest extends TestCase
         // strange behavior but to test that we find a group for this user on this event (even if the user is new)
         $this->groupRepository->getByUserAndEvent($newUser2, $event->reveal())
             ->shouldBeCalled()
-            ->willReturn($newGroup2)
-        ;
+            ->willReturn($newGroup2);
         $this->groupRepository->add($newGroup2)->shouldNotBeCalled();
 
         $this->sheetRepository
             ->getSheetsByUserAndEvent($newUser2, $event->reveal())
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $sheet4 = new Sheet(
             $event->reveal(),
@@ -872,46 +823,39 @@ class ParticipantDenormalizerTest extends TestCase
                     static function (Sheet $sheet) {
                         return 'Super SA' === $sheet->getTitle()
                             && $sheet->isImported()
-                            && $sheet->hasGroup() === false
-                        ;
+                            && $sheet->hasGroup() === false;
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->sheetRepository
             ->add(
                 Argument::that(
                     static function (Sheet $sheet) {
                         return 'Super SARL' === $sheet->getTitle()
                             && $sheet->isImported()
-                            && $sheet->hasGroup() === true
-                            ;
+                            && $sheet->hasGroup() === true;
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->sheetRepository
             ->add(
                 Argument::that(
                     static function (Sheet $sheet) {
                         return 'Super SCOP' === $sheet->getTitle()
                             && $sheet->isImported()
-                            && $sheet->hasGroup() === true
-                            ;
+                            && $sheet->hasGroup() === true;
                     }
                 )
             )
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->sheetRepository->set(
             Argument::that(
                 static function (Sheet $sheet) {
                     return 'Super SA' === $sheet->getTitle()
                         && $sheet->isImported()
-                        && $sheet->hasGroup() === true
-                    ;
+                        && $sheet->hasGroup() === true;
                 }
             )
         )->shouldBeCalled();
@@ -940,33 +884,26 @@ class ParticipantDenormalizerTest extends TestCase
 
         $this->participantRepository
             ->add($callBackParticipant4)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantRepository
             ->add($callBackParticipant5)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantRepository
             ->add($callBackParticipant6)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant4)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant5)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
             ->handle($callBackParticipant6)
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
 
         $this->userEventRepository
             ->add(new UserEvent($newUser2, $event->reveal(), $type->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->shouldBeCalled();
         $taggedData4 = [
             'participant_firstname' => 'Véronique',
             'participant_lastname' => 'Joly',
