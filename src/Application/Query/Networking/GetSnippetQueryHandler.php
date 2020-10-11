@@ -32,12 +32,10 @@ class GetSnippetQueryHandler
             throw new ClosedNetworkingException();
         }
 
-        $topic = $this->notificationSubscriber->getChatSessionTopic($getSnippetQuery->user->getId());
-
         return new GetSnippetView(
             $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getEventSubscriberKey($getSnippetQuery->sheet, $getSnippetQuery->user),
-            $topic
+            $this->notificationSubscriber->getUserSubscriberKey($getSnippetQuery->sheet, $getSnippetQuery->user),
+            $this->notificationSubscriber->getUserTopic($getSnippetQuery->user->getId())
         );
     }
 }

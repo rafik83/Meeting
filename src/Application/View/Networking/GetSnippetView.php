@@ -13,12 +13,12 @@ class GetSnippetView
     public $subscriberKey;
 
     /** @var string */
-    public $topic;
+    public $userTopic;
 
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic)
+    public function __construct(string $providerUrl, string $subscriberKey, string $userTopic)
     {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
-        $this->topic = $topic;
+        $this->userTopic = $userTopic;
     }
 }

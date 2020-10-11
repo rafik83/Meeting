@@ -51,6 +51,7 @@ class UserPayloadBuilder
 
         return [
             'userId' => $user->getId(),
+            'eventId' => $sheet->getEvent()->getId(),
             'userLastName' => $user->getLastName(),
             'userFirstName' => $user->getFirstName(),
             'userPosition' => $position,

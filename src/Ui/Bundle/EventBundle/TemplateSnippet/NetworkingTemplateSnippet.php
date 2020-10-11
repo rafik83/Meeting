@@ -4,7 +4,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\TemplateSnippet;
 
 
-use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Networking\ClosedNetworkingException;
 use Proximum\Vimeet\Application\Query\Networking\GetSnippetQuery;
@@ -20,21 +19,16 @@ class NetworkingTemplateSnippet
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var NotificationPublisherInterface */
-    private $notificationPublisher;
-
     public function __construct(
         EngineInterface $engine,
-        QueryBusInterface $queryBus,
-        NotificationPublisherInterface $notificationPublisher
-    )
-    {
+        QueryBusInterface $queryBus
+    ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
-        $this->notificationPublisher = $notificationPublisher;
     }
 
-    public function generate(Sheet $sheet, ?User $user) : string {
+    public function generate(Sheet $sheet, ?User $user): string
+    {
 
         if ($user === null) {
             return ' ';
@@ -52,8 +46,6 @@ class NetworkingTemplateSnippet
                 'getSnippetView' => $getSnippetView,
             ]
         );
-
-        $this->notificationPublisher->publishUserConnectionNotification($sheet, $user);
 
         return $template;
     }

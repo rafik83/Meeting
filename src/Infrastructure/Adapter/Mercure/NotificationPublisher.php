@@ -8,9 +8,11 @@ use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatSession;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use RuntimeException;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
 {
@@ -55,18 +57,19 @@ class NotificationPublisher extends AbstractNotification implements Notification
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getChatSessionTopic($object->getOtherUser($message->getCreatedBy())->getId());
+            $topic = $this->getUserTopic($object->getOtherUser($message->getCreatedBy())->getId());
             $payload['content'] = $message->getContent();
             $payload['author'] = $message->getCreatedBy()->getFullname();
             $payload['authorId'] = $message->getCreatedBy()->getId();
+        } elseif ($object instanceof Event) {
+            $topic = $this->getNetworkingTopic($object->getEvent()->getId());
         } else {
-            $topic = $this->getNotificationTopic($object->getEvent()->getId());
+            throw new RuntimeException('Unsupported chat message type '.$object->getObjectType());
         }
 
         $postData = [
             'topic' => $topic,
             'data' => json_encode($payload),
-            'private' => true,
         ];
 
         $this->publishMessage($postData);
@@ -78,9 +81,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getChatSessionTopic($object->getOtherUser($chatMessage->getCreatedBy())->getId());
+            $topic = $this->getUserTopic($chatMessage->getCreatedBy()->getId());
         } else {
-            $topic = $this->getNotificationTopic($object->getEvent()->getId());
+            $topic = $this->getNetworkingTopic($object->getEvent()->getId());
         }
 
         $postData = [
@@ -94,7 +97,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
     public function publishUserConnectionNotification(Sheet $sheet, User $user): void
     {
         $postData = [
-            'topic' => $this->getNotificationTopic($sheet->getEvent()->getId()),
+            'topic' => $this->getNetworkingTopic($sheet->getEvent()->getId()),
             'data' => json_encode(
                 array_merge(['action' => 'user_connection',], $this->userPayloadBuilder->get($sheet, $user))
             ),

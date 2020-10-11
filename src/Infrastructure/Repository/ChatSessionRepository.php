@@ -64,6 +64,7 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->setParameter('event', $event)
             ->andWhere('session.fromUser = :user OR session.toUser = :user')
             ->setParameter('user', $user)
+            ->having('messagesCount > 0')
         ;
 
         return $queryBuilder->getQuery()->getResult();

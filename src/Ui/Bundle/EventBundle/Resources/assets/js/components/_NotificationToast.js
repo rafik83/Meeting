@@ -1,18 +1,19 @@
-import { currentUserConnection } from './_UserConnectionRegister';
-
 class NotificationToast {
 
     constructor(element, currentUserConnection) {
         if (element) {
             this.element = element;
             currentUserConnection.addListener(this.onNotificationReceived.bind(this));
+            this.element.querySelector('.close').addEventListener('click', () => this.hide());
         }
     }
 
     onNotificationReceived(notification) {
         const payload = JSON.parse(notification.data);
-        this.timerId = setTimeout(this.hide.bind(this), 5000);
-        this.show(payload);
+        if (payload.action === 'add_chat_message') {
+            this.timerId = setTimeout(this.hide.bind(this), 5000);
+            this.show(payload);
+        }
     }
 
     show(message) {

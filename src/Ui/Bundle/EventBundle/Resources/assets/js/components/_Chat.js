@@ -97,10 +97,9 @@ Chat.prototype.initChat = function () {
             };
 
             const onLikedClicked = function (event) {
-                const payload = {
-                    'messageId': event.currentTarget.getAttribute('data-message-id'),
-                    'messageType': event.currentTarget.getAttribute('data-message-type')
-                };
+                const messageId = event.currentTarget.getAttribute('data-message-id');
+                const messageType = event.currentTarget.getAttribute('data-message-type');
+                const payload = { messageId, messageType };
                 $.post(voteChatHref, JSON.stringify(payload), (response) => {
                     if (response.status !== 'ok') {
                         this.showError('Message vote failed');
@@ -206,11 +205,19 @@ Chat.prototype.initChat = function () {
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
     }.bind(this))
-        .fail(function () {
-            console.error('Failed to load webinar chat');
+        .fail(function (error) {
+            console.error('Failed to load chat', error);
         }.bind(this));
 };
 
+Chat.prototype.updateVotes = function (messageId, votes) {
+    const chatMessageRow = document.getElementById(`chat-message-${messageId}`);
+    const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
+    voteCounts.forEach((voteCount) => {
+        const voteType = voteCount.getAttribute('data-message-type');
+        voteCount.querySelector('.chat-vote-count').textContent = votes[voteType] ? votes[voteType] : '';
+    });
+}
 Chat.prototype.reload = function () {
     this.chatLoaded = false;
     this.initChat();

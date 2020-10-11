@@ -102,7 +102,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
         $happening = $this->prophesize(Happening::class);
-        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Webinar: how to work remotely during the Covid-19 crisis'
@@ -240,7 +240,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
-        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
@@ -478,7 +478,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
         $happening = $this->prophesize(Happening::class);
-        $happening->getEvent()->shouldBeCalledOnce()->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Video Webinar: how to work remotely during the Covid-19 crisis'

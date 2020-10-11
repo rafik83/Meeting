@@ -1,9 +1,9 @@
 
 .chat-list {
-  height: calc(100vh - 160px);
+  min-height: 2em;
+  max-height: calc(100vh - 320px);
   margin-top: 10px;
-  overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-right: 5px;
 
   .btn.btn-gray {
@@ -126,6 +126,7 @@
 
 .chat-form {
   align-items: center;
+  background-color: white;
   border: 1px solid $border-light;
   display: flex;
   height: 34px;

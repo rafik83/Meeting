@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Contact\ContactListView;
 use Proximum\Vimeet\Application\Query\Contact\GetContactListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
@@ -33,22 +32,16 @@ class IndexAction
     /** @var EventOpenAccessChecker */
     private $eventOpenAccessChecker;
 
-    /** @var RouterInterface */
-    private $routerAdapter;
-
     public function __construct(
         QueryBusInterface $queryBus,
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EventOpenAccessChecker $eventOpenAccessChecker,
-        RouterInterface $routerAdapter
-    )
-    {
+        EventOpenAccessChecker $eventOpenAccessChecker
+    ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
-        $this->routerAdapter = $routerAdapter;
     }
 
     public function __invoke(
@@ -56,8 +49,7 @@ class IndexAction
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Sheet $sheet
-    )
-    {
+    ) {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
         ) {

@@ -69,11 +69,9 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
      * Generate JWT token for all topics a user can be interested in
      * @param ChatSession[] $sessions
      */
-    public function getEventSubscriberKey(Sheet $sheet, User $user): string
+    public function getUserSubscriberKey(Sheet $sheet, User $user): string
     {
-        $topics[] = $this->getChatSessionTopic($user->getId());
-
-        $topics[] = $this->getNotificationTopic($sheet->getEvent()->getId());
+        $topics[] = $this->getUserTopic($user->getId());
 
         return JWT::encode([
             'mercure' => [

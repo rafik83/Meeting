@@ -14,7 +14,7 @@
         <div class="networking_container">
             <div class="networking_chat">
                 <div data-chat-networking
-                     data-topic="{{ networkingView.topic }}"
+                     data-networking-topic="{{ networkingView.topic }}"
                      data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
                      data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
                      data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
@@ -75,12 +75,20 @@
             </div>
             <div class="networking_list">
                 <div class="networking_list_header">
-                    <h2>{{ 'networking.participants.title'|trans }}</h2>
+                    <h2>
+                        {{ 'networking.participants.title'|trans({
+                            '%count%': '<span class="networking_list_count">'~networkingView.subscriptions|length~'</span>'
+                            })|raw }}
+                        <small>{{ 'networking.participants.intro'|trans }}</small>
+                    </h2>
                     <div class="networking_list_search">
                         <input id="networking_list_search_input" type="search" placeholder="{{ 'networking.participants.search'|trans }}">
                     </div>
                 </div>
-                <table class="list list--users table table-striped table-bordered table-hover participantList">
+                <table
+                    class="list list--users table table-striped table-bordered table-hover participantList"
+                    data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id}) }}"
+                >
                     <tbody id="ParticipantList" data-user-current="{{ networkingView.userCurrentId }}">
                     {% for userId, subscription in networkingView.subscriptions %}
                     <tr data-participant-user-id="{{ subscription.userId }}">

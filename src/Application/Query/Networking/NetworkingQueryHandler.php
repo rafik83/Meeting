@@ -35,7 +35,7 @@ class NetworkingQueryHandler
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
     {
 
-        $topic = $this->notificationSubscriber->getNotificationTopic($networkingQuery->sheet->getEvent()->getId());
+        $topic = $this->notificationSubscriber->getNetworkingTopic($networkingQuery->sheet->getEvent()->getId());
 
         $privateChatSessions = array_map(
             function ($row) {
@@ -52,7 +52,7 @@ class NetworkingQueryHandler
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getNetworkingSubscriberKey($networkingQuery->sheet, $networkingQuery->user, [AbstractNotification::TYPE_CHAT]),
             $topic,
-            $this->notificationSubscriptions->getSubscriptions($topic, $networkingQuery->user),
+            $this->notificationSubscriptions->getSubscriptions($networkingQuery->sheet->getEvent()->getId(), $networkingQuery->user->getId()),
             $networkingQuery->user->getId(),
             $privateChatSessions
         );

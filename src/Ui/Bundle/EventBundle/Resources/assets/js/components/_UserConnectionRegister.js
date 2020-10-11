@@ -7,7 +7,7 @@ class UserConnectionRegister {
     }
 
     getRegistrationParameters() {
-        const rawData = document.getElementById("user-context");
+        const rawData = document.getElementById('user-context');
         if (!rawData) {
             return null
         }
@@ -21,13 +21,12 @@ class UserConnectionRegister {
         if (!registrationsParameters) {
             return null
         }
-        console.log(registrationsParameters);
 
-        const { topic, subscriberKey, providerUrl } = registrationsParameters;
+        const { userTopic, subscriberKey, providerUrl } = registrationsParameters;
 
         const subscriber = new NotificationSubscriber(providerUrl);
-        subscriber.addSubscriber(topic, subscriberKey, (event) => {
-            this.listeners.forEach((callback) => callback(event));
+        subscriber.addSubscriber(userTopic, subscriberKey, (notification) => {
+            this.listeners.forEach((callback) => callback(notification));
         });
     }
 

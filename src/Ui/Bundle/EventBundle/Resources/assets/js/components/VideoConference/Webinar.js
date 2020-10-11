@@ -1031,12 +1031,7 @@ Webinar.prototype.addChatSubscriber = function () {
             }
 
             if (payload.action === 'update_chat_message_votes') {
-                const chatMessageRow = document.getElementById(`chat-message-${payload.messageId}`);
-                const voteCounts = chatMessageRow.querySelectorAll(`[data-message-type]`);
-                voteCounts.forEach((voteCount) => {
-                    const voteType = voteCount.getAttribute('data-message-type');
-                    voteCount.querySelector('.chat-vote-count').textContent = payload.votes[voteType] ? payload.votes[voteType] : '';
-                });
+                this.chat.updateVotes(payload.messageId, payload.votes);
             }
         }
     );

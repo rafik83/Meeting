@@ -6,4 +6,3 @@ services:
     arguments:
       - '@templating'
       - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-      - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
