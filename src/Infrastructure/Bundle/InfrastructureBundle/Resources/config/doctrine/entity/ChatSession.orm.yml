@@ -6,6 +6,9 @@ Proximum\Vimeet\Domain\Model\ChatSession:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        unreadMessages:
+            type: json
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

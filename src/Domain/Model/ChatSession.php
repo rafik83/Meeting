@@ -18,11 +18,15 @@ class ChatSession implements ChatMessageLinkableInterface
     /** @var User */
     private $toUser;
 
+    /** @var array */
+    private $unreadMessages;
+
     public function __construct(Event $event, User $fromUser, User $toUser)
     {
         $this->event = $event;
         $this->fromUser = $fromUser;
         $this->toUser = $toUser;
+        $this->unreadMessages = [];
     }
 
     public function getId(): int
@@ -48,5 +52,16 @@ class ChatSession implements ChatMessageLinkableInterface
     public function isUserInChat(User $user): bool
     {
         return $user->getId() === $this->toUser->getId() || $user->getId() === $this->fromUser->getId();
+    }
+
+    public function incrementUnreadMessages(): void
+    {
+        $this->unreadMessages[$this->fromUser->getId()] = ($this->unreadMessages[$this->fromUser->getId()] ?? 0) + 1;
+        $this->unreadMessages[$this->toUser->getId()] = ($this->unreadMessages[$this->toUser->getId()] ?? 0) + 1;
+    }
+
+    public function getUnreadMessages(User $user): int
+    {
+        return $this->unreadMessages[$user->getId()] ?? 0;
     }
 }

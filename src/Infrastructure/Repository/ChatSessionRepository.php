@@ -46,13 +46,14 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByEventAndUser(Event $event, User $user): array
+    public function findSessionsByEventAndUser(Event $event, User $user): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('
                 other AS otherUser,
                 NEW \DateTimeImmutable(MAX(message.createdAt)) AS latestMessageDate,
-                COUNT(message) AS messagesCount')
+                COUNT(message) AS messagesCount,
+                session.unreadMessages')
             ->from(ChatSession::class, 'session')
             ->join('session.fromUser', 'fromUser')
             ->join('session.toUser', 'toUser')
@@ -71,6 +72,22 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
     }
 
     public function findIdsByEventAndUser(Event $event, User $user): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session.id')
+            ->from(ChatSession::class, 'session')
+            ->join('session.fromUser', 'fromUser')
+            ->join('session.toUser', 'toUser')
+            ->where('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+    }
+
+    public function findIds(Event $event, User $user): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('session.id')

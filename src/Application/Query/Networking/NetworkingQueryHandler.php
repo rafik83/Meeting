@@ -45,7 +45,7 @@ class NetworkingQueryHandler
                     $row['messagesCount']
                 );
             },
-            $this->chatSessionRepository->findByEventAndUser($networkingQuery->sheet->getEvent(), $networkingQuery->user)
+            $this->chatSessionRepository->findSessionsByEventAndUser($networkingQuery->sheet->getEvent(), $networkingQuery->user)
         );
 
         return new NetworkingView(

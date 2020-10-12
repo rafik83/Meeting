@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
+use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class AddChatMessageHandler
@@ -52,6 +53,10 @@ class AddChatMessageHandler
             $command->user->getFullname(),
             $command->sheet->getTitle()
         ));
+
+        if ($command->object instanceof ChatSession) {
+            $command->object->incrementUnreadMessages();
+        }
 
         $this->notificationPublisher->publishChatMessageNotification($command->object, $message);
     }

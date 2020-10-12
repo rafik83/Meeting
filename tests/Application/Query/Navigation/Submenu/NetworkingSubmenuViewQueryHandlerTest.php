@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
 
 class NetworkingSubmenuViewQueryHandlerTest extends TestCase
@@ -44,7 +45,15 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $chatMessageRepository->getMessagesCountByEvent($event->reveal(), null)->shouldBeCalled()->willReturn(0);
 
-        $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler($navigationBuilder->reveal(), $accessChecker->reveal(),  $chatMessageRepository->reveal());
+        $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
+        $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([]);
+
+        $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
+            $navigationBuilder->reveal(),
+            $accessChecker->reveal(),
+            $chatMessageRepository->reveal(),
+            $chatSessionRepository->reveal()
+        );
 
 
         $expectedSubButtonView = new SubmenuButtonView(
@@ -70,7 +79,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
     public function testHasNewChatMessage()
     {
         $sheetId = 1337;
-        $expectedMessagesCount = 55;
+        $expectedMessagesCount = 53 + 2; // networking chat + private chat
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn($sheetId);
@@ -78,6 +87,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $lastViewDate = new \DateTime('2020-03-14T03:14:15');
 
         $user = $this->prophesize(User::class);
+        $user->getId()->shouldBeCalled()->willReturn(31415);
         $event = $this->prophesize(Event::class);
         $participant = $this->prophesize(Participant::class);
         $participant->getNetworkingChatViewedAt()->shouldBeCalled()->willReturn($lastViewDate);
@@ -89,7 +99,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $chatMessageRepository->getMessagesCountByEvent($event->reveal(), $lastViewDate)
             ->shouldBeCalled()
-            ->willReturn($expectedMessagesCount);
+            ->willReturn(53);
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $navigationBuilder->getRoute(
@@ -100,7 +110,15 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         )->shouldBeCalled()
             ->willReturn('/url/to/contacts');
 
-        $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler($navigationBuilder->reveal(), $accessChecker->reveal(), $chatMessageRepository->reveal());
+        $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
+        $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([['unreadMessages' => [31415 => 2]]]);
+
+        $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
+            $navigationBuilder->reveal(),
+            $accessChecker->reveal(),
+            $chatMessageRepository->reveal(),
+            $chatSessionRepository->reveal()
+        );
 
 
         $expectedSubButtonView = new SubmenuButtonView(
