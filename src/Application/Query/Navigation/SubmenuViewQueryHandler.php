@@ -54,6 +54,21 @@ class SubmenuViewQueryHandler
             )
         );
 
+        $networkingButtonViews = $this->queryBus->handle(
+            new NetworkingSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::NETWORKING] ?? null
+            )
+        );
+
+        if (null !== $networkingButtonViews) {
+            $buttonsViews[] = $networkingButtonViews;
+        }
+
         if (null !== $badgeSubmenuView) {
             $buttonsViews[] = $badgeSubmenuView;
         } else {
@@ -153,21 +168,6 @@ class SubmenuViewQueryHandler
         );
 
         $buttonsViews = array_merge($buttonsViews, $agendaButtonViews);
-
-        $networkingButtonViews = $this->queryBus->handle(
-            new NetworkingSubmenuViewQuery(
-                $submenuViewQuery->user,
-                $submenuViewQuery->event,
-                $submenuViewQuery->locale,
-                $submenuViewQuery->sheet,
-                $submenuViewQuery->route,
-                $submenuViewQuery->staticFormulationsIndexByCategories[Category::NETWORKING] ?? null
-            )
-        );
-
-        if (null !== $networkingButtonViews) {
-            $buttonsViews[] = $networkingButtonViews;
-        }
 
         $packageSubmenuButtonView = $this->queryBus->handle(
             new PackageSubmenuButtonViewQuery(
