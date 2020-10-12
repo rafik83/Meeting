@@ -8,14 +8,14 @@
 
   h2 {
     text-transform: none;
+    font-size: 24px;
     small {
-      font-size: 50%;
+      font-size: 75%;
     }
   }
 
   .networking_chat {
-    max-width: 40%;
-    width: 40%;
+    width: 49%;
 
     .chat-list {
       height: auto;
@@ -24,8 +24,7 @@
   }
 
   .networking_list {
-    max-width: 58%;
-    width: 58%;
+    width: 49%;
     padding: 25px 25px;
     margin-bottom: 0px;
     border-radius: 5px;
@@ -102,7 +101,7 @@
 @media (max-width: 1024px) {
   .main__content {
     display: block;
-    margin: 20px;
+    margin: 0px;
 
     .networking_chat {
       width: 100%;
@@ -114,6 +113,15 @@
       max-width: 100%;
       margin: 20px 0 0 0;
     }
-
   }
+  .networking_container .modal {
+    .modal-header, .modal-footer {
+      padding: 15px;
+    }
+  }
+
+  .networking_container .modal .modal-body {
+    margin: 0px 10px;
+  }
+
 }
