@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use RuntimeException;
@@ -61,6 +62,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
             $payload['content'] = $message->getContent();
             $payload['author'] = $message->getCreatedBy()->getFullname();
             $payload['authorId'] = $message->getCreatedBy()->getId();
+        } elseif ($object instanceof Meeting) {
+            //todo: add special topic for meeting
+            return;
         } elseif ($object instanceof Event) {
             $topic = $this->getNetworkingTopic($object->getEvent()->getId());
         } else {
@@ -82,6 +86,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
             $topic = $this->getUserTopic($chatMessage->getCreatedBy()->getId());
+        } elseif ($object instanceof Meeting) {
+            //todo: add special topic for meeting
+            return;
         } else {
             $topic = $this->getNetworkingTopic($object->getEvent()->getId());
         }
