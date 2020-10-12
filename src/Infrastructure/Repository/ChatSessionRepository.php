@@ -19,9 +19,16 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    public function add(ChatSession $chatSession)
+    public function add(ChatSession $chatSession): ChatSession
     {
         $this->entityManager->persist($chatSession);
+        $this->entityManager->flush();
+
+        return $chatSession;
+    }
+
+    public function update():void
+    {
         $this->entityManager->flush();
     }
 

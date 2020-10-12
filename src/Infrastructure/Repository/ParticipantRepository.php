@@ -700,7 +700,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->setParameter('date', $date)
             ->where('participant.sheet IN (:sheetIds)')
             ->setParameter('sheetIds', $sheetIds)
-            ->andWhere('participant.user IN (:user)')
+            ->andWhere('participant.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
             ->execute();

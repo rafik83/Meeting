@@ -2,21 +2,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Chat;
 
-use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
 class ResetSessionUnreadMessagesHandler
 {
-    /** @var EntityManagerAdapterInterface */
-    private $entityManager;
+    /** @var ChatSessionRepositoryInterface */
+    private $chatSessionRepository;
 
-    public function __construct(EntityManagerAdapterInterface $entityManager)
+    public function __construct(ChatSessionRepositoryInterface $chatSessionRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->chatSessionRepository = $chatSessionRepository;
     }
 
     public function handle(ResetSessionUnreadMessages $command): void
     {
         $command->chatSession->resetUnreadMessages($command->user);
-        $this->entityManager->flush($command->chatSession);
+        $this->chatSessionRepository->update();
     }
 }

@@ -217,7 +217,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessagesHandler:
         arguments:
-            - '@adapter.entity_manager_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages }
 

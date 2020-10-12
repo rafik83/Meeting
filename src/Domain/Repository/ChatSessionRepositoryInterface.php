@@ -8,7 +8,9 @@ use Proximum\Vimeet\Domain\Model\User;
 
 interface ChatSessionRepositoryInterface
 {
-    public function add(ChatSession $chatSession);
+    public function add(ChatSession $chatSession): ChatSession;
+
+    public function update():void;
 
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession;
 
