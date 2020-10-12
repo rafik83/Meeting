@@ -70,7 +70,6 @@ export default function initNetworking(target, userConnection) {
     // private chat modale
 
     const participantNodes = target.querySelectorAll('.participantChat');
-    console.log(userConnection);
 
     const modalManager = {
         userConnection,
@@ -102,4 +101,15 @@ export default function initNetworking(target, userConnection) {
     }
     modalManager.open.bind(modalManager);
     participantNodes.forEach(participantNode => participantNode.addEventListener('click', ()=>modalManager.open(participantNode)));
+
+    // open private chat if "toUser" known is queryString
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const toUser = urlParams.get('toUser');
+    if (toUser !== null) {
+        const toUserParticipantNode = target.querySelector('[data-participant-user-id="' + toUser + '"]')
+        if (toUserParticipantNode) {
+            modalManager.open(toUserParticipantNode);
+        }
+    }
 }
