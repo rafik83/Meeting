@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV255 - move question css to event guideline css
 - MV255 - separate button chat and button question
 
+## [2.56.0] - 2010-10-09
+### Added
+- VIMET-2177 - Add metrics to sheet export
+
+## [2.55.0] - 2010-10-08
+### Fixed
+- Hotfix - Prevent invalid extensions (especially php) on uploaded files
+
+## [2.54.0] - 2010-10-07
+### Fixed
+- MV-254 - Display bullet point in help message
+- Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)
+
+## [2.53.0] - 2020-10-05
+### Added
+- VIMEET-2237 - Option to record webinars automatically
+
+## [2.52.0] - 2020-10-01
+### Revert
+- VIMEET-1925 - Revert chat and questions with Mercure, reintroduce chat and questions from Tokbox
+
 ## [2.51.2] - 2020-10-01
 ### Added
 - Hotfix - force refresh chat and questions in webinars
@@ -112,7 +133,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.44.0] - 2020-09-03
 ### Added
-- VIMEET-1925 - Chat API
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 - VIMEET-2213 - Translate timezones

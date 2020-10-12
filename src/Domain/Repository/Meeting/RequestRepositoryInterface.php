@@ -409,4 +409,8 @@ interface RequestRepositoryInterface
     public function loadParticipantRequestsCount(array $participantIds): void;
 
     public function getParticipantRequestsCount(Participant $participant): int;
+
+    public function getSheetSentRequestsCount(array $sheetIds): array;
+
+    public function getSheetReceivedRequestsCount(array $sheetIds): array;
 }

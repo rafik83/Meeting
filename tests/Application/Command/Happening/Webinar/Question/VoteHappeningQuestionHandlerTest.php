@@ -4,12 +4,10 @@ namespace Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
-use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
 use Proximum\Vimeet\Domain\Model\User;
@@ -24,9 +22,6 @@ class VoteHappeningQuestionHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $questionVoteRepository;
 
-    /** @var ObjectProphecy */
-    private $notificationPublisher;
-
     /** @var VoteHappeningQuestionHandler */
     private $voteHappeningQuestionHandler;
 
@@ -34,13 +29,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
     {
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->questionVoteRepository = $this->prophesize(QuestionVoteRepositoryInterface::class);
-        $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
-
-        $this->voteHappeningQuestionHandler = new VoteHappeningQuestionHandler(
-            $this->questionRepository->reveal(),
-            $this->questionVoteRepository->reveal(),
-            $this->notificationPublisher->reveal()
-        );
+        $this->voteHappeningQuestionHandler = new VoteHappeningQuestionHandler($this->questionRepository->reveal(), $this->questionVoteRepository->reveal());
     }
 
     public function test_vote_happening_question()
@@ -60,7 +49,6 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $questionAuthor->getId()->shouldBeCalled()->willReturn(24);
         $question = $this->prophesize(Question::class);
         $question->getCreatedBy()->shouldBeCalled()->willReturn($questionAuthor->reveal());
-        $question->getHappening()->shouldBeCalled()->willReturn($this->prophesize(Happening::class));
 
         $this->questionRepository->findById(42)->shouldBeCalled()->willReturn($question->reveal());
         $this->questionVoteRepository
@@ -90,7 +78,6 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $questionAuthor->getId()->shouldBeCalled()->willReturn(24);
         $question = $this->prophesize(Question::class);
         $question->getCreatedBy()->shouldBeCalled()->willReturn($questionAuthor->reveal());
-        $question->getHappening()->shouldBeCalled()->willReturn($this->prophesize(Happening::class));
 
         $this->questionRepository->findById(42)->shouldBeCalled()->willReturn($question->reveal());
 

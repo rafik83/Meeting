@@ -6,7 +6,7 @@
   padding-right: 5px;
 
   .question-row {
-    border: 1px solid $color-highlighted;
+    border: 1px solid $border-light;
     border-radius: 8px;
     margin-bottom: 10px;
     overflow: hidden;
@@ -14,11 +14,14 @@
     .question-content {
       font-size: 16px;
       padding: 10px;
-      color: $color-highlighted;
     }
 
     .question-aside {
       text-align: right;
+
+      i {
+        cursor: pointer;
+      }
     }
 
     .question-vote-count {
@@ -34,8 +37,7 @@
 
     .question-author {
       align-items: flex-end;
-      @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
-      color: $button-text-color;
+      background-color: $gray-lighter;
       clear: right;
       display: flex;
       flex-wrap: nowrap;
@@ -52,6 +54,7 @@
     }
 
     .question-author-title {
+      color: $gray-light;
       display: inline-block;
       margin-left: 5px;
       font-style: italic;

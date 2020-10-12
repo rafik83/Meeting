@@ -1153,8 +1153,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->join('request.fromParticipants', 'participants')
             ->where('participants.id IN (:participantIds)')
-            ->andWhere('request.disabled = false')
             ->setParameter('participantIds', $participantIds)
+            ->andWhere('request.disabled = false')
             ->groupBy('participants.id')
         ;
 
@@ -1168,5 +1168,39 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         return $this->requestedMeetingsCounts[$participant->getId()]??0;
+    }
+
+    public function getSheetSentRequestsCount(array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('fromSheet.id, COUNT(request.id) as nb')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet')
+            ->where('fromSheet.id IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('request.disabled = false')
+            ->groupBy('fromSheet.id')
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
+    }
+
+    public function getSheetReceivedRequestsCount(array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('to.id, COUNT(request.id) as nb')
+            ->from(Request::class, 'request')
+            ->join('request.to', 'to')
+            ->where('to.id IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('request.disabled = false')
+            ->groupBy('to.id')
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
     }
 }

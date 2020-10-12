@@ -6,7 +6,7 @@ parameters:
     database_port:     3306
     database_name:     proximum_vimeet
     database_user:     root
-    database_password: password
+    database_password: ~
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -39,8 +39,8 @@ parameters:
 
     sendgrid_api_key: ~
 
-    domain: vimeet.proximum.wip
-    admin_domain: admin.vimeet.proximum.wip
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum
     scheme: https
 
     timezone_default: Europe/Paris
@@ -137,10 +137,3 @@ parameters:
         token_uri: ''
         auth_provider_x509_cert_url: ''
         client_x509_cert_url: ''
-
-    # should be accessible from PHP
-    mercure_hub_publisher_url: 'http://mercure/.well-known/mercure'
-    mercure_publisher_key: ''
-    # should be accessible from browser
-    mercure_hub_subscriber_url: 'https://notifications.k8s.vimeet.events/.well-known/mercure'
-    mercure_subscriber_key: ''

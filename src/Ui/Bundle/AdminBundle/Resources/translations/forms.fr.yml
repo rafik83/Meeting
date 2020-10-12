@@ -275,6 +275,7 @@ form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouvertur
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
 form.event_configure_date.children.smsActivationDate.label: 'Date d''activation des notifications SMS'
 form.event_configure_date.children.submit.label: Enregistrer
+form.event_create.children.autoArchiveWebinar.label: 'Enregistrement automatique des webinaires'
 form.event_create.children.backgroundColor.label: 'Couleur de fond'
 form.event_create.children.backgroundImage.label: 'Image de fond'
 form.event_create.children.country.label: Pays
@@ -330,6 +331,7 @@ form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de 
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
 form.event_update.children.accessControlEnabled.label: "Contrôle d'accès activé"
+form.event_update.children.autoArchiveWebinar.label: 'Enregistrement automatique des webinaires'
 form.event_update.children.showCheckinStatus.label: "Présence/absence d’un participant affichée dans les RDV et liste de contacts"
 form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
 form.event_update_design.children.backgroundImage.label: 'Image de fond'

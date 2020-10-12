@@ -24,8 +24,6 @@ interface MeetingRepositoryInterface
      */
     public function set(Meeting $meeting);
 
-    public function findById(int $id): ?Meeting;
-
     /**
      * @param Event  $event
      * @param int    $page
@@ -321,5 +319,8 @@ interface MeetingRepositoryInterface
     ): ?Meeting;
 
     public function loadParticipantMeetingsCount(array $participantIds): void;
+
     public function getParticipantMeetingsCount(Participant $participant): int;
+
+    public function getSheetScheduledMeetingsCount(array $sheetIds): array;
 }
