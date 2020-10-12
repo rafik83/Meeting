@@ -33,6 +33,8 @@ Encore
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')
     .addStyleEntry('css/mainStyle', './src/Ui/Bundle/EventBundle/Resources/assets/sass/main.scss')
     .addStyleEntry('tinymce/tinymceStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/tinymce.scss')
+    // css tokbox chat (legacy)
+    .addStyleEntry('css/videoConferenceChatTokbox', './src/Ui/Bundle/EventBundle/Resources/assets/sass/objects/_videoConferenceChatTokbox.scss')
 
     // allow sass/scss files to be processed
     .enableSassLoader()
