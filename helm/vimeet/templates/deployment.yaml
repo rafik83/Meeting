@@ -88,14 +88,10 @@ spec:
         volumeMounts:
         - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
           name: vimeet-var-cache
-        - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/participants_imports
-          name: vimeet-var-imports
         - mountPath: /share/shared
           name: vimeet-data
       volumes:
       - name: vimeet-var-cache
-        emptyDir: {}
-      - name: vimeet-var-imports
         emptyDir: {}
       - name: vimeet-data
       {{- if .Values.persistence.enabled }}
