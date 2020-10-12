@@ -2,6 +2,7 @@ import Chat from './components/_Chat';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
+import axios from 'axios';
 
 export default function initNetworking(target, userConnection) {
 
@@ -13,8 +14,8 @@ export default function initNetworking(target, userConnection) {
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
 
-    const chat = new Chat(chatNetworkingElement);
-    chat.initChat();
+    const chatNetworking = new Chat(chatNetworkingElement);
+    chatNetworking.initChat();
 
     const participantListElements = target.querySelectorAll('.participantList');
 
@@ -29,25 +30,24 @@ export default function initNetworking(target, userConnection) {
     });
 
     const notificationHandler = {
-        chat,
         participantLists,
         target,
-        handle: function (notification) {
+        handle: function (notification, targetChat) {
             const payload = JSON.parse(notification.data);
             if (payload.action === 'user_connection') {
-                this.participantLists.forEach((participantList) => participantList.addNewuser(payload));
+                this.participantLists.forEach((participantList) => participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', ()=>modalManager.open(participantNode))));
                 this.target.querySelectorAll('.networking_list_count')
                     .forEach((element) => element.textContent = this.target.querySelectorAll('.participantList tr').length);
                 return;
             }
 
             if (payload.action === 'add_chat_message') {
-                this.chat.reload();
+                targetChat.reload();
                 return;
             }
 
             if (payload.action === 'update_chat_message_votes') {
-                this.chat.updateVotes(payload.messageId, payload.votes);
+                targetChat.updateVotes(payload.messageId, payload.votes);
                 return;
             }
         }
@@ -61,15 +61,45 @@ export default function initNetworking(target, userConnection) {
 
         const subscriber = new NotificationSubscriber(notificationProviderUrl);
         subscriber.addSubscriber(networkingTopic, notificationSubscriberKey, (notification) => {
-            notificationHandler.handle(notification);
-        });
-    } else {
-        // private chat
-        userConnection.addListener((notification) => {
-            notificationHandler.handle(notification);
+            notificationHandler.handle(notification, chatNetworking);
         });
     }
 
     new ParticipantListFilter(document.getElementById('networking_list_search_input'), target.querySelectorAll('.networking_list_row'));
 
+    // private chat modale
+
+    const participantNodes = target.querySelectorAll('.participantChat');
+    console.log(userConnection);
+
+    const modalManager = {
+        userConnection,
+        notificationHandler,
+        open: function (participantNode) {
+                const privateChatModalId = 'private-chat-'+participantNode.getAttribute('data-participant-user-id');
+                let modal = document.getElementById(privateChatModalId);
+                if (modal == null) {
+                    modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
+                    modal.setAttribute('id', privateChatModalId);
+
+                    target.querySelector('.networking_container').appendChild(modal);
+                    axios.get(participantNode.getAttribute('data-private-chat-url')).then((response)=>{
+                        modal.querySelector('.modal-body').innerHTML = response.data;
+
+                        const privateChatModalElement = modal.querySelector('[data-chat-networking]');
+
+                        const chat = new Chat(privateChatModalElement);
+                        chat.initChat();
+
+                        this.userConnection.addListener((notification) => {
+                            this.notificationHandler.handle(notification, chat);
+                        });
+                    });
+                }
+
+                $(modal).modal('show')
+            }
+    }
+    modalManager.open.bind(modalManager);
+    participantNodes.forEach(participantNode => participantNode.addEventListener('click', ()=>modalManager.open(participantNode)));
 }
