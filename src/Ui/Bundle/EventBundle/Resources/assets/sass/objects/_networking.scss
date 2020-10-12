@@ -115,5 +115,17 @@
       margin: 20px 0 0 0;
     }
 
+    .networking_list_header {
+      display: block;
+    }
+
+    .networking_list_header h2 small {
+      display: block;
+      padding-top: 20px;
+    }
+
+    .list {
+        margin-top: 20px;
+    }
   }
 }
