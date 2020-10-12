@@ -3,10 +3,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages;
 use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessages;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
+use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -23,10 +26,17 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    public function __construct(AuthorizationCheckerAdapterInterface $authorizationChecker, QueryBusInterface $queryBus)
-    {
+    /** @var CommandBusInterface */
+    private $commandBus;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
     }
 
     public function __invoke(
@@ -56,6 +66,10 @@ class ListAction
         $chatMessageViews = $this->queryBus->handle(
             new ListChatMessages($object, $user, $request->getLocale())
         );
+
+        if ($object->getObjectType() === ChatSession::OBJECT_TYPE) {
+            $this->commandBus->handle(new ResetSessionUnreadMessages($object, $user));
+        }
 
         return new JsonResponse($chatMessageViews);
     }

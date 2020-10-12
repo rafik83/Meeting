@@ -55,7 +55,7 @@ class AddChatMessageHandler
         ));
 
         if ($command->object instanceof ChatSession) {
-            $command->object->incrementUnreadMessages();
+            $command->object->incrementUnreadMessages($command->object->getOtherUser($command->user));
         }
 
         $this->notificationPublisher->publishChatMessageNotification($command->object, $message);

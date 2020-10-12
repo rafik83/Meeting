@@ -425,6 +425,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction:
         arguments:

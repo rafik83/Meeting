@@ -54,10 +54,14 @@ class ChatSession implements ChatMessageLinkableInterface
         return $user->getId() === $this->toUser->getId() || $user->getId() === $this->fromUser->getId();
     }
 
-    public function incrementUnreadMessages(): void
+    public function incrementUnreadMessages(User $user): void
     {
-        $this->unreadMessages[$this->fromUser->getId()] = ($this->unreadMessages[$this->fromUser->getId()] ?? 0) + 1;
-        $this->unreadMessages[$this->toUser->getId()] = ($this->unreadMessages[$this->toUser->getId()] ?? 0) + 1;
+        $this->unreadMessages[$user->getId()] = ($this->unreadMessages[$user->getId()] ?? 0) + 1;
+    }
+
+    public function resetUnreadMessages(User $user): void
+    {
+        $this->unreadMessages[$user->getId()] = 0;
     }
 
     public function getUnreadMessages(User $user): int

@@ -215,6 +215,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VoteChatMessage }
 
+    Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessagesHandler:
+        arguments:
+            - '@adapter.entity_manager_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages }
+
     #
     # Webinar
     #

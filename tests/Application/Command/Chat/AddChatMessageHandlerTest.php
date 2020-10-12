@@ -83,12 +83,14 @@ class AddChatMessageHandlerTest extends TestCase
 
     public function testAddPrivateChatMessage()
     {
+        $user = $this->prophesize(User::class);
+        $user->getFullname()->shouldBeCalled()->willReturn('Paul DUPOND');
+        $otherUser = $this->prophesize(User::class);
         $chatSession = $this->prophesize(ChatSession::class);
         $chatSession->getObjectType()->shouldBeCalled()->willReturn('private_chat');
         $chatSession->getId()->shouldBeCalled()->willReturn(42);
-        $chatSession->incrementUnreadMessages()->shouldBeCalled();
-        $user = $this->prophesize(User::class);
-        $user->getFullname()->shouldBeCalled()->willReturn('Paul DUPOND');
+        $chatSession->getOtherUser($user->reveal())->shouldBeCalled()->willReturn($otherUser);
+        $chatSession->incrementUnreadMessages($otherUser->reveal())->shouldBeCalled();
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getTitle()->shouldBeCalled()->willReturn('World Company');
 
