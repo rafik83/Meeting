@@ -3,6 +3,36 @@ import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
+import Webinar from "./components/VideoConference/Webinar";
+
+
+const chatPrivateContainer = document.querySelector('[data-chat-private-container]');
+const chatGeneralContainer = document.querySelector('[data-chat-container]');
+
+const chatPrivateButton = document.querySelector('[data-chat-private-button]');
+const chatGeneralButton = document.querySelector('[data-chat-general-button]');
+
+
+chatPrivateButton.addEventListener('click', showChatPrivate);
+chatGeneralButton.addEventListener('click', showChatGeneral);
+
+function showChatPrivate() {
+    chatGeneralContainer.classList.add('hide');
+    chatPrivateContainer.classList.remove('hide');
+    chatPrivateButton.classList.add('btn-primary');
+    chatPrivateButton.classList.remove('btn-gray');
+    chatGeneralButton.classList.add('btn-gray');
+    chatGeneralButton.classList.remove('btn-primary');
+}
+
+function showChatGeneral() {
+    chatPrivateContainer.classList.add('hide');
+    chatGeneralContainer.classList.remove('hide');
+    chatPrivateButton.classList.remove('btn-primary');
+    chatPrivateButton.classList.add('btn-gray');
+    chatGeneralButton.classList.remove('btn-gray');
+    chatGeneralButton.classList.add('btn-primary');
+}
 
 export default function initNetworking(target, userConnection) {
 
@@ -35,7 +65,7 @@ export default function initNetworking(target, userConnection) {
         handle: function (notification, targetChat) {
             const payload = JSON.parse(notification.data);
             if (payload.action === 'user_connection') {
-                this.participantLists.forEach((participantList) => participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', ()=>modalManager.open(participantNode))));
+                this.participantLists.forEach((participantList) => participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode))));
                 this.target.querySelectorAll('.networking_list_count')
                     .forEach((element) => element.textContent = this.target.querySelectorAll('.participantList tr').length);
                 return;
@@ -75,32 +105,32 @@ export default function initNetworking(target, userConnection) {
         userConnection,
         notificationHandler,
         open: function (participantNode) {
-                const privateChatModalId = 'private-chat-'+participantNode.getAttribute('data-participant-user-id');
-                let modal = document.getElementById(privateChatModalId);
-                if (modal == null) {
-                    modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
-                    modal.setAttribute('id', privateChatModalId);
+            const privateChatModalId = 'private-chat-' + participantNode.getAttribute('data-participant-user-id');
+            let modal = document.getElementById(privateChatModalId);
+            if (modal == null) {
+                modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
+                modal.setAttribute('id', privateChatModalId);
 
-                    target.querySelector('.networking_container').appendChild(modal);
-                    axios.get(participantNode.getAttribute('data-private-chat-url')).then((response)=>{
-                        modal.querySelector('.modal-body').innerHTML = response.data;
+                target.querySelector('.networking_container').appendChild(modal);
+                axios.get(participantNode.getAttribute('data-private-chat-url')).then((response) => {
+                    modal.querySelector('.modal-body').innerHTML = response.data;
 
-                        const privateChatModalElement = modal.querySelector('[data-chat-networking]');
+                    const privateChatModalElement = modal.querySelector('[data-chat-networking]');
 
-                        const chat = new Chat(privateChatModalElement);
-                        chat.initChat();
+                    const chat = new Chat(privateChatModalElement);
+                    chat.initChat();
 
-                        this.userConnection.addListener((notification) => {
-                            this.notificationHandler.handle(notification, chat);
-                        });
+                    this.userConnection.addListener((notification) => {
+                        this.notificationHandler.handle(notification, chat);
                     });
-                }
-
-                $(modal).modal('show')
+                });
             }
+
+            $(modal).modal('show')
+        }
     }
     modalManager.open.bind(modalManager);
-    participantNodes.forEach(participantNode => participantNode.addEventListener('click', ()=>modalManager.open(participantNode)));
+    participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
 
     // open private chat if "toUser" known is queryString
     const queryString = window.location.search;
