@@ -1,0 +1,17 @@
+{{- if and .Values.mysql.enabled  .Values.mysql.persistence.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+    name: {{ template "vimeet.mysql.fullname" . }}-initdb
+    labels:
+        app: "{{ template "vimeet.mysql.fullname" . }}"
+        chart: "{{ template "vimeet.chart" . }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+spec:
+    accessModes:
+        - {{ .Values.persistence.accessMode | quote }}
+    resources:
+        requests:
+            storage: {{ .Values.mysql.persistence.size | quote }}
+{{- end -}}

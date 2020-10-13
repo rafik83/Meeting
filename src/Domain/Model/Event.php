@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
 /**
  * "Evènement".
  */
-class Event implements EventInterface, TraceableInterface
+class Event implements EventInterface, TraceableInterface, ChatMessageLinkableInterface
 {
     /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
@@ -908,32 +908,28 @@ class Event implements EventInterface, TraceableInterface
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogo(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedNotificationImage(string $locale): ?string
@@ -989,5 +985,15 @@ class Event implements EventInterface, TraceableInterface
     public function getAutoArchiveWebinar(): bool
     {
         return $this->autoArchiveWebinar;
+    }
+
+    public function getObjectType(): string
+    {
+        return 'networking';
+    }
+
+    public function getEvent(): Event
+    {
+        return $this;
     }
 }

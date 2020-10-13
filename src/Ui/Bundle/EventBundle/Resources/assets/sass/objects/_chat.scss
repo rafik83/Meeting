@@ -1,9 +1,9 @@
 
 .chat-list {
-  height: calc(100vh - 160px);
+  min-height: 2em;
+  max-height: calc(100vh - 320px);
   margin-top: 10px;
-  overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-right: 5px;
 
   .btn.btn-gray {
@@ -28,6 +28,7 @@
       font-size: 16px;
       padding: 10px;
       color: $color-highlighted;
+      background-color: white;
     }
 
 
@@ -126,6 +127,7 @@
 
 .chat-form {
   align-items: center;
+  background-color: white;
   border: 1px solid $color-highlighted;
   display: flex;
   height: 34px;
@@ -155,5 +157,11 @@
 
   button:hover {
     background-color: #999;
+  }
+}
+
+.modal {
+  .chat-list {
+    max-height: calc(100vh - 400px);
   }
 }

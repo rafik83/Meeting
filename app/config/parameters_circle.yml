@@ -136,3 +136,8 @@ parameters:
         token_uri: ''
         auth_provider_x509_cert_url: ''
         client_x509_cert_url: ''
+
+    mercure_hub_publisher_url: 'http://mercure/.well-known/mercure'
+    mercure_publisher_key: 'secretkey'
+    mercure_hub_subscriber_url: 'http://mercure:8088/.well-known/mercure'
+    mercure_subscriber_key: 'secretkey'
