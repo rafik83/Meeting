@@ -6,18 +6,29 @@ admin.mail.export_form_template_data.body: 'Hello, here is the file with the exp
 admin.mail.export_form_template_data.end: Regards
 admin.mail.export_form_template_data.file_link: 'CSV file'
 admin.mail.export_form_template_data.subject: 'Export of template form data'
+admin.mail.export_happening_participants.content: 'Hello, Here is the file you requested and containing the conference participants.'
+admin.mail.export_happening_participants.linkTitle: Download
+admin.mail.export_happening_participants.subject: '[%event%] Export of conference participants'
 admin.mail.export_rooming_list.body: 'Hello, here is the file with the rooming list export'
 admin.mail.export_rooming_list.end: Cordialement
 admin.mail.export_rooming_list.file_link: 'CSV file'
 admin.mail.export_rooming_list.subject: 'Export of the rooming list'
+admin.mail.export_sheets.content: 'Hello, You can download the CSV file of the selected files by clicking on the button below.'
+admin.mail.export_sheets.linkTitle: 'Download the file'
+admin.mail.export_sheets.subject: '%event% :Your file export is ready'
 admin.mail.invoices.print.body: 'Hello, Here is the link to download the desired invoices'
 admin.mail.invoices.print.end: 'regards,'
 admin.mail.invoices.print.link_label: 'Download the document'
 admin.mail.invoices.print.subject: 'Generate PDF of invoices'
+admin.mail.meetings.deletedAll.body: 'All the meetings of "%event%" have been removed by %admin%.'
+admin.mail.meetings.deletedAll.subject: 'Deleting all appointments'
 admin.mail.resetPassword.body: 'Hello, to reset your password, please click on the link below:'
 admin.mail.resetPassword.end: 'Best regards,'
 admin.mail.resetPassword.link: 'Reset password'
 admin.mail.resetPassword.subject: 'Forgotten password'
+admin.mail.translations.downloaded.body: 'Hello, The translations were downloaded from openl10n.'
+admin.mail.translations.downloaded.subject: 'Download translations'
+admin.mail.userAccountTemporarilyDisabled.body: '%firstname% %lastname%, Your account has been disabled for 15 minutes following login attempts. Best regards,'
 mail.activateAccount.activate: 'Activate your account'
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
@@ -26,13 +37,14 @@ mail.agenda.version_diff_changed.body: 'Hello %firstname% %lastname%, Your sched
 mail.agenda.version_diff_changed.end: 'Regards,'
 mail.agenda.version_diff_changed.link: 'Access your schedule'
 mail.agenda.version_diff_changed.subject: '[%event%]  Your schedule has changed'
+mail.changeMail.link: 'Confirm your email change'
 mail.changeMailNew.body: 'Hello, you have chosen a new e-mail addresse as login to ViMeet instead of %currentEmail%. To confirm that you are the owner of this e-mail address, please click on the link below to log in to your participant area.'
 mail.changeMailNew.end: Regards
 mail.changeMailNew.subject: 'Your new email ID'
 mail.changeMailNew.validate: 'Validate Your new email'
 mail.changeMailOld.body: "Hello, \n\nYou have just made a request to change your email for %newMail%. \n\nCheck your inbox of this new address to validate the change. If you have not requested this change, please contact an administrator. \n\nRegards,"
 mail.changeMailOld.subject: 'Email change request'
-mail.completeProfile.body: 'You have been invited as participant on the event %event%. To access it, please click on the link below and chose a password to complete your member area.'
+mail.completeProfile.body: 'You have been invited as a participant at the event %event%. To access the event, please click on the link below and chose a password to complete your member area.'
 mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
 mail.completeProfile.subject: '[%event%] Invitation as a participant'
@@ -56,7 +68,7 @@ mail.event.sheets_duplicated.sheetTitle: 'Sheet title'
 mail.event.sheets_duplicated.subject: 'Sheets duplicated from "%eventOrigin%" to "%event%"'
 mail.event.sheets_duplicated.userAlreadyGroupManagerOnSameEvent: 'Error: can not create an entity with this email because already manager of a multi-sheet entity:'
 mail.event.sheets_duplicated.userAlreadyParticipantOrOwnerOnGroupOnSameEvent: 'Error: can not create an entity with this email because already participant or owner on another sheet:'
-mail.footer.contact: Contact
+mail.footer.contact: Contact(s)
 mail.happening.participation.intro: 'List of participants automatically updated by event'
 mail.happening.participation.register: '%name% registered'
 mail.happening.participation.subject: 'List of participants automatically updated by event'
@@ -157,3 +169,5 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Login
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activate your account'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
 mail.transaction.confirm.subject: '[%event%] Your payment has been received'
+mail.userAccountTemporarilyDisabled.body: '%firstname% %lastname%, Your account has been deactivated for 15 minutes following connection attempts. Best regards,'
+mail.userAccountTemporarilyDisabled.subject: 'Your user account has been temporarily disabled'
