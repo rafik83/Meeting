@@ -10,7 +10,7 @@ interface ChatSessionRepositoryInterface
 {
     public function add(ChatSession $chatSession): ChatSession;
 
-    public function update():void;
+    public function update(ChatSession $chatSession):void;
 
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession;
 
