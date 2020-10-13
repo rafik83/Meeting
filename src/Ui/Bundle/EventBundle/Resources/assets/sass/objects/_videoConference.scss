@@ -71,6 +71,22 @@
     }
   }
 
+  .btn-sidebar {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn-group > .btn:first-child {
+    &:not(:last-child):not(.dropdown-toggle) {
+      @include border-right-radius(18px);
+    }
+  }
+
+  .btn-group > .btn:last-child:not(:first-child),
+  .btn-group > .dropdown-toggle:not(:first-child) {
+    @include border-left-radius(18px);
+  }
+
   .toggle-sidebar-button {
     z-index: 9999;
     position: absolute !important;
