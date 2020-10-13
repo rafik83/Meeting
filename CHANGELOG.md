@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.59.1] - 2010-10-13
+### Updated
+- Update translations
+
 ## [2.59.0] - 2010-10-13
 ### Added
 - VIMEET-2245 - Login with tech event token in md5
