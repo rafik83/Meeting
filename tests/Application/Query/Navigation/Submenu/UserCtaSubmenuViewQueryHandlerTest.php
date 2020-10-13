@@ -30,6 +30,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(746);
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->shouldBeCalled()->willReturn(123456);
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
 
@@ -39,7 +40,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $extraParameter = $this->prophesize(Event\ExtraParameter::class);
         $extraParameter->getValue()->shouldBeCalled()->willReturn('
         {
-             "link": "https://example.net/%userId%/%userEmail%/%participantId%/%techEventIdContact%",
+             "link": "https://example.net/%userId%/%userEmail%/%participantId%/%techEventIdContact%/%sheetId%",
              "concerned_type_ids": [689, 746, 747, 748, 749, 750],
              "button-label": {
              "fr": "Mon bouton",
@@ -68,7 +69,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
         Category::CUSTOM_BUTTON_ICON,
             'Mon bouton',
-            'https://example.net/42/test%40yahoo.fr/123/123456789',
+            'https://example.net/42/test%40yahoo.fr/123/25f9e794323b453885f5181f1b624d0b/123456',
             false,
             null,
             false,
@@ -87,6 +88,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(746);
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->willReturn(123456);
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet->getUserParticipant($user->reveal())->willReturn(null);
 

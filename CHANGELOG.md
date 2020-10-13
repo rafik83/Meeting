@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - VIMEET-2236 - Add participant id for custom button
-- VIMEET-2240 - Add tech event id contact for custom button
+- VIMEET-2240 - Add tech event id contact in md5 for custom button
+- VIMEET-2240 - Add sheet id for custom button
 
 ## [2.57.0] - 2010-10-13
 ### Added

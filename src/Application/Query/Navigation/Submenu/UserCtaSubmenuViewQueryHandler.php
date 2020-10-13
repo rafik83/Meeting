@@ -11,6 +11,19 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 
 class UserCtaSubmenuViewQueryHandler
 {
+    private const PLACEHOLDER_USER_ID = '%userId%';
+    private const PLACEHOLDER_USER_EMAIL = '%userEmail%';
+    private const PLACEHOLDER_PARTICIPANT_ID = '%participantId%';
+    private const PLACEHOLDER_SHEET_ID = '%sheetId%';
+    private const PLACEHOLDER_TECH_EVENT_ID_CONTACT = '%techEventIdContact%';
+
+    public const USER_CTA_PLACEHOLDERS_ALLOWED = [
+        self::PLACEHOLDER_USER_ID,
+        self::PLACEHOLDER_USER_EMAIL,
+        self::PLACEHOLDER_PARTICIPANT_ID,
+        self::PLACEHOLDER_SHEET_ID,
+        self::PLACEHOLDER_TECH_EVENT_ID_CONTACT,
+    ];
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
@@ -20,8 +33,7 @@ class UserCtaSubmenuViewQueryHandler
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository,
         ExtraDataRepositoryInterface $extraDataRepository
-    )
-    {
+    ) {
         $this->extraParameterRepository = $extraParameterRepository;
         $this->extraDataRepository = $extraDataRepository;
     }
@@ -45,15 +57,20 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
-        $needParticipantId = strpos($parameters['link'], '%participantId%') !== false;
+        $needParticipantId = $this->urlContainsPlaceholder(
+            $parameters['link'],
+            self::PLACEHOLDER_PARTICIPANT_ID
+        );
+        $needTechEventIdContact = $this->urlContainsPlaceholder(
+            $parameters['link'],
+            self::PLACEHOLDER_TECH_EVENT_ID_CONTACT
+        );
 
         $participant = $needParticipantId ? $query->sheet->getUserParticipant($query->user) : null;
 
         if ($needParticipantId && $participant === null) {
             return null;
         }
-
-        $needTechEventIdContact = strpos($parameters['link'], '%techEventIdContact%') !== false;
 
         $techEventIdContact = $needTechEventIdContact ? $this->extraDataRepository->getExtraDataForEventNameAndUser(
             $query->event,
@@ -65,14 +82,14 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
-        $placeholders = ['%userId%', '%userEmail%', '%participantId%', '%techEventIdContact%'];
         $values = [
             urlencode($query->user->getId()),
             urlencode($query->user->getEmail()),
             $participant ? $participant->getId() : null,
-            $techEventIdContact ? $techEventIdContact->getValue() : null
+            $query->sheet->getId(),
+            $techEventIdContact ? md5($techEventIdContact->getValue()) : null // Tech Event Id Contact needs to be md5.
         ];
-        $link = str_replace($placeholders, $values, $parameters['link']);
+        $link = str_replace(self::USER_CTA_PLACEHOLDERS_ALLOWED, $values, $parameters['link']);
 
         return new SubmenuButtonView(
             Category::CUSTOM_BUTTON_ICON,
@@ -83,5 +100,10 @@ class UserCtaSubmenuViewQueryHandler
             false,
             ['target' => '_blank']
         );
+    }
+
+    private function urlContainsPlaceholder(string $link, string $placeholder): bool
+    {
+        return strpos($link, $placeholder) !== false;
     }
 }
