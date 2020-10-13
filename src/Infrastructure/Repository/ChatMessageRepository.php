@@ -16,10 +16,6 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
     /** @var EntityManager */
     private $entityManager;
 
-    const OBJECT_TYPES = [
-        'NETWORKING' => 'networking'
-    ];
-
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager  = $entityManager;
@@ -99,7 +95,7 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->andWhere('chatMessage.objectId = :eventId')
             ->setParameters([
                 'eventId' => $event->getId(),
-                'objectType' => Self::OBJECT_TYPES['NETWORKING'],
+                'objectType' => ChatMessage::TYPE_NETWORKING,
             ]);
 
         if ($viewedAfter) {

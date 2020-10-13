@@ -8,7 +8,6 @@ use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
-use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
@@ -48,10 +47,16 @@ class NetworkingSubmenuViewQueryHandler
                 $networkingTitle = $query->staticFormulationsIndexedByCategory[Category::NETWORKING]->getTitle($query->locale);
             }
 
-            $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
-                $query->event,
-                $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
-            );
+            $eventMessagesCount = 0;
+
+            $isRouteNetworking = Route::isNetworking($query->route);
+
+            if (!$isRouteNetworking) {
+                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                    $query->event,
+                    $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
+                );
+            }
 
             $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
             $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {
@@ -62,7 +67,7 @@ class NetworkingSubmenuViewQueryHandler
                 Category::NETWORKING_ICON,
                 $networkingTitle,
                 $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
-                Route::isNetworking($query->route),
+                $isRouteNetworking,
                 $eventMessagesCount + $privateChatSessionsCount,
                 true
             );

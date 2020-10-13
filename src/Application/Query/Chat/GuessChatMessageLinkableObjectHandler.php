@@ -6,8 +6,8 @@ use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\Exception\Happening\HappeningNotFoundException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
 use Proximum\Vimeet\Domain\Exception\Event\EventNotFoundException;
+use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
-use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
@@ -47,7 +47,7 @@ class GuessChatMessageLinkableObjectHandler
      */
     public function handle(GuessChatMessageLinkableObject $query): ChatMessageLinkableInterface
     {
-        if ('happening' === $query->objectType) {
+        if ($query->objectType === ChatMessage::TYPE_HAPPENING) {
             $happening = $this->happeningRepository->getById($query->objectId);
 
             if (null === $happening) {
@@ -57,7 +57,7 @@ class GuessChatMessageLinkableObjectHandler
             return $happening;
         }
 
-        if ('meeting' === $query->objectType) {
+        if ($query->objectType === ChatMessage::TYPE_MEETING) {
             $meeting = $this->meetingRepository->findById($query->objectId);
 
             if (null === $meeting) {
@@ -67,7 +67,7 @@ class GuessChatMessageLinkableObjectHandler
             return $meeting;
         }
 
-        if ('networking' === $query->objectType) {
+        if ($query->objectType === ChatMessage::TYPE_NETWORKING) {
             $event = $this->eventRepository->getById($query->objectId);
 
             if (null === $event) {
@@ -77,7 +77,7 @@ class GuessChatMessageLinkableObjectHandler
             return $event;
         }
 
-        if (ChatSession::OBJECT_TYPE === $query->objectType) {
+        if ($query->objectType === ChatMessage::TYPE_PRIVATE_CHAT) {
             $chatSession = $this->chatSessionRepository->findOneById($query->objectId);
 
             if (null === $chatSession) {

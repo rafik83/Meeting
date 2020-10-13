@@ -6,10 +6,11 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages;
+use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
 use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessages;
+use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
-use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -67,8 +68,12 @@ class ListAction
             new ListChatMessages($object, $user, $request->getLocale())
         );
 
-        if ($object->getObjectType() === ChatSession::OBJECT_TYPE) {
+        if ($object->getObjectType() === ChatMessage::TYPE_PRIVATE_CHAT) {
             $this->commandBus->handle(new ResetSessionUnreadMessages($object, $user));
+        }
+
+        if ($object->getObjectType() === ChatMessage::TYPE_NETWORKING) {
+            $this->commandBus->handle(new UpdateNetworkingChatViewedAt($sheet, $user));
         }
 
         return new JsonResponse($chatMessageViews);

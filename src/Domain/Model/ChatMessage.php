@@ -6,6 +6,11 @@ use DateTimeInterface;
 
 class ChatMessage
 {
+    const TYPE_PRIVATE_CHAT = 'private_chat';
+    const TYPE_NETWORKING = 'networking';
+    const TYPE_HAPPENING = 'happening';
+    const TYPE_MEETING = 'meeting';
+
     /** @var int */
     private $id;
 

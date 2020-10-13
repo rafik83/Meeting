@@ -67,7 +67,7 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->join(User::class, 'other', 'WITH', 'other = (CASE WHEN fromUser=:user THEN toUser ELSE fromUser END)')
             ->leftJoin(ChatMessage::class, 'message', 'WITH', 'message.objectId=session.id AND message.objectType=:objectType')
             ->addGroupBy('session.id')
-            ->setParameter('objectType', ChatSession::OBJECT_TYPE)
+            ->setParameter('objectType', ChatMessage::TYPE_PRIVATE_CHAT)
             ->where('session.event = :event')
             ->setParameter('event', $event)
             ->andWhere('session.fromUser = :user OR session.toUser = :user')
