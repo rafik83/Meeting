@@ -13,10 +13,10 @@ const chatPrivateButton = document.querySelector('[data-chat-private-button]');
 const chatGeneralButton = document.querySelector('[data-chat-general-button]');
 
 
-chatPrivateButton.addEventListener('click', showChatPrive);
+chatPrivateButton.addEventListener('click', showChatPrivate);
 chatGeneralButton.addEventListener('click', showChatGeneral);
 
-function showChatPrive() {
+function showChatPrivate() {
     chatGeneralContainer.classList.add('hide');
     chatPrivateContainer.classList.remove('hide');
     chatPrivateButton.classList.add('btn-primary');

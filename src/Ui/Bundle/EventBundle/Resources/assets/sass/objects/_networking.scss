@@ -104,6 +104,10 @@
     display: block;
     margin: 20px;
 
+    .networking_list_header {
+      display: block;
+    }
+
     .networking_chat {
       width: 100%;
       max-width: 100%;
@@ -115,21 +119,18 @@
       max-width: 100%;
       margin: 20px 0 0 0;
     }
-  }
-  .networking_container .modal {
-    .modal-header, .modal-footer {
-      padding: 15px;
-    }
-  }
 
-  .networking_container .modal .modal-body {
-    margin: 0px 10px;
-  }
+    .modal{
+      .modal-body {
+        margin: 0px 10px;
+      }
 
-  .networking_container .networking_list_header {
-      display: block;
+      .modal-header, .modal-footer {
+        padding: 15px;
+      }
     }
 
+  }
     .networking_list_header h2 small {
       display: block;
       padding-top: 20px;
