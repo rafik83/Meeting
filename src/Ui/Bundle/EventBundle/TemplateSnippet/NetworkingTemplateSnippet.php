@@ -34,6 +34,10 @@ class NetworkingTemplateSnippet
             return ' ';
         }
 
+        if ($sheet === null) {
+            return ' ';
+        }
+
         try {
             $getSnippetView = $this->queryBus->handle(new GetSnippetQuery($sheet, $user));
         } catch (ClosedNetworkingException $e) {
