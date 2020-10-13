@@ -20,19 +20,30 @@ class NetworkingView
     /** @var int */
     public $userCurrentId;
 
+    /** @var int*/
+    public $networkingChatNewMessages;
+
     /** @var ChatSessionView[] */
     public $privateChatSessions;
 
     /**
      * @param ChatSessionView[] $privateChatSessions
      */
-    public function __construct(string $providerUrl, string $subscriberKey, string $topic, array $subscriptions, int $userCurrentId, array $privateChatSessions)
-    {
+    public function __construct(
+        string $providerUrl,
+        string $subscriberKey,
+        string $topic,
+        array $subscriptions,
+        int $userCurrentId,
+        int $networkingChatNewMessages,
+        array $privateChatSessions
+    ) {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
         $this->topic = $topic;
         $this->subscriptions = $subscriptions;
         $this->userCurrentId = $userCurrentId;
+        $this->networkingChatNewMessages = $networkingChatNewMessages;
         $this->privateChatSessions = $privateChatSessions;
     }
 }

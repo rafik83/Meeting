@@ -7241,8 +7241,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
-            - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: tactician.handler, typehints: true }
 
