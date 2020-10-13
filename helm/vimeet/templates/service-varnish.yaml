@@ -1,0 +1,19 @@
+{{- if .Values.proxyCache.enabled }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "vimeet.fullname" . }}-varnish
+  labels:
+    app: "{{ template "vimeet.name" . }}"
+    tier: varnish
+    chart: "{{ template "vimeet.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  ports:
+    - protocol: TCP
+      port: 54270
+      targetPort: 54270
+  type: ExternalName
+  externalName: {{ .Values.proxyCache.host }}
+{{- end }}

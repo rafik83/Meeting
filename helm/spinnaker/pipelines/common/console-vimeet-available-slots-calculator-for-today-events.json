@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:event:available-slots-calculator-for-current-event",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-available-slots-calculator-for-today-events",
+    "cronEnabled": "true",
+    "cronExpression": "0 0 4 ? * * *",
+    "cronCommand": "bin/console vimeet:event:available-slots-calculator-for-current-event --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:event:available-slots-calculator-for-current-event",
+  "stages": []
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console redis:flushdb doctrine",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-redis-flushdb-doctrine",
+    "cronEnabled": "false",
+    "cronExpression": "0 0 8 ? * * *",
+    "cronCommand": "bin/console redis:flushdb --client=doctrine --no-interaction --env=prod --no-debug"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "Flush Redis database for Doctrine metadata",
+  "stages": []
+}

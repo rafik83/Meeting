@@ -1,0 +1,45 @@
+#! /bin/bash
+
+echo "hostname:" `hostname`
+echo "date:" `date`
+echo "whoami:" `whoami`
+echo "debug: $DEBUG"
+
+# Do not stop on errors
+set +e
+# Verbose command execution
+set -x
+
+TEMPLATES="$PHP_INI_DIR/conf.d/*.template"
+
+for tmpl in $TEMPLATES; do
+  cf=`echo $tmpl | sed 's/.template$//'`
+  echo "$tmpl => $cf"
+  envsubst < $tmpl > $cf
+done
+
+if [[ -z "${PHP_NEWRELIC_ENABLED}" ]]; then
+  echo "Environment variable PHP_NEWRELIC_ENABLED is missing, New Relic PHP extension stays disabled"
+else
+  if [[ -z "${PHP_NEWRELIC_LICENSE}" ]]; then
+    echo "Environement variable PHP_NEWRELIC_LICENSE is missing, skipping New Relic PHP extension setup"
+  else
+    cp /usr/local/etc/php/conf.d/newrelic.ini.dist /usr/local/etc/php/conf.d/newrelic.ini
+    sed -i -e 's/"REPLACE_WITH_REAL_KEY"/'${PHP_NEWRELIC_LICENSE}'/' \
+        /usr/local/etc/php/conf.d/newrelic.ini
+
+    if [[ -z "${PHP_NEWRELIC_APPNAME}" ]]; then
+      echo "Environement variable PHP_NEWRELIC_APPNAME is missing, using default application name, not recommended"
+    else
+      sed -i -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${PHP_NEWRELIC_APPNAME}"'"/' \
+          /usr/local/etc/php/conf.d/newrelic.ini
+    fi
+  fi
+fi
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+    set -- apache2-foreground "$@"
+fi
+
+exec "$@"

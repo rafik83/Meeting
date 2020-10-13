@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ template "vimeet.fullname" . }}
+    labels:
+        app: "{{ template "vimeet.name" . }}"
+        chart: "{{ template "vimeet.chart" . }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    annotations:
+      strategy.spinnaker.io/versioned: 'false'
+data:
+    TZ: {{ .Values.tz }}
+        {{- if .Values.mysql.enabled }}
+    MASTER_HOST: {{ template "vimeet.mysql.fullname" . }}
+    MASTER_DB_NAME: {{ .Values.mysql.mysqlDatabase }}
+    MASTER_USER: {{ .Values.mysql.mysqlUser }}
+        {{- else }}
+    MASTER_HOST: {{ .Values.externalDatabase.host }}
+    MASTER_DB_NAME: {{ .Values.externalDatabase.database }}
+    MASTER_USER: {{ .Values.externalDatabase.user }}
+        {{- end }}
+        {{- if .Values.externalDatabase.slave.hostList }}
+    SLAVE_HOST_LIST: {{ .Values.externalDatabase.slave.hostList }}
+    SLAVE_DB_NAME: {{ .Values.externalDatabase.slave.database }}
+    SLAVE_USER: {{ .Values.externalDatabase.slave.user }}
+        {{- end }}
+    APP_ENV: {{ default "dev" .Values.environment }}
+        {{- if .Values.proxyCache.enabled }}
+    PROXYCACHE_HOST: {{ .Values.proxyCache.host }}
+        {{- end }}
+        {{- if .Values.newrelic.enabled }}
+    PHP_NEWRELIC_ENABLED: "true"
+    PHP_NEWRELIC_APPNAME: {{ .Values.newrelic.appName | quote }}
+    PHP_NEWRELIC_LICENSE: {{ .Values.newrelic.licenseKey | quote }}
+        {{- end }}
+        {{- if .Values.redis.enabled }}
+    REDIS_HOST: {{ template "vimeet.redis.fullname" . }}
+    REDIS_PORT: {{ .Values.redis.redisPort | quote }}
+        {{- else }}
+    REDIS_HOST: {{ .Values.externalRedis.host }}
+    REDIS_PORT: {{ .Values.externalRedis.port | quote }}
+        {{- end }}
+        {{- if .Values.redis.enabled }}
+    REDIS_ENABLED: "true"
+        {{- else }}
+    REDIS_ENABLED: "false"
+        {{- end }}
+  {{- if .Values.jenkins.agent.url }}
+    JENKINS_URL: {{ .Values.jenkins.agent.url }}
+  {{- end }}
