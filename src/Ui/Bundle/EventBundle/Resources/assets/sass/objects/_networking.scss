@@ -99,7 +99,7 @@
 }
 
 @media (max-width: 1024px) {
-  .main__content {
+  .networking_container {
     display: block;
     margin: 0px;
 
@@ -122,6 +122,19 @@
 
   .networking_container .modal .modal-body {
     margin: 0px 10px;
+
+    .networking_list_header {
+      display: block;
+    }
+
+    .networking_list_header h2 small {
+      display: block;
+      padding-top: 20px;
+    }
+
+    .list {
+        margin-top: 20px;
+    }
   }
 
 }
