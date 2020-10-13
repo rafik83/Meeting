@@ -27,10 +27,14 @@ class NetworkingTemplateSnippet
         $this->queryBus = $queryBus;
     }
 
-    public function generate(Sheet $sheet, ?User $user): string
+    public function generate(?Sheet $sheet, ?User $user): string
     {
 
         if ($user === null) {
+            return ' ';
+        }
+
+        if ($sheet === null) {
             return ' ';
         }
 
