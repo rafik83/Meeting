@@ -4,7 +4,7 @@ class ParticipantList {
         this.userCurrentId = userCurrentId;
     }
 
-    addNewuser(payload) {
+    addNewuser(payload, callback) {
         if (parseInt(this.userCurrentId) === payload.userId) {
             return;
         }
@@ -19,25 +19,26 @@ class ParticipantList {
         const tr = document.createElement('tr');
         tr.setAttribute('data-participant-user-id', payload.userId);
         const td = document.createElement('td');
-        const a = document.createElement('a');
         const img = document.createElement('img');
         const user = document.createElement('p');
         const position = document.createElement('em');
 
         const url = new URL(this.target.getAttribute('data-private-chat-url'), document.URL);
         url.searchParams.append('toUser', payload.userId);
-        a.setAttribute('href', url);
+
+        tr.setAttribute('data-private-chat-url', url);
 
         tbody.insertBefore(tr, tbody.firstChild);
         tr.appendChild(td);
-        a.appendChild(img);
-        a.appendChild(user);
 
         img.setAttribute('src', payload.userAvatar);
         user.textContent = payload.userFirstName+' '+ payload.userLastName+' - '+ userCompany + ' - ';
         position.textContent = payload.userPosition;
         user.appendChild(position);
-        td.appendChild(a);
+        td.appendChild(img);
+        td.appendChild(user);
+
+        callback(tr)
     }
 }
 

@@ -28,6 +28,7 @@
       font-size: 16px;
       padding: 10px;
       color: $color-highlighted;
+      background-color: white;
     }
 
 
@@ -158,3 +159,11 @@
     background-color: #999;
   }
 }
+
+.modal {
+  .chat-list {
+    max-height: calc(100vh - 400px);
+  }
+}
+
+
