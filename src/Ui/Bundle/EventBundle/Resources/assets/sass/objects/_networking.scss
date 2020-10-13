@@ -99,13 +99,15 @@
 }
 
 @media (max-width: 1024px) {
+
   .networking_container {
     display: block;
-    margin: 0px;
+    margin: 20px;
 
     .networking_chat {
       width: 100%;
       max-width: 100%;
+      margin-top:30px;
     }
 
     .networking_list {
@@ -122,8 +124,9 @@
 
   .networking_container .modal .modal-body {
     margin: 0px 10px;
+  }
 
-    .networking_list_header {
+  .networking_container .networking_list_header {
       display: block;
     }
 
@@ -135,6 +138,5 @@
     .list {
         margin-top: 20px;
     }
-  }
 
 }
