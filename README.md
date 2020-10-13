@@ -55,9 +55,7 @@ Unfortunately for now we are also using `PHP 7.2` to run the application. So we 
 
 This could be related to this [this bug](https://github.com/symfony/cli/issues/292).
 
-**Pro Tips**: 
-
-- check if you can exectute symfony by running `symfony` from your terminal. If symfony is not found add this    in your `.bashrc` (or `.zshrc`, if you are using `zsh`)
+**Before you install PHP**:  check if you can exectute symfony by running `symfony` from your terminal. If symfony is not found add this    in your `.bashrc` (or `.zshrc`, if you are using `zsh`)
 
 
 ```
@@ -161,9 +159,9 @@ symfony server:start -d
 
 
 
-Then you're reading to start hacking.
+Then you're ready to start hacking.
 
-You should access the project via http://admin.vimeet.proximum/app_dev.php/fr/event
+You should access the project via http://admin.vimeet.proximum.wip/app_dev.php/fr/event
 
 ### Day to day usage
 
@@ -171,8 +169,9 @@ You should access the project via http://admin.vimeet.proximum/app_dev.php/fr/ev
 
         make watch
 
+**Build Vimeet events assets**
 
-Build Vimeet events assets
+Sometime events use specific assets like specific css. To build those run :
 
         bin/console vimeet:event:build-guideline-asset
 
@@ -209,8 +208,6 @@ To do not forget to rebuild js bundles:
 To update the application, for example after git branch checkout:
 
         make update-app
-
-### 
 
 ### Migrations
 
