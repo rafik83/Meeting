@@ -3,36 +3,6 @@ import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
-import Webinar from "./components/VideoConference/Webinar";
-
-
-const chatPrivateContainer = document.querySelector('[data-chat-private-container]');
-const chatGeneralContainer = document.querySelector('[data-chat-container]');
-
-const chatPrivateButton = document.querySelector('[data-chat-private-button]');
-const chatGeneralButton = document.querySelector('[data-chat-general-button]');
-
-
-chatPrivateButton.addEventListener('click', showChatPrivate);
-chatGeneralButton.addEventListener('click', showChatGeneral);
-
-function showChatPrivate() {
-    chatGeneralContainer.classList.add('hide');
-    chatPrivateContainer.classList.remove('hide');
-    chatPrivateButton.classList.add('btn-primary');
-    chatPrivateButton.classList.remove('btn-gray');
-    chatGeneralButton.classList.add('btn-gray');
-    chatGeneralButton.classList.remove('btn-primary');
-}
-
-function showChatGeneral() {
-    chatPrivateContainer.classList.add('hide');
-    chatGeneralContainer.classList.remove('hide');
-    chatPrivateButton.classList.remove('btn-primary');
-    chatPrivateButton.classList.add('btn-gray');
-    chatGeneralButton.classList.remove('btn-gray');
-    chatGeneralButton.classList.add('btn-primary');
-}
 
 export default function initNetworking(target, userConnection) {
 
@@ -40,6 +10,34 @@ export default function initNetworking(target, userConnection) {
 
     if (!chatNetworkingElement) {
         return;
+    }
+
+    const chatPrivateContainer = document.querySelector('[data-chat-private-container]');
+    const chatGeneralContainer = document.querySelector('[data-chat-container]');
+
+    const chatPrivateButton = document.querySelector('[data-chat-private-button]');
+    const chatGeneralButton = document.querySelector('[data-chat-general-button]');
+
+
+    chatPrivateButton.addEventListener('click', showChatPrivate);
+    chatGeneralButton.addEventListener('click', showChatGeneral);
+
+    function showChatPrivate() {
+        chatGeneralContainer.classList.add('hide');
+        chatPrivateContainer.classList.remove('hide');
+        chatPrivateButton.classList.add('btn-primary');
+        chatPrivateButton.classList.remove('btn-gray');
+        chatGeneralButton.classList.add('btn-gray');
+        chatGeneralButton.classList.remove('btn-primary');
+    }
+
+    function showChatGeneral() {
+        chatPrivateContainer.classList.add('hide');
+        chatGeneralContainer.classList.remove('hide');
+        chatPrivateButton.classList.remove('btn-primary');
+        chatPrivateButton.classList.add('btn-gray');
+        chatGeneralButton.classList.remove('btn-gray');
+        chatGeneralButton.classList.add('btn-primary');
     }
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
