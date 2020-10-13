@@ -1,7 +1,7 @@
 account.change_password.link: 'Change the password'
 account.change_password.title: 'Change the password'
 account.profile.company: 'Company / Organization'
-account.profile.contactInformation: 'Contact informations'
+account.profile.contactInformation: 'Contact information'
 account.profile.profile: Profile
 account.profile.title: Profile
 account.profile.updateAvatar: 'Change profile picture'
@@ -10,6 +10,7 @@ account.update.avatar.title: 'Profile picture'
 account.update.company.title: 'Company / Organization'
 account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
+agenda.availability.available_participant_for_this_slot: 'See available participants'
 agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
 agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
 agenda.availability.define: 'Set my availabilities'
@@ -24,11 +25,15 @@ agenda.meeting.move.back: Back
 agenda.meeting.move.button: 'Move the meeting'
 agenda.meeting.move.no_available_slots: 'The meeting can''t be moved because there are no other join availabilities'
 agenda.meeting.move.success: 'The appointment has been moved'
+agenda.meeting.ownSheetParticipants: 'Take part in the meeting:'
 agenda.meeting.remove.button: 'Delete the meeting'
 agenda.meeting.remove.confirm: 'Confirm deletion?'
 agenda.meeting.remove.success: 'The appointment has been deleted'
 agenda.meeting.updateSlot.error: 'Impossible to move this meeting'
+agenda.myAgenda.button.title: 'My calendar'
 agenda.participant.view: 'Schedule of %participant%'
+agenda.sheetAgenda.button.title: 'Global calendar'
+agenda.sheetAgenda.title: 'Global calendar'
 agenda.slot.available: Available
 agenda.slot.imperative-presence: 'Your presence is mandatory'
 agenda.slot.unavailable: Unavailable
@@ -37,10 +42,14 @@ agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'
 agenda.unavailability.remove: Remove
+analytics.click_counter: '{0}0 clic|{1} 1 clic|]1,Inf[%clicks% clics by %uniqueClicks% unique visitors'
+analytics.view_counter: '{0}0 view|{1} 1 view|]1,Inf[%views% views by %uniqueViews% unique visitors'
+authentication.account_temporarily_disabled: 'Your account has been blocked for 15 minutes.'
+authentication.remaining_attempt: '{1} Last attempt before your account is blocked for 15 minutes.|]1,Inf[ %remainingAttempt% remaining attempts'
 availability.confirmation.action.add_unavailability: 'Add an unavailability'
-availability.confirmation.explanation.title: 'In order to have access to your meeting requests, please confirm your availability on your schedule.'
+availability.confirmation.explanation.title: 'IMPORTANT: In order to access the catalogue of meeting requests, please add when you are unavailable (days and times of unavailability for meetings), to avoid having meetings scheduled when you are unavailable.'
 availability.confirmation.title: 'Confirm your availabilities'
-'Bad credentials.': 'Bad credentials.'
+'Bad credentials.': 'Wrong credentials.'
 badge.scan.loading: 'Searching the participant''s profile ...'
 badge.scan.title: 'Scan a participant''s badge'
 badge.title: 'My badge'
@@ -55,9 +64,9 @@ catalog.action.meeting.request.discussion: discussions
 catalog.action.meeting.request.pending: 'Pending request'
 catalog.action.meeting.request.refuse: 'Received proposal'
 catalog.action.meeting.request.show.refuse: 'Request declined'
-catalog.complete_sheet: 'View sheet details'
+catalog.complete_sheet: 'See more'
 catalog.external.modal.content: 'To access the full profile, you need to register to the event.'
-catalog.external.modal.content.logged: 'The schedule of appointment will be available on the %catalogOnlineDate%'
+catalog.external.modal.content.logged: 'The schedule of meetings will be available on the %catalogOnlineDate%'
 catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
@@ -83,6 +92,15 @@ catalog.selectItemsFromNomenclatures.unSelectAll: 'Unselect all'
 catalog.sheet.export.csv: Export
 catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
+chat.unvote: 'Withdraw my vote'
+chat.vote: 'Vote for this message'
+chat.vote.acclaim: Applaud
+chat.vote.happy: Happy
+chat.vote.heart: 'I love'
+chat.vote.instructive: Instructive
+chat.vote.like: 'I like'
+chat.voteDisabled: 'You cannot vote for this message'
+common.back: Back
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'
 common.cryptedUploadFileHelp: 'The file is encrypted and stored securely.'
@@ -101,8 +119,12 @@ contact.show.evaluation.2.label: 'Not relevant'
 contact.show.evaluation.3.label: 'Long term issue'
 contact.show.evaluation.4.label: 'Medium term follow-up'
 contact.show.evaluation.5.label: 'To see again very quickly'
+contact.show.me.info: 'It''s about you! You will not be added to the contact list.'
+contacts.list.absent: Absent
+contacts.list.noResults: 'No contact'
+contacts.list.present: Present
 contacts.list.title: Contacts
-error.403.content: 'Your are not allowed to reach this content.'
+error.403.content: 'You are not allowed to reach this content.'
 error.403.title: 'Not allowed'
 error.404.content: 'This content is not available or not available any more.'
 error.404.title: 'This page cannot be found'
@@ -123,13 +145,16 @@ event.info.contact: 'Useful information'
 event.info.privacyPolicy.content: "The data collected are registered by Vimeet and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
 event.info.privacyPolicy.title: 'Privacy policy'
 event.invisible.label: Invisible
+event.meeting.evaluation.label: 'Rate the relevance of your previous business meeting have it later in your  follow-up file we will provide you with at the end of the event (confidential)'
+event.meeting.evaluation.skip: Skip
 event.meeting.listRequest.contact.export: 'Download my contacts'
 event.meeting.listRequest.filter.all: All
 event.meeting.listRequest.filter.propositions: 'Requests received only'
 event.meeting.listRequest.filter.requests: 'My requests'
 event.meeting.request.answering.closed: 'The answering to the meetings requests is closed'
-event.meeting.request.closed: 'The meeting requests are now closed'
+event.meeting.request.closed: 'The meeting requests are closed'
 event.meeting.request.locked: 'Planning processing - the meetings requests are locked'
+event.meeting.request.priority: 'Request for a prior appointment'
 event.meeting.request.transformIntoMeeting.error: 'The meeting cannot be schedule for lack of common availabilities'
 event.meeting.request.transformIntoMeeting.success: 'The meeting is scheduled for %participants% on the %date% at %time% : %spot%.'
 event.participant.define_timezone: 'Set my time zone'
@@ -141,7 +166,7 @@ event.sheet.export.fields.event_name: 'Event name'
 event.sheet.export.fields.has_approved_meeting_request_with: Meeting
 event.sheet.export.fields.participant_email: 'Participant email'
 event.sheet.export.fields.participant_firstname: Firstname
-event.sheet.export.fields.participant_genre: gender
+event.sheet.export.fields.participant_genre: Title
 event.sheet.export.fields.participant_lastname: lastname
 event.sheet.export.fields.participant_phone: 'phone number'
 event.sheet.export.fields.participant_position: Position
@@ -151,7 +176,7 @@ event.sheet.export.fields.sheet_city: City
 event.sheet.export.fields.sheet_country: Country
 event.sheet.export.fields.sheet_employees: 'number of employees'
 event.sheet.export.fields.sheet_name: 'Sheet name ( Company/Organism)'
-event.sheet.export.fields.sheet_turnover: turnover
+event.sheet.export.fields.sheet_turnover: Turnover
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: website
 event.sheet.export.fields.sheet_zipcode: Zipcode
@@ -167,6 +192,25 @@ event.user_event_phone.validate.returnToPhone: 'Update my phone number'
 event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
 event.user_event_phone.validate.title: 'Phone number validation'
 event.visio.agenda_access: 'Click here to access your calendar'
+event.visio.settings.askPermissions: 'activate your camera and microphone'
+event.visio.settings.askPermissionsDenial: 'You must validate the permissions to be able to join a video meeting. Reload the page to try again. If the problem persists, contact us.'
+event.visio.settings.askPermissionsDescription: "You're about to join a video meeting.\nIn order for the other participants to see and hear you, your browser will ask you for permission to access your camera and microphone.\nYou will be able to disable them at any time throughout the meeting."
+event.visio.settings.askPermissionsDeviceNotFound: 'An error occurred during the request to accept permissions, verify that you have at least one microphone connected to your terminal.'
+event.visio.settings.askPermissionsMicNotFound: 'You must at least have a microphone plugged in to join a video date. Connect or turn on a microphone on your device and refresh the page to join the meeting.'
+event.visio.settings.audioVolumeBar.help: 'Speak to make this bar move and test the sensitivity of your microphone.'
+event.visio.settings.audioVolumeBar.label: 'Sensitivity of your microphone :'
+event.visio.settings.chromeInstall: 'Install Chrome here'
+event.visio.settings.chromeInstallUnavailable: 'I can''t install Chrome - skip'
+event.visio.settings.chromeRequired: 'For an optimal diffusion, please use the Chrome browser.'
+event.visio.settings.preview: 'Overview of your settings :'
+event.visio.settings.selectAudio: 'Select your microphone'
+event.visio.settings.selectVideo: 'Select your camera :'
+event.visio.settings.selectVideoNotFound: 'No camera seems to be detected, you can make the video call in audio only or connect a camera and refresh the page.'
+event.visio.settings.start: Start
+event.visio.settings.startMeeting: 'Start the visio meeting'
+event.visio.settings.testAudio: 'Test your audio output'
+event.visio.settings.testAudioHelp: 'Click to hear a sound and test your audio output'
+event.visio.settings.title: 'Video meeting settings'
 event.visio.test.audio: Audio
 event.visio.test.description: 'When prompted, allow us to use your camera and audio hardware. This test will last for 30 seconds.'
 event.visio.test.edge: 'Your browser, Edge, is not compatible to perform all audio / video quality tests. Thank you for using Chrome or Firefox.'
@@ -183,8 +227,8 @@ event.visio.test.video: Video
 event.visio.welcome: 'Welcome on %event%'
 form_template.fill_step.participant: 'Form for %participant%'
 form_template.fill_step.step_title: 'Step %currentStep% / %totalStep%'
-gender.man: Mr
-gender.woman: Mrs
+gender.man: Mr.
+gender.woman: Ms.
 group.home.link.create_sheet: 'Create a profile'
 group.home.link.participant_update: 'Manage participants'
 group.home.link.participants: 'Participants per profile'
@@ -215,6 +259,8 @@ group.sheet.create.title: 'Create a new profile'
 happening.participate.action: Attend
 happening.participate.detail: detail
 happening.participate.full: full
+happening.participate.maxNumberHappeningParticipationReached: 'Maximum number of registrations reached'
+happening.participate.maxNumberHappeningParticipationReachedForParticipant: '%fullname% has reached its maximum number of registrations'
 happening.participate.noParticipantSelected: 'no participant selected'
 happening.participate.notEnoughtRemainingParticipations: '{0} no more available place|{1} one available place remaining|]1,Inf[ there are only %remaining% places available'
 happening.participate.participantMustHaveProductToParticipate: 'An option is required to participate in this event.'
@@ -224,6 +270,27 @@ happening.participate.wrongInvitationCode: 'wrong invitation code'
 happening.participate.youAreNotAvailable: 'You are not available to attend'
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
+happening.webinar.chat.add: 'Add your message'
+happening.webinar.chat.tab: Chat
+happening.webinar.end: Stop
+happening.webinar.endingAt: 'End in'
+happening.webinar.media.share: Share
+happening.webinar.media.stopSharing: 'Stop sharing'
+happening.webinar.media.videoshare.title: 'Share a video'
+happening.webinar.media.videoshare.url: 'Url of the video'
+happening.webinar.messageWarningBeforeStart: 'The webinar is about to begin'
+happening.webinar.questions.add: 'Add your question'
+happening.webinar.questions.tab: Questions
+happening.webinar.questions.unvote: 'Withdraw my vote'
+happening.webinar.questions.voteDisabled: 'You cannot vote for this question'
+happening.webinar.recordButtonTitle: Recording
+happening.webinar.recordingButtonTitle: 'Recording in progress'
+happening.webinar.screenshare.end: 'Stop sharing my screen'
+happening.webinar.screenshare.start: 'Share my screen'
+happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'You already share your screen.'
+happening.webinar.start: Start
+happening.webinar.viewers: 'Connected :'
+happening.webinar.waiting.message: 'The webinar will start in a few moments.'
 invoice.list.column.date: Date
 invoice.list.column.number: 'N° invoice'
 invoice.list.column.totalExcludeTaxes: 'Total excl. tax'
@@ -233,20 +300,27 @@ invoice.no-result: 'No invoice available'
 invoice.show: 'View final invoice (pdf)'
 login.comexposium_sso.connect: Login
 login.connect: Login
-login.connection: Connexion
+login.connection: ''
 login.error.sheetDisabled: 'Your participation has been disabled.'
 login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Participant area'
+meeting.video.chat.waitingMessage: 'Messages will be delivered once your contact is connected.'
 meeting.video.end: 'End call'
 meeting.video.endingAt: 'End in'
 meeting.video.error.userDeniedAccess: 'You have denied access to your audio/video devices or canceled the launch of the screen share. For video conferencing to work properly, please allow access to your devices or the launch of screen sharing.'
 meeting.video.installScreenSharingExtensionMessage: 'Thank you for setting our screen sharing extension.'
-meeting.video.notCompatibleBrowserMessage: 'Your browser is not compatible. Thank you for using Chrome or Firefox'
+meeting.video.media.share.button.screenShare: 'My screen'
+meeting.video.media.share.button.videoShare: 'A video'
+meeting.video.media.share.screenShareStatus: 'You share your screen'
+meeting.video.media.share.urlVideo: 'Url of the video file'
+meeting.video.media.share.urlVideo.loadingError: 'Can'' t read this Url. Check that it is a video format suitable for the web and that the file is freely available.'
+meeting.video.media.share.urlVideo.securityError: 'The Url of the video must be secured, starting with https://.'
+meeting.video.notCompatibleBrowserMessage: 'Your browser is not compatible. Thank you for using Chrome'
 meeting.video.screenshare: Screenshare
 meeting.video.screenshare.end: 'stop the screenshare'
 meeting.video.screenshare.start: 'share my screen'
-meeting.video.start: 'start the meeting'
+meeting.video.start: 'Start the meeting'
 meeting.video.waitingForParticipant: 'Waiting for participant'
 meetingRequest.mobile.filters.availableSlot.title: 'who is available ?'
 meetingRequest.mobile.filters.state.title: 'My meetings'
@@ -271,8 +345,10 @@ multiple_sheets.request.title: 'meetings management'
 multiple_sheets.select_sheet: 'select a sheet'
 multiple_sheets.title: 'My profiles'
 navigation.category.badge: Badge
+navigation.category.badge_scan: Scanner
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
+navigation.category.contact: Contacts
 navigation.category.forms: 'My venue'
 navigation.category.happening: 'Meeting administration'
 navigation.category.inCart: Basket
@@ -283,6 +359,7 @@ navigation.category.package: 'Registration package'
 navigation.category.planning: 'Planning & Attendance'
 navigation.category.program: Program
 navigation.category.sheet: 'Presentation Sheet'
+navigation.category.visio_test: 'Test my visio'
 navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
 navigation.links.billing.order_history: 'Orders & Transactions'
@@ -306,7 +383,9 @@ navigation.links.meetingRequest.refused: Declined
 navigation.links.meetingRequest.sent: 'Pending requests'
 navigation.links.member_space.avatar: 'Profile picture'
 navigation.links.member_space.company: 'Company / Organization'
+navigation.links.member_space.privacy_policy: 'Privacy policy'
 navigation.links.member_space.profile: Profile
+navigation.links.member_space.terms_of_sale: 'General Terms and Conditions of Participation'
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'My orders'
 navigation.links.package.order_summary_total: 'Global summary'
@@ -322,11 +401,22 @@ navigation.links.planning.my_schedule: 'My planning'
 navigation.links.planning.unavailability: 'Add an unavailability'
 navigation.links.returnToSelectSheet: 'My profiles'
 navigation.links.sheet.locale: Version
+navigation.links.termsOfSale: 'Terms of sale'
 navigation.menu: Menu
+networking.chat.add: 'Add your message'
+networking.chat.global.title: 'General chat'
+networking.chat.messages.count: '{0} No message|{1} One message|]1,Inf[ %count% messages'
+networking.chat.messages.new: '{0} No new message|{1} one new message|]1,Inf[ %count% new messages'
+networking.chat.notification.open: 'Open in the chat'
+networking.chat.title: 'Private chate'
+networking.chat.with: 'Private chat with %user%'
+networking.participants.intro: 'click on a participant to start a private conversation'
+networking.participants.search: 'Search in the list'
+networking.participants.title: 'Connected participants'
 new_password.confirm.title: 'Reset password'
 new_password.help.noaction: 'If you take no action, the current password remains valid'
 new_password.help.reset: 'You can reset your password'
-new_password.mail.title: 'An email has been sent to you!'
+new_password.mail.title: 'If this email is registered with a valid user, you will receive a message.'
 new_password.needHelp: 'Need help'
 nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
@@ -406,6 +496,7 @@ package.product.includedProduct: 'Included:'
 package.product.label: 'Title & Description'
 package.product.notDeletableSince: 'can not be removed sincel %date%'
 package.product.outOfStock: 'Sold out'
+package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
@@ -456,18 +547,19 @@ register.already_registered: 'Already registered?'
 register.connect: Submit
 register.finalize: Submit
 register.noAvailableRegistrationType: 'No available registration type'
-register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
-register.privacy_policies: "The data collected in this form will be registered with Vimeet, and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
+register.photo: "Why should you publish a photo?\n\n- Let potential business partners “put a face to a name”\n- Help contacts to identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule\n- Reinforce your professional network"
+register.privacy_policies: ''
 register.register: Registration
 register.register_as: 'Register as:'
 register.step: Step
 select2.no_results: 'No results'
-sheet.edit.object: Edit
+sheet.edit.object: 'Complete/Edit "%label%"'
 sheet.maxParticipantReached: 'Maximum participants reached'
 sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
-sheet.object.action.edit: Edit
+sheet.object.action.edit: Complete/Edit
 sheet.object.action.remove: Delete
+sheet.object.action.sortParticipants: 'Change participants display order'
 sheet.object.boolean.false: 'No'
 sheet.object.boolean.true: 'yes'
 sheet.object.image.label: 'Your current image'
@@ -481,12 +573,15 @@ sheet.participant.seeLess.title: 'See less'
 sheet.participant.seeMore.title: 'See more'
 sheet.participant.sendInvite: 'Send Invitation'
 sheet.request_meeting: 'Request a meeting'
+sheet.sortParticipants.alternativeDescription: 'or activate the sorting option'
+sheet.sortParticipants.description: 'Drag participants to sort them'
+sheet.sortParticipants.title: 'Change participants display order'
 sheet.submit.completeYourSheet: 'Complete my presentation sheet'
 sheet.submit.validation: 'Submit for validation'
 sheet.submit.validation.moreInfoOnPending: 'Submit your presentation sheet to validation'
 sheet.submit.validation.pending: 'Awaiting validation'
 sheet.title: 'Presentation sheet'
-sheet.validation.complete.message: "Once your presentation form has been completed, you must submit it for validation before publication on the participants' platform. Your presentation sheet will be validated quickly by the organizer.\n\nYou can always edit it later"
+sheet.validation.complete.message: "Once your presentation sheet has been completed, you must submit it for validation before publication on the participants' platform. Your presentation sheet will be validated quickly by the organiser.\n\nYou can always edit it later"
 sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory fields marked with an *.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
 sheet.welcome.programContent: 'Choose your conferences'
@@ -507,6 +602,13 @@ summary.total: Total
 summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
+template.upload.formats.csv: csv
+template.upload.formats.image: Image
+template.upload.formats.pdf: pdf
+template.upload.formats.ppt: powerpoint
+template.upload.formats.vector_image: 'Vector image (.ai, .eps)'
+timezone.asia-colombo: 'New Dehli - Colombo'
+timezone.asia-kolkata: 'Mumbai, New Delhi, Kolkata'
 unavailability.action.remove.title: Delete
 unavailability.createdBySystem.buy.title: 'Modify my package'
 unavailability.createdBySystem.explaination.title: 'Please select the product that allows you to access this content'
