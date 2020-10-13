@@ -154,5 +154,6 @@ services:
     Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
+            - '@repository.user.event.extra_data_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }
