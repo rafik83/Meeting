@@ -59,6 +59,7 @@ twig:
     globals:
         admin_menu_color: "%admin_menu_color%"
         visio_screen_sharing_chrome_extension: "%visio_screen_sharing_chrome_extension%"
+        networking_template_snippet: "@Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\TemplateSnippet\\NetworkingTemplateSnippet"
 
 # Doctrine Configuration
 doctrine:

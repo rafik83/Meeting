@@ -69,4 +69,9 @@ class SessionAdapter implements SessionInterface
     {
         $this->session->remove($key);
     }
+
+    public function getLastUsed(): int
+    {
+        return $this->session->getMetadataBag()->getLastUsed();
+    }
 }

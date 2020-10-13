@@ -23,3 +23,13 @@ services:
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\UserConnectedEventListener:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver'
+            - '@adapter.session'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@datetime'
+        tags:
+            - { name: kernel.event_subscriber }

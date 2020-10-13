@@ -1,0 +1,21 @@
+#notification-toast {
+  background-color: rgba(255, 255, 255, 0.95);
+  bottom: 1em;
+  border-radius: 0.4em;
+  max-width: 300px;
+  padding: 2em;
+  position: fixed;
+  box-shadow: -1px -1px 8px #444;
+  right: 1em;
+
+  .message-content {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .close {
+    position: absolute;
+    right: 3px;
+    top: 6px;
+  }
+}

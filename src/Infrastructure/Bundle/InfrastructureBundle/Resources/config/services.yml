@@ -51,6 +51,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@datetime'
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
@@ -441,6 +442,13 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ParticipantTimezone }
+
+    Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt }
 
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
@@ -2917,6 +2925,10 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
+    Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
+        arguments:
+            - '@components.security.video_meeting_access'
+
     Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
         arguments:
             - '@repository.rule_repository'
@@ -4625,6 +4637,17 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
 
+    query.navigation.networking_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.networking_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
+
+
     ##
     # Mass Assignment query handler
     ##
@@ -5596,6 +5619,11 @@ services:
 
     domain.key_dates.checker.registration_close_date_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
+        arguments:
+            - '@datetime'
+            -
+    domain.key_dates.checker.networking_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
         arguments:
             - '@datetime'
 
@@ -7188,5 +7216,40 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
+            - '@domain.key_dates.checker.networking_access_checker'
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\PrivateChatQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
         tags:
             - { name: tactician.handler, typehints: true }

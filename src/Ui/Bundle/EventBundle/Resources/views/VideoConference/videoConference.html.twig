@@ -9,6 +9,11 @@
     <script src="{{ asset('assets/js/visio.js') }}"></script>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/videoConferenceChatTokbox.css') }}">
+{% endblock %}
+
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
