@@ -4,8 +4,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.57.0] - 2010-10-13
+### Added
+- VIMEET-2218 - Networking tab and page
+- VIMEET-2219 - Networking tab search participant
+- VIMEET-2222 - Networking / Private chat
+- VIMEET-2221 - Private chat notification toast
+- VIMEET-2220 - Badge on networking tab with unread messages
+
 ### Changed
 - Remove command bus usage for translations update commands to prevent DB connections
+
+### Revert
+- VIMEET-1925 - Restore mercure version, with fixed issue on chat update
 
 ## [2.56.0] - 2010-10-09
 ### Added
