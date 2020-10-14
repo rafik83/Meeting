@@ -67,6 +67,12 @@ class ConvertContactToSheet
         $loginDataKey = $mandatoryKeys['loginData'] ?? null;
         // login data should not be normalized (no trim, etc..)
         $loginData = $contact[$loginDataKey] ?? null;
+
+        // An identifier may be sent with an md5 hash.
+        // This identifier has to be updated and stored separately
+        $identifierMD5Key = $mandatoryKeys['identifierMD5'] ?? null;
+        $valueMD5 = $contact[$identifierMD5Key] ?? null;
+
         $countryKey = $mandatoryKeys['country'] ?? null;
         $email = mb_strtolower($contact[$emailKey]);
 
@@ -111,22 +117,36 @@ class ConvertContactToSheet
             $user = $this->userRepository->findByEmail($email);
         }
 
-        if ($user instanceof User && null !== $loginData) {
-            $this->userEventExtraDataRepository->removeForUserAndEventAndName(
-                $user,
-                $event,
-                ExtraDataType::TECH_EVENT_LOGIN_DATA
-            );
-
-            $this->userEventExtraDataRepository->add(
-                new User\Event\ExtraData(
+        if ($user instanceof User) {
+            if (null !== $loginData) {
+                $this->userEventExtraDataRepository->removeForUserAndEventAndName(
                     $user,
                     $event,
-                    ExtraDataType::TECH_EVENT_LOGIN_DATA,
-                    $loginData,
-                    $this->dateTime
-                )
-            );
+                    ExtraDataType::TECH_EVENT_LOGIN_DATA
+                );
+
+                $this->userEventExtraDataRepository->add(
+                    new User\Event\ExtraData(
+                        $user,
+                        $event,
+                        ExtraDataType::TECH_EVENT_LOGIN_DATA,
+                        $loginData,
+                        $this->dateTime
+                    )
+                );
+            }
+
+            if (null !== $valueMD5) {
+                $this->userEventExtraDataRepository->add(
+                    new User\Event\ExtraData(
+                        $user,
+                        $event,
+                        ExtraDataType::TECH_EVENT_IDENTIFIER_MD5,
+                        $valueMD5,
+                        $this->dateTime
+                    )
+                );
+            }
         }
     }
 

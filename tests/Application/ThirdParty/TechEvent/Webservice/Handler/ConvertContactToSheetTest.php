@@ -37,6 +37,7 @@ class ConvertContactToSheetTest extends TestCase
 
         $contact = [
             "IDCONTACT" => "113893672",
+            "IDCONTACTMD5" => "0892e7d27bba322f0ac7fefbece15387",
             "SOCIETE" => "TPM",
             "IDCIVILITE" => "M  ",
             "NOM" => "Test",
@@ -65,6 +66,7 @@ class ConvertContactToSheetTest extends TestCase
             'mandatory_keys' => [
                 'email' => 'EMAIL',
                 'identifier' => 'IDCONTACT',
+                'identifierMD5' => 'IDCONTACTMD5',
                 'country' => 'IDPAYS',
                 'loginData' => 'PASSWORD',
             ],
@@ -115,6 +117,7 @@ class ConvertContactToSheetTest extends TestCase
 
         $resultNormalizer = [
             "IDCONTACT" => "113893672",
+            "IDCONTACTMD5" => "0892e7d27bba322f0ac7fefbece15387",
             "SOCIETE" => "TPM",
             "GRADE" => "CF",
             "IDCIVILITE" => "man",
@@ -179,6 +182,15 @@ class ConvertContactToSheetTest extends TestCase
                 $event->reveal(),
                 ExtraDataType::TECH_EVENT_LOGIN_DATA,
                 $contact['PASSWORD'],
+                $dateTime
+            )
+        )->shouldBeCalled();
+        $userEventExtraDataRepository->add(
+            new User\Event\ExtraData(
+                $user->reveal(),
+                $event->reveal(),
+                ExtraDataType::TECH_EVENT_IDENTIFIER_MD5,
+                $contact['IDCONTACTMD5'],
                 $dateTime
             )
         )->shouldBeCalled();
