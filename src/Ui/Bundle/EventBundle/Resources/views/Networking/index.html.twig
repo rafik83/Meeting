@@ -31,12 +31,12 @@
                        data-chat-general-button>{{ 'networking.chat.global.title'|trans }}
                         {% if networkingView.networkingChatNewMessages > 0 %}
                             <span class="alert-notification">
-                                {{ 'networking.chat.tab.messages.new'|transchoice(networkingView.networkingChatNewMessages, {'%count%': networkingView.networkingChatNewMessages}) }}
+                                {{ networkingView.networkingChatNewMessages }}
                             </span>
                         {% endif %}</a>
                     <a class="btn btn-gray" href="#" data-chat-private-button>{{ 'networking.chat.title'|trans }}
                             {% if networkingView.privateChatNewMessages > 0 %}
-                                 <span class="alert-notification">{{ 'networking.chat.tab.messages.new'|transchoice(networkingView.privateChatNewMessages, {'%count%': networkingView.privateChatNewMessages}) }}</span>
+                                 <span class="alert-notification">{{ networkingView.privateChatNewMessages }}</span>
                             {% endif %}
                     </a>
                 </div>
