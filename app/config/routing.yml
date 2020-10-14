@@ -15,6 +15,11 @@ jenkins_callback_sheet_print_pdf:
         _controller: AdminBundle:ThirdParty\Jenkins\Callback:printSheetBuildCallback
     methods: [POST]
 
+vimeet_healthcheck:
+    path: /healthz
+    controller: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Controller\HealthCheckAction
+    methods: [GET]
+
 root_admin:
     path: /{_locale}
     host: '%admin_domain%'
