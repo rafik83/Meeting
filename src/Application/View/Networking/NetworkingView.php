@@ -26,6 +26,9 @@ class NetworkingView
     /** @var ChatSessionView[] */
     public $privateChatSessions;
 
+    /** @var int */
+    public $privateChatNewMessages;
+
     /**
      * @param ChatSessionView[] $privateChatSessions
      */
@@ -36,7 +39,8 @@ class NetworkingView
         array $subscriptions,
         int $userCurrentId,
         int $networkingChatNewMessages,
-        array $privateChatSessions
+        array $privateChatSessions,
+        int $privateChatNewMessages
     ) {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
@@ -45,5 +49,6 @@ class NetworkingView
         $this->userCurrentId = $userCurrentId;
         $this->networkingChatNewMessages = $networkingChatNewMessages;
         $this->privateChatSessions = $privateChatSessions;
+        $this->privateChatNewMessages = $privateChatNewMessages;
     }
 }
