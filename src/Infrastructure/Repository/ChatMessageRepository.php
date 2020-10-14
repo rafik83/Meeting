@@ -85,17 +85,17 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
         return $this->entityManager->find(ChatMessage::class, $id);
     }
 
-    public function getMessagesCountByEvent(Event $event, ?DateTimeInterface $viewedAfter): int
+    public function getMessagesCountByEvent(ChatMessageLinkableInterface $object, ?DateTimeInterface $viewedAfter): int
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('COUNT(chatMessage.id) as count')
             ->from(ChatMessage::class, 'chatMessage')
             ->where('chatMessage.objectType = :objectType')
-            ->andWhere('chatMessage.objectId = :eventId')
+            ->andWhere('chatMessage.objectId = :objectId')
             ->setParameters([
-                'eventId' => $event->getId(),
-                'objectType' => ChatMessage::TYPE_NETWORKING,
+                'objectId' => $object->getId(),
+                'objectType' => $object->getObjectType(),
             ]);
 
         if ($viewedAfter) {

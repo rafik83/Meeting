@@ -6,7 +6,6 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 interface ChatMessageRepositoryInterface
 {
@@ -17,5 +16,5 @@ interface ChatMessageRepositoryInterface
 
     public function findById(int $id): ?ChatMessage;
 
-    public function getMessagesCountByEvent(Event $event, ?DateTimeInterface $viewedAfter): int;
+    public function getMessagesCountByEvent(ChatMessageLinkableInterface $object, ?DateTimeInterface $viewedAfter): int;
 }
