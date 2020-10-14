@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
+use Psr\Log\LoggerInterface;
 
 class ConvertContactToSheet
 {
@@ -32,18 +33,23 @@ class ConvertContactToSheet
     /** @var UserRepositoryInterface */
     private $userRepository;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         ExtraDataRepositoryInterface $userEventExtraDataRepository,
         ConvertToParticipantHandler $convertToParticipantHandler,
         \DateTimeInterface $dateTime,
         ContactNormalizer $contactNormalizer,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        LoggerInterface $logger
     ) {
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
         $this->dateTime = $dateTime;
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->contactNormalizer = $contactNormalizer;
         $this->userRepository = $userRepository;
+        $this->logger = $logger;
     }
 
     public function handle(
@@ -64,6 +70,17 @@ class ConvertContactToSheet
 
         $emailKey = $mandatoryKeys['email'];
         $identifierKey = $mandatoryKeys['identifier'];
+
+        if (!isset($contact[$emailKey])) {
+            $identifierValue = $contact[$identifierKey];
+
+            $this->logger->warning(
+                sprintf('VIMEET - A user has no email. The identifier key is "%s"', $identifierValue)
+            );
+
+            return;
+        }
+
         $loginDataKey = $mandatoryKeys['loginData'] ?? null;
         // login data should not be normalized (no trim, etc..)
         $loginData = $contact[$loginDataKey] ?? null;

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Psr\Log\LoggerInterface;
 
 class ConvertContactToSheetTest extends TestCase
 {
@@ -34,6 +35,7 @@ class ConvertContactToSheetTest extends TestCase
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
         $dateTime = new \DateTime();
         $contactNormalizer = $this->prophesize(ContactNormalizer::class);
+        $logger = $this->prophesize(LoggerInterface::class);
 
         $contact = [
             "IDCONTACT" => "113893672",
@@ -200,7 +202,8 @@ class ConvertContactToSheetTest extends TestCase
             $convertToParticipantHandler->reveal(),
             $dateTime,
             $contactNormalizer->reveal(),
-            $userRepository->reveal()
+            $userRepository->reveal(),
+            $logger->reveal()
         );
         $handler->handle(
             $event->reveal(),
