@@ -74,7 +74,7 @@ class UserCtaSubmenuViewQueryHandler
 
         $techEventIdContact = $needTechEventIdContact ? $this->extraDataRepository->getExtraDataForEventNameAndUser(
             $query->event,
-            TypeExtraData::IMPORTED_FROM_TECH_EVENT,
+            TypeExtraData::TECH_EVENT_IDENTIFIER_MD5,
             $query->user
         ) : null;
 
@@ -87,7 +87,7 @@ class UserCtaSubmenuViewQueryHandler
             urlencode($query->user->getEmail()),
             $participant ? $participant->getId() : null,
             $query->sheet->getId(),
-            $techEventIdContact ? md5($techEventIdContact->getValue()) : null // Tech Event Id Contact needs to be md5.
+            $techEventIdContact ? $techEventIdContact->getValue() : null,
         ];
         $link = str_replace(self::USER_CTA_PLACEHOLDERS_ALLOWED, $values, $parameters['link']);
 
