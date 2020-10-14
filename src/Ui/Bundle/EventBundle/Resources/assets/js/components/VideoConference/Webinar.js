@@ -10,7 +10,6 @@ import Settings from './Settings';
 
 import 'bootstrap/js/tooltip';
 import 'bootstrap/js/popover'; // popover require tooltip
-
 import Chat from '../_Chat.js';
 import NotificationSubscriber from '../_Subscriber';
 
@@ -20,11 +19,17 @@ function Webinar(element, isSpeaker) {
     this.invisibleMode = false;
     this.typeScreenShare = 'screen';
     this.typeCustomShare = 'custom';
+    this.openTab = 'chat';
 
     this.startFullScreenClass = 'glyphicon-fullscreen';
     this.endFullScreenClass = 'icon-Reduire_3';
 
     this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
+
+    this.newMessageChatCountNotification = element.querySelector('[data-chat-button] .alert-notification');
+    this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] .alert-notification');
+
+    this.questionMessageCount = 0;
 
     if(this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
@@ -173,6 +178,8 @@ function Webinar(element, isSpeaker) {
 
     this.countDownBeforeEnd();
 
+    this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'));
+
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
@@ -320,7 +327,8 @@ Webinar.prototype.init = function () {
     this.connect();
 
     if (!this.mobile) {
-        this.addChatSubscriber();
+        this.addShownChatSubscriber();
+        this.addHiddenQuestionSubscriber();
     }
 
     this.prepareRecordButtons();
@@ -1019,7 +1027,7 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
-Webinar.prototype.addChatSubscriber = function () {
+Webinar.prototype.addShownChatSubscriber = function () {
     this.notificationSubscriber.addSubscriber(
         this.topicChat,
         this.notificationSubscriberKey,
@@ -1037,9 +1045,40 @@ Webinar.prototype.addChatSubscriber = function () {
     );
 }
 
+Webinar.prototype.addHiddenChatSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicChat,
+        this.notificationSubscriberKey,
+        function (event) {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'add_chat_message') {
+                const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;
+                this.newMessageChatCountNotification.innerHTML = newMessageCount > 99 ? '99+' : newMessageCount;
+            }
+        }.bind(this)
+    );
+}
+
+Webinar.prototype.addHiddenQuestionSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicQuestions,
+        this.notificationSubscriberKey,
+        function (event) {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'update') {
+                const newQuestionCount = payload.msg_count - this.lastSeenquestionMessageCount;
+                this.newMessageQuestionCountNotification.innerHTML = newQuestionCount > 99 ? '99+' : newQuestionCount;
+            }
+        }.bind(this)
+    );
+}
+
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
-
+    this.openTab = 'chat';
+    this.lastSeenquestionMessageCount = this.questionMessageCount;
     this.questionsButton.classList.remove('btn-primary');
     this.questionsButton.classList.add('btn-gray');
     this.chatButton.classList.remove('btn-gray');
@@ -1047,13 +1086,18 @@ Webinar.prototype.showChat = function (event) {
     this.hideElement(this.questionsContainer);
     this.showElement(this.chat.chatContainer);
     this.chat.reload();
-    this.addChatSubscriber();
+    this.notificationSubscriber.removeSubscriber(this.topicChat);
+    this.addShownChatSubscriber();
     this.notificationSubscriber.removeSubscriber(this.topicQuestions);
+    this.newMessageChatCountNotification.innerHTML = '';
+    this.addHiddenQuestionSubscriber();
+
 };
 
 Webinar.prototype.showQuestions = function (event) {
     event.preventDefault();
-
+    this.openTab = 'questions';
+    this.lastSeenChatMessagesCount = this.chat.getChatMessagesCount();
     this.chatButton.classList.remove('btn-primary');
     this.chatButton.classList.add('btn-gray');
     this.questionsButton.classList.remove('btn-gray');
@@ -1061,9 +1105,12 @@ Webinar.prototype.showQuestions = function (event) {
 
     this.hideElement(this.chat.chatContainer);
     this.notificationSubscriber.removeSubscriber(this.topicChat);
+    this.notificationSubscriber.removeSubscriber(this.topicQuestions);
     this.showElement(this.questionsContainer);
 
     this.initQuestions();
+
+    this.newMessageQuestionCountNotification.innerHTML = '';
 
     this.notificationSubscriber.addSubscriber(
         this.topicQuestions,
@@ -1075,6 +1122,7 @@ Webinar.prototype.showQuestions = function (event) {
             }
         }
     );
+    this.addHiddenChatSubscriber();
 };
 
 Webinar.prototype.initQuestions = function () {
@@ -1087,7 +1135,7 @@ Webinar.prototype.initQuestions = function () {
         // make shure there no listeners leak
         this.removeQuestionListeners();
         $questionsList.empty();
-
+        let questionMessageCount = 0;
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.classList.add('question-row');
@@ -1100,6 +1148,7 @@ Webinar.prototype.initQuestions = function () {
 
             const likeBlock = document.createElement('div');
             const voteCount = document.createElement('span');
+            questionMessageCount++;
 
             if (+item.voteCount) {
                 voteCount.textContent = item.voteCount;
@@ -1172,6 +1221,7 @@ Webinar.prototype.initQuestions = function () {
 
             $questionsList[0].appendChild(rowEl);
         });
+        this.questionMessageCount = questionMessageCount;
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar questions');

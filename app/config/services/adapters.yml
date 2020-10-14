@@ -61,6 +61,8 @@ services:
             - '%mercure_publisher_key%'
             - '@adapter.http_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\UserPayloadBuilder'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
 
     Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber:
         arguments:

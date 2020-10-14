@@ -2,8 +2,8 @@
     {% if webinarView.sidebarAllowed %}
         <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i class="icon-Suivant_3"></i></button>
         <div class="btn-group btn-sidebar" role="group">
-            <a class="btn btn-primary btn-chat" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
-            <a class="btn btn-gray btn-question" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
+            <a class="btn btn-primary btn-chat" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }} <span class="alert-notification"></span></a>
+            <a class="btn btn-gray btn-question" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }} <span class="alert-notification"></span></a>
         </div>
         <div data-chat-container
              data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'happening', objectId: webinarView.happeningId }) }}"
