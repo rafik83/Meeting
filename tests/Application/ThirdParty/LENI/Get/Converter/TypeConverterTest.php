@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Converter;
 
 use PHPUnit\Framework\TestCase;
@@ -19,7 +11,7 @@ class TypeConverterTest extends TestCase
 {
     private $typeConverter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $expressionLanguage = new ExpressionLanguageAdapter();
         $this->typeConverter = new TypeConverter($expressionLanguage);

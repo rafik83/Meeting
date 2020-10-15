@@ -4,8 +4,8 @@ namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\Condition\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer;
-use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -36,12 +36,16 @@ class ConvertContactToSheet
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var TypeConverter */
+    private $typeConverter;
+
     public function __construct(
         ExtraDataRepositoryInterface $userEventExtraDataRepository,
         ConvertToParticipantHandler $convertToParticipantHandler,
         \DateTimeInterface $dateTime,
         ContactNormalizer $contactNormalizer,
         UserRepositoryInterface $userRepository,
+        TypeConverter $typeConverter,
         LoggerInterface $logger
     ) {
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
@@ -50,32 +54,46 @@ class ConvertContactToSheet
         $this->contactNormalizer = $contactNormalizer;
         $this->userRepository = $userRepository;
         $this->logger = $logger;
+        $this->typeConverter = $typeConverter;
     }
 
+    /**
+     * @param Event          $event
+     * @param Type[]         $types
+     * @param TemplateData[] $registrationTemplates
+     * @param TemplateData[] $sheetTemplates
+     * @param array          $contact
+     * @param array          $eventConfiguration
+     */
     public function handle(
         Event $event,
-        Type $type,
-        TemplateData $registrationTemplate,
-        TemplateData $sheetTemplate,
+        array $types,
+        array $registrationTemplates,
+        array $sheetTemplates,
         array $contact,
         array $eventConfiguration
     ): void {
-        $registrationTemplate->clear();
-        $sheetTemplate->clear();
-
         $mandatoryKeys = $eventConfiguration['mandatory_keys'] ?? [];
-        if (!isset($mandatoryKeys['email'], $mandatoryKeys['identifier'])) {
+        $emailKey = $mandatoryKeys['email'];
+        $identifierKey = $mandatoryKeys['identifier'];
+        $identifierValue = $contact[$identifierKey];
+
+        if (!isset($contact[$emailKey])) {
+            $this->logger->warning(
+                sprintf('VIMEET - A user has no email. The identifier key is "%s"', $identifierValue)
+            );
+
             return;
         }
 
-        $emailKey = $mandatoryKeys['email'];
-        $identifierKey = $mandatoryKeys['identifier'];
+        $type = $this->typeConverter->convert($types, $eventConfiguration['types'], $contact);
 
-        if (!isset($contact[$emailKey])) {
-            $identifierValue = $contact[$identifierKey];
-
-            $this->logger->warning(
-                sprintf('VIMEET - A user has no email. The identifier key is "%s"', $identifierValue)
+        if (!$type instanceof Type) {
+            $this->logger->info(
+                sprintf(
+                    'VIMEET - No type match the contact with identifier : %s',
+                    $identifierValue
+                )
             );
 
             return;
@@ -99,7 +117,16 @@ class ConvertContactToSheet
             $countryKey
         );
 
-        $dataIndexedByTag = $this->getDataIndexedByTag($contact, $eventConfiguration['mapping'] ?? []);
+        $registrationTemplate = $this->getTemplateForType($type, $registrationTemplates);
+        $sheetTemplate = $this->getTemplateForType($type, $sheetTemplates);
+
+        $registrationTemplate->clear();
+        $sheetTemplate->clear();
+
+        // Mapping is indexed by type (see src/Application/ThirdParty/TechEvent/Webservice/Configuration/Mapping.md)
+        $mapping = $eventConfiguration['types'][$type->getId()]['mapping'] ?? [];
+
+        $dataIndexedByTag = $this->getDataIndexedByTag($contact, $mapping);
 
         $participant = $this->convertToParticipantHandler->handle(
             new ConvertToParticipant(
@@ -178,5 +205,10 @@ class ConvertContactToSheet
         }
 
         return $dataIndexedByTag;
+    }
+
+    private function getTemplateForType(Type $type, array $templates): TemplateData
+    {
+        return $templates[$type->getId()];
     }
 }
