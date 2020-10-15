@@ -86,7 +86,7 @@ class ConvertContactToSheet
             return;
         }
 
-        $type = $this->typeConverter->convert($types, $eventConfiguration, $contact);
+        $type = $this->typeConverter->convert($types, $eventConfiguration['types'], $contact);
 
         if (!$type instanceof Type) {
             $this->logger->info(

@@ -181,7 +181,7 @@ class ConvertContactToSheetTest extends TestCase
             ->willReturn($resultNormalizer)
         ;
 
-        $typeConverter->convert([$type1->reveal(), $type2->reveal()], $configuration, $contact)
+        $typeConverter->convert([$type1->reveal(), $type2->reveal()], $configuration['types'], $contact)
             ->shouldBeCalled()
             ->willReturn($type2->reveal())
         ;
