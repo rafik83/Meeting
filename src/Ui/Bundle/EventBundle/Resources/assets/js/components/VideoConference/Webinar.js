@@ -26,8 +26,8 @@ function Webinar(element, isSpeaker) {
 
     this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
 
-    this.newMessageChatCountNotification = element.querySelector('[data-chat-button] .alert-notification');
-    this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] .alert-notification');
+    this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
+    this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
     this.questionMessageCount = 0;
 
@@ -1055,7 +1055,9 @@ Webinar.prototype.addHiddenChatSubscriber = function () {
             if (payload.action === 'add_chat_message') {
                 const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;
                 this.newMessageChatCountNotification.innerHTML = newMessageCount > 99 ? '99+' : newMessageCount;
+                this.newMessageChatCountNotification.classList.add('alert-notification');
             }
+
         }.bind(this)
     );
 }
@@ -1070,7 +1072,9 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
             if (payload.action === 'update') {
                 const newQuestionCount = payload.msg_count - this.lastSeenquestionMessageCount;
                 this.newMessageQuestionCountNotification.innerHTML = newQuestionCount > 99 ? '99+' : newQuestionCount;
+                this.newMessageQuestionCountNotification.classList.add('alert-notification');
             }
+
         }.bind(this)
     );
 }
@@ -1090,6 +1094,7 @@ Webinar.prototype.showChat = function (event) {
     this.addShownChatSubscriber();
     this.notificationSubscriber.removeSubscriber(this.topicQuestions);
     this.newMessageChatCountNotification.innerHTML = '';
+    this.newMessageChatCountNotification.classList.remove('alert-notification');
     this.addHiddenQuestionSubscriber();
 
 };
@@ -1111,6 +1116,7 @@ Webinar.prototype.showQuestions = function (event) {
     this.initQuestions();
 
     this.newMessageQuestionCountNotification.innerHTML = '';
+    this.newMessageQuestionCountNotification.classList.remove('alert-notification');
 
     this.notificationSubscriber.addSubscriber(
         this.topicQuestions,
@@ -1122,6 +1128,13 @@ Webinar.prototype.showQuestions = function (event) {
             }
         }
     );
+
+    if (this.newMessageQuestionCountNotification.innerHTML === '') {
+        this.newMessageQuestionCountNotification.classList.remove('alert-notification');
+    } else {
+        this.newMessageQuestionCountNotification.classList.add('alert-notification');
+    }
+
     this.addHiddenChatSubscriber();
 };
 
