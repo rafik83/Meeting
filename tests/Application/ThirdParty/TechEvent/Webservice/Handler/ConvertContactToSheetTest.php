@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\TechEvent\Webservice\Hand
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\Condition\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet;
 use Proximum\Vimeet\Domain\Model\User;
 use PHPUnit\Framework\TestCase;
@@ -26,10 +27,14 @@ class ConvertContactToSheetTest extends TestCase
         $participant->getUser()->willReturn($user->reveal());
         $event = $this->prophesize(Event::class);
         $event->getLocaleFallback()->willReturn('fr');
-        $type = $this->prophesize(Type::class);
+        $type1 = $this->prophesize(Type::class);
+        $type2 = $this->prophesize(Type::class);
+        $type1->getId()->willReturn(42);
+        $type2->getId()->willReturn(1337);
         $registrationTemplate = $this->prophesize(TemplateData::class);
         $sheetTemplate = $this->prophesize(TemplateData::class);
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $typeConverter = $this->prophesize(TypeConverter::class);
 
         $userEventExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
@@ -72,24 +77,51 @@ class ConvertContactToSheetTest extends TestCase
                 'country' => 'IDPAYS',
                 'loginData' => 'PASSWORD',
             ],
-            'mapping' => [
-                "EMAIL" => "email",
-                "SOCIETE" => "sheet_title",
-                "GRADE" => "tag_sheet_generic_1",
-                "IDCIVILITE" => "participant_gender",
-                "NOM" => "participant_lastname",
-                "PRENOM" => "participant_firstname",
-                "ADRESSE1" => "sheet_address",
-                "ADRESSE2" => "sheet_address",
-                "CODEPOSTAL" => "sheet_zipcode",
-                "VILLE" => "sheet_city",
-                "IDPAYS" => "sheet_country",
-                "TEL" => "sheet_phone",
-                "Typologie_société" => "sheet_organization_category",
-                "Nombre_Personnes" => "sheet_staff",
-                "Votre_Fonction" => "participant_position",
-                "Nature_de_votre_société_organisation" => "tag_sheet_generic_3",
-                "RDV_B2B" => "tag_sheet_generic_2"
+            'types' => [
+                '42' => [
+                    'condition' => 'IDPAYS === EN',
+                    'mapping' => [
+                        "EMAIL" => "email",
+                        "SOCIETE" => "sheet_title",
+                        "GRADE" => "tag_sheet_generic_1",
+                        "IDCIVILITE" => "participant_gender",
+                        "NOM" => "participant_lastname",
+                        "PRENOM" => "participant_firstname",
+                        "ADRESSE1" => "sheet_address",
+                        "ADRESSE2" => "sheet_address",
+                        "CODEPOSTAL" => "sheet_zipcode",
+                        "VILLE" => "sheet_city",
+                        "IDPAYS" => "sheet_country",
+                        "TEL" => "sheet_phone",
+                        "Typologie_société" => "sheet_organization_category",
+                        "Nombre_Personnes" => "sheet_staff",
+                        "Votre_Fonction" => "participant_position",
+                        "Nature_de_votre_société_organisation" => "tag_sheet_generic_3",
+                        "RDV_B2B" => "tag_sheet_generic_2"
+                    ],
+                ],
+                '1337' => [
+                    'condition' => 'IDPAYS === FR',
+                    'mapping' => [
+                        "EMAIL" => "email",
+                        "SOCIETE" => "sheet_title",
+                        "GRADE" => "tag_sheet_generic_1",
+                        "IDCIVILITE" => "participant_gender",
+                        "NOM" => "participant_lastname",
+                        "PRENOM" => "participant_firstname",
+                        "ADRESSE1" => "sheet_address",
+                        "ADRESSE2" => "sheet_address",
+                        "CODEPOSTAL" => "sheet_zipcode",
+                        "VILLE" => "sheet_city",
+                        "IDPAYS" => "sheet_country",
+                        "TEL" => "sheet_phone",
+                        "Typologie_société" => "sheet_organization_category",
+                        "Nombre_Personnes" => "sheet_staff",
+                        "Votre_Fonction" => "participant_position",
+                        "Nature_de_votre_société_organisation" => "tag_sheet_generic_3",
+                        "RDV_B2B" => "tag_sheet_generic_2"
+                    ],
+                ],
             ],
             'normalize' => [
                 "TEL" => "telephone",
@@ -146,12 +178,18 @@ class ConvertContactToSheetTest extends TestCase
 
         $contactNormalizer->normalize($contact, $configuration['normalize'], 'IDPAYS')
             ->shouldBeCalled()
-            ->willReturn($resultNormalizer);
+            ->willReturn($resultNormalizer)
+        ;
+
+        $typeConverter->convert([$type1->reveal(), $type2->reveal()], $configuration, $contact)
+            ->shouldBeCalled()
+            ->willReturn($type2->reveal())
+        ;
 
         $convertToParticipantHandler->handle(
             new ConvertToParticipant(
                 $event->reveal(),
-                $type->reveal(),
+                $type2->reveal(),
                 $contact['EMAIL'],
                 'fr',
                 $dataIndexedByTag,
@@ -203,13 +241,14 @@ class ConvertContactToSheetTest extends TestCase
             $dateTime,
             $contactNormalizer->reveal(),
             $userRepository->reveal(),
+            $typeConverter->reveal(),
             $logger->reveal()
         );
         $handler->handle(
             $event->reveal(),
-            $type->reveal(),
-            $registrationTemplate->reveal(),
-            $sheetTemplate->reveal(),
+            [$type1->reveal(), $type2->reveal()],
+            [42 => $registrationTemplate->reveal(), 1337 => $registrationTemplate->reveal()],
+            [42 => $sheetTemplate->reveal(), 1337 => $sheetTemplate->reveal()],
             $contact,
             $configuration
         );
