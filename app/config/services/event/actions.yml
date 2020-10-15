@@ -16,6 +16,25 @@ services:
     #
     # Sheet
     #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\DisplaySheetAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.rule_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Domain\Sheet\CanSeeSheet'
+            - '@template.sheet.sheet_info_getter'
+            - '@template.tagged_data_factory'
+            - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
+            - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+            - '@domain.user.phone.validation_required_checker'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@domain.rule.applyer'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Sheet\ObjectsCollectionUpdateAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -71,6 +90,17 @@ services:
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\FollowLinkAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\VideoPlayCallbackAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
     # Package
@@ -290,6 +320,11 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating.engine.twig'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Redirect\AgendaOrProgramRedirectAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.router'
+
     #
     # Badge
     #
@@ -384,6 +419,52 @@ services:
             - '@templating.engine.twig'
 
     #
+    # Chat
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\AvatarAdapter'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\VoteAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
     # Authentication
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\TechEvent\LoginCheckAction: ~
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\IndexAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@domain.key_dates.checker.networking_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating.engine.twig'
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@domain.key_dates.checker.networking_access_checker'
+            - '@vimeet_infrastructure.repository.user_repository'

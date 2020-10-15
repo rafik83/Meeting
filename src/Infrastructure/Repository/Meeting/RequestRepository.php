@@ -30,10 +30,13 @@ class RequestRepository implements RequestRepositoryInterface
     /** @var Paginator */
     private $paginator;
 
+    /** @var array|null $requestedMeetingsCounts used to preload results in memory */
+    private $requestedMeetingsCounts;
+
     public function __construct(EntityManager $entityManager, Paginator $paginator)
     {
         $this->entityManager = $entityManager;
-        $this->paginator     = $paginator;
+        $this->paginator = $paginator;
     }
 
     /**
@@ -1139,5 +1142,65 @@ class RequestRepository implements RequestRepositoryInterface
             ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
+    }
+
+    public function loadParticipantRequestsCount(array $participantIds): void
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participants.id, COUNT(request.id) as nb')
+            ->from(Request::class, 'request')
+            ->join('request.fromParticipants', 'participants')
+            ->where('participants.id IN (:participantIds)')
+            ->setParameter('participantIds', $participantIds)
+            ->andWhere('request.disabled = false')
+            ->groupBy('participants.id')
+        ;
+
+        $this->requestedMeetingsCounts =  array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
+    }
+
+    public function getParticipantRequestsCount(Participant $participant): int
+    {
+        if (null === $this->requestedMeetingsCounts) {
+            throw new \RuntimeException('Request counts not loaded, loadParticipantRequestsCount should be called before this method');
+        }
+
+        return $this->requestedMeetingsCounts[$participant->getId()]??0;
+    }
+
+    public function getSheetSentRequestsCount(array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('fromSheet.id, COUNT(request.id) as nb')
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet')
+            ->where('fromSheet.id IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('request.disabled = false')
+            ->groupBy('fromSheet.id')
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
+    }
+
+    public function getSheetReceivedRequestsCount(array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('to.id, COUNT(request.id) as nb')
+            ->from(Request::class, 'request')
+            ->join('request.to', 'to')
+            ->where('to.id IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->andWhere('request.disabled = false')
+            ->groupBy('to.id')
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
     }
 }

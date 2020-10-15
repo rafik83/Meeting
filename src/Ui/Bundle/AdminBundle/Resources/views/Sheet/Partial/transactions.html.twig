@@ -35,7 +35,8 @@
                         </td>
                         <td class="text-right col-md-2" nowrap="nowrap">
                             <div class="btn-group">
-                                <a href="{{ path('admin_sheet_transaction_update', {
+                                <a id="update_transaction_{{ transaction.id }}_link"
+                                   href="{{ path('admin_sheet_transaction_update', {
                                     'event': event.id,
                                     'sheet': sheet.id,
                                     'transaction': transaction.id

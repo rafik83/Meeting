@@ -38,7 +38,7 @@ class UploadFileHandlerTest extends TestCase
 
         $uploadedFile
             ->expects(static::once())
-            ->method('getClientOriginalExtension')
+            ->method('guessExtension')
             ->withAnyParameters()
             ->willReturn('jpg')
         ;
@@ -124,7 +124,7 @@ class UploadFileHandlerTest extends TestCase
 
         $uploadedFile
             ->expects(static::once())
-            ->method('getClientOriginalExtension')
+            ->method('guessExtension')
             ->withAnyParameters()
             ->willReturn('jpg')
         ;

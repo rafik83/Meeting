@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository\User\Event;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -94,19 +95,41 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         string $name,
         $value
     ): ?ExtraData {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('extraData')
-            ->from(ExtraData::class, 'extraData')
-            ->where('extraData.event = :event')
-            ->andWhere('extraData.name = :name')
+        $queryBuilder = $this->getExtraDataForEventNameQueryBuilder($event, $name);
+        $queryBuilder
             ->andWhere('extraData.value = :value')
-            ->setParameter('event', $event)
-            ->setParameter('name', $name)
             ->setParameter('value', $value)
             ->setMaxResults(1)
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function getExtraDataForEventNameAndMD5Value(
+        Event $event,
+        string $name,
+        $value
+    ): ?ExtraData {
+        $queryBuilder = $this->getExtraDataForEventNameQueryBuilder($event, $name);
+        $queryBuilder
+            ->andWhere('MD5(extraData.value) = :value')
+            ->setParameter('value', $value)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    private function getExtraDataForEventNameQueryBuilder(Event $event, string $name): QueryBuilder
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.event = :event')
+            ->andWhere('extraData.name = :name')
+            ->setParameter('event', $event)
+            ->setParameter('name', $name)
+        ;
     }
 
     public function getExtraDataForEventIdAndNameIndexedByUserId(int $eventId, string $name): array

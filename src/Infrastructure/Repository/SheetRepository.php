@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
@@ -1313,4 +1306,59 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder;
     }
+
+    public function getAnalyticsByUser(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.analytics.viewers, sheet.analytics.clickedElements')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere("sheet.analytics.views > 0 OR sheet.analytics.clickedElements != ''")
+        ;
+
+        $analyticsByUser = [];
+
+        foreach ($queryBuilder->getQuery()->iterate(null, Query::HYDRATE_ARRAY) as $row) {
+            $analytics = reset($row);
+            foreach ($analytics['analytics.viewers'] as $userId) {
+                $analyticsByUser[$userId]['viewedSheets'] = ($analyticsByUser[$userId]['viewedSheets']??0) + 1;
+            }
+
+            if (empty($analytics['analytics.clickedElements'])) {
+                continue;
+            }
+            foreach ($analytics['analytics.clickedElements'] as $key => $values) {
+                if (!isset($values['viewers'])) {
+                    $viewersByItem = $this->flattenViewersCollection($key, $values);
+                } else {
+                    $viewersByItem = [$key => $values['viewers']];
+                }
+
+                foreach($viewersByItem as $key => $viewers) {
+                    foreach($viewers as $userId) {
+                        $analyticsByUser[$userId]['clickedElements'] = ($analyticsByUser[$userId]['clickedElements']??0) + 1;
+                    }
+                }
+            }
+        }
+
+        return $analyticsByUser;
+    }
+
+    /**
+     * Turn array into indexed array, with stringified indices as 'key[0]', 'key[1]' ...
+     */
+    private function flattenViewersCollection(string $key, array $values): array
+    {
+        $indexedArray = [];
+        foreach ($values as $index => ['viewers' => $viewers]) {
+            $indexedArray[$key.'['.$index.']'] = $viewers;
+        }
+
+        return $indexedArray;
+    }
+
 }

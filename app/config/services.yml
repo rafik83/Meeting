@@ -53,6 +53,7 @@ imports:
     - { resource: services/event/serializers.yml }
     - { resource: services/event/actions.yml }
     - { resource: services/event/components.yml }
+    - { resource: services/event/templateSnippet.yml }
     - { resource: services/admin/queries.yml }
     - { resource: services/admin/commands.yml }
     - { resource: services/admin/components.yml }
@@ -62,3 +63,4 @@ imports:
     - { resource: services/infrastructure/listeners.yml }
     - { resource: services/infrastructure/validators.yml }
     - { resource: services/third_party/services_tech_event.yml }
+

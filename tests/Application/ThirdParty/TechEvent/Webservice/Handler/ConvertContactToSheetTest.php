@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Psr\Log\LoggerInterface;
 
 class ConvertContactToSheetTest extends TestCase
 {
@@ -34,9 +35,11 @@ class ConvertContactToSheetTest extends TestCase
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
         $dateTime = new \DateTime();
         $contactNormalizer = $this->prophesize(ContactNormalizer::class);
+        $logger = $this->prophesize(LoggerInterface::class);
 
         $contact = [
             "IDCONTACT" => "113893672",
+            "IDCONTACTMD5" => "0892e7d27bba322f0ac7fefbece15387",
             "SOCIETE" => "TPM",
             "IDCIVILITE" => "M  ",
             "NOM" => "Test",
@@ -65,6 +68,7 @@ class ConvertContactToSheetTest extends TestCase
             'mandatory_keys' => [
                 'email' => 'EMAIL',
                 'identifier' => 'IDCONTACT',
+                'identifierMD5' => 'IDCONTACTMD5',
                 'country' => 'IDPAYS',
                 'loginData' => 'PASSWORD',
             ],
@@ -115,6 +119,7 @@ class ConvertContactToSheetTest extends TestCase
 
         $resultNormalizer = [
             "IDCONTACT" => "113893672",
+            "IDCONTACTMD5" => "0892e7d27bba322f0ac7fefbece15387",
             "SOCIETE" => "TPM",
             "GRADE" => "CF",
             "IDCIVILITE" => "man",
@@ -182,13 +187,23 @@ class ConvertContactToSheetTest extends TestCase
                 $dateTime
             )
         )->shouldBeCalled();
+        $userEventExtraDataRepository->add(
+            new User\Event\ExtraData(
+                $user->reveal(),
+                $event->reveal(),
+                ExtraDataType::TECH_EVENT_IDENTIFIER_MD5,
+                $contact['IDCONTACTMD5'],
+                $dateTime
+            )
+        )->shouldBeCalled();
 
         $handler = new ConvertContactToSheet(
             $userEventExtraDataRepository->reveal(),
             $convertToParticipantHandler->reveal(),
             $dateTime,
             $contactNormalizer->reveal(),
-            $userRepository->reveal()
+            $userRepository->reveal(),
+            $logger->reveal()
         );
         $handler->handle(
             $event->reveal(),

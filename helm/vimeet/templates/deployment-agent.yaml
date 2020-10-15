@@ -1,0 +1,102 @@
+{{- if include "vimeet.host" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "vimeet.fullname" . }}-agent
+  labels:
+    app: "{{ template "vimeet.name" . }}"
+    tier: agent
+    chart: "{{ template "vimeet.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "vimeet.name" . }}
+      tier: agent
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ template "vimeet.name" . }}"
+        tier: agent
+        chart: "{{ template "vimeet.chart" . }}"
+        release: {{ .Release.Name | quote }}
+{{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+{{- include "vimeet.imagePullSecrets" . | indent 6 }}
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - "status.localhost"
+      - ip: "10.11.0.95"
+        hostnames:
+          - "optaplanner"
+{{- if .Values.initContainers }}
+      initContainers:
+{{- range $key, $value := .Values.initContainers }}
+        - name: {{ $key }}
+{{ toYaml $value | indent 10 }}
+{{- end }}
+{{- end }}
+      containers:
+      - name: {{ template "vimeet.fullname" . }}
+        image: {{ template "vimeet.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        securityContext:
+          runAsUser: 0
+        command:
+          - "/bin/sh"
+        args:
+          - "-c"
+          - |
+            apt-get update
+
+            mkdir -p /usr/share/man/man1
+
+            apt-get install -y openjdk-11-jre-headless wget
+
+            mkdir -p /opt/jenkins
+
+            cd /opt/jenkins
+
+            wget -qO agent.jar "$JENKINS_URL/jnlpJars/agent.jar"
+
+            echo "$JENKINS_SECRET" > secret-file
+
+            java -jar agent.jar -jnlpUrl $JENKINS_URL/computer/k8s/slave-agent.jnlp -secret @secret-file -workDir /opt/jenkins
+        envFrom:
+          - configMapRef:
+              name: {{ template "vimeet.fullname" . }}
+          - secretRef:
+              name: {{ template "vimeet.fullname" . }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+          name: vimeet-var-cache
+        - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/participants_imports
+          name: vimeet-var-imports
+        - mountPath: /share/shared
+          name: vimeet-data
+      volumes:
+      - name: vimeet-var-cache
+        emptyDir: {}
+      - name: vimeet-var-imports
+        emptyDir: {}
+      - name: vimeet-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "vimeet.fullname" . }}-data{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+{{- end -}}

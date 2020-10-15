@@ -32,7 +32,7 @@ class VideoStorageAdapterTest extends TestCase
             ->getMock()
         ;
 
-        $file->method('getClientOriginalExtension')->willReturn('mp4');
+        $file->method('guessExtension')->willReturn('mp4');
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(123);

@@ -36,7 +36,7 @@
     <hr>
     {{ form_row(form.invitationCode, {widget_columns: 2}) }}
     {{ form_row(form.questionAllowed) }}
-    {{ form_row(form.sidebarAllowed) }}    
+    {{ form_row(form.sidebarAllowed) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
 
@@ -63,6 +63,14 @@
             )
         });
     </script>
+    {% endif %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="help-happening hide">
+            {% if happening.hasWebinarSessionId %}
+            <p>Happening Webinar Session Id : {{ happening.getWebinarSessionId }}</p>
+            {% endif %}
+        </div>
     {% endif %}
 {% endblock form_content %}
 

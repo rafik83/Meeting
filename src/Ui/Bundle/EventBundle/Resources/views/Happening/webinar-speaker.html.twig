@@ -13,11 +13,25 @@
 
 {% block body %}
     <div class="webinar webinar-speaker"
+         data-event-id="{{ webinarView.eventId }}"
+         data-happening-id="{{ webinarView.happeningId }}"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
          data-session-id="{{ webinarView.sessionId }}"
+         data-notifications-provider-url="{{ webinarView.notification.providerUrl }}"
+         data-notifications-subscriber-key="{{ webinarView.notification.subscriberKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+
+         data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+         data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+         data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+         data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+         data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+         data-chat-vote-message="{{ 'chat.vote'|trans }}"
+         data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+         data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
          data-invisibleMode-quitConfirmation-message="{{ 'happening.webinar.invisibleMode.quitConfirmation'|trans }}"
          data-invisibleMode-enableConfirmation-message="{{ 'happening.webinar.invisibleMode.enableConfirmation'|trans }}"
@@ -55,6 +69,8 @@
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"
             data-webinar-can-record="true"
+            data-webinar-auto-start="{{ webinarView.isWebinarRecordAutoStart }}"
+            data-webinar-stop-timestamp="{{ webinarView.stopTimestamp }}"
             data-webinar-record-endpoint="{{ path(
                 'event_happening_webinar_record',
                 {

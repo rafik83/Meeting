@@ -378,10 +378,8 @@ interface RequestRepositoryInterface
     public function hasAssignedRequestByParticipant(Participant $participant);
 
     /**
-     * @param Event    $event
      * @param Sheet[]  $sheets
      * @param string[] $states
-     * @param bool     $withoutMeeting
      *
      * @return Request[]
      */
@@ -390,16 +388,20 @@ interface RequestRepositoryInterface
     public function hasApprovedMeetingRequest(Sheet $sheet, Sheet $sheetMet): bool;
 
     /**
-     * @param Event $event
-     *
      * @return Request[]
      */
     public function findApprovedAndPrioritizedWithoutMeeting(Event $event): array;
 
     /**
-     * @param Event $event
-     *
      * @return DashboardRequestView[]
      */
     public function getDashboardRequestViewsByEvent(Event $event): array;
+
+    public function loadParticipantRequestsCount(array $participantIds): void;
+
+    public function getParticipantRequestsCount(Participant $participant): int;
+
+    public function getSheetSentRequestsCount(array $sheetIds): array;
+
+    public function getSheetReceivedRequestsCount(array $sheetIds): array;
 }

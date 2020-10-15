@@ -483,4 +483,9 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function filterWithScheduledMeetings(array $sheets): array;
+
+    /**
+     * Get analytics (views and clicks) indexed by userId
+     */
+    public function getAnalyticsByUser(Event $event): array;
 }

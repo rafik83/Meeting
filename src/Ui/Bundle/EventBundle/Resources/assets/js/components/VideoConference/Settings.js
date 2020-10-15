@@ -17,6 +17,7 @@ function Settings(
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
+    this.chromeRequired = this.videoSettingsContainer.querySelector('#visio-chrome-required');
     this.invisibleModeOption = this.videoSettingsContainer.querySelector('#invisible-mode-option');
     this.enableInvisibleMode = enableInvisibleMode;
 
@@ -367,13 +368,21 @@ Settings.prototype.closeSettings = function () {
     dispatchEvent(htmlEvent);
 }
 
-Settings.prototype.init = function () {
+Settings.prototype.init = function (chromeRequired) {
     this.settingsFocus = true;
     this.requestPermissionModalFocus = true;
     this.settingsModalFocus = false;
     showElement(this.videoSettingsContainer);
     showElement(this.requestPermissionModal);
     hideElement(this.settingsModal);
+
+    if (chromeRequired && !(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor))) {
+        showElement(this.chromeRequired);
+        hideElement(this.requestPermissionModal);
+        this.chromeRequired.querySelector('#visio-chrome-required-bypass').addEventListener('change', () => {
+            this.init(false);
+        });
+    }
 }
 
 // Theses methods do not need to be link to the Settings component.

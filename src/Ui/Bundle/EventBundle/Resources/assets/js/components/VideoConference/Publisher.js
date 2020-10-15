@@ -63,7 +63,7 @@ Publisher.prototype.isScreensharing = function() {
 
 Publisher.prototype.handleError = function(error) {
   if (error) {
-    console.log('Publisher error:', error);
+    console.error('Publisher error:', error);
   }
 };
 

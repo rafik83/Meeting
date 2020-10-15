@@ -23,7 +23,6 @@ Feature: I can add question via the API
         """
             {"questionContent": "Bonjour, comment allez-vous ?"}
         """
-    Then print the corresponding curl command
     And the JSON should be equal to:
       """
       {
@@ -34,10 +33,9 @@ Feature: I can add question via the API
   Scenario: I can view a new question
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I send a GET request to "http://asddays-2016.vimeet.proximum/fr/sheet/1/happening/4/webinar/questions"
-    And the JSON node "[0].questionContent" should be equal to the string "Bonjour, comment allez-vous ?"
+    Then the JSON node "[0].questionContent" should be equal to the string "Bonjour, comment allez-vous ?"
 
   Scenario: I can't access questions if happening is not a webinar
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    And I send a GET request to "http://asddays-2016.vimeet.proximum/fr/sheet/1/happening/1/webinar/questions"
+    When I send a GET request to "http://asddays-2016.vimeet.proximum/fr/sheet/1/happening/1/webinar/questions"
     Then the response status code should be 403
-

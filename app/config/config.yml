@@ -59,6 +59,7 @@ twig:
     globals:
         admin_menu_color: "%admin_menu_color%"
         visio_screen_sharing_chrome_extension: "%visio_screen_sharing_chrome_extension%"
+        networking_template_snippet: "@Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\TemplateSnippet\\NetworkingTemplateSnippet"
 
 # Doctrine Configuration
 doctrine:
@@ -90,6 +91,9 @@ doctrine:
                 dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
+        dql:
+            string_functions:
+                MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -247,6 +251,7 @@ sentry:
         excluded_exceptions:
             - Symfony\Component\Security\Core\Exception\AccessDeniedException
             - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+            - Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
             - Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException
 
 coop_tilleuls_ovh:
