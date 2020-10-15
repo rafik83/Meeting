@@ -25,11 +25,12 @@ class HealthCheckAction
 
     public function __invoke(): Response
     {
-        if (!$this->checkDoctrineConnection($this->doctrine->getConnection())) {
-            return new Response('KO', 503);
-        }
+        $message = [
+            'status' => 'ok',
+            'db' => $this->checkDoctrineConnection($this->doctrine->getConnection()) ? 'ok' : 'nok',
+        ];
 
-        return new Response('OK', 200);
+        return new Response(json_encode($message), 200);
     }
 
     private function checkDoctrineConnection(Connection $connection): bool
