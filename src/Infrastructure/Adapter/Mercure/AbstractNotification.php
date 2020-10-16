@@ -17,13 +17,8 @@ class AbstractNotification
         return sprintf('https://vimeet.events/networking/%d', $eventId);
     }
 
-    public function getUserConnectionTopic(int $eventId): string
+    public function getUserTopic(int $eventId, int $userId): string
     {
-        return sprintf('https://vimeet.events/event/%d/user/connection', $eventId);
-    }
-
-    public function getUserTopic(int $userId): string
-    {
-        return sprintf('https://vimeet.events/user/%d', $userId);
+        return sprintf('https://vimeet.events/event/%d/user/%d', $eventId, $userId);
     }
 }

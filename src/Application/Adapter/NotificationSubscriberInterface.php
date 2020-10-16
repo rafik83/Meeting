@@ -17,7 +17,7 @@ interface NotificationSubscriberInterface
 
     public function getNetworkingTopic(int $eventId): string;
 
-    public function getUserTopic(int $userId): string;
+    public function getUserTopic(int $eventId, int $userId): string;
 
     public function getUserSubscriberKey(Sheet $sheet, User $user): string;
 }

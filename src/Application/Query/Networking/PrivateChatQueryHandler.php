@@ -47,7 +47,7 @@ class PrivateChatQueryHandler
             $this->chatSessionRepository->add($chatSession);
         }
 
-        $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->fromUser->getId());
+        $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->sheet->getEvent()->getId(), $privateChatQuery->fromUser->getId());
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),

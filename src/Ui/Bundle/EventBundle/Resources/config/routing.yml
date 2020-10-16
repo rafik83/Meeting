@@ -667,6 +667,14 @@ event_networking_chat:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction, toUser: null }
 
+event_networking_visio:
+    path: /sheet/{sheet}/networking/visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\VisioAction }
+
 #
 # Meeting Request
 #

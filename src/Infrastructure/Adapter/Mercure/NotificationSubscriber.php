@@ -71,7 +71,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
      */
     public function getUserSubscriberKey(Sheet $sheet, User $user): string
     {
-        $topics[] = $this->getUserTopic($user->getId());
+        $topics[] = $this->getUserTopic($sheet->getEvent()->getId(), $user->getId());
 
         return JWT::encode([
             'mercure' => [

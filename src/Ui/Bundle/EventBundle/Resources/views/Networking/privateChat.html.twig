@@ -1,11 +1,32 @@
 
         <div class="main__content privateChat">
-            <h2>{{ 'networking.chat.with'|trans({'%user%': privateChatView.toUserFirstName~' '~privateChatView.toUserLastName}) }}
-            </h2>
-            <p>
-                {% if privateChatView.toUserCompany %}{{ privateChatView.toUserCompany }} - {% endif %}
-                {% if privateChatView.toUserPosition %}<em> {{ privateChatView.toUserPosition }}</em>{% endif %}
-            <p>
+            <div class="chat-header">
+                <div class="chat-header-title">
+                    <h2>
+                        {{ 'networking.chat.with'|trans({'%user%': privateChatView.toUserFirstName~' '~privateChatView.toUserLastName}) }}
+                    </h2>
+                    <p>
+                        {% if privateChatView.toUserCompany %}{{ privateChatView.toUserCompany }} - {% endif %}
+                        {% if privateChatView.toUserPosition %}<em> {{ privateChatView.toUserPosition }}</em>{% endif %}
+                    <p>
+                </div>
+                <div class="chat-header-tools">
+                    <button
+                        href="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                        class="btn btn-sm btn-primary state-normal"
+                    >
+                        <span class="glyphicon glyphicon-facetime-video"></span>
+                        {{ 'networking.chat.visio.request'|trans }}
+                    </button>
+                    <span
+                        href="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                        class="btn btn-sm btn-primary disabled state-pending hide"
+                    >
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.pending'|trans }}
+                    </span>
+                </div>
+            </div>
             <div data-chat-networking
                  data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
                  data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
