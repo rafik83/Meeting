@@ -7,10 +7,9 @@ export default class ChatVisio
     constructor (chat, buttonContainer) {
         const visioEnable = buttonContainer.getAttribute('data-visio-enable');
         const buttonVisio = buttonContainer.querySelector('button');
-        console.log(buttonContainer);
         if (visioEnable != 1){
             buttonVisio.classList.add("hide");
-        } console.log(buttonVisio);
+        }
     }
 
 }
