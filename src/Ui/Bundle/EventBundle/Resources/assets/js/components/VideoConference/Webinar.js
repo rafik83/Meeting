@@ -1050,7 +1050,7 @@ Webinar.prototype.addHiddenChatSubscriber = function () {
 
             if (payload.action === 'add_chat_message') {
                 const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;
-                this.newMessageChatCountNotification.innerHTML = newMessageCount > 99 ? '99+' : newMessageCount;
+                this.newMessageChatCountNotification.textContent = newMessageCount > 99 ? '99+' : newMessageCount;
                 this.newMessageChatCountNotification.classList.add('alert-notification');
             }
 
@@ -1067,7 +1067,7 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
 
             if (payload.action === 'update') {
                 const newQuestionCount = payload.msg_count - this.lastSeenquestionMessageCount;
-                this.newMessageQuestionCountNotification.innerHTML = newQuestionCount > 99 ? '99+' : newQuestionCount;
+                this.newMessageQuestionCountNotification.textContent = newQuestionCount > 99 ? '99+' : newQuestionCount;
                 this.newMessageQuestionCountNotification.classList.add('alert-notification');
             }
 
@@ -1078,7 +1078,7 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
     this.openTab = 'chat';
-    this.lastSeenquestionMessageCount = this.questionMessageCount;
+    this.lastSeenquestionMessageCount = this.question.questionMessageCount;
     this.questionsButton.classList.remove('btn-primary');
     this.questionsButton.classList.add('btn-gray');
     this.chatButton.classList.remove('btn-gray');
@@ -1089,7 +1089,7 @@ Webinar.prototype.showChat = function (event) {
     this.notificationSubscriber.removeSubscriber(this.topicChat);
     this.addShownChatSubscriber();
     this.notificationSubscriber.removeSubscriber(this.topicQuestions);
-    this.newMessageChatCountNotification.innerHTML = '';
+    this.newMessageChatCountNotification.textContent = '';
     this.newMessageChatCountNotification.classList.remove('alert-notification');
     this.addHiddenQuestionSubscriber();
 
@@ -1111,7 +1111,7 @@ Webinar.prototype.showQuestions = function (event) {
 
     this.question.initQuestions();
 
-    this.newMessageQuestionCountNotification.innerHTML = '';
+    this.newMessageQuestionCountNotification.textContent = '';
     this.newMessageQuestionCountNotification.classList.remove('alert-notification');
 
     this.notificationSubscriber.addSubscriber(
@@ -1125,7 +1125,7 @@ Webinar.prototype.showQuestions = function (event) {
         }
     );
 
-    if (this.newMessageQuestionCountNotification.innerHTML === '') {
+    if (this.newMessageQuestionCountNotification.textContent === '') {
         this.newMessageQuestionCountNotification.classList.remove('alert-notification');
     } else {
         this.newMessageQuestionCountNotification.classList.add('alert-notification');

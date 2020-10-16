@@ -1,8 +1,6 @@
 'use strict';
 
 import $ from "jquery";
-import Webinar from "./VideoConference/Webinar";
-import Chat from "./_Chat";
 
 function Question(element) {
     this.questionsContainer = element.querySelector('[data-questions-container]');
@@ -11,8 +9,6 @@ function Question(element) {
     this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
     this.questionsFormAction = this.questionsForm.getAttribute('action');
     this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
-
-    //this.chatLoaded = false;
 
     this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
