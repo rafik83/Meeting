@@ -96,6 +96,13 @@
 
 .privateChat {
   display: block;
+
+  .chat-header {
+    display: flex;
+    .chat-header-title {
+      flex-grow: 1;
+    }
+  }
 }
 
 @media (max-width: 1024px) {

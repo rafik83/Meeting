@@ -222,6 +222,15 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages }
 
     #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Command\Networking\RequestVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RequestVisio }
+
+    #
     # Webinar
     #
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
