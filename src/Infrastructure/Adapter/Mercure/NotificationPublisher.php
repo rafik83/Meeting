@@ -68,7 +68,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
     {
         $payload = [
             'action' => 'add_chat_message',
-            'msg_count' => $this->chatMessageRepository->getMessagesCountByEvent($object, null),
+            'msg_count' => $this->chatMessageRepository->getMessagesCountByLinkableObject($object, null),
         ];
 
         if ($object instanceof Happening) {

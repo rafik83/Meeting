@@ -16,5 +16,5 @@ interface ChatMessageRepositoryInterface
 
     public function findById(int $id): ?ChatMessage;
 
-    public function getMessagesCountByEvent(ChatMessageLinkableInterface $object, ?DateTimeInterface $viewedAfter): int;
+    public function getMessagesCountByLinkableObject(ChatMessageLinkableInterface $object, ?DateTimeInterface $viewedAfter): int;
 }

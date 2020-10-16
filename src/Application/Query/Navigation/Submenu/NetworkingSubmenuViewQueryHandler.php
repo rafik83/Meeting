@@ -52,7 +52,7 @@ class NetworkingSubmenuViewQueryHandler
             $isRouteNetworking = Route::isNetworking($query->route);
 
             if (!$isRouteNetworking) {
-                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByLinkableObject(
                     $query->event,
                     $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
                 );

@@ -43,7 +43,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             ->willReturn('/url/to/contacts');
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), null)->shouldBeCalled()->willReturn(0);
+        $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), null)->shouldBeCalled()->willReturn(0);
 
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([]);
@@ -97,7 +97,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), $lastViewDate)
+        $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), $lastViewDate)
             ->shouldBeCalled()
             ->willReturn(53);
 
