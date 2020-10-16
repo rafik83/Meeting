@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2186 - Notifications when new messages or questions during webinar.
 
+## [2.61.0] - 2010-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
 ## [2.60.0] - 2010-10-14
 ### Added
 - VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
