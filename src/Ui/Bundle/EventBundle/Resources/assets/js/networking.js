@@ -1,11 +1,11 @@
 import Chat from './components/_Chat';
+import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 
 export default function initNetworking(target, userConnection) {
-
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
     if (!chatNetworkingElement) {
@@ -118,6 +118,8 @@ export default function initNetworking(target, userConnection) {
                     const chat = new Chat(privateChatModalElement);
                     chat.initChat();
 
+                    const chatVisio = new ChatVisio(chat, modal.querySelector('.chat-header-tools'));
+
                     this.userConnection.addListener((notification) => {
                         this.notificationHandler.handle(notification, chat);
                     });
@@ -125,6 +127,9 @@ export default function initNetworking(target, userConnection) {
             }
 
             $(modal).modal('show')
+            $(modal).on('hidden.bs.modal', ()=> {
+                modal.remove();
+            })
         }
     }
     modalManager.open.bind(modalManager);

@@ -33,6 +33,9 @@ class PrivateChatView
     /** @var int */
     public $chatSessionId;
 
+    /** @var bool */
+    public $isVisio;
+
     public function __construct(
         string $providerUrl,
         string $subscriberKey,
@@ -42,7 +45,8 @@ class PrivateChatView
         ?string $toUserCompany,
         ?string $toUserPosition,
         int $toUserId,
-        int $chatSessionId
+        int $chatSessionId,
+        bool $isVisio
     ) {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
@@ -53,5 +57,6 @@ class PrivateChatView
         $this->toUserPosition = $toUserPosition;
         $this->toUserId = $toUserId;
         $this->chatSessionId = $chatSessionId;
+        $this->isVisio = $isVisio;
     }
 }

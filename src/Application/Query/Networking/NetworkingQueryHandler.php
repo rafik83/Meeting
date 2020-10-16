@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\View\Networking\ChatSessionView;
 use Proximum\Vimeet\Application\View\Networking\NetworkingView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;

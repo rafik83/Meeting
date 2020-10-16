@@ -13,7 +13,7 @@ class CallVisioPrivateChatAccessChecker extends AccessChecker
      *
      * @return bool
      */
-    public function allowedToAccess(Event $event)
+    public function allowedToAccess(Event $event) : bool
     {
         if (null === $event->getConfiguration()->getCallVisioOpenDate() && null === $event->getConfiguration()->getCallVisioCloseDate()) {
             return false;
