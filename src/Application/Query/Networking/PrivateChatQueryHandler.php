@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Exception\Chat\PrivateChatInvalidToUser;
 use Proximum\Vimeet\Application\View\Networking\PrivateChatView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
@@ -17,12 +18,17 @@ class PrivateChatQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
+    /** @var CallVisioPrivateChatAccessChecker */
+    private $callVisioPrivateChatAccessChecker;
+
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
-        ChatSessionRepositoryInterface $chatSessionRepository
+        ChatSessionRepositoryInterface $chatSessionRepository,
+        CallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker
     ) {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
+        $this->callVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
     }
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
