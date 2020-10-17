@@ -1,6 +1,7 @@
 import Chat from './components/_Chat';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
+import NewMessageCounter from './components/_NewMessageCounter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 

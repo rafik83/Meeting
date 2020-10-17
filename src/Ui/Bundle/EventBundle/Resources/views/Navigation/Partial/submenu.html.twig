@@ -1,6 +1,9 @@
 <ul class="sub-header__item">
 	{% for button in submenuView.submenuButtonViews %}
 		<li>
+
+		{# data-button-type #}
+		{# data-message-count={button.counter} #}
 			<a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
 				<i class="{{ button.icon }}"></i>
 				<span class="name pull-right">{{ button.label|trans }}</span>
