@@ -95,7 +95,7 @@ class Update implements Command
     public $displayAnalyticsOnSheet;
 
     /** @var bool */
-    public $displayAnalyticsOnMeetingList;
+    public $displayAnalyticsOnCatalog;
 
     public function __construct(Type $type, string $locale)
     {
@@ -124,7 +124,7 @@ class Update implements Command
         $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
         $this->canSubmitValidation = $type->canSubmitValidation();
         $this->displayAnalyticsOnSheet = $type->displayAnalyticsOnSheet;
-        $this->displayAnalyticsOnMeetingList = $type->displayAnalyticsOnMeetingList;
+        $this->displayAnalyticsOnCatalog = $type->displayAnalyticsOnCatalog;
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

@@ -114,7 +114,7 @@ class Type implements WhoInterface, TypeInterface
     public $displayAnalyticsOnSheet = false;
 
     /** @var bool */
-    public $displayAnalyticsOnMeetingList = false;
+    public $displayAnalyticsOnCatalog = false;
 
     public function __construct(Event $event)
     {
@@ -462,7 +462,7 @@ class Type implements WhoInterface, TypeInterface
         bool $mustEvaluateMeeting = false,
         bool $canSubmitValidation = true,
         bool $displayAnalyticsOnSheet = false,
-        bool $displayAnalyticsOnMeetingList = false
+        bool $displayAnalyticsOnCatalog = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -481,7 +481,7 @@ class Type implements WhoInterface, TypeInterface
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
         $this->canSubmitValidation = $canSubmitValidation;
         $this->displayAnalyticsOnSheet = $displayAnalyticsOnSheet;
-        $this->displayAnalyticsOnMeetingList = $displayAnalyticsOnMeetingList;
+        $this->displayAnalyticsOnCatalog = $displayAnalyticsOnCatalog;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
