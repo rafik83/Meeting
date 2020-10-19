@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\View\Catalog\Export\SheetListView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction;
@@ -268,6 +269,8 @@ class ExportActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->sheet->isInInternalCatalog()->willReturn(true);
+        $type = $this->prophesize(Type::class);
+        $this->sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
         $typeViews = [];
@@ -310,15 +313,16 @@ class ExportActionTest extends TestCase
                 SearchType::class,
                 ['type' => [], 'categories' => [], 'availableSlot' => 'catalog_everyone'],
                 [
-                    'typeViews'                 => $typeViews,
-                    'categoryViews'             => [],
+                    'filterBySheetVisit' => false,
+                    'typeViews' => $typeViews,
+                    'categoryViews' => [],
                     'organizationCategoryViews' => [],
-                    'positionViews'             => $positionViews,
-                    'event'                     => $this->event->reveal(),
-                    'locale'                    => 'fr',
-                    'filterByAvailableSlotIds'  => false,
-                    'filterBySpecificSlot'      => false,
-                    'specificSlot'              => null,
+                    'positionViews' => $positionViews,
+                    'event' => $this->event->reveal(),
+                    'locale' => 'fr',
+                    'filterByAvailableSlotIds' => false,
+                    'filterBySpecificSlot' => false,
+                    'specificSlot' => null,
                     'taggedNomenclatureTagViews' => [],
                 ]
             )
@@ -335,12 +339,12 @@ class ExportActionTest extends TestCase
                 $this->sheet->reveal(),
                 $this->user->reveal(),
                 [
-                    'enabled'       => true,
-                    'inCatalog'     => true,
-                    'type'          => [],
-                    'categories'    => [],
+                    'enabled' => true,
+                    'inCatalog' => true,
+                    'type' => [],
+                    'categories' => [],
                     'availableSlot' => 'catalog_everyone',
-                    'orderBy'       => 'alphabetical',
+                    'orderBy' => 'alphabetical',
                 ],
                 'fr',
                 [],
@@ -354,7 +358,7 @@ class ExportActionTest extends TestCase
         $seriliazed = "type;azerty;participant;ytreza;\ntypeColumn;registration1;participantColumn;sheet1;\nExposant;AAnera;President;Needs;\n";
 
         $this->serializerAdapter->serialize($view, 'csv', [
-                'charset'       => Charset::WINDOWS_1252,
+                'charset' => Charset::WINDOWS_1252,
                 'csv_delimiter' => ';',
             ])
             ->shouldBeCalled()
@@ -391,6 +395,9 @@ class ExportActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->sheet->isInInternalCatalog()->willReturn(true);
+        $type = $this->prophesize(Type::class);
+        $type->reveal()->displayAnalyticsOnCatalog = true;
+        $this->sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
         $typeViews = [];
@@ -433,15 +440,16 @@ class ExportActionTest extends TestCase
             SearchType::class,
             ['type' => [], 'categories' => [], 'availableSlot' => 'catalog_everyone'],
             [
-                'typeViews'                 => $typeViews,
-                'categoryViews'             => [],
+                'filterBySheetVisit' => true,
+                'typeViews' => $typeViews,
+                'categoryViews' => [],
                 'organizationCategoryViews' => [],
-                'positionViews'             => $positionViews,
-                'event'                     => $this->event->reveal(),
-                'locale'                    => 'fr',
-                'filterByAvailableSlotIds'  => false,
-                'filterBySpecificSlot'      => false,
-                'specificSlot'              => null,
+                'positionViews' => $positionViews,
+                'event' => $this->event->reveal(),
+                'locale' => 'fr',
+                'filterByAvailableSlotIds' => false,
+                'filterBySpecificSlot' => false,
+                'specificSlot' => null,
                 'taggedNomenclatureTagViews' => [],
             ]
         )
@@ -454,10 +462,10 @@ class ExportActionTest extends TestCase
         $form->isValid()->willReturn(true);
 
         $form->getData()->willReturn([
-            'type'          => [1 => 1, 2 => 2],
-            'position'      => 'President',
-            'categories'    => [],
-            'orderBy'       => 'relevant',
+            'type' => [1 => 1, 2 => 2],
+            'position' => 'President',
+            'categories' => [],
+            'orderBy' => 'relevant',
         ]);
 
         $view = new SheetListView([], [], [], 'participantColumn', 'typeColumn', true);
@@ -466,12 +474,12 @@ class ExportActionTest extends TestCase
             $this->sheet->reveal(),
             $this->user->reveal(),
             [
-                'enabled'       => true,
-                'inCatalog'     => true,
-                'type'          => [1 => 1, 2 => 2],
-                'position'      => 'President',
-                'categories'    => [],
-                'orderBy'       => 'alphabetical',
+                'enabled' => true,
+                'inCatalog' => true,
+                'type' => [1 => 1, 2 => 2],
+                'position' => 'President',
+                'categories' => [],
+                'orderBy' => 'alphabetical',
             ],
             'fr',
             [],
@@ -485,7 +493,7 @@ class ExportActionTest extends TestCase
         $seriliazed = "type;azerty;participant;ytreza;\ntypeColumn;registration1;participantColumn;sheet1;\nExposant;AAnera;President;Needs;\n";
 
         $this->serializerAdapter->serialize($view, 'csv', [
-            'charset'       => Charset::WINDOWS_1252,
+            'charset' => Charset::WINDOWS_1252,
             'csv_delimiter' => ';',
         ])
             ->shouldBeCalled()
