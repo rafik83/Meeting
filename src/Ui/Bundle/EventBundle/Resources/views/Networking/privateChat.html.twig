@@ -12,20 +12,25 @@
                 </div>
                 <div class="chat-header-tools" data-visio-enable="{{ privateChatView.isVisio }}">
                     <button
-                        href="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                        data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                         class="btn btn-sm btn-primary state-normal"
                     >
                         <span class="glyphicon glyphicon-facetime-video"></span>
                         {{ 'networking.chat.visio.request'|trans }}
                     </button>
                     <span
-                        href="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                        data-url="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                         class="btn btn-sm btn-primary disabled state-pending hide"
                     >
                         <span class="glyphicon glyphicon-option-horizontal"></span>
                         {{ 'networking.chat.visio.pending'|trans }}
                     </span>
                 </div>
+            </div>
+            <div class="chat-message-call-visio" data-message-call-visio>
+                <p>{{ 'networking.chat.visio.request.message'|trans }}</p>
+                <span class="glyphicon glyphicon-facetime-video"  data-url=""></span>
+                <span class="glyphicon glyphicon-remove-sign"  data-url=""></span>
             </div>
             <div data-chat-networking
                  data-chat-vote-like="{{ 'chat.vote.like'|trans }}"

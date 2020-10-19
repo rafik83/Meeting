@@ -22,4 +22,6 @@ interface ChatSessionRepositoryInterface
     public function findIdsByEventAndUser(Event $event, User $user): array;
 
     public function findOneById(int $id): ?ChatSession;
+
+    public function hasMessageFromUser (ChatSession $chatSession, User $user): bool;
 }

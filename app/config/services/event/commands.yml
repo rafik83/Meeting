@@ -227,6 +227,7 @@ services:
     Proximum\Vimeet\Application\Command\Networking\RequestVisioHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RequestVisio }
 

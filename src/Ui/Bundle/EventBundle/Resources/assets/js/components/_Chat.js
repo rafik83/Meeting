@@ -9,7 +9,7 @@ function Chat(element) {
     this.addChatFormAction = this.addChatForm.getAttribute('action');
     this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
     this.addChatFormList = this.chatContainer.querySelector('.chat-list');
-
+    this.externalListener = [];
     this.chatLoaded = false;
 
     this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
@@ -204,6 +204,7 @@ Chat.prototype.initChat = function () {
 
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
+        this.externalListener.forEach((callback) => callback(response));
     }.bind(this))
         .fail(function (error) {
             console.error('Failed to load chat', error);
@@ -226,6 +227,10 @@ Chat.prototype.reload = function () {
 Chat.prototype.removeChatListeners = function () {
     this.chatListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
     this.chatListeners = [];
+}
+
+Chat.prototype.addListener = function (callback) {
+    this.externalListener.push(callback);
 }
 
 export default Chat;

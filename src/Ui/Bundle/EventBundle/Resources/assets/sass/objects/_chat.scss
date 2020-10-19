@@ -165,3 +165,34 @@
     max-height: calc(100vh - 400px);
   }
 }
+
+.chat-message-call-visio {
+  background: lightgray;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+
+  p {
+    font-weight: bold;
+  }
+
+  span {
+    border-radius: 30px;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 25px;
+
+      .glyphicon.glyphicon-facetime-video {
+        background-color: mediumseagreen;
+      }
+
+      .glyphicon.glyphicon-remove-sign {
+        background-color: red;
+      }
+  }
+
+}

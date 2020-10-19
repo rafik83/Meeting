@@ -28,7 +28,8 @@ class PrivateChatQueryHandler
         NotificationSubscriberInterface $notificationSubscriber,
         ChatSessionRepositoryInterface $chatSessionRepository,
         CallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker
-    ) {
+    )
+    {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
         $this->callVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
@@ -58,7 +59,7 @@ class PrivateChatQueryHandler
 
         $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->sheet->getEvent()->getId(), $privateChatQuery->fromUser->getId());
 
-        $isVisio = $this->callVisioPrivateChatAccessChecker->allowedToAccess($privateChatQuery->sheet->getEvent());
+        $isVisio = $this->callVisioPrivateChatAccessChecker->allowedToAccess($privateChatQuery->sheet->getEvent(), $chatSession, $privateChatQuery->toUser);
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),

@@ -5630,6 +5630,7 @@ services:
     domain.key_dates.checker.call_visio_private_chat_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker
         arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@datetime'
 
     #

@@ -78,6 +78,10 @@ export default function initNetworking(target, userConnection) {
                 targetChat.updateVotes(payload.messageId, payload.votes);
                 return;
             }
+
+            if (payload.action === 'request_visio') {
+                alert("test");
+            }
         }
     }
     notificationHandler.handle.bind(notificationHandler);
@@ -116,9 +120,11 @@ export default function initNetworking(target, userConnection) {
                     const privateChatModalElement = modal.querySelector('[data-chat-networking]');
 
                     const chat = new Chat(privateChatModalElement);
-                    chat.initChat();
-
                     const chatVisio = new ChatVisio(chat, modal.querySelector('.chat-header-tools'));
+                    chat.initChat();
+                    chat.addListener((messages) => {
+                        chatVisio.onMessagesReceived(messages);
+                    });
 
                     this.userConnection.addListener((notification) => {
                         this.notificationHandler.handle(notification, chat);
