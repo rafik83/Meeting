@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
@@ -75,7 +74,10 @@ class AddHappeningQuestionHandlerTest extends TestCase
         $this->questionRepository->add($expectedQuestion)
             ->shouldBeCalled();
 
-        $this->notificationPublisher->publishHappeningNotification($happening->reveal(), 'questions', Argument::withEntry('action', 'update'))
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->willReturn(2020);
+
+        $this->notificationPublisher
+            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'update', 'msg_count' => 2020])
             ->shouldBeCalled();
 
         $this->addHappeningQuestionHandler->handle($addHappeningQuestion->reveal());

@@ -13,8 +13,6 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use RuntimeException;
 
 class NotificationPublisher extends AbstractNotification implements NotificationPublisherInterface
@@ -31,31 +29,20 @@ class NotificationPublisher extends AbstractNotification implements Notification
     /** @var UserPayloadBuilder */
     private $userPayloadBuilder;
 
-    /** @var ChatMessageRepositoryInterface */
-    private $chatMessageRepository;
-
-    /** @var QuestionRepositoryInterface */
-    private $questionRepository;
-
     public function __construct(
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter,
-        UserPayloadBuilder $userPayloadBuilder,
-        ChatMessageRepositoryInterface $chatMessageRepository,
-        QuestionRepositoryInterface $questionRepository
+        UserPayloadBuilder $userPayloadBuilder
     ) {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
         $this->userPayloadBuilder = $userPayloadBuilder;
-        $this->chatMessageRepository = $chatMessageRepository;
-        $this->questionRepository = $questionRepository;
     }
 
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void
     {
-        $data['msg_count'] = $this->questionRepository->getMessagesCountDuringHappening($happening);
         $postData = [
             'topic' => $this->getHappeningTopic($happening->getId(), $type),
             'data' => json_encode($data),
@@ -64,11 +51,11 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message): void
+    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message, int $messageCount): void
     {
         $payload = [
             'action' => 'add_chat_message',
-            'msg_count' => $this->chatMessageRepository->getMessagesCountByLinkableObject($object, null),
+            'msg_count' => $messageCount,
         ];
 
         if ($object instanceof Happening) {
