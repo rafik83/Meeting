@@ -1,9 +1,10 @@
 <?php
 
-namespace Application\Command\Happening\Webinar\Question;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler;
@@ -30,7 +31,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
     /** @var VoteHappeningQuestionHandler */
     private $voteHappeningQuestionHandler;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->questionVoteRepository = $this->prophesize(QuestionVoteRepositoryInterface::class);
@@ -43,7 +44,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         );
     }
 
-    public function test_vote_happening_question()
+    public function test_vote_happening_question(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(1234);
@@ -73,7 +74,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_unvote_happening_question()
+    public function test_unvote_happening_question(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(1234);
@@ -106,7 +107,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_vote_unexpected_question()
+    public function test_vote_unexpected_question(): void
     {
         $this->expectException(QuestionNotFoundException::class);
 
@@ -122,7 +123,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_vote_self_question()
+    public function test_vote_self_question(): void
     {
         $this->expectException(QuestionNotAllowedException::class);
 
