@@ -172,7 +172,7 @@ function Webinar(element, isSpeaker) {
 
     this.countDownBeforeEnd();
 
-    this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'));
+    this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
 
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
