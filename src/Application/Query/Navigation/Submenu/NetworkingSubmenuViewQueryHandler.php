@@ -48,7 +48,6 @@ class NetworkingSubmenuViewQueryHandler
             }
 
             $eventMessagesCount = 0;
-            $privateChatSessionsCount  = 0;
 
             $isRouteNetworking = Route::isNetworking($query->route);
 
@@ -57,14 +56,12 @@ class NetworkingSubmenuViewQueryHandler
                     $query->event,
                     $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
                 );
-
-                $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
-                $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {
-                    return $carry + ($chatSession['unreadMessages'][$query->user->getId()] ?? 0);
-                }, 0);
             }
 
-
+            $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
+            $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {
+                return $carry + ($chatSession['unreadMessages'][$query->user->getId()] ?? 0);
+            }, 0);
 
             return new SubmenuButtonView(
                 Category::NETWORKING_ICON,
@@ -74,8 +71,6 @@ class NetworkingSubmenuViewQueryHandler
                 $eventMessagesCount + $privateChatSessionsCount,
                 true
             );
-
-            /// Ajouter tableau attribut qui permet de savoir si je suis dans le boutton networking
         }
         return null;
     }
