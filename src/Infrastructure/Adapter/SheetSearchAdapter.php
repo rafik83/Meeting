@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Aggregation\Filter;
@@ -23,6 +15,7 @@ use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
@@ -49,14 +42,19 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /** @var ConditionRulesTransformerInterface */
     private $conditionRulesTransformer;
 
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         PaginatedFinderInterface $finder,
         SearchableInterface $searchable,
-        ConditionRulesTransformerInterface $conditionRulesTransformer
+        ConditionRulesTransformerInterface $conditionRulesTransformer,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
         $this->finder = $finder;
         $this->searchable = $searchable;
         $this->conditionRulesTransformer = $conditionRulesTransformer;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
     /**
@@ -66,18 +64,20 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      * @param string      $locale
      * @param array       $nomenclatureItems
      * @param array       $availableSlotIds
-     * @param array       $sheetsToExclude
+     * @param Sheet[]     $sheetsToExclude
+     * @param int[]       $prefilteredSheetIds
      *
      * @return Query
      */
     private function getQueryToFind(
         Event $event,
         array $filters,
-        string $orderBy = null,
+        ?string $orderBy = null,
         string $locale,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): Query {
         $nomenclatureBoost = isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             ? \count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
@@ -90,7 +90,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $nomenclatureBoost,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
@@ -156,7 +157,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $locale,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         $query = $this->getQueryToFind(
             $event,
@@ -165,7 +167,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $locale,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
         $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];
 
@@ -186,6 +189,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
         array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null,
         ?RuleInterface $condition = null
     ): PaginatedResult {
         $query = $this->getQueryToFind(
@@ -195,7 +199,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $locale,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         if (true === $getAggregations) {
@@ -410,7 +415,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $filterToRemove,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         return $this->searchAggregations(
             $event,
@@ -420,7 +426,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             self::ES_FIELD_TYPE,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
@@ -434,7 +441,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $filterToRemove,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         return $this->searchAggregations(
             $event,
@@ -444,39 +452,48 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             self::ES_FIELD_CATEGORIES,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOrganizationCategoryAggregations(
         Event $event,
         string $locale,
         array $filters,
-        string $filterToRemove
+        string $filterToRemove,
+        ?array $prefilteredSheetIds
     ): array {
         return $this->searchAggregations(
             $event,
             $locale,
             $filters,
             $filterToRemove,
-            self::ES_FIELD_ORGANIZATION_CATEGORY
+            self::ES_FIELD_ORGANIZATION_CATEGORY,
+            [],
+            [],
+            [],
+            $prefilteredSheetIds
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPositionAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
-    {
+    public function getPositionAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        ?array $prefilteredSheetIds
+        ): array {
         return $this->searchAggregations(
             $event,
             $locale,
             $filters,
             $filterToRemove,
-            self::ES_FIELD_POSITION
+            self::ES_FIELD_POSITION,
+            [],
+            [],
+            [],
+            $prefilteredSheetIds
         );
     }
 
@@ -530,7 +547,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $elasticField,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         // remove filter
         unset($filters[$filterToRemove]);
@@ -542,7 +560,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             1,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
         $query   = new Query($builder->getQuery());
 

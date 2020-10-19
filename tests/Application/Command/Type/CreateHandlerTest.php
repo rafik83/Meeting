@@ -70,7 +70,7 @@ class CreateHandlerTest extends TestCase
         $create->mustEvaluateMeeting = true;
         $create->canSubmitValidation = true;
         $create->displayAnalyticsOnSheet = true;
-        $create->displayAnalyticsOnMeetingList = true;
+        $create->displayAnalyticsOnCatalog = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
@@ -90,7 +90,7 @@ class CreateHandlerTest extends TestCase
                 && $actual->mustEvaluateMeeting()
                 && $actual->canSubmitValidation()
                 && $actual->displayAnalyticsOnSheet
-                && $actual->displayAnalyticsOnMeetingList
+                && $actual->displayAnalyticsOnCatalog
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);

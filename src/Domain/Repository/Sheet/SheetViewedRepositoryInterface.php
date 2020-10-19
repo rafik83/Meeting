@@ -31,9 +31,12 @@ interface SheetViewedRepositoryInterface
     public function getSheetsSeenByUserAndEvent(User $user, Event $event): array;
 
     /**
-     * @param Sheet $sheet
-     *
      * @return int[]
      */
     public function getUsersWhoViewedSheet(Sheet $sheet): array;
+
+    /**
+     * @return int[]
+     */
+    public function getSheetIdsWhoViewedSheet(Sheet $sheet): array;
 }

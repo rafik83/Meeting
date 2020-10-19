@@ -34,19 +34,20 @@ class SearchType extends AbstractSearchType
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
             ])
-            ->add('sheetVisit', ChoiceType::class, [
-                'label' => 'form.search.sheetVisit.label',
-                'expanded' => true,
-                'multiple' => false,
-                'choices' => CatalogConstant::getAllSheetVisitChoices(),
-                'choice_value' => function ($state) {
-                    return $state;
-                },
-                'choice_label' => function ($choice) {
-                    return 'form.search.sheetVisit.choice.' . $choice;
-                }
-            ])
         ;
+        if (!empty($options['filterBySheetVisit'])) {
+            $builder
+                ->add(SearchFields::FILTER_BY_SHEET_VISIT, ChoiceType::class, [
+                    'label' => 'form.search.sheetVisit.label',
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => CatalogConstant::getAllSheetVisitChoices(),
+                    'choice_label' => function ($choice) {
+                        return 'form.search.sheetVisit.choice.' . $choice;
+                    },
+                ])
+            ;
+        }
 
         $objectiveFilters = [];
         if (in_array(Nomenclature::OBJECTIVE_SUPPLY, $options['objectiveFilters'])) {
@@ -59,14 +60,14 @@ class SearchType extends AbstractSearchType
 
         if (!empty($options['objectiveFilters'])) {
             $builder->
-            add(
-                SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
-                    'label'    => 'form.search.objective.label',
-                    'expanded' => true,
-                    'multiple' => true,
-                    'choices'  => $objectiveFilters,
-                ]
-            );
+                add(
+                    SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
+                        'label'    => 'form.search.objective.label',
+                        'expanded' => true,
+                        'multiple' => true,
+                        'choices'  => $objectiveFilters,
+                    ]
+                );
         }
 
         if (true === $options['filterByAvailableSlotIds']) {
@@ -145,9 +146,10 @@ class SearchType extends AbstractSearchType
 
         $resolver->setDefaults([
             'filterByAvailableSlotIds' => false,
-            'filterBySpecificSlot'     => false,
-            'specificSlot'             => null,
-            'objectiveFilters'         => [],
+            'filterBySpecificSlot' => false,
+            'specificSlot' => null,
+            'objectiveFilters' => [],
+            'filterBySheetVisit' => false,
         ]);
     }
 

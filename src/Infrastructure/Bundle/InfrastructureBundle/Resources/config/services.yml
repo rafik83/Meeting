@@ -3542,6 +3542,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -4992,6 +4993,7 @@ services:
              - '@fos_elastica.finder.app.sheet'
              - '@fos_elastica.index.app.sheet'
              - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
+             - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
 
     #
     # Elastica

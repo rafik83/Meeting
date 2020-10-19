@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Catalog;
 
 use PHPUnit\Framework\TestCase;
@@ -341,6 +333,7 @@ class ExportActionTest extends TestCase
         $this->queryBus->handle(new SheetsViewQuery(
                 $this->event->reveal(),
                 $this->sheet->reveal(),
+                $this->user->reveal(),
                 [
                     'enabled'       => true,
                     'inCatalog'     => true,
@@ -471,6 +464,7 @@ class ExportActionTest extends TestCase
         $this->queryBus->handle(new SheetsViewQuery(
             $this->event->reveal(),
             $this->sheet->reveal(),
+            $this->user->reveal(),
             [
                 'enabled'       => true,
                 'inCatalog'     => true,

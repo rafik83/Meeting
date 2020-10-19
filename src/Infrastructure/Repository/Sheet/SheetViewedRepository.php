@@ -95,4 +95,21 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @return int[]
+     */
+    public function getSheetIdsWhoViewedSheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(SheetViewed::class, 'sheetViewed')
+            ->join('sheetViewed.sheet', 'sheet')
+            ->where('sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+    }
 }

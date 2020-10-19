@@ -110,6 +110,7 @@ class ExportAction
         UserDomain $userDomain
     ): CsvFileResponse {
         $event = $eventDomain->getEvent();
+        $user = $userDomain->getUser();
         $locale = $request->getLocale();
 
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
@@ -150,6 +151,7 @@ class ExportAction
         ;
 
         $form = $this->formFactory->createNamed('', SearchType::class, $filters, [
+            'filterBySheetVisit' => $sheet->getType()->displayAnalyticsOnCatalog,
             'typeViews' => $catalogFilterViewsResult->typeViews,
             'categoryViews' => $catalogFilterViewsResult->categoryViews,
             'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
@@ -178,7 +180,7 @@ class ExportAction
         if (true === $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
             $catalogAvailableSlotView = $this
                 ->queryBus
-                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $userDomain->getUser(), $filters))
+                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
             ;
 
             $availableSlotsIds = $catalogAvailableSlotView->availableSlotIds;
@@ -194,6 +196,7 @@ class ExportAction
         $sheetListView = $this->queryBus->handle(new SheetsViewQuery(
             $event,
             $sheet,
+            $user,
             $filters,
             $locale,
             $availableSlotsIds,
