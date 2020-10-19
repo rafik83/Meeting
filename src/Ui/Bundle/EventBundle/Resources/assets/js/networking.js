@@ -18,7 +18,6 @@ export default function initNetworking(target, userConnection) {
     const chatPrivateButton = document.querySelector('[data-chat-private-button]');
     const chatGeneralButton = document.querySelector('[data-chat-general-button]');
 
-
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
 
@@ -80,7 +79,12 @@ export default function initNetworking(target, userConnection) {
             }
 
             if (payload.action === 'request_visio') {
-                alert("test");
+                const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
+                const buttonVisio = document.querySelector('.state-normal');
+                if (divCallVisioMessage != null){
+                    divCallVisioMessage.classList.remove("hide");
+                    buttonVisio.classList.add("hide");
+                }
             }
         }
     }

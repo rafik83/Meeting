@@ -37,6 +37,7 @@ import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitE
 import SheetVideo from './components/_SheetVideo';
 import UserConnectionRegister from './components/_UserConnectionRegister';
 import NotificationToast from './components/_NotificationToast';
+import NotificationCallVisio from './components/_NotificationCallVisio';
 import initNetworking from './networking'
 
 import 'bootstrap';
@@ -288,6 +289,7 @@ function init(target) {
     initNetworking(document, userConnectionRegister);
 
     new NotificationToast(target.querySelector('[data-notification-toast]'), userConnectionRegister);
+    new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
 
 }
 

@@ -178,21 +178,22 @@
 
   span {
     border-radius: 30px;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     color: white;
     font-size: 25px;
-
-      .glyphicon.glyphicon-facetime-video {
-        background-color: mediumseagreen;
-      }
-
-      .glyphicon.glyphicon-remove-sign {
-        background-color: red;
-      }
   }
+
+  span.glyphicon.glyphicon-facetime-video {
+      background-color: mediumseagreen;
+    }
+
+  span.glyphicon.glyphicon-remove-sign {
+      background-color: red;
+    }
+
 
 }
