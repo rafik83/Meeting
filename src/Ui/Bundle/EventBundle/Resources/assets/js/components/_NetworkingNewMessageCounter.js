@@ -1,4 +1,4 @@
-class NewMessageCounter {
+class NetworkingNewMessageCounter {
 
     static getNewMessageCount() {
 
@@ -18,8 +18,7 @@ class NewMessageCounter {
         const networkingPageDataElements = document.querySelectorAll("[data-is-networking-page-active]");
         // I assume if one of the dataset is set to true, we are in the networking page
         const isOnNetworkingPage = networkingPageDataElements.length > 0 &&
-            (networkingPageDataElements[0].dataset.isNetworkingPageActive == true)
-
+            (networkingPageDataElements[0].dataset.isNetworkingPageActive == true);
         const newMessageCount = this.getNewMessageCount();
 
         if (!isOnNetworkingPage || newMessageCount == 0) {
@@ -39,4 +38,4 @@ class NewMessageCounter {
         });
     }
 }
-export default NewMessageCounter;
+export default NetworkingNewMessageCounter;

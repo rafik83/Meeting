@@ -47,16 +47,25 @@ class NetworkingSubmenuViewQueryHandler
                 $networkingTitle = $query->staticFormulationsIndexedByCategory[Category::NETWORKING]->getTitle($query->locale);
             }
 
-            $eventMessagesCount = 0;
 
             $isRouteNetworking = Route::isNetworking($query->route);
 
-            if (!$isRouteNetworking) {
-                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
-                    $query->event,
-                    $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
+            if ($isRouteNetworking) {
+                return new SubmenuButtonView(
+                    Category::NETWORKING_ICON,
+                    $networkingTitle,
+                    $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
+                    $isRouteNetworking,
+                    0,
+                    true,
+                    ['data-is-networking-page-active' => true]
                 );
             }
+
+            $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                $query->event,
+                $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
+            );
 
             $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
             $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {

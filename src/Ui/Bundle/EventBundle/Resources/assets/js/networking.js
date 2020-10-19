@@ -1,7 +1,7 @@
 import Chat from './components/_Chat';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import NewMessageCounter from './components/_NewMessageCounter';
+import NetworkingNewMessageCounter from './components/_NetworkingNewMessageCounter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 
@@ -141,4 +141,6 @@ export default function initNetworking(target, userConnection) {
             modalManager.open(toUserParticipantNode);
         }
     }
+
+    NetworkingNewMessageCounter.appendNewMessageBadge();
 }
