@@ -94,6 +94,9 @@ doctrine:
         dql:
             string_functions:
                 MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
+        metadata_cache_driver: apcu
+        result_cache_driver: apcu
+        query_cache_driver: apcu
 
 # Swiftmailer Configuration
 swiftmailer:
