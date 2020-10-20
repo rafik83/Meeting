@@ -423,7 +423,7 @@ networking.chat.title: 'Chat privé'
 networking.chat.with: 'Chat privé avec %user%'
 networking.participants.intro: 'cliquez sur un participant pour lancer une conversation privée'
 networking.participants.search: 'Chercher dans la liste'
-networking.participants.title: 'Participants connectés'
+networking.participants.title: 'Participants connectés (%count%)'
 networking.title: Networking
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'
