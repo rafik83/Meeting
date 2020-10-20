@@ -15,7 +15,7 @@ class NetworkingNewMessageCounter {
     }
 
     appendNewMessageBadge(networkingPageDataElements) {
-        // I assume if one of the dataset is set to true, I am in the networking page
+        // We assume if one of the dataset is set to true, We are in the networking page
         const isOnNetworkingPage = networkingPageDataElements.length > 0 &&
             (networkingPageDataElements[0].dataset.isNetworkingPageActive == true);
         const newMessageCount = this.getNewMessageCount();
@@ -23,11 +23,9 @@ class NetworkingNewMessageCounter {
             return;
         }
 
-        const classAttribute = document.createAttribute("class");
-        classAttribute.value = "alert-notification";
         const newMessageBadge = document.createElement("span");
-        newMessageBadge.textContent = newMessageCount;
-        newMessageBadge.setAttributeNode(classAttribute);
+        newMessageBadge.textContent = newMessageCount >= 99 ? "99+" : newMessageCount;
+        newMessageBadge.classList.add('alert-notification');
 
         [].forEach.call(networkingPageDataElements, function (item) {
             const clone = newMessageBadge.cloneNode(true);

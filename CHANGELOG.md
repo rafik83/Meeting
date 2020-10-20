@@ -5,11 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
-## [2.62.0] - 2020-10-20
-### Updated
-
 - VIMEET-2220 Compute the private chat message count
+
 
 ## [2.61.0] - 2010-10-15
 ### Added
