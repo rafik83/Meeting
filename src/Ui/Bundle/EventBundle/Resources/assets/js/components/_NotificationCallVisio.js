@@ -11,7 +11,7 @@ class NotificationCallVisio {
     onNotificationReceived(notification) {
         const payload = JSON.parse(notification.data);
         if (payload.action === 'request_visio') {
-            this.timerId = setTimeout(this.hide.bind(this), 30000);
+            this.timerId = setTimeout(this.hide.bind(this), 1000000);
             this.show(payload);
             // réinitialiser le timeout
         }
