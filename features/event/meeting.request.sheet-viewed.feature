@@ -32,9 +32,3 @@ Feature: Filter by sheet viewed on meeting request list
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/catalog/display/1"
     Then I should see "Aanera"
-    # filter on sheet saw
-    When I go to this page "/fr/sheet/2/meeting/request?state=all&sheetVisit=sheetSaw&orderBy=alphabetical"
-    Then I should see "Aanera"
-    # filter on sheet who saw me
-    When I go to this page "/fr/sheet/2/meeting/request?state=all&sheetVisit=viewedBySheet&orderBy=alphabetical"
-    Then I should not see "Aanera"
