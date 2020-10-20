@@ -2,98 +2,212 @@
 
 [![CircleCI](https://circleci.com/gh/proximum/vimeet/tree/master.svg?style=svg&circle-token=1177af92f29a64cb40f13255e22d302b38d032b5)](https://circleci.com/gh/proximum/vimeet/tree/master)
 
-## Development
+## Setup
 
-> Note: The `$` stands for your machine CLI, while the `⇒` stands for the VM CLI
+> This installation procedure is strongly linked to Ubuntu. If you are using a different OS/distribution, it may be a good idea to do this installation with another developer and update this Readme.
 
-### Requirements
+#### Create a proxy on your locale machine
 
-* [Vagrant 2.2.6](https://www.vagrantup.com/downloads.html)
-* [VirtualBox 5.2.4](https://www.virtualbox.org/wiki/Downloads)
-* [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
-* On linux: [NFS server](http://nfs.sourceforge.net/), can be installed with `sudo apt install nfs-kernel-server`
+On Ubuntu go to Settings > Network  > Network proxy
 
-### Setup
+Set the proxy to **Automatic** and add this address http://127.0.0.1:7080/proxy.pac
 
-Clone the project in your workspace, and launch setup
+#### Install MySQL client
 
-        $ make setup
+```
+sudo apt install mysql-client
+```
 
-If an error occurs when installing ansible roles, remove alt-galaxy:
+#### Install PHP
 
-        $ vagrant ssh
-        $ sudo rm /usr/bin/alt-galaxy
+First you will need to install PHP 7.x on your local machine
 
-You should access the project via http://admin.vimeet.proximum/app_dev.php/fr/event
+```bash
+sudo apt update
+sudo apt install php
+```
 
-Load Vimeet fixtures:
+#### Install Docker and docker-compose
 
-        ⇒ make init-db
+Please see the official documentation [here](https://docs.docker.com/engine/install/ubuntu/) and consider following the [optional post installation steps](https://docs.docker.com/engine/install/linux-postinstall/) which are recommended in order to execute docker command as non root user.
 
-### Usage
+After this step you may need to restart your machine.
 
-Launch vagrant box, and ssh into it
+#### Install Composer
 
-        $ vagrant up
-        $ vagrant ssh
+If you haven't do it yet on your locale machine, you will need to  install ***Composer***
 
-Build assets:
+Please follow the official instructions from [here](https://getcomposer.org/download/)
 
-        ⇒ make build
+#### Symfony server
 
-Build and watch assets:
+Symfony Server is a local server used to run symfony php files
 
-        ⇒ make watch
+```bash
+wget https://get.symfony.com/cli/installer -O - | bash
+export PATH="$HOME/.symfony/bin:$PATH"
+sudo apt install libnss3-tools
+symfony server:ca:install
+symfony proxy:domain:attach "*.vimeet.proximum"
+```
+
+Unfortunately for now we are also using `PHP 7.2` to run the application. So we also need to install that version alongside the latest PHP version.
+
+This could be related to this [this bug](https://github.com/symfony/cli/issues/292).
+
+**Before you install PHP**:  check if you can exectute symfony by running `symfony` from your terminal. If symfony is not found add this    in your `.bashrc` (or `.zshrc`, if you are using `zsh`)
 
 
-Build Vimeet events assets
+```
+export PATH="$HOME/.symfony/bin:$HOME/.config/composer/vendor/bin:$PATH"
+```
 
-        ⇒ bin/console vimeet:event:build-guideline-asset
+```bash
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
 
-Enable/Disable php xdebug
+# Install PHP 7.2
+sudo apt install php7.2
 
-        ⇒ manala_php_xdebug [on|off]
+# Install required dependencies for php and php 7.2
+sudo apt install php7.2-intl php7.2-gd php7.2-xml php7.2-curl php7.2-mysql php7.2-mbstring
+sudo apt install php-intl    php-gd    php-xml    php-curl    php-mysql php-mbstring
+
+cp app/config/parameters.yml.dist app/config/parameters.yml
+
+#Install symfony dependencies
+symfony composer install
+
+```
+
+
+
+####   Working with Elastic Search,  MySQL, NGINX and Redis
+
+Elastic Search, MySQL and NGINX  and Redis are living in  their dedicated docker container. To run all those services  just do :
+
+```
+docker network create proxy
+docker-compose up -d
+```
+
+### Import a Database Dump
+
+First ask a team mate to get an anonimyzed database dump.
+
+Then let's create the database and import  this dump
+
+#####  Create the database
+
+```
+mysql -h 127.0.0.1 -u root -p 
+create database proximum_vimeet;
+exit
+```
+
+ **Import the dump**
+
+Go to the folder where you've unzipped the sql dump and run
+
+```
+mysql -u root -h 127.0.0.1 -p proximu_vimeet < <your_db_dump_name>.sql
+```
+
+##### Indexing Elastic Search  DB
+
+Now it's time to index the Elastic Search Database
+
+```
+php bin/console vimeet:elasticsearch:index
+php bin/console jms:run
+```
+
+The last command will take ~1h to run . It's time to grab a coffee I guess.
+
+### Frontend Setup
+
+Currently the app frontend works on node version 8.
+
+The easiest way to install and manage node is by using [`nvm`](https://github.com/nvm-sh/nvm)
+
+##### Install Nvm
+
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+```
+
+Install the 8th version of node 
+
+```
+nvm install 8
+```
+
+If you already have this node version just run `nvm use`
+
+#### Build assets:
+
+    make build
+
+### Let's start and open the app
+
+First you need to start the symfony server :
+
+```
+symfony proxy:start
+symfony server:start -d
+```
+
+
+
+Then you're ready to start hacking.
+
+You should access the project via http://admin.vimeet.proximum.wip/app_dev.php/fr/event
+
+### Day to day usage
+
+**Build and watch assets:**
+
+        make watch
+
+**Build Vimeet events assets**
+
+Sometime events use specific assets like specific css. To build those run :
+
+        bin/console vimeet:event:build-guideline-asset
+
+**Enable/Disable php xdebug**
+
+       manala_php_xdebug [on|off]
 
 * *Supervisor*: http://vimeet.proximum:9001
 * *phpMyAdmin*: http://vimeet.proximum:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
 
-### Known issues
 
-* Landrush not working on Ubuntu.
-Get your VM ip, into your VM (`vagrant ssh`): `$ ip addr show`
-You will get something like: `... eth1: <BROADCAST... inet 172.28.128.3/24`. 
-Add in your /etc/hosts the needed *.vimeet.proximum subdomains:
-```
-172.28.128.3 admin.vimeet.proximum
-172.28.128.3 event*.vimeet.proximum
-```
 
-### Update
+**Install a Node dependency:**
 
-To update the application, for example after git branch checkout:
+         yarn add <package>
 
-        ⇒ make update-app
+**Remove a Node dependency:**
 
-### Yarn
+        yarn remove <package>
 
-Install a package:
+**Upgrade a Node dependency:**
 
-        ⇒ yarn add <package>
-
-Remove a dependency:
-
-        ⇒ yarn remove <package>
-
-Upgrade a dependency:
-
-        ⇒ yarn upgrade <package>@<version>
+        yarn upgrade <package>@<version>
 
 Then check if everything ok (please check package version release notes).
 
 To do not forget to rebuild js bundles:
 
-        ⇒ make build
+        make build
+
+### Update
+
+To update the application, for example after git branch checkout:
+
+        make update-app
 
 ### Migrations
 
@@ -133,11 +247,11 @@ To deploy to preprod and prod, you need to be connected to VPN with this  ~/.ssh
         Host vimeet-preprod
                 User www-data
                 Hostname 10.11.0.83
-
+    
         Host vimeet-prod1
                 User www-data
                 Hostname 10.11.0.31
-
+    
         Host vimeet-prod2
                 User www-data
                 Hostname 10.11.0.32

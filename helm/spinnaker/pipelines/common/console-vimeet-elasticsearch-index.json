@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:elasticsearch:index",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-elasticsearch-index",
+    "cronEnabled": "false",
+    "cronExpression": "0 0 8 ? * * *",
+    "cronCommand": "bin/console vimeet:elasticsearch:index --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "Rebuild Elasticsearch indices",
+  "stages": []
+}

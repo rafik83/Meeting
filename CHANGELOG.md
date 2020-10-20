@@ -5,6 +5,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.61.0] - 2010-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
+## [2.60.0] - 2010-10-14
+### Added
+- VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
+- VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
+
+## [2.59.1] - 2010-10-13
+### Updated
+- Update translations
+
+## [2.59.0] - 2010-10-13
+### Added
+- VIMEET-2245 - Login with tech event token in md5
+
+## [2.58.0] - 2010-10-13
+### Added
+- VIMEET-2236 - Add participant id for custom button
+- VIMEET-2240 - Add tech event id contact in md5 for custom button
+- VIMEET-2240 - Add sheet id for custom button
+- VIMEET 2218 - Add tab private chat and tab general chat
+
+### Fixed
+- MV255 - move chat css to event guideline css
+- MV255 - move question css to event guideline css
+- MV255 - separate button chat and button question
+
+## [2.57.0] - 2010-10-13
+### Added
+- VIMEET-2218 - Networking tab and page
+- VIMEET-2219 - Networking tab search participant
+- VIMEET-2222 - Networking / Private chat
+- VIMEET-2221 - Private chat notification toast
+- VIMEET-2220 - Badge on networking tab with unread messages
+
+### Changed
+- Remove command bus usage for translations update commands to prevent DB connections
+
+### Revert
+- VIMEET-1925 - Restore mercure version, with fixed issue on chat update
+
+## [2.56.0] - 2010-10-09
+### Added
+- VIMET-2177 - Add metrics to sheet export
+
+## [2.55.0] - 2010-10-08
+### Fixed
+- Hotfix - Prevent invalid extensions (especially php) on uploaded files
+
+## [2.54.0] - 2010-10-07
+### Fixed
+- MV-254 - Display bullet point in help message
+- Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)
+
 ## [2.53.0] - 2020-10-05
 ### Added
 - VIMEET-2237 - Option to record webinars automatically
@@ -116,6 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.44.0] - 2020-09-03
 ### Added
+- VIMEET-1925 - Chat API
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 - VIMEET-2213 - Translate timezones

@@ -1,0 +1,26 @@
+opcache.enable=1
+opcache.enable_cli=1
+
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=12
+opcache.max_accelerated_files=16000
+opcache.fast_shutdown=1
+
+; When disabled, you must reset the OPcache manually or restart the
+; webserver for changes to the filesystem to take effect.
+opcache.validate_timestamps=$DISABLE_OPCACHE
+
+; How often (in seconds) to check file timestamps for changes to the shared
+; memory storage allocation. ("1" means validate once per second, but only
+; once per request. "0" means always validate)
+opcache.revalidate_freq=0
+
+; Enables or disables file search in include_path optimization
+opcache.revalidate_path=1
+
+opcache.save_comments=1
+opcache.load_comments=0
+opcache.enable_file_override=1
+
+opcache.error_log=/var/log/php5/php5-opcache.error.log
+opcache.log_verbosity_level=1

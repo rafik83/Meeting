@@ -71,6 +71,9 @@ class Analytics
         return $this->uniqueViews;
     }
 
+    /**
+     * Get click count for a specific object identified by $objectId and optionally $index for collections
+     */
     public function getClickedElementsViews(string $objectId, int $index = null): array
     {
         if (!isset($this->clickedElements[$objectId])) {
@@ -88,5 +91,23 @@ class Analytics
         }
 
         return $clickedViews;
+    }
+
+    /**
+     * Get the sum of all elements clicked
+     */
+    public function getClickedElementsTotal(): int
+    {
+        if (empty($this->clickedElements)) {
+            return 0;
+        }
+
+        return array_reduce($this->clickedElements, static function ($carry, $item) {
+            if (isset($item['views'])) {
+                return $carry + $item['views'];
+            } else {
+                return $carry + array_sum(array_column($item, 'views'));
+            }
+        }, 0);
     }
 }

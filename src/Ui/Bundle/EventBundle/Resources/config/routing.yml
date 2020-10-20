@@ -650,6 +650,24 @@ event_contact_show:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
 
 #
+# Networking
+#
+event_networking_index:
+    path: /sheet/{sheet}/networking
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\IndexAction }
+
+event_networking_chat:
+    path: /sheet/{sheet}/networking/chat/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction, toUser: null }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
@@ -1244,6 +1262,40 @@ event_meeting_evaluation:
         meeting: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction
+
+#
+# Chat
+#
+event_chat_messages_list:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/list
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
+
+event_chat_messages_add:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/add
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction
+
+event_chat_avatar:
+    path: /chat/avatar
+    requirements:
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction
+
+event_chat_messages_vote:
+    path: /sheet/{sheet}/chat/vote
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\VoteAction
 
 #
 # Custom

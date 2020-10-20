@@ -51,7 +51,6 @@ template.object.telephone: Phone
 template.object.text: 'non modifiable text'
 template.object.upload: 'File upload'
 template.object.url: Link
-template.object.video: Video
 template.object.visibility.editable: 'Editable (editable and visible by the participant and the admin)'
 template.object.visibility.hidden: 'Hidden (editable and visible only by admin)'
 template.object.visibility.label: 'Visibility of the field'
@@ -84,7 +83,20 @@ template.tag.participant_city: 'participant''s city'
 template.tag.participant_country: 'participant''s country'
 template.tag.participant_departure_date: 'Date of departure'
 template.tag.participant_firstname: 'participant''s firstname'
-template.tag.participant_gender: 'Participant gender'
+template.tag.participant_gender: 'Participant title'
+template.tag.participant_generic_tag_1: 'Generic participant tag 1'
+template.tag.participant_generic_tag_10: 'Generic participant tag 10'
+template.tag.participant_generic_tag_11: 'Generic participant tag 11'
+template.tag.participant_generic_tag_12: 'Generic participant tag 12'
+template.tag.participant_generic_tag_13: 'Generic participant tag 13'
+template.tag.participant_generic_tag_14: 'Generic participant tag 14'
+template.tag.participant_generic_tag_15: 'Generic participant tag 15'
+template.tag.participant_generic_tag_2: 'Generic participant tag 2'
+template.tag.participant_generic_tag_3: 'Generic participant tag 3'
+template.tag.participant_generic_tag_4: 'Generic participant tag 4'
+template.tag.participant_generic_tag_5: 'Generic participant tag 5'
+template.tag.participant_generic_tag_7: 'Generic participant tag 7'
+template.tag.participant_generic_tag_8: 'Generic participant tag 8'
 template.tag.participant_lastname: 'participant''s lastname'
 template.tag.participant_mobile: 'participant''s mobile phone'
 template.tag.participant_phone: 'participant''s phone number'
@@ -94,7 +106,7 @@ template.tag.participant_zipcode: 'participant''s zipcode'
 template.tag.sheet_address: 'sheet adress'
 template.tag.sheet_application_domain: 'Application fields'
 template.tag.sheet_city: 'sheet city'
-template.tag.sheet_country: 'sheet country'
+template.tag.sheet_country: 'Sheet''s country'
 template.tag.sheet_description: 'sheet description'
 template.tag.sheet_generic_tag_1: 'generic tag 1'
 template.tag.sheet_generic_tag_10: 'generic tag  10'
@@ -198,8 +210,8 @@ template.tag.sheet_generic_tag_99: 'generic tag 99'
 template.tag.sheet_logo: logo
 template.tag.sheet_organization: 'organization name'
 template.tag.sheet_organization_category: 'organization category'
-template.tag.sheet_organization_staff: staff
-template.tag.sheet_organization_turnover: turnover
+template.tag.sheet_organization_staff: Staff
+template.tag.sheet_organization_turnover: Turnover
 template.tag.sheet_phone: 'sheet phone number'
 template.tag.sheet_template_generic_tag_1: 'generic presentation tag 1'
 template.tag.sheet_template_generic_tag_10: 'generic presentation tag 10'
@@ -313,4 +325,5 @@ template.upload.formats.choice.csv: Csv
 template.upload.formats.choice.image: Image
 template.upload.formats.choice.pdf: Pdf
 template.upload.formats.choice.ppt: Powerpoint
+template.upload.formats.choice.vector_image: 'Vector image'
 template.upload.formats.title: 'Allowed formats for upload'

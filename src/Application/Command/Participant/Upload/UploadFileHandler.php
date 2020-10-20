@@ -63,7 +63,7 @@ class UploadFileHandler
                 );
             }
 
-            $clientOriginalExtension = $file->getClientOriginalExtension();
+            $clientOriginalExtension = $file->guessExtension();
             $path = $this->fileStorage->upload($file, $isEncrypted ? $this->encryptedFilesPath : null);
 
             if ($isEncrypted) {

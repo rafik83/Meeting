@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 /**
  * Domain language: "Conférence"  (aka "Sous-événement")
  */
-class Happening implements TimeRangeInterface
+class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 {
     /** @var int */
     private $id;
@@ -128,6 +128,11 @@ class Happening implements TimeRangeInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return 'happening';
     }
 
     public function getEvent(): Event

@@ -4,15 +4,17 @@ namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use DateTimeInterface;
 use LogicException;
+use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
-use Proximum\Vimeet\Application\View\Happening\Webinar\SpeakerWebinarView;
-use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\SpeakerWebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\WebinarView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -20,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class GetWebinarViewQueryHandler
 {
@@ -28,6 +31,9 @@ class GetWebinarViewQueryHandler
 
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
+
+    /** @var NotificationSubscriberInterface */
+    private $notificationSubscriber;
 
     /** @var DateTimeInterface */
     private $dateTime;
@@ -44,6 +50,7 @@ class GetWebinarViewQueryHandler
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        NotificationSubscriberInterface $notificationSubscriber,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
@@ -52,6 +59,7 @@ class GetWebinarViewQueryHandler
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
+        $this->notificationSubscriber = $notificationSubscriber;
         $this->dateTime = $dateTime;
         $this->isRecordingAllowed = $isRecordingAllowed;
         $this->happeningBroadcastRepository = $happeningBroadcastRepository;
@@ -103,7 +111,17 @@ class GetWebinarViewQueryHandler
             );
         }
 
-        return new ViewerWebinarView(
+        $notificationView = new NotificationView(
+            $this->notificationSubscriber->getUrl(),
+            $this->notificationSubscriber->getHappeningSubscriberKey(
+                $happening,
+                $query->getUser(),
+                [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS]
+            )
+        );
+
+        return new WebinarView(
+            $happening->getEvent()->getId(),
             $happening->getId(),
             $query->getUser()->getId(),
             $happening->getTitle($query->getLocale()),
@@ -111,6 +129,8 @@ class GetWebinarViewQueryHandler
             $sessionAndTokenView->token,
             $sessionAndTokenView->sessionId,
             $sessionAndTokenView->apiKey,
+            $notificationView,
+            $isSpeaker,
             $this->getSpeakerViews($happening, $query->getLocale()),
             $this->getParticipantViews($happening, $query->getLocale()),
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),

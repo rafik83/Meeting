@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -63,6 +65,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     public const COL_COMMENTS = 'comments';
     public const COL_COMMERCIAL_STATUS = 'commercial_status';
     public const COL_SPOT = 'sheet_spot';
+    public const COL_SENT_REQUESTS = 'sent_requests';
+    public const COL_RECEIVED_REQUESTS = 'received_requests';
+    public const COL_SCHEDULED_MEETINGS = 'scheduled_meetings';
+    public const COL_VIEWS = 'views';
+    public const COL_CLICKED_ELEMENTS = 'clicked_elements';
 
     public const TRANSLATION_KEY_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
     public const TRANSLATION_KEY_COMMENT = 'admin.sheet.export.field.comment';
@@ -92,6 +99,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         self::COL_BALANCE,
         self::COL_COMMENTS,
         self::COL_COMMERCIAL_STATUS,
+        self::COL_SENT_REQUESTS,
+        self::COL_RECEIVED_REQUESTS,
+        self::COL_SCHEDULED_MEETINGS,
+        self::COL_VIEWS,
+        self::COL_CLICKED_ELEMENTS,
     ];
 
     protected $normalizerType = 'sheet';
@@ -141,11 +153,26 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
     /** @var string[] indexed by type id */
     private $typeTitles = [];
 
     /** @var string[] indexed by type id */
     private $categories = [];
+
+    /** @var int[] indexed by sheet id */
+    private $sentRequests;
+
+    /** @var int[] indexed by sheet id */
+    private $receivedRequests;
+
+    /** @var int[] indexed by sheet id */
+    private $scheduledMeetings;
 
     public function __construct(
         TranslatorInterface $translator,
@@ -155,7 +182,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         Merger $merger,
         Balance $balance,
         RecordViewsQueryHandler $recordViewsQueryHandler,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator,
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         parent::__construct($translator);
 
@@ -168,6 +197,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->orderRepository = $orderRepository;
         $this->recordViewsQueryHandler = $recordViewsQueryHandler;
         $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->requestRepository = $requestRepository;
+        $this->meetingRepository = $meetingRepository;
     }
 
     /**
@@ -190,6 +221,13 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // Preload transaction and order to avoid a query by sheet
         $this->balance->loadAllForSheetIds($event, $sheetIds);
+
+        // Preload requests count
+        $this->sentRequests = $this->requestRepository->getSheetSentRequestsCount($sheetIds);
+        $this->receivedRequests = $this->requestRepository->getSheetReceivedRequestsCount($sheetIds);
+
+        // Preload meetings count
+        $this->scheduledMeetings = $this->meetingRepository->getSheetScheduledMeetingsCount($sheetIds);
 
         $sheets = $this->sheetRepository->getSheetsByEventAndIds($event, $sheetIds);
 
@@ -265,30 +303,35 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
-            self::COL_EVENT_ID          => $event->getId(),
-            self::COL_EVENT_NAME        => $event->getTitle(),
-            self::COL_SHEET_ID          => $sheet->getId(),
-            self::COL_SHEET_ENABLE      => $this->normalizeBoolean($sheet->isEnabled()),
-            self::COL_SHEET_STATE       => $sheet->getState(),
-            self::COL_SPOT              => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
-            self::COL_OWNER_ID          => $owner->getId(),
-            self::COL_OWNER_FIRSTNAME   => $owner->getFirstName(),
-            self::COL_OWNER_LASTNAME    => $owner->getLastName(),
-            self::COL_OWNER_EMAIL       => $owner->getEmail(),
-            self::COL_OWNER_PHONE       => $owner->getPhone(),
-            self::COL_OWNER_MOBILE      => $owner->getMobile(),
-            self::COL_TYPE              => $this->getTypeTitle($sheet, $locale),
-            self::COL_CATEGORY          => $this->getCategories($sheet, $locale),
+            self::COL_EVENT_ID => $event->getId(),
+            self::COL_EVENT_NAME => $event->getTitle(),
+            self::COL_SHEET_ID => $sheet->getId(),
+            self::COL_SHEET_ENABLE => $this->normalizeBoolean($sheet->isEnabled()),
+            self::COL_SHEET_STATE => $sheet->getState(),
+            self::COL_SPOT => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
+            self::COL_OWNER_ID => $owner->getId(),
+            self::COL_OWNER_FIRSTNAME => $owner->getFirstName(),
+            self::COL_OWNER_LASTNAME => $owner->getLastName(),
+            self::COL_OWNER_EMAIL => $owner->getEmail(),
+            self::COL_OWNER_PHONE => $owner->getPhone(),
+            self::COL_OWNER_MOBILE => $owner->getMobile(),
+            self::COL_TYPE => $this->getTypeTitle($sheet, $locale),
+            self::COL_CATEGORY => $this->getCategories($sheet, $locale),
             self::COL_REGISTRATION_DATE => $sheet->getCreatedAt()->format('d/m/Y'),
-            self::COL_PARTICIPANTS      => $sheet->countParticipants(),
-            self::COL_STATUS            => $sheet->getValidationState(),
-            self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
-            self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInInternalCatalog()),
-            self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
-            self::COL_TOTAL_ORDER       => $totalWithoutVat,
-            self::COL_BALANCE           => $balance,
-            self::COL_COMMENTS          => $this->getCommentHistoric($sheet, $locale),
+            self::COL_PARTICIPANTS => $sheet->countParticipants(),
+            self::COL_STATUS => $sheet->getValidationState(),
+            self::COL_FOLLOWING => null !== $follower ? $follower->getDisplayName() : '',
+            self::COL_IN_CATALOG => $this->normalizeBoolean($sheet->isInInternalCatalog()),
+            self::COL_ORDER_PROMO_CODE => implode(',', $promotionCodes),
+            self::COL_TOTAL_ORDER => $totalWithoutVat,
+            self::COL_BALANCE => $balance,
+            self::COL_COMMENTS => $this->getCommentHistoric($sheet, $locale),
             self::COL_COMMERCIAL_STATUS => $this->getCommercialStatus($sheet),
+            self::COL_SENT_REQUESTS => $this->sentRequests[$sheet->getId()] ?? 0,
+            self::COL_RECEIVED_REQUESTS => $this->receivedRequests[$sheet->getId()] ?? 0,
+            self::COL_SCHEDULED_MEETINGS => $this->scheduledMeetings[$sheet->getId()] ?? 0,
+            self::COL_VIEWS => $sheet->getAnalytics()->getViews(),
+            self::COL_CLICKED_ELEMENTS => $sheet->getAnalytics()->getClickedElementsTotal(),
         ];
 
         // 2. Registration data
