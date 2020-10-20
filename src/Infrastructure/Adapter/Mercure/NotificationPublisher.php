@@ -120,6 +120,8 @@ class NotificationPublisher extends AbstractNotification implements Notification
             'data' => json_encode([
                 'action' => 'request_visio',
                 'from' => $this->userPayloadBuilder->get($sheet, $fromUser),
+                'urlAccept' => '/fr/sheet/123/',
+                'urlRefuse' => '/fr/sheet/124/',
             ]),
         ];
 

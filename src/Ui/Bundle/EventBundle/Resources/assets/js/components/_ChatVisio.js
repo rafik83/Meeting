@@ -1,6 +1,5 @@
 'use strict';
 
-import $ from "jquery";
 import axios from "axios";
 
 export default class ChatVisio
@@ -9,6 +8,7 @@ export default class ChatVisio
         this.visioEnable = buttonContainer.getAttribute('data-visio-enable');
         this.buttonVisio = buttonContainer.querySelector('.state-normal');
         this.buttonRequestPending = buttonContainer.querySelector('.state-pending');
+        this.buttonRequestRefuse = buttonContainer.querySelector('.state-refuse');
         this.buttonVisio.classList.add("hide");
         this.buttonVisio.addEventListener('click', this.onRequestVisio.bind(this));
     }

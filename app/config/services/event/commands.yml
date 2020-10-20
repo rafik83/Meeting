@@ -231,6 +231,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RequestVisio }
 
+    Proximum\Vimeet\Application\Command\Networking\RefuseVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RefuseVisio }
+
     #
     # Webinar
     #

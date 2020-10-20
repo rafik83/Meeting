@@ -1,3 +1,6 @@
+import ChatVisio from "./_ChatVisio";
+import RefuseVisio from "./_RefuseVisio";
+
 class NotificationCallVisio {
 
     constructor(element, currentUserConnection) {
@@ -5,6 +8,8 @@ class NotificationCallVisio {
             this.element = element;
             currentUserConnection.addListener(this.onNotificationReceived.bind(this));
             this.element.querySelector('.close').addEventListener('click', () => this.hide());
+            this.disabled = false;
+            this.refuseVisio = new RefuseVisio(this.element.querySelector('.glyphicon-remove-sign'), ()=> this.hide());
         }
     }
 
@@ -13,11 +18,17 @@ class NotificationCallVisio {
         if (payload.action === 'request_visio') {
             this.timerId = setTimeout(this.hide.bind(this), 30000);
             this.show(payload);
+            this.requestUrlRefuse = payload.urlRefuse;
+            this.requestUrlAccept = payload.urlAccept;
+            this.refuseVisio.setUrlRefuse(payload.urlRefuse);
             // réinitialiser le timeout
         }
     }
 
     show(message) {
+        if (this.disabled) {
+            return;
+        }
         const author = document.querySelector('.author');
         const user = document.createElement('p');
         const position = document.createElement('em');
@@ -33,6 +44,14 @@ class NotificationCallVisio {
         const author = document.querySelector('.author');
         author.innerHTML = "";
         $("#notificationCallVisio").modal('hide');
+    }
+
+    disable() {
+        this.disabled = true;
+    }
+
+    enable() {
+        this.disabled = false;
     }
 }
 export default NotificationCallVisio;

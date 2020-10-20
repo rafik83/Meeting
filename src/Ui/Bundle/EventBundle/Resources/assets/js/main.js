@@ -286,10 +286,11 @@ function init(target) {
     const userConnectionRegister = new UserConnectionRegister();
     userConnectionRegister.connect();
 
-    initNetworking(document, userConnectionRegister);
+    const notificationCallVisio = new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
+
+    initNetworking(document, userConnectionRegister, notificationCallVisio);
 
     new NotificationToast(target.querySelector('[data-notification-toast]'), userConnectionRegister);
-    new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
 
 }
 

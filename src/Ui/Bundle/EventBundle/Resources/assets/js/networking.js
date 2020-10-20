@@ -5,7 +5,7 @@ import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 
-export default function initNetworking(target, userConnection) {
+export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
     if (!chatNetworkingElement) {
@@ -59,6 +59,8 @@ export default function initNetworking(target, userConnection) {
     const notificationHandler = {
         participantLists,
         target,
+        requestUrlAccept: null,
+        requestUrlRefuse: null,
         handle: function (notification, targetChat) {
             const payload = JSON.parse(notification.data);
             if (payload.action === 'user_connection') {
@@ -85,6 +87,8 @@ export default function initNetworking(target, userConnection) {
                     divCallVisioMessage.classList.remove("hide");
                     buttonVisio.classList.add("hide");
                 }
+                this.requestUrlAccept = payload.urlAccept;
+                this.requestUrlRefuse = payload.urlRefuse;
             }
         }
     }
@@ -110,6 +114,7 @@ export default function initNetworking(target, userConnection) {
     const modalManager = {
         userConnection,
         notificationHandler,
+        notificationCallVisio,
         open: function (participantNode) {
             const privateChatModalId = 'private-chat-' + participantNode.getAttribute('data-participant-user-id');
             let modal = document.getElementById(privateChatModalId);
@@ -126,6 +131,7 @@ export default function initNetworking(target, userConnection) {
                     const chat = new Chat(privateChatModalElement);
                     const chatVisio = new ChatVisio(chat, modal.querySelector('.chat-header-tools'));
                     chat.initChat();
+                    this.notificationCallVisio.disable();
                     chat.addListener((messages) => {
                         chatVisio.onMessagesReceived(messages);
                     });
@@ -139,6 +145,7 @@ export default function initNetworking(target, userConnection) {
             $(modal).modal('show')
             $(modal).on('hidden.bs.modal', ()=> {
                 modal.remove();
+                this.notificationCallVisio.enable();
             })
         }
     }

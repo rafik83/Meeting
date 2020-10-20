@@ -23,10 +23,18 @@
             >
                         <span class="glyphicon glyphicon-option-horizontal"></span>
                         {{ 'networking.chat.visio.pending'|trans }}
-                    </span>
+            </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-refuse hide">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.refuse'|trans }}
+            </span>
         </div>
     </div>
-    {% include '@Event/Networking/Partials/notificationCallVisio.html.twig' %}
+    <div class="chat-message-call-visio hide">
+        {% include '@Event/Networking/Partials/notificationCallVisio.html.twig' %}
+    </div>
     <div data-chat-networking
          data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
          data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"

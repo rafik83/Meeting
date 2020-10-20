@@ -683,6 +683,14 @@ event_networking_visio:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\VisioAction }
 
+event_networking_refuse_visio:
+    path: /sheet/{sheet}/networking/refuse-visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\RefuseVisioAction }
+
 #
 # Meeting Request
 #

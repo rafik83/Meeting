@@ -71,7 +71,7 @@
                 </p>
             </div>
 
-            <div class="modal fade hide" id="notificationCallVisio" data-notification-call-visio tabindex="-1" role="dialog" data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}">
+            <div class="modal fade notificationCallVisio hide" id="notificationCallVisio" data-notification-call-visio tabindex="-1" role="dialog" data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body" data-notification-call-visio>
@@ -80,9 +80,7 @@
                             <h2>{{ 'networking.chat.visio.request.message.author'|trans }}</h2>
                             <div class="author"></div>
                             <div class="chat-message-call-visio">
-                                <p>{{ 'networking.chat.visio.request.message'|trans }}</p>
-                                <span class="glyphicon glyphicon-facetime-video" data-url=""></span>
-                                <span class="glyphicon glyphicon-remove-sign" data-url=""></span>
+                                {% include '@Event/Networking/Partials/notificationCallVisio.html.twig' %}
                             </div>
                         </div>
                     </div>
