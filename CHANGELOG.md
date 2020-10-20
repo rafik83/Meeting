@@ -5,6 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [2.62.0] - 2020-10-20
+### Updated
+
+- VIMEET-2220 - Add attributes and refactoring of [NetworkingSubMenuViewQueryHandler](https://github.com/proximum/vimeet/blob/099b60aa1b9cb4231d608b740e239261cbe870b2/src/Application/Query/Navigation/Submenu/NetworkingSubmenuViewQueryHandler.php)
+- Compute the private chat message count in JS
+
 ## [2.61.0] - 2010-10-15
 ### Added
 - VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
