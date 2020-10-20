@@ -141,6 +141,10 @@ export default function initNetworking(target, userConnection) {
             modalManager.open(toUserParticipantNode);
         }
     }
+    const newMessageItems = document.querySelectorAll("[data-new-messages-count");
+    const networkingPageDataNodeElements = document.querySelectorAll("[data-is-networking-page-active]");
 
-    NetworkingNewMessageCounter.appendNewMessageBadge();
+    const networkingMessageCounter = new NetworkingNewMessageCounter(newMessageItems);
+
+    networkingMessageCounter.appendNewMessageBadge(networkingPageDataNodeElements)
 }
