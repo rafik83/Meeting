@@ -5,20 +5,7 @@ snc_redis:
             alias: session
             dsn: '%redis_dsn%/1'
             logging: '%kernel.debug%'
-        # doctrine:
-        #     type: predis
-        #     alias: doctrine
-        #     dsn: '%redis_dsn%/2'
-        #     logging: '%kernel.debug%'
     session:
         client: session
         prefix: session
         ttl: 86400
-    # doctrine:
-    #     metadata_cache:
-    #         client: doctrine
-    #         entity_manager: default
-    #         document_manager: default
-    #     query_cache:
-    #         client: doctrine
-    #         entity_manager: default
