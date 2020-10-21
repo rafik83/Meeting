@@ -420,6 +420,7 @@ networking.chat.messages.count: '{0} Aucun message|{1} Un message|]1,Inf[ %count
 networking.chat.messages.new: '{0} Aucun nouveau message|{1} Un nouveau message|]1,Inf[ %count% nouveaux messages'
 networking.chat.notification.open: 'Ouvrir dans le chat'
 networking.chat.title: 'Chat privé'
+networking.chat.visio.no.response: 'votre interlocuteur ne répond pas'
 networking.chat.visio.pending: 'En attente de confirmation'
 networking.chat.visio.refuse: 'Votre appel a été refusé'
 networking.chat.visio.request: 'Appel visio'

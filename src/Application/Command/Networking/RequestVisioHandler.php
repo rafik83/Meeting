@@ -27,7 +27,8 @@ class RequestVisioHandler
         $this->notificationPublisher->publishRequestVisioNotification(
             $command->sheet,
             $command->fromUser,
-            $command->toUser->getId()
+            $command->toUser->getId(),
+            'request_visio'
         );
     }
 }

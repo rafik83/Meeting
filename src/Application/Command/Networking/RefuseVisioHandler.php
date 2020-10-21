@@ -29,7 +29,8 @@ class RefuseVisioHandler
         $this->notificationPublisher->publishRequestVisioNotification(
             $command->sheet,
             $command->fromUser,
-            $command->toUser->getId()
+            $command->toUser->getId(),
+            'refuse_visio'
         );
     }
 }

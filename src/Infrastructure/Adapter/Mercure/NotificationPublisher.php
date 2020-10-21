@@ -113,15 +113,15 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishRequestVisioNotification(Sheet $sheet, User $fromUser, int $toUserId): void
+    public function publishRequestVisioNotification(Sheet $sheet, User $fromUser, int $toUserId, string $type): void
     {
         $postData = [
             'topic' => $this->getUserTopic($sheet->getEvent()->getId(), $toUserId),
             'data' => json_encode([
-                'action' => 'request_visio',
+                'action' => $type,
                 'from' => $this->userPayloadBuilder->get($sheet, $fromUser),
-                'urlAccept' => '/fr/sheet/123/',
-                'urlRefuse' => '/fr/sheet/124/',
+                'urlAccept' => '/fr/sheet/'.$sheet->getId().'/',
+                'urlRefuse' => '/fr/sheet/'.$sheet->getId().'/networking/refuse-visio/'.$fromUser->getId(),
             ]),
         ];
 

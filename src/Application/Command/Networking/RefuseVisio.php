@@ -4,10 +4,11 @@
 namespace Proximum\Vimeet\Application\Command\Networking;
 
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class RefuseVisio
+class RefuseVisio implements Command
 {
 
     /** @var Sheet */

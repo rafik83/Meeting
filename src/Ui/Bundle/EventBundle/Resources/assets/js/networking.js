@@ -4,6 +4,7 @@ import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
+import RefuseVisio from "./components/_RefuseVisio";
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
@@ -83,12 +84,20 @@ export default function initNetworking(target, userConnection, notificationCallV
             if (payload.action === 'request_visio') {
                 const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
                 const buttonVisio = document.querySelector('.state-normal');
-                if (divCallVisioMessage != null){
+
+                if (divCallVisioMessage != null) {
                     divCallVisioMessage.classList.remove("hide");
                     buttonVisio.classList.add("hide");
+                    this.refuseVisio.setUrlRefuse(payload.urlRefuse);
+                    setTimeout(() => {
+                        divCallVisioMessage.classList.add("hide");
+                        buttonVisio.classList.remove("hide");
+                    }, 30000);
                 }
-                this.requestUrlAccept = payload.urlAccept;
-                this.requestUrlRefuse = payload.urlRefuse;
+            }
+
+            if (payload.action === 'refuse_visio') {
+                this.chatVisio.onRefuseVisio();
             }
         }
     }
@@ -130,6 +139,13 @@ export default function initNetworking(target, userConnection, notificationCallV
 
                     const chat = new Chat(privateChatModalElement);
                     const chatVisio = new ChatVisio(chat, modal.querySelector('.chat-header-tools'));
+                    const refuseVisio = new RefuseVisio(modal.querySelector('.chat-message-call-visio .glyphicon-remove-sign'),
+                        () => {
+                            modal.querySelector('.chat-message-call-visio').classList.add('hide');
+                            modal.querySelector('.state-normal').classList.remove('hide');
+                        });
+                    this.notificationHandler.refuseVisio = refuseVisio;
+                    this.notificationHandler.chatVisio = chatVisio;
                     chat.initChat();
                     this.notificationCallVisio.disable();
                     chat.addListener((messages) => {
@@ -143,7 +159,7 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             $(modal).modal('show')
-            $(modal).on('hidden.bs.modal', ()=> {
+            $(modal).on('hidden.bs.modal', () => {
                 modal.remove();
                 this.notificationCallVisio.enable();
             })

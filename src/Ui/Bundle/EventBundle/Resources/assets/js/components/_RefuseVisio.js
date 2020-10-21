@@ -10,13 +10,12 @@ export default class RefuseVisio {
     }
 
     refuseCall(event) {
-        const url = this.buttonRefuse.getAttribute('data-url');
-        axios.post(url).then((response) => {
+        axios.post(this.urlRefuse).then((response) => {
             this.callback();
         });
     }
 
     setUrlRefuse(urlRefuse) {
-        console.log(urlRefuse);
+        this.urlRefuse = urlRefuse;
     }
 }

@@ -30,6 +30,12 @@
                         <span class="glyphicon glyphicon-option-horizontal"></span>
                         {{ 'networking.chat.visio.refuse'|trans }}
             </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-no-response hide">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.no.response'|trans }}
+            </span>
         </div>
     </div>
     <div class="chat-message-call-visio hide">

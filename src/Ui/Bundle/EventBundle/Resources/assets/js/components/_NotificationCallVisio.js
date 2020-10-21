@@ -21,7 +21,6 @@ class NotificationCallVisio {
             this.requestUrlRefuse = payload.urlRefuse;
             this.requestUrlAccept = payload.urlAccept;
             this.refuseVisio.setUrlRefuse(payload.urlRefuse);
-            // réinitialiser le timeout
         }
     }
 
@@ -44,6 +43,7 @@ class NotificationCallVisio {
         const author = document.querySelector('.author');
         author.innerHTML = "";
         $("#notificationCallVisio").modal('hide');
+        clearTimeout(this.timerId);
     }
 
     disable() {
