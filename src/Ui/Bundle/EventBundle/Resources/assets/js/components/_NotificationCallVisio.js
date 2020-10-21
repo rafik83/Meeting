@@ -1,4 +1,3 @@
-import ChatVisio from "./_ChatVisio";
 import RefuseVisio from "./_RefuseVisio";
 
 class NotificationCallVisio {
@@ -7,9 +6,10 @@ class NotificationCallVisio {
         if (element) {
             this.element = element;
             currentUserConnection.addListener(this.onNotificationReceived.bind(this));
+            this.acceptVisio = this.element.querySelector('.call-visio-accept');
             this.element.querySelector('.close').addEventListener('click', () => this.hide());
             this.disabled = false;
-            this.refuseVisio = new RefuseVisio(this.element.querySelector('.glyphicon-remove-sign'), ()=> this.hide());
+            this.refuseVisio = new RefuseVisio(this.element.querySelector('.call-visio-refuse'), ()=> this.hide());
         }
     }
 
@@ -18,9 +18,8 @@ class NotificationCallVisio {
         if (payload.action === 'request_visio') {
             this.timerId = setTimeout(this.hide.bind(this), 30000);
             this.show(payload);
-            this.requestUrlRefuse = payload.urlRefuse;
-            this.requestUrlAccept = payload.urlAccept;
             this.refuseVisio.setUrlRefuse(payload.urlRefuse);
+            this.acceptVisio.setAttribute('href', payload.urlAccept);
         }
     }
 

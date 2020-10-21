@@ -34,7 +34,7 @@ class PrivateChatView
     public $chatSessionId;
 
     /** @var bool */
-    public $isVisio;
+    public $hasVisioButton;
 
     public function __construct(
         string $providerUrl,
@@ -46,7 +46,7 @@ class PrivateChatView
         ?string $toUserPosition,
         int $toUserId,
         int $chatSessionId,
-        bool $isVisio
+        bool $hasVisioButton
     ) {
         $this->providerUrl = $providerUrl;
         $this->subscriberKey = $subscriberKey;
@@ -57,6 +57,6 @@ class PrivateChatView
         $this->toUserPosition = $toUserPosition;
         $this->toUserId = $toUserId;
         $this->chatSessionId = $chatSessionId;
-        $this->isVisio = $isVisio;
+        $this->hasVisioButton = $hasVisioButton;
     }
 }

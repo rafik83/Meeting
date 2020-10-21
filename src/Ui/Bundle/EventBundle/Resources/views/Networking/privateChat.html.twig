@@ -9,7 +9,7 @@
                 {% if privateChatView.toUserPosition %}<em> {{ privateChatView.toUserPosition }}</em>{% endif %}
             <p>
         </div>
-        <div class="chat-header-tools" data-visio-enable="{{ privateChatView.isVisio }}">
+        <div class="chat-header-tools" data-visio-enable="{{ privateChatView.hasVisioButton }}">
             <button
                     data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                     class="btn btn-sm btn-primary state-normal"

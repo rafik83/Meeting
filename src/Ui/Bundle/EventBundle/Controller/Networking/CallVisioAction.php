@@ -5,11 +5,15 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Query\Networking\PrivateChatQuery;
+use Proximum\Vimeet\Application\Command\Contact\Add;
+use Proximum\Vimeet\Application\Command\Networking\AcceptVisio;
+use Proximum\Vimeet\Application\Query\Networking\CallVisioQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +23,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
-class VisioAction
+class CallVisioAction
 {
     /** @var EngineInterface */
     private $engine;
@@ -35,19 +39,25 @@ class VisioAction
 
     /** @var UserRepositoryInterface */
     private $userRepository;
+    /**
+     * @var CommandBus
+     */
+    private $commandBus;
 
     public function __construct(
         QueryBusInterface $queryBus,
         EngineInterface $engine,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         NetworkingAccessChecker $networkingAccessChecker,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        CommandBus $commandBus
     ) {
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->networkingAccessChecker = $networkingAccessChecker;
         $this->userRepository = $userRepository;
+        $this->commandBus = $commandBus;
     }
 
     public function __invoke(
@@ -78,12 +88,17 @@ class VisioAction
             throw new AccessDeniedException();
         }
 
+        $user = $userDomain->getUser();
+
+        $this->commandBus->handle(new Add($event, $user, $toUser, Contact::ORIGIN_PRIVATE_CHAT_VISIO));
+
         // todo
-        // $visioView = $this->queryBus->handle(new VisioQuery($sheet, $userDomain->getUser(), $toUser));
+        $visioView = $this->queryBus->handle(new CallVisioQuery($sheet, $user, $toUser));
+        $this->commandBus->handle(new AcceptVisio($sheet, $user, $toUser));
 
         return new Response(
             $this->engine->render(
-                '@Event/Networking/visio.html.twig',
+                '@Event/CallVisio/CallVisio.html.twig',
                 [
                     'visioView' => $visioView,
                     'sheet' => $sheet,

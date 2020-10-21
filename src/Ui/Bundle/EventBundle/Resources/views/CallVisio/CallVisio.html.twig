@@ -1,0 +1,93 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block head_link %}
+<link rel="chrome-webstore-item" href="{{ visio_screen_sharing_chrome_extension }}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('assets/js/visio.js') }}"></script>
+{% endblock %}
+
+{% block body_attributes 'class="background-black"' %}
+
+{% block body %}
+    {% set participantPresenceAction = null %}
+    {% if participant is defined and meeting is defined and sheet is defined %}
+        {% set participantPresenceAction = path('event_video_meeting_presence', {'sheet': sheet.id, 'participant': participant.id, 'meeting': meeting.id}) %}
+    {% endif %}
+
+    <div class="video-conference"
+         data-token="{{ visioView.token }}"
+         data-session-id="{{ visioView.sessionId }}"
+         data-api-key="{{ visioView.apiKey }}"
+         data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+         data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
+         data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+         data-media-screenShareStatus-message="{{ 'meeting.video.media.share.screenShareStatus'|trans }}"
+         data-participant-presence-action="{{ participantPresenceAction }}"
+         data-user-complete-name=""
+
+            {% if meetingView is defined %}
+                data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
+                data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
+
+                data-current-user-id="{{ currentUserId }}"
+                data-subscriber-mapping="{{ meetingView.participantInfosByUserId|json_encode }}"
+            {% endif %}
+
+         data-visio-meeting-end-warning=""
+    >
+
+        <div class="layout-container"></div>
+        <div class="chat-container hide"></div>
+        <div class="video-helper" data-meeting-settings-container>
+            {{ include('EventBundle:Visio:settings.html.twig') }}
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" data-visio-meeting-end-container>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'modal.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+                <div class="timer-container">
+                    <div class="timer">
+                        {{ 'meeting.video.endingAt'|trans }}
+                        <span class="countdown"></span>
+                    </div>
+                </div>
+
+            <button id="toggle-audio" class="btn hide">
+                <i class="icon-Conference icon-center"></i>
+            </button>
+            <button id="toggle-video" class="btn hide">
+                <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="start-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
+            </button>
+            <button id="end-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.end'|trans }}
+            </button>
+            <button
+                    class="btn btn-primary end-meeting">
+                <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock %}
+

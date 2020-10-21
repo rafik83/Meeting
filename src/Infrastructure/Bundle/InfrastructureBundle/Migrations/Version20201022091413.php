@@ -29,7 +29,7 @@ final class Version20201022091413 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql('ALTER TABLE contact ADD ALTER TABLE contact ADD scanned TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE contact ADD scanned TINYINT(1) NOT NULL');
         $this->addSql('UPDATE contact SET contact.scanned = IF(contact.origin = \'scan\', 1, 0)');
         $this->addSql('ALTER TABLE contact DROP origin');
     }

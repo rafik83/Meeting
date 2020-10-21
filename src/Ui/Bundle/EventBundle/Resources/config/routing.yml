@@ -681,7 +681,7 @@ event_networking_visio:
         sheet: \d+
         toUser: \d+
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\VisioAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\CallVisioAction }
 
 event_networking_refuse_visio:
     path: /sheet/{sheet}/networking/refuse-visio/{toUser}

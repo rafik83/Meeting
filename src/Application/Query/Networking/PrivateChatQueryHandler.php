@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Exception\Chat\PrivateChatInvalidToUser;
 use Proximum\Vimeet\Application\View\Networking\PrivateChatView;
-use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
@@ -18,21 +18,18 @@ class PrivateChatQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
-    /** @var CallVisioPrivateChatAccessChecker */
-    private $callVisioPrivateChatAccessChecker;
-
-    /** @var bool */
-    public $isVisio;
+    /** @var AskCallVisioPrivateChatAccessChecker */
+    private $askCallVisioPrivateChatAccessChecker;
 
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
         ChatSessionRepositoryInterface $chatSessionRepository,
-        CallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker
+        AskCallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker
     )
     {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
-        $this->callVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
+        $this->askCallVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
     }
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
@@ -59,7 +56,7 @@ class PrivateChatQueryHandler
 
         $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->sheet->getEvent()->getId(), $privateChatQuery->fromUser->getId());
 
-        $isVisio = $this->callVisioPrivateChatAccessChecker->allowedToAccess($privateChatQuery->sheet->getEvent(), $chatSession, $privateChatQuery->toUser);
+        $hasVisioButton = $this->askCallVisioPrivateChatAccessChecker->allowedToAccess($privateChatQuery->sheet->getEvent(), $chatSession, $privateChatQuery->toUser);
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),
@@ -75,7 +72,7 @@ class PrivateChatQueryHandler
             $privateChatQuery->toUser->getPosition(),
             $privateChatQuery->toUser->getId(),
             $chatSession->getId(),
-            $isVisio
+            $hasVisioButton
         );
     }
 }

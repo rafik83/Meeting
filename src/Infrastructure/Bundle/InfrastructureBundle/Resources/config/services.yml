@@ -5626,7 +5626,13 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
         arguments:
             - '@datetime'
-            -
+
+    domain.key_dates.checker.ask_call_visio_private_chat_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
+
     domain.key_dates.checker.call_visio_private_chat_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker
         arguments:
@@ -7237,6 +7243,17 @@ services:
     #
     # Networking
     #
+
+    Proximum\Vimeet\Application\Query\Networking\CallVisioQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
@@ -7257,6 +7274,6 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
-            - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
+            - '@domain.key_dates.checker.ask_call_visio_private_chat_access_checker'
         tags:
             - { name: tactician.handler, typehints: true }

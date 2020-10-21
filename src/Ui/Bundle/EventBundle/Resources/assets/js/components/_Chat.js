@@ -11,6 +11,7 @@ function Chat(element) {
     this.addChatFormList = this.chatContainer.querySelector('.chat-list');
     this.externalListener = [];
     this.chatLoaded = false;
+    this.toUserId = null;
 
     this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
 
@@ -231,6 +232,14 @@ Chat.prototype.removeChatListeners = function () {
 
 Chat.prototype.addListener = function (callback) {
     this.externalListener.push(callback);
+}
+
+Chat.prototype.setToUserId = function(toUserId) {
+    this.toUserId = toUserId;
+}
+
+Chat.prototype.getToUserId = function() {
+    return this.toUserId;
 }
 
 export default Chat;

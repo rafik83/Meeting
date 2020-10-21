@@ -23,7 +23,7 @@ class CallVisioPrivateChatAccessChecker extends AccessChecker
         parent::__construct($dateTime);
         $this->chatSessionRepository = $chatSessionRepository;
     }
-    public function allowedToAccess(Event $event, ChatSession $chatSession, User $user) : bool
+    public function allowedToAccess(Event $event, ChatSession $chatSession) : bool
     {
         if (null === $event->getConfiguration()->getCallVisioOpenDate() && null === $event->getConfiguration()->getCallVisioCloseDate()) {
             return false;
@@ -33,6 +33,7 @@ class CallVisioPrivateChatAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->chatSessionRepository->hasMessageFromUser($chatSession, $user);
+        return $this->chatSessionRepository->hasMessageFromUser($chatSession, $chatSession->getFromUser())
+            || $this->chatSessionRepository->hasMessageFromUser($chatSession, $chatSession->getToUser());
     }
 }
