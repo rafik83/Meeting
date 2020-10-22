@@ -61,4 +61,4 @@ ansible.cfg
 /.vscode/
 
 #nvm
-/.nvmrc/
+.nvmrc
