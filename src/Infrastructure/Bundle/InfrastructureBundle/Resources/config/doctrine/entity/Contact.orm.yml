@@ -18,8 +18,9 @@ Proximum\Vimeet\Domain\Model\Contact:
         comment:
             type: text
             nullable: true
-        scanned:
-            type: boolean
+        origin:
+            type: string
+            length: 20
             nullable: false
     manyToOne:
         event:
