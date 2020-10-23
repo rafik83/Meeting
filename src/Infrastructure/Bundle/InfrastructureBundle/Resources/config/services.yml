@@ -3580,6 +3580,8 @@ services:
 
     Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
 
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink: ~
+
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
             - '@adapter.sheet_search_adapter'

@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
 use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat;
+use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -130,6 +131,8 @@ class SheetController extends Controller
 
         $displayAnalyticsStat = $this->get(CanDisplayAnalyticsStat::class)->isSatisfiedBy($sheet);
 
+        $displayAnalyticsViewLink = $this->get(CanDisplayAnalyticsViewLink::class)->isSatisfiedBy($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
@@ -146,6 +149,7 @@ class SheetController extends Controller
             'tipTranslationViews'     => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
             'displayAnalyticsStat' => $displayAnalyticsStat,
+            'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
         ]);
     }
 

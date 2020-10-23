@@ -7,7 +7,7 @@
         <div class="col-md-12 tip tip--stats" role="contentinfo">
             <i class="glyphicon glyphicon-stats"></i>
             {{ 'analytics.view_counter'|transchoice(sheet.analytics.views, {'%views%': sheet.analytics.views, '%uniqueViews%': sheet.analytics.uniqueViews}) }}
-            {% if sheet.analytics.views > 0 %}
+            {% if displayAnalyticsViewLink|default(false) %}
             <a href="{{ path('event_catalog_index', {'sheet': sheet.id, 'sheetVisit[]': 'viewedBySheet' }) }}" class="btn btn-sm btn-gray">
                 {{ 'analytics.view_link'|trans }}
             </a>
