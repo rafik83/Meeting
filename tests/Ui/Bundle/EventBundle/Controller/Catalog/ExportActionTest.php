@@ -270,6 +270,7 @@ class ExportActionTest extends TestCase
         ;
         $this->sheet->isInInternalCatalog()->willReturn(true);
         $type = $this->prophesize(Type::class);
+        $type->canDisplayAnalyticsOnCatalog()->willReturn(false);
         $this->sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 
@@ -396,7 +397,7 @@ class ExportActionTest extends TestCase
         ;
         $this->sheet->isInInternalCatalog()->willReturn(true);
         $type = $this->prophesize(Type::class);
-        $type->reveal()->displayAnalyticsOnCatalog = true;
+        $type->canDisplayAnalyticsOnCatalog()->willReturn(true);
         $this->sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $this->catalogAccessChecker->allowedToAccess($this->event->reveal())->shouldBeCalled()->willReturn(true);
 

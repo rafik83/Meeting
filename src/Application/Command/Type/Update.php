@@ -123,8 +123,8 @@ class Update implements Command
         $this->canEvaluateMeeting = $type->canEvaluateMeeting();
         $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
         $this->canSubmitValidation = $type->canSubmitValidation();
-        $this->displayAnalyticsOnSheet = $type->displayAnalyticsOnSheet;
-        $this->displayAnalyticsOnCatalog = $type->displayAnalyticsOnCatalog;
+        $this->displayAnalyticsOnSheet = $type->canDisplayAnalyticsOnSheet();
+        $this->displayAnalyticsOnCatalog = $type->canDisplayAnalyticsOnCatalog();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [

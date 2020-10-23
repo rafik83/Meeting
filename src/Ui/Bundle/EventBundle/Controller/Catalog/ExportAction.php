@@ -151,7 +151,7 @@ class ExportAction
         ;
 
         $form = $this->formFactory->createNamed('', SearchType::class, $filters, [
-            'filterBySheetVisit' => $sheet->getType()->displayAnalyticsOnCatalog,
+            'filterBySheetVisit' => $sheet->getType()->canDisplayAnalyticsOnCatalog(),
             'typeViews' => $catalogFilterViewsResult->typeViews,
             'categoryViews' => $catalogFilterViewsResult->categoryViews,
             'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,

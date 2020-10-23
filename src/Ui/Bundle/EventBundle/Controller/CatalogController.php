@@ -332,7 +332,7 @@ class CatalogController extends Controller
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action' => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
-            'filterBySheetVisit' => $sheet->getType()->displayAnalyticsOnCatalog,
+            'filterBySheetVisit' => $sheet->getType()->canDisplayAnalyticsOnCatalog(),
             'typeViews' => $catalogFilterViewsResult->typeViews,
             'categoryViews' => $catalogFilterViewsResult->categoryViews,
             'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,

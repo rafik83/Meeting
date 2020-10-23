@@ -8,8 +8,8 @@ class CanDisplayAnalyticsViewLink
 {
     public function isSatisfiedBy(Sheet $sheet): bool
     {
-        return $sheet->isInInternalCatalog() && $sheet->getType()->displayAnalyticsOnSheet
-            && $sheet->getType()->displayAnalyticsOnCatalog
+        return $sheet->isInInternalCatalog() && $sheet->getType()->canDisplayAnalyticsOnSheet()
+            && $sheet->getType()->canDisplayAnalyticsOnCatalog()
             && $sheet->getAnalytics()->getViews() > 0;
     }
 }

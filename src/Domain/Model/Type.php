@@ -111,10 +111,10 @@ class Type implements WhoInterface, TypeInterface
     public $canSubmitValidation = true;
 
     /** @var bool */
-    public $displayAnalyticsOnSheet = false;
+    private $displayAnalyticsOnSheet = false;
 
     /** @var bool */
-    public $displayAnalyticsOnCatalog = false;
+    private $displayAnalyticsOnCatalog = false;
 
     public function __construct(Event $event)
     {
@@ -559,5 +559,15 @@ class Type implements WhoInterface, TypeInterface
     public function canSubmitValidation(): bool
     {
         return $this->canSubmitValidation;
+    }
+
+    public function canDisplayAnalyticsOnSheet(): bool
+    {
+        return $this->displayAnalyticsOnSheet;
+    }
+
+    public function canDisplayAnalyticsOnCatalog(): bool
+    {
+        return $this->displayAnalyticsOnCatalog;
     }
 }

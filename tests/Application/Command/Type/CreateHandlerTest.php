@@ -89,8 +89,8 @@ class CreateHandlerTest extends TestCase
                 && $actual->canEvaluateMeeting()
                 && $actual->mustEvaluateMeeting()
                 && $actual->canSubmitValidation()
-                && $actual->displayAnalyticsOnSheet
-                && $actual->displayAnalyticsOnCatalog
+                && $actual->canDisplayAnalyticsOnSheet()
+                && $actual->canDisplayAnalyticsOnCatalog()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);
