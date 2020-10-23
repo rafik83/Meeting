@@ -1,0 +1,7 @@
+gate:
+  endpoint: https://spinnaker-gate.staging.vimeet.synalabs.hosting
+auth:
+  enabled: true
+  basic:
+    username: spinnaker
+    password: CHANGEME

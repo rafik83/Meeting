@@ -1,20 +1,14 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestResult;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -47,7 +41,7 @@ class CreateRequestHandlerTest extends TestCase
         $dateTime     = new DateTime();
 
         // Command
-        $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1);
+        $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1, "fr");
         $createRequest->description = 'test';
         $createRequest->participants = [$participant1, $participant2];
 
@@ -64,8 +58,15 @@ class CreateRequestHandlerTest extends TestCase
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
+        $approveRequestHandler = $this->prophesize(ApproveRequestHandler::class);
+
+        $allowTransformAutomaticallyRequestIntoMeeting = $this->prophesize(AllowTransformAutomaticallyRequestIntoMeeting::class);
+        $allowTransformAutomaticallyRequestIntoMeeting->__invoke($expectedRequest)->willReturn(false);
+
         // Handler
         $handler = new CreateRequestHandler(
+            $approveRequestHandler->reveal(),
+            $allowTransformAutomaticallyRequestIntoMeeting->reveal(),
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $eventDispatcher->reveal(),

@@ -45,7 +45,7 @@ class VideoStorageAdapter implements VideoStorageInterface
             'sheet-video',
             $event->getId(),
             $this->uuidGenerator->generate(),
-            $file->getClientOriginalExtension()
+            $file->guessExtension()
         );
 
         $this->googleCloudStorageAdapter->create(

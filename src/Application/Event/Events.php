@@ -26,6 +26,7 @@ final class Events
     public const SHEET_OWNER_CHANGED = 'sheet.owner.changed';
     public const SHEET_CREATE_BY_GROUP_MANAGER = 'group.sheet.created';
     public const SHEET_SET_COMMERCIAL_STATUS = 'sheet.set_commercial_status';
+    public const SHEET_VIEWED = 'sheet.viewed';
     public const USER_MAIL_CHANGED = 'change_mail';
     public const MEETING_PARTICIPANT_ADDED = 'meeting.participant.added';
     public const MEETING_PARTICIPANT_REMOVED = 'meeting.participant.removed';

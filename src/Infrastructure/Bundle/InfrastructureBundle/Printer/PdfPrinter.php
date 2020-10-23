@@ -61,6 +61,10 @@ class PdfPrinter
                 $pathToPdf,
                 $this->phantomjsHttpUser,
                 $this->phantomjsHttpPassword,
+            ],
+            null,
+            [
+                'OPENSSL_CONF' => '/etc/ssl/'
             ]
         );
 

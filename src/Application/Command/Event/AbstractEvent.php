@@ -65,4 +65,7 @@ abstract class AbstractEvent
 
     /** @var bool */
     public $disabledPasswordChanging = false;
+
+    /** @var bool */
+    public $autoArchiveWebinar = false;
 }

@@ -1,0 +1,143 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'networking.title'|trans %}
+
+{% block container_classes 'full-mobile-container' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/networking.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="networking_container">
+        <div class="networking_chat">
+            <div data-chat-networking
+                 data-networking-topic="{{ networkingView.topic }}"
+                 data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+                 data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+                 data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+                 data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+                 data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+                 data-chat-vote-message="{{ 'chat.vote'|trans }}"
+                 data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+                 data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+                 data-notifications-provider-url="{{ networkingView.providerUrl }}"
+                 data-notifications-subscriber-key="{{ networkingView.subscriberKey }}"
+            >
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" href="#"
+                       data-chat-general-button>{{ 'networking.chat.global.title'|trans }}</a>
+                    <a class="btn btn-gray" href="#" data-chat-private-button>{{ 'networking.chat.title'|trans }}</a>
+                </div>
+                <div data-chat-container
+                     data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'networking', objectId: sheet.event.id}) }}"
+                     data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
+                >
+                    <h2>
+                        {% if networkingView.networkingChatNewMessages > 0 %}
+                            <small>
+                                {{ 'networking.chat.messages.new'|transchoice(networkingView.networkingChatNewMessages, {'%count%': networkingView.networkingChatNewMessages}) }}
+                            </small>
+                        {% endif %}
+
+                    </h2>
+                    <div class="chat-list">
+                        {# content filled with javascript #}
+                    </div>
+                    <form
+                            action="{{ path('event_chat_messages_add', {sheet: sheet.id, objectType: 'networking', objectId: sheet.event.id}) }}"
+                            class="chat-form"
+                            data-chat-form
+                    >
+                        <input type="text" name="content" placeholder="{{ 'networking.chat.add'|trans }}"
+                               maxlength="250" autocomplete="off">
+                        <button type="submit"></button>
+                    </form>
+                </div>
+
+                <div data-chat-private-container class="hide">
+                    <br>
+                    {% if networkingView.privateChatSessions|length %}
+                        <table class="list list--private-messages table table-condensed table-hover">
+                            {% for chatSessionView in networkingView.privateChatSessions %}
+                                <tr class="participantChat"
+                                    data-participant-user-id="{{ chatSessionView.otherUser.id }}"
+                                    data-private-chat-url="{{ path('event_networking_chat', {
+                                        'sheet': sheet.id,
+                                        'toUser': chatSessionView.otherUser.id,
+                                    }) }}">
+                                    <td>
+                                        <div>
+                                            <em>{{ chatSessionView.latestMessageDate | localizeddate('short', 'short') }}</em>
+                                        </div>
+                                        <div>
+                                            <img src="{{ chatSessionView.otherUser.avatar }}">
+                                            {{ chatSessionView.otherUser.fullName }}
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        {% if chatSessionView.newMessagesCount > 0 %}
+                                            <span class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
+                                        {% else %}
+                                            {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="networking_list">
+            <div class="networking_list_header">
+                <h2>
+                    {{ 'networking.participants.title'|trans({
+                        '%count%': '<span class="networking_list_count">'~networkingView.subscriptions|length~'</span>'
+                    })|raw }}
+                    <small>{{ 'networking.participants.intro'|trans }}</small>
+                </h2>
+                <div class="networking_list_search">
+                    <input id="networking_list_search_input" type="search"
+                           placeholder="{{ 'networking.participants.search'|trans }}">
+                </div>
+            </div>
+            <table
+                    class="list list--users table table-striped table-bordered table-hover participantList"
+                    data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id}) }}"
+            >
+                <tbody id="ParticipantList" data-user-current="{{ networkingView.userCurrentId }}">
+                {% for userId, subscription in networkingView.subscriptions %}
+                    <tr class="participantChat" data-participant-user-id="{{ subscription.userId }}"
+                        data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id, toUser: userId}) }}">
+                        <td class="networking_list_row">
+                            <img src="{{ subscription.userAvatar }}">
+                            <p>{{ subscription.userFirstName }}  {{ subscription.userLastName }}
+                                - {{ subscription.userCompany }} - <em> {{ subscription.userPosition }}</em></p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="privateChat-modalTemplate" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}">
+                            <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">{{ 'modal.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

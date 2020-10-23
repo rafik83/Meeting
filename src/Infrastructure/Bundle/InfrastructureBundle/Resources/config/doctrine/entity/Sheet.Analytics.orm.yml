@@ -1,0 +1,12 @@
+Proximum\Vimeet\Domain\Model\Sheet\Analytics:
+    type: embeddable
+    table: sheet_analytics
+    fields:
+        views:
+            type: integer
+        uniqueViews:
+            type: integer
+        viewers:
+            type: json_array
+        clickedElements:
+            type: json
