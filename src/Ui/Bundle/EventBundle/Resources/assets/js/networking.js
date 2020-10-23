@@ -171,6 +171,7 @@ export default function initNetworking(target, userConnection, notificationCallV
                         modal.remove();
                         this.notificationCallVisio.enable();
                         this.userConnection.removeListener(callback);
+                        chatVisio.abandonRequestVisio();
                     })
                 });
             }

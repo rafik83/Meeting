@@ -19,6 +19,7 @@
             </button>
             <span
                     data-url="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    data-abandon-url="{{ path('event_networking_abandon_call_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                     class="btn btn-sm btn-primary disabled state-pending hide"
             >
                         <span class="glyphicon glyphicon-option-horizontal"></span>

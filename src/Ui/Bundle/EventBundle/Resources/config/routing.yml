@@ -675,6 +675,14 @@ event_networking_request_visio:
     methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\RequestVisioAction }
 
+event_networking_abandon_call_visio:
+    path: /sheet/{sheet}/networking/abandon-visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [ POST ]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\AbandonCallVisioAction }
+
 event_networking_visio:
     path: /sheet/{sheet}/networking/visio/{toUser}
     requirements:

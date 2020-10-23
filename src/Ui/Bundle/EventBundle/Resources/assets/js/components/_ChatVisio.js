@@ -37,4 +37,9 @@ export default class ChatVisio
         this.buttonRequestRefuse.classList.remove('hide');
         clearTimeout(this.timerId);
     }
+
+    abandonRequestVisio() {
+        const url = this.buttonRequestPending.getAttribute('data-abandon-url');
+        axios.post(url);
+    }
 }

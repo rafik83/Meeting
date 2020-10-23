@@ -21,6 +21,10 @@ class NotificationCallVisio {
             this.refuseVisio.setUrlRefuse(payload.urlRefuse);
             this.acceptVisio.setAttribute('href', payload.urlAccept);
         }
+
+        if (payload.action === 'abandon_visio') {
+            this.hide();
+        }
     }
 
     show(message) {
