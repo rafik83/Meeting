@@ -88,11 +88,12 @@ export default function initNetworking(target, userConnection, notificationCallV
             if (payload.action === 'request_visio') {
                 const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
                 const buttonVisio = document.querySelector('.state-normal');
-
                 if (divCallVisioMessage != null) {
+
                     divCallVisioMessage.classList.remove("hide");
                     buttonVisio.classList.add("hide");
                     this.refuseVisio.setUrlRefuse(payload.urlRefuse);
+                    console.log(this.acceptVisio);
                     setTimeout(() => {
                         divCallVisioMessage.classList.add("hide");
                         buttonVisio.classList.remove("hide");
@@ -105,7 +106,7 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'accept_visio' && payload.from.userId === targetChat.getToUserId()) {
-                document.location.href = payload.urlAccept;
+                window.open(payload.urlAccept);
             }
         }
     }
