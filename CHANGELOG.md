@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - VIMEET-2219 - Apply filter on users added on the fly
+- Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
 
 ## [2.61.0] - 2010-10-15
 ### Added
