@@ -104,12 +104,32 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('sheet.id')
-            ->from(SheetViewed::class, 'sheetViewed')
-            ->join('sheetViewed.sheet', 'sheet')
-            ->where('sheet = :sheet')
+            ->distinct()
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant')
+            ->join(SheetViewed::class, 'sheetView', 'WITH', 'participant.user = sheetView.user')
+            ->where('sheetView.sheet = :sheet')
+            ->andWhere('sheet.event = :event')
             ->setParameter('sheet', $sheet)
+            ->setParameter('event', $sheet->getEvent())
         ;
 
-        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+        $participantUserIds = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->distinct()
+            ->from(Sheet::class, 'sheet')
+            ->join(SheetViewed::class, 'sheetView', 'WITH', 'sheet.owner = sheetView.user')
+            ->where('sheetView.sheet = :sheet')
+            ->andWhere('sheet.event = :event')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('event', $sheet->getEvent())
+        ;
+
+        $ownerUserIds = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        return array_unique(array_merge($participantUserIds, $ownerUserIds));
     }
 }
