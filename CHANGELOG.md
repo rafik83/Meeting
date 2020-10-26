@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
 - VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
 
+### Fixed
+- VIMEET-2224 - Avoid exceptions related to chat and networking submenu
+
 ## [2.59.1] - 2010-10-13
 ### Updated
 - Update translations
