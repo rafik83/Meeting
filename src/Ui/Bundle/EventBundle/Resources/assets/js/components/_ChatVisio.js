@@ -8,6 +8,7 @@ export default class ChatVisio
         this.visioEnable = buttonContainer.getAttribute('data-visio-enable');
         this.buttonVisio = buttonContainer.querySelector('.state-normal');
         this.buttonRequestPending = buttonContainer.querySelector('.state-pending');
+        this.buttonRequestBusy = buttonContainer.querySelector('.state-busy');
         this.buttonRequestRefuse = buttonContainer.querySelector('.state-refuse');
         this.buttonRequestNoResponse = buttonContainer.querySelector('.state-no-response');
         this.buttonVisio.classList.add("hide");
@@ -41,5 +42,10 @@ export default class ChatVisio
     abandonRequestVisio() {
         const url = this.buttonRequestPending.getAttribute('data-abandon-url');
         axios.post(url);
+    }
+
+    busyVisio() {
+        this.buttonVisio.classList.add("hide");
+        this.buttonRequestPending.classList.remove('hide');
     }
 }

@@ -27,6 +27,12 @@
             </span>
             <span
                     data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-busy hide">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.busy'|trans }}
+            </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                     class="btn btn-sm btn-primary disabled state-refuse hide">
                         <span class="glyphicon glyphicon-option-horizontal"></span>
                         {{ 'networking.chat.visio.refuse'|trans }}

@@ -93,7 +93,6 @@ export default function initNetworking(target, userConnection, notificationCallV
                     divCallVisioMessage.classList.remove("hide");
                     buttonVisio.classList.add("hide");
                     this.refuseVisio.setUrlRefuse(payload.urlRefuse);
-                    console.log(this.acceptVisio);
                     setTimeout(() => {
                         divCallVisioMessage.classList.add("hide");
                         buttonVisio.classList.remove("hide");
