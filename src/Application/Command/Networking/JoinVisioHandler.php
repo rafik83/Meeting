@@ -5,33 +5,27 @@ namespace Proximum\Vimeet\Application\Command\Networking;
 
 
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
-use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
-class AcceptVisioHandler
+
+class JoinVisioHandler
 {
-
-    /** @var ChatMessageRepositoryInterface */
-    private $chatSessionRepository;
-
     /** @var NotificationPublisherInterface */
     private $notificationPublisher;
 
     public function __construct(
-        ChatSessionRepositoryInterface $chatSessionRepository,
         NotificationPublisherInterface $notificationPublisher
     ) {
-        $this->chatSessionRepository = $chatSessionRepository;
         $this->notificationPublisher = $notificationPublisher;
     }
 
-    public function handle(AcceptVisio $command)
+    public function handle(JoinVisio $command)
     {
         $this->notificationPublisher->publishRequestVisioNotification(
             $command->sheet,
             $command->fromUser,
             $command->toUser->getId(),
-            'accept_visio'
+            'join_visio'
         );
     }
 }
+

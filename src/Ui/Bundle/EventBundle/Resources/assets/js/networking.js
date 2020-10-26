@@ -60,8 +60,6 @@ export default function initNetworking(target, userConnection, notificationCallV
     const notificationHandler = {
         participantLists,
         target,
-        requestUrlAccept: null,
-        requestUrlRefuse: null,
         /**
          * @param {String} notification
          * @param {Chat} targetChat
@@ -92,6 +90,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
                     divCallVisioMessage.classList.remove("hide");
                     buttonVisio.classList.add("hide");
+                    this.chatVisio.setUrlAccept(payload.urlAccept);
                     this.refuseVisio.setUrlRefuse(payload.urlRefuse);
                     setTimeout(() => {
                         divCallVisioMessage.classList.add("hide");
@@ -104,8 +103,8 @@ export default function initNetworking(target, userConnection, notificationCallV
                 this.chatVisio.onRefuseVisio();
             }
 
-            if (payload.action === 'accept_visio' && payload.from.userId === targetChat.getToUserId()) {
-                window.open(payload.urlAccept);
+            if (payload.action === 'join_visio') {
+                this.chatVisio.showJoinVisioButton(payload.urlAccept);
             }
         }
     }
@@ -132,6 +131,10 @@ export default function initNetworking(target, userConnection, notificationCallV
         userConnection,
         notificationHandler,
         notificationCallVisio,
+        close: function () {
+            $(this.currentModal).modal('hide');
+            this.currentModal = null;
+        },
         open: function (participantNode) {
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
@@ -148,7 +151,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
                     const chat = new Chat(privateChatModalElement);
                     chat.setToUserId(toUserId);
-                    const chatVisio = new ChatVisio(chat, modal.querySelector('.chat-header-tools'));
+                    const chatVisio = new ChatVisio(modal.querySelector('.chat-header-tools'), modal.querySelector('.call-visio-accept'));
                     const refuseVisio = new RefuseVisio(modal.querySelector('.call-visio-refuse'),
                         () => {
                             modal.querySelector('.chat-message-call-visio').classList.add('hide');
@@ -175,12 +178,17 @@ export default function initNetworking(target, userConnection, notificationCallV
                     })
                 });
             }
-
+            this.currentModal = modal;
             $(modal).modal('show')
         }
     }
     modalManager.open.bind(modalManager);
+    modalManager.close.bind(modalManager);
     participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
+
+    $('.networking_container').on('click', '[data-close-modal]', ()=> {
+        modalManager.close();
+    });
 
     // open private chat if "toUser" known is queryString
     const queryString = window.location.search;

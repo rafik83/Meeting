@@ -233,24 +233,21 @@ services:
 
     Proximum\Vimeet\Application\Command\Networking\RefuseVisioHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RefuseVisio }
 
     Proximum\Vimeet\Application\Command\Networking\AbandonVisioHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\AbandonVisio }
 
-    Proximum\Vimeet\Application\Command\Networking\AcceptVisioHandler:
+    Proximum\Vimeet\Application\Command\Networking\JoinVisioHandler:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\AcceptVisio }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\JoinVisio }
 
     #
     # Webinar

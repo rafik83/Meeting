@@ -17,6 +17,14 @@
                 <span class="glyphicon glyphicon-facetime-video"></span>
                 {{ 'networking.chat.visio.request'|trans }}
             </button>
+            <button
+                    data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary state-join hide"
+                    data-close-modal
+            >
+                <span class="glyphicon glyphicon-facetime-video"></span>
+                {{ 'networking.chat.visio.join'|trans }}
+            </button>
             <span
                     data-url="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
                     data-abandon-url="{{ path('event_networking_abandon_call_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"

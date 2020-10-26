@@ -8,9 +8,8 @@ use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class AcceptVisio implements Command
+class JoinVisio implements Command
 {
-
     /** @var Sheet */
     public $sheet;
 
@@ -20,7 +19,7 @@ class AcceptVisio implements Command
     /** @var User */
     public $toUser;
 
-    public function __construct(Sheet $sheet, User $fromUser, User $toUser)
+    public function __construct($sheet, User $fromUser, User $toUser)
     {
         $this->sheet = $sheet;
         $this->fromUser = $fromUser;

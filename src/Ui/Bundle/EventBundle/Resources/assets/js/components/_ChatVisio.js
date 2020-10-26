@@ -4,15 +4,18 @@ import axios from "axios";
 
 export default class ChatVisio
 {
-    constructor (chat, buttonContainer) {
+    constructor (buttonContainer, linkAccept) {
         this.visioEnable = buttonContainer.getAttribute('data-visio-enable');
         this.buttonVisio = buttonContainer.querySelector('.state-normal');
+        this.buttonJoin = buttonContainer.querySelector('.state-join');
         this.buttonRequestPending = buttonContainer.querySelector('.state-pending');
         this.buttonRequestBusy = buttonContainer.querySelector('.state-busy');
         this.buttonRequestRefuse = buttonContainer.querySelector('.state-refuse');
         this.buttonRequestNoResponse = buttonContainer.querySelector('.state-no-response');
+        this.linkAccept = linkAccept;
         this.buttonVisio.classList.add("hide");
         this.buttonVisio.addEventListener('click', this.onRequestVisio.bind(this));
+        this.buttonJoin.addEventListener('click', this.onJoinVisio.bind(this));
     }
 
     onMessagesReceived(messages) {
@@ -42,6 +45,22 @@ export default class ChatVisio
     abandonRequestVisio() {
         const url = this.buttonRequestPending.getAttribute('data-abandon-url');
         axios.post(url);
+    }
+
+    setUrlAccept(urlAccept) {
+        this.linkAccept.setAttribute('href', urlAccept);
+    }
+
+    onJoinVisio() {
+       window.open(this.urlAccept);
+    }
+
+    showJoinVisioButton(urlAccept) {
+        this.buttonJoin.classList.remove('hide');
+        this.buttonVisio.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        clearTimeout(this.timerId);
+        this.urlAccept = urlAccept;
     }
 
     busyVisio() {

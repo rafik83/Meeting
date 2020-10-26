@@ -10,6 +10,10 @@ class NotificationCallVisio {
             this.element.querySelector('.close').addEventListener('click', () => this.hide());
             this.disabled = false;
             this.refuseVisio = new RefuseVisio(this.element.querySelector('.call-visio-refuse'), ()=> this.hide());
+
+            $(element).on('click', '[data-close-modal]', ()=> {
+                this.hide();
+            });
         }
     }
 

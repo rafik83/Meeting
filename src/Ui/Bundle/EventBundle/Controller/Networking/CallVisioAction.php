@@ -6,7 +6,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Contact\Add;
-use Proximum\Vimeet\Application\Command\Networking\AcceptVisio;
+use Proximum\Vimeet\Application\Command\Networking\JoinVisio;
 use Proximum\Vimeet\Application\Query\Networking\CallVisioQuery;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Contact;
@@ -91,10 +91,10 @@ class CallVisioAction
         $user = $userDomain->getUser();
 
         $this->commandBus->handle(new Add($event, $user, $toUser, Contact::ORIGIN_PRIVATE_CHAT_VISIO));
+        $this->commandBus->handle(new JoinVisio($sheet, $user, $toUser));
 
-        // todo
         $visioView = $this->queryBus->handle(new CallVisioQuery($sheet, $user, $toUser));
-        $this->commandBus->handle(new AcceptVisio($sheet, $user, $toUser));
+
 
         return new Response(
             $this->engine->render(

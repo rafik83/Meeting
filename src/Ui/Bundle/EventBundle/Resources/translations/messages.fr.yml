@@ -422,6 +422,7 @@ networking.chat.messages.new: '{0} Aucun nouveau message|{1} Un nouveau message|
 networking.chat.notification.open: 'Ouvrir dans le chat'
 networking.chat.title: 'Chat privé'
 networking.chat.visio.busy: 'Votre interlocuteur est occupé'
+networking.chat.visio.join: 'Accéder à la room visio'
 networking.chat.visio.no.response: 'votre interlocuteur ne répond pas'
 networking.chat.visio.pending: 'En attente de confirmation'
 networking.chat.visio.refuse: 'Votre appel a été refusé'
