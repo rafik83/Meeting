@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2208 - Filter meeting request by sheet viewed
 
+### Fixed
+- VIMEET-2219 - Apply filter on users added on the fly
+- Add sheet card tag for datetime
+- Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+
+## [2.61.0] - 2010-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
 ## [2.60.0] - 2010-10-14
 ### Added
 - VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
 - VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
+
+### Fixed
+- VIMEET-2224 - Avoid exceptions related to chat and networking submenu
 
 ## [2.59.1] - 2010-10-13
 ### Updated

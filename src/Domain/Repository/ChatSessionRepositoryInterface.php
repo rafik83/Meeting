@@ -10,17 +10,12 @@ interface ChatSessionRepositoryInterface
 {
     public function add(ChatSession $chatSession): ChatSession;
 
-    public function update():void;
+    public function update(): void;
 
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession;
 
     /**
-     * @return [
-     *   'otherUser' => User,
-     *   'latestMessageDate' => DateTimeInterface,
-     *   'messagesCount' => int,
-     *   'unreadMessages' => array,
-     * ]
+     *   @return array{otherUser: User, latestMessageDate: DateTimeInterface, messagesCount: int, unreadMessages: array}[]
      */
     public function findSessionsByEventAndUser(Event $event, User $user): array;
 

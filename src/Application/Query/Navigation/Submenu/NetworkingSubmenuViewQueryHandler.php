@@ -52,10 +52,13 @@ class NetworkingSubmenuViewQueryHandler
             $isRouteNetworking = Route::isNetworking($query->route);
 
             if (!$isRouteNetworking) {
-                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
-                    $query->event,
-                    $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
-                );
+                $participant = $query->sheet->getUserParticipant($query->user);
+                if ($participant !== null) {
+                    $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                        $query->event,
+                        $participant->getNetworkingChatViewedAt()
+                    );
+                }
             }
 
             $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
