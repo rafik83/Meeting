@@ -91,7 +91,7 @@ class Create implements Command
     public $displayAnalyticsOnSheet;
 
     /** @var bool */
-    public $displayAnalyticsOnMeetingList;
+    public $displayAnalyticsOnCatalog;
 
     public function __construct(Event $event, string $locale)
     {

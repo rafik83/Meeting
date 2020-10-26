@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet;
 
 use Elastica\Aggregation\Filter;
@@ -35,7 +27,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
         string $locale,
         array $filters,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         unset($filters['tagFilters'][$tag]);
 
@@ -46,7 +39,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
             1,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         $query = $this->getQuery($builder, $tag);

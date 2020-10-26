@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog\Export;
 
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SheetsViewQuery implements Query
 {
@@ -21,6 +14,9 @@ class SheetsViewQuery implements Query
 
     /** @var Sheet */
     public $sheet;
+
+    /** @var User */
+    public $user;
 
     /** @var array */
     public $filters;
@@ -38,29 +34,25 @@ class SheetsViewQuery implements Query
     public $isTypeColumn;
 
     /**
-     * @param Event   $event
-     * @param Sheet   $sheet
-     * @param array   $filters
-     * @param string  $locale
-     * @param array   $availableSlotIds
      * @param Sheet[] $sheetsToExclude
-     * @param bool    $isTypeColumn
      */
     public function __construct(
         Event $event,
         Sheet $sheet,
+        User $user,
         array $filters,
         string $locale,
         array $availableSlotIds = [],
         array $sheetsToExclude = [],
         bool $isTypeColumn
     ) {
-        $this->event            = $event;
-        $this->sheet            = $sheet;
-        $this->filters          = $filters;
-        $this->locale           = $locale;
+        $this->event = $event;
+        $this->sheet = $sheet;
+        $this->user = $user;
+        $this->filters = $filters;
+        $this->locale = $locale;
         $this->availableSlotIds = $availableSlotIds;
-        $this->sheetsToExclude  = $sheetsToExclude;
-        $this->isTypeColumn     = $isTypeColumn;
+        $this->sheetsToExclude = $sheetsToExclude;
+        $this->isTypeColumn = $isTypeColumn;
     }
 }

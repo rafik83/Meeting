@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
@@ -33,9 +26,30 @@ use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class MeetingRequestListViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    /** @var ObjectProphecy */
+    private $meetingRequestRepository,
+        $meetingRequestViewQueryHandler,
+        $meetingPublishedAccessChecker,
+        $meetingRequestAccessChecker,
+        $answeringMeetingRequestAccessChecker,
+        $viewedSheetListViewQueryHandler,
+        $validationRequiredChecker
+    ;
+
+    public function setUp(): void
     {
-        $now      = new \DateTime();
+        $this->meetingRequestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->meetingRequestViewQueryHandler = $this->prophesize(MeetingRequestViewQueryHandler::class);
+        $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
+        $this->meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $this->answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
+        $this->viewedSheetListViewQueryHandler = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
+    }
+
+    public function testHandle(): void
+    {
+        $now = new \DateTime();
         $configuration = $this->prophesize(Event\Configuration::class);
         $event = $this->prophesize(Event::class);
         $event->getConfiguration()->willReturn($configuration->reveal());
@@ -73,25 +87,17 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingRequestListView->addRequestView($meetingRequestView);
 
         // Mock
-        $meetingRequestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $meetingRequestViewQueryHandler = $this->prophesize(MeetingRequestViewQueryHandler::class);
-        $meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
-        $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
-        $viewedSheetListViewQueryHandler = $this->prophesize(ViewedSheetListViewQueryHandler::class);
-        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
-
-        $meetingRequestRepository
+        $this->meetingRequestRepository
             ->getAllRequestBySheet($sheet, [], [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
-        $viewedSheetListViewQueryHandler
+        $this->viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
             ->shouldBeCalled()
             ->willReturn([2 => $sheetTwo]);
 
-        $meetingRequestViewQueryHandler
+        $this->meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
@@ -108,25 +114,25 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
 
-        $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
-        $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
+        $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
-            $meetingRequestRepository->reveal(),
-            $meetingRequestViewQueryHandler->reveal(),
-            $viewedSheetListViewQueryHandler->reveal(),
-            $meetingPublishedAccessChecker->reveal(),
-            $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal(),
-            $validationRequiredChecker->reveal()
+            $this->meetingRequestRepository->reveal(),
+            $this->meetingRequestViewQueryHandler->reveal(),
+            $this->viewedSheetListViewQueryHandler->reveal(),
+            $this->meetingPublishedAccessChecker->reveal(),
+            $this->meetingRequestAccessChecker->reveal(),
+            $this->answeringMeetingRequestAccessChecker->reveal(),
+            $this->validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);
     }
 
-    public function testHandleWithClosedMeetingRequest()
+    public function testHandleWithClosedMeetingRequest(): void
     {
         $now      = new \DateTime();
         $configuration = $this->prophesize(Event\Configuration::class);
@@ -167,25 +173,17 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingRequestListView->addRequestView($meetingRequestView);
 
         // Mock
-        $meetingRequestRepository             = $this->prophesize(RequestRepositoryInterface::class);
-        $meetingRequestViewQueryHandler       = $this->prophesize(MeetingRequestViewQueryHandler::class);
-        $meetingPublishedAccessChecker        = $this->prophesize(MeetingPublishedAccessChecker::class);
-        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
-        $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
-        $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
-        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
-
-        $meetingRequestRepository
+        $this->meetingRequestRepository
             ->getAllRequestBySheet($sheet, [], [$meetingSlot])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
-        $viewedSheetListViewQueryHandler
+        $this->viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $meetingRequestViewQueryHandler
+        $this->meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
                 $meetingRequest,
                 $sheet,
@@ -201,19 +199,19 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
 
-        $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
-        $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
-        $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
-        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
+        $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
-            $meetingRequestRepository->reveal(),
-            $meetingRequestViewQueryHandler->reveal(),
-            $viewedSheetListViewQueryHandler->reveal(),
-            $meetingPublishedAccessChecker->reveal(),
-            $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal(),
-            $validationRequiredChecker->reveal()
+            $this->meetingRequestRepository->reveal(),
+            $this->meetingRequestViewQueryHandler->reveal(),
+            $this->viewedSheetListViewQueryHandler->reveal(),
+            $this->meetingPublishedAccessChecker->reveal(),
+            $this->meetingRequestAccessChecker->reveal(),
+            $this->answeringMeetingRequestAccessChecker->reveal(),
+            $this->validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);
