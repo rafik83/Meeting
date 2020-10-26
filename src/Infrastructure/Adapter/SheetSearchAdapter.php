@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
+use Elastica\Aggregation\ValueCount;
 use Elastica\Filter\Query as FilterQuery;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
@@ -15,7 +16,6 @@ use FOS\ElasticaBundle\Paginator\PaginatorAdapterInterface;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
@@ -42,19 +42,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /** @var ConditionRulesTransformerInterface */
     private $conditionRulesTransformer;
 
-    /** @var GetViewedSheetsFromFilters */
-    private $getViewedSheetsFromFilters;
-
     public function __construct(
         PaginatedFinderInterface $finder,
         SearchableInterface $searchable,
-        ConditionRulesTransformerInterface $conditionRulesTransformer,
-        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
+        ConditionRulesTransformerInterface $conditionRulesTransformer
     ) {
         $this->finder = $finder;
         $this->searchable = $searchable;
         $this->conditionRulesTransformer = $conditionRulesTransformer;
-        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
     /**
@@ -408,6 +403,32 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function getCountAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        ?string $filterToRemove,
+        array $nomenclatureItems,
+        array $availableSlotIds,
+        array $sheetsToExclude,
+        array $prefilteredSheetIds
+    ): array {
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            null,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude,
+            $prefilteredSheetIds
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypeAggregations(
         Event $event,
         string $locale,
@@ -528,14 +549,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
-     * @param Event  $event
+     * @param Event $event
      * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
+     * @param array $filters
+     * @param string|null $filterToRemove
      * @param string $elasticField
-     * @param array  $nomenclatureItems
-     * @param array  $availableSlotIds
-     * @param array  $sheetsToExclude
+     * @param array $nomenclatureItems
+     * @param array $availableSlotIds
+     * @param array $sheetsToExclude
      *
      * @return array
      */
@@ -543,15 +564,17 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         Event $event,
         string $locale,
         array $filters,
-        string $filterToRemove,
-        string $elasticField,
+        ?string $filterToRemove,
+        ?string $elasticField,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
         array $sheetsToExclude = [],
         ?array $prefilteredSheetIds = null
     ): array {
         // remove filter
-        unset($filters[$filterToRemove]);
+        if (null !== $filterToRemove) {
+            unset($filters[$filterToRemove]);
+        }
 
         $builder = new SheetSearchQueryBuilder(
             $event,
@@ -563,14 +586,16 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $sheetsToExclude,
             $prefilteredSheetIds
         );
-        $query   = new Query($builder->getQuery());
+        $query = new Query($builder->getQuery());
 
         if (self::ES_FIELD_POSITION === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
         } elseif (self::ES_FIELD_CATEGORIES === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORIES));
-        } else {
+        } elseif (null !== $elasticField) {
             $query->addAggregation($this->getAggregation($elasticField));
+        } else {
+            $query->addAggregation(new ValueCount('total_count', self::ES_FIELD_IN_CATALOG));
         }
 
         $query->setSize(0);

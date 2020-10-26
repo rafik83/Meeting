@@ -4,8 +4,10 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 
@@ -17,16 +19,22 @@ class FilteredFieldsQueryHandler
     /** @var TagFilterAggregator */
     private $tagFilterAggregator;
 
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        TagFilterAggregator $tagFilterAggregator
+        TagFilterAggregator $tagFilterAggregator,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->tagFilterAggregator = $tagFilterAggregator;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
     public function handle(FilteredFieldsQuery $filteredFieldsQuery): FilteredFieldsView
     {
+        $this->filterSheetVisitViews($filteredFieldsQuery);
         $this->filterTypeViews($filteredFieldsQuery);
         $this->filterCategoryViews($filteredFieldsQuery);
         $this->filterOrganizationCategoryViews($filteredFieldsQuery);
@@ -47,6 +55,7 @@ class FilteredFieldsQueryHandler
         array $sheetsToExclude = [],
         ?array $prefilteredSheetIds = null
     ): ?array {
+        // if all types are selected, or if types are disabled
         if (isset($filters[SearchFields::FILTER_TYPE])
             && \count($filters[SearchFields::FILTER_TYPE]) === \count($typeViews)
         ) {
@@ -78,6 +87,7 @@ class FilteredFieldsQueryHandler
         array $sheetsToExclude = [],
         ?array $prefilteredSheetIds = null
     ): ?array {
+        // if all categories are selected, or if categories are disabled
         if (isset($filters[SearchFields::FILTER_CATEGORY])
             && \count($filters[SearchFields::FILTER_CATEGORY]) === \count($categoryViews)
         ) {
@@ -146,9 +156,43 @@ class FilteredFieldsQueryHandler
     }
 
     /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
+     * Generate views (with counts), for visit filters
      */
-    private function filterTypeViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterSheetVisitViews(FilteredFieldsQuery $filteredFieldsQuery): void
+    {
+        // skip if visit filters are not available
+        if (!isset($filteredFieldsQuery->filters[SearchFields::FILTER_BY_SHEET_VISIT])) {
+            return;
+        }
+
+        $sheetSawView = $filteredFieldsQuery->catalogFilterViewsResult->sheetVisitViews[CatalogConstant::FILTER_SHEET_SAW];
+        $sheetSawCount = $this->sheetSearchAdapter->getCountAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            null,
+            [],
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getSheetIdsSaw($sheetSawView->user, $sheetSawView->sheet->getEvent())
+        );
+        $sheetSawView->count = $sheetSawCount['total_count']['value'];
+
+        $viewedBySheetView = $filteredFieldsQuery->catalogFilterViewsResult->sheetVisitViews[CatalogConstant::FILTER_VIEWED_BY_SHEET];
+        $viewedBySheetCount = $this->sheetSearchAdapter->getCountAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            null,
+            [],
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getSheetIdsViewedBySheet($viewedBySheetView->sheet)
+        );
+        $viewedBySheetView->count = $viewedBySheetCount['total_count']['value'];
+    }
+
+    private function filterTypeViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $typeAggregations = $this->getTypeAggregation(
             $filteredFieldsQuery->event,
@@ -174,10 +218,7 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $categoryAggregations = $this->getCategoryAggregation(
             $filteredFieldsQuery->event,
@@ -206,10 +247,7 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterOrganizationCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterOrganizationCategoryViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $aggregations = $this->getOrganizationCategoryAggregation(
             $filteredFieldsQuery->event,
@@ -241,10 +279,7 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterPositionViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterPositionViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $aggregations = $this->getPositionAggregation(
             $filteredFieldsQuery->event,
@@ -282,8 +317,6 @@ class FilteredFieldsQueryHandler
      * @param string $fieldName    ElasticSearch field name
      * @param bool   $subField:    is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
      *                             else: $aggregations['type'] = [...]
-     *
-     * @return array
      */
     private function getAggregationsIndexedByKey(array $aggregations, string $fieldName, bool $subField = false): array
     {

@@ -280,6 +280,7 @@ class ExportActionTest extends TestCase
         $catalogFilterViewResult = new CatalogFilterViewsResult(
             CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
             [],
+            [],
             $typeViews,
             [],
             $positionViews,
@@ -406,6 +407,7 @@ class ExportActionTest extends TestCase
 
         $catalogFilterViewResult = new CatalogFilterViewsResult(
             CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+            [],
             [],
             $typeViews,
             [],

@@ -118,6 +118,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             [],
             [],
             [],
+            [],
             $response
         );
 
@@ -192,6 +193,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
 
         $expected = new CatalogFilterViewsResult(
             CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+            [],
             [],
             [$typeView1->reveal(), $typeView2->reveal()],
             [],
