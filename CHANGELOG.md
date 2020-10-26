@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.62.1] - 2020-10-26
+### Fixed
+- disable redis doctrine cache
+
 ## [2.62.0] - 2020-10-26
 ### Added
 - VIMEET-2208 - Filter meeting request by sheet viewed
