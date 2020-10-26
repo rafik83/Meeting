@@ -246,6 +246,8 @@ services:
     Proximum\Vimeet\Application\Command\Networking\JoinVisioHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\JoinVisio }
 

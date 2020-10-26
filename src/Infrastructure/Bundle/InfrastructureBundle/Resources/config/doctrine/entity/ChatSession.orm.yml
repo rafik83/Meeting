@@ -12,6 +12,9 @@ Proximum\Vimeet\Domain\Model\ChatSession:
         visioSessionId:
             type: string
             nullable: true
+        visioStartedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

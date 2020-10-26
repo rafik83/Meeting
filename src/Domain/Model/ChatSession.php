@@ -22,6 +22,9 @@ class ChatSession implements ChatMessageLinkableInterface
     /** @var string */
     private $visioSessionId;
 
+    /** @var \DateTimeInterface */
+    private $visioStartedAt;
+
     public function __construct(Event $event, User $fromUser, User $toUser)
     {
         $this->event = $event;
@@ -91,5 +94,15 @@ class ChatSession implements ChatMessageLinkableInterface
     public function getToUser(): User
     {
         return $this->toUser;
+    }
+
+    public function getVisioStartedAt(): ?\DateTimeInterface
+    {
+        return $this->visioStartedAt;
+    }
+
+    public function setVisioStartedAt(?\DateTimeInterface $visioStartedAt): void
+    {
+        $this->visioStartedAt = $visioStartedAt;
     }
 }
