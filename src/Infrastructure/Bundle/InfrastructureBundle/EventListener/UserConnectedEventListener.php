@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver;
@@ -17,6 +18,9 @@ class UserConnectedEventListener implements EventSubscriberInterface
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
+
+    /** @var NetworkingAccessChecker */
+    private $networkingAccessChecker;
 
     /** @var UserDomainValueResolver */
     private $userResolver;
@@ -41,12 +45,14 @@ class UserConnectedEventListener implements EventSubscriberInterface
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        NetworkingAccessChecker $networkingAccessChecker,
         UserDomainValueResolver $userResolver,
         SessionInterface $session,
         NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $datetime
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->networkingAccessChecker = $networkingAccessChecker;
         $this->userResolver = $userResolver;
         $this->session = $session;
         $this->notificationPublisher = $notificationPublisher;
@@ -80,6 +86,10 @@ class UserConnectedEventListener implements EventSubscriberInterface
 
         $this->sheet = $event->getRequest()->attributes->get('sheet');
         if (null === $this->sheet) {
+            return;
+        }
+
+        if (!$this->networkingAccessChecker->allowedToAccess($this->sheet->getEvent())) {
             return;
         }
 

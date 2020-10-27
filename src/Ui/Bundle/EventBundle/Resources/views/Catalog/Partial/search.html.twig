@@ -11,6 +11,25 @@
         </div>
     {% endif %}
 
+    {% if searchForm.sheetVisit is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.sheetVisit.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+            <ul data-choices-root>
+                {% for state in searchForm.children.sheetVisit %}
+                    <li class="filter__item">
+                        <label class="checkbox-inline">
+                            <span class="filter-label">
+                                {{ form_widget(state, {'attr': {'data-single-selection': true}}) }}
+                                {{ state.vars.label|trans({}, state.vars.translation_domain) }}
+                            </span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
     {% if searchForm.categories is defined %}
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
     {% endif %}

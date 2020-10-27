@@ -71,14 +71,10 @@
     }
   }
 
-  .btn-sidebar {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .btn-group > .btn:first-child {
     &:not(:last-child):not(.dropdown-toggle) {
       @include border-right-radius(18px);
+      margin-right:10px;
     }
   }
 

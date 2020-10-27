@@ -44,6 +44,7 @@ agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibi
 agenda.unavailability.remove: Supprimer
 analytics.click_counter: '{0}0 clic|{1} 1 clic|]1,Inf[%clicks% clics par %uniqueClicks% visiteurs uniques'
 analytics.view_counter: '{0}0 vue|{1} 1 vue|]1,Inf[%views% vues par %uniqueViews% visiteurs uniques'
+analytics.view_link: 'Voir qui a visité ma fiche'
 authentication.account_temporarily_disabled: 'Votre compte a été bloqué pour une durée de 15 minutes.'
 authentication.remaining_attempt: '{0} Votre compte va être bloqué pendant 15 minutes.|{1} Dernière tentative avant que votre compte soit bloqué pour 15 minutes.|]1,Inf[ %remainingAttempt% tentatives restantes'
 availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'
@@ -423,7 +424,7 @@ networking.chat.title: 'Chat privé'
 networking.chat.with: 'Chat privé avec %user%'
 networking.participants.intro: 'cliquez sur un participant pour lancer une conversation privée'
 networking.participants.search: 'Chercher dans la liste'
-networking.participants.title: 'Participants connectés'
+networking.participants.title: 'Participants connectés (%count%)'
 networking.title: Networking
 new_password.confirm.title: 'Réinitialiser le mot de passe'
 new_password.help.noaction: 'Si vous ne faites aucune action, le mot de passe actuel reste valide'

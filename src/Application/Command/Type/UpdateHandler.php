@@ -70,7 +70,7 @@ class UpdateHandler
             $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false,
             $update->canSubmitValidation,
             $update->displayAnalyticsOnSheet,
-            $update->displayAnalyticsOnMeetingList
+            $update->displayAnalyticsOnCatalog
         );
         $type->setHidden($update->hidden);
 

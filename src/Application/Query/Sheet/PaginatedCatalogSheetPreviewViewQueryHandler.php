@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
@@ -54,17 +47,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @param SheetRepositoryInterface             $sheetRepository
-     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
-     * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
-     * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
-     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
-     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
-     * @param ValidationRequiredChecker            $validationRequiredChecker
-     * @param NomenclatureItemsGetter              $nomenclatureItemsGetter
-     * @param RequestRepositoryInterface           $meetingRequestRepository
-     */
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -74,17 +59,19 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
         NomenclatureItemsGetter $nomenclatureItemsGetter,
-        RequestRepositoryInterface $meetingRequestRepository
+        RequestRepositoryInterface $meetingRequestRepository,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
-        $this->sheetRepository                      = $sheetRepository;
-        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
-        $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
-        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
-        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->sheetRepository = $sheetRepository;
+        $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler = $sheetPreviewViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler = $viewedSheetListViewQueryHandler;
+        $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
-        $this->validationRequiredChecker            = $validationRequiredChecker;
+        $this->validationRequiredChecker = $validationRequiredChecker;
         $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
         $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
     /**
@@ -92,7 +79,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      *
      * @return PaginatedResult
      */
-    public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
+    public function handle(PaginatedCatalogSheetPreviewViewQuery $query): PaginatedResult
     {
         $paginatedResult = $this->sheetSearchAdapter->paginate(
             $query->event,
@@ -107,15 +94,16 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                 $query->locale
             ),
             $query->availableSlotIds,
-            $query->sheetsToExclude
+            $query->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getFilteredByVisitSheetIds($query->filters, $query->user, $query->viewer)
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
-        $seenSheetIndexed         = $this->viewedSheetListViewQueryHandler->handle(
+        $seenSheetIndexed = $this->viewedSheetListViewQueryHandler->handle(
             new ViewedSheetListViewQuery($query->user, $paginatedResult->results)
         );
 
-        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         $isPhoneValidationRequired = $this->isPhoneValidationRequiredForUser($query);
@@ -156,11 +144,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         return $paginatedResult;
     }
 
-    /**
-     * @param PaginatedCatalogSheetPreviewViewQuery $query
-     *
-     * @return bool
-     */
     private function isPhoneValidationRequiredForUser(PaginatedCatalogSheetPreviewViewQuery $query): bool
     {
         return $this->validationRequiredChecker->handle($query->viewer, $query->user);

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
@@ -33,11 +25,6 @@ class FilteredFieldsQueryHandler
         $this->tagFilterAggregator = $tagFilterAggregator;
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     *
-     * @return FilteredFieldsView
-     */
     public function handle(FilteredFieldsQuery $filteredFieldsQuery): FilteredFieldsView
     {
         $this->filterTypeViews($filteredFieldsQuery);
@@ -51,23 +38,14 @@ class FilteredFieldsQueryHandler
         );
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $typeViews
-     * @param array  $availableSlotIds
-     * @param array  $sheetsToExclude
-     *
-     * @return array|null
-     */
     private function getTypeAggregation(
         Event $event,
         string $locale,
         array $filters,
         array $typeViews,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): ?array {
         if (isset($filters[SearchFields::FILTER_TYPE])
             && \count($filters[SearchFields::FILTER_TYPE]) === \count($typeViews)
@@ -83,19 +61,13 @@ class FilteredFieldsQueryHandler
             SearchFields::FILTER_TYPE,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
     /**
-     * @param Event          $event
-     * @param string         $locale
-     * @param array          $filters
      * @param CategoryView[] $categoryViews
-     * @param array          $availableSlotIds
-     * @param array          $sheetsToExclude
-     *
-     * @return array|null
      */
     private function getCategoryAggregation(
         Event $event,
@@ -103,7 +75,8 @@ class FilteredFieldsQueryHandler
         array $filters,
         array $categoryViews,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): ?array {
         if (isset($filters[SearchFields::FILTER_CATEGORY])
             && \count($filters[SearchFields::FILTER_CATEGORY]) === \count($categoryViews)
@@ -119,7 +92,8 @@ class FilteredFieldsQueryHandler
             SearchFields::FILTER_CATEGORY,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
@@ -130,7 +104,7 @@ class FilteredFieldsQueryHandler
      *
      * @return array|null
      */
-    private function getOrganizationCategoryAggregation(Event $event, string $locale, array $filters): ?array
+    private function getOrganizationCategoryAggregation(Event $event, string $locale, array $filters, ?array $prefilteredSheetIds): ?array
     {
         if (!isset($filters[SearchFields::FILTER_ORGANIZATION_CATEGORY])) {
             return null;
@@ -142,7 +116,8 @@ class FilteredFieldsQueryHandler
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_ORGANIZATION_CATEGORY
+            SearchFields::FILTER_ORGANIZATION_CATEGORY,
+            $prefilteredSheetIds
         );
     }
 
@@ -153,7 +128,7 @@ class FilteredFieldsQueryHandler
      *
      * @return array|null
      */
-    private function getPositionAggregation(Event $event, string $locale, array $filters): ?array
+    private function getPositionAggregation(Event $event, string $locale, array $filters, ?array $prefilteredSheetIds): ?array
     {
         if (!isset($filters[SearchFields::FILTER_POSITION])) {
             return null;
@@ -165,7 +140,8 @@ class FilteredFieldsQueryHandler
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_POSITION
+            SearchFields::FILTER_POSITION,
+            $prefilteredSheetIds
         );
     }
 
@@ -180,7 +156,8 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters,
             $filteredFieldsQuery->catalogFilterViewsResult->typeViews,
             $filteredFieldsQuery->availableSlotIds,
-            $filteredFieldsQuery->sheetsToExclude
+            $filteredFieldsQuery->sheetsToExclude,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = null !== $typeAggregations ? $typeAggregations : $filteredFieldsQuery->currentAggregations;
@@ -208,7 +185,8 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters,
             $filteredFieldsQuery->catalogFilterViewsResult->categoryViews,
             $filteredFieldsQuery->availableSlotIds,
-            $filteredFieldsQuery->sheetsToExclude
+            $filteredFieldsQuery->sheetsToExclude,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = null !== $categoryAggregations ?
@@ -236,7 +214,8 @@ class FilteredFieldsQueryHandler
         $aggregations = $this->getOrganizationCategoryAggregation(
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
-            $filteredFieldsQuery->filters
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
@@ -270,7 +249,8 @@ class FilteredFieldsQueryHandler
         $aggregations = $this->getPositionAggregation(
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
-            $filteredFieldsQuery->filters
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
@@ -352,7 +332,8 @@ class FilteredFieldsQueryHandler
                 $filteredFieldsQuery->locale,
                 $filteredFieldsQuery->filters,
                 $filteredFieldsQuery->availableSlotIds,
-                $filteredFieldsQuery->sheetsToExclude
+                $filteredFieldsQuery->sheetsToExclude,
+                $filteredFieldsQuery->prefilteredSheetIds
             );
 
             $aggregationKeys = [];
