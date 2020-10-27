@@ -9,12 +9,6 @@ imports:
 #    serializer:
 #        cache: serializer.mapping.cache.apc
 
-#doctrine:
-#    orm:
-#        metadata_cache_driver: apc
-#        result_cache_driver: apc
-#        query_cache_driver: apc
-
 monolog:
     handlers:
         main:
@@ -28,3 +22,19 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
+snc_redis:
+    clients:
+        doctrine:
+            type: predis
+            alias: doctrine
+            dsn: '%redis_dsn%/2'
+            logging: '%kernel.debug%'
+    doctrine:
+        metadata_cache:
+            client: doctrine
+            entity_manager: default
+            document_manager: default
+            namespace: '%app_version%:'
+        query_cache:
+            client: doctrine
+            entity_manager: default

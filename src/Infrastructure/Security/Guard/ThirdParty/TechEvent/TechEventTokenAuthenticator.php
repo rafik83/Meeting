@@ -83,9 +83,9 @@ class TechEventTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
-        $extraData = $this->extraDataRepository->getExtraDataForEventNameAndMD5Value(
+        $extraData = $this->extraDataRepository->getExtraDataForEventNameAndValue(
             $credentials['event'],
-            Type::IMPORTED_FROM_TECH_EVENT,
+            Type::TECH_EVENT_IDENTIFIER_MD5,
             $credentials['techtoken']
         );
 

@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
@@ -188,7 +189,8 @@ class CatalogController extends Controller
             $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
             $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
             $availableSlotsIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $this->get(GetViewedSheetsFromFilters::class)->getFilteredByVisitSheetIds($filters, $user, $sheet)
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -330,6 +332,7 @@ class CatalogController extends Controller
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action' => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
+            'filterBySheetVisit' => $sheet->getType()->canDisplayAnalyticsOnCatalog(),
             'typeViews' => $catalogFilterViewsResult->typeViews,
             'categoryViews' => $catalogFilterViewsResult->categoryViews,
             'organizationCategoryViews' => $catalogFilterViewsResult->organizationCategoryViews,
@@ -340,7 +343,7 @@ class CatalogController extends Controller
             'filterByAvailableSlotIds' => $filterAvailableSlotIds,
             'filterBySpecificSlot' => null !== $specificSlot,
             'specificSlot' => $specificSlot,
-            'objectiveFilters' => $catalogFilterViewsResult->objectiveFilters
+            'objectiveFilters' => $catalogFilterViewsResult->objectiveFilters,
         ]);
     }
 
@@ -354,7 +357,8 @@ class CatalogController extends Controller
         bool $filterAvailableSlotIds = false,
         MeetingSlot $specificSlot = null,
         array $availableSlotsIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds
     ): FormInterface {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
@@ -365,7 +369,8 @@ class CatalogController extends Controller
                 $catalogFilterViewsResult,
                 $locale,
                 $availableSlotsIds,
-                $sheetsToExclude
+                $sheetsToExclude,
+                $prefilteredSheetIds
             )
         );
 

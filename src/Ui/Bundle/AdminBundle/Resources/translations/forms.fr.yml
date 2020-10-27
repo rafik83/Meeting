@@ -7,16 +7,23 @@ created_at: 'Date d''inscription'
 form.activate_account_password.children.password.children.first.label: 'Nouveau mot de passe'
 form.activate_account_password.children.password.children.second.label: 'Ressaisir le nouveau mot de passe'
 form.activate_account_password.children.submit.label: Envoyer
+form.add_fast_checkin.children.country.label: 'Pays du participant'
+form.add_fast_checkin.children.firstname.label: Prénom
+form.add_fast_checkin.children.hasAccessToMeetings.label: 'A accès aux rendez-vous'
+form.add_fast_checkin.children.lastname.label: Nom
+form.add_fast_checkin.children.mobile.label: 'Téléphone mobile'
+form.add_fast_checkin.children.sheetTitle.label: 'Nom de la fiche'
+form.add_fast_checkin.children.submit.label: 'Enregistrer la participation'
+form.add_fast_checkin.children.type.error.missing: 'Le type de participation est obligatoire'
+form.add_fast_checkin.children.type.label: 'Type de participation'
 form.add_participant.children.data.label: 'Coordonnées du participant'
 form.add_participant.children.email.label: Email
 form.add_participant.children.submit.label: Envoyer
 form.add_products.children.submit.label: 'Valider les produits'
-form.admin_password.rules: 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 12 caractères.'
-form.registration_path_question.children.answers.label: Réponses
-form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
-form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'
-form.registration_path_question.children.submit.label: Enregistrer
-form.registration_path_question.children.translatedTitle.label: Titre de la question
+form.add_question.children.answers.label: Réponses
+form.add_question.children.answers.label_add: 'Ajouter une réponse'
+form.add_question.children.answers.label_delete: 'Supprimer cette réponse'
+form.add_question.children.submit.label: Enregistrer
 form.add_unavailability.children.from.label: De
 form.add_unavailability.children.participants.label: 'Participants concernés'
 form.add_unavailability.children.submit.label: Ajouter
@@ -43,7 +50,6 @@ form.admin_assign_accommodation_type.roommate.none: Aucune
 form.admin_assign_accommodation_type.roomType.double: Double
 form.admin_assign_accommodation_type.roomType.single: Simple
 form.admin_assign_accommodation_type.roomType.twin: Twin
-form.speaker.email_does_not_exist.error: 'Aucun compte n''existe sur cet évènement correspondant à cet email'
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
 form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
@@ -64,6 +70,7 @@ form.admin_lib.children.private.label: Privé
 form.admin_lib.children.required.label: Requis
 form.admin_lib.children.submit.label: Enregistrer
 form.admin_lib.children.tags.label: Tags
+form.admin_password.rules: 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 12 caractères.'
 form.admin_schedule_days.children.days.label: 'Jours de l''événement'
 form.admin_schedule_days.children.days.label_add: 'Ajouter un jour'
 form.admin_schedule_days.children.days.label_delete: 'Supprimer ce jour'
@@ -84,8 +91,8 @@ form.apply_promotion_code.children.submit.label: Appliquer
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
-form.assign_participation_type.children.types.label: 'Types de participation'
 form.assign_participation_type.children.submit.label: Assigner
+form.assign_participation_type.children.types.label: 'Types de participation'
 form.authentication_token.children.file.label: 'Fichier des tokens'
 form.authentication_token.children.submit.label: 'Importer des tokens'
 form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
@@ -307,16 +314,16 @@ form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.label: 'Image de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endImage.missing: 'Image de fin non défini'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endMessage.label: 'Message de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.help: 'Format autorisé: .mp3, .webm, .wav'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.label: 'Son de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endSound.missing: 'Son de fin non défini'
-form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.endMessage.label: 'Message de fin'
-form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.label: 'Image d''entête des RDVs Visio'
+form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.label: 'Image d''entête'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.header.missing: 'Image non défini actuellement'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeEndImage.label: 'Supprimer l''image de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeEndSound.label: 'Supprimer le son de fin'
 form.event_meeting_visio_settings.children.localizedVisioSettings.prototype.children.removeHeader.label: 'Supprimer ce header'
-form.event_meeting_visio_settings.children.submit.label: 'Enregistrer'
+form.event_meeting_visio_settings.children.submit.label: Enregistrer
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
@@ -330,9 +337,6 @@ form.event_practical_info_update.children.organiserName.label: Organisateur
 form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de contact'
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
-form.event_update.children.accessControlEnabled.label: "Contrôle d'accès activé"
-form.event_update.children.autoArchiveWebinar.label: 'Enregistrement automatique des webinaires'
-form.event_update.children.showCheckinStatus.label: "Présence/absence d’un participant affichée dans les RDV et liste de contacts"
 form.event_update_design.children.backgroundColor.label: 'Couleur de fond'
 form.event_update_design.children.backgroundImage.label: 'Image de fond'
 form.event_update_design.children.headerButtonLeftColor.label: 'Couleur de gauche des boutons du Header'
@@ -343,22 +347,20 @@ form.event_update_design.children.headerRightColor.label: 'Couleur de droite du 
 form.event_update_design.children.leftColor.label: 'Couleur de gauche des CTA'
 form.event_update_design.children.localizedImages.prototype.children.logo.label: 'Header desktop'
 form.event_update_design.children.localizedImages.prototype.children.mobileLogo.label: 'Header mobile'
-form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
 form.event_update_design.children.localizedImages.prototype.children.notificationImage.label: 'Image de notification'
+form.event_update_design.children.localizedImages.prototype.children.undefined: 'Non défini'
 form.event_update_design.children.removeBackgroundImage.label: 'Supprimer l''image de fond actuelle'
 form.event_update_design.children.rightColor.label: 'Couleur de droite des CTA'
 form.event_update_design.children.submit.label: Sauvegarder
 form.event_update_design.children.textColor.label: 'Couleur du texte'
+form.event_update.children.accessControlEnabled.label: 'Contrôle d''accès activé'
 form.event_update.children.analyticsCode.label: 'Code analytique'
+form.event_update.children.autoArchiveWebinar.label: 'Enregistrement automatique des webinaires'
 form.event_update.children.backgroundColor.label: 'Couleur de fond'
 form.event_update.children.backgroundImage.label: 'Image de fond'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
-form.event_update.children.googleLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection dans la console Google (console.developers.google.com) : %urls%'
-form.event_update.children.googleLoginEnabled.label: 'Inscription et connexion par compte Google activé'
-form.event_update.children.linkedinLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection sur la console Linkedin (www.linkedin.com/developers) dans l''onglet “Auth” : %urls%'
-form.event_update.children.linkedinLoginEnabled.label: 'Inscription et connexion par compte Linkedin activé'
 form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
 form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event_update.children.displayParticipantNameOnPlanning.label: 'Prénom et Nom des participants affichés sur le planning'
@@ -366,14 +368,19 @@ form.event_update.children.displayParticipantPositionOnPlanning.label: 'Fonction
 form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
+form.event_update.children.googleLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection dans la console Google (console.developers.google.com) : %urls%'
+form.event_update.children.googleLoginEnabled.label: 'Inscription et connexion par compte Google activé'
 form.event_update.children.invoicePrefix.label: 'Préfixe de facturation'
 form.event_update.children.isBackgroundImageToRemove.label: 'Supprimer l''image de fond actuelle'
 form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
+form.event_update.children.linkedinLoginEnabled.help: 'Il est nécessaire d’ajouter le ou les urls de redirection sur la console Linkedin (www.linkedin.com/developers) dans l''onglet “Auth” : %urls%'
+form.event_update.children.linkedinLoginEnabled.label: 'Inscription et connexion par compte Linkedin activé'
 form.event_update.children.locales.label: Langues
 form.event_update.children.logo.label: Logo
 form.event_update.children.mode.label: Mode
 form.event_update.children.organiserName.label: Organisateur
 form.event_update.children.rightColor.label: 'Couleur habillage de droite'
+form.event_update.children.showCheckinStatus.label: 'Présence/absence d’un participant affichée dans les RDV et liste de contacts'
 form.event_update.children.submit.label: Enregistrer
 form.event_update.children.textColor.label: 'Couleur du texte'
 form.event_update.children.timeZone.label: 'Fuseau horaire'
@@ -415,15 +422,6 @@ form.extra_parameter_create.children.value.label: Valeur
 form.extra_parameter_update.children.name.label: Nom
 form.extra_parameter_update.children.submit.label: Enregistrer
 form.extra_parameter_update.children.value.label: Valeur
-form.add_fast_checkin.children.country.label: Pays du participant
-form.add_fast_checkin.children.firstname.label: Prénom
-form.add_fast_checkin.children.hasAccessToMeetings.label: A accès aux rendez-vous
-form.add_fast_checkin.children.lastname.label: Nom
-form.add_fast_checkin.children.mobile.label: Téléphone mobile
-form.add_fast_checkin.children.sheetTitle.label: Nom de la fiche
-form.add_fast_checkin.children.submit.label: Enregistrer la participation
-form.add_fast_checkin.children.type.label: Type de participation
-form.add_fast_checkin.children.type.error.missing: Le type de participation est obligatoire
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
@@ -487,10 +485,7 @@ form.generate_slot.children.recipes.prototype.children.duration.label: 'Durée (
 form.generate_slot.children.recipes.prototype.children.end.label: à
 form.generate_slot.children.recipes.prototype.children.interval.label: 'Intervalle (en minutes)'
 form.generate_slot.children.submit.label: Enregistrer
-form.happening.happeningType.default.label: 'En présentiel'
-form.happening.happeningType.webinar.label: Webinaire
-form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
-form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
+form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
@@ -499,7 +494,7 @@ form.happening_create.children.invitationCode.label: 'Code d''invitation'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex: https://www.youtube.com/embed/wwNZKfBLAsc?autoplay=1&modestbranding=1&controls=0&disablekb=1&showinfo=0&fs=0&rel=0'
-form.happening_create.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
+form.happening_create.children.liveUrl.label: 'URL pour la diffusion en iframe'
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
 form.happening_create.children.questionAllowed.label: 'Question des participants'
@@ -512,10 +507,10 @@ form.happening_create.children.talkings.label_add: Ajouter
 form.happening_create.children.talkings.label_delete: Supprimer
 form.happening_create.children.talkings.prototype.children.position.label: Position
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
+form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: 'Image actuelle'
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
-form.happening_create.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
-form.happening_create.children.translations.prototype.children.currentWebinarHeaderImage.label: Image actuelle
+form.happening_create.children.translations.prototype.children.webinarHeaderImage.label: 'Image entête de webinaire'
 form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
 form.happening_create.children.webinarRecorded.label: 'Enregistrement du webinar'
@@ -537,12 +532,15 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
-form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: Image entête de webinaire
+form.happening_update.children.translations.prototype.children.webinarHeaderImage.label: 'Image entête de webinaire'
 form.happening_update.children.types.label: 'Types ayant accès'
 form.happening_update.children.webinar.label: 'Webinaire activé'
 form.happening_update.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_update.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
-form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
+form.happening.happeningType.default.label: 'En présentiel'
+form.happening.happeningType.interactive_webinar.label: 'Webinaire interactif'
+form.happening.happeningType.video_webinar.label: 'Webinaire vidéo'
+form.happening.happeningType.webinar.label: Webinaire
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
@@ -677,8 +675,8 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Libe
 form.package_update.children.title.label: 'Titre du template'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Envoyer
-form.participant_import.children.allowMultiSheet.choice.no: 'Non'
-form.participant_import.children.allowMultiSheet.choice.yes: 'Oui'
+form.participant_import.children.allowMultiSheet.choice.no: Non
+form.participant_import.children.allowMultiSheet.choice.yes: Oui
 form.participant_import.children.allowMultiSheet.label: 'Autoriser le multi-fiche'
 form.participant_import.children.charset.label: Encodage
 form.participant_import.children.file.label: 'Fichier CSV'
@@ -686,8 +684,8 @@ form.participant_import.children.mapping.label: 'Selectionner une correspondance
 form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
 form.participant_import.children.type.placeholder: 'Sélectionner un type'
-form.participant_import.field.ignore: Ignorer
 form.participant_import.field.group_title: 'Titre de l''entité'
+form.participant_import.field.ignore: Ignorer
 form.participant_import.field.mail: Email
 form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmé
 form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
@@ -838,22 +836,22 @@ form.product_update_planning.children.translations.prototype.children.descriptio
 form.product_update_planning.children.translations.prototype.children.title.label: Titre
 form.product_update_planning.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_update_planning.children.vat.label: TVA
-form.promotion_code_batch_create.children.promotions.label_add: Ajouter une promotion
-form.promotion_code_batch_create.children.promotions.label_delete: Supprimer cette promotion
+form.promotion_code_batch_create.children.promotions.label_add: 'Ajouter une promotion'
+form.promotion_code_batch_create.children.promotions.label_delete: 'Supprimer cette promotion'
 form.promotion_code_batch_create.children.promotions.prototype.children.product.label: Produit
 form.promotion_code_batch_create.children.promotions.prototype.children.quantityMax.label: 'Quantité limitée à'
 form.promotion_code_batch_create.children.promotions.prototype.children.type.label: Type
 form.promotion_code_batch_create.children.promotions.prototype.children.value.label: Valeur
 form.promotion_code_batch_create.children.submit.label: Enregistrer
-form.promotion_code_batch_update.children.promotions.label_add: Ajouter une promotion
-form.promotion_code_batch_update.children.promotions.label_delete: Supprimer cette promotion
+form.promotion_code_batch_update.children.promotions.label_add: 'Ajouter une promotion'
+form.promotion_code_batch_update.children.promotions.label_delete: 'Supprimer cette promotion'
 form.promotion_code_batch_update.children.promotions.prototype.children.product.label: Produit
 form.promotion_code_batch_update.children.promotions.prototype.children.quantityMax.label: 'Quantité limitée à'
 form.promotion_code_batch_update.children.promotions.prototype.children.type.label: Type
 form.promotion_code_batch_update.children.promotions.prototype.children.value.label: Valeur
 form.promotion_code_batch_update.children.submit.label: Enregistrer
 form.promotion_code_create.children.code.label: Code
-form.promotion_code_create.children.number.label: Nombre de codes
+form.promotion_code_create.children.number.label: 'Nombre de codes'
 form.promotion_code_create.children.prefix.label: Préfixe
 form.promotion_code_create.children.promotions.label: Promotions
 form.promotion_code_create.children.promotions.label_add: Ajouter
@@ -888,15 +886,20 @@ form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
 form.register.children.submit.label: Envoyer
+form.registration_path_question.children.answers.label: Réponses
+form.registration_path_question.children.answers.label_add: 'Ajouter une réponse'
+form.registration_path_question.children.answers.label_delete: 'Supprimer cette réponse'
+form.registration_path_question.children.submit.label: Enregistrer
+form.registration_path_question.children.translatedTitle.label: 'Titre de la question'
 form.registration_template_create.children.submit.label: Créer
 form.registration_template_create.children.title.label: 'Titre du nouveau template'
 form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
-form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
+form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
 form.rule_see_what.children.unrestricted: 'Toujours afficher'
@@ -904,7 +907,7 @@ form.rule_see_what.not_see_what_column: 'Ne voit pas'
 form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'
 form.schedule_config.children.submit.label: Enregistrer
-form.search_email_for_fast_checkin.children.email.help: si pas d'email, appuyer sur suivant
+form.search_email_for_fast_checkin.children.email.help: 'si pas d''email, appuyer sur suivant'
 form.search_email_for_fast_checkin.children.email.label: Email
 form.search_email_for_fast_checkin.children.submit.label: Suivant
 form.search_facet_translation.children.enabled.label: Activé
@@ -1050,7 +1053,7 @@ form.sheet_import_mapping_create.children.submit.label: 'Enregistrer une nouvell
 form.sheet_import_mapping_create.children.title.label: 'Titre de la correspondance'
 form.sheet_import_mapping_result.text.diff: 'Vous avez effectué des modifications à la correspondance utilisée'
 form.sheet_import_mapping_result.text.save_title: 'Enregistrer sous une nouvelle correspondance'
-form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisée'
+form.sheet_import_mapping_save.children.save.label: 'Mettre à jour la correspondance utilisé avec les changements'
 form.sheet_template_add_locale.children.locale.label: Langue
 form.sheet_template_add_locale.children.submit.label: Ajouter
 form.sheet_template_create.children.close.label: Annuler
@@ -1077,6 +1080,7 @@ form.sheet.messaging_campaign.recipients.submit.label: Valider
 form.sheet.reminderDate.children.begin.label: Début
 form.sheet.reminderDate.children.end.label: Fin
 form.sheet.sheetGroup.unAssignedGroup: 'Non assigné'
+form.speaker.email_does_not_exist.error: 'Aucun compte n''existe sur cet évènement correspondant à cet email'
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
 form.spot_batch_create.children.priority.label: Priorité
@@ -1236,6 +1240,7 @@ form.transactional_mail_update_customized.children.submit.label: 'Mettre à jour
 form.transactional_mail_update_customized.children.translations.label: 'Traductions du contenu'
 form.transactional_mail_update_customized.children.translations.prototype.children.content.label: Contenu
 form.transactional_mail_update_customized.children.translations.prototype.children.subject.label: Sujet
+form.translations.update.label: 'Mise à jour des traductions'
 form.translations.update.submit: 'Mettre à jour'
 form.type_content_define_terms_of_sale.children.enabled.label: 'Activer la personnalisation des conditions générales de vente pour ce type'
 form.type_content_define_terms_of_sale.children.submit.label: Valider
@@ -1245,7 +1250,8 @@ form.type_create.children.canEvaluateMeeting.label: 'Le participant peut noter s
 form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
-form.type_create.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
+form.type_create.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
+form.type_create.children.displayAnalyticsOnCatalog.label: 'Activer les filtres catalogue fiches que j''ai vues / qui m''ont vu'
 form.type_create.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
@@ -1266,7 +1272,6 @@ form.type_create.children.rank.label: Position
 form.type_create.children.registrationTemplate.label: 'Template d''Inscription'
 form.type_create.children.sheetTemplate.label: 'Template de présentation'
 form.type_create.children.submit.label: Enregistrer
-form.type_create.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_create.children.template.label: Template
 form.type_create.children.translations.prototype.children.description.label: Description
 form.type_create.children.translations.prototype.children.title.label: Titre
@@ -1307,7 +1312,8 @@ form.type_update.children.canEvaluateMeeting.label: 'Le participant peut noter s
 form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_update.children.canScanParticipant.label: 'Peut scanner un autre participant'
-form.type_update.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
+form.type_update.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
+form.type_update.children.displayAnalyticsOnCatalog.label: 'Activer les filtres catalogue fiches que j''ai vues / qui m''ont vu'
 form.type_update.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'
 form.type_update.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_update.children.formTemplates.label: Formulaires
@@ -1326,7 +1332,6 @@ form.type_update.children.rank.label: Position
 form.type_update.children.registrationTemplate.label: 'Template d''inscription'
 form.type_update.children.sheetTemplate.label: 'Template de présentation'
 form.type_update.children.submit.label: Enregistrer
-form.type_update.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
 form.type_update.children.translations.prototype.children.description.label: Description
 form.type_update.children.translations.prototype.children.title.label: Titre
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'

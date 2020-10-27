@@ -7,10 +7,13 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer\ContactNormalizer'
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\Condition\TypeConverter'
+            - '@monolog.logger'
     Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ImportSheetsHandler:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\MappingConfigurationChecker'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\ConvertContactToSheet'
             - '@monolog.logger'
@@ -24,6 +27,12 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler\PrepareImportSheetsHandler'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\Condition\TypeConverter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter'
+
+    Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\MappingConfigurationChecker: ~
 
     #
     # Guard

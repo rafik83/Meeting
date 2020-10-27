@@ -136,7 +136,7 @@ class TypeUpdateType extends AbstractType
                 ->add('displayAnalyticsOnSheet', CheckboxType::class, [
                     'required' => false,
                 ])
-                ->add('displayAnalyticsOnMeetingList', CheckboxType::class, [
+                ->add('displayAnalyticsOnCatalog', CheckboxType::class, [
                     'required' => false,
                 ])
             ;

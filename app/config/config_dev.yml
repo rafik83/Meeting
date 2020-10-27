@@ -13,6 +13,11 @@ framework:
         cookie_lifetime: 2592000
         gc_maxlifetime:  2592000
 
+doctrine:
+    orm:
+        metadata_cache_driver: apcu
+        query_cache_driver: apcu
+
 web_profiler:
     toolbar: true
     intercept_redirects: false

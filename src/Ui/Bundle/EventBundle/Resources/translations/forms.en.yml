@@ -1,6 +1,6 @@
 boolean.no: 'No'
 boolean.yes: 'Yes'
-form.add_participant.children.email.placeholder: E-mail
+form.add_participant.children.email.placeholder: Email
 form.add_participant.children.firstName.placeholder: 'First name'
 form.add_participant.children.lastName.placeholder: 'Last Name'
 form.add_participant.children.product.label: 'Linked products'
@@ -8,15 +8,22 @@ form.catalog_approve_meeting_request.children.description.label: 'Respond to the
 form.catalog_approve_meeting_request.children.description.placeholder: 'Write a message'
 form.catalog_approve_meeting_request.children.participants.label: 'Assign this meeting exclusively to?'
 form.catalog_approve_meeting_request.children.submit.label: 'Accept received proposal'
+form.catalog_approve_meeting_request.children.tooltip.title: 'requests for priority meetings remaining on'
+form.catalog_approve_meeting_request.children.toPriority.label: Priority
 form.catalog_cancel_meeting_request.request.children.submit.label: 'Cancel my request'
 form.catalog_create_meeting_request.children.description.label: 'Detail your request ?'
 form.catalog_create_meeting_request.children.description.placeholder: 'Write a message'
+form.catalog_create_meeting_request.children.fromPriority.label: Priority
+form.catalog_create_meeting_request.children.fromPriorityRemaining.label: '{0} (0/%total% remaining) |{1} (1/%total% remaining) |]1,Inf[ (%available%/%total% remaining)'
 form.catalog_create_meeting_request.children.participants.default.no_preference: 'No preference'
 form.catalog_create_meeting_request.children.participants.label: 'Assign this meeting exclusively to?'
 form.catalog_create_meeting_request.children.submit.label: 'Validate the meeting request'
+form.catalog_create_meeting_request.children.tooltip.title: 'requests for priority meetings remaining on'
 form.catalog_edit_meeting_request.children.description.label: 'Detail your meeting request'
 form.catalog_edit_meeting_request.children.description.placeholder: 'Write a message'
+form.catalog_edit_meeting_request.children.isPriority.label: Priority
 form.catalog_edit_meeting_request.children.participants.label: 'Assign this meeting exclusively to?'
+form.catalog_edit_meeting_request.children.tooltip.title: 'requests for priority meetings remaining on'
 form.catalog_edit_meeting_request.pending.request.children.submit.label: 'Modify the meeting request'
 form.catalog_edit_meeting_request.proposition.children.submit.label: Edit
 form.catalog_edit_meeting_request.request.children.submit.label: Edit
@@ -45,8 +52,10 @@ form.login.children.password.placeholder: Password
 form.login.children.rememberMe.label: 'Keep me logged in'
 form.move_meeting_slot.children.content.label: 'Comment to your contact'
 form.move_meeting_slot.children.meetingSlot.label: 'Choose an available slot'
+form.move_meeting_slot.children.meetingSlot.label.begin.end: '%day% from %begin% to %end%'
 form.move_meeting.children.content.label: 'Comment to your contact'
 form.move_meeting.children.meetingSlot.label: 'Choose an available slot'
+form.move_meeting.children.meetingSlot.label.begin.end: '%day% from %begin% to %end%'
 form.multi_upload_data.children.submit.label: Submit
 form.multi_upload_data.children.uploads.label_add: Add
 form.multi_upload_data.children.uploads.label_delete: Delete
@@ -83,6 +92,7 @@ form.participate.children.participants.unavailable: Unavailable
 form.participate.children.question.label: 'Ask a question to the speakers to prepare the workshop'
 form.participate.children.submit.label: Attend
 form.participate.children.submitUpdate.label: Edit
+form.password.rules: 'Your password must contain at least upper and lower case letters, a number and at least 8 characters'
 form.payment_choice_with_deposit.children.deposit.label: 'Choose whether to pay the full or a deposit'
 form.payment_choice_with_deposit.children.depositMode.deposit: Deposit
 form.payment_choice_with_deposit.children.depositMode.total: Total
@@ -111,6 +121,8 @@ form.search.meeting.availableSlot.choice.available: 'having availabilities'
 form.search.meeting.availableSlot.choice.everyone: All
 form.search.meeting.availableSlot.choice.slot: 'available on the %day% at %time%'
 form.search.meeting.availableSlot.label: 'who is available ?'
+form.search.meeting.sheetVisit.choice.sheetSaw: 'Profiles I have consulted'
+form.search.meeting.sheetVisit.label: Visits
 form.search.meeting.state.all: 'All status'
 form.search.meeting.state.approved: Approved
 form.search.meeting.state.cancelled: Cancelled
@@ -162,9 +174,10 @@ form.sheet_media_data.children.type.video: video
 form.sheet_template_objects_collection_type.children.objectsCollection.label_add: Add
 form.sheet_template_objects_collection_type.children.objectsCollection.label_delete: Delete
 form.sheet_template_objects_collection_type.children.submit.label: Save
-form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
+form.sort_participants.children.submit.label: Save
+form.user_availability_confirmation.children.confirm.label: 'Go directly to catalogue'
 form.user_event_phone_validate_code.children.code.label: 'Validation code received'
 form.user_event_phone_validate_code.children.confirm.label: Confirmed
-gender.man: Mr
+gender.man: Mr.
 gender.none: None
-gender.woman: Mrs
+gender.woman: Ms.

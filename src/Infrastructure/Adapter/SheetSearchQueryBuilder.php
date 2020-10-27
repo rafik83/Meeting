@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Filter\Exists;
@@ -41,19 +33,13 @@ use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilde
 
 class SheetSearchQueryBuilder
 {
-    /**
-     * @var BoolQuery
-     */
+    /** @var BoolQuery */
     private $query;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $initialBooster = 1;
 
     /**
@@ -67,22 +53,18 @@ class SheetSearchQueryBuilder
     private $availableSlots;
 
     /**
-     * @param Event               $event
-     * @param array               $filters
-     * @param string              $locale
-     * @param int                 $initialBooster
-     * @param array               $nomenclatureItems
      * @param AvailableSlotView[] $availableSlots
-     * @param array               $sheetsToExclude
+     * @param int[] $prefilteredSheetIds
      */
     public function __construct(
         Event $event,
         array $filters,
-        $locale,
-        $initialBooster = 1,
+        string $locale,
+        int $initialBooster = 1,
         array $nomenclatureItems = [],
         array $availableSlots = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
@@ -93,6 +75,7 @@ class SheetSearchQueryBuilder
         $this->matchEvent($event);
         $this->filter($filters);
         $this->excludeSheets($sheetsToExclude);
+        $this->restrictToSheets($prefilteredSheetIds);
     }
 
     /**
@@ -953,6 +936,31 @@ class SheetSearchQueryBuilder
         $matchAgendaConfirmedStatus->setTerm('agendaConfirmedStatus', $agendaConfirmedStatus);
 
         $this->query->addMust($matchAgendaConfirmedStatus);
+    }
+
+    /**
+     * @param int[]|null $sheets
+     */
+    private function restrictToSheets(?array $sheetIds)
+    {
+        if ($sheetIds === null) {
+            return;
+        }
+
+        $restrictToSheets = new BoolQuery();
+
+        // in case of an empty list, we want to display no result
+        if (empty($sheetIds)) {
+            $sheetIds[] = 0;
+        }
+
+        foreach ($sheetIds as $sheetId) {
+            $restrictToSheets->addShould(
+                (new Term())->setTerm('id', $sheetId)
+            );
+        }
+
+        $this->query->addMust($restrictToSheets);
     }
 
     /**

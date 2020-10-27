@@ -8,17 +8,17 @@ form.catalog_approve_meeting_request.children.description.label: 'Répondre à l
 form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_approve_meeting_request.children.submit.label: 'Accepter la proposition'
-form.catalog_approve_meeting_request.children.toPriority.label: Prioritaire
 form.catalog_approve_meeting_request.children.tooltip.title: ' demandes de rdvs prioritaires restant sur '
+form.catalog_approve_meeting_request.children.toPriority.label: Prioritaire
 form.catalog_cancel_meeting_request.request.children.submit.label: 'Annuler la demande'
 form.catalog_create_meeting_request.children.description.label: 'Motiver votre demande de RDV ?'
 form.catalog_create_meeting_request.children.description.placeholder: 'Ecrire un message'
-form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
-form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_create_meeting_request.children.fromPriority.label: Prioritaire
 form.catalog_create_meeting_request.children.fromPriorityRemaining.label: '{0} (0/%total% restante) |{1} (1/%total% restante) |]1,Inf[ (%available%/%total% restantes)'
-form.catalog_create_meeting_request.children.tooltip.title: ' demandes de rdvs prioritaires restant sur '
+form.catalog_create_meeting_request.children.participants.default.no_preference: 'Pas de préférence'
+form.catalog_create_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
 form.catalog_create_meeting_request.children.submit.label: 'Valider la demande de RDV'
+form.catalog_create_meeting_request.children.tooltip.title: ' demandes de rdvs prioritaires restant sur '
 form.catalog_edit_meeting_request.children.description.label: 'Motiver votre demande de RDV'
 form.catalog_edit_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_edit_meeting_request.children.isPriority.label: Prioritaire
@@ -83,7 +83,7 @@ form.options.selectParticipants.placeholder: Choisir...
 form.options.selectParticipantsQuantityMax.label: 'Limité à 1 participant|Limité à %max% participants'
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
-form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation auquel je souscris.'
 form.participant_timezone.children.timezone.label: 'Fuseau horaire'
 form.participantAndPlanning.participantProduct.selectAnOption: '-- Sélectionnez une option --'
 form.participate.children.invitationCode.label: 'Code d''invitation'
@@ -92,6 +92,7 @@ form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
 form.participate.children.submit.label: Participer
 form.participate.children.submitUpdate.label: Modifier
+form.password.rules: 'Votre mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 8 caractères.'
 form.payment_choice_with_deposit.children.deposit.label: 'Choisissez si vous souhaitez payer le total ou l''acompte'
 form.payment_choice_with_deposit.children.depositMode.deposit: Acompte
 form.payment_choice_with_deposit.children.depositMode.total: Total
@@ -101,7 +102,6 @@ form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Virement
 form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
-form.password.rules: 'Votre mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et au moins 8 caractères.'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.remove_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
@@ -121,6 +121,10 @@ form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
 form.search.meeting.availableSlot.choice.everyone: Tous
 form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
 form.search.meeting.availableSlot.label: 'Qui est disponible ?'
+form.search.meeting.sheetVisit.choice.all: 'Toutes les participations'
+form.search.meeting.sheetVisit.choice.sheetSaw: 'Profils que j''ai consultés'
+form.search.meeting.sheetVisit.choice.viewedBySheet: 'A consulté mon profil'
+form.search.meeting.sheetVisit.label: Visites
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
@@ -139,6 +143,10 @@ form.search.orderBy.label: TRIER
 form.search.orderBy.relevance: Pertinence
 form.search.organizationCategory.label: Structure
 form.search.position.label: Fonctions
+form.search.sheetVisit.label: 'Visites'
+form.search.sheetVisit.choice.all: 'Toutes les participations'
+form.search.sheetVisit.choice.sheetSaw: 'Profils que j''ai consultés'
+form.search.sheetVisit.choice.viewedBySheet: 'A consulté mon profil'
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'
@@ -174,7 +182,7 @@ form.sheet_template_objects_collection_type.children.objectsCollection.label_del
 form.sheet_template_objects_collection_type.children.submit.label: Enregistrer
 form.sheet_video_data.children.submit.label: Enregistrer
 form.sort_participants.children.submit.label: Enregistrer
-form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
+form.user_availability_confirmation.children.confirm.label: 'Accéder directement au catalogue'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur

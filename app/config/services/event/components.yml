@@ -33,3 +33,7 @@ services:
             - '@datetime'
             - '%feature_video_conference_date_security_enabled%'
             - '%feature_video_conference_enabled%'
+
+    Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters:
+        arguments:
+            - '@repository.sheet.sheet_viewed_repository'

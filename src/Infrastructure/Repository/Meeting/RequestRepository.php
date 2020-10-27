@@ -42,7 +42,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Request $request)
+    public function add(Request $request): void
     {
         $this->entityManager->persist($request);
         $this->entityManager->flush($request);
@@ -51,7 +51,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function set(Request $request)
+    public function set(Request $request): void
     {
         $this->entityManager->flush($request);
     }
@@ -59,7 +59,7 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function remove(Request $request)
+    public function remove(Request $request): void
     {
         $this->entityManager
             ->createQueryBuilder()

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -37,20 +29,11 @@ class MeetingRequestListViewQuery
     /** @var bool */
     public $showCategory;
 
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $slotsToFilter
-     * @param bool   $showCategory
-     */
     public function __construct(
         Event $event,
         Sheet $sheet,
         User $user,
-        $locale,
+        string $locale,
         array $filters = [],
         array $slotsToFilter = [],
         bool $showCategory = false
