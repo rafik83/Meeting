@@ -6,7 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
  * Add new field visio started at
  */
 final class Version20201026170301 extends AbstractMigration

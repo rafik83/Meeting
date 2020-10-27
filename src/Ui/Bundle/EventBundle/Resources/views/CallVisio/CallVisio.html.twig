@@ -12,10 +12,6 @@
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
-    {% set participantPresenceAction = null %}
-    {% if participant is defined and meeting is defined and sheet is defined %}
-        {% set participantPresenceAction = path('event_video_meeting_presence', {'sheet': sheet.id, 'participant': participant.id, 'meeting': meeting.id}) %}
-    {% endif %}
 
     <div class="video-conference"
          data-token="{{ visioView.token }}"
@@ -26,20 +22,11 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-media-screenShareStatus-message="{{ 'meeting.video.media.share.screenShareStatus'|trans }}"
-         data-participant-presence-action="{{ participantPresenceAction }}"
          data-user-complete-name=""
 
-            {% if meetingView is defined %}
-                data-time-remaining="{{ meetingView.timeRemainingInSeconds }}"
-                data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
-
-                data-current-user-id="{{ currentUserId }}"
-                data-subscriber-mapping="{{ meetingView.participantInfosByUserId|json_encode }}"
-            {% endif %}
-
-         data-visio-meeting-end-warning=""
+         data-time-remaining="{{ visioView.timeRemainingInSeconds }}"
+         data-warning-time-remaining="{{ visioView.warningTimeRemainingInSeconds }}"
     >
-
         <div class="layout-container"></div>
         <div class="chat-container hide"></div>
         <div class="video-helper" data-meeting-settings-container>
@@ -65,7 +52,7 @@
 
         <div class="buttons-container">
                 <div class="timer-container">
-                    <div class="timer">
+                    <div class="timer" data-start-on-visio-started="true">
                         {{ 'meeting.video.endingAt'|trans }}
                         <span class="countdown"></span>
                     </div>

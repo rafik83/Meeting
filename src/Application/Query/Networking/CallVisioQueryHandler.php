@@ -69,6 +69,13 @@ class CallVisioQueryHandler
             $dateTimeEnd
         );
 
-        return new CallVisioView($token, $chatSession->getVisioSessionId(), $this->videoConferenceAdapter->getApiKey());
+        $timeRemainingInSeconds = 15 * 60;
+
+        return new CallVisioView(
+            $token, $chatSession->getVisioSessionId(),
+            $this->videoConferenceAdapter->getApiKey(),
+            $timeRemainingInSeconds,
+            round($timeRemainingInSeconds * 0.2)
+        );
     }
 }

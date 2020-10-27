@@ -100,7 +100,11 @@ function VideoConference(
     this.join();
   }
 
-  this.countDownBeforeEnd();
+  this.startOnVisioStarted = !!this.timerContainer.getAttribute('data-start-on-visio-started');
+  if(!this.startOnVisioStarted) {
+      this.countDownBeforeEnd();
+  }
+
 }
 
 VideoConference.prototype.join = function () {
@@ -211,6 +215,10 @@ VideoConference.prototype.init = function() {
     this.subscribers.push(subscriber);
 
     this.hideElement(this.meetingHelperWaitingContainer);
+    if(this.startOnVisioStarted) {
+        this.countDownBeforeEnd();
+        this.startOnVisioStarted = false;
+    }
     this.layout();
 
   }.bind(this));
