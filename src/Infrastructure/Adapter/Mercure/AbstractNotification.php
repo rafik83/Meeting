@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
@@ -20,5 +22,10 @@ class AbstractNotification
     public function getUserTopic(int $eventId, int $userId): string
     {
         return sprintf('https://vimeet.events/event/%d/user/%d', $eventId, $userId);
+    }
+
+    public function getCallVisioTopic(Event $event): string
+    {
+        return sprintf('https://vimeet.events/callvisio/%d', $event->getId());
     }
 }

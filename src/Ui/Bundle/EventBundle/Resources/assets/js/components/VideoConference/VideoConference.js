@@ -8,6 +8,7 @@ import Subscriber from './Subscriber';
 import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
+import MercureSubscriber from '../_Subscriber';
 
 import 'bootstrap/js/modal';
 
@@ -107,6 +108,14 @@ function VideoConference(
       this.countDownBeforeEnd();
   }
 
+  // call visio topic subscription
+  (function (element) {
+    const providerUrl = element.getAttribute('data-provider-url');
+    const callVisioTopic = element.getAttribute('data-callvisio-topic');
+    const subscriberKey = element.getAttribute('data-subscriber-key');
+    const subscriber = new MercureSubscriber(providerUrl);
+    subscriber.addSubscriber(callVisioTopic, subscriberKey, null);
+  })(element);
 }
 
 VideoConference.prototype.join = function () {

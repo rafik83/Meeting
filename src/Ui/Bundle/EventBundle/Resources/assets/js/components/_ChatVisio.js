@@ -19,7 +19,7 @@ export default class ChatVisio
     }
 
     onMessagesReceived(messages) {
-        if (messages.some((message)=> !message.isAuthor)) {
+        if (messages.some((message)=> !message.isAuthor) && this.buttonRequestBusy.classList.contains('hide')) {
             this.buttonVisio.classList.remove("hide");
         }
     }

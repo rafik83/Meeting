@@ -80,6 +80,12 @@ class CallVisioQueryHandler
 
         $visioSettings = $this->visioSettingsRepository->getByEvent($visioQuery->sheet->getEvent());
 
+        $callVisioTopic = $this->notificationSubscriber->getCallVisioTopic($visioQuery->sheet->getEvent());
+
+        $providerUrl = $this->notificationSubscriber->getUrl();
+
+        $subscriberKey = $this->notificationSubscriber->getUserSubscriberKey($visioQuery->sheet, $visioQuery->fromUser);
+
         return new CallVisioView(
             $token, $chatSession->getVisioSessionId(),
             $this->videoConferenceAdapter->getApiKey(),
@@ -88,7 +94,10 @@ class CallVisioQueryHandler
             $visioSettings !== null ? $visioSettings->getHeader($visioQuery->locale) : null,
             $visioSettings !== null ? $visioSettings->getEndSound($visioQuery->locale) :null,
             $visioSettings !== null ? $visioSettings->getEndImage($visioQuery->locale) : null,
-            $visioSettings !== null ? $visioSettings->getEndMessage($visioQuery->locale) : null
+            $visioSettings !== null ? $visioSettings->getEndMessage($visioQuery->locale) : null,
+            $callVisioTopic,
+            $providerUrl,
+            $subscriberKey
         );
     }
 }

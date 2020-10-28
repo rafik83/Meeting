@@ -31,6 +31,14 @@ class CallVisioView
     /** @var string|null */
     public $endMessage;
 
+    /** @var string */
+    public $callVisioTopic;
+
+    /** @var string */
+    public $providerUrl;
+
+    /** @var string */
+    public $subscriberKey;
 
     public function __construct(
         string $token,
@@ -41,7 +49,10 @@ class CallVisioView
         ?string $header,
         ?string $endSound,
         ?string $endImage,
-        ?string $endMessage
+        ?string $endMessage,
+        string $callVisioTopic,
+        string $providerUrl,
+        string $subscriberKey
     )
     {
         $this->token = $token;
@@ -53,6 +64,9 @@ class CallVisioView
         $this->endSound = $endSound;
         $this->endImage = $endImage;
         $this->endMessage = $endMessage;
+        $this->callVisioTopic = $callVisioTopic;
+        $this->providerUrl = $providerUrl;
+        $this->subscriberKey = $subscriberKey;
     }
 
     public function hasHeader(): bool

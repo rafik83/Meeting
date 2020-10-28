@@ -21,15 +21,20 @@ class PrivateChatQueryHandler
     /** @var AskCallVisioPrivateChatAccessChecker */
     private $askCallVisioPrivateChatAccessChecker;
 
+    /** @var IsUserInCallVisio */
+    private $isUserInCallVisio;
+
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
         ChatSessionRepositoryInterface $chatSessionRepository,
-        AskCallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker
+        AskCallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker,
+        IsUserInCallVisio $isUserInCallVisio
     )
     {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
         $this->askCallVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
+        $this->isUserInCallVisio = $isUserInCallVisio;
     }
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
@@ -38,15 +43,17 @@ class PrivateChatQueryHandler
             throw new PrivateChatInvalidToUser('User cannot open a chat session with himself');
         }
 
+        $event = $privateChatQuery->sheet->getEvent();
+
         $chatSession = $this->chatSessionRepository->findOneByEventAndUsers(
-            $privateChatQuery->sheet->getEvent(),
+            $event,
             $privateChatQuery->fromUser,
             $privateChatQuery->toUser
         );
 
         if (null === $chatSession) {
             $chatSession = new ChatSession(
-                $privateChatQuery->sheet->getEvent(),
+                $event,
                 $privateChatQuery->fromUser,
                 $privateChatQuery->toUser
             );
@@ -54,9 +61,11 @@ class PrivateChatQueryHandler
             $this->chatSessionRepository->add($chatSession);
         }
 
-        $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->sheet->getEvent()->getId(), $privateChatQuery->fromUser->getId());
+        $topic = $this->notificationSubscriber->getUserTopic($event->getId(), $privateChatQuery->fromUser->getId());
 
-        $hasVisioButton = $this->askCallVisioPrivateChatAccessChecker->allowedToAccess($privateChatQuery->sheet->getEvent(), $chatSession, $privateChatQuery->toUser);
+        $hasVisioButton = $this->askCallVisioPrivateChatAccessChecker->allowedToAccess($event, $chatSession, $privateChatQuery->toUser);
+
+        $isToUserBusy = $this->isUserInCallVisio->isSatisfiedBy($event, $privateChatQuery->toUser);
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),
@@ -72,7 +81,8 @@ class PrivateChatQueryHandler
             $privateChatQuery->toUser->getPosition(),
             $privateChatQuery->toUser->getId(),
             $chatSession->getId(),
-            $hasVisioButton
+            $hasVisioButton,
+            $isToUserBusy
         );
     }
 }

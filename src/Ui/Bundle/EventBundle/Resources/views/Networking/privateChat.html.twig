@@ -12,7 +12,7 @@
         <div class="chat-header-tools" data-visio-enable="{{ privateChatView.hasVisioButton }}">
             <button
                     data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
-                    class="btn btn-sm btn-primary state-normal"
+                    class="btn btn-sm btn-primary state-normal {{ privateChatView.isToUserBusy ? 'hide' }}"
             >
                 <span class="glyphicon glyphicon-facetime-video"></span>
                 {{ 'networking.chat.visio.request'|trans }}
@@ -35,7 +35,7 @@
             </span>
             <span
                     data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
-                    class="btn btn-sm btn-primary disabled state-busy hide">
+                    class="btn btn-sm btn-primary disabled state-busy {{ not privateChatView.isToUserBusy ? 'hide' }}">
                         <span class="glyphicon glyphicon-option-horizontal"></span>
                         {{ 'networking.chat.visio.busy'|trans }}
             </span>

@@ -7262,6 +7262,11 @@ services:
         tags:
             - { name: tactician.handler, typehints: true }
 
+    Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
@@ -7276,5 +7281,6 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@domain.key_dates.checker.ask_call_visio_private_chat_access_checker'
+            - '@Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio'
         tags:
             - { name: tactician.handler, typehints: true }
