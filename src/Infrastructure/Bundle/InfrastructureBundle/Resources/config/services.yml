@@ -7250,6 +7250,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
             - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
             - '@datetime'
         tags:
             - { name: tactician.handler, typehints: true }

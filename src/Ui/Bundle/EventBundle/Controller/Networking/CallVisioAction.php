@@ -93,8 +93,9 @@ class CallVisioAction
         $this->commandBus->handle(new Add($event, $user, $toUser, Contact::ORIGIN_PRIVATE_CHAT_VISIO));
         $this->commandBus->handle(new JoinVisio($sheet, $user, $toUser));
 
-        $visioView = $this->queryBus->handle(new CallVisioQuery($sheet, $user, $toUser));
+        $locale = $request->getLocale();
 
+        $visioView = $this->queryBus->handle(new CallVisioQuery($sheet, $user, $toUser, $locale));
 
         return new Response(
             $this->engine->render(

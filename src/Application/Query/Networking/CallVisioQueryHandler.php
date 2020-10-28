@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\View\Networking\CallVisioView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Visio\VisioSettingsRepositoryInterface;
 
 class CallVisioQueryHandler
 {
@@ -23,17 +24,23 @@ class CallVisioQueryHandler
     /** @var \DateTimeImmutable */
     private $now;
 
+    /** @var VisioSettingsRepositoryInterface */
+    private $visioSettingsRepository;
+
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
         ChatSessionRepositoryInterface $chatSessionRepository,
         CallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
+        VisioSettingsRepositoryInterface $visioSettingsRepository,
         \DateTimeImmutable $now
+
     ) {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
         $this->callVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->visioSettingsRepository = $visioSettingsRepository;
         $this->now = $now;
     }
 
@@ -71,11 +78,17 @@ class CallVisioQueryHandler
 
         $timeRemainingInSeconds = 15 * 60;
 
+        $visioSettings = $this->visioSettingsRepository->getByEvent($visioQuery->sheet->getEvent());
+
         return new CallVisioView(
             $token, $chatSession->getVisioSessionId(),
             $this->videoConferenceAdapter->getApiKey(),
             $timeRemainingInSeconds,
-            round($timeRemainingInSeconds * 0.2)
+            round($timeRemainingInSeconds * 0.2),
+            $visioSettings !== null ? $visioSettings->getHeader($visioQuery->locale) : null,
+            $visioSettings !== null ? $visioSettings->getEndSound($visioQuery->locale) :null,
+            $visioSettings !== null ? $visioSettings->getEndImage($visioQuery->locale) : null,
+            $visioSettings !== null ? $visioSettings->getEndMessage($visioQuery->locale) : null
         );
     }
 }

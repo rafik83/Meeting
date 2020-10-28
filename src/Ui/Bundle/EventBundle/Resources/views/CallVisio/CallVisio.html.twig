@@ -23,11 +23,23 @@
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-media-screenShareStatus-message="{{ 'meeting.video.media.share.screenShareStatus'|trans }}"
          data-user-complete-name=""
+         data-disconnect-on-timeout
 
          data-time-remaining="{{ visioView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ visioView.warningTimeRemainingInSeconds }}"
-    >
-        <div class="layout-container"></div>
+        {% if visioView.hasEndSound %}
+            data-visio-meeting-end-sound="{{ asset(visioView.endSound) }}"
+        {% endif %}
+        data-visio-meeting-end-warning="{{ visioView.hasEndMessageOrImage }}"
+        >
+
+        {% if visioView.hasHeader %}
+            <div class="visio-header">
+                <img src="{{ visioView.header }}" class="img-responsive">
+            </div>
+        {% endif %}
+
+        <div class="layout-container" {% if visioView.hasHeader %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
         <div class="video-helper" data-meeting-settings-container>
             {{ include('EventBundle:Visio:settings.html.twig') }}
@@ -42,6 +54,13 @@
                         </button>
                     </div>
                     <div class="modal-body text-center">
+                        {% if visioView.hasEndImage %}
+                            <img src="{{ asset(visioView.endImage) }}" class="img-responsive" style="margin: 0 auto;"/>
+                            <br>
+                        {% endif %}
+                        {% if visioView.hasEndMessage %}
+                            <p>{{ visioView.endMessage|nl2br }}</p>
+                        {% endif %}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'modal.close'|trans }}</button>

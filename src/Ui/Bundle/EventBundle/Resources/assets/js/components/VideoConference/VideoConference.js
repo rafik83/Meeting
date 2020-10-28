@@ -32,6 +32,8 @@ function VideoConference(
   this.timeRemaining = element.getAttribute('data-time-remaining');
   this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
+  this.disconnectOnTimeout = element.hasAttribute('data-disconnect-on-timeout');
+
   this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
   this.userCompleteName = element.getAttribute('data-user-complete-name');
 
@@ -650,6 +652,12 @@ VideoConference.prototype.countDownBeforeEnd = function() {
         this.timerContainer,
         countDownEndCallback.bind(this)
     );
+
+    if (this.disconnectOnTimeout) {
+        setTimeout(() => {
+            this.disconnect();
+        }, parseInt(this.timeRemaining, 10) * 1000 + 15000);
+    }
 };
 
 VideoConference.prototype.isScreenShareStream = function (stream) {

@@ -18,13 +18,18 @@ class CallVisioQuery implements Query
     /** @var User */
     public $fromUser;
 
+    /** @var string */
+    public $locale;
+
     public function __construct(
         Sheet $sheet,
         User $fromUser,
-        User $toUser
+        User $toUser,
+        string $locale
     ) {
         $this->sheet = $sheet;
         $this->toUser = $toUser;
         $this->fromUser = $fromUser;
+        $this->locale = $locale;
     }
 }
