@@ -67,7 +67,6 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
 
     /**
      * Generate JWT token for all topics a user can be interested in
-     * @param ChatSession[] $sessions
      */
     public function getUserSubscriberKey(Sheet $sheet, User $user): string
     {
