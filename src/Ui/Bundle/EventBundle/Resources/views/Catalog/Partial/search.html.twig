@@ -16,11 +16,13 @@
             <h3>{{ searchForm.sheetVisit.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
             <ul data-choices-root>
                 {% for state in searchForm.children.sheetVisit %}
+                    {% set disabled = sheetVisitViews[state.vars.value].count == 0 %}
                     <li class="filter__item">
-                        <label class="checkbox-inline">
+                        <label class="checkbox-inline {{ disabled ? 'count_zero' : '' }}">
                             <span class="filter-label">
-                                {{ form_widget(state, {'attr': {'data-single-selection': true}}) }}
+                                {{ form_widget(state, {'attr': {'data-single-selection': true, class: disabled ? 'disabled' : ''}}) }}
                                 {{ state.vars.label|trans({}, state.vars.translation_domain) }}
+                                <span class="details">{{ sheetVisitViews[state.vars.value].count }}</span>
                             </span>
                         </label>
                     </li>

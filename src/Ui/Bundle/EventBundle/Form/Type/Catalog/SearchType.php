@@ -35,7 +35,7 @@ class SearchType extends AbstractSearchType
                 ],
             ])
         ;
-        if (!empty($options['filterBySheetVisit'])) {
+        if ($options['filterBySheetVisit']) {
             $builder
                 ->add(SearchFields::FILTER_BY_SHEET_VISIT, ChoiceType::class, [
                     'label' => 'form.search.sheetVisit.label',

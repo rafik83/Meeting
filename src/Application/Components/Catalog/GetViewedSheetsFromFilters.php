@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Components\Catalog;
 
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
@@ -13,6 +14,12 @@ class GetViewedSheetsFromFilters
 {
     /** @var SheetViewedRepositoryInterface */
     private $sheetViewedRepository;
+
+    /** @var int[] */
+    private $sheetIdsSaw;
+
+    /** @var int[] */
+    private $sheetIdsViewedBySheet;
 
     public function __construct(
         SheetViewedRepositoryInterface $sheetViewedRepository
@@ -29,13 +36,35 @@ class GetViewedSheetsFromFilters
         }
 
         if ($sheetVisitFilter === CatalogConstant::FILTER_SHEET_SAW) {
-            return array_column($this->sheetViewedRepository->getSheetsSeenByUserAndEvent($user, $sheet->getEvent()), 'id');
+            return $this->getSheetIdsSaw($user, $sheet->getEvent());
         }
 
         if ($sheetVisitFilter === CatalogConstant::FILTER_VIEWED_BY_SHEET) {
-            return $this->sheetViewedRepository->getSheetIdsWhoViewedSheet($sheet);
+            return $this->getSheetIdsViewedBySheet($sheet);
         }
 
         throw new RuntimeException('Invalid sheet visit filter: '.$filters[SearchFields::FILTER_BY_SHEET_VISIT]);
+    }
+
+    public function getSheetIdsSaw(User $user, Event $event): array
+    {
+        if ($this->sheetIdsSaw !== null) {
+            return $this->sheetIdsSaw;
+        }
+
+        $this->sheetIdsSaw = array_column($this->sheetViewedRepository->getSheetsSeenByUserAndEvent($user, $event), 'id');
+
+        return $this->sheetIdsSaw;
+    }
+
+    public function getSheetIdsViewedBySheet(Sheet $sheet): array
+    {
+        if ($this->sheetIdsViewedBySheet !== null) {
+            return $this->sheetIdsViewedBySheet;
+        }
+
+        $this->sheetIdsViewedBySheet = $this->sheetViewedRepository->getSheetIdsWhoViewedSheet($sheet);
+
+        return $this->sheetIdsViewedBySheet;
     }
 }

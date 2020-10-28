@@ -74,11 +74,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
-    /**
-     * @param PaginatedCatalogSheetPreviewViewQuery $query
-     *
-     * @return PaginatedResult
-     */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query): PaginatedResult
     {
         $paginatedResult = $this->sheetSearchAdapter->paginate(
