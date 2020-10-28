@@ -121,7 +121,9 @@ form.search.meeting.availableSlot.choice.available: 'having availabilities'
 form.search.meeting.availableSlot.choice.everyone: All
 form.search.meeting.availableSlot.choice.slot: 'available on the %day% at %time%'
 form.search.meeting.availableSlot.label: 'who is available ?'
+form.search.meeting.sheetVisit.choice.all: 'All participations'
 form.search.meeting.sheetVisit.choice.sheetSaw: 'Profiles I have consulted'
+form.search.meeting.sheetVisit.choice.viewedBySheet: 'Viewed my profile'
 form.search.meeting.sheetVisit.label: Visits
 form.search.meeting.state.all: 'All status'
 form.search.meeting.state.approved: Approved
@@ -141,6 +143,10 @@ form.search.orderBy.label: 'SORT BY'
 form.search.orderBy.relevance: Relevance
 form.search.organizationCategory.label: organization
 form.search.position.label: 'Job title'
+form.search.sheetVisit.choice.all: 'All participations'
+form.search.sheetVisit.choice.sheetSaw: 'Profiles I have viewed'
+form.search.sheetVisit.choice.viewedBySheet: 'Viewed my profile'
+form.search.sheetVisit.label: Visits
 form.search.type.at_least_one_checked: 'At least one participant''s type must be selected'
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'I agree to receive notifications during the event'

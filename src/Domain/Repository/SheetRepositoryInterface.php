@@ -179,12 +179,12 @@ interface SheetRepositoryInterface
     /**
      * Get only enabled sheet of users on this event
      *
-     * @param User[] $users
-     * @param Event  $event
+     * @param User[]|int[] $users
+     * @param Event $event
      *
      * @return Sheet[]
      */
-    public function getSheetsByUsersAndEvent(array $users, Event $event);
+    public function getSheetsByUsersAndEvent(array $users, Event $event): array;
 
     /**
      * Get count enabled sheet by user or user's participant

@@ -61,10 +61,13 @@ class NetworkingSubmenuViewQueryHandler
             $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {
                 return $carry + ($chatSession['unreadMessages'][$query->user->getId()] ?? 0);
             }, 0);
-            $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
-                $query->event,
-                $query->sheet->getUserParticipant($query->user)->getNetworkingChatViewedAt()
-            );
+            $participant = $query->sheet->getUserParticipant($query->user);
+            if ($participant !== null) {
+                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                        $query->event,
+                        $participant->getNetworkingChatViewedAt()
+                    );
+            }
         }
 
         return new SubmenuButtonView(

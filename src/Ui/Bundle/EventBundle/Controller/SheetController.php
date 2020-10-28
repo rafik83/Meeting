@@ -4,13 +4,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
-use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
-use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
-use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat;
+use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -22,14 +19,11 @@ use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectForm;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -130,6 +124,8 @@ class SheetController extends Controller
 
         $displayAnalyticsStat = $this->get(CanDisplayAnalyticsStat::class)->isSatisfiedBy($sheet);
 
+        $displayAnalyticsViewLink = $this->get(CanDisplayAnalyticsViewLink::class)->isSatisfiedBy($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
@@ -146,6 +142,7 @@ class SheetController extends Controller
             'tipTranslationViews'     => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
             'displayAnalyticsStat' => $displayAnalyticsStat,
+            'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
         ]);
     }
 

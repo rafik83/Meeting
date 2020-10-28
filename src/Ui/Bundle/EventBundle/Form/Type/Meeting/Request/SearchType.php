@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -27,9 +19,6 @@ class SearchType extends AbstractType
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param TranslatorInterface $translator
-     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
@@ -64,7 +53,8 @@ class SearchType extends AbstractType
                 'choice_label' => function ($state) {
                     return 'form.search.meeting.state.' . $state;
                 },
-            ]);
+            ])
+        ;
 
         if (\count($options['categoryViews']) > 1) {
             $builder
@@ -190,9 +180,10 @@ class SearchType extends AbstractType
     {
         $defaultFilters = [
             'availableSlot' => Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE,
-            'disabled'      => false,
-            'orderBy'       => Sheet\Constant::ORDER_BY_ALPHABETICAL,
-            'state'         => Meeting\Constant::FILTER_STATE_ALL,
+            'disabled' => false,
+            'orderBy'=> Sheet\Constant::ORDER_BY_ALPHABETICAL,
+            'state' => Meeting\Constant::FILTER_STATE_ALL,
+            'sheetVisit' => 'all',
         ];
 
         // Allow to filters by type if there are more than 1

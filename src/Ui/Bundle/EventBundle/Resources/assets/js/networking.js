@@ -64,7 +64,10 @@ export default function initNetworking(target, userConnection) {
         handle: function (notification, targetChat) {
             const payload = JSON.parse(notification.data);
             if (payload.action === 'user_connection') {
-                this.participantLists.forEach((participantList) => participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode))));
+                this.participantLists.forEach((participantList) => {
+                    participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
+                    participantListFilter.filter(this.target.querySelectorAll('.networking_list_row'));
+                });
                 this.target.querySelectorAll('.networking_list_count')
                     .forEach((element) => element.textContent = this.target.querySelectorAll('.participantList tr').length);
                 return;
@@ -94,7 +97,10 @@ export default function initNetworking(target, userConnection) {
         });
     }
 
-    new ParticipantListFilter(document.getElementById('networking_list_search_input'), target.querySelectorAll('.networking_list_row'));
+    const participantListFilter = new ParticipantListFilter(
+        document.getElementById('networking_list_search_input'),
+        target.querySelectorAll('.networking_list_row')
+    );
 
     // private chat modale
 
