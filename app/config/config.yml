@@ -9,6 +9,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    # should be set to deployed version hash on k8s environments
+    app_version: '%env(APP_VERSION)%'
+    env(APP_VERSION): dev
 
 framework:
     esi: { enabled: true }
@@ -91,6 +94,9 @@ doctrine:
                 dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
+        dql:
+            string_functions:
+                MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
 
 # Swiftmailer Configuration
 swiftmailer:

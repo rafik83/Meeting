@@ -10,14 +10,14 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.availability.available_participant_for_this_slot: 'Voir les participants disponibles'
 agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
 agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
-agenda.availability.available_participant_for_this_slot: 'Voir les participants disponible'
 agenda.availability.define: 'Définir mes disponibilités'
 agenda.availability.fail_message_on_save: 'L''enregistrement de vos disponibilités a échoué. Une erreur inattendue du serveur s''est produite.'
 agenda.availability.hide: 'Cacher mes disponibilités'
 agenda.availability.ko_message_on_save: 'L''enregistrement de vos disponibilités a échoué. Elles sont peut-être incompatibles votre agenda. Veuillez rafraichir votre page.'
-agenda.availability.save: 'Enregistrez mes disponibilités'
+agenda.availability.save: 'Enregistrer mes disponibilités'
 agenda.day.hide: 'Cacher cette journée'
 agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details
@@ -30,10 +30,10 @@ agenda.meeting.remove.button: 'Supprimer le RDV'
 agenda.meeting.remove.confirm: 'Confirmer la suppression ?'
 agenda.meeting.remove.success: 'Le RDV a bien été supprimé'
 agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
-agenda.participant.view: 'Agenda de %participant%'
-agenda.sheetAgenda.button.title: 'Agenda de la fiche'
-agenda.sheetAgenda.title: 'Agenda de la fiche'
 agenda.myAgenda.button.title: 'Mon agenda'
+agenda.participant.view: 'Agenda de %participant%'
+agenda.sheetAgenda.button.title: 'Agenda global'
+agenda.sheetAgenda.title: 'Agenda global'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
 agenda.slot.unavailable: Indisponible
@@ -44,10 +44,11 @@ agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibi
 agenda.unavailability.remove: Supprimer
 analytics.click_counter: '{0}0 clic|{1} 1 clic|]1,Inf[%clicks% clics par %uniqueClicks% visiteurs uniques'
 analytics.view_counter: '{0}0 vue|{1} 1 vue|]1,Inf[%views% vues par %uniqueViews% visiteurs uniques'
-authentication.remaining_attempt: '{1} Dernière tentative avant que votre compte soit bloqué pour 15 minutes.|]1,Inf[ %remainingAttempt% tentatives restantes'
+analytics.view_link: 'Voir qui a visité ma fiche'
 authentication.account_temporarily_disabled: 'Votre compte a été bloqué pour une durée de 15 minutes.'
+authentication.remaining_attempt: '{0} Votre compte va être bloqué pendant 15 minutes.|{1} Dernière tentative avant que votre compte soit bloqué pour 15 minutes.|]1,Inf[ %remainingAttempt% tentatives restantes'
 availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'
-availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
+availability.confirmation.explanation.title: 'IMPORTANT : Afin d''accéder au catalogue des demandes de rendez-vous nous vous remercions d''ajouter vos indisponibilités (jours/horaires de non-disponibilités pour des rendez-vous), afin d''éviter que vos rendez-vous puissent être positionnés lorsque vous n’êtes pas disponible.'
 availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
 badge.scan.loading: 'Recherche du profil du participant...'
@@ -64,7 +65,7 @@ catalog.action.meeting.request.discussion: Echanges
 catalog.action.meeting.request.pending: 'Demande en attente'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
 catalog.action.meeting.request.show.refuse: 'Demande refusée'
-catalog.complete_sheet: 'Voir la fiche complète'
+catalog.complete_sheet: 'Voir plus'
 catalog.external.modal.content: 'Pour accéder à ce contenu, vous devez être inscrit ou connecté.'
 catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le %catalogOnlineDate%.'
 catalog.meeting_request.approve: Accepter
@@ -92,13 +93,13 @@ catalog.selectItemsFromNomenclatures.unSelectAll: 'Tout désélectionner'
 catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
-chat.vote.acclaim: 'Applaudir'
-chat.vote.happy: 'Content'
-chat.vote.heart: 'J''adore'
-chat.vote.instructive: 'Instructif'
-chat.vote.like: 'J''aime'
 chat.unvote: 'Retirer mon vote'
 chat.vote: 'Voter pour ce message'
+chat.vote.acclaim: Applaudir
+chat.vote.happy: Content
+chat.vote.heart: 'J''adore'
+chat.vote.instructive: Instructif
+chat.vote.like: 'J''aime'
 chat.voteDisabled: 'Vous ne pouvez pas voter pour ce message'
 common.back: Retour
 common.backToPackage: 'Retour au forfait'
@@ -120,9 +121,9 @@ contact.show.evaluation.3.label: 'Pertinent à long terme'
 contact.show.evaluation.4.label: 'A relancer à moyen terme'
 contact.show.evaluation.5.label: 'A revoir très vite'
 contact.show.me.info: 'Il s''agit de vous même ! Vous ne serez pas ajouté à la liste des contacts.'
-contacts.list.absent: 'Absent(e)'
+contacts.list.absent: Absent(e)
 contacts.list.noResults: 'Aucun contact'
-contacts.list.present: 'Présent(e)'
+contacts.list.present: Présent(e)
 contacts.list.title: Contacts
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
 error.403.title: 'Non autorisé'
@@ -145,7 +146,7 @@ event.info.contact: 'Informations pratiques'
 event.info.privacyPolicy.content: "Les informations recueillies sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 event.info.privacyPolicy.title: 'Politique de confidentialité'
 event.invisible.label: Invisible
-event.meeting.evaluation.label: 'Pour accéder au prochain rendez-vous vous devez noter la pertinence business de ce rendez-vous (confidentiel) :'
+event.meeting.evaluation.label: 'Qualifiez votre rendez-vous et retrouvez ces notations + commentaires dans votre fichier de suivi de contacts, téléchargeable à la fin de l''événement. (Confidentiel)'
 event.meeting.evaluation.skip: 'Plus tard'
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.contact.insufficient_evaluation: 'Le niveau de note du RDV ne permet l''accès à cette information'
@@ -154,10 +155,10 @@ event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
 event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
-event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
+event.meeting.request.closed: 'Les demandes de rendez-vous sont fermées'
 event.meeting.request.locked: 'Planification en cours - Les demandes sont verrouillées'
-event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
 event.meeting.request.priority: 'Demande de RDV prioritaire'
+event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
 event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.participant.define_timezone: 'Définir mon fuseau horaire'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
@@ -194,6 +195,25 @@ event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléph
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
+event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
+event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez nous.'
+event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre une room visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la possibilité de les désactiver à n'importe quel moment du rendez-vous."
+event.visio.settings.askPermissionsDeviceNotFound: 'Une erreur s''est produite lors de la demande d''acceptation des permissions, vérifiez que vous disposez bien d''au moins un micro branché à votre terminal.'
+event.visio.settings.askPermissionsMicNotFound: 'Vous devez au moins avoir un micro branché pour rejoindre un rendez-vous visio. Branchez ou activez un micro sur votre terminal et rafraichissez la page pour rejoindre le rendez-vous.'
+event.visio.settings.audioVolumeBar.help: 'Parlez pour faire bouger cette bar et tester la sensibilité de votre micro.'
+event.visio.settings.audioVolumeBar.label: 'Sensibilité de votre micro :'
+event.visio.settings.chromeInstall: 'Installer Chrome.'
+event.visio.settings.chromeInstallUnavailable: 'Je ne peux pas installer Chrome'
+event.visio.settings.chromeRequired: 'Pour une diffusion optimale, merci d''utiliser le navigateur Chrome.'
+event.visio.settings.preview: 'Aperçu de vos règlages :'
+event.visio.settings.selectAudio: 'Select your microphone :'
+event.visio.settings.selectVideo: 'Sélectionnez votre caméra :'
+event.visio.settings.selectVideoNotFound: 'Aucune caméra ne semble présente, vous pouvez effectuer l''appel visio en audio uniquement ou brancher une caméra et rafraichir la page.'
+event.visio.settings.start: Démarrer
+event.visio.settings.startMeeting: 'Démarrez le rendez-vous visio'
+event.visio.settings.testAudio: 'Tester votre sortie audio'
+event.visio.settings.testAudioHelp: 'Cliquer pour entendre un son et tester votre sortie audio'
+event.visio.settings.title: 'Paramètres de votre visio'
 event.visio.test.audio: Audio
 event.visio.test.description: 'Lorsque vous y êtes invité, permettez-nous d''utiliser votre appareil photo et votre matériel audio. Ce test durera environ 30 secondes.'
 event.visio.test.edge: 'Votre navigateur, Edge, n''est pas compatible pour effectuer tous les tests de qualité de l''audio / vidéo. Merci d''utiliser Chrome ou Firefox.'
@@ -208,24 +228,6 @@ event.visio.test.testSuccessful: 'Test réussi !'
 event.visio.test.title: 'Test de votre configuration rendez-vous visio'
 event.visio.test.video: Vidéo
 event.visio.welcome: 'Bienvenue sur %event%'
-event.visio.settings.audioVolumeBar.label: 'Sensibilité de votre micro :'
-event.visio.settings.audioVolumeBar.help: 'Parlez pour faire bouger cette bar et tester la sensibilité de votre micro.'
-event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
-event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez nous.'
-event.visio.settings.askPermissionsDeviceNotFound: 'Une erreur s''est produite lors de la demande d''acceptation des permissions, vérifiez que vous disposez bien d''au moins un micro branché à votre terminal.'
-event.visio.settings.askPermissionsMicNotFound: 'Vous devez au moins avoir un micro branché pour rejoindre un rendez-vous visio. Branchez ou activez un micro sur votre terminal et rafraichissez la page pour rejoindre le rendez-vous.'
-event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre un rendez-vous visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la posibilité de les désactiver à n'importe quel moment du rendez-vous."
-event.visio.settings.chromeRequired: 'Pour une diffusion optimale, merci d''utiliser le navigateur Chrome.'
-event.visio.settings.chromeInstall: 'Installer Chrome.'
-event.visio.settings.chromeInstallUnavailable: 'Je ne peux pas installer Chrome'
-event.visio.settings.preview: 'Aperçu de vos règlages :'
-event.visio.settings.selectAudio: 'Sélectionner votre micro :'
-event.visio.settings.selectVideo: 'Sélectionner votre caméra :'
-event.visio.settings.selectVideoNotFound: 'Aucune caméra ne semble présente, vous pouvez effectuer l''appel visio en audio uniquement ou brancher une caméra et rafraichir la page.'
-event.visio.settings.start: 'Démarrer'
-event.visio.settings.testAudio: 'Tester votre sortie audio'
-event.visio.settings.testAudioHelp: 'Cliquer pour entendre un son et tester votre sortie audio'
-event.visio.settings.title: 'Paramètres de votre visio'
 form_template.fill_step.participant: 'Formulaire pour %participant%'
 form_template.fill_step.step_title: 'Étape %currentStep% / %totalStep%'
 gender.man: Monsieur
@@ -271,31 +273,33 @@ happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
-happening.webinar.chat.tab: 'Chat'
 happening.webinar.chat.add: 'Ajoutez votre message'
-happening.webinar.end: 'Arrêter'
+happening.webinar.chat.tab: Chat
+happening.webinar.end: Arrêter
 happening.webinar.endingAt: 'Fin dans'
-happening.webinar.invisibleMode.button: 'Mode invisible'
-happening.webinar.invisibleMode.enableConfirmation: 'Activer le mode invisible (votre micro est coupé et vous n’apparaissez pas à l''écran) ?'
-happening.webinar.invisibleMode.option: 'Mode invisible'
-happening.webinar.invisibleMode.optionHelp: 'Votre micro est coupé et vous n’apparaissez pas à l''écran. Vous pouvez désactiver le mode invisible à tout moment en cliquant sur le bouton :'
-happening.webinar.invisibleMode.quitConfirmation: 'Quitter le mode invisible et activer votre caméra et votre micro ?'
-happening.webinar.media.share: 'Partager'
+happening.webinar.invisibleMode.button: 'Invisible mode'
+happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)?'
+happening.webinar.invisibleMode.option: 'Invisible mode'
+happening.webinar.invisibleMode.optionHelp: 'Your microphone is muted and you do not appear on the screen. You can deactivate the invisible mode at any time by clicking on the button :'
+happening.webinar.invisibleMode.quitConfirmation: 'Exit invisible mode and activate your camera and microphone?'
+happening.webinar.media.share: Partager
 happening.webinar.media.stopSharing: 'Arrêter le partage'
+happening.webinar.media.videoshare.title: 'Partager une vidéo'
+happening.webinar.media.videoshare.url: 'Url de la vidéo'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.questions.add: 'Ajoutez votre question'
-happening.webinar.questions.tab: 'Questions'
+happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Retirer mon vote'
 happening.webinar.questions.vote: 'Voter pour cette question'
 happening.webinar.questions.voteDisabled: 'Vous ne pouvez pas voter pour cette question'
-happening.webinar.recordButtonTitle: 'Enregistrement'
-happening.webinar.recordingButtonTitle: 'Enregistrement en cours'
 happening.webinar.record.not_possible_as_webinar_ended: 'Vous ne pouvez plus lancer d''enregistrement car ce webinar est terminé depuis plus de 30 minutes'
-happening.webinar.start: 'Démarrer'
-happening.webinar.viewers: 'Connectés :'
-happening.webinar.screenshare.start: 'Partager mon écran'
+happening.webinar.recordButtonTitle: Enregistrement
+happening.webinar.recordingButtonTitle: 'Enregistrement en cours'
 happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
+happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'Il y a déjà un partage d''écran en cours.'
+happening.webinar.start: Démarrez
+happening.webinar.viewers: 'Connectés :'
 happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date
 invoice.list.column.number: 'N° facture'
@@ -316,13 +320,13 @@ meeting.video.end: 'Arrêter le RDV'
 meeting.video.endingAt: 'Fin dans'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
-meeting.video.media.share.urlVideo: 'Url du fichier vidéo'
-meeting.video.media.share.urlVideo.securityError: 'L''Url de la vidéo doit être sécurisée, commençant par https://'
-meeting.video.media.share.urlVideo.loadingError: 'Impossible de lire cette Url. Vérifiez qu''il s''agit d''un format vidéo adapté pour le web et que le fichier est en libre accès.'
 meeting.video.media.share.button.screenShare: 'Mon écran'
 meeting.video.media.share.button.videoShare: 'Une vidéo'
 meeting.video.media.share.screenShareStatus: 'Vous partagez votre écran'
-meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
+meeting.video.media.share.urlVideo: 'Url du fichier vidéo'
+meeting.video.media.share.urlVideo.loadingError: 'Impossible de lire cette Url. Vérifiez qu''il s''agit d''un format vidéo adapté pour le web et que le fichier est en libre accès.'
+meeting.video.media.share.urlVideo.securityError: 'L''Url de la vidéo doit être sécurisée, commençant par https://'
+meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome.'
 meeting.video.screenshare: 'Partage d''écran'
 meeting.video.screenshare.end: 'Arrêter le partage'
 meeting.video.screenshare.start: 'Partager mon écran'
@@ -362,7 +366,7 @@ navigation.category.inCart: 'au panier'
 navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'Gestion RDV'
 navigation.category.member_space: 'Espace participant'
-navigation.category.networking: 'Networking'
+navigation.category.networking: Networking
 navigation.category.package: 'Forfait de participation'
 navigation.category.planning: Agenda
 navigation.category.program: Programme
@@ -419,7 +423,7 @@ networking.chat.notification.open: 'Ouvrir dans le chat'
 networking.chat.title: 'Chat privé'
 networking.chat.with: 'Chat privé avec %user%'
 networking.participants.intro: 'cliquez sur un participant pour lancer une conversation privée'
-networking.participants.search: 'Chercher dans les participants'
+networking.participants.search: 'Chercher dans la liste'
 networking.participants.title: 'Participants connectés (%count%)'
 networking.title: Networking
 new_password.confirm.title: 'Réinitialiser le mot de passe'
@@ -505,6 +509,7 @@ package.product.includedProduct: 'Inclus :'
 package.product.label: 'Intitulé & descriptions'
 package.product.notDeletableSince: 'Non supprimable depuis le %date%'
 package.product.outOfStock: Epuisé
+package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
 package.product.quantityMaxInformation: 'Max : %quantityMax%'
@@ -555,19 +560,19 @@ register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
 register.noAvailableRegistrationType: 'Aucun type d''inscription n''est disponible.'
-register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
+register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel,\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
 register.privacy_policies: "Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape
 select2.no_results: 'Aucun résultat'
-sheet.edit.object: 'Compléter "%label%"'
+sheet.edit.object: 'Compléter / Modifier "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
-sheet.object.action.add: 'Ajouter :'
+sheet.object.action.add: Ajouter
 sheet.object.action.backToSheet: 'Retour à la fiche'
-sheet.object.action.edit: Compléter
+sheet.object.action.edit: 'Compléter / Modifier'
 sheet.object.action.remove: 'Supprimer :'
-sheet.object.action.sortParticipants: 'Modifier l''ordre'
+sheet.object.action.sortParticipants: 'Modifier l''ordre d''affichage des participants'
 sheet.object.boolean.false: Non
 sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'
@@ -582,9 +587,9 @@ sheet.participant.seeLess.title: 'Voir moins'
 sheet.participant.seeMore.title: 'Voir plus'
 sheet.participant.sendInvite: 'Envoyer l''invitation'
 sheet.request_meeting: 'Demander un RDV'
-sheet.sortParticipants.title: 'Modifier l''ordre'
-sheet.sortParticipants.description: 'Déplacer les participants pour définir le nouvel ordre'
 sheet.sortParticipants.alternativeDescription: 'ou activer la saisie de l''ordre'
+sheet.sortParticipants.description: 'Déplacer les participants pour définir le nouvel ordre'
+sheet.sortParticipants.title: 'Modifier l''ordre d''affichage des participants'
 sheet.submit.completeYourSheet: 'Completer ma fiche'
 sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
@@ -608,7 +613,7 @@ summary.product.included: Inclus
 summary.promotionCode.free: Offert
 summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
-summary.totalByVat: 'Total assujetti à %vatRate%%'
+summary.totalByVat: 'Total en Euros hors taxes'
 summary.totalToPay: 'Total à régler'
 summary.vatRate: 'TVA applicable %vatRate%%'
 template.upload.formats.csv: csv
@@ -616,63 +621,63 @@ template.upload.formats.image: image
 template.upload.formats.pdf: pdf
 template.upload.formats.ppt: powerpoint
 template.upload.formats.vector_image: 'image vectorielle (.ai, .eps)'
-timezone.africa-abidjan: 'Abidjan'
-timezone.africa-accra: 'Accra'
+timezone.africa-abidjan: Abidjan
+timezone.africa-accra: Accra
 timezone.africa-addis_ababa: 'Addis Ababa'
-timezone.africa-algiers: 'Algiers'
-timezone.africa-asmara: 'Asmara'
-timezone.africa-bamako: 'Bamako'
-timezone.africa-bangui: 'Bangui'
-timezone.africa-banjul: 'Banjul'
-timezone.africa-bissau: 'Bissau'
-timezone.africa-blantyre: 'Blantyre'
-timezone.africa-brazzaville: 'Brazzaville'
-timezone.africa-bujumbura: 'Bujumbura'
-timezone.africa-cairo: 'Cairo'
-timezone.africa-casablanca: 'Casablanca'
-timezone.africa-ceuta: 'Ceuta'
-timezone.africa-conakry: 'Conakry'
-timezone.africa-dakar: 'Dakar'
+timezone.africa-algiers: Algiers
+timezone.africa-asmara: Asmara
+timezone.africa-bamako: Bamako
+timezone.africa-bangui: Bangui
+timezone.africa-banjul: Banjul
+timezone.africa-bissau: Bissau
+timezone.africa-blantyre: Blantyre
+timezone.africa-brazzaville: Brazzaville
+timezone.africa-bujumbura: Bujumbura
+timezone.africa-cairo: Cairo
+timezone.africa-casablanca: Casablanca
+timezone.africa-ceuta: Ceuta
+timezone.africa-conakry: Conakry
+timezone.africa-dakar: Dakar
 timezone.africa-dar_es_salaam: 'Dar es Salaam'
-timezone.africa-djibouti: 'Djibouti'
-timezone.africa-douala: 'Douala'
+timezone.africa-djibouti: Djibouti
+timezone.africa-douala: Douala
 timezone.africa-el_aaiun: 'El Aaiun'
-timezone.africa-freetown: 'Freetown'
-timezone.africa-gaborone: 'Gaborone'
-timezone.africa-harare: 'Harare'
-timezone.africa-johannesburg: 'Johannesburg'
-timezone.africa-juba: 'Juba'
-timezone.africa-kampala: 'Kampala'
-timezone.africa-khartoum: 'Khartoum'
-timezone.africa-kigali: 'Kigali'
-timezone.africa-kinshasa: 'Kinshasa'
-timezone.africa-lagos: 'Lagos'
-timezone.africa-libreville: 'Libreville'
-timezone.africa-lome: 'Lome'
-timezone.africa-luanda: 'Luanda'
-timezone.africa-lubumbashi: 'Lubumbashi'
-timezone.africa-lusaka: 'Lusaka'
-timezone.africa-malabo: 'Malabo'
-timezone.africa-maputo: 'Maputo'
-timezone.africa-maseru: 'Maseru'
-timezone.africa-mbabane: 'Mbabane'
-timezone.africa-mogadishu: 'Mogadishu'
-timezone.africa-monrovia: 'Monrovia'
-timezone.africa-nairobi: 'Nairobi'
-timezone.africa-ndjamena: 'Ndjamena'
-timezone.africa-niamey: 'Niamey'
-timezone.africa-nouakchott: 'Nouakchott'
-timezone.africa-ouagadougou: 'Ouagadougou'
-timezone.africa-porto-novo: 'Porto-Novo'
+timezone.africa-freetown: Freetown
+timezone.africa-gaborone: Gaborone
+timezone.africa-harare: Harare
+timezone.africa-johannesburg: Johannesburg
+timezone.africa-juba: Juba
+timezone.africa-kampala: Kampala
+timezone.africa-khartoum: Khartoum
+timezone.africa-kigali: Kigali
+timezone.africa-kinshasa: Kinshasa
+timezone.africa-lagos: Lagos
+timezone.africa-libreville: Libreville
+timezone.africa-lome: Lome
+timezone.africa-luanda: Luanda
+timezone.africa-lubumbashi: Lubumbashi
+timezone.africa-lusaka: Lusaka
+timezone.africa-malabo: Malabo
+timezone.africa-maputo: Maputo
+timezone.africa-maseru: Maseru
+timezone.africa-mbabane: Mbabane
+timezone.africa-mogadishu: Mogadishu
+timezone.africa-monrovia: Monrovia
+timezone.africa-nairobi: Nairobi
+timezone.africa-ndjamena: Ndjamena
+timezone.africa-niamey: Niamey
+timezone.africa-nouakchott: Nouakchott
+timezone.africa-ouagadougou: Ouagadougou
+timezone.africa-porto-novo: Porto-Novo
 timezone.africa-sao_tome: 'Sao Tome'
-timezone.africa-tripoli: 'Tripoli'
-timezone.africa-tunis: 'Tunis'
-timezone.africa-windhoek: 'Windhoek'
-timezone.america-adak: 'Adak'
-timezone.america-anchorage: 'Anchorage'
-timezone.america-anguilla: 'Anguilla'
-timezone.america-antigua: 'Antigua'
-timezone.america-araguaina: 'Araguaina'
+timezone.africa-tripoli: Tripoli
+timezone.africa-tunis: Tunis
+timezone.africa-windhoek: Windhoek
+timezone.america-adak: Adak
+timezone.america-anchorage: Anchorage
+timezone.america-anguilla: Anguilla
+timezone.america-antigua: Antigua
+timezone.america-araguaina: Araguaina
 timezone.america-argentina-buenos_aires: 'Argentina - Buenos Aires'
 timezone.america-argentina-catamarca: 'Argentina - Catamarca'
 timezone.america-argentina-cordoba: 'Argentina - Cordoba'
@@ -685,53 +690,53 @@ timezone.america-argentina-san_juan: 'Argentina - San Juan'
 timezone.america-argentina-san_luis: 'Argentina - San Luis'
 timezone.america-argentina-tucuman: 'Argentina - Tucuman'
 timezone.america-argentina-ushuaia: 'Argentina - Ushuaia'
-timezone.america-aruba: 'Aruba'
-timezone.america-asuncion: 'Asuncion'
-timezone.america-atikokan: 'Atikokan'
-timezone.america-bahia: 'Bahia'
+timezone.america-aruba: Aruba
+timezone.america-asuncion: Asuncion
+timezone.america-atikokan: Atikokan
+timezone.america-bahia: Bahia
 timezone.america-bahia_banderas: 'Bahia Banderas'
-timezone.america-barbados: 'Barbados'
-timezone.america-belem: 'Belem'
-timezone.america-belize: 'Belize'
-timezone.america-blanc-sablon: 'Blanc-Sablon'
+timezone.america-barbados: Barbados
+timezone.america-belem: Belem
+timezone.america-belize: Belize
+timezone.america-blanc-sablon: Blanc-Sablon
 timezone.america-boa_vista: 'Boa Vista'
-timezone.america-bogota: 'Bogota'
-timezone.america-boise: 'Boise'
+timezone.america-bogota: Bogota
+timezone.america-boise: Boise
 timezone.america-cambridge_bay: 'Cambridge Bay'
 timezone.america-campo_grande: 'Campo Grande'
-timezone.america-cancun: 'Cancun'
-timezone.america-caracas: 'Caracas'
-timezone.america-cayenne: 'Cayenne'
-timezone.america-cayman: 'Cayman'
-timezone.america-chicago: 'Chicago'
-timezone.america-chihuahua: 'Chihuahua'
+timezone.america-cancun: Cancun
+timezone.america-caracas: Caracas
+timezone.america-cayenne: Cayenne
+timezone.america-cayman: Cayman
+timezone.america-chicago: Chicago
+timezone.america-chihuahua: Chihuahua
 timezone.america-costa_rica: 'Costa Rica'
-timezone.america-creston: 'Creston'
-timezone.america-cuiaba: 'Cuiaba'
-timezone.america-curacao: 'Curacao'
-timezone.america-danmarkshavn: 'Danmarkshavn'
-timezone.america-dawson: 'Dawson'
+timezone.america-creston: Creston
+timezone.america-cuiaba: Cuiaba
+timezone.america-curacao: Curacao
+timezone.america-danmarkshavn: Danmarkshavn
+timezone.america-dawson: Dawson
 timezone.america-dawson_creek: 'Dawson Creek'
-timezone.america-denver: 'Denver'
-timezone.america-detroit: 'Detroit'
-timezone.america-dominica: 'Dominica'
-timezone.america-edmonton: 'Edmonton'
-timezone.america-eirunepe: 'Eirunepe'
+timezone.america-denver: Denver
+timezone.america-detroit: Detroit
+timezone.america-dominica: Dominica
+timezone.america-edmonton: Edmonton
+timezone.america-eirunepe: Eirunepe
 timezone.america-el_salvador: 'El Salvador'
 timezone.america-fort_nelson: 'Fort Nelson'
-timezone.america-fortaleza: 'Fortaleza'
+timezone.america-fortaleza: Fortaleza
 timezone.america-glace_bay: 'Glace Bay'
-timezone.america-godthab: 'Godthab'
+timezone.america-godthab: Godthab
 timezone.america-goose_bay: 'Goose Bay'
 timezone.america-grand_turk: 'Grand Turk'
-timezone.america-grenada: 'Grenada'
-timezone.america-guadeloupe: 'Guadeloupe'
-timezone.america-guatemala: 'Guatemala'
-timezone.america-guayaquil: 'Guayaquil'
-timezone.america-guyana: 'Guyana'
-timezone.america-halifax: 'Halifax'
-timezone.america-havana: 'Havana'
-timezone.america-hermosillo: 'Hermosillo'
+timezone.america-grenada: Grenada
+timezone.america-guadeloupe: Guadeloupe
+timezone.america-guatemala: Guatemala
+timezone.america-guayaquil: Guayaquil
+timezone.america-guyana: Guyana
+timezone.america-halifax: Halifax
+timezone.america-havana: Havana
+timezone.america-hermosillo: Hermosillo
 timezone.america-indiana-indianapolis: 'Indiana - Indianapolis'
 timezone.america-indiana-knox: 'Indiana - Knox'
 timezone.america-indiana-marengo: 'Indiana - Marengo'
@@ -740,63 +745,63 @@ timezone.america-indiana-tell_city: 'Indiana - Tell City'
 timezone.america-indiana-vevay: 'Indiana - Vevay'
 timezone.america-indiana-vincennes: 'Indiana - Vincennes'
 timezone.america-indiana-winamac: 'Indiana - Winamac'
-timezone.america-inuvik: 'Inuvik'
-timezone.america-iqaluit: 'Iqaluit'
-timezone.america-jamaica: 'Jamaica'
-timezone.america-juneau: 'Juneau'
+timezone.america-inuvik: Inuvik
+timezone.america-iqaluit: Iqaluit
+timezone.america-jamaica: Jamaica
+timezone.america-juneau: Juneau
 timezone.america-kentucky-louisville: 'Kentucky - Louisville'
 timezone.america-kentucky-monticello: 'Kentucky - Monticello'
-timezone.america-kralendijk: 'Kralendijk'
+timezone.america-kralendijk: Kralendijk
 timezone.america-la_paz: 'La Paz'
-timezone.america-lima: 'Lima'
+timezone.america-lima: Lima
 timezone.america-los_angeles: 'Los Angeles'
 timezone.america-lower_princes: 'Lower Princes'
-timezone.america-maceio: 'Maceio'
-timezone.america-managua: 'Managua'
-timezone.america-manaus: 'Manaus'
-timezone.america-marigot: 'Marigot'
-timezone.america-martinique: 'Martinique'
-timezone.america-matamoros: 'Matamoros'
-timezone.america-mazatlan: 'Mazatlan'
-timezone.america-menominee: 'Menominee'
-timezone.america-merida: 'Merida'
-timezone.america-metlakatla: 'Metlakatla'
+timezone.america-maceio: Maceio
+timezone.america-managua: Managua
+timezone.america-manaus: Manaus
+timezone.america-marigot: Marigot
+timezone.america-martinique: Martinique
+timezone.america-matamoros: Matamoros
+timezone.america-mazatlan: Mazatlan
+timezone.america-menominee: Menominee
+timezone.america-merida: Merida
+timezone.america-metlakatla: Metlakatla
 timezone.america-mexico_city: 'Mexico City'
-timezone.america-miquelon: 'Miquelon'
-timezone.america-moncton: 'Moncton'
-timezone.america-monterrey: 'Monterrey'
-timezone.america-montevideo: 'Montevideo'
-timezone.america-montserrat: 'Montserrat'
-timezone.america-nassau: 'Nassau'
+timezone.america-miquelon: Miquelon
+timezone.america-moncton: Moncton
+timezone.america-monterrey: Monterrey
+timezone.america-montevideo: Montevideo
+timezone.america-montserrat: Montserrat
+timezone.america-nassau: Nassau
 timezone.america-new_york: 'New York'
-timezone.america-nipigon: 'Nipigon'
-timezone.america-nome: 'Nome'
-timezone.america-noronha: 'Noronha'
+timezone.america-nipigon: Nipigon
+timezone.america-nome: Nome
+timezone.america-noronha: Noronha
 timezone.america-north_dakota-beulah: 'North Dakota - Beulah'
 timezone.america-north_dakota-center: 'North Dakota - Center'
 timezone.america-north_dakota-new_salem: 'North Dakota - New Salem'
-timezone.america-ojinaga: 'Ojinaga'
-timezone.america-panama: 'Panama'
-timezone.america-pangnirtung: 'Pangnirtung'
-timezone.america-paramaribo: 'Paramaribo'
-timezone.america-phoenix: 'Phoenix'
-timezone.america-port-au-prince: 'Port-au-Prince'
+timezone.america-ojinaga: Ojinaga
+timezone.america-panama: Panama
+timezone.america-pangnirtung: Pangnirtung
+timezone.america-paramaribo: Paramaribo
+timezone.america-phoenix: Phoenix
 timezone.america-port_of_spain: 'Port of Spain'
+timezone.america-port-au-prince: Port-au-Prince
 timezone.america-porto_velho: 'Porto Velho'
 timezone.america-puerto_rico: 'Puerto Rico'
 timezone.america-punta_arenas: 'Punta Arenas'
 timezone.america-rainy_river: 'Rainy River'
 timezone.america-rankin_inlet: 'Rankin Inlet'
-timezone.america-recife: 'Recife'
-timezone.america-regina: 'Regina'
-timezone.america-resolute: 'Resolute'
+timezone.america-recife: Recife
+timezone.america-regina: Regina
+timezone.america-resolute: Resolute
 timezone.america-rio_branco: 'Rio Branco'
-timezone.america-santarem: 'Santarem'
-timezone.america-santiago: 'Santiago'
+timezone.america-santarem: Santarem
+timezone.america-santiago: Santiago
 timezone.america-santo_domingo: 'Santo Domingo'
 timezone.america-sao_paulo: 'Sao Paulo'
-timezone.america-scoresbysund: 'Scoresbysund'
-timezone.america-sitka: 'Sitka'
+timezone.america-scoresbysund: Scoresbysund
+timezone.america-sitka: Sitka
 timezone.america-st_barthelemy: 'St Barthelemy'
 timezone.america-st_johns: 'St Johns'
 timezone.america-st_kitts: 'St Kitts'
@@ -804,244 +809,244 @@ timezone.america-st_lucia: 'St Lucia'
 timezone.america-st_thomas: 'St Thomas'
 timezone.america-st_vincent: 'St Vincent'
 timezone.america-swift_current: 'Swift Current'
-timezone.america-tegucigalpa: 'Tegucigalpa'
-timezone.america-thule: 'Thule'
+timezone.america-tegucigalpa: Tegucigalpa
+timezone.america-thule: Thule
 timezone.america-thunder_bay: 'Thunder Bay'
-timezone.america-tijuana: 'Tijuana'
-timezone.america-toronto: 'Toronto'
-timezone.america-tortola: 'Tortola'
-timezone.america-vancouver: 'Vancouver'
-timezone.america-whitehorse: 'Whitehorse'
-timezone.america-winnipeg: 'Winnipeg'
-timezone.america-yakutat: 'Yakutat'
-timezone.america-yellowknife: 'Yellowknife'
-timezone.antarctica-casey: 'Casey'
-timezone.antarctica-davis: 'Davis'
-timezone.antarctica-dumontdurville: 'DumontDUrville'
-timezone.antarctica-macquarie: 'Macquarie'
-timezone.antarctica-mawson: 'Mawson'
-timezone.antarctica-mcmurdo: 'McMurdo'
-timezone.antarctica-palmer: 'Palmer'
-timezone.antarctica-rothera: 'Rothera'
-timezone.antarctica-syowa: 'Syowa'
-timezone.antarctica-troll: 'Troll'
-timezone.antarctica-vostok: 'Vostok'
-timezone.arctic-longyearbyen: 'Longyearbyen'
-timezone.asia-aden: 'Aden'
-timezone.asia-almaty: 'Almaty'
-timezone.asia-amman: 'Amman'
-timezone.asia-anadyr: 'Anadyr'
-timezone.asia-aqtau: 'Aqtau'
-timezone.asia-aqtobe: 'Aqtobe'
-timezone.asia-ashgabat: 'Ashgabat'
-timezone.asia-atyrau: 'Atyrau'
-timezone.asia-baghdad: 'Baghdad'
-timezone.asia-bahrain: 'Bahrain'
-timezone.asia-baku: 'Baku'
-timezone.asia-bangkok: 'Bangkok'
-timezone.asia-barnaul: 'Barnaul'
-timezone.asia-beirut: 'Beirut'
-timezone.asia-bishkek: 'Bishkek'
-timezone.asia-brunei: 'Brunei'
-timezone.asia-chita: 'Chita'
-timezone.asia-choibalsan: 'Choibalsan'
-timezone.asia-colombo: 'Colombo'
-timezone.asia-damascus: 'Damascus'
-timezone.asia-dhaka: 'Dhaka'
-timezone.asia-dili: 'Dili'
-timezone.asia-dubai: 'Dubai'
-timezone.asia-dushanbe: 'Dushanbe'
-timezone.asia-famagusta: 'Famagusta'
-timezone.asia-gaza: 'Gaza'
-timezone.asia-hebron: 'Hebron'
+timezone.america-tijuana: Tijuana
+timezone.america-toronto: Toronto
+timezone.america-tortola: Tortola
+timezone.america-vancouver: Vancouver
+timezone.america-whitehorse: Whitehorse
+timezone.america-winnipeg: Winnipeg
+timezone.america-yakutat: Yakutat
+timezone.america-yellowknife: Yellowknife
+timezone.antarctica-casey: Casey
+timezone.antarctica-davis: Davis
+timezone.antarctica-dumontdurville: DumontDUrville
+timezone.antarctica-macquarie: Macquarie
+timezone.antarctica-mawson: Mawson
+timezone.antarctica-mcmurdo: McMurdo
+timezone.antarctica-palmer: Palmer
+timezone.antarctica-rothera: Rothera
+timezone.antarctica-syowa: Syowa
+timezone.antarctica-troll: Troll
+timezone.antarctica-vostok: Vostok
+timezone.arctic-longyearbyen: Longyearbyen
+timezone.asia-aden: Aden
+timezone.asia-almaty: Almaty
+timezone.asia-amman: Amman
+timezone.asia-anadyr: Anadyr
+timezone.asia-aqtau: Aqtau
+timezone.asia-aqtobe: Aqtobe
+timezone.asia-ashgabat: Ashgabat
+timezone.asia-atyrau: Atyrau
+timezone.asia-baghdad: Baghdad
+timezone.asia-bahrain: Bahrain
+timezone.asia-baku: Baku
+timezone.asia-bangkok: Bangkok
+timezone.asia-barnaul: Barnaul
+timezone.asia-beirut: Beirut
+timezone.asia-bishkek: Bishkek
+timezone.asia-brunei: Brunei
+timezone.asia-chita: Chita
+timezone.asia-choibalsan: Choibalsan
+timezone.asia-colombo: 'New Dehli - Colombo'
+timezone.asia-damascus: Damascus
+timezone.asia-dhaka: Dhaka
+timezone.asia-dili: Dili
+timezone.asia-dubai: Dubai
+timezone.asia-dushanbe: Dushanbe
+timezone.asia-famagusta: Famagusta
+timezone.asia-gaza: Gaza
+timezone.asia-hebron: Hebron
 timezone.asia-ho_chi_minh: 'Ho Chi Minh'
 timezone.asia-hong_kong: 'Hong Kong'
-timezone.asia-hovd: 'Hovd'
-timezone.asia-irkutsk: 'Irkutsk'
-timezone.asia-jakarta: 'Jakarta'
-timezone.asia-jayapura: 'Jayapura'
-timezone.asia-jerusalem: 'Jerusalem'
-timezone.asia-kabul: 'Kabul'
-timezone.asia-kamchatka: 'Kamchatka'
-timezone.asia-karachi: 'Karachi'
-timezone.asia-kathmandu: 'Kathmandu'
-timezone.asia-khandyga: 'Khandyga'
-timezone.asia-kolkata: 'Mumbay, New Delhi, Kolkata'
-timezone.asia-krasnoyarsk: 'Krasnoyarsk'
+timezone.asia-hovd: Hovd
+timezone.asia-irkutsk: Irkutsk
+timezone.asia-jakarta: Jakarta
+timezone.asia-jayapura: Jayapura
+timezone.asia-jerusalem: Jerusalem
+timezone.asia-kabul: Kabul
+timezone.asia-kamchatka: Kamchatka
+timezone.asia-karachi: Karachi
+timezone.asia-kathmandu: Kathmandu
+timezone.asia-khandyga: Khandyga
+timezone.asia-kolkata: 'Mumbai, New Delhi, Kolkata'
+timezone.asia-krasnoyarsk: Krasnoyarsk
 timezone.asia-kuala_lumpur: 'Kuala Lumpur'
-timezone.asia-kuching: 'Kuching'
-timezone.asia-kuwait: 'Kuwait'
-timezone.asia-macau: 'Macau'
-timezone.asia-magadan: 'Magadan'
-timezone.asia-makassar: 'Makassar'
-timezone.asia-manila: 'Manila'
-timezone.asia-muscat: 'Muscat'
-timezone.asia-nicosia: 'Nicosia'
-timezone.asia-novokuznetsk: 'Novokuznetsk'
-timezone.asia-novosibirsk: 'Novosibirsk'
-timezone.asia-omsk: 'Omsk'
-timezone.asia-oral: 'Oral'
+timezone.asia-kuching: Kuching
+timezone.asia-kuwait: Kuwait
+timezone.asia-macau: Macau
+timezone.asia-magadan: Magadan
+timezone.asia-makassar: Makassar
+timezone.asia-manila: Manila
+timezone.asia-muscat: Muscat
+timezone.asia-nicosia: Nicosia
+timezone.asia-novokuznetsk: Novokuznetsk
+timezone.asia-novosibirsk: Novosibirsk
+timezone.asia-omsk: Omsk
+timezone.asia-oral: Oral
 timezone.asia-phnom_penh: 'Phnom Penh'
-timezone.asia-pontianak: 'Pontianak'
-timezone.asia-pyongyang: 'Pyongyang'
-timezone.asia-qatar: 'Qatar'
-timezone.asia-qostanay: 'Qostanay'
-timezone.asia-qyzylorda: 'Qyzylorda'
-timezone.asia-riyadh: 'Riyadh'
-timezone.asia-sakhalin: 'Sakhalin'
-timezone.asia-samarkand: 'Samarkand'
-timezone.asia-seoul: 'Seoul'
-timezone.asia-shanghai: 'Shanghai'
-timezone.asia-singapore: 'Singapore'
-timezone.asia-srednekolymsk: 'Srednekolymsk'
-timezone.asia-taipei: 'Taipei'
-timezone.asia-tashkent: 'Tashkent'
-timezone.asia-tbilisi: 'Tbilisi'
-timezone.asia-tehran: 'Tehran'
-timezone.asia-thimphu: 'Thimphu'
-timezone.asia-tokyo: 'Tokyo'
-timezone.asia-tomsk: 'Tomsk'
-timezone.asia-ulaanbaatar: 'Ulaanbaatar'
-timezone.asia-urumqi: 'Urumqi'
-timezone.asia-ust-nera: 'Ust-Nera'
-timezone.asia-vientiane: 'Vientiane'
-timezone.asia-vladivostok: 'Vladivostok'
-timezone.asia-yakutsk: 'Yakutsk'
-timezone.asia-yangon: 'Yangon'
-timezone.asia-yekaterinburg: 'Yekaterinburg'
-timezone.asia-yerevan: 'Yerevan'
-timezone.atlantic-azores: 'Azores'
-timezone.atlantic-bermuda: 'Bermuda'
-timezone.atlantic-canary: 'Canary'
+timezone.asia-pontianak: Pontianak
+timezone.asia-pyongyang: Pyongyang
+timezone.asia-qatar: Qatar
+timezone.asia-qostanay: Qostanay
+timezone.asia-qyzylorda: Qyzylorda
+timezone.asia-riyadh: Riyadh
+timezone.asia-sakhalin: Sakhalin
+timezone.asia-samarkand: Samarkand
+timezone.asia-seoul: Seoul
+timezone.asia-shanghai: Shanghai
+timezone.asia-singapore: Singapore
+timezone.asia-srednekolymsk: Srednekolymsk
+timezone.asia-taipei: Taipei
+timezone.asia-tashkent: Tashkent
+timezone.asia-tbilisi: Tbilisi
+timezone.asia-tehran: Tehran
+timezone.asia-thimphu: Thimphu
+timezone.asia-tokyo: Tokyo
+timezone.asia-tomsk: Tomsk
+timezone.asia-ulaanbaatar: Ulaanbaatar
+timezone.asia-urumqi: Urumqi
+timezone.asia-ust-nera: Ust-Nera
+timezone.asia-vientiane: Vientiane
+timezone.asia-vladivostok: Vladivostok
+timezone.asia-yakutsk: Yakutsk
+timezone.asia-yangon: Yangon
+timezone.asia-yekaterinburg: Yekaterinburg
+timezone.asia-yerevan: Yerevan
+timezone.atlantic-azores: Azores
+timezone.atlantic-bermuda: Bermuda
+timezone.atlantic-canary: Canary
 timezone.atlantic-cape_verde: 'Cape Verde'
-timezone.atlantic-faroe: 'Faroe'
-timezone.atlantic-madeira: 'Madeira'
-timezone.atlantic-reykjavik: 'Reykjavik'
+timezone.atlantic-faroe: Faroe
+timezone.atlantic-madeira: Madeira
+timezone.atlantic-reykjavik: Reykjavik
 timezone.atlantic-south_georgia: 'South Georgia'
 timezone.atlantic-st_helena: 'St Helena'
-timezone.atlantic-stanley: 'Stanley'
-timezone.australia-adelaide: 'Adelaide'
-timezone.australia-brisbane: 'Brisbane'
+timezone.atlantic-stanley: Stanley
+timezone.australia-adelaide: Adelaide
+timezone.australia-brisbane: Brisbane
 timezone.australia-broken_hill: 'Broken Hill'
-timezone.australia-currie: 'Currie'
-timezone.australia-darwin: 'Darwin'
-timezone.australia-eucla: 'Eucla'
-timezone.australia-hobart: 'Hobart'
-timezone.australia-lindeman: 'Lindeman'
+timezone.australia-currie: Currie
+timezone.australia-darwin: Darwin
+timezone.australia-eucla: Eucla
+timezone.australia-hobart: Hobart
+timezone.australia-lindeman: Lindeman
 timezone.australia-lord_howe: 'Lord Howe'
-timezone.australia-melbourne: 'Melbourne'
-timezone.australia-perth: 'Perth'
-timezone.australia-sydney: 'Sydney'
-timezone.europe-amsterdam: 'Amsterdam'
-timezone.europe-andorra: 'Andorra'
-timezone.europe-astrakhan: 'Astrakhan'
-timezone.europe-athens: 'Athens'
-timezone.europe-belgrade: 'Belgrade'
-timezone.europe-berlin: 'Berlin'
-timezone.europe-bratislava: 'Bratislava'
-timezone.europe-brussels: 'Brussels'
-timezone.europe-bucharest: 'Bucharest'
-timezone.europe-budapest: 'Budapest'
-timezone.europe-busingen: 'Busingen'
-timezone.europe-chisinau: 'Chisinau'
-timezone.europe-copenhagen: 'Copenhagen'
-timezone.europe-dublin: 'Dublin'
-timezone.europe-gibraltar: 'Gibraltar'
-timezone.europe-guernsey: 'Guernsey'
-timezone.europe-helsinki: 'Helsinki'
+timezone.australia-melbourne: Melbourne
+timezone.australia-perth: Perth
+timezone.australia-sydney: Sydney
+timezone.europe-amsterdam: Amsterdam
+timezone.europe-andorra: Andorra
+timezone.europe-astrakhan: Astrakhan
+timezone.europe-athens: Athens
+timezone.europe-belgrade: Belgrade
+timezone.europe-berlin: Berlin
+timezone.europe-bratislava: Bratislava
+timezone.europe-brussels: Brussels
+timezone.europe-bucharest: Bucharest
+timezone.europe-budapest: Budapest
+timezone.europe-busingen: Busingen
+timezone.europe-chisinau: Chisinau
+timezone.europe-copenhagen: Copenhagen
+timezone.europe-dublin: Dublin
+timezone.europe-gibraltar: Gibraltar
+timezone.europe-guernsey: Guernsey
+timezone.europe-helsinki: Helsinki
 timezone.europe-isle_of_man: 'Isle of Man'
-timezone.europe-istanbul: 'Istanbul'
-timezone.europe-jersey: 'Jersey'
-timezone.europe-kaliningrad: 'Kaliningrad'
-timezone.europe-kiev: 'Kiev'
-timezone.europe-kirov: 'Kirov'
-timezone.europe-lisbon: 'Lisbon'
-timezone.europe-ljubljana: 'Ljubljana'
-timezone.europe-london: 'London'
-timezone.europe-luxembourg: 'Luxembourg'
-timezone.europe-madrid: 'Madrid'
-timezone.europe-malta: 'Malta'
-timezone.europe-mariehamn: 'Mariehamn'
-timezone.europe-minsk: 'Minsk'
-timezone.europe-monaco: 'Monaco'
-timezone.europe-moscow: 'Moscow'
-timezone.europe-oslo: 'Oslo'
-timezone.europe-paris: 'Paris'
-timezone.europe-podgorica: 'Podgorica'
-timezone.europe-prague: 'Prague'
-timezone.europe-riga: 'Riga'
-timezone.europe-rome: 'Rome'
-timezone.europe-samara: 'Samara'
+timezone.europe-istanbul: Istanbul
+timezone.europe-jersey: Jersey
+timezone.europe-kaliningrad: Kaliningrad
+timezone.europe-kiev: Kiev
+timezone.europe-kirov: Kirov
+timezone.europe-lisbon: Lisbon
+timezone.europe-ljubljana: Ljubljana
+timezone.europe-london: London
+timezone.europe-luxembourg: Luxembourg
+timezone.europe-madrid: Madrid
+timezone.europe-malta: Malta
+timezone.europe-mariehamn: Mariehamn
+timezone.europe-minsk: Minsk
+timezone.europe-monaco: Monaco
+timezone.europe-moscow: Moscow
+timezone.europe-oslo: Oslo
+timezone.europe-paris: Paris
+timezone.europe-podgorica: Podgorica
+timezone.europe-prague: Prague
+timezone.europe-riga: Riga
+timezone.europe-rome: Rome
+timezone.europe-samara: Samara
 timezone.europe-san_marino: 'San Marino'
-timezone.europe-sarajevo: 'Sarajevo'
-timezone.europe-saratov: 'Saratov'
-timezone.europe-simferopol: 'Simferopol'
-timezone.europe-skopje: 'Skopje'
-timezone.europe-sofia: 'Sofia'
-timezone.europe-stockholm: 'Stockholm'
-timezone.europe-tallinn: 'Tallinn'
-timezone.europe-tirane: 'Tirane'
-timezone.europe-ulyanovsk: 'Ulyanovsk'
-timezone.europe-uzhgorod: 'Uzhgorod'
-timezone.europe-vaduz: 'Vaduz'
-timezone.europe-vatican: 'Vatican'
-timezone.europe-vienna: 'Vienna'
-timezone.europe-vilnius: 'Vilnius'
-timezone.europe-volgograd: 'Volgograd'
-timezone.europe-warsaw: 'Warsaw'
-timezone.europe-zagreb: 'Zagreb'
-timezone.europe-zaporozhye: 'Zaporozhye'
-timezone.europe-zurich: 'Zurich'
-timezone.indian-antananarivo: 'Antananarivo'
-timezone.indian-chagos: 'Chagos'
-timezone.indian-christmas: 'Christmas'
-timezone.indian-cocos: 'Cocos'
-timezone.indian-comoro: 'Comoro'
-timezone.indian-kerguelen: 'Kerguelen'
-timezone.indian-mahe: 'Mahe'
-timezone.indian-maldives: 'Maldives'
-timezone.indian-mauritius: 'Mauritius'
-timezone.indian-mayotte: 'Mayotte'
-timezone.indian-reunion: 'Reunion'
-timezone.pacific-apia: 'Apia'
-timezone.pacific-auckland: 'Auckland'
-timezone.pacific-bougainville: 'Bougainville'
-timezone.pacific-chatham: 'Chatham'
-timezone.pacific-chuuk: 'Chuuk'
-timezone.pacific-easter: 'Easter'
-timezone.pacific-efate: 'Efate'
-timezone.pacific-enderbury: 'Enderbury'
-timezone.pacific-fakaofo: 'Fakaofo'
-timezone.pacific-fiji: 'Fiji'
-timezone.pacific-funafuti: 'Funafuti'
-timezone.pacific-galapagos: 'Galapagos'
-timezone.pacific-gambier: 'Gambier'
-timezone.pacific-guadalcanal: 'Guadalcanal'
-timezone.pacific-guam: 'Guam'
-timezone.pacific-honolulu: 'Honolulu'
-timezone.pacific-kiritimati: 'Kiritimati'
-timezone.pacific-kosrae: 'Kosrae'
-timezone.pacific-kwajalein: 'Kwajalein'
-timezone.pacific-majuro: 'Majuro'
-timezone.pacific-marquesas: 'Marquesas'
-timezone.pacific-midway: 'Midway'
-timezone.pacific-nauru: 'Nauru'
-timezone.pacific-niue: 'Niue'
-timezone.pacific-norfolk: 'Norfolk'
-timezone.pacific-noumea: 'Noumea'
+timezone.europe-sarajevo: Sarajevo
+timezone.europe-saratov: Saratov
+timezone.europe-simferopol: Simferopol
+timezone.europe-skopje: Skopje
+timezone.europe-sofia: Sofia
+timezone.europe-stockholm: Stockholm
+timezone.europe-tallinn: Tallinn
+timezone.europe-tirane: Tirane
+timezone.europe-ulyanovsk: Ulyanovsk
+timezone.europe-uzhgorod: Uzhgorod
+timezone.europe-vaduz: Vaduz
+timezone.europe-vatican: Vatican
+timezone.europe-vienna: Vienna
+timezone.europe-vilnius: Vilnius
+timezone.europe-volgograd: Volgograd
+timezone.europe-warsaw: Warsaw
+timezone.europe-zagreb: Zagreb
+timezone.europe-zaporozhye: Zaporozhye
+timezone.europe-zurich: Zurich
+timezone.indian-antananarivo: Antananarivo
+timezone.indian-chagos: Chagos
+timezone.indian-christmas: Christmas
+timezone.indian-cocos: Cocos
+timezone.indian-comoro: Comoro
+timezone.indian-kerguelen: Kerguelen
+timezone.indian-mahe: Mahe
+timezone.indian-maldives: Maldives
+timezone.indian-mauritius: Mauritius
+timezone.indian-mayotte: Mayotte
+timezone.indian-reunion: Reunion
+timezone.pacific-apia: Apia
+timezone.pacific-auckland: Auckland
+timezone.pacific-bougainville: Bougainville
+timezone.pacific-chatham: Chatham
+timezone.pacific-chuuk: Chuuk
+timezone.pacific-easter: Easter
+timezone.pacific-efate: Efate
+timezone.pacific-enderbury: Enderbury
+timezone.pacific-fakaofo: Fakaofo
+timezone.pacific-fiji: Fiji
+timezone.pacific-funafuti: Funafuti
+timezone.pacific-galapagos: Galapagos
+timezone.pacific-gambier: Gambier
+timezone.pacific-guadalcanal: Guadalcanal
+timezone.pacific-guam: Guam
+timezone.pacific-honolulu: Honolulu
+timezone.pacific-kiritimati: Kiritimati
+timezone.pacific-kosrae: Kosrae
+timezone.pacific-kwajalein: Kwajalein
+timezone.pacific-majuro: Majuro
+timezone.pacific-marquesas: Marquesas
+timezone.pacific-midway: Midway
+timezone.pacific-nauru: Nauru
+timezone.pacific-niue: Niue
+timezone.pacific-norfolk: Norfolk
+timezone.pacific-noumea: Noumea
 timezone.pacific-pago_pago: 'Pago Pago'
-timezone.pacific-palau: 'Palau'
-timezone.pacific-pitcairn: 'Pitcairn'
-timezone.pacific-pohnpei: 'Pohnpei'
+timezone.pacific-palau: Palau
+timezone.pacific-pitcairn: Pitcairn
+timezone.pacific-pohnpei: Pohnpei
 timezone.pacific-port_moresby: 'Port Moresby'
-timezone.pacific-rarotonga: 'Rarotonga'
-timezone.pacific-saipan: 'Saipan'
-timezone.pacific-tahiti: 'Tahiti'
-timezone.pacific-tarawa: 'Tarawa'
-timezone.pacific-tongatapu: 'Tongatapu'
-timezone.pacific-wake: 'Wake'
-timezone.pacific-wallis: 'Wallis'
-timezone.utc: 'UTC'
+timezone.pacific-rarotonga: Rarotonga
+timezone.pacific-saipan: Saipan
+timezone.pacific-tahiti: Tahiti
+timezone.pacific-tarawa: Tarawa
+timezone.pacific-tongatapu: Tongatapu
+timezone.pacific-wake: Wake
+timezone.pacific-wallis: Wallis
+timezone.utc: UTC
 unavailability.action.remove.title: Supprimer
 unavailability.createdBySystem.buy.title: 'Modifier mon forfait'
 unavailability.createdBySystem.explaination.title: 'Veuillez sélectionner le produit vous permettant d''accéder à ce contenu'

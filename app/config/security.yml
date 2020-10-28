@@ -118,6 +118,7 @@ security:
         - { path: '^/(fr|en)/event/archived', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/impersonate', role: ROLE_ALLOWED_TO_SWITCH, host: '%admin_domain%' }
         - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/meeting-request', role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/meeting', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }

@@ -128,7 +128,7 @@
 .chat-form {
   align-items: center;
   background-color: white;
-  border: 1px solid $border-light;
+  border: 1px solid $color-highlighted;
   display: flex;
   height: 34px;
 
@@ -165,5 +165,3 @@
     max-height: calc(100vh - 400px);
   }
 }
-
-

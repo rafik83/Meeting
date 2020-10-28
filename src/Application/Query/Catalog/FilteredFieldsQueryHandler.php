@@ -1,19 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 
@@ -25,21 +19,22 @@ class FilteredFieldsQueryHandler
     /** @var TagFilterAggregator */
     private $tagFilterAggregator;
 
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
-        TagFilterAggregator $tagFilterAggregator
+        TagFilterAggregator $tagFilterAggregator,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->tagFilterAggregator = $tagFilterAggregator;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     *
-     * @return FilteredFieldsView
-     */
     public function handle(FilteredFieldsQuery $filteredFieldsQuery): FilteredFieldsView
     {
+        $this->filterSheetVisitViews($filteredFieldsQuery);
         $this->filterTypeViews($filteredFieldsQuery);
         $this->filterCategoryViews($filteredFieldsQuery);
         $this->filterOrganizationCategoryViews($filteredFieldsQuery);
@@ -51,24 +46,16 @@ class FilteredFieldsQueryHandler
         );
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param array  $typeViews
-     * @param array  $availableSlotIds
-     * @param array  $sheetsToExclude
-     *
-     * @return array|null
-     */
     private function getTypeAggregation(
         Event $event,
         string $locale,
         array $filters,
         array $typeViews,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): ?array {
+        // if all types are selected, or if types are disabled
         if (isset($filters[SearchFields::FILTER_TYPE])
             && \count($filters[SearchFields::FILTER_TYPE]) === \count($typeViews)
         ) {
@@ -83,19 +70,13 @@ class FilteredFieldsQueryHandler
             SearchFields::FILTER_TYPE,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
     /**
-     * @param Event          $event
-     * @param string         $locale
-     * @param array          $filters
      * @param CategoryView[] $categoryViews
-     * @param array          $availableSlotIds
-     * @param array          $sheetsToExclude
-     *
-     * @return array|null
      */
     private function getCategoryAggregation(
         Event $event,
@@ -103,8 +84,10 @@ class FilteredFieldsQueryHandler
         array $filters,
         array $categoryViews,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): ?array {
+        // if all categories are selected, or if categories are disabled
         if (isset($filters[SearchFields::FILTER_CATEGORY])
             && \count($filters[SearchFields::FILTER_CATEGORY]) === \count($categoryViews)
         ) {
@@ -119,7 +102,8 @@ class FilteredFieldsQueryHandler
             SearchFields::FILTER_CATEGORY,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
@@ -130,7 +114,7 @@ class FilteredFieldsQueryHandler
      *
      * @return array|null
      */
-    private function getOrganizationCategoryAggregation(Event $event, string $locale, array $filters): ?array
+    private function getOrganizationCategoryAggregation(Event $event, string $locale, array $filters, ?array $prefilteredSheetIds): ?array
     {
         if (!isset($filters[SearchFields::FILTER_ORGANIZATION_CATEGORY])) {
             return null;
@@ -142,7 +126,8 @@ class FilteredFieldsQueryHandler
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_ORGANIZATION_CATEGORY
+            SearchFields::FILTER_ORGANIZATION_CATEGORY,
+            $prefilteredSheetIds
         );
     }
 
@@ -153,7 +138,7 @@ class FilteredFieldsQueryHandler
      *
      * @return array|null
      */
-    private function getPositionAggregation(Event $event, string $locale, array $filters): ?array
+    private function getPositionAggregation(Event $event, string $locale, array $filters, ?array $prefilteredSheetIds): ?array
     {
         if (!isset($filters[SearchFields::FILTER_POSITION])) {
             return null;
@@ -165,14 +150,49 @@ class FilteredFieldsQueryHandler
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_POSITION
+            SearchFields::FILTER_POSITION,
+            $prefilteredSheetIds
         );
     }
 
     /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
+     * Generate views (with counts), for visit filters
      */
-    private function filterTypeViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterSheetVisitViews(FilteredFieldsQuery $filteredFieldsQuery): void
+    {
+        // skip if visit filters are not available
+        if (!isset($filteredFieldsQuery->filters[SearchFields::FILTER_BY_SHEET_VISIT])) {
+            return;
+        }
+
+        $sheetSawView = $filteredFieldsQuery->catalogFilterViewsResult->sheetVisitViews[CatalogConstant::FILTER_SHEET_SAW];
+        $sheetSawCount = $this->sheetSearchAdapter->getCountAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            null,
+            [],
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getSheetIdsSaw($sheetSawView->user, $sheetSawView->sheet->getEvent())
+        );
+        $sheetSawView->count = $sheetSawCount['total_count']['value'];
+
+        $viewedBySheetView = $filteredFieldsQuery->catalogFilterViewsResult->sheetVisitViews[CatalogConstant::FILTER_VIEWED_BY_SHEET];
+        $viewedBySheetCount = $this->sheetSearchAdapter->getCountAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            null,
+            [],
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getSheetIdsViewedBySheet($viewedBySheetView->sheet)
+        );
+        $viewedBySheetView->count = $viewedBySheetCount['total_count']['value'];
+    }
+
+    private function filterTypeViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $typeAggregations = $this->getTypeAggregation(
             $filteredFieldsQuery->event,
@@ -180,7 +200,8 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters,
             $filteredFieldsQuery->catalogFilterViewsResult->typeViews,
             $filteredFieldsQuery->availableSlotIds,
-            $filteredFieldsQuery->sheetsToExclude
+            $filteredFieldsQuery->sheetsToExclude,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = null !== $typeAggregations ? $typeAggregations : $filteredFieldsQuery->currentAggregations;
@@ -197,10 +218,7 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $categoryAggregations = $this->getCategoryAggregation(
             $filteredFieldsQuery->event,
@@ -208,7 +226,8 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->filters,
             $filteredFieldsQuery->catalogFilterViewsResult->categoryViews,
             $filteredFieldsQuery->availableSlotIds,
-            $filteredFieldsQuery->sheetsToExclude
+            $filteredFieldsQuery->sheetsToExclude,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = null !== $categoryAggregations ?
@@ -228,15 +247,13 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterOrganizationCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterOrganizationCategoryViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $aggregations = $this->getOrganizationCategoryAggregation(
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
-            $filteredFieldsQuery->filters
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
@@ -262,15 +279,13 @@ class FilteredFieldsQueryHandler
         }
     }
 
-    /**
-     * @param FilteredFieldsQuery $filteredFieldsQuery
-     */
-    private function filterPositionViews(FilteredFieldsQuery $filteredFieldsQuery)
+    private function filterPositionViews(FilteredFieldsQuery $filteredFieldsQuery): void
     {
         $aggregations = $this->getPositionAggregation(
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
-            $filteredFieldsQuery->filters
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->prefilteredSheetIds
         );
 
         $aggregations = $aggregations ?? $filteredFieldsQuery->currentAggregations;
@@ -302,8 +317,6 @@ class FilteredFieldsQueryHandler
      * @param string $fieldName    ElasticSearch field name
      * @param bool   $subField:    is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
      *                             else: $aggregations['type'] = [...]
-     *
-     * @return array
      */
     private function getAggregationsIndexedByKey(array $aggregations, string $fieldName, bool $subField = false): array
     {
@@ -352,7 +365,8 @@ class FilteredFieldsQueryHandler
                 $filteredFieldsQuery->locale,
                 $filteredFieldsQuery->filters,
                 $filteredFieldsQuery->availableSlotIds,
-                $filteredFieldsQuery->sheetsToExclude
+                $filteredFieldsQuery->sheetsToExclude,
+                $filteredFieldsQuery->prefilteredSheetIds
             );
 
             $aggregationKeys = [];

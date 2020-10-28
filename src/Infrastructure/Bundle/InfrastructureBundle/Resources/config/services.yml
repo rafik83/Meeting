@@ -3542,6 +3542,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3578,6 +3579,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
     Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
+
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink: ~
 
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
@@ -3654,6 +3657,7 @@ services:
         arguments:
             - '@adapter.sheet_search_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
@@ -7125,7 +7129,8 @@ services:
     #
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PushHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PullHandler'
             - '%kernel.cache_dir%'
         tags:
             - { name: console.command }

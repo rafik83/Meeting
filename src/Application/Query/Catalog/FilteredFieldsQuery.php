@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -33,18 +25,12 @@ class FilteredFieldsQuery
     /** @var array */
     public $sheetsToExclude;
 
+    /** @var int[]|null */
+    public $prefilteredSheetIds;
+
     /** @var CatalogFilterViewsResult */
     public $catalogFilterViewsResult;
 
-    /**
-     * @param Event                    $event
-     * @param array                    $filters
-     * @param array                    $currentAggregations
-     * @param CatalogFilterViewsResult $catalogFilterViewsResult
-     * @param string                   $locale
-     * @param array                    $availableSlotIds
-     * @param array                    $sheetsToExclude
-     */
     public function __construct(
         Event $event,
         array $filters,
@@ -52,14 +38,16 @@ class FilteredFieldsQuery
         CatalogFilterViewsResult $catalogFilterViewsResult,
         string $locale,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ) {
-        $this->event               = $event;
-        $this->filters             = $filters;
+        $this->event = $event;
+        $this->filters = $filters;
         $this->currentAggregations = $currentAggregations;
-        $this->locale              = $locale;
-        $this->availableSlotIds    = $availableSlotIds;
-        $this->sheetsToExclude     = $sheetsToExclude;
         $this->catalogFilterViewsResult = $catalogFilterViewsResult;
+        $this->locale = $locale;
+        $this->availableSlotIds = $availableSlotIds;
+        $this->sheetsToExclude = $sheetsToExclude;
+        $this->prefilteredSheetIds = $prefilteredSheetIds;
     }
 }

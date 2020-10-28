@@ -4,17 +4,88 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- VMEET 2218 - Add tab private chat and tab general chat
 
-## [2.56.0] - 2010-10-09
+## [2.64.0] - 2020-10-28
+### Fixed
+- MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
+
+### Updated
+- VIMEET-2208 - Add counts to visit filters in catalog
+
+## [2.63.0] - 2020-10-28
+### Updated
+- VIMEET-2218 - Check networking access to avoid sending useless notifications
+- VIMEET-2242 - Suite Chat Vimeet - Button separate.
+- update translations
+
+## [2.62.1] - 2020-10-26
+### Fixed
+- disable redis doctrine cache
+
+## [2.62.0] - 2020-10-26
+### Added
+- VIMEET-2208 - Filter meeting request by sheet viewed
+
+### Fixed
+- VIMEET-2219 - Apply filter on users added on the fly
+- Add sheet card tag for datetime
+- Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+
+## [2.61.0] - 2020-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
+## [2.60.0] - 2020-10-14
+### Added
+- VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
+- VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
+
+### Fixed
+- VIMEET-2224 - Avoid exceptions related to chat and networking submenu
+
+## [2.59.1] - 2020-10-13
+### Updated
+- Update translations
+
+## [2.59.0] - 2020-10-13
+### Added
+- VIMEET-2245 - Login with tech event token in md5
+
+## [2.58.0] - 2020-10-13
+### Added
+- VIMEET-2236 - Add participant id for custom button
+- VIMEET-2240 - Add tech event id contact in md5 for custom button
+- VIMEET-2240 - Add sheet id for custom button
+- VIMEET 2218 - Add tab private chat and tab general chat
+
+### Fixed
+- MV255 - move chat css to event guideline css
+- MV255 - move question css to event guideline css
+- MV255 - separate button chat and button question
+
+## [2.57.0] - 2020-10-13
+### Added
+- VIMEET-2218 - Networking tab and page
+- VIMEET-2219 - Networking tab search participant
+- VIMEET-2222 - Networking / Private chat
+- VIMEET-2221 - Private chat notification toast
+- VIMEET-2220 - Badge on networking tab with unread messages
+
+### Changed
+- Remove command bus usage for translations update commands to prevent DB connections
+
+### Revert
+- VIMEET-1925 - Restore mercure version, with fixed issue on chat update
+
+## [2.56.0] - 2020-10-09
 ### Added
 - VIMET-2177 - Add metrics to sheet export
 
-## [2.55.0] - 2010-10-08
+## [2.55.0] - 2020-10-08
 ### Fixed
 - Hotfix - Prevent invalid extensions (especially php) on uploaded files
 
-## [2.54.0] - 2010-10-07
+## [2.54.0] - 2020-10-07
 ### Fixed
 - MV-254 - Display bullet point in help message
 - Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)

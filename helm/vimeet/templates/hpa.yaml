@@ -1,0 +1,23 @@
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "vimeet.fullname" . }}
+  labels:
+    app: "{{ template "vimeet.name" . }}"
+    chart: "{{ template "vimeet.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ template "vimeet.fullname" . }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.hpa.targetAverageUtilization }}
+{{- end }}

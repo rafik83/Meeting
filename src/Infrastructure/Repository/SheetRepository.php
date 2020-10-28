@@ -316,7 +316,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsByUsersAndEvent(array $users, Event $event)
+    public function getSheetsByUsersAndEvent(array $users, Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

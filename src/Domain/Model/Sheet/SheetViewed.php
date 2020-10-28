@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -24,51 +17,32 @@ class SheetViewed
     /** @var User */
     private $user;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     private $createdAt;
 
-    /**
-     * SheetViewed constructor.
-     *
-     * @param Sheet              $sheet
-     * @param User               $user
-     * @param \DateTimeInterface $createdAt
-     */
-    public function __construct(Sheet $sheet, User $user, \DateTimeInterface $createdAt)
+    public function __construct(Sheet $sheet, User $user, DateTimeInterface $createdAt)
     {
-        $this->sheet     = $sheet;
-        $this->user      = $user;
+        $this->sheet = $sheet;
+        $this->user = $user;
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Sheet
-     */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
