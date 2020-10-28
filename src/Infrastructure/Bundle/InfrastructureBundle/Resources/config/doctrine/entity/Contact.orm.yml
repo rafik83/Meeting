@@ -22,6 +22,9 @@ Proximum\Vimeet\Domain\Model\Contact:
             type: string
             length: 20
             nullable: false
+        scanned:
+            type: boolean
+            nullable: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

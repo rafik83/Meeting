@@ -29,6 +29,9 @@ class Contact
     /** @var string */
     private $origin;
 
+    /** @var bool */
+    private $scanned;
+
     public function __construct(
         Event $event,
         User $user,
