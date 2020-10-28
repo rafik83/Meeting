@@ -70,6 +70,7 @@ class VideoDataType extends AbstractType
                 'choices' => $video->getBuyableProducts(),
                 'required' => true,
                 'data' => $selectedRadio,
+                'attr' => ['required' => true],
             ]);
             $builder->get('selectedProduct')->addModelTransformer($this->idToProductTransformer);
         }

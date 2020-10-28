@@ -34,6 +34,7 @@ import CatalogSelectFromNomenclaturesField from './components/_CatalogSelectFrom
 import SortParticipants from './components/_SortParticipants';
 import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
 import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
+import { showSpinnerOnSubmit } from './components/form/_ShowSpinnerOnSubmit';
 import SheetVideo from './components/_SheetVideo';
 import UserConnectionRegister from './components/_UserConnectionRegister';
 import NotificationToast from './components/_NotificationToast';
@@ -273,6 +274,8 @@ function init(target) {
 
     addSubmitEventListenerOnElementChange(target, 'evaluation', 'evaluation');
     addSubmitEventListenerOnElementChange(target, 'evaluate_meeting', 'evaluation');
+
+    showSpinnerOnSubmit();
 
     if (target.querySelector('[data-agenda-autorefresh]')) {
         new AgendaRefresh();
