@@ -58,7 +58,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         return JWT::encode([
             'mercure' => [
                 'subscriber' => array_map(function ($type) use ($sheet) {
-                    return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId(), $type)];
+                    return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId())];
                 }, $types),
                 'payload' => $this->userPayloadBuilder->get($sheet, $user),
             ]
