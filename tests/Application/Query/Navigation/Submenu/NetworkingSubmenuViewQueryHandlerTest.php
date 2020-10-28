@@ -57,7 +57,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $chatMessageRepository->reveal(),
             $chatSessionRepository->reveal()
         );
-        $expectedAttributes =  ['data-is-networking-page-active' => false];
+        $expectedAttributes =  ['data-submenu' => 'networking'];
 
         $expectedSubButtonView = new SubmenuButtonView(
             Category::NETWORKING_ICON,
@@ -126,7 +126,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $chatSessionRepository->reveal()
         );
 
-        $expectedAttributes =  ['data-is-networking-page-active' => false];
+        $expectedAttributes =  ['data-submenu' => 'networking'];
 
         $expectedSubButtonView = new SubmenuButtonView(
             Category::NETWORKING_ICON,
@@ -198,7 +198,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $chatSessionRepository->reveal()
         );
 
-        $expectedAttributes =  ['data-is-networking-page-active' => true];
+        $expectedAttributes =  ['data-submenu' => 'networking'];
 
         $expectedSubButtonView = new SubmenuButtonView(
             Category::NETWORKING_ICON,

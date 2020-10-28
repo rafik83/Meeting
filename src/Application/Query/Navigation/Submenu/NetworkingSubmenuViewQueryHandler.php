@@ -54,7 +54,7 @@ class NetworkingSubmenuViewQueryHandler
 
         $isRouteNetworking = Route::isNetworking($query->route);
 
-        $attributes =  ['data-is-networking-page-active' => $isRouteNetworking];
+        $attributes =  ['data-submenu' => 'networking'];
 
         if (!$isRouteNetworking) {
             $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
