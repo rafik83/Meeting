@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Exception\CallVisio\CallVisioNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\View\Networking\CallVisioView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
@@ -57,8 +58,7 @@ class CallVisioQueryHandler
         }
 
         if (!$this->callVisioPrivateChatAccessChecker->allowedToAccess($visioQuery->sheet->getEvent(), $chatSession)) {
-            // TODO a faire au propre
-            throw new \Exception();
+            throw new CallVisioNotAllowedException();
         }
 
         if ($chatSession->getVisioSessionId() === null) {
