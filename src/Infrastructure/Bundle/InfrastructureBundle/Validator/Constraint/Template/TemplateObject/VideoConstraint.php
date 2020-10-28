@@ -6,9 +6,7 @@ use Symfony\Component\Validator\Constraint;
 
 class VideoConstraint extends Constraint
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $key;
 
     /**
