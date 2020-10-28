@@ -4,7 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.64.0] - 2020-10-28
+### Fixed
 - MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
+
+### Updated
+- VIMEET-2208 - Add counts to visit filters in catalog
 
 ## [2.63.0] - 2020-10-28
 ### Updated
