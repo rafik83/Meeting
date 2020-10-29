@@ -44,6 +44,7 @@ class NetworkingQueryHandlerTest extends TestCase
         $fakeSubscriberKey = "a fake subscriber key";
         $now = new DateTime();
         $messageCount = 333;
+        $privateChatNewMessages = 0;
 
         $fakeSubscriptions = [];
         $sessionsByEventAndUser = [];
@@ -75,7 +76,16 @@ class NetworkingQueryHandlerTest extends TestCase
 
         $result =  $handler->handle($query);
 
-        $expectedResult = new NetworkingView($providerUrl, $fakeSubscriberKey, $topic, $fakeSubscriptions, $userId, $messageCount, $privateChatSessions);
+        $expectedResult = new NetworkingView(
+            $providerUrl,
+            $fakeSubscriberKey,
+            $topic,
+            $fakeSubscriptions,
+            $userId,
+            $messageCount,
+            $privateChatSessions,
+            $privateChatNewMessages
+        );
 
         $this->assertEquals($result, $expectedResult);
     }
@@ -97,7 +107,8 @@ class NetworkingQueryHandlerTest extends TestCase
         $fakeSubscriptions = [];
 
         $newMessageCount = 666;
-        $totalMessageCount = 55;
+        $totalMessageCount = 855;
+        $privateChatNewMessages = $newMessageCount;
 
         $sessionsByEventAndUser = [[
             "otherUser" =>  $otherUser->reveal(),
@@ -137,7 +148,16 @@ class NetworkingQueryHandlerTest extends TestCase
 
         $result =  $handler->handle($query);
 
-        $expectedResult = new NetworkingView($providerUrl, $fakeSubscriberKey, $topic, $fakeSubscriptions, $userId, $messageCount, $privateChatSessions);
+        $expectedResult = new NetworkingView(
+            $providerUrl,
+            $fakeSubscriberKey,
+            $topic,
+            $fakeSubscriptions,
+            $userId,
+            $messageCount,
+            $privateChatSessions,
+            $privateChatNewMessages
+        );
 
         $this->assertEquals($result, $expectedResult);
     }
@@ -160,7 +180,8 @@ class NetworkingQueryHandlerTest extends TestCase
         $fakeSubscriptions = [];
 
         $newMessageCount = 666;
-        $totalMessageCount = 55;
+        $totalMessageCount = 855;
+        $privateChatNewMessages = 0;
 
         // This Sesssion has no messages for user with id 1615 (our User)
 
@@ -204,7 +225,16 @@ class NetworkingQueryHandlerTest extends TestCase
 
         $result =  $handler->handle($query);
 
-        $expectedResult = new NetworkingView($providerUrl, $fakeSubscriberKey, $topic, $fakeSubscriptions, $userId, $messageCount, $privateChatSessions);
+        $expectedResult = new NetworkingView(
+            $providerUrl,
+            $fakeSubscriberKey,
+            $topic,
+            $fakeSubscriptions,
+            $userId,
+            $messageCount,
+            $privateChatSessions,
+            $privateChatNewMessages
+        );
 
         $this->assertEquals($result, $expectedResult);
     }
