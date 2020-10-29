@@ -30,6 +30,8 @@ function VideoConference(
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
 
+  this.timer = element.querySelector('.timer');
+
   this.timeRemaining = element.getAttribute('data-time-remaining');
   this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
@@ -229,6 +231,7 @@ VideoConference.prototype.init = function() {
     if(this.startOnVisioStarted) {
         this.countDownBeforeEnd();
         this.startOnVisioStarted = false;
+        this.timer.classList.remove('hide');
     }
     this.layout();
 
