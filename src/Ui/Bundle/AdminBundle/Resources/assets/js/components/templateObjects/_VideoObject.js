@@ -47,6 +47,7 @@ VideoObject.prototype.save = function ()
     this.config.placeholder[this.locale] = this.form.get('placeholder');
     this.config.help[this.locale] = this.form.get('help');
     this.config.required = this.form.get('required');
+    this.config.products = this.form.get('products');
     this.config.tags = this.form.get('tags');
 
     this.form.bind('label', this.config.label[this.locale]);

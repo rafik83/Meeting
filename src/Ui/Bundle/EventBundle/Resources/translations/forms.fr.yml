@@ -180,6 +180,7 @@ form.sheet_media_data.children.type.video: Vidéo
 form.sheet_template_objects_collection_type.children.objectsCollection.label_add: Ajouter
 form.sheet_template_objects_collection_type.children.objectsCollection.label_delete: Supprimer
 form.sheet_template_objects_collection_type.children.submit.label: Enregistrer
+form.sheet_video_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_video_data.children.submit.label: Enregistrer
 form.sort_participants.children.submit.label: Enregistrer
 form.user_availability_confirmation.children.confirm.label: 'Accéder directement au catalogue'
