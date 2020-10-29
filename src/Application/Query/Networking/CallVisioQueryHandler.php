@@ -61,12 +61,14 @@ class CallVisioQueryHandler
             throw new CallVisioNotAllowedException();
         }
 
-        if ($chatSession->getVisioSessionId() === null) {
+        $visioSessionId = $chatSession->getVisioSessionId();
+        if (null === $visioSessionId) {
             $session = $this->videoConferenceAdapter->createSession();
             $chatSession->setVisioSessionId($session->getSessionId());
             $this->chatSessionRepository->update();
+            $visioSessionId = $session->getSessionId();
         } else {
-            $session = $this->videoConferenceAdapter->getSession($chatSession->getVisioSessionId());
+            $session = $this->videoConferenceAdapter->getSession($visioSessionId);
         }
 
         $dateTimeEnd = $this->now->add(new \DateInterval('PT1H'));
@@ -87,7 +89,8 @@ class CallVisioQueryHandler
         $subscriberKey = $this->notificationSubscriber->getUserSubscriberKey($visioQuery->sheet, $visioQuery->fromUser);
 
         return new CallVisioView(
-            $token, $chatSession->getVisioSessionId(),
+            $token,
+            $visioSessionId,
             $this->videoConferenceAdapter->getApiKey(),
             $timeRemainingInSeconds,
             round($timeRemainingInSeconds * 0.2),
