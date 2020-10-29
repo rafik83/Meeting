@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.65.0] - 2020-10-29
 ### Added
-- VIMEET-2208 - Add related product to video template objects
+- VIMEET-2225 - Add related product to video template objects
 
 ## [2.64.0] - 2020-10-28
 ### Fixed
