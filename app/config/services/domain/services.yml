@@ -187,3 +187,8 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.event.extra_parameter_repository'
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking: ~
