@@ -158,6 +158,9 @@ RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
       php bin/console vimeet:translations:update; \
     fi
 
+ARG VCS_REF
+ENV APP_VERSION=${VCS_REF:-unkown}
+
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
     rm -f web/*_dev.php && \
