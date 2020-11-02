@@ -117,6 +117,17 @@
                 <hr>
                 {{ include('EventBundle:Visio:settings.html.twig') }}
                 <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+                <div id="visio-prepare" class="row hide">
+                    <div class="col-md-12 text-center">
+                        <p>{{ 'event.visio.preparation'|trans|nl2br }}</p>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <hr>
+                        <button class="btn btn-primary" id="visio-prepare-validate">
+                            {{ 'event.visio.close_warning_preparation'|trans }}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -234,16 +234,37 @@ function Webinar(element, isSpeaker) {
     this.desktopNotificationBody = element.getAttribute('data-desktop-notification-body');
     this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
+
+    // "preparation" modal
+    this.prepareModal = this.element.querySelector('#visio-prepare');
+    this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
+    if (this.closePrepareMessageButton) {
+        this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
+    }
 }
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
     if (Notification.permission === 'default') {
-        Notification.requestPermission().then(permission => this.join());
+        Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+    } else {
+        this.showPrepareModalOrJoin();
+    }
+};
+
+Webinar.prototype.showPrepareModalOrJoin = function()
+{
+    if (this.prepareModal) {
+        this.showElement(this.prepareModal);
     } else {
         this.join();
     }
 }
+
+Webinar.prototype.onPrepareMessageClose = function () {
+    this.hideElement(this.prepareModal);
+    this.join();
+};
 
 Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
