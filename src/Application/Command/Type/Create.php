@@ -88,10 +88,10 @@ class Create implements Command
     public $canSubmitValidation = true;
 
     /** @var bool */
-    public $displayAnalyticsOnSheet;
+    public $displayAnalyticsOnSheet = false;
 
     /** @var bool */
-    public $displayAnalyticsOnCatalog;
+    public $displayAnalyticsOnCatalog = false;
 
     public function __construct(Event $event, string $locale)
     {
