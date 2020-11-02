@@ -61,7 +61,7 @@ final class Category
     const NETWORKING_ICON = 'icon-Travail';
 
     const CUSTOM_BUTTON = 'navigation.category.custom_button';
-    const CUSTOM_BUTTON_ICON = 'icon-Preferences_1';
+    const CUSTOM_BUTTON_ICON = 'icon-DemandeRDV';
 
     const CUSTOM_BUTTON_2 = 'navigation.category.custom_button';
     const CUSTOM_BUTTON_ICON_2 = 'icon-Etoile';

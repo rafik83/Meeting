@@ -62,7 +62,7 @@ class Type
     // Tracking code
     public const TYPE_TRACKING_CODE = 'tracking_code';
 
-    public const TYPE_CUSTOM_BUTTON_1 = 'custom_button_1';
+    public const TYPE_CUSTOM_BUTTON_1 = 'custom_button';
     public const TYPE_CUSTOM_BUTTON_2 = 'custom_button_2';
 
     public const TYPES = [
