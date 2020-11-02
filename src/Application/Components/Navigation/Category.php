@@ -61,7 +61,7 @@ final class Category
     const NETWORKING_ICON = 'icon-Travail';
 
     const CUSTOM_BUTTON_ICON = 'icon-DemandeRDV';
-    const CUSTOM_BUTTON_ICON_2 = 'glyphicon glyphicon-headphones';
+    const CUSTOM_BUTTON_ICON_2 = 'icon-Suivant_1';
 
     public static $categories = [
         self::MEMBER_SPACE,
