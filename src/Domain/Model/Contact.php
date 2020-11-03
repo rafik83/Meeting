@@ -29,8 +29,10 @@ class Contact
     /** @var string */
     private $origin;
 
-    /** @var bool */
-    private $scanned;
+    /** @var bool
+     * @deprecated
+     */
+    private $scanned = false;
 
     public function __construct(
         Event $event,
