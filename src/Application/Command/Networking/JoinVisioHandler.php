@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Networking;
 
 
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
+use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository;
 
 
@@ -32,6 +33,10 @@ class JoinVisioHandler
     public function handle(JoinVisio $command): void
     {
         $chatSession = $this->chatSessionRepository->findOneByEventAndUsers($command->sheet->getEvent(), $command->fromUser, $command->toUser);
+        if (null === $chatSession) {
+            throw new ChatSessionNotFoundException();
+        }
+
         $chatSession->setVisioStartedAt($this->now);
         $this->chatSessionRepository->update();
         $this->notificationPublisher->publishRequestVisioNotification(

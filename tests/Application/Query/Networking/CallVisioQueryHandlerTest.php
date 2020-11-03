@@ -135,7 +135,7 @@ class CallVisioQueryHandlerTest extends TestCase
         $this->videoConferenceAdapter->createSession()->shouldBeCalled()->willReturn($this->session->reveal());
         $this->session->getSessionId()->shouldBeCalled()->willReturn(123456);
         $this->chatSession->setVisioSessionId(123456)->shouldBeCalled();
-        $this->chatSessionRepository->update()->shouldBeCalled();
+        $this->chatSessionRepository->update($this->chatSession->reveal())->shouldBeCalled();
 
         $this->now->add(new \DateInterval('PT1H'))->shouldBeCalled()->willReturn($this->endTokenDateTime);
         $this->videoConferenceAdapter->generateAccessToken($this->session->reveal(), $this->endTokenDateTime)->shouldBeCalled()->willReturn('token');

@@ -65,7 +65,7 @@ class CallVisioQueryHandler
         if (null === $visioSessionId) {
             $session = $this->videoConferenceAdapter->createSession();
             $chatSession->setVisioSessionId($session->getSessionId());
-            $this->chatSessionRepository->update();
+            $this->chatSessionRepository->update($chatSession);
             $visioSessionId = $session->getSessionId();
         } else {
             $session = $this->videoConferenceAdapter->getSession($visioSessionId);
