@@ -13,6 +13,9 @@ use Proximum\Vimeet\Domain\Repository\Visio\VisioSettingsRepositoryInterface;
 
 class CallVisioQueryHandler
 {
+    /** @var NotificationSubscriberInterface */
+    private $notificationSubscriber;
+
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
@@ -65,7 +68,7 @@ class CallVisioQueryHandler
         if (null === $visioSessionId) {
             $session = $this->videoConferenceAdapter->createSession();
             $chatSession->setVisioSessionId($session->getSessionId());
-            $this->chatSessionRepository->update($chatSession);
+            $this->chatSessionRepository->update();
             $visioSessionId = $session->getSessionId();
         } else {
             $session = $this->videoConferenceAdapter->getSession($visioSessionId);
