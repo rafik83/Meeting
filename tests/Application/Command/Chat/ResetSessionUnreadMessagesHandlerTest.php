@@ -18,7 +18,7 @@ class ResetSessionUnreadMessagesHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
         $chatSession = $this->prophesize(ChatSession::class);
         $chatSession->resetUnreadMessages($user->reveal())->shouldBeCalled();
-        $entityManagerAdapter->update($chatSession->reveal())->shouldBeCalled();
+        $entityManagerAdapter->update()->shouldBeCalled();
 
         $handler = new ResetSessionUnreadMessagesHandler($entityManagerAdapter->reveal());
         $handler->handle(new ResetSessionUnreadMessages($chatSession->reveal(), $user->reveal()));

@@ -17,6 +17,6 @@ class ResetSessionUnreadMessagesHandler
     public function handle(ResetSessionUnreadMessages $command): void
     {
         $command->chatSession->resetUnreadMessages($command->user);
-        $this->chatSessionRepository->update($command->chatSession);
+        $this->chatSessionRepository->update();
     }
 }

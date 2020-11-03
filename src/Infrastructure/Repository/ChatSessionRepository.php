@@ -22,14 +22,14 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
     public function add(ChatSession $chatSession): ChatSession
     {
         $this->entityManager->persist($chatSession);
-        $this->entityManager->flush($chatSession);
+        $this->entityManager->flush();
 
         return $chatSession;
     }
 
-    public function update(ChatSession $chatSession):void
+    public function update():void
     {
-        $this->entityManager->flush($chatSession);
+        $this->entityManager->flush();
     }
 
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession
