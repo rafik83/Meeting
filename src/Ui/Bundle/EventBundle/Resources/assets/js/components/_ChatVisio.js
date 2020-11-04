@@ -64,9 +64,4 @@ export default class ChatVisio
         clearTimeout(this.timerId);
         this.urlAccept = urlAccept;
     }
-
-    busyVisio() {
-        this.buttonVisio.classList.add("hide");
-        this.buttonRequestPending.classList.remove('hide');
-    }
 }
