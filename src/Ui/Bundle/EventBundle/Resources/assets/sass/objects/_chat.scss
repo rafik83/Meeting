@@ -125,6 +125,20 @@
   }
 }
 
+.btn.btn-primary.state-pending {
+  background:mediumseagreen;
+  &:hover {
+    background:mediumseagreen;
+  }
+}
+
+.btn.btn-primary.state-no-response {
+  background: red;
+  &:hover {
+    background: red;
+  }
+}
+
 .chat-form {
   align-items: center;
   background-color: white;
