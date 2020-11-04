@@ -58,10 +58,14 @@ export default class ChatVisio
     }
 
     showJoinVisioButton(urlAccept) {
+        // prepare 'join' button in case browser block new tab opening
         this.buttonJoin.classList.remove('hide');
         this.buttonVisio.classList.add('hide');
         this.buttonRequestPending.classList.add('hide');
         clearTimeout(this.timerId);
         this.urlAccept = urlAccept;
+
+        // open in new tab
+        this.onJoinVisio();
     }
 }
