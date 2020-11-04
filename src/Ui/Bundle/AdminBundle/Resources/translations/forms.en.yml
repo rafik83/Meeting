@@ -658,10 +658,13 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Step
 form.package_update.children.title.label: 'Template title'
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Submit
+form.participant_import.children.allowMultiSheet.choice.no: 'No'
+form.participant_import.children.allowMultiSheet.choice.yes: 'Yes'
 form.participant_import.children.charset.label: encoding
 form.participant_import.children.file.label: 'CSV file'
 form.participant_import.children.submit.label: import
 form.participant_import.children.type.label: Type
+form.participant_import.children.type.placeholder: 'Select type'
 form.participant_import.field.ignore: ignore
 form.participant_import.field.mail: Email
 form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmed

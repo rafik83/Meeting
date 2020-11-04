@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
@@ -36,13 +28,6 @@ class MeetingRequestViewQueryHandler
     /** @var RouterInterface */
     private $router;
 
-    /**
-     * @param Preview                 $preview
-     * @param SheetInfoGuesser        $sheetInfoGuesser
-     * @param RuleRepositoryInterface $ruleRepository
-     * @param Composer                $ruleComposer
-     * @param RouterInterface         $router
-     */
     public function __construct(
         Preview $preview,
         SheetInfoGuesser $sheetInfoGuesser,

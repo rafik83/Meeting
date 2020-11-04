@@ -4,3 +4,4 @@ Proximum\Vimeet\Domain\Template\TemplateData:
         - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\CompanyDataConstraint: { groups: [company] }
         - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageConstraint: ~
         - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionConstraint: ~
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoConstraint: ~

@@ -18,6 +18,7 @@ class ParticipantList {
         const tbody = this.target.querySelector('tbody');
         const tr = document.createElement('tr');
         tr.setAttribute('data-participant-user-id', payload.userId);
+        tr.classList.add('networking_list_row');
         const td = document.createElement('td');
         const img = document.createElement('img');
         const user = document.createElement('p');

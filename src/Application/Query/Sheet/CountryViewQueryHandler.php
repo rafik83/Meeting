@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
@@ -50,10 +42,9 @@ class CountryViewQueryHandler
             }
         }
 
-        usort($countryViews, function (CountryView $one, CountryView $other) {
+        usort($countryViews, static function (CountryView $one, CountryView $other) {
             return strcasecmp($one->name, $other->name);
-        }
-        );
+        });
 
         return $countryViews;
     }

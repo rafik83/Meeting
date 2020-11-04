@@ -53,6 +53,7 @@ class BuyableObjectResolver
 
         if ($object instanceof TemplateObject\Image
             || $object instanceof TemplateObject\MediaCollection
+            || $object instanceof TemplateObject\Video
         ) {
             $this->addPayableProduct($object, $cart, $order);
         }
