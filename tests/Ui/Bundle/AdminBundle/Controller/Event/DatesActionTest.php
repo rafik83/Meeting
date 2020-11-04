@@ -100,6 +100,8 @@ class DatesActionTest extends TestCase
         $configuration->getRegistrationCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getNetworkingOpenDate()->shouldBeCalled()->willReturn(null);
         $configuration->getNetworkingCloseDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getCallVisioOpenDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getCallVisioCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableBadgeForParticipantDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableVisioTestMenuButtonDate()->shouldBeCalled()->willReturn(null);
         $this->event->getConfiguration()->willReturn($configuration->reveal());
@@ -112,7 +114,7 @@ class DatesActionTest extends TestCase
         $form->isSubmitted()->willReturn(false);
 
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')
-            ->shouldBeCalledOnce()
+            ->shouldBeCalled()
             ->willReturn(false)
         ;
 
@@ -120,6 +122,7 @@ class DatesActionTest extends TestCase
             ->create(ConfigureDatesType::class, $update, [
                 'event' => $this->event->reveal(),
                 'showDateNetworking' => false,
+                'showDateCallVisio' => false,
                 'submit' => true,
             ])
             ->shouldBeCalled()
@@ -172,6 +175,8 @@ class DatesActionTest extends TestCase
         $configuration->getRegistrationCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getNetworkingOpenDate()->shouldBeCalled()->willReturn(null);
         $configuration->getNetworkingCloseDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getCallVisioOpenDate()->shouldBeCalled()->willReturn(null);
+        $configuration->getCallVisioCloseDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableBadgeForParticipantDate()->shouldBeCalled()->willReturn(null);
         $configuration->getEnableVisioTestMenuButtonDate()->shouldBeCalled()->willReturn(null);
         $this->event->getConfiguration()->willReturn($configuration->reveal());
@@ -183,7 +188,7 @@ class DatesActionTest extends TestCase
         $form->isValid()->willReturn(true);
 
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')
-            ->shouldBeCalledOnce()
+            ->shouldBeCalled()
             ->willReturn(false)
         ;
 
@@ -191,6 +196,7 @@ class DatesActionTest extends TestCase
             ->create(ConfigureDatesType::class, $update, [
                 'event' => $this->event->reveal(),
                 'showDateNetworking' => false,
+                'showDateCallVisio' => false,
                 'submit' => true,
             ])
             ->shouldBeCalled()

@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2219 - Apply filter on users added on the fly
 - Add sheet card tag for datetime
 - Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+- VIMEET-2229 - Add call visio networking tab by key date
 
 ## [2.61.0] - 2020-10-15
 ### Added
