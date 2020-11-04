@@ -60,6 +60,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     const notificationHandler = {
         participantLists,
         target,
+        divCallVisioMessageTimeoutId: null,
         /**
          * @param {String} notification
          * @param {Chat} targetChat
@@ -92,7 +93,7 @@ export default function initNetworking(target, userConnection, notificationCallV
                     this.chatVisio.hideAllButtons();
                     this.chatVisio.setUrlAccept(payload.urlAccept);
                     this.refuseVisio.setUrlRefuse(payload.urlRefuse);
-                    setTimeout(() => {
+                    this.divCallVisioMessageTimeoutId = setTimeout(() => {
                         divCallVisioMessage.classList.add("hide");
                         this.chatVisio.showVisioButton();
                         buttonVisio.classList.remove("hide");
@@ -176,6 +177,7 @@ export default function initNetworking(target, userConnection, notificationCallV
                         this.notificationCallVisio.enable();
                         this.userConnection.removeListener(callback);
                         chatVisio.abandonRequestVisio();
+                        clearTimeout(this.notificationHandler.divCallVisioMessageTimeoutId);
                     })
                 });
             }
