@@ -141,7 +141,9 @@ class SubmenuViewQueryHandler
             )
         );
 
-        $customButtonView = $this->queryBus->handle(
+        $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
+
+        $customButtonViews = $this->queryBus->handle(
             new UserCtaSubmenuViewQuery(
                 $submenuViewQuery->user,
                 $submenuViewQuery->event,
@@ -150,11 +152,7 @@ class SubmenuViewQueryHandler
             )
         );
 
-        if (null !== $customButtonView) {
-            $buttonsViews[] = $customButtonView;
-        }
-
-        $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
+        $buttonsViews = array_merge($buttonsViews, $customButtonViews);
 
         $agendaButtonViews = $this->queryBus->handle(
             new AgendaSubmenuViewQuery(

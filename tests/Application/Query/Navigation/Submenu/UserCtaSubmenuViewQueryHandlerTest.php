@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Navigation\Submenu;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler;
@@ -47,7 +48,9 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
              "en": "My button"
              }
         }');
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraParameterRepository->findByEventAndType($event->reveal(), Argument::type('string'))
+            ->shouldBeCalled()
+            ->willReturn($extraParameter->reveal(), null);
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository->getExtraDataForEventNameAndUser($event->reveal(),TypeExtraData::TECH_EVENT_IDENTIFIER_MD5, $user->reveal())->shouldBeCalled()->willReturn($extraData->reveal());
@@ -66,7 +69,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
+        $expectedCustomButtonSubmenuButtonView = [new SubmenuButtonView(
         Category::CUSTOM_BUTTON_ICON,
             'Mon bouton',
             'https://example.net/42/test%40yahoo.fr/123/25f9e794323b453885f5181f1b624d0b/123456',
@@ -74,7 +77,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             null,
             false,
             ['target' => '_blank']
-    );
+    )];
 
         self::assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
@@ -103,7 +106,9 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
              "en": "My button"
              }
         }');
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraParameterRepository->findByEventAndType($event->reveal(), Argument::type('string'))
+            ->shouldBeCalled()
+            ->willReturn($extraParameter->reveal(), null);
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
@@ -121,7 +126,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        $expectedCustomButtonSubmenuButtonView = new SubmenuButtonView(
+        $expectedCustomButtonSubmenuButtonView = [new SubmenuButtonView(
             Category::CUSTOM_BUTTON_ICON,
             'Mon bouton',
             'https://example.net/42/test%40yahoo.fr',
@@ -129,12 +134,12 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             null,
             false,
             ['target' => '_blank']
-        );
+        )];
 
         self::assertEquals($expectedCustomButtonSubmenuButtonView, $result);
     }
 
-    public function testCustomButtonNullWhenTypeNotConcerned(): void
+    public function testCustomButtonEmptyWhenTypeNotConcerned(): void
     {
         $type = $this->prophesize(Type::class);
         $type->getId()->shouldBeCalled()->willReturn(701);
@@ -155,7 +160,7 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
              "en": "My button"
              }
         }');
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraParameterRepository->findByEventAndType($event->reveal(), Argument::type('string'))->shouldBeCalled()->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
@@ -173,17 +178,17 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        self::assertEquals(null, $result);
+        self::assertEmpty($result);
     }
 
-    public function testCustomButtonNullWhenNotConfigured(): void
+    public function testCustomButtonEmptyWhenNotConfigured(): void
     {
         $sheet = $this->prophesize(Sheet::class);
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn(null);
+        $extraParameterRepository->findByEventAndType($event->reveal(), Argument::type('string'))->shouldBeCalled()->willReturn(null);
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
@@ -201,10 +206,10 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        self::assertNull($result);
+        self::assertEmpty($result);
     }
 
-    public function testCustomButtonNullWhenNotParticipant(): void
+    public function testCustomButtonEmptyWhenNotParticipant(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->willReturn(42);
@@ -227,7 +232,9 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
              "en": "My button"
              }
         }');
-        $extraParameterRepository->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_CUSTOM_BUTTON)->shouldBeCalled()->willReturn($extraParameter->reveal());
+        $extraParameterRepository->findByEventAndType($event->reveal(), Argument::type('string'))
+            ->shouldBeCalled()
+            ->willReturn($extraParameter->reveal());
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
@@ -245,6 +252,6 @@ class UserCtaSubmenuViewQueryHandlerTest extends TestCase
             )
         );
 
-        self::assertNull($result);
+        self::assertEmpty($result);
     }
 }
