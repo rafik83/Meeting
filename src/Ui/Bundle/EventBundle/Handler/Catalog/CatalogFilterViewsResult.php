@@ -25,6 +25,9 @@ class CatalogFilterViewsResult
     /** @var string */
     public $type;
 
+    /** @var SheetVisitViews[] */
+    public $sheetVisitViews;
+
     /** @var CategoryView[] */
     public $categoryViews;
 
@@ -48,16 +51,18 @@ class CatalogFilterViewsResult
 
     /**
      * @param string                     $type
+     * @param SheetVisitView[]           $sheetVisitViews
      * @param CategoryView[]             $categoryViews
      * @param TypeView[]                 $typeViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param NomenclatureTagViews[]     $taggedNomenclatureTagViews
      * @param Response|null              $response
-     * @param string[]                      $objectiveFilters
+     * @param string[]                   $objectiveFilters
      */
     public function __construct(
         string $type,
+        array $sheetVisitViews = [],
         array $categoryViews = [],
         array $typeViews = [],
         array $organizationCategoryViews = [],
@@ -67,6 +72,7 @@ class CatalogFilterViewsResult
         array $objectiveFilters = []
     ) {
         $this->type = $type;
+        $this->sheetVisitViews = $sheetVisitViews;
         $this->categoryViews = $categoryViews;
         $this->typeViews = $typeViews;
         $this->response = $response;

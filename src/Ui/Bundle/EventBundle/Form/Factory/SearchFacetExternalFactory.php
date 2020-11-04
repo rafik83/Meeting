@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory;
 
 use League\Tactician\CommandBus;
@@ -50,12 +42,6 @@ class SearchFacetExternalFactory
     /** @var CategoryView[] indexed by Event id */
     private $categoryViewsByEvent;
 
-    /**
-     * @param CommandBus                           $commandBus
-     * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
-     * @param FormFactoryInterface                 $formFactory
-     * @param RouterInterface                      $router
-     */
     public function __construct(
         CommandBus $commandBus,
         CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
@@ -63,9 +49,9 @@ class SearchFacetExternalFactory
         RouterInterface $router
     ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
-        $this->commandBus                  = $commandBus;
-        $this->formFactory                 = $formFactory;
-        $this->router                      = $router;
+        $this->commandBus = $commandBus;
+        $this->formFactory = $formFactory;
+        $this->router = $router;
     }
 
     /**
@@ -180,13 +166,7 @@ class SearchFacetExternalFactory
     }
 
     /**
-     * @param Event            $event
-     * @param string           $locale
-     * @param SearchFacetsView $searchFacetsView
-     *
      * @throws CatalogVisibilityNotFoundException
-     *
-     * @return FilteredFieldsView
      */
     private function getInitialFieldsView(Event $event, string $locale, SearchFacetsView $searchFacetsView): FilteredFieldsView
     {
@@ -196,7 +176,7 @@ class SearchFacetExternalFactory
             throw new CatalogVisibilityNotFoundException();
         }
 
-        $typeViews     = $this->getTypeViews($event, $locale);
+        $typeViews = $this->getTypeViews($event, $locale);
         $categoryViews = $this->getCategoryViews($event, $locale);
 
         $organizationCategoryViews = $this->commandBus->handle(
@@ -219,6 +199,7 @@ class SearchFacetExternalFactory
         return new FilteredFieldsView(
             new CatalogFilterViewsResult(
                 CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+                [],
                 $categoryViews,
                 $typeViews,
                 $organizationCategoryViews,
@@ -228,14 +209,6 @@ class SearchFacetExternalFactory
         );
     }
 
-    /**
-     * @param Event                    $event
-     * @param string                   $locale
-     * @param array                    $filters
-     * @param CatalogFilterViewsResult $catalogFilterViewsResult
-     *
-     * @return FormInterface
-     */
     private function getForm(
         Event $event,
         string $locale,

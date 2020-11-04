@@ -4,9 +4,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.65.2] - 2020-11-02
+### Fixed
+- Hotfix - Add default values for analytics options on participant type, to avoid error when type is created by an organizer admin
+
+## [2.65.1] - 2020-10-29
+### Fixed
+- Disable session lock on redis to avoid timeouts for some sessions
+
+## [2.65.0] - 2020-10-29
+### Added
+- VIMEET-2225 - Add related product to video template objects
+
+## [2.64.0] - 2020-10-28
+### Fixed
+- MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
+
+### Updated
+- VIMEET-2208 - Add counts to visit filters in catalog
+
+## [2.63.0] - 2020-10-28
 ### Updated
 - VIMEET-2218 - Check networking access to avoid sending useless notifications
 - VIMEET-2242 - Suite Chat Vimeet - Button separate.
+- update translations
 
 ## [2.62.1] - 2020-10-26
 ### Fixed

@@ -110,3 +110,29 @@ Feature: add type
     And I should see "SheetTemplate"
     And I should see "RegistrationTemplate"
     And I should see "Package RDV Carnot"
+
+  Scenario: add a type as organizer
+    Given the database is purged
+    And the event "RDV Carnot" is created
+    And the domain for this event is "rdvcarnot.vimeet.proximum"
+    And there is a type in this event
+    And there is a sheet for this type with the title "Proximum"
+    And the admin "organizer@test.com" with role "ROLE_ORGANIZER" is created
+    And this admin can access this event
+    And I am logged with this admin
+    And I am on this page "/fr/event"
+    When I follow "admin.type.link"
+    Then I should be on "/fr/event/1/type"
+    When I follow "admin.type.create.link"
+    Then the response status code should be 200
+    And I fill in the following:
+      | type_create_sheetTemplate         | 0    |
+      | type_create_registrationTemplate  | 0    |
+      | type_create_package               | 0    |
+      | type_create_translations_fr_title | Test |
+      | type_create_translations_en_title | Test |
+      | type_create_rank                  | 1    |
+    And I check "type_create_hidden"
+    And I press "form.type_create.children.submit.label"
+    Then the response status code should be 200
+    And I should see "flash.admin.type.create.success"

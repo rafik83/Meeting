@@ -78,6 +78,17 @@ interface SheetSearchAdapterInterface
 
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
+    public function getCountAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        ?string $filterToRemove,
+        array $nomenclatureItems,
+        array $availableSlotIds,
+        array $sheetsToExclude,
+        array $prefilteredSheetIds
+    ): array;
+
     public function getTypeAggregations(
         Event $event,
         string $locale,
@@ -85,7 +96,8 @@ interface SheetSearchAdapterInterface
         string $filterToRemove,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array;
 
     public function getCategoryAggregations(

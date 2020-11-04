@@ -67,9 +67,9 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $event  = $eventDomain->getEvent();
+        $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
-        $user   = $userDomain->getUser();
+        $user = $userDomain->getUser();
 
         $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
             ->handle(new AvailabilityConfirmationChecker(
@@ -90,16 +90,16 @@ class CatalogController extends Controller
 
         $catalogFilterViewsResult = $this
             ->get(CatalogFilterViewsHandler::class)
-            ->handle(new CatalogFilterViews($event, $sheet, $locale))
+            ->handle(new CatalogFilterViews($event, $sheet, $locale), $sheet->getType()->canDisplayAnalyticsOnCatalog(), $user)
         ;
 
         if ($catalogFilterViewsResult->hasEmptyCategoryOrType()) {
             return $catalogFilterViewsResult->response;
         }
 
-        $categoryViews     = $catalogFilterViewsResult->categoryViews;
-        $typeViews         = $catalogFilterViewsResult->typeViews;
-        $sheetsToExclude   = [];
+        $categoryViews = $catalogFilterViewsResult->categoryViews;
+        $typeViews = $catalogFilterViewsResult->typeViews;
+        $sheetsToExclude = [];
         $availableSlotsIds = [];
 
         $filterAvailableSlotAndSpecificSlotChecker = $this
@@ -113,6 +113,10 @@ class CatalogController extends Controller
         ;
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
+
+        if ($sheet->getType()->canDisplayAnalyticsOnCatalog()) {
+            $filters[SearchFields::FILTER_BY_SHEET_VISIT] = [];
+        }
 
         $searchForm = $this->getSearchForm(
             $filters,
@@ -199,11 +203,11 @@ class CatalogController extends Controller
             if ($page > 1) {
                 return new JsonResponse(
                     [
-                        'html'          => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
+                        'html' => $this->renderView('EventBundle:Catalog:Partial/list.html.twig', [
                             'paginatedResult' => $paginatedResult,
-                            'viewer'          => $sheet,
-                            'page'            => $page,
-                            'isCatalog'       => true,
+                            'viewer' => $sheet,
+                            'page' => $page,
+                            'isCatalog' => true,
                         ]),
                         'seeMoreButton' => $seeMoreButton,
                     ]
@@ -222,15 +226,16 @@ class CatalogController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'               => $event,
-            'sheet'               => $sheet,
-            'page'                => 1,
-            'isCatalog'           => true,
-            'typeViews'           => $typeViews,
-            'categoryViews'       => $categoryViews,
-            'paginatedResult'     => $paginatedResult,
-            'seeMoreButton'       => $seeMoreButton,
-            'searchForm'          => $searchForm->createView(),
+            'event' => $event,
+            'sheet' => $sheet,
+            'page'  => 1,
+            'isCatalog' => true,
+            'sheetVisitViews' => $catalogFilterViewsResult->sheetVisitViews,
+            'typeViews' => $typeViews,
+            'categoryViews' => $categoryViews,
+            'paginatedResult' => $paginatedResult,
+            'seeMoreButton' => $seeMoreButton,
+            'searchForm' => $searchForm->createView(),
             'tipTranslationViews' => $tipTranslationViews,
         ]);
     }
@@ -301,26 +306,15 @@ class CatalogController extends Controller
     private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY                  => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE               => $typeViews,
-            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::ORDER_BY => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE => $typeViews,
+            SearchFields::FILTER_CATEGORY => $categoryViews,
             SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
         ];
 
         return $filters;
     }
 
-    /**
-     * @param array                    $filters
-     * @param CatalogFilterViewsResult $catalogFilterViewsResult
-     * @param Event                    $event
-     * @param Sheet                    $sheet
-     * @param string                   $locale
-     * @param bool                     $filterAvailableSlotIds
-     * @param MeetingSlot|null         $specificSlot
-     *
-     * @return FormInterface
-     */
     private function getSearchForm(
         array $filters,
         CatalogFilterViewsResult $catalogFilterViewsResult,
@@ -328,8 +322,8 @@ class CatalogController extends Controller
         Sheet $sheet,
         $locale,
         bool $filterAvailableSlotIds = false,
-        MeetingSlot $specificSlot = null
-    ) {
+        ?MeetingSlot $specificSlot = null
+    ): FormInterface {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action' => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
             'filterBySheetVisit' => $sheet->getType()->canDisplayAnalyticsOnCatalog(),

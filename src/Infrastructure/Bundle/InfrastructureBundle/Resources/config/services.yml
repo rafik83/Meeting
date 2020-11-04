@@ -3257,6 +3257,13 @@ services:
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
+    validator.template_object.video_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoValidator
+        arguments:
+            - '@package.product.template_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
     validator.email_validator:
         class: Proximum\Vimeet\Domain\Account\EmailValidator
         arguments:
@@ -3663,6 +3670,7 @@ services:
         arguments:
             - '@adapter.sheet_search_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
@@ -5001,7 +5009,6 @@ services:
              - '@fos_elastica.finder.app.sheet'
              - '@fos_elastica.index.app.sheet'
              - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
-             - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
 
     #
     # Elastica
