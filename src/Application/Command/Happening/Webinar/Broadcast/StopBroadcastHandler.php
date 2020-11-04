@@ -49,7 +49,7 @@ class StopBroadcastHandler
             try {
                 $this->videoConferenceAdapter->stopBroadcast($broadcast->getBroadcastId());
             } catch (BroadcastDomainException $exception) {
-                // Event if stopped, broadcast can still appear in the api...
+                // Even if stopped, broadcast can still appear in the api
                 continue;
             }
         }

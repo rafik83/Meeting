@@ -58,6 +58,14 @@
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
 
+         {% if webinarView.allowWebinarOnHLS %}
+         data-webinar-stream-endpoint="{{ path(
+             'event_happening_webinar_start_broadcast',
+             {
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+         {% else %}
          data-webinar-stream-endpoint="{{ path(
              'event_happening_webinar_stream',
              {
@@ -65,6 +73,7 @@
                  'happening': webinarView.happeningId
              }
          ) }}"
+         {% endif %}
 
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"

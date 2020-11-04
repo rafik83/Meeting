@@ -6,7 +6,6 @@ use InvalidArgumentException;
 use OpenTok\Archive;
 use OpenTok\ArchiveList;
 use OpenTok\Layout;
-use OpenTok\Broadcast as TokboxBroadcast;
 use OpenTok\MediaMode;
 use OpenTok\OpenTok;
 use OpenTok\OutputMode;
@@ -18,6 +17,7 @@ use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
 use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Broadcast as DomainBroadcast;
 use Proximum\Vimeet\Infrastructure\Tokbox\Broadcast\Broadcast;
 use Proximum\Vimeet\Infrastructure\Tokbox\Client;
+use stdClass;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
@@ -209,12 +209,15 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         string $sessionId,
         int $duration
     ): DomainBroadcast {
-        return Broadcast::createFromTokboxObject(
+        $broadcast = Broadcast::createFromTokboxObject(
             $this->openTok->startBroadcast($sessionId, [
                 'maxDuration' => $duration,
                 'resolution' => '1280x720',
+                'outputs' => ['hls' => new stdClass()],
             ])
         );
+
+        return $broadcast;
     }
 
     public function stopBroadcast(string $broadcastId): DomainBroadcast
@@ -229,6 +232,9 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         if (empty($json)) {
             return null;
         }
+        // dump($this->openTok->setStreamClassLists($session, []));
+        dump($this->openTok->getBroadcast(Broadcast::createFromJson($json)->getBroadcastId()));
+        dump($this->openTok->listStreams($session));
 
         return Broadcast::createFromJson($json);
     }

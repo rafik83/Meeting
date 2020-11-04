@@ -2,13 +2,17 @@
 
 namespace Proximum\Vimeet\Application\View\Happening\Webinar;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
-use DateTimeInterface;
 
-abstract class WebinarView
+abstract class AbstractWebinarView
 {
+    /** @var int */
+    public $eventId;
+
     /** @var bool */
     public $isSpeaker = false;
 
@@ -26,6 +30,9 @@ abstract class WebinarView
 
     /** @var string */
     public $apiKey;
+
+    /** @var NotificationView */
+    public $notification;
 
     /** @var TimeRangeView */
     public $slot;
@@ -71,6 +78,7 @@ abstract class WebinarView
      * @param WebinarParticipantView[] $participantViews
      */
     public function __construct(
+        int $eventId,
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
@@ -78,6 +86,7 @@ abstract class WebinarView
         string $token,
         string $sessionId,
         string $apiKey,
+        NotificationView $notification,
         array $speakers,
         array $participantViews,
         TimeRangeView $slot,
@@ -87,12 +96,14 @@ abstract class WebinarView
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded
     ) {
+        $this->eventId = $eventId;
         $this->happeningId = $happeningId;
         $this->currentUserId = $currentUserId;
         $this->happeningTitle = $happeningTitle;
         $this->token = $token;
         $this->sessionId = $sessionId;
         $this->apiKey = $apiKey;
+        $this->notification = $notification;
         $this->slot = $slot;
         $this->currentTime = $currentTime;
         $this->headerImage = $headerImage;

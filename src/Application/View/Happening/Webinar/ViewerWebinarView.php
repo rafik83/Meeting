@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\View\Happening\Webinar;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
-use DateTimeInterface;
 
-class ViewerWebinarView extends WebinarView
+class ViewerWebinarView extends AbstractWebinarView
 {
     /** @var int */
     public $timeRemainingInSeconds;
@@ -15,17 +16,18 @@ class ViewerWebinarView extends WebinarView
     /** @var bool */
     public $isVideoWebinarAndHasLiveUrl;
 
-    /** @var string|null */
-    public $hlsUrl;
-
     /** @var bool */
     public $isWebinarHls;
+
+    /** @var string|null */
+    public $hlsUrl;
 
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
      */
     public function __construct(
+        int $eventId,
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
@@ -33,6 +35,7 @@ class ViewerWebinarView extends WebinarView
         string $token,
         string $sessionId,
         string $apiKey,
+        NotificationView $notification,
         array $speakers,
         array $participantViews,
         TimeRangeView $slot,
@@ -46,6 +49,7 @@ class ViewerWebinarView extends WebinarView
         ?string $hlsUrl
     ) {
         parent::__construct(
+            $eventId,
             $happeningId,
             $currentUserId,
             $happeningTitle,
@@ -53,6 +57,7 @@ class ViewerWebinarView extends WebinarView
             $token,
             $sessionId,
             $apiKey,
+            $notification,
             $speakers,
             $participantViews,
             $slot,
@@ -65,7 +70,7 @@ class ViewerWebinarView extends WebinarView
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
-        $this->hlsUrl = $hlsUrl;
         $this->isWebinarHls = $isWebinarHls;
+        $this->hlsUrl = $hlsUrl;
     }
 }

@@ -42,7 +42,7 @@
          data-question-vote-message="{{ 'happening.webinar.questions.vote'|trans }}"
          data-question-unvote-message="{{ 'happening.webinar.questions.unvote'|trans }}"
          data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
-         data-webinar-hls="{{ webinar.isWebinarHls ? 'true' : 'false' }}"
+         data-webinar-hls="{{ webinarView.isWebinarHls ? 'true' : 'false' }}"
          {% if webinarView.liveUrl %}
             data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
@@ -52,8 +52,8 @@
         {% endif %}
 
         <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}>
-            {% if webinar.isWebinarHls %}
-                <video id="webinar-video"></video>
+            {% if webinarView.isWebinarHls %}
+                <video id="webinar-video" data-hls-url="{{ webinarView.hlsUrl }}"></video>
             {% endif %}
         </div>
 

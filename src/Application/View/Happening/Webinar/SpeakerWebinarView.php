@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\View\Happening\Webinar;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
 use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
-use DateTimeInterface;
 
-class SpeakerWebinarView extends WebinarView
+class SpeakerWebinarView extends AbstractWebinarView
 {
     /** @var bool */
     public $isSpeaker = true;
@@ -41,6 +42,7 @@ class SpeakerWebinarView extends WebinarView
      * @param WebinarParticipantView[] $participantViews
      */
     public function __construct(
+        int $eventId,
         int $happeningId,
         int $currentUserId,
         string $happeningTitle,
@@ -48,6 +50,7 @@ class SpeakerWebinarView extends WebinarView
         string $token,
         string $sessionId,
         string $apiKey,
+        NotificationView $notification,
         array $speakers,
         array $participantViews,
         TimeRangeView $slot,
@@ -66,6 +69,7 @@ class SpeakerWebinarView extends WebinarView
         bool $allowWebinarOnHLS = false
     ) {
         parent::__construct(
+            $eventId,
             $happeningId,
             $currentUserId,
             $happeningTitle,
@@ -73,6 +77,7 @@ class SpeakerWebinarView extends WebinarView
             $token,
             $sessionId,
             $apiKey,
+            $notification,
             $speakers,
             $participantViews,
             $slot,

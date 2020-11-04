@@ -6,6 +6,7 @@ class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
     const TYPE_CHAT = 'chat';
+    const TYPE_HLS = 'hls';
 
     protected function getHappeningTopic(string $happeningId, string $type): string
     {

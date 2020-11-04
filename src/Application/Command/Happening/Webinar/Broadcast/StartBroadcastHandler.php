@@ -3,12 +3,12 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 
 use DateTimeInterface;
-use OpenTok\Exception\BroadcastDomainException;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
-use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Exception\BroadcastException;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\DaysHelper;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class StartBroadcastHandler
 {
@@ -21,17 +21,22 @@ class StartBroadcastHandler
     /** @var HappeningBroadcastRepositoryInterface */
     private $broadcastRepository;
 
+    /** @var NotificationPublisherInterface */
+    private $notificationPublisher;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         HappeningBroadcastRepositoryInterface $broadcastRepository,
+        NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->broadcastRepository = $broadcastRepository;
+        $this->notificationPublisher = $notificationPublisher;
         $this->dateTime = $dateTime;
     }
 
-    public function handle(StartBroadcast $startBroadcast): void
+    public function handle(StartBroadcast $startBroadcast): ?string
     {
         $happening = $startBroadcast->happening;
         $end = DaysHelper::cloneDateTime($happening->getEnd());
@@ -55,18 +60,13 @@ class StartBroadcastHandler
         $sessionId = $happening->getWebinarSessionId();
         $broadcast = null;
 
-        try {
+        $broadcast = $this->videoConferenceAdapter->getBroadcastForSession($sessionId);
+
+        if (!$broadcast) {
             $broadcast = $this->videoConferenceAdapter->startBroadcast(
                 $sessionId,
                 $duration
             );
-        } catch (BroadcastDomainException $exception) {
-            // Handle error code 409, already broadcast
-            $broadcast = $this->videoConferenceAdapter->getBroadcastForSession($sessionId);
-
-            if ($broadcast === null) {
-                throw new BroadcastException('Broadcast could not be started');
-            }
         }
 
         $happeningBroadcast = new HappeningBroadcast(
@@ -80,5 +80,12 @@ class StartBroadcastHandler
 
         $this->broadcastRepository->deleteForHappening($happening);
         $this->broadcastRepository->add($happeningBroadcast);
+
+        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_HLS, [
+            'action' => 'broadcast_started',
+            'hlsUrl' => $broadcast->getHlsUrl(),
+        ]);
+
+        return $happeningBroadcast->getHlsUrl();
     }
 }

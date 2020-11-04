@@ -15,7 +15,7 @@ use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
 use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\SpeakerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
-use Proximum\Vimeet\Application\View\Happening\Webinar\WebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\User;
@@ -60,12 +60,12 @@ class GetWebinarViewQueryHandler
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->notificationSubscriber = $notificationSubscriber;
-        $this->dateTime = $dateTime;
-        $this->isRecordingAllowed = $isRecordingAllowed;
         $this->happeningBroadcastRepository = $happeningBroadcastRepository;
+        $this->isRecordingAllowed = $isRecordingAllowed;
+        $this->dateTime = $dateTime;
     }
 
-    public function handle(GetWebinarViewQuery $query): WebinarView
+    public function handle(GetWebinarViewQuery $query): AbstractWebinarView
     {
         $happening = $query->getHappening();
         $isSpeaker = $happening->isInteractiveWebinar() || $happening->hasSpeaker($query->getUser());
@@ -78,13 +78,24 @@ class GetWebinarViewQueryHandler
 
         $liveUrl = $this->getLiveUrl($happening, $query->getUser());
 
+        $timeRemainingBeforeStartInSeconds = max(
+            0,
+            $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
+        );
+
+        $notificationView = new NotificationView(
+            $this->notificationSubscriber->getUrl(),
+            $this->notificationSubscriber->getHappeningSubscriberKey(
+                $happening,
+                $query->getUser(),
+                [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_HLS]
+            )
+        );
+
         if ($isSpeaker) {
-            $timeRemainingBeforeStartInSeconds = max(
-                0,
-                $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
-            );
 
             return new SpeakerWebinarView(
+                $happening->getEvent()->getId(),
                 $happening->getId(),
                 $query->getUser()->getId(),
                 $happening->getTitle($query->getLocale()),
@@ -92,6 +103,7 @@ class GetWebinarViewQueryHandler
                 $sessionAndTokenView->token,
                 $sessionAndTokenView->sessionId,
                 $sessionAndTokenView->apiKey,
+                $notificationView,
                 $this->getSpeakerViews($happening, $query->getLocale()),
                 $this->getParticipantViews($happening, $query->getLocale()),
                 new TimeRangeView($happening->getBegin(), $happening->getEnd()),
@@ -111,16 +123,7 @@ class GetWebinarViewQueryHandler
             );
         }
 
-        $notificationView = new NotificationView(
-            $this->notificationSubscriber->getUrl(),
-            $this->notificationSubscriber->getHappeningSubscriberKey(
-                $happening,
-                $query->getUser(),
-                [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS]
-            )
-        );
-
-        return new WebinarView(
+        return new ViewerWebinarView(
             $happening->getEvent()->getId(),
             $happening->getId(),
             $query->getUser()->getId(),
@@ -130,7 +133,6 @@ class GetWebinarViewQueryHandler
             $sessionAndTokenView->sessionId,
             $sessionAndTokenView->apiKey,
             $notificationView,
-            $isSpeaker,
             $this->getSpeakerViews($happening, $query->getLocale()),
             $this->getParticipantViews($happening, $query->getLocale()),
             new TimeRangeView($happening->getBegin(), $happening->getEnd()),

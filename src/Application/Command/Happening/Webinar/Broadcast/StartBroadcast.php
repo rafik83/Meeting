@@ -10,8 +10,12 @@ class StartBroadcast implements Command
     /** @var Happening */
     public $happening;
 
-    public function __construct(Happening $happening)
+    /** @var string */
+    public $type;
+
+    public function __construct(Happening $happening, string $type)
     {
         $this->happening = $happening;
+        $this->type = $type;
     }
 }

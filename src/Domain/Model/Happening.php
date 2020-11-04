@@ -83,7 +83,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     private $webinarRecordZipFileUrl = null;
 
     /** @var bool */
-    private $allowHls = false;
+    private $allowHls;
 
     public function __construct(
         Event $event,
@@ -121,7 +121,6 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->liveUrl = $liveUrl;
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
-        $this->webinarRecorded = $webinarRecorded;
         $this->allowHls = $allowHls;
     }
 
@@ -227,7 +226,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         ?string $liveUrl = null,
         bool $sidebarAllowed,
         bool $webinarRecorded = true,
-        bool $allowHls = false
+        bool $allowHls = true
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -237,11 +236,11 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
-        $this->webinarRecorded = $webinarRecorded;
         $this->interactiveWebinar = $interactiveWebinar;
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->webinarRecorded = $webinarRecorded;
         $this->allowHls = $allowHls;
     }
 

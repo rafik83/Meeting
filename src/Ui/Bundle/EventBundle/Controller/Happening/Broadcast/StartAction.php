@@ -53,11 +53,22 @@ class StartAction
             throw new AccessDeniedException('Access denied.');
         }
 
-        $this->commandBus->handle(new StartBroadcast($happening));
+        $message = null;
+        $hlsUrl = null;
+        switch ($request->request->get('action')) {
+            case 'start':
+                $hlsUrl = $this->commandBus->handle(new StartBroadcast($happening, $request->request->get('type')));
+                $message = 'broadcast_started';
+            break;
+            case 'stop':
+                $message = 'broadcast_stopped';
+            break;
+        }
 
         return new JsonResponse([
             'status' => 'ok',
-            'message' => 'Broadcasting',
+            'message' => $message,
+            'hlsUrl' => $hlsUrl,
         ]);
     }
 }
