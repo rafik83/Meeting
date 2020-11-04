@@ -22,25 +22,22 @@ export default class ChatVisio
         if (this.visioEnable === '1'
             && messages.some((message)=> !message.isAuthor)
             && this.buttonRequestBusy.classList.contains('hide')) {
-            this.buttonVisio.classList.remove("hide");
+            this.showVisioButton();
         }
     }
 
     onRequestVisio(event) {
         const url = this.buttonVisio.getAttribute('data-url');
         axios.post(url).then((response) => {
-            this.buttonVisio.classList.add("hide");
-            this.buttonRequestPending.classList.remove("hide");
+            this.showRequestPendingButton();
             this.timerId = setTimeout(() => {
-                this.buttonRequestPending.classList.add("hide");
-                this.buttonRequestNoResponse.classList.remove("hide");
+                this.showRequestNoResponseButton();
             }, 40000);
         });
     }
 
     onRefuseVisio() {
-        this.buttonRequestPending.classList.add('hide');
-        this.buttonRequestRefuse.classList.remove('hide');
+        this.showRequestRefuseButton();
         clearTimeout(this.timerId);
     }
 
@@ -57,15 +54,75 @@ export default class ChatVisio
        window.open(this.urlAccept);
     }
 
+    showVisioButton(){
+        this.buttonVisio.classList.remove('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
+    }
+
     showJoinVisioButton(urlAccept) {
         // prepare 'join' button in case browser block new tab opening
-        this.buttonJoin.classList.remove('hide');
         this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.remove('hide');
         this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
         clearTimeout(this.timerId);
         this.urlAccept = urlAccept;
 
         // open in new tab
         this.onJoinVisio();
+    }
+
+    showRequestPendingButton(){
+        this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.remove('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
+    }
+
+    /**
+     * Not yet used - busy button visibility is controlled by twig
+     */
+    showRequestBusyButton(){
+        this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.remove('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
+    }
+
+    showRequestRefuseButton(){
+        this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.remove('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
+    }
+
+    showRequestNoResponseButton(){
+        this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.remove('hide');
+    }
+
+    hideAllButtons() {
+        this.buttonVisio.classList.add('hide');
+        this.buttonJoin.classList.add('hide');
+        this.buttonRequestPending.classList.add('hide');
+        this.buttonRequestBusy.classList.add('hide');
+        this.buttonRequestRefuse.classList.add('hide');
+        this.buttonRequestNoResponse.classList.add('hide');
     }
 }

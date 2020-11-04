@@ -89,11 +89,12 @@ export default function initNetworking(target, userConnection, notificationCallV
                 if (divCallVisioMessage != null) {
 
                     divCallVisioMessage.classList.remove("hide");
-                    buttonVisio.classList.add("hide");
+                    this.chatVisio.hideAllButtons();
                     this.chatVisio.setUrlAccept(payload.urlAccept);
                     this.refuseVisio.setUrlRefuse(payload.urlRefuse);
                     setTimeout(() => {
                         divCallVisioMessage.classList.add("hide");
+                        this.chatVisio.showVisioButton();
                         buttonVisio.classList.remove("hide");
                     }, 30000);
                 }
