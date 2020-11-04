@@ -11,6 +11,7 @@ use OpenTok\OpenTok;
 use OpenTok\OutputMode;
 use OpenTok\Role;
 use OpenTok\Session;
+use OpenTok\StreamList;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
 use Proximum\Vimeet\Domain\Happening\Webinar\RecordStatus;
@@ -64,6 +65,14 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         ));
     }
 
+    public function getSessionStreamCount($sessionId): int
+    {
+        /** @var StreamList */
+        $streamList = $this->openTok->listStreams($sessionId);
+
+        return $streamList->totalCount();
+    }
+
     public function archive(string $sessionId, string $name): Archive
     {
         return $this->openTok->startArchive(
@@ -102,6 +111,17 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
                 'layoutClassList' => [$class]
             ]
         );
+    }
+
+    public function changeBroadcastFocus(DomainBroadcast $broadcast, string $streamId): void
+    {
+        $this->changeStreamClassList($broadcast->getSessionId(), $streamId, 'focus');
+        $this->openTok->updateBroadcastLayout($broadcast->getBroadcastId(), Layout::getVerticalPresentation());
+    }
+
+    public function resetBroadcastFocus(string $broadcastId): void
+    {
+        $this->openTok->updateBroadcastLayout($broadcastId, Layout::getBestFit());
     }
 
     public function stopArchive(string $archiveId): Archive

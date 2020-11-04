@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 
 use OpenTok\Exception\BroadcastDomainException;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 
@@ -29,6 +30,15 @@ class StopBroadcastHandler
         $broadcast = $this->broadcastRepository->getByHappening($happening);
 
         if ($broadcast === null) {
+            return;
+        }
+
+        if ($this->videoConferenceAdapter->getSessionStreamCount($happening->getWebinarSessionId()) > 0) {
+            // broadcast is active, we reset layout if needed, and don't stop broadcast
+            if ($stopBroadcast->type !== Stream::TYPE_VIDEO) {
+                $this->videoConferenceAdapter->resetBroadcastFocus($broadcast->getBroadcastId());
+            }
+
             return;
         }
 

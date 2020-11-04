@@ -16,18 +16,18 @@ class Broadcast implements DomainBroadcast
     /** @var bool */
     private $isStopped;
 
-    /** @var string */
+    /** @var string|null */
     private $hls;
 
-    /** @var array */
+    /** @var array|null */
     private $rtmp;
 
     public function __construct(
-        $broadcastId,
-        $sessionId,
-        $isStopped,
-        $hls,
-        $rtmp
+        string $broadcastId,
+        string $sessionId,
+        bool $isStopped,
+        ?string $hls,
+        ?array $rtmp
     ) {
         $this->broadcastId = $broadcastId;
         $this->sessionId = $sessionId;
@@ -61,6 +61,11 @@ class Broadcast implements DomainBroadcast
     public function getBroadcastId(): string
     {
         return $this->broadcastId;
+    }
+
+    public function getSessionId(): string
+    {
+        return $this->sessionId;
     }
 
     public function getHlsUrl(): ?string

@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\DaysHelper;
@@ -39,6 +40,10 @@ class StartBroadcastHandler
     public function handle(StartBroadcast $startBroadcast): ?string
     {
         $happening = $startBroadcast->happening;
+
+        $sessionId = $happening->getWebinarSessionId();
+
+        // manage broadcast
         $end = DaysHelper::cloneDateTime($happening->getEnd());
         $end = $end->modify('+30 minutes');
 
@@ -57,7 +62,6 @@ class StartBroadcastHandler
             $end = $end->modify("+$maxDuration seconds");
         }
 
-        $sessionId = $happening->getWebinarSessionId();
         $broadcast = null;
 
         $broadcast = $this->videoConferenceAdapter->getBroadcastForSession($sessionId);
@@ -69,21 +73,30 @@ class StartBroadcastHandler
             );
         }
 
-        $happeningBroadcast = new HappeningBroadcast(
-            $happening,
-            $broadcast->getBroadcastId(),
-            false,
-            $this->dateTime,
-            $end,
-            $broadcast->getHlsUrl()
-        );
+        // adapt layout if needed
+        if ($startBroadcast->type !== Stream::TYPE_VIDEO) {
+            $this->videoConferenceAdapter->changeBroadcastFocus($broadcast, $startBroadcast->streamId);
+        }
 
-        $this->broadcastRepository->deleteForHappening($happening);
-        $this->broadcastRepository->add($happeningBroadcast);
+        // store broadcast info
+        $happeningBroadcast = $this->broadcastRepository->getByHappening($happening);
+        if (null === $happeningBroadcast || $happeningBroadcast->getHlsUrl() !== $broadcast->getHlsUrl()) {
+            $happeningBroadcast = new HappeningBroadcast(
+                $happening,
+                $broadcast->getBroadcastId(),
+                false,
+                $this->dateTime,
+                $end,
+                $broadcast->getHlsUrl()
+            );
+
+            $this->broadcastRepository->deleteForHappening($happening);
+            $this->broadcastRepository->add($happeningBroadcast);
+        }
 
         $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_HLS, [
             'action' => 'broadcast_started',
-            'hlsUrl' => $broadcast->getHlsUrl(),
+            'hlsUrl' => $happeningBroadcast->getHlsUrl(),
         ]);
 
         return $happeningBroadcast->getHlsUrl();

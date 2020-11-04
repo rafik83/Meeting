@@ -1032,19 +1032,12 @@ event_happening_webinar_stream:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
 
-event_happening_webinar_start_broadcast:
-    path: /happening/{happening}/webinar/broadcast/start
+event_happening_webinar_stream_broadcast:
+    path: /happening/{happening}/webinar/broadcast/stream
     requirements:
         happening: \d+
     methods: [POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StartAction
-
-event_happening_webinar_stop_broadcast:
-    path: /happening/{happening}/webinar/broadcast/stop
-    requirements:
-        happening: \d+
-    methods: [POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StopAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StreamAction
 
 #
 # Unavailability

@@ -10,8 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class BroadcastVoter extends Voter
 {
-    public const CAN_START_BROADCAST = 'PERMISSION_HAPPENING_ACCESS';
-    public const CAN_STOP_BROADCAST = 'PERMISSION_HAPPENING_ACCESS';
+    public const CAN_STREAM_BROADCAST = 'PERMISSION_HAPPENING_STREAM_BROADCAST';
 
     /** @var IsUserSpeaker */
     private $isUserSpeaker;
@@ -31,7 +30,7 @@ class BroadcastVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         return $subject instanceof Happening
-            && (self::CAN_START_BROADCAST === $attribute || self::CAN_STOP_BROADCAST === $attribute)
+            && (self::CAN_STREAM_BROADCAST === $attribute)
         ;
     }
 
@@ -41,20 +40,12 @@ class BroadcastVoter extends Voter
         $happening = $subject;
 
 
-        if ($attribute === self::CAN_START_BROADCAST) {
+        if ($attribute === self::CAN_STREAM_BROADCAST) {
             if (!$this->isUserSpeaker->__invoke($happening, $user)) {
                 return false;
             }
 
             if (!$this->canWebinarBeBroadcast->__invoke($happening)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        if ($attribute === self::CAN_STOP_BROADCAST) {
-            if (!$this->isUserSpeaker->__invoke($happening, $user)) {
                 return false;
             }
 

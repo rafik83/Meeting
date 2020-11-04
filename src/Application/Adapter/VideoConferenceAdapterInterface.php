@@ -24,6 +24,7 @@ interface VideoConferenceAdapterInterface
      * @return Session
      */
     public function getSession(string $sessionId): Session;
+    public function getSessionStreamCount($sessionId): int;
 
     public function archive(string $sessionId, string $name): Archive;
 
@@ -33,6 +34,8 @@ interface VideoConferenceAdapterInterface
     public function changeArchiveToBestFit(string $archiveId): void;
 
     public function changeStreamClassList(string $sessionId, string $streamId, string $class): void;
+    public function changeBroadcastFocus(Broadcast $broadcast, string $streamId): void;
+    public function resetBroadcastFocus(string $broadcastId): void;
 
     public function stopArchive(string $archiveId): Archive;
 
