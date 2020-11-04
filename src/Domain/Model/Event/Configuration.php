@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Event;
 
 use Proximum\Vimeet\Domain\Payment\Mode;
@@ -634,17 +626,11 @@ class Configuration
         return $this->networkingCloseDate;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
     public function getCallVisioOpenDate(): ?\DateTimeInterface
     {
         return $this->callVisioOpenDate;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
     public function getCallVisioCloseDate(): ?\DateTimeInterface
     {
         return $this->callVisioCloseDate;

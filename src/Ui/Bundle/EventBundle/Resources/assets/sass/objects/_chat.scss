@@ -109,7 +109,7 @@
 }
 
 .chat-row-on {
-  margin-right:0px !important;
+  margin-right:0 !important;
   margin-left:30px;
 
   .chat-content-on {
@@ -122,6 +122,20 @@
 
   .chat-author-avatar-on {
     align-self: center;
+  }
+}
+
+.btn.btn-primary.state-pending {
+  background:mediumseagreen;
+  &:hover {
+    background:mediumseagreen;
+  }
+}
+
+.btn.btn-primary.state-no-response {
+  background: red;
+  &:hover {
+    background: red;
   }
 }
 
@@ -164,4 +178,69 @@
   .chat-list {
     max-height: calc(100vh - 400px);
   }
+}
+
+.chat-message-call-visio {
+  background: lightgray;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+
+  p {
+    font-weight: bold;
+  }
+
+  a {
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 25px;
+    margin: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: mediumseagreen;
+  }
+
+  .call-visio-refuse {
+    background-color: red;
+  }
+
+  .call-visio-refuse:after {
+    position: absolute;
+    content: "/";
+    font-weight: 700;
+    font-size: 2em;
+    left: 17px;
+    top: -8px;
+    color: white;
+  }
+
+  span {
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 25px;
+    margin: 10px;
+    cursor: pointer;
+
+    .glyphicon {
+
+      .glyphicon-facetime-video {
+        width: 50px;
+        height: 50px;
+        text-decoration: none;
+
+      }
+    }
+
+  }
+
 }

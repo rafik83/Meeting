@@ -33,5 +33,11 @@ class UserConnectionRegister {
     addListener(callback) {
         this.listeners.push(callback);
     }
+
+    removeListener(callback) {
+        this.listeners = this.listeners.filter((item) => {
+            return item !== callback
+        })
+    }
 }
 export default UserConnectionRegister;

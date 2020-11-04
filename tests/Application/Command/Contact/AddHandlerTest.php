@@ -54,12 +54,12 @@ class AddHandlerTest extends TestCase
             $this->user->reveal(),
             $this->contact->reveal(),
             $this->dateTime,
-            true
+            'scan'
         );
         $this->contactRepository->find($expectedContact)->shouldBeCalled()->willReturn($expectedContact);
         $this->contactRepository->add($expectedContact)->shouldNotBeCalled();
 
-        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal()));
+        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal(), 'scan'));
     }
 
     public function testDoNotAddMyself()
@@ -70,7 +70,7 @@ class AddHandlerTest extends TestCase
         $this->contactRepository->find(Argument::any())->shouldNotBeCalled();
         $this->contactRepository->add(Argument::any())->shouldNotBeCalled();
 
-        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal()));
+        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal(), 'scan'));
     }
 
     public function testAdd()
@@ -83,11 +83,11 @@ class AddHandlerTest extends TestCase
             $this->user->reveal(),
             $this->contact->reveal(),
             $this->dateTime,
-            true
+            'scan'
         );
         $this->contactRepository->find($expectedContact)->shouldBeCalled()->willReturn(null);
         $this->contactRepository->add($expectedContact)->shouldBeCalled();
 
-        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal()));
+        $this->addHandler->handle(new Add($this->event->reveal(), $this->user->reveal(), $this->contact->reveal(), 'scan'));
     }
 }

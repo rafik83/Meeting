@@ -17,10 +17,14 @@ class Add implements Command
     /** @var User */
     public $contact;
 
-    public function __construct(Event $event, User $user, User $contact)
+    /** @var string */
+    public $origin;
+
+    public function __construct(Event $event, User $user, User $contact, string $origin)
     {
         $this->event = $event;
         $this->user = $user;
         $this->contact = $contact;
+        $this->origin = $origin;
     }
 }

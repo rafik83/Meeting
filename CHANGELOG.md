@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2223 - Add call visio on private chat (tab networking).
 - VIMEET-2260 - Add button custom 2
 
 ## [2.65.2] - 2020-11-02
