@@ -4,9 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.66.0] - 2020-11-04
 ### Added
 - VIMEET-2223 - Add call visio on private chat (tab networking).
-- VIMEET-2260 - Add button custom 2
+- VIMEET-2229 - Add field date call visio in Admin.
+- VIMEET-2260 - Add button custom 2.
 
 ## [2.65.2] - 2020-11-02
 ### Fixed
