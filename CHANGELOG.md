@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV264 - Networking tab only validated or accepted
+
 ## [2.66.0] - 2020-11-04
 ### Added
 - VIMEET-2223 - Add call visio on private chat (tab networking).
@@ -21,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.65.0] - 2020-10-29
 ### Added
 - VIMEET-2225 - Add related product to video template objects
+>>>>>>> master
 
 ## [2.64.0] - 2020-10-28
 ### Fixed

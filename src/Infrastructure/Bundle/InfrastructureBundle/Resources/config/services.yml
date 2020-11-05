@@ -4655,6 +4655,7 @@ services:
             - '@domain.key_dates.checker.networking_access_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
 
