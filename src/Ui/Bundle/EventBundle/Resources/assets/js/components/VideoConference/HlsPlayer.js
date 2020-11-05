@@ -19,7 +19,8 @@ export default class HlsPlayer {
             });
             this.hls.loadSource(hlsUrl);
             this.hls.attachMedia(this.videoElement);
-            this.hls.on(Hls.Events.MANIFEST_PARSED, () => this.onPlayerReady());
+            this.hls.once(Hls.Events.MANIFEST_PARSED, () => this.onPlayerReady());
+            this.hls.on(Hls.Events.MEDIA_ATTACHED, () => this.videoElement.play());
             this.hls.on(Hls.Events.ERROR, (event, data) =>
                 this.onError(event, data)
             );
@@ -62,19 +63,21 @@ export default class HlsPlayer {
         switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
                 console.warn('[HlsPlayer] fatal network error encountered, try to recover');
-                this.errorRecoveryTimerId = setTimeout(() => this.hls.startLoad(), 5000);
+                this.hls.startLoad();
                 break;
             case Hls.ErrorTypes.MEDIA_ERROR:
                 console.warn('[HlsPlayer] fatal media error encountered, try to recover');
-                this.errorRecoveryTimerId = setTimeout(() => this.hls.recoverMediaError(), 5000);
+                this.hls.recoverMediaError();
                 break;
             default:
                 console.error('[HlsPlayer] fatal non recoverable error #' + fatalErrorsCount, data);
-                const currentUrl = this.hls.url;
-                this.hls.destroy();
-                this.hls = null;
                 if (fatalErrorsCount < 3) {
-                    this.errorRecoveryTimerId = setTimeout(() => this.initHlsStreamPlayer(currentUrl), 10000);
+                    this.errorRecoveryTimerId = setTimeout(() => {
+                        const currentUrl = this.hls.url;
+                        this.hls.destroy();
+                        this.hls = null;
+                        this.initHlsStreamPlayer(currentUrl);
+                    }, 10000);
                     fatalErrorsCount++;
                 } else {
                     // failover: refresh browser after 3 errors

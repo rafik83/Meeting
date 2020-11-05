@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Exception\Chat\PrivateChatInvalidToUser;
 use Proximum\Vimeet\Application\View\Networking\PrivateChatView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
@@ -17,12 +18,23 @@ class PrivateChatQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
+    /** @var AskCallVisioPrivateChatAccessChecker */
+    private $askCallVisioPrivateChatAccessChecker;
+
+    /** @var IsUserInCallVisio */
+    private $isUserInCallVisio;
+
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
-        ChatSessionRepositoryInterface $chatSessionRepository
-    ) {
+        ChatSessionRepositoryInterface $chatSessionRepository,
+        AskCallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker,
+        IsUserInCallVisio $isUserInCallVisio
+    )
+    {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
+        $this->askCallVisioPrivateChatAccessChecker = $callVisioPrivateChatAccessChecker;
+        $this->isUserInCallVisio = $isUserInCallVisio;
     }
 
     public function handle(PrivateChatQuery $privateChatQuery): PrivateChatView
@@ -31,15 +43,17 @@ class PrivateChatQueryHandler
             throw new PrivateChatInvalidToUser('User cannot open a chat session with himself');
         }
 
+        $event = $privateChatQuery->sheet->getEvent();
+
         $chatSession = $this->chatSessionRepository->findOneByEventAndUsers(
-            $privateChatQuery->sheet->getEvent(),
+            $event,
             $privateChatQuery->fromUser,
             $privateChatQuery->toUser
         );
 
         if (null === $chatSession) {
             $chatSession = new ChatSession(
-                $privateChatQuery->sheet->getEvent(),
+                $event,
                 $privateChatQuery->fromUser,
                 $privateChatQuery->toUser
             );
@@ -47,7 +61,11 @@ class PrivateChatQueryHandler
             $this->chatSessionRepository->add($chatSession);
         }
 
-        $topic = $this->notificationSubscriber->getUserTopic($privateChatQuery->fromUser->getId());
+        $topic = $this->notificationSubscriber->getUserTopic($event->getId(), $privateChatQuery->fromUser->getId());
+
+        $hasVisioButton = $this->askCallVisioPrivateChatAccessChecker->allowedToAccess($event, $chatSession, $privateChatQuery->toUser);
+
+        $isToUserBusy = $this->isUserInCallVisio->isSatisfiedBy($event, $privateChatQuery->toUser);
 
         return new PrivateChatView(
             $this->notificationSubscriber->getUrl(),
@@ -62,7 +80,9 @@ class PrivateChatQueryHandler
             $privateChatQuery->toUser->getAccount()->getCompany(),
             $privateChatQuery->toUser->getPosition(),
             $privateChatQuery->toUser->getId(),
-            $chatSession->getId()
+            $chatSession->getId(),
+            $hasVisioButton,
+            $isToUserBusy
         );
     }
 }

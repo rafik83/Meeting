@@ -45,7 +45,8 @@ class GetSnippetQueryHandlerTest extends TestCase
         $notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://www.google.fr');
         $notificationSubscriber->getUserSubscriberKey($sheet->reveal(), $user->reveal())->shouldBeCalled()->willReturn('123456');
         $user->getId()->shouldBeCalled()->willReturn(333);
-        $notificationSubscriber->getUserTopic(333)->shouldBeCalled()->willReturn('Chat');
+        $event->getId()->shouldBeCalled()->willReturn(137);
+        $notificationSubscriber->getUserTopic(137, 333)->shouldBeCalled()->willReturn('Chat');
 
         $result = $getSnippetQueryHandler->handle($getSnippetQuery);
 

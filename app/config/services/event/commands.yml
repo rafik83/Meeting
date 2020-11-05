@@ -245,6 +245,36 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages }
 
     #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Command\Networking\RequestVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RequestVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\RefuseVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RefuseVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\AbandonVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\AbandonVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\JoinVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\JoinVisio }
+
+    #
     # Webinar
     #
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:

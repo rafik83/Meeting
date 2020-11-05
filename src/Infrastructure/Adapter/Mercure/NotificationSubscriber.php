@@ -57,7 +57,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         return JWT::encode([
             'mercure' => [
                 'subscriber' => array_map(function ($type) use ($sheet) {
-                    return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId(), $type)];
+                    return ['topic' => $this->getNetworkingTopic($sheet->getEvent()->getId())];
                 }, $types),
                 'payload' => $this->userPayloadBuilder->get($sheet, $user),
             ]
@@ -66,11 +66,10 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
 
     /**
      * Generate JWT token for all topics a user can be interested in
-     * @param ChatSession[] $sessions
      */
     public function getUserSubscriberKey(Sheet $sheet, User $user): string
     {
-        $topics[] = $this->getUserTopic($user->getId());
+        $topics[] = $this->getUserTopic($sheet->getEvent()->getId(), $user->getId());
 
         return JWT::encode([
             'mercure' => [

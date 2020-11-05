@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
@@ -20,13 +22,13 @@ class AbstractNotification
         return sprintf('https://vimeet.events/networking/%d', $eventId);
     }
 
-    public function getUserConnectionTopic(int $eventId): string
+    public function getUserTopic(int $eventId, int $userId): string
     {
-        return sprintf('https://vimeet.events/event/%d/user/connection', $eventId);
+        return sprintf('https://vimeet.events/event/%d/user/%d', $eventId, $userId);
     }
 
-    public function getUserTopic(int $userId): string
+    public function getCallVisioTopic(Event $event): string
     {
-        return sprintf('https://vimeet.events/user/%d', $userId);
+        return sprintf('https://vimeet.events/callvisio/%d', $event->getId());
     }
 }

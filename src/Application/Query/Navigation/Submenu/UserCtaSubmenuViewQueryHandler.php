@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as TypeExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -38,18 +39,35 @@ class UserCtaSubmenuViewQueryHandler
         $this->extraDataRepository = $extraDataRepository;
     }
 
-    public function handle(UserCtaSubmenuViewQuery $query): ?SubmenuButtonView
+    public function handle(UserCtaSubmenuViewQuery $query): array
     {
-        $customUserIdExtraParameter = $this->extraParameterRepository->findByEventAndType(
+        $extraParameter1 = $this->extraParameterRepository->findByEventAndType(
             $query->event,
-            Type::TYPE_CUSTOM_BUTTON
+            Type::TYPE_CUSTOM_BUTTON_1
         );
 
-        if (null === $customUserIdExtraParameter) {
-            return null;
+        $extraParameter2 = $this->extraParameterRepository->findByEventAndType(
+            $query->event,
+            Type::TYPE_CUSTOM_BUTTON_2
+        );
+
+        $subMenuButtonViews = [];
+        if (null !== $extraParameter1){
+            $subMenuButtonViews[] = $this->getSubMenuButtonView($query, $extraParameter1, Category::CUSTOM_BUTTON_ICON);
         }
 
-        $parameters = json_decode($customUserIdExtraParameter->getValue(), true);
+        if (null !== $extraParameter2){
+            $subMenuButtonViews[] = $this->getSubMenuButtonView($query, $extraParameter2, Category::CUSTOM_BUTTON_ICON_2);
+        }
+
+        return array_filter($subMenuButtonViews, static function($item) {
+            return null !== $item;
+        });
+    }
+
+    private function getSubMenuButtonView(UserCtaSubmenuViewQuery $query, $extraParameter, $buttonIcon) : ?SubmenuButtonView
+    {
+        $parameters = json_decode($extraParameter->getValue(), true);
 
         if (isset($parameters['concerned_type_ids'])
             && !in_array($query->sheet->getType()->getId(), $parameters['concerned_type_ids'], false)
@@ -92,7 +110,7 @@ class UserCtaSubmenuViewQueryHandler
         $link = str_replace(self::USER_CTA_PLACEHOLDERS_ALLOWED, $values, $parameters['link']);
 
         return new SubmenuButtonView(
-            Category::CUSTOM_BUTTON_ICON,
+            $buttonIcon,
             $parameters['button-label'][$query->locale] ?? '',
             $link,
             false,

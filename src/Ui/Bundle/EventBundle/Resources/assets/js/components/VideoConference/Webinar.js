@@ -289,7 +289,7 @@ Webinar.prototype.init = function () {
         const subscriber = subscriberManager.subscribe(event);
 
         if (this.isScreenShareStream(event.stream)) {
-            this.hasMediaSharing = true;s
+            this.hasMediaSharing = true;
             this.minimizeAllSubscribers();
             this.maximize(subscriber.element);
         } else {

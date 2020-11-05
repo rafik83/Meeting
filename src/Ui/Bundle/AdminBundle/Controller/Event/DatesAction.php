@@ -63,6 +63,7 @@ class DatesAction
             'event' => $event,
             'submit' => true,
             'showDateNetworking' => $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN'),
+            'showDateCallVisio' => $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN'),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
