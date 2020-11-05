@@ -118,3 +118,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         networkingCloseDate:
             type: datetime
             nullable: true
+        callVisioOpenDate:
+            type: datetime
+            nullable: true
+        callVisioCloseDate:
+            type: datetime
+            nullable: true

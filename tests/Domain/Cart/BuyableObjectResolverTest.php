@@ -45,9 +45,6 @@ class BuyableObjectResolverTest extends TestCase
     /** @var ObjectProphecy */
     private $orderMerger;
 
-    /** @var ObjectProphecy */
-    private $sheet;
-
     public function setup()
     {
         $this->product = $this->prophesize(Product::class);
@@ -59,7 +56,6 @@ class BuyableObjectResolverTest extends TestCase
         $this->cartManager = $this->prophesize(CartManager::class);
         $this->templateProductGuesser = $this->prophesize(TemplateProductGuesser::class);
         $this->orderMerger = $this->prophesize(Merger::class);
-        $this->sheet = $this->prophesize(Sheet::class);
     }
 
     public function testNoOrderRowAndNoCartRow()
@@ -171,4 +167,3 @@ class BuyableObjectResolverTest extends TestCase
         $resolver->addPayableProduct($this->templateObject->reveal(), $this->cart->reveal(), null);
     }
 }
-

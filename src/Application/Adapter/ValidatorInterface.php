@@ -20,5 +20,5 @@ interface ValidatorInterface
      *
      * @return mixed
      */
-    public function validate($data, $constraintType);
+    public function validate($data, $constraintType = null);
 }

@@ -186,7 +186,8 @@ class UpdateAction
                         ->commandBus
                         ->handle(new VideoUpload($eventDomain->getEvent(), $object))
                     ;
-                    $object->setData($objectData);
+
+                    $object->setData(array_merge($object->getData(), $objectData));
                 }
 
                 $this->commandBus->handle(new UpdateData($sheet, $templateData, $object));

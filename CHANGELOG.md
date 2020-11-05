@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV264 - Networking tab only validated or accepted
 
+## [2.66.0] - 2020-11-04
+### Added
+- VIMEET-2223 - Add call visio on private chat (tab networking).
+- VIMEET-2229 - Add field date call visio in Admin.
+- VIMEET-2260 - Add button custom 2.
+
+## [2.65.2] - 2020-11-02
+### Fixed
+- Hotfix - Add default values for analytics options on participant type, to avoid error when type is created by an organizer admin
+
+## [2.65.1] - 2020-10-29
+### Fixed
+- Disable session lock on redis to avoid timeouts for some sessions
+
+## [2.65.0] - 2020-10-29
+### Added
+- VIMEET-2225 - Add related product to video template objects
+>>>>>>> master
+
 ## [2.64.0] - 2020-10-28
 ### Fixed
 - MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
@@ -32,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2219 - Apply filter on users added on the fly
 - Add sheet card tag for datetime
 - Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+- VIMEET-2229 - Add call visio networking tab by key date
 
 ## [2.61.0] - 2020-10-15
 ### Added

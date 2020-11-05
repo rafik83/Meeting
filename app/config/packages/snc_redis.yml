@@ -7,5 +7,6 @@ snc_redis:
             logging: '%kernel.debug%'
     session:
         client: session
+        locking: false
         prefix: session
         ttl: 86400

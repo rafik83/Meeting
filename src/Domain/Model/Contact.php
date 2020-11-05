@@ -4,6 +4,10 @@ namespace Proximum\Vimeet\Domain\Model;
 
 class Contact
 {
+    public const ORIGIN_MEETING = 'meeting';
+    public const ORIGIN_SCAN = 'scan';
+    public const ORIGIN_PRIVATE_CHAT_VISIO = 'private_chat_visio';
+
     /** @var Event */
     private $event;
 
@@ -22,21 +26,27 @@ class Contact
     /** @var string|null */
     private $comment;
 
-    /** @var bool */
-    private $scanned;
+    /** @var string */
+    private $origin;
+
+    /** @var bool
+     * @deprecated
+     */
+    private $scanned = false;
 
     public function __construct(
         Event $event,
         User $user,
         User $contact,
         \DateTimeInterface $createdAt,
-        bool $scanned = false
-    ) {
+        string $origin
+    )
+    {
         $this->event = $event;
         $this->user = $user;
         $this->contact = $contact;
         $this->createdAt = $createdAt;
-        $this->scanned = $scanned;
+        $this->origin = $origin;
     }
 
     public function getEvent(): Event
@@ -81,7 +91,7 @@ class Contact
 
     public function isScanned(): bool
     {
-        return $this->scanned;
+        return self::ORIGIN_SCAN === $this->origin;
     }
 
     public function setEvaluation(int $evaluation): void

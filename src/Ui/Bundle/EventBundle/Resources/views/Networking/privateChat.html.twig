@@ -1,38 +1,89 @@
-
-        <div class="main__content privateChat">
-            <h2>{{ 'networking.chat.with'|trans({'%user%': privateChatView.toUserFirstName~' '~privateChatView.toUserLastName}) }}
+<div class="main__content privateChat">
+    <div class="chat-header">
+        <div class="chat-header-title">
+            <h2>
+                {{ 'networking.chat.with'|trans({'%user%': privateChatView.toUserFirstName~' '~privateChatView.toUserLastName}) }}
             </h2>
             <p>
                 {% if privateChatView.toUserCompany %}{{ privateChatView.toUserCompany }} - {% endif %}
                 {% if privateChatView.toUserPosition %}<em> {{ privateChatView.toUserPosition }}</em>{% endif %}
             <p>
-            <div data-chat-networking
-                 data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
-                 data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
-                 data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
-                 data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
-                 data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
-                 data-chat-vote-message="{{ 'chat.vote'|trans }}"
-                 data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
-                 data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
-                 data-notifications-provider-url="{{ privateChatView.providerUrl }}"
-                 data-notifications-subscriber-key="{{ privateChatView.subscriberKey }}"
-            >
-                <div data-chat-container
-                     data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'private_chat', objectId: privateChatView.chatSessionId}) }}"
-                     data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
-                >
-                    <div class="chat-list">
-                        {# content filled with javascript #}
-                    </div>
-                    <form
-                            action="{{ path('event_chat_messages_add', {sheet: sheet.id, objectType: 'private_chat', objectId: privateChatView.chatSessionId}) }}"
-                            class="chat-form"
-                            data-chat-form
-                    >
-                        <input type="text" name="content" placeholder="{{ 'networking.chat.add'|trans }}" maxlength="250" autocomplete="off">
-                        <button type="submit"></button>
-                    </form>
-                </div>
-            </div>
         </div>
+        <div class="chat-header-tools" data-visio-enable="{{ privateChatView.hasVisioButton }}">
+            <button
+                    data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary state-normal {{ privateChatView.isToUserBusy ? 'hide' }}"
+            >
+                <span class="glyphicon glyphicon-facetime-video"></span>
+                {{ 'networking.chat.visio.request'|trans }}
+            </button>
+            <button
+                    data-url="{{ path('event_networking_request_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary state-join hide"
+                    data-close-modal
+            >
+                <span class="glyphicon glyphicon-facetime-video"></span>
+                {{ 'networking.chat.visio.join'|trans }}
+            </button>
+            <span
+                    data-url="{{ path('event_networking_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    data-abandon-url="{{ path('event_networking_abandon_call_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-pending hide"
+            >
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.pending'|trans }}
+            </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-busy {{ not privateChatView.isToUserBusy ? 'hide' }}">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.busy'|trans }}
+            </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-refuse hide">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.refuse'|trans }}
+            </span>
+            <span
+                    data-url="{{ path('event_networking_refuse_visio', {'sheet': sheet.id, 'toUser': privateChatView.toUserId}) }}"
+                    class="btn btn-sm btn-primary disabled state-no-response hide">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                        {{ 'networking.chat.visio.no.response'|trans }}
+            </span>
+        </div>
+    </div>
+    <div class="chat-message-call-visio hide" data-notification-call-visio>
+        {% include '@Event/Networking/Partials/notificationCallVisio.html.twig' %}
+    </div>
+    <div data-chat-networking
+         data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+         data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+         data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+         data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+         data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+         data-chat-vote-message="{{ 'chat.vote'|trans }}"
+         data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+         data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+         data-notifications-provider-url="{{ privateChatView.providerUrl }}"
+         data-notifications-subscriber-key="{{ privateChatView.subscriberKey }}"
+    >
+        <div data-chat-container
+             data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'private_chat', objectId: privateChatView.chatSessionId}) }}"
+             data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
+        >
+            <div class="chat-list">
+                {# content filled with javascript #}
+            </div>
+            <form
+                    action="{{ path('event_chat_messages_add', {sheet: sheet.id, objectType: 'private_chat', objectId: privateChatView.chatSessionId}) }}"
+                    class="chat-form"
+                    data-chat-form
+            >
+                <input type="text" name="content" placeholder="{{ 'networking.chat.add'|trans }}" maxlength="250"
+                       autocomplete="off">
+                <button type="submit"></button>
+            </form>
+        </div>
+    </div>
+</div>

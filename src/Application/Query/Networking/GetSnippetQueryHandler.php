@@ -35,7 +35,7 @@ class GetSnippetQueryHandler
         return new GetSnippetView(
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getUserSubscriberKey($getSnippetQuery->sheet, $getSnippetQuery->user),
-            $this->notificationSubscriber->getUserTopic($getSnippetQuery->user->getId())
+            $this->notificationSubscriber->getUserTopic($getSnippetQuery->sheet->getEvent()->getId(), $getSnippetQuery->user->getId())
         );
     }
 }

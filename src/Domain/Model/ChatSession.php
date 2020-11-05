@@ -19,6 +19,12 @@ class ChatSession implements ChatMessageLinkableInterface
     /** @var array */
     private $unreadMessages;
 
+    /** @var string */
+    private $visioSessionId;
+
+    /** @var \DateTimeInterface */
+    private $visioStartedAt;
+
     public function __construct(Event $event, User $fromUser, User $toUser)
     {
         $this->event = $event;
@@ -65,5 +71,38 @@ class ChatSession implements ChatMessageLinkableInterface
     public function getUnreadMessages(User $user): int
     {
         return $this->unreadMessages[$user->getId()] ?? 0;
+    }
+
+    /**
+     * @param string $visioSessionId
+     */
+    public function setVisioSessionId(string $visioSessionId): void
+    {
+        $this->visioSessionId = $visioSessionId;
+    }
+
+    public function getVisioSessionId(): ?string
+    {
+        return $this->visioSessionId;
+    }
+
+    public function getFromUser(): User
+    {
+        return $this->fromUser;
+    }
+
+    public function getToUser(): User
+    {
+        return $this->toUser;
+    }
+
+    public function getVisioStartedAt(): ?\DateTimeInterface
+    {
+        return $this->visioStartedAt;
+    }
+
+    public function setVisioStartedAt(?\DateTimeInterface $visioStartedAt): void
+    {
+        $this->visioStartedAt = $visioStartedAt;
     }
 }

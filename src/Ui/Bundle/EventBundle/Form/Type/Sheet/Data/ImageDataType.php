@@ -84,6 +84,7 @@ class ImageDataType extends AbstractType
                 'choices'     => $image->getBuyableProducts(),
                 'required'    => true,
                 'data'        => $selectedRadio,
+                'attr' => ['required' => true],
             ]);
             $builder->get('selectedProduct')->addModelTransformer($this->idToProductTransformer);
         }

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Event;
 
 use Proximum\Vimeet\Domain\Payment\Mode;
@@ -142,6 +134,12 @@ class Configuration
 
     /** @var \DateTimeInterface|null "Date de cloture du networking" */
     private $networkingCloseDate;
+
+    /** @var \DateTimeInterface|null "Date d'ouverture des call visio dans l'onglet networking" */
+    public $callVisioOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture des call visio dans l'onglet networking" */
+    public $callVisioCloseDate;
 
     public function __construct()
     {
@@ -404,7 +402,9 @@ class Configuration
         \DateTimeInterface $enableBadgeForParticipantDate = null,
         \DateTimeInterface $enableVisioTestMenuButtonDate = null,
         \DateTimeInterface $networkingOpenDate = null,
-        \DateTimeInterface $networkingCloseDate = null
+        \DateTimeInterface $networkingCloseDate = null,
+        \DateTimeInterface $callVisioOpenDate = null,
+        \DateTimeInterface $callVisioCloseDate = null
     ): self {
         $this->catalogOnlineDate = $catalogOnlineDate;
         $this->happeningsOpenDate = $happeningsOpenDate;
@@ -419,6 +419,8 @@ class Configuration
         $this->enableVisioTestMenuButtonDate = $enableVisioTestMenuButtonDate;
         $this->networkingOpenDate = $networkingOpenDate;
         $this->networkingCloseDate = $networkingCloseDate;
+        $this->callVisioOpenDate = $callVisioOpenDate;
+        $this->callVisioCloseDate = $callVisioCloseDate;
 
         return $this;
     }
@@ -622,5 +624,15 @@ class Configuration
     public function getNetworkingCloseDate(): ?\DateTimeInterface
     {
         return $this->networkingCloseDate;
+    }
+
+    public function getCallVisioOpenDate(): ?\DateTimeInterface
+    {
+        return $this->callVisioOpenDate;
+    }
+
+    public function getCallVisioCloseDate(): ?\DateTimeInterface
+    {
+        return $this->callVisioCloseDate;
     }
 }

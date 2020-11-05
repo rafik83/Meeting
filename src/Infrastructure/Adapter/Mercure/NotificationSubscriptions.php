@@ -8,7 +8,6 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 
-
 class NotificationSubscriptions extends AbstractNotification implements NotificationSubscriptionsInterface
 {
     /** @var string */
@@ -30,7 +29,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getSubscriptions(int $eventId, int $userId): array
+    public function getSubscriptions(int $eventId, ?int $userId, string $topicFilter = null): array
     {
         $authPayload = [
             'mercure' => [
@@ -46,6 +45,9 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         $users = [];
 
         foreach ($result['subscriptions'] as $subscription) {
+            if ($topicFilter && $subscription['topic'] !== $topicFilter) {
+                continue;
+            }
             if (!isset($subscription['payload']['eventId']) || $subscription['payload']['eventId'] != $eventId) {
                 continue;
             }
@@ -53,7 +55,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
                 continue;
             }
             // exclude current user
-            if ($userId === $subscription['payload']['userId']) {
+            if ($userId && $userId === $subscription['payload']['userId']) {
                 continue;
             }
             $users[$subscription['payload']['userId']] = $subscription['payload'];

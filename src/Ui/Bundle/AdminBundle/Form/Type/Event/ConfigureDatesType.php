@@ -42,6 +42,11 @@ class ConfigureDatesType extends AbstractType
         'networkingCloseDate',
     ];
 
+    private const CONFIGURATION_DATES_CALL_VISIO = [
+        'callVisioOpenDate',
+        'callVisioCloseDate',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -65,6 +70,17 @@ class ConfigureDatesType extends AbstractType
                     ]);
             }
         }
+
+        if ($options['showDateCallVisio']) {
+            foreach (self::CONFIGURATION_DATES_CALL_VISIO as $configurationDateCallVisio) {
+                $builder
+                    ->add($configurationDateCallVisio, DateTimePickerType::class, [
+                        'view_timezone' => $options['event']->getTimezone(),
+                        'required' => false,
+                    ]);
+            }
+        }
+
     }
 
     /**
@@ -73,8 +89,10 @@ class ConfigureDatesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event', 'showDateNetworking']);
+        $resolver->setRequired(['event', 'showDateCallVisio']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setAllowedTypes('showDateNetworking', 'bool');
+        $resolver->setAllowedTypes('showDateCallVisio', 'bool');
         $resolver->setDefaults([
             'data_class' => ConfigureDates::class,
         ]);
