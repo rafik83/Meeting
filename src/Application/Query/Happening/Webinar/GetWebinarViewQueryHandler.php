@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 use DateTimeInterface;
 use LogicException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
+use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
@@ -35,6 +36,9 @@ class GetWebinarViewQueryHandler
     /** @var NotificationSubscriberInterface */
     private $notificationSubscriber;
 
+    /** @var NotificationSubscriptionsInterface */
+    private $notificationSubscriptions;
+
     /** @var DateTimeInterface */
     private $dateTime;
 
@@ -51,6 +55,7 @@ class GetWebinarViewQueryHandler
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         NotificationSubscriberInterface $notificationSubscriber,
+        NotificationSubscriptionsInterface $notificationSubscriptions,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
@@ -60,6 +65,7 @@ class GetWebinarViewQueryHandler
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->recordArchiveRepository = $recordArchiveRepository;
         $this->notificationSubscriber = $notificationSubscriber;
+        $this->notificationSubscriptions = $notificationSubscriptions;
         $this->happeningBroadcastRepository = $happeningBroadcastRepository;
         $this->isRecordingAllowed = $isRecordingAllowed;
         $this->dateTime = $dateTime;
@@ -83,16 +89,25 @@ class GetWebinarViewQueryHandler
             $happening->getBegin()->getTimestamp() - $this->dateTime->getTimestamp()
         );
 
+        $topics = [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_STREAM];
+        if ($isSpeaker) {
+            $topics[] = AbstractNotification::TYPE_SPEAKER;
+        }
+
         $notificationView = new NotificationView(
             $this->notificationSubscriber->getUrl(),
             $this->notificationSubscriber->getHappeningSubscriberKey(
                 $happening,
                 $query->getUser(),
-                [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_HLS]
+                $topics
             )
         );
 
         if ($isSpeaker) {
+
+            if ($happening->allowWebinarOnHLS()) {
+                $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
+            }
 
             return new SpeakerWebinarView(
                 $happening->getEvent()->getId(),
@@ -119,7 +134,8 @@ class GetWebinarViewQueryHandler
                 $this->isRecordingAllowed->isSatisfiedBy($happening),
                 $this->isWebinarRecording($happening),
                 $happening->getEvent()->getAutoArchiveWebinar(),
-                $happening->allowWebinarOnHLS()
+                $happening->allowWebinarOnHLS(),
+                $viewersCount ?? 0
             );
         }
 

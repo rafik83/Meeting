@@ -6,7 +6,9 @@ class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
     const TYPE_CHAT = 'chat';
-    const TYPE_HLS = 'hls';
+    // stream and speaker are used only when broadcast mode (hls) is enabled
+    const TYPE_STREAM = 'stream';
+    const TYPE_SPEAKER = 'speaker';
 
     protected function getHappeningTopic(string $happeningId, string $type): string
     {

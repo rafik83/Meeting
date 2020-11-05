@@ -43,7 +43,8 @@ function Webinar(element, isSpeaker) {
     this.notificationSubscriber = new NotificationSubscriber(notificationProviderUrl);
     this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
     this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
-    this.topicHls = `https://vimeet.events/happening/${this.happeningId}/webinar/hls`;
+    this.topicStream = `https://vimeet.events/happening/${this.happeningId}/webinar/stream`;
+    this.topicSpeaker = `https://vimeet.events/happening/${this.happeningId}/webinar/speaker`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -129,7 +130,7 @@ function Webinar(element, isSpeaker) {
     this.timerContainer = element.querySelector('.timer-container');
     this.timerElement = this.timerContainer.querySelector('.timer');
     this.countDownContainer = this.timerContainer.querySelector('.timer span.countdown');
-    this.viewersCount = 0;
+    this.viewersCount = element.getAttribute('data-webinar-initial-viewers-count');
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
 
@@ -269,11 +270,8 @@ Webinar.prototype.init = function () {
         if (this.hlsVideoElement.dataset.hlsUrl) {
             this.hlsPlayer.initHlsStreamPlayer(this.hlsVideoElement.dataset.hlsUrl);
         }
-        this.hlsPlayer.subscribeToNotifications(
-            this.notificationSubscriber,
-            this.topicHls,
-            this.notificationSubscriberKey
-        );
+        this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
+        this.subscribeToStreamNotifications();
 
         return;
     }
@@ -353,6 +351,40 @@ Webinar.prototype.updateViewers = function () {
     this.viewersTextContainer.textContent = this.viewersCount;
 };
 
+Webinar.prototype.subscribeToStreamNotifications = function () {
+    if (!this.isHls) {
+        return;
+    }
+
+    this.notificationSubscriber.addSubscriber(this.topicStream, this.notificationSubscriberKey, (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (!this.isSpeaker && payload.action === 'stream_started') {
+            this.hlsPlayer.updateHlsSource(payload.hlsUrl);
+            console.info('Received stream_started notification, hlsUrl: ' + payload.hlsUrl);
+        }
+    });
+
+};
+
+Webinar.prototype.subscribeToSpeakerNotifications = function () {
+    // if webinar is not in hls mode, updates will be sent with tokbox
+    if (!this.isHls) {
+        return;
+    }
+
+    this.notificationSubscriber.addSubscriber(this.topicSpeaker, this.notificationSubscriberKey, (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (payload.action === 'viewer_connected') {
+            // viewers + other speakers + current speaker
+            this.viewersCount = payload.viewersCount + this.subscribers.length + 1;
+            this.updateViewers();
+        }
+    });
+
+};
+
 /**
  * Connect to the session, create and publish your stream
  */
@@ -376,6 +408,7 @@ Webinar.prototype.connect = function () {
         if (!error) {
             if (this.isSpeaker) {
                 this.publishStream();
+                this.subscribeToSpeakerNotifications();
             }
 
             return;
@@ -384,6 +417,18 @@ Webinar.prototype.connect = function () {
         console.error(error);
     }.bind(this));
 };
+
+// declare viewer on server and get hlsUrl if not available when page loads
+Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
+    $.get(hlsConnectUrl, (response) => {
+        if (response.hlsUrl && !this.hlsPlayer.isInitialized()) {
+            this.hlsPlayer.initHlsStreamPlayer(response.hlsUrl)
+        }
+    })
+    .fail((error) => {
+        console.error(error.status, error.statusText, this.recordEndpoint);
+    });
+}
 
 Webinar.prototype.showViewerControls = function () {
 

@@ -43,8 +43,7 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
                 'subscribe' => array_map(function ($type) use ($happening) {
                     return $this->getHappeningTopic($happening->getId(), $type);
                 }, $types),
-                // todo: add payload
-                // 'payload' => $this->userPayloadBuilder->get($user),
+                'payload' => ['userId' => $user->getId()],
             ]
         ], $this->mercureSubscriberKey);
     }

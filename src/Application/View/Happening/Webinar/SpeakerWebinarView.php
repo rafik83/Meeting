@@ -37,6 +37,9 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $allowWebinarOnHLS;
 
+    /** @var int $viewersCount, used only for broadcast mode */
+    public $viewersCount;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -66,7 +69,8 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
         bool $isWebinarRecordAutoStart,
-        bool $allowWebinarOnHLS = false
+        bool $allowWebinarOnHLS = false,
+        int $viewersCount = 0
     ) {
         parent::__construct(
             $eventId,
@@ -96,5 +100,6 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->isWebinarRecording = $isWebinarRecording;
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
         $this->allowWebinarOnHLS = $allowWebinarOnHLS;
+        $this->viewersCount = $viewersCount;
     }
 }

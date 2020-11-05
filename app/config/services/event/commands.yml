@@ -127,6 +127,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer }
+
     #
     # Unavailabilities
     #

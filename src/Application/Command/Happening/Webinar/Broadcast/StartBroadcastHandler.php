@@ -94,8 +94,8 @@ class StartBroadcastHandler
             $this->broadcastRepository->add($happeningBroadcast);
         }
 
-        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_HLS, [
-            'action' => 'broadcast_started',
+        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_STREAM, [
+            'action' => 'stream_started',
             'hlsUrl' => $happeningBroadcast->getHlsUrl(),
         ]);
 

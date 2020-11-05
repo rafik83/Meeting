@@ -1039,6 +1039,13 @@ event_happening_webinar_stream_broadcast:
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StreamAction
 
+event_happening_webinar_view_broadcast:
+    path: /happening/{happening}/webinar/broadcast/view
+    requirements:
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\ViewAction
+
 #
 # Unavailability
 #

@@ -252,9 +252,6 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         if (empty($json)) {
             return null;
         }
-        // dump($this->openTok->setStreamClassLists($session, []));
-        dump($this->openTok->getBroadcast(Broadcast::createFromJson($json)->getBroadcastId()));
-        dump($this->openTok->listStreams($session));
 
         return Broadcast::createFromJson($json);
     }

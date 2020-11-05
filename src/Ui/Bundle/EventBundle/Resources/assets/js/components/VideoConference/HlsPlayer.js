@@ -46,6 +46,10 @@ export default class HlsPlayer {
         }
     }
 
+    isInitialized() {
+        return !!this.hls;
+    }
+
     onPlayerReady() {
         this.videoElement.play();
         this.onReadyCallback();
@@ -78,16 +82,5 @@ export default class HlsPlayer {
                 }
                 break;
         }
-    }
-
-    subscribeToNotifications(notificationSubscriber, topic, key) {
-        notificationSubscriber.addSubscriber(topic, key, (event) => {
-            const payload = JSON.parse(event.data);
-
-            if (payload.action === 'broadcast_started') {
-                this.updateHlsSource(payload.hlsUrl);
-                console.info('Received broadcast_started notification, hlsUrl:' + payload.hlsUrl);
-            }
-        });
     }
 }

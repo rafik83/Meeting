@@ -4,20 +4,21 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
+use Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQuery;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class StreamAction
+class ViewAction
 {
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     /** @var CommandBusInterface */
     private $commandBus;
 
@@ -28,17 +29,18 @@ class StreamAction
     private $canAccessToWebinar;
 
     public function __construct(
+        QueryBusInterface $queryBus,
         CommandBusInterface $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar
     ) {
+        $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
     }
 
     public function __invoke(
-        Request $request,
         EventDomain $eventDomain,
         Happening $happening,
         UserDomain $userDomain
@@ -50,33 +52,16 @@ class StreamAction
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_HAPPENING_ACCESS', $event)
             || !$this->canAccessToWebinar->isSatisfiableBy($happening, $user)
             || $happening->getEvent() !== $event
-            || !$this->authorizationCheckerAdapter->isGranted(BroadcastVoter::CAN_STREAM_BROADCAST, $happening)
         ) {
             throw new AccessDeniedException('Access denied.');
         }
 
-        $message = null;
-        $hlsUrl = null;
-        $type = $request->request->get('type');
-        $streamId = $request->request->get('streamId');
+        $hlsUrl = $this->queryBus->handle(new GetBroadcastViewQuery($happening));
 
-        switch ($request->request->get('action')) {
-            case 'start':
-                $hlsUrl = $this->commandBus->handle(new StartBroadcast($happening, $type, $streamId));
-                $message = 'stream_started';
-            break;
-            case 'stop':
-                $message = 'stream_stopped';
-                $this->commandBus->handle(new StopBroadcast($happening, $type));
-            break;
-            default:
-                throw new BadRequestHttpException('Unsupported action');
-            break;
-        }
+        $this->commandBus->handle(new StartViewer($happening));
 
         return new JsonResponse([
             'status' => 'ok',
-            'message' => $message,
             'hlsUrl' => $hlsUrl,
         ]);
     }
