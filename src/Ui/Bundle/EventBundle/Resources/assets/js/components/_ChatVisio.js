@@ -85,6 +85,7 @@ export default class ChatVisio
         this.buttonRequestBusy.classList.add('hide');
         this.buttonRequestRefuse.classList.add('hide');
         this.buttonRequestNoResponse.classList.add('hide');
+        clearTimeout(this.timerId);
     }
 
     /**
@@ -97,6 +98,7 @@ export default class ChatVisio
         this.buttonRequestBusy.classList.remove('hide');
         this.buttonRequestRefuse.classList.add('hide');
         this.buttonRequestNoResponse.classList.add('hide');
+        clearTimeout(this.timerId);
     }
 
     showRequestRefuseButton(){
@@ -106,6 +108,7 @@ export default class ChatVisio
         this.buttonRequestBusy.classList.add('hide');
         this.buttonRequestRefuse.classList.remove('hide');
         this.buttonRequestNoResponse.classList.add('hide');
+        clearTimeout(this.timerId);
     }
 
     showRequestNoResponseButton(){
@@ -115,6 +118,7 @@ export default class ChatVisio
         this.buttonRequestBusy.classList.add('hide');
         this.buttonRequestRefuse.classList.add('hide');
         this.buttonRequestNoResponse.classList.remove('hide');
+        clearTimeout(this.timerId);
     }
 
     hideAllButtons() {
@@ -124,5 +128,6 @@ export default class ChatVisio
         this.buttonRequestBusy.classList.add('hide');
         this.buttonRequestRefuse.classList.add('hide');
         this.buttonRequestNoResponse.classList.add('hide');
+        clearTimeout(this.timerId);
     }
 }
