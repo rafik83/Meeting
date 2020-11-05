@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -131,6 +132,20 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->setParameter('user', $user)
             ->where('session.id = :id')
             ->setParameter('id', $chatSession)
+            ->setMaxResults(1);
+
+        return !empty($queryBuilder->getQuery()->getArrayResult());
+    }
+
+    public function hasAStartedVisio (Event $event, User $user): bool {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session.id')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
             ->setMaxResults(1);
 
         return !empty($queryBuilder->getQuery()->getArrayResult());
