@@ -56,9 +56,9 @@ RUN set -x \
   xsl \
   zip
 
-RUN pecl install redis apcu lzf timezonedb \
+RUN pecl install redis apcu lzf \
   && yes '' | pecl install imagick \
-  && docker-php-ext-enable redis apcu lzf imagick timezonedb \
+  && docker-php-ext-enable redis apcu lzf imagick \
   && rm -rf /tmp/pear
 
 # Install New Relic but disable it by default
@@ -102,9 +102,21 @@ ENV DISABLE_OPCACHE ${DISABLE_OPCACHE}
 ARG VERSION=latest
 ARG PHP_VARIANT=apache
 
+# Application specific code
+COPY --chown=www-data:www-data . /var/www/proximum-vimeet.project.local/htdocs/current
+COPY --chown=www-data:www-data app/config/parameters.yml.dist /var/www/proximum-vimeet.project.local/htdocs/current/app/config/parameters.yml
+
 # Spinnaker CLI binary + Templates
 COPY --from=spinnaker /usr/local/bin/spin /usr/local/bin/spin
 COPY helm/spinnaker /var/www/spinnaker
+
+# NodeJS and Yarn
+RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs=8.17.0-1nodesource1
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install yarn
 
 # Timezone
 RUN echo "Europe/Paris" > /etc/timezone
@@ -123,5 +135,47 @@ RUN ln -sf /share/shared
 
 # Working directory
 WORKDIR /var/www/proximum-vimeet.project.local/htdocs/current
+USER www-data
+
+# Composer Install
+RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --optimize-autoloader --no-progress
+
+# NodeJS Install
+RUN make install@prod
+
+# Symfony
+#RUN bin/console cache:clear --env=prod && \
+#    bin/console cache:warmup --env=prod
+
+# OpenL10N fetch
+ARG OPENL10N_UPDATE="false"
+ARG OPENL10N_HOSTNAME
+ARG OPENL10N_SSL
+ARG OPENL10N_USERNAME
+ARG OPENL10N_PASSWORD
+RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
+      envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml && \
+      php bin/console vimeet:translations:update; \
+    fi
+
+ARG VCS_REF
+ENV APP_VERSION=${VCS_REF:-unkown}
+
+# Cleanup
+RUN rm -f app/config/parameters.yml && \
+    rm -f web/*_dev.php && \
+    rm -f web/*_test.php && \
+    rm -rf web/uploads && \
+    rm -rf web/css && \
+    rm -rf var/logs
+
+# Symlinks
+RUN ln -sfn /share/shared/web/media web/ && \
+    ln -sfn /share/shared/web/uploads web/ && \
+    ln -sfn /share/shared/web/css web/ && \
+    ln -sfn /share/shared/var/logs var/ && \
+    ln -sfn /share/shared/var/shared_uploaded_files var/ && \
+    ln -sfn /share/shared/var/participants_imports var/ && \
+    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml
 
 USER root
