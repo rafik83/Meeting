@@ -74,7 +74,7 @@ class CanAccessToContactsTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
-        $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
+        $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
         $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $canAccessToContacts = new CanAccessToContacts(
@@ -99,8 +99,8 @@ class CanAccessToContactsTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
-        $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
-        $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
+        $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
+        $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
         $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
 
         $canAccessToContacts = new CanAccessToContacts(

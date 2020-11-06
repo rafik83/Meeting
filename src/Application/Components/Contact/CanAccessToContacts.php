@@ -44,7 +44,7 @@ class CanAccessToContacts
             return true;
         }
 
-        if (true === $sheet->isInInternalCatalog()) {
+        if ($sheet->isInInternalCatalog()) {
             return true;
         }
 
