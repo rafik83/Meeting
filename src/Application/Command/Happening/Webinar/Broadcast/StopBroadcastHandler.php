@@ -34,7 +34,8 @@ class StopBroadcastHandler
         }
 
         if ($this->videoConferenceAdapter->getSessionStreamCount($happening->getWebinarSessionId()) > 0) {
-            // broadcast is active, we reset layout if needed, and don't stop broadcast
+            // broadcast is active, we reset layout if stopped stream is not video (screen or video share)
+            // and don't stop broadcast since it must be kept for remaining speaker(s)
             if ($stopBroadcast->type !== Stream::TYPE_VIDEO) {
                 $this->videoConferenceAdapter->resetBroadcastFocus($broadcast->getBroadcastId());
             }

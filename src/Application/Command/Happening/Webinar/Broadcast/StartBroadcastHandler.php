@@ -62,11 +62,9 @@ class StartBroadcastHandler
             $end = $end->modify("+$maxDuration seconds");
         }
 
-        $broadcast = null;
-
         $broadcast = $this->videoConferenceAdapter->getBroadcastForSession($sessionId);
 
-        if (!$broadcast) {
+        if (null === $broadcast) {
             $broadcast = $this->videoConferenceAdapter->startBroadcast(
                 $sessionId,
                 $duration
