@@ -67,7 +67,7 @@ class NetworkingQueryHandlerTest extends TestCase
         $this->notificationSubscribtions->getSubscriptions($eventId, $userId)->shouldBeCalled()->willReturn($fakeSubscriptions);
 
         $this->chatSessionRepository->findSessionsByEventAndUser($this->event->reveal(), $this->user)->shouldBeCalled()->willReturn($sessionsByEventAndUser);
-        $this->chatMessageRepository->getMessagesCountByEvent($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
+        $this->chatMessageRepository->getMessagesCountByLinkableObject($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
 
         $query = new NetworkingQuery($this->sheet->reveal(), $this->user->reveal());
 
@@ -129,7 +129,7 @@ class NetworkingQueryHandlerTest extends TestCase
         $this->notificationSubscribtions->getSubscriptions($eventId, $userId)->shouldBeCalled()->willReturn($fakeSubscriptions);
 
         $this->chatSessionRepository->findSessionsByEventAndUser($this->event->reveal(), $this->user->reveal())->shouldBeCalled()->willReturn($sessionsByEventAndUser);
-        $this->chatMessageRepository->getMessagesCountByEvent($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
+        $this->chatMessageRepository->getMessagesCountByLinkableObject($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
 
         $query = new NetworkingQuery($this->sheet->reveal(), $this->user->reveal());
 
@@ -196,7 +196,7 @@ class NetworkingQueryHandlerTest extends TestCase
         $this->notificationSubscribtions->getSubscriptions($eventId, $userId)->shouldBeCalled()->willReturn($fakeSubscriptions);
 
         $this->chatSessionRepository->findSessionsByEventAndUser($this->event->reveal(), $this->user->reveal())->shouldBeCalled()->willReturn($sessionsByEventAndUser);
-        $this->chatMessageRepository->getMessagesCountByEvent($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
+        $this->chatMessageRepository->getMessagesCountByLinkableObject($this->event->reveal(), $now)->shouldBeCalled()->willReturn($messageCount);
 
         $query = new NetworkingQuery($this->sheet->reveal(), $this->user->reveal());
 

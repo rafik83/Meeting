@@ -58,6 +58,7 @@ class AddChatMessageHandler
             $command->object->incrementUnreadMessages($command->object->getOtherUser($command->user));
         }
 
-        $this->notificationPublisher->publishChatMessageNotification($command->object, $message);
+        $messageCount = $this->messageRepository->getMessagesCountByLinkableObject($command->object, null);
+        $this->notificationPublisher->publishChatMessageNotification($command->object, $message, $messageCount);
     }
 }

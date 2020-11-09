@@ -74,9 +74,11 @@ class AddChatMessageHandlerTest extends TestCase
             )
         )->shouldBeCalled()->willReturn($savedChatMesssage->reveal());
 
+        $this->messageRepository->getMessagesCountByLinkableObject($meeting->reveal(), null)->shouldBeCalled()->willReturn(42);
+
         $this->checkAccessToChatMessages->isSatisfiedBy($meeting->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $this->notificationPublisher->publishChatMessageNotification($meeting->reveal(), $savedChatMesssage->reveal())->shouldBeCalled();
+        $this->notificationPublisher->publishChatMessageNotification($meeting->reveal(), $savedChatMesssage->reveal(), 42)->shouldBeCalled();
 
         $this->addChatMessageHandler->handle(new AddChatMessage($meeting->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }
@@ -107,9 +109,11 @@ class AddChatMessageHandlerTest extends TestCase
             )
         )->shouldBeCalled()->willReturn($savedChatMesssage->reveal());
 
+        $this->messageRepository->getMessagesCountByLinkableObject($chatSession->reveal(), null)->shouldBeCalled()->willReturn(43);
+
         $this->checkAccessToChatMessages->isSatisfiedBy($chatSession->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $this->notificationPublisher->publishChatMessageNotification($chatSession->reveal(), $savedChatMesssage->reveal())->shouldBeCalled();
+        $this->notificationPublisher->publishChatMessageNotification($chatSession->reveal(), $savedChatMesssage->reveal(), 43)->shouldBeCalled();
 
         $this->addChatMessageHandler->handle(new AddChatMessage($chatSession->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }
@@ -125,7 +129,7 @@ class AddChatMessageHandlerTest extends TestCase
 
         $this->checkAccessToChatMessages->isSatisfiedBy($chatSession->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
 
-        $this->notificationPublisher->publishChatMessageNotification(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->notificationPublisher->publishChatMessageNotification(Argument::any(), Argument::any(), Argument::any())->shouldNotBeCalled();
 
         $this->addChatMessageHandler->handle(new AddChatMessage($chatSession->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }

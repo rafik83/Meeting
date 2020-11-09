@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - VIMEET-2223 - ClearTimeout missing.
 
+### Added
+- VIMEET-2186 - Notifications when new messages or questions during webinar.
+
+### Changed
+- MV-267 - Brazil abolished DST in 2019
+
+## [2.66.1] - 2020-11-05
+### Fixed
+- MV264 - Networking tab only validated or accepted
+
 ## [2.66.0] - 2020-11-04
 ### Added
 - VIMEET-2223 - Add call visio on private chat (tab networking).

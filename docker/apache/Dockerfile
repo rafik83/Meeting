@@ -56,9 +56,9 @@ RUN set -x \
   xsl \
   zip
 
-RUN pecl install redis apcu lzf \
+RUN pecl install redis apcu lzf timezonedb \
   && yes '' | pecl install imagick \
-  && docker-php-ext-enable redis apcu lzf imagick \
+  && docker-php-ext-enable redis apcu lzf imagick timezonedb \
   && rm -rf /tmp/pear
 
 # Install New Relic but disable it by default

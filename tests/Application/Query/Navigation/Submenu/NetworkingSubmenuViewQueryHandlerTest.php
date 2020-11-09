@@ -13,6 +13,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -43,16 +44,20 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             ->willReturn('/url/to/contacts');
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), null)->shouldBeCalled()->willReturn(0);
+        $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), null)->shouldBeCalled()->willReturn(0);
 
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([]);
+
+        $canAccessToNetworking = $this->prophesize(CanAccessToNetworking::class);
+        $canAccessToNetworking->isSatisfied($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
             $accessChecker->reveal(),
             $chatMessageRepository->reveal(),
-            $chatSessionRepository->reveal()
+            $chatSessionRepository->reveal(),
+            $canAccessToNetworking->reveal()
         );
 
 
@@ -97,7 +102,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
-        $chatMessageRepository->getMessagesCountByEvent($event->reveal(), $lastViewDate)
+        $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), $lastViewDate)
             ->shouldBeCalled()
             ->willReturn(53);
 
@@ -112,12 +117,15 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
 
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([['unreadMessages' => [31415 => 2]]]);
+        $canAccessToNetworking = $this->prophesize(CanAccessToNetworking::class);
+        $canAccessToNetworking->isSatisfied($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
             $accessChecker->reveal(),
             $chatMessageRepository->reveal(),
-            $chatSessionRepository->reveal()
+            $chatSessionRepository->reveal(),
+            $canAccessToNetworking->reveal()
         );
 
 

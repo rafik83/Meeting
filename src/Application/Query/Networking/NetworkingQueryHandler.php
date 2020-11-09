@@ -43,7 +43,9 @@ class NetworkingQueryHandler
     {
 
         $topic = $this->notificationSubscriber->getNetworkingTopic($networkingQuery->sheet->getEvent()->getId());
-        $networkingChatNewMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+
+        $networkingChatNewMessagesCount = $this->chatMessageRepository->getMessagesCountByLinkableObject(
+
             $networkingQuery->sheet->getEvent(),
             $networkingQuery->sheet->getUserParticipant($networkingQuery->user)->getNetworkingChatViewedAt()
         );
