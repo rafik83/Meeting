@@ -7,6 +7,7 @@ class Contact
     public const ORIGIN_MEETING = 'meeting';
     public const ORIGIN_SCAN = 'scan';
     public const ORIGIN_PRIVATE_CHAT_VISIO = 'private_chat_visio';
+    public const ORIGIN_NONE = 'none';
 
     /** @var Event */
     private $event;
