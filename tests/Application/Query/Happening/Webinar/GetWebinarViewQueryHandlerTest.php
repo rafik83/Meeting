@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
@@ -61,6 +62,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $isRecordingAllowed;
 
+    /** @var ObjectProphecy */
+    private $questionRepository;
+
     private const ALL_NOTIFICATIONS = [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_STREAM];
 
     protected function setUp(): void
@@ -73,6 +77,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->happeningBroadcastRepository = $this->prophesize(HappeningBroadcastRepositoryInterface::class);
         $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
+        $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
@@ -82,6 +87,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->recordArchiveRepository->reveal(),
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
+            $this->questionRepository->reveal(),
             $this->dateTime
         );
     }
@@ -138,6 +144,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
+
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -207,7 +215,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
-                false
+                21,
+                false,
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -268,7 +278,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
-
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
 
@@ -309,6 +319,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->recordArchiveRepository->reveal(),
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
+            $this->questionRepository->reveal(),
             $date
         );
 
@@ -348,6 +359,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                21,
                 false
             ),
             $getWebinarViewQueryHandler->handle(
@@ -404,6 +416,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
 
         $session = $this->prophesize(Session::class);
@@ -498,6 +511,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 true,
                 false,
+                21,
                 false
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -530,6 +544,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
@@ -564,6 +579,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 'https://www.utube.com/embed/whatever',
                 true,
                 true,
+                21,
                 false,
                 null
             ),
@@ -621,6 +637,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
@@ -693,6 +710,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                21,
                 true,
                 42
             ),
@@ -723,6 +741,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->willReturn(null);
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
@@ -778,6 +797,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 null,
                 true,
                 false,
+                21,
                 true,
                 'http://some-video-provider.com/stream.hls'
             ),

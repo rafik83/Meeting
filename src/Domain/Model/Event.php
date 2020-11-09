@@ -989,7 +989,7 @@ class Event implements EventInterface, TraceableInterface, ChatMessageLinkableIn
 
     public function getObjectType(): string
     {
-        return 'networking';
+        return ChatMessage::TYPE_NETWORKING;
     }
 
     public function getEvent(): Event

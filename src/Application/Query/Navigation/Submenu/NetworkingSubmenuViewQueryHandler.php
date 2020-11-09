@@ -64,7 +64,7 @@ class NetworkingSubmenuViewQueryHandler
             if (!$isRouteNetworking) {
                 $participant = $query->sheet->getUserParticipant($query->user);
                 if ($participant !== null) {
-                    $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                    $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByLinkableObject(
                         $query->event,
                         $participant->getNetworkingChatViewedAt()
                     );

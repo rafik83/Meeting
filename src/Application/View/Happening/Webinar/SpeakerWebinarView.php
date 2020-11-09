@@ -69,6 +69,7 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
         bool $isWebinarRecordAutoStart,
+        int $questionsCount = 0,
         bool $allowWebinarOnHLS = false,
         int $viewersCount = 0
     ) {
@@ -89,6 +90,7 @@ class SpeakerWebinarView extends AbstractWebinarView
             $headerImage,
             $liveUrl,
             $sidebarAllowed,
+            $questionsCount,
             $isVideoWebinarAndHappeningIsEnded
         );
 

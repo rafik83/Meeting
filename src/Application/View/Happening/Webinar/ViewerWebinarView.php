@@ -45,6 +45,7 @@ class ViewerWebinarView extends AbstractWebinarView
         ?string $liveUrl,
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
+        int $questionsCount,
         bool $isWebinarHls,
         ?string $hlsUrl
     ) {
@@ -65,6 +66,7 @@ class ViewerWebinarView extends AbstractWebinarView
             $headerImage,
             $liveUrl,
             $sidebarAllowed,
+            $questionsCount,
             $isVideoWebinarAndHappeningIsEnded
         );
 

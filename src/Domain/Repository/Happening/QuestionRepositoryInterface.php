@@ -42,4 +42,6 @@ interface QuestionRepositoryInterface
     public function getByHappeningDuringWebinar(Happening $happening, User $currentUser): array;
 
     public function findById(int $id): ?Question;
+
+    public function getMessagesCountDuringHappening(Happening $happening): int;
 }

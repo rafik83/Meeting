@@ -73,6 +73,9 @@ abstract class AbstractWebinarView
     /** @var bool */
     public $isVideoWebinarAndHappeningIsEnded;
 
+    /** @var int */
+    public $questionsCount;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -94,6 +97,7 @@ abstract class AbstractWebinarView
         ?string $headerImage,
         ?string $liveUrl,
         bool $sidebarAllowed,
+        int $questionsCount,
         bool $isVideoWebinarAndHappeningIsEnded
     ) {
         $this->eventId = $eventId;
@@ -113,6 +117,7 @@ abstract class AbstractWebinarView
         $this->sidebarAllowed = $sidebarAllowed;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
+        $this->questionsCount = $questionsCount;
     }
 
     public function getSpeakerInfosByUserId(): string

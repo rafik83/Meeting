@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
@@ -48,6 +49,9 @@ class GetWebinarViewQueryHandler
     /** @var IsRecordingAllowed */
     private $isRecordingAllowed;
 
+    /** @var QuestionRepositoryInterface */
+    private $questionRepository;
+
     /** @var HappeningBroadcastRepositoryInterface */
     private $happeningBroadcastRepository;
 
@@ -59,6 +63,7 @@ class GetWebinarViewQueryHandler
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
+        QuestionRepositoryInterface $questionRepository,
         DateTimeInterface $dateTime
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
@@ -68,6 +73,7 @@ class GetWebinarViewQueryHandler
         $this->notificationSubscriptions = $notificationSubscriptions;
         $this->happeningBroadcastRepository = $happeningBroadcastRepository;
         $this->isRecordingAllowed = $isRecordingAllowed;
+        $this->questionRepository = $questionRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -103,6 +109,8 @@ class GetWebinarViewQueryHandler
             )
         );
 
+        $questionsCount = $this->questionRepository->getMessagesCountDuringHappening($happening);
+
         if ($isSpeaker) {
 
             if ($happening->allowWebinarOnHLS()) {
@@ -134,6 +142,7 @@ class GetWebinarViewQueryHandler
                 $this->isRecordingAllowed->isSatisfiedBy($happening),
                 $this->isWebinarRecording($happening),
                 $happening->getEvent()->getAutoArchiveWebinar(),
+                $questionsCount,
                 $happening->allowWebinarOnHLS(),
                 $viewersCount ?? 0
             );
@@ -158,6 +167,7 @@ class GetWebinarViewQueryHandler
             $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
+            $questionsCount,
             $happening->allowWebinarOnHLS(),
             $this->getHLSUrl($happening)
         );
