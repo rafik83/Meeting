@@ -53,7 +53,9 @@ class ConfigureDatesHandler
             $configureDates->enableBadgeForParticipantDate,
             $configureDates->enableVisioTestMenuButtonDate,
             $configureDates->networkingOpenDate,
-            $configureDates->networkingCloseDate
+            $configureDates->networkingCloseDate,
+            $configureDates->callVisioOpenDate,
+            $configureDates->callVisioCloseDate
         );
 
         $this->eventRepository->set($configureDates->event);

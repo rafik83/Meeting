@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Command\Happening\Webinar\Question;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
@@ -25,7 +25,10 @@ class AddHappeningQuestionHandlerTest extends TestCase
     /** @var AddHappeningQuestionHandler */
     private $addHappeningQuestionHandler;
 
-    public function setUp()
+    /** @var \DateTime */
+    private $datetime;
+
+    public function setUp(): void
     {
         $this->datetime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
@@ -37,7 +40,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
         );
     }
 
-    public function test_add_happening_question()
+    public function test_add_happening_question(): void
     {
         $happening = $this->prophesize(Happening::class);
 
@@ -71,7 +74,10 @@ class AddHappeningQuestionHandlerTest extends TestCase
         $this->questionRepository->add($expectedQuestion)
             ->shouldBeCalled();
 
-        $this->notificationPublisher->publishHappeningNotification($happening->reveal(), 'questions', Argument::withEntry('action', 'update'))
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->willReturn(2020);
+
+        $this->notificationPublisher
+            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'update', 'msg_count' => 2020])
             ->shouldBeCalled();
 
         $this->addHappeningQuestionHandler->handle($addHappeningQuestion->reveal());

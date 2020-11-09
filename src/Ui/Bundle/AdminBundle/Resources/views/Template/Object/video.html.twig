@@ -7,6 +7,7 @@
     required: false,
     style: '',
     tags: [],
+    products: [],
 }|merge(config|default({})) %}
 
 <div class="object" data-object="video" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -71,6 +72,20 @@
                                     <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                     <input type="checkbox" name="required" />
                                 </div>
+
+                                {% if products is defined and products is not empty %}
+                                    <div class="form-group">
+                                        <label class="form-label">{{ 'template.products.title'|trans }}</label>
+                                        <select class="form-control select2-builder" name="products" multiple="multiple">
+                                            {% for product in products %}
+                                                <option value="{{ product.id }}" {% if product.id in config.products %}selected="selected"{% endif %}>
+                                                    {{ product.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+
                                 {% if isFormTemplate is defined and isFormTemplate == true and templateTagView is defined %}
                                     <hr/>
                                     {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {

@@ -120,4 +120,20 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function hasMessageFromUser(ChatSession $chatSession, User $user): bool {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session')
+            ->from(ChatSession::class, 'session')
+            ->join(ChatMessage::class, 'message', 'WITH',
+                'message.objectId = session.id AND message.objectType = :type AND message.createdBy = :user')
+            ->setParameter('type', ChatMessage::TYPE_PRIVATE_CHAT)
+            ->setParameter('user', $user)
+            ->where('session.id = :id')
+            ->setParameter('id', $chatSession)
+            ->setMaxResults(1);
+
+        return !empty($queryBuilder->getQuery()->getArrayResult());
+    }
+
 }

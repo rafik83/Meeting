@@ -60,8 +60,8 @@ final class Category
     const NETWORKING      = 'navigation.category.networking';
     const NETWORKING_ICON = 'icon-Travail';
 
-    const CUSTOM_BUTTON = 'navigation.category.custom_button';
-    const CUSTOM_BUTTON_ICON = 'icon-Preferences_1';
+    const CUSTOM_BUTTON_ICON = 'icon-DemandeRDV';
+    const CUSTOM_BUTTON_ICON_2 = 'icon-Suivant_1';
 
     public static $categories = [
         self::MEMBER_SPACE,
@@ -76,6 +76,5 @@ final class Category
         self::FORMS,
         self::VISIO,
         self::NETWORKING,
-        self::CUSTOM_BUTTON,
     ];
 }

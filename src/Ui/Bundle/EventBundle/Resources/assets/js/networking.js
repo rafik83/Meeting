@@ -1,12 +1,13 @@
 import Chat from './components/_Chat';
+import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 import NetworkingNewMessageCounter from './components/_NetworkingNewMessageCounter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
+import RefuseVisio from "./components/_RefuseVisio";
 
-export default function initNetworking(target, userConnection) {
-
+export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
     if (!chatNetworkingElement) {
@@ -18,7 +19,6 @@ export default function initNetworking(target, userConnection) {
 
     const chatPrivateButton = document.querySelector('[data-chat-private-button]');
     const chatGeneralButton = document.querySelector('[data-chat-general-button]');
-
 
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
@@ -61,6 +61,11 @@ export default function initNetworking(target, userConnection) {
     const notificationHandler = {
         participantLists,
         target,
+        divCallVisioMessageTimeoutId: null,
+        /**
+         * @param {String} notification
+         * @param {Chat} targetChat
+         */
         handle: function (notification, targetChat) {
             const payload = JSON.parse(notification.data);
             if (payload.action === 'user_connection') {
@@ -81,6 +86,31 @@ export default function initNetworking(target, userConnection) {
             if (payload.action === 'update_chat_message_votes') {
                 targetChat.updateVotes(payload.messageId, payload.votes);
                 return;
+            }
+
+            if (payload.action === 'request_visio') {
+                const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
+                const buttonVisio = document.querySelector('.state-normal');
+                if (divCallVisioMessage != null) {
+
+                    divCallVisioMessage.classList.remove("hide");
+                    this.chatVisio.hideAllButtons();
+                    this.chatVisio.setUrlAccept(payload.urlAccept);
+                    this.refuseVisio.setUrlRefuse(payload.urlRefuse);
+                    this.divCallVisioMessageTimeoutId = setTimeout(() => {
+                        divCallVisioMessage.classList.add("hide");
+                        this.chatVisio.showVisioButton();
+                        buttonVisio.classList.remove("hide");
+                    }, 30000);
+                }
+            }
+
+            if (payload.action === 'refuse_visio') {
+                this.chatVisio.onRefuseVisio();
+            }
+
+            if (payload.action === 'join_visio') {
+                this.chatVisio.showJoinVisioButton(payload.urlAccept);
             }
         }
     }
@@ -109,8 +139,14 @@ export default function initNetworking(target, userConnection) {
     const modalManager = {
         userConnection,
         notificationHandler,
+        notificationCallVisio,
+        close: function () {
+            $(this.currentModal).modal('hide');
+            this.currentModal = null;
+        },
         open: function (participantNode) {
-            const privateChatModalId = 'private-chat-' + participantNode.getAttribute('data-participant-user-id');
+            const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
+            const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);
             if (modal == null) {
                 modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
@@ -123,19 +159,46 @@ export default function initNetworking(target, userConnection) {
                     const privateChatModalElement = modal.querySelector('[data-chat-networking]');
 
                     const chat = new Chat(privateChatModalElement);
+                    chat.setToUserId(toUserId);
+                    const chatVisio = new ChatVisio(modal.querySelector('.chat-header-tools'), modal.querySelector('.call-visio-accept'));
+                    const refuseVisio = new RefuseVisio(modal.querySelector('.call-visio-refuse'),
+                        () => {
+                            modal.querySelector('.chat-message-call-visio').classList.add('hide');
+                            modal.querySelector('.state-normal').classList.remove('hide');
+                        });
+                    this.notificationHandler.refuseVisio = refuseVisio;
+                    this.notificationHandler.chatVisio = chatVisio;
                     chat.initChat();
-
-                    this.userConnection.addListener((notification) => {
-                        this.notificationHandler.handle(notification, chat);
+                    this.notificationCallVisio.disable();
+                    chat.addListener((messages) => {
+                        chatVisio.onMessagesReceived(messages);
                     });
+
+                    const callback = (notification) => {
+                        this.notificationHandler.handle(notification, chat);
+                    };
+                    this.userConnection.addListener(callback);
+
+                    $(modal).on('hidden.bs.modal', () => {
+                        modal.remove();
+                        this.notificationCallVisio.enable();
+                        this.userConnection.removeListener(callback);
+                        chatVisio.abandonRequestVisio();
+                        clearTimeout(this.notificationHandler.divCallVisioMessageTimeoutId);
+                    })
                 });
             }
-
+            this.currentModal = modal;
             $(modal).modal('show')
         }
     }
     modalManager.open.bind(modalManager);
+    modalManager.close.bind(modalManager);
     participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
+
+    $('.networking_container').on('click', '[data-close-modal]', ()=> {
+        modalManager.close();
+    });
 
     // open private chat if "toUser" known is queryString
     const queryString = window.location.search;

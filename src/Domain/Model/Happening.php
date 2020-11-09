@@ -127,7 +127,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 
     public function getObjectType(): string
     {
-        return 'happening';
+        return ChatMessage::TYPE_HAPPENING;
     }
 
     public function getEvent(): Event

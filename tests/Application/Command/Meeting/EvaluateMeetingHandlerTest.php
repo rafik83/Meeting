@@ -43,7 +43,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $user->reveal(),
             $userMet1->reveal(),
             $date,
-            false
+            Contact::ORIGIN_MEETING
         );
 
         $contact2 = new Contact(
@@ -51,7 +51,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $user->reveal(),
             $userMet2->reveal(),
             $date,
-            false
+            Contact::ORIGIN_MEETING
         );
 
         $expectedContact1 = new Contact(
@@ -59,7 +59,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $user->reveal(),
             $userMet1->reveal(),
             $date,
-            false
+            Contact::ORIGIN_MEETING
         );
         $expectedContact1->setEvaluation(4);
 
@@ -68,7 +68,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $user->reveal(),
             $userMet2->reveal(),
             $date,
-            false
+            Contact::ORIGIN_MEETING
         );
         $expectedContact2->setEvaluation(4);
 

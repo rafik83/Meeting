@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -26,20 +27,29 @@ class NetworkingSubmenuViewQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
+    /** @var CanAccessToNetworking */
+    private $canAccessToNetworking;
+
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
         NetworkingAccessChecker $networkingAccessChecker,
         ChatMessageRepositoryInterface $chatMessageRepository,
-        ChatSessionRepositoryInterface $chatSessionRepository
+        ChatSessionRepositoryInterface $chatSessionRepository,
+        CanAccessToNetworking $canAccessToNetworking
     ) {
         $this->navigationBuilder = $navigationBuilder;
         $this->networkingAccessChecker = $networkingAccessChecker;
         $this->chatMessageRepository = $chatMessageRepository;
         $this->chatSessionRepository = $chatSessionRepository;
+        $this->canAccessToNetworking = $canAccessToNetworking;
     }
 
     public function handle(NetworkingSubmenuViewQuery $query): ?SubmenuButtonView
     {
+        if (!$this->canAccessToNetworking->isSatisfied($query->sheet)) {
+            return null;
+        }
+
         if (!$this->networkingAccessChecker->allowedToAccess($query->event)) {
             return null;
         }
@@ -63,7 +73,7 @@ class NetworkingSubmenuViewQueryHandler
             }, 0);
             $participant = $query->sheet->getUserParticipant($query->user);
             if ($participant !== null) {
-                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
+                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByLinkableObject(
                         $query->event,
                         $participant->getNetworkingChatViewedAt()
                     );

@@ -51,14 +51,17 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message): void
+    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message, int $messageCount): void
     {
-        $payload = ['action' => 'add_chat_message'];
+        $payload = [
+            'action' => 'add_chat_message',
+            'msg_count' => $messageCount,
+        ];
 
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getUserTopic($object->getOtherUser($message->getCreatedBy())->getId());
+            $topic = $this->getUserTopic($object->getEvent()->getId(), $object->getOtherUser($message->getCreatedBy())->getId());
             $payload['content'] = $message->getContent();
             $payload['author'] = $message->getCreatedBy()->getFullname();
             $payload['authorId'] = $message->getCreatedBy()->getId();
@@ -85,7 +88,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
         if ($object instanceof Happening) {
             $topic = $this->getHappeningTopic($object->getId(), NotificationSubscriber::TYPE_CHAT);
         } elseif ($object instanceof ChatSession) {
-            $topic = $this->getUserTopic($chatMessage->getCreatedBy()->getId());
+            $topic = $this->getUserTopic($object->getEvent()->getId(), $chatMessage->getCreatedBy()->getId());
         } elseif ($object instanceof Meeting) {
             //todo: add special topic for meeting
             return;
@@ -106,8 +109,23 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $postData = [
             'topic' => $this->getNetworkingTopic($sheet->getEvent()->getId()),
             'data' => json_encode(
-                array_merge(['action' => 'user_connection',], $this->userPayloadBuilder->get($sheet, $user))
+                array_merge(['action' => 'user_connection'], $this->userPayloadBuilder->get($sheet, $user))
             ),
+        ];
+
+        $this->publishMessage($postData);
+    }
+
+    public function publishRequestVisioNotification(Sheet $sheet, User $fromUser, int $toUserId, string $type): void
+    {
+        $postData = [
+            'topic' => $this->getUserTopic($sheet->getEvent()->getId(), $toUserId),
+            'data' => json_encode([
+                'action' => $type,
+                'from' => $this->userPayloadBuilder->get($sheet, $fromUser),
+                'urlAccept' => '/fr/sheet/'.$sheet->getId().'/networking/visio/'.$fromUser->getId(),
+                'urlRefuse' => '/fr/sheet/'.$sheet->getId().'/networking/refuse-visio/'.$fromUser->getId(),
+            ]),
         ];
 
         $this->publishMessage($postData);
