@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\WebinarView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\Webinar\RecordArchiveRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
@@ -38,13 +39,17 @@ class GetWebinarViewQueryHandler
     /** @var IsRecordingAllowed */
     private $isRecordingAllowed;
 
+    /** @var QuestionRepositoryInterface */
+    private $questionRepository;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         NotificationSubscriberInterface $notificationSubscriber,
         RecordArchiveRepositoryInterface $recordArchiveRepository,
         IsRecordingAllowed $isRecordingAllowed,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        QuestionRepositoryInterface $questionRepository
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
@@ -52,6 +57,7 @@ class GetWebinarViewQueryHandler
         $this->notificationSubscriber = $notificationSubscriber;
         $this->dateTime = $dateTime;
         $this->isRecordingAllowed = $isRecordingAllowed;
+        $this->questionRepository = $questionRepository;
     }
 
     public function handle(GetWebinarViewQuery $query): WebinarView
@@ -86,6 +92,8 @@ class GetWebinarViewQueryHandler
             )
         );
 
+        $questionsCount = $this->questionRepository->getMessagesCountDuringHappening($happening);
+
         return new WebinarView(
             $happening->getEvent()->getId(),
             $happening->getId(),
@@ -111,7 +119,8 @@ class GetWebinarViewQueryHandler
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $this->isRecordingAllowed->isSatisfiedBy($happening),
             $this->isWebinarRecording($happening),
-            $happening->getEvent()->getAutoArchiveWebinar()
+            $happening->getEvent()->getAutoArchiveWebinar(),
+            $questionsCount
         );
     }
 

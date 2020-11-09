@@ -82,6 +82,9 @@ class WebinarView
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
 
+    /** @var int */
+    public $questionsCount;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -111,7 +114,8 @@ class WebinarView
         bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
-        bool $isWebinarRecordAutoStart
+        bool $isWebinarRecordAutoStart,
+        int $questionsCount
     ) {
         $this->eventId = $eventId;
         $this->happeningId = $happeningId;
@@ -138,6 +142,7 @@ class WebinarView
         $this->isWebinarRecorded = $isWebinarRecorded;
         $this->isWebinarRecording = $isWebinarRecording;
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
+        $this->questionsCount = $questionsCount;
     }
 
     public function getSpeakerInfosByUserId(): string

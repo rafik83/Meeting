@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2186 - Notifications when new messages or questions during webinar.
+
 ### Changed
 - MV-267 - Brazil abolished DST in 2019
 
@@ -28,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.65.0] - 2020-10-29
 ### Added
 - VIMEET-2225 - Add related product to video template objects
->>>>>>> master
 
 ## [2.64.0] - 2020-10-28
 ### Fixed

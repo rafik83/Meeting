@@ -47,6 +47,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed'
             - '@datetime'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
 

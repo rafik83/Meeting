@@ -160,7 +160,7 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
 
     public function getObjectType(): string
     {
-        return 'meeting';
+        return ChatMessage::TYPE_MEETING;
     }
 
     /**

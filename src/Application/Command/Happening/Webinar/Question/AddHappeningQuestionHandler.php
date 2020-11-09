@@ -48,6 +48,7 @@ class AddHappeningQuestionHandler
 
         $this->notificationPublisher->publishHappeningNotification($command->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
             'action' => 'update',
+            'msg_count' => $this->questionRepository->getMessagesCountDuringHappening($command->getHappening()),
         ]);
     }
 }
