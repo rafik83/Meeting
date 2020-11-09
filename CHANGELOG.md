@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2186 - Notifications when new messages or questions during webinar.
 
+### Changed
+- MV-267 - Brazil abolished DST in 2019
+
 ## [2.66.1] - 2020-11-05
 ### Fixed
 - MV264 - Networking tab only validated or accepted
