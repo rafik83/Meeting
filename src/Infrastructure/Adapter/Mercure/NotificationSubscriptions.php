@@ -31,17 +31,8 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
 
     public function getSubscriptions(int $eventId, ?int $userId, string $topicFilter = null): array
     {
-        $authPayload = [
-            'mercure' => [
-                'subscribe' => ['*'],
-            ]
-        ];
+        $result = $this->getSubscriptionsRaw();
 
-        $response = $this->httpAdapter->get($this->mercureHubUrl . '/subscriptions', [
-            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercureSubscriberKey)),
-            'Content-type' => 'application/x-www-form-urlencoded',
-        ]);
-        $result = json_decode($response->body, true);
         $users = [];
 
         foreach ($result['subscriptions'] as $subscription) {
@@ -71,5 +62,40 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         });
 
         return $users;
+    }
+
+    public function getStreamSubscriptionsCount(int $happeningId): int
+    {
+        $result = $this->getSubscriptionsRaw($this->getHappeningTopic($happeningId, AbstractNotification::TYPE_STREAM));
+
+        $indexedUsers = array_reduce($result['subscriptions'], function ($carry, $item) {
+            if ($item['payload']['userId'] ?? false) {
+                $carry[$item['payload']['userId']] = 1;
+            }
+            return $carry;
+        }, []);
+
+        return count($indexedUsers);
+    }
+
+    private function getSubscriptionsRaw(?string $topic = null): array
+    {
+        $authPayload = [
+            'mercure' => [
+                'subscribe' => ['*'],
+            ]
+        ];
+
+        $topicUrlPart = '';
+        if (null !== $topic) {
+            $topicUrlPart = '/' . urlencode($topic);
+        }
+
+        $response = $this->httpAdapter->get($this->mercureHubUrl . '/subscriptions' . $topicUrlPart, [
+            'Authorization' => sprintf('Bearer %s', JWT::encode($authPayload, $this->mercureSubscriberKey)),
+            'Content-type' => 'application/x-www-form-urlencoded',
+        ]);
+
+        return json_decode($response->body, true);
     }
 }

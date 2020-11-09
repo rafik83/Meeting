@@ -56,10 +56,20 @@
          data-current-user-id="{{ webinarView.currentUserId }}"
          data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
          data-sidebar-allowed="{{ webinarView.sidebarAllowed }}"
+         data-webinar-hls="{{ webinarView.allowWebinarOnHLS ? 'true' : 'false' }}"
+         data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
 
+         {% if webinarView.allowWebinarOnHLS %}
+         data-webinar-stream-endpoint="{{ path(
+             'event_happening_webinar_stream_broadcast',
+             {
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+         {% else %}
          data-webinar-stream-endpoint="{{ path(
              'event_happening_webinar_stream',
              {
@@ -67,6 +77,7 @@
                  'happening': webinarView.happeningId
              }
          ) }}"
+         {% endif %}
 
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"

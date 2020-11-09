@@ -111,3 +111,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
