@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
@@ -25,10 +17,6 @@ class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
     /** @var CatalogTagFilterRepositoryInterface */
     private $catalogTagFilterRepository;
 
-    /**
-     * @param SearchFacetRepositoryInterface      $searchFacetRepository
-     * @param CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
-     */
     public function __construct(
         SearchFacetRepositoryInterface $searchFacetRepository,
         CatalogTagFilterRepositoryInterface $catalogTagFilterRepository
@@ -37,11 +25,6 @@ class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
         $this->catalogTagFilterRepository = $catalogTagFilterRepository;
     }
 
-    /**
-     * @param AbstractSearchFacetViewQuery $query
-     *
-     * @return SearchFacetsView
-     */
     public function handle(AbstractSearchFacetViewQuery $query): SearchFacetsView
     {
         $searchFacets = $this->searchFacetRepository->getByEvent($query->event);

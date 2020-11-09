@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages;
 use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
+use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject;
 use Proximum\Vimeet\Application\Query\Chat\ListChatMessages;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
@@ -17,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ListAction
@@ -64,9 +66,13 @@ class ListAction
             throw new AccessDeniedException('Object not in this event');
         }
 
-        $chatMessageViews = $this->queryBus->handle(
-            new ListChatMessages($object, $user, $request->getLocale())
-        );
+        try {
+            $chatMessageViews = $this->queryBus->handle(
+                new ListChatMessages($object, $user, $request->getLocale())
+            );
+        } catch (ChatMessageNotAllowedException $exception) {
+            throw new AccessDeniedHttpException('Access denied to this chat');
+        }
 
         if ($object->getObjectType() === ChatMessage::TYPE_PRIVATE_CHAT) {
             $this->commandBus->handle(new ResetSessionUnreadMessages($object, $user));

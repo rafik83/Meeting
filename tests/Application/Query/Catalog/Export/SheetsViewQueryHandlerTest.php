@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Catalog\Export;
 
 use Elastica\Result;
@@ -15,15 +7,17 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
-use Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\Export\SheetListView;
 use Proximum\Vimeet\Application\View\Catalog\Export\SheetView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Sheet\SheetIdView;
 
@@ -45,6 +39,9 @@ class SheetsViewQueryHandlerTest extends TestCase
     private $sheetViewQueryHandler;
 
     /** @var ObjectProphecy */
+    private $getViewedSheetsFromFilters;
+
+    /** @var ObjectProphecy */
     private $event;
 
     /** @var ObjectProphecy */
@@ -57,9 +54,11 @@ class SheetsViewQueryHandlerTest extends TestCase
         $this->nomenclatureItemsGetter = $this->prophesize(NomenclatureItemsGetter::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $this->getViewedSheetsFromFilters = $this->prophesize(GetViewedSheetsFromFilters::class);
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
-        $this->event->getFallback()->willReturn('de');
+        $this->user = $this->prophesize(User::class);
+        $this->event->getLocaleFallback()->willReturn('de');
     }
 
     public function testHandle()
@@ -86,7 +85,8 @@ class SheetsViewQueryHandlerTest extends TestCase
                 'fr',
                 [],
                 [],
-                []
+                [],
+                null
             )->shouldBeCalled()
             ->willReturn([
                 $result1->reveal(),
@@ -158,17 +158,23 @@ class SheetsViewQueryHandlerTest extends TestCase
             ->willReturn('Type de participation')
         ;
 
+        $this->getViewedSheetsFromFilters->getFilteredByVisitSheetIds($filters, $this->user->reveal(), $this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null);
+
         $handler = new SheetsViewQueryHandler(
             $this->translator->reveal(),
             $this->sheetSearchAdapter->reveal(),
             $this->nomenclatureItemsGetter->reveal(),
             $this->sheetRepository->reveal(),
-            $this->sheetViewQueryHandler->reveal()
+            $this->sheetViewQueryHandler->reveal(),
+            $this->getViewedSheetsFromFilters->reveal()
         );
 
         $query = new SheetsViewQuery(
             $this->event->reveal(),
             $this->sheet->reveal(),
+            $this->user->reveal(),
             $filters,
             'fr',
             [],

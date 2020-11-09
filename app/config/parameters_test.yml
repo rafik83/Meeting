@@ -6,3 +6,5 @@ parameters:
     feature_dday_enabled: true
     feature_availability_confirmation_enabled: false
     feature_product_vat_enabled: true
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum

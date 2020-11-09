@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository\Sheet;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Model\User;
@@ -21,11 +14,6 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
     /** @var EntityManager */
     private $entityManager;
 
-    /**
-     * SheetViewedRepository constructor.
-     *
-     * @param EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -34,7 +22,7 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(SheetViewed $sheetViewed)
+    public function add(SheetViewed $sheetViewed): void
     {
         $this->entityManager->persist($sheetViewed);
         $this->entityManager->flush($sheetViewed);
@@ -43,7 +31,7 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function isSheetAlreadySeenByUser(User $user, Sheet $sheet)
+    public function isSheetAlreadySeenByUser(User $user, Sheet $sheet): bool
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -62,7 +50,7 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds)
+    public function getSheetsAlreadySeenByUser(User $user, array $sheetIds): array
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -71,9 +59,77 @@ class SheetViewedRepository implements SheetViewedRepositoryInterface
             ->where('sheetViewed.sheet IN (:sheetIds) AND sheetViewed.user = :user')
             ->setParameters([
                 'sheetIds' => $sheetIds,
-                'user'  => $user,
+                'user' => $user,
             ]);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getSheetsSeenByUserAndEvent(User $user, Event $event): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->from(SheetViewed::class, 'sheetViewed')
+            ->leftJoin('sheetViewed.sheet', 'sheet')
+            ->where('sheetViewed.user = :user')
+            ->andWhere('sheet.event = :event')
+            ->setParameters([
+                'user' => $user,
+                'event' => $event,
+            ]);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getUsersWhoViewedSheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('user.id')
+            ->from(SheetViewed::class, 'sheetViewed')
+            ->leftJoin('sheetViewed.user', 'user')
+            ->where('sheetViewed.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getSheetIdsWhoViewedSheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->distinct()
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.participants', 'participant')
+            ->join(SheetViewed::class, 'sheetView', 'WITH', 'participant.user = sheetView.user')
+            ->where('sheetView.sheet = :sheet')
+            ->andWhere('sheet.event = :event')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('event', $sheet->getEvent())
+        ;
+
+        $participantUserIds = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('sheet.id')
+            ->distinct()
+            ->from(Sheet::class, 'sheet')
+            ->join(SheetViewed::class, 'sheetView', 'WITH', 'sheet.owner = sheetView.user')
+            ->where('sheetView.sheet = :sheet')
+            ->andWhere('sheet.event = :event')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('event', $sheet->getEvent())
+        ;
+
+        $ownerUserIds = array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
+
+        return array_unique(array_merge($participantUserIds, $ownerUserIds));
     }
 }

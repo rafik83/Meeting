@@ -9,8 +9,9 @@ function Chat(element) {
     this.addChatFormAction = this.addChatForm.getAttribute('action');
     this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
     this.addChatFormList = this.chatContainer.querySelector('.chat-list');
-
+    this.externalListener = [];
     this.chatLoaded = false;
+    this.toUserId = null;
 
     this.addChatForm.addEventListener('submit', this.submitChat.bind(this));
 
@@ -208,6 +209,7 @@ Chat.prototype.initChat = function () {
         this.chatMessagesCount = chatMessagesCount;
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
+        this.externalListener.forEach((callback) => callback(response));
     }.bind(this))
         .fail(function (error) {
             console.error('Failed to load chat', error);
@@ -234,6 +236,18 @@ Chat.prototype.removeChatListeners = function () {
 
 Chat.prototype.getChatMessagesCount = function () {
     return this.chatMessagesCount;
+}
+
+Chat.prototype.addListener = function (callback) {
+    this.externalListener.push(callback);
+}
+
+Chat.prototype.setToUserId = function(toUserId) {
+    this.toUserId = toUserId;
+}
+
+Chat.prototype.getToUserId = function() {
+    return this.toUserId;
 }
 
 export default Chat;

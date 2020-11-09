@@ -24,6 +24,7 @@ flash.admin.event.export.uploaded_objects.success: 'L''export des fichiers uploa
 flash.admin.event.extraParameter.create.success: 'Le paramètre supplémentaire a été créé avec succès'
 flash.admin.event.extraParameter.update.success: 'Le paramètre supplémentaire a été mis à jour avec succès'
 flash.admin.event.filter_facet.update.success: 'Vos filtres ont bien été mis à jour'
+flash.admin.event.filter_facet.update.warning_bad_config: 'Les filtres catégorie et type ne peuvent pas être affichés en même temps'
 flash.admin.event.index.success: 'La réindexation de l''ensemble des événements est en cours'
 flash.admin.event.paymentConditions.update.success: 'Les conditions de paiement ont été modifiées avec succès'
 flash.admin.event.practicalInfo.update.success: 'Les informations pratiques ont bien été mises à jour'

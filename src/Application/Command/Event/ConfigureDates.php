@@ -75,6 +75,12 @@ class ConfigureDates implements Command
     /** @var \DateTimeInterface|null "Date de cloture du networking" */
     public $networkingCloseDate;
 
+    /** @var \DateTimeInterface|null "Date d'ouverture des call visio dans l'onglet networking" */
+    public $callVisioOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture des call visio dans l'onglet networking" */
+    public $callVisioCloseDate;
+
     /**
      * @param Event $event
      */
@@ -94,6 +100,8 @@ class ConfigureDates implements Command
         $this->enableVisioTestMenuButtonDate    = $event->getConfiguration()->getEnableVisioTestMenuButtonDate();
         $this->networkingOpenDate               = $event->getConfiguration()->getNetworkingOpenDate();
         $this->networkingCloseDate              = $event->getConfiguration()->getNetworkingCloseDate();
+        $this->callVisioOpenDate                = $event->getConfiguration()->getCallVisioOpenDate();
+        $this->callVisioCloseDate               = $event->getConfiguration()->getCallVisioCloseDate();
     }
 
     public function addCatalogOnlineDateButEventHasNoDate(): bool

@@ -16,6 +16,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery }
 

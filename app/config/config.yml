@@ -9,6 +9,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    # should be set to deployed version hash on k8s environments
+    app_version: '%env(APP_VERSION)%'
+    env(APP_VERSION): dev
 
 framework:
     esi: { enabled: true }

@@ -70,7 +70,7 @@ class CreateHandler
             $create->canEvaluateMeeting ? $create->mustEvaluateMeeting : false,
             $create->canSubmitValidation,
             $create->displayAnalyticsOnSheet,
-            $create->displayAnalyticsOnMeetingList
+            $create->displayAnalyticsOnCatalog
         );
 
         $localesTitleAlreadyExists = [];

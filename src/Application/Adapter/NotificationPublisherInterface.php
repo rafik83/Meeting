@@ -17,4 +17,6 @@ interface NotificationPublisherInterface
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, ChatMessage $chatMessage, array $votes): void;
 
     public function publishUserConnectionNotification(Sheet $sheet, User $user): void;
+
+    public function publishRequestVisioNotification(Sheet $sheet, User $fromUser, int $toUserId, string $type): void;
 }

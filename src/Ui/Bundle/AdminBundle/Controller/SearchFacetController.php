@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
@@ -37,11 +29,11 @@ class SearchFacetController extends Controller
         $catalogTagFilters = $this->get(CatalogTagFilterRepository::class)
             ->getByEventAndType($event, CatalogTagFilter::TYPE_INTERNAL);
 
-        $types   = SearchFacet::getAllTypes();
+        $types = SearchFacet::getAllTypes();
         $command = new Update($event, $searchFacets, $catalogTagFilters);
         $form = $this->createForm(UpdateType::class, $command, [
             'submit' => true,
-            'types'  => $types,
+            'types' => $types,
             'event' => $event,
         ]);
 
@@ -49,11 +41,16 @@ class SearchFacetController extends Controller
             $this->get('tactician.commandbus')->handle($command);
             $this->addFlash('success', 'flash.admin.event.filter_facet.update.success');
 
+            $submittedSearchFacets = $form->get('searchFacets')->getData();
+            if ($submittedSearchFacets['type']['enabled'] && $submittedSearchFacets['category']['enabled']) {
+                $this->addFlash('warning', 'flash.admin.event.filter_facet.update.warning_bad_config');
+            }
+
             return $this->redirectToRoute('admin_event_search_facets', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Event/SearchFacet:update.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
         ]);
     }

@@ -27,6 +27,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\UserConnectedEventListener:
         arguments:
             - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.networking_access_checker'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver'
             - '@adapter.session'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'

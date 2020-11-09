@@ -3251,6 +3251,13 @@ services:
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
+    validator.template_object.video_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoValidator
+        arguments:
+            - '@package.product.template_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
     validator.email_validator:
         class: Proximum\Vimeet\Domain\Account\EmailValidator
         arguments:
@@ -3542,6 +3549,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3578,6 +3586,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
     Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
+
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink: ~
 
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
@@ -3654,6 +3664,7 @@ services:
         arguments:
             - '@adapter.sheet_search_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
@@ -4644,6 +4655,7 @@ services:
             - '@domain.key_dates.checker.networking_access_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
 
@@ -5625,6 +5637,18 @@ services:
     domain.key_dates.checker.networking_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
         arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.ask_call_visio_private_chat_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
+
+    domain.key_dates.checker.call_visio_private_chat_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@datetime'
 
     #
@@ -7231,12 +7255,29 @@ services:
     #
     # Networking
     #
+
+    Proximum\Vimeet\Application\Query\Networking\CallVisioQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
     Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@domain.key_dates.checker.networking_access_checker'
         tags:
             - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
 
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
         arguments:
@@ -7251,5 +7292,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@domain.key_dates.checker.ask_call_visio_private_chat_access_checker'
+            - '@Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio'
         tags:
             - { name: tactician.handler, typehints: true }

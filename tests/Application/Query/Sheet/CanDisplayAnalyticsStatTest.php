@@ -12,7 +12,7 @@ class CanDisplayAnalyticsStatTest extends TestCase
     public function testCan(): void
     {
         $type = $this->prophesize(Type::class);
-        $type->displayAnalyticsOnSheet = true;
+        $type->canDisplayAnalyticsOnSheet()->willReturn(true);
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->isInInternalCatalog()->willReturn(true);
@@ -27,7 +27,7 @@ class CanDisplayAnalyticsStatTest extends TestCase
     public function testCantWhenNotInCatalog(): void
     {
         $type = $this->prophesize(Type::class);
-        $type->displayAnalyticsOnSheet = true;
+        $type->canDisplayAnalyticsOnSheet()->willReturn(true);
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->isInInternalCatalog()->willReturn(false);
@@ -42,7 +42,7 @@ class CanDisplayAnalyticsStatTest extends TestCase
     public function testCantWhenTypeNotAllowed(): void
     {
         $type = $this->prophesize(Type::class);
-        $type->displayAnalyticsOnSheet = false;
+        $type->canDisplayAnalyticsOnSheet()->willReturn(false);
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->isInInternalCatalog()->willReturn(true);
