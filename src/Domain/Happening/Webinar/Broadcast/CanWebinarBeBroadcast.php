@@ -37,6 +37,6 @@ class CanWebinarBeBroadcast
         $end = DaysHelper::cloneDateTime($happening->getEnd());
         $end->modify('+30 minutes');
 
-        return $begin < $this->datetime && $this->datetime > $end;
+        return $begin < $this->datetime && $this->datetime < $end;
     }
 }

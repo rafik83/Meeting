@@ -784,6 +784,7 @@ Webinar.prototype.handleStream = function(
         action: 'start'
     })
     .fail((error) => {
+        this.showError('Stream creation failed');
         console.error(error);
     });
 };
@@ -800,6 +801,7 @@ Webinar.prototype.handleStopStream = function(
         action: 'stop'
     }, (response) => {})
         .fail((error) => {
+            this.showError('Stream stop failed');
             console.error(error);
         });
 };
