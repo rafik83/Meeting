@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2220 Compute the private chat message count
+- VIMEET-2232 - Allow user to access video webinar when ended even with no participation
 
 ## [2.68.0] - 2020-11-09
 ### Added
