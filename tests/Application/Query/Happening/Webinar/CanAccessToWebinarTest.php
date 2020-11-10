@@ -27,7 +27,7 @@ class CanAccessToWebinarTest extends TestCase
     /** @var ObjectProphecy|User */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->happening = $this->prophesize(Happening::class);
         $this->user = $this->prophesize(User::class);
@@ -42,7 +42,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_happening_not_a_webinar()
+    public function test_happening_not_a_webinar(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(false);
         $this->assertFalse(
@@ -50,7 +50,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_webinar_not_opened()
+    public function test_webinar_not_opened(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
         $this->happening->hasSpeaker($this->user->reveal())->shouldBeCalled()->willReturn(false);
@@ -63,7 +63,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_user_is_webinar_speaker()
+    public function test_user_is_webinar_speaker(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
         $this->happening->hasSpeaker($this->user->reveal())->shouldBeCalled()->willReturn(true);
@@ -73,7 +73,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_user_is_webinar_participant()
+    public function test_user_is_webinar_participant(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
         $this->happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:20:00'));
@@ -92,7 +92,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_user_is_not_webinar_participant()
+    public function test_user_is_not_webinar_participant(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
         $this->happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:20:00'));
@@ -110,7 +110,7 @@ class CanAccessToWebinarTest extends TestCase
         );
     }
 
-    public function test_user_is_video_webinar_participant()
+    public function test_user_is_video_webinar_participant(): void
     {
         $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
         $this->happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:20:00'));
@@ -126,6 +126,26 @@ class CanAccessToWebinarTest extends TestCase
 
         $this->assertTrue(
             $this->canAccessToWebinar->isSatisfiableBy($this->happening->reveal(), $this->user->reveal())
+        );
+    }
+
+    public function test_user_is_not_participant_of_video_webinar_but_webinar_is_ended(): void
+    {
+        $currentTime = new \DateTime('2020-04-14 09:45:00');
+        $this->happening->isWebinar()->shouldBeCalled()->willReturn(true);
+        $this->happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:20:00'));
+        $this->happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-04-12 09:45:00'));
+        $this->happening->hasSpeaker($this->user->reveal())->shouldBeCalled()->willReturn(false);
+        $this->happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
+
+        $canAccessToWebinar = new CanAccessToWebinar(
+            $this->happeningParticipationRepository->reveal(),
+            $currentTime,
+            true,
+            true
+        );
+        $this->assertTrue(
+            $canAccessToWebinar->isSatisfiableBy($this->happening->reveal(), $this->user->reveal())
         );
     }
 }
