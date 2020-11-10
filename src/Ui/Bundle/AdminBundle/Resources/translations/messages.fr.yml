@@ -433,6 +433,7 @@ admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
+admin.meeting.dashboard.callVisio: 'RDV en visio lors d''un chat privé'
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
 admin.meeting.dashboard.createdByPlanner: 'RDV algo'
 admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'

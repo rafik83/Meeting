@@ -1,20 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardMeetingView;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class DashboardMeetingViewQueryHandler
 {
@@ -24,12 +17,17 @@ class DashboardMeetingViewQueryHandler
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
+    /** @var ChatSessionRepositoryInterface */
+    private $chatSessionRepository;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
-        RequestRepositoryInterface $requestRepository
+        RequestRepositoryInterface $requestRepository,
+        ChatSessionRepositoryInterface $chatSessionRepository
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->requestRepository = $requestRepository;
+        $this->chatSessionRepository = $chatSessionRepository;
     }
 
     public function handle(DashboardMeetingViewQuery $query): DashboardMeetingView
@@ -62,14 +60,17 @@ class DashboardMeetingViewQueryHandler
         $meetingCreatedByPlanner = $this->meetingRepository
             ->countCreatedByEventAndType($query->event, Meeting::CREATED_BY_PLANNER);
 
+        $meetingCallVisio = $this->chatSessionRepository->countCallVisioByEvent($query->event);
+
         $dashboardRequestViews = $this->requestRepository->getDashboardRequestViewsByEvent($query->event);
 
         return new DashboardMeetingView(
-            $allMeetings,
+            $allMeetings + $meetingCallVisio,
             $meetingCreatedDayDByAdmin,
             $meetingCreatedByParticipant,
             $meetingCreatedByPlanner,
             $meetingCreatedUpstreamByAdmin,
+            $meetingCallVisio,
             $this->countApprovedRequests($dashboardRequestViews),
             $this->countPendingRequests($dashboardRequestViews),
             $this->countRefusedRequests($dashboardRequestViews),

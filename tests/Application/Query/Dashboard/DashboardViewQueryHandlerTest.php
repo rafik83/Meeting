@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
@@ -42,7 +34,7 @@ class DashboardViewQueryHandlerTest extends TestCase
         //Expected
         $dashboardTransactionView = new DashboardTransactionView(100, 25, 75);
         $dashboardSheetView = new DashboardSheetView(100, 150, [], []);
-        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 100, 33, 32, [42 => 2, 1337 => 120], []);
+        $dashboardMeetingView = new DashboardMeetingView(200, 20, 10, 300, 20, 15, 100, 33, 32, [42 => 2, 1337 => 120], []);
         $dashboardContactView = new DashboardContactView(
             [42 => [5 => 3, 4 => 7], 1337 => [5 => 1, 3 => 1]],
             [42 => 2, 1337 => 1]

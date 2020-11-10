@@ -3655,6 +3655,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
 
     Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler:
         arguments:
