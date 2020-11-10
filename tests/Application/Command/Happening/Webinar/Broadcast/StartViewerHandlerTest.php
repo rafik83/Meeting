@@ -23,9 +23,9 @@ class StartViewerHandlerTest extends TestCase
         $notificationSubscriptions->getStreamSubscriptionsCount($happeningId)->shouldBeCalled()->willReturn($subscriptionsCount);
 
         $notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
-        $notificationPublisher->publishHappeningNotification($happening->reveal(), 'speaker', [
+        $notificationPublisher->publishHappeningNotification($happening->reveal(), 'stream', [
             'action' => 'viewer_connected',
-            'viewersCount' => $subscriptionsCount,
+            'connectedUsersCount' => $subscriptionsCount,
         ])->shouldBeCalled();
 
         $startViewerHandler = new StartViewerHandler(

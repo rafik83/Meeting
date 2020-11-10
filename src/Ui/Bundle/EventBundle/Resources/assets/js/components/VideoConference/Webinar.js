@@ -49,7 +49,6 @@ function Webinar(element, isSpeaker) {
     this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
     this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
     this.topicStream = `https://vimeet.events/happening/${this.happeningId}/webinar/stream`;
-    this.topicSpeaker = `https://vimeet.events/happening/${this.happeningId}/webinar/speaker`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -367,22 +366,9 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
             this.hlsPlayer.updateHlsSource(payload.hlsUrl);
             console.info('Received stream_started notification, hlsUrl: ' + payload.hlsUrl);
         }
-    });
-
-};
-
-Webinar.prototype.subscribeToSpeakerNotifications = function () {
-    // if webinar is not in hls mode, updates will be sent with tokbox
-    if (!this.isHls) {
-        return;
-    }
-
-    this.notificationSubscriber.addSubscriber(this.topicSpeaker, this.notificationSubscriberKey, (event) => {
-        const payload = JSON.parse(event.data);
 
         if (payload.action === 'viewer_connected') {
-            // viewers + other speakers + current speaker
-            this.viewersCount = payload.viewersCount + this.subscribers.length + 1;
+            this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }
     });
@@ -403,8 +389,6 @@ Webinar.prototype.connect = function () {
         }
 
         this.showElement(this.mediaStartSharingButton);
-        this.showElement(this.timerContainer);
-        this.showElement(this.viewersContainer);
         this.initShareMedia();
 
         this.showViewerControls();
@@ -412,7 +396,7 @@ Webinar.prototype.connect = function () {
         if (!error) {
             if (this.isSpeaker) {
                 this.publishStream();
-                this.subscribeToSpeakerNotifications();
+                this.subscribeToStreamNotifications();
             }
 
             return;
@@ -435,6 +419,8 @@ Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
 }
 
 Webinar.prototype.showViewerControls = function () {
+    this.showElement(this.timerContainer);
+    this.showElement(this.viewersContainer);
 
     if (!this.isMobile && !this.isSidebarOpened()) {
         this.toggleSideBar();
