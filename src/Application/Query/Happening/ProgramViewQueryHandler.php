@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
@@ -32,13 +24,6 @@ class ProgramViewQueryHandler
     /** @var FullHappeningQueryHandler */
     private $fullHappeningQueryHandler;
 
-    /**
-     * @param DayRepositoryInterface             $dayRepository
-     * @param DayViewQueryHandler                $dayViewQueryHandler
-     * @param HappeningParticipationQueryHandler $happeningParticipationQueryHandler
-     * @param MassRepositoryInterface            $massRepository
-     * @param FullHappeningQueryHandler          $fullHappeningQueryHandler
-     */
     public function __construct(
         DayRepositoryInterface $dayRepository,
         DayViewQueryHandler $dayViewQueryHandler,
@@ -46,11 +31,11 @@ class ProgramViewQueryHandler
         MassRepositoryInterface $massRepository,
         FullHappeningQueryHandler $fullHappeningQueryHandler
     ) {
-        $this->dayRepository                      = $dayRepository;
-        $this->dayViewQueryHandler                = $dayViewQueryHandler;
+        $this->dayRepository = $dayRepository;
+        $this->dayViewQueryHandler = $dayViewQueryHandler;
         $this->happeningParticipationQueryHandler = $happeningParticipationQueryHandler;
-        $this->massRepository                     = $massRepository;
-        $this->fullHappeningQueryHandler          = $fullHappeningQueryHandler;
+        $this->massRepository = $massRepository;
+        $this->fullHappeningQueryHandler = $fullHappeningQueryHandler;
     }
 
     /**
@@ -60,7 +45,7 @@ class ProgramViewQueryHandler
      *
      * @return ProgramView
      */
-    public function handle(ProgramViewQuery $programViewQuery)
+    public function handle(ProgramViewQuery $programViewQuery): ProgramView
     {
         $eventDays = $this->dayRepository->findByEvent($programViewQuery->event);
 
@@ -71,7 +56,10 @@ class ProgramViewQueryHandler
         $masses = [];
 
         if (null === $programViewQuery->category) {
-            $masses = $this->massRepository->findByType($programViewQuery->sheet->getType(), $programViewQuery->locale);
+            $masses = $this->massRepository->findByTypes(
+                [$programViewQuery->sheet->getType()],
+                $programViewQuery->locale
+            );
         }
 
         $dayViews = [];
@@ -107,7 +95,10 @@ class ProgramViewQueryHandler
         );
 
         $this->fullHappeningQueryHandler->handle(
-            new FullHappeningQuery($programView, $programViewQuery->event)
+            new FullHappeningQuery(
+                $programView,
+                $programViewQuery->event
+            )
         );
 
         return $programView;
