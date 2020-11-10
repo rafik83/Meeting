@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2268 - Cal visio analytics on admin dashboard
+- VIMEET-2268 - Call visio analytics on admin dashboard
 
 ## [2.68.0] - 2020-11-09
 ### Added

@@ -25,5 +25,5 @@ interface ChatSessionRepositoryInterface
 
     public function hasMessageFromUser (ChatSession $chatSession, User $user): bool;
 
-    public function countCallVisioByEvent(Event $event):int;
+    public function countCallVisioByEvent(Event $event): int;
 }
