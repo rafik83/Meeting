@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisab
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -147,19 +148,35 @@ class AgendaController extends Controller
             ]);
         }
 
+        $myParticipant = $sheet->getUserParticipant($user);
+
+        if ($myParticipant !== null) {
+            $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($myParticipant) {
+                return $myParticipant->getId() !== $otherParticipant->id;
+            });
+        }
+
+
+        \dump($participant->getIdAndFullName());
+        \dump($agenda->participants);
+
         return $this->render(
-            '@Event/Agenda/participant_agenda.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'agenda' => $agenda,
-            'sheet' => $sheet,
-            'tipTranslationViews' => $tipTranslationViews,
-            'sendCodeForm' => $sendCodeForm,
-            'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
-            'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
-            'participant' => $participant,
-            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
-            'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
-        ]);
+            '@Event/Agenda/participant_agenda.html.twig',
+            [
+                'event' => $eventDomain->getEvent(),
+                'agenda' => $agenda,
+                'sheet' => $sheet,
+                'myParticipant' => $myParticipant,
+                'otherParticipants' => $otherParticipants,
+                'tipTranslationViews' => $tipTranslationViews,
+                'sendCodeForm' => $sendCodeForm,
+                'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
+                'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
+                'participant' => $participant,
+                'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
+                'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
+            ]
+        );
     }
 
     /**
