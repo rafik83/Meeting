@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -47,7 +48,8 @@ class SheetAgendaAction
     ): Response {
         $event = $eventDomain->getEvent();
 
-        if (!$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
+        if (
+            !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
             || !$this->authorizationChecker->isGranted(AgendaAccessVoter::PERMISSION, $event)
         ) {
             throw new AccessDeniedException();
@@ -73,6 +75,16 @@ class SheetAgendaAction
             )
         );
 
+        $myParticipant = $sheet->getUserParticipant($user);
+        $otherParticipants = $agenda->participants;
+
+        if ($myParticipant !== null) {
+            $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($myParticipant) {
+                return $myParticipant->getId() !== $otherParticipant->id;
+            });
+        }
+
+
         return new Response(
             $this->engine->render(
                 '@Event/Agenda/sheet_agenda.html.twig',
@@ -80,6 +92,8 @@ class SheetAgendaAction
                     'event' => $event,
                     'sheet' => $sheet,
                     'agenda' => $agenda,
+                    'myParticipant' => $myParticipant,
+                    'otherParticipants' => $otherParticipants,
                     'participant' => $participant,
                     'tipTranslationViews' => $this->queryBus->handle(new TipTranslationViewQuery(
                         $sheet,

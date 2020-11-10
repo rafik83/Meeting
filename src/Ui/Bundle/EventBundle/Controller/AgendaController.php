@@ -45,12 +45,10 @@ class AgendaController extends Controller
 
         $isUserAloneParticipant = null !== $user
             ? ParticipantHelper::isUserAloneParticipant($user, $sheet)
-            : false
-        ;
+            : false;
 
         $isUserParticipantMultipleSheet = $this->get('vimeet_infrastructure.repository.sheet_repository')
-            ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent())
-        ;
+            ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent());
 
         if (!$isUserAloneParticipant || $isUserParticipantMultipleSheet) {
             return $this->redirectToRoute(
@@ -149,6 +147,7 @@ class AgendaController extends Controller
         }
 
         $myParticipant = $sheet->getUserParticipant($user);
+        $otherParticipants = $agenda->participants;
 
         if ($myParticipant !== null) {
             $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($myParticipant) {
@@ -157,8 +156,7 @@ class AgendaController extends Controller
         }
 
 
-        \dump($participant->getIdAndFullName());
-        \dump($agenda->participants);
+
 
         return $this->render(
             '@Event/Agenda/participant_agenda.html.twig',
