@@ -33,6 +33,7 @@ agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.myAgenda.button.title: 'Mon agenda'
 agenda.participant.view: 'Agenda de %participant%'
 agenda.sheetAgenda.button.title: 'Agenda global'
+agenda.sheetAgenda.participantsAgenda.title: "Agenda des participants"
 agenda.sheetAgenda.title: 'Agenda global'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
