@@ -1,0 +1,192 @@
+{
+  "id": "vimeetCronTemplate",
+  "lastModifiedBy": "spinnaker",
+  "metadata": {
+    "description": "Run console command",
+    "name": "vimeet-console",
+    "owner": "noc@synalabs.com",
+    "scopes": [
+      "global"
+    ]
+  },
+  "pipeline": {
+    "keepWaitingPipelines": false,
+    "lastModifiedBy": "spinnaker",
+    "limitConcurrent": true,
+    "spelEvaluator": "v3",
+    "stages": [
+      {
+        "application": "vimeet",
+        "executionOptions": {
+          "successful": true
+        },
+        "expectedArtifacts": [
+          {
+            "defaultArtifact": {
+              "customKind": true,
+              "id": "ca5d8b08-d1b3-4cf6-a100-98c932666fd9"
+            },
+            "displayName": "vimeet-docker",
+            "id": "57d11711-228c-4b9e-8a2d-26076c4553df",
+            "matchArtifact": {
+              "artifactAccount": "docker-registry",
+              "id": "5062d17c-8b97-40c7-8486-9f228b13c245",
+              "name": "eu.gcr.io/proximum-vimeet-staging/vimeet",
+              "type": "docker/image"
+            },
+            "useDefaultArtifact": false,
+            "usePriorArtifact": false
+          }
+        ],
+        "name": "Find Artifacts From Execution",
+        "pipeline": "260e8809-de21-4d2e-8105-80e11609a7b3",
+        "refId": "1",
+        "requisiteStageRefIds": [],
+        "type": "findArtifactFromExecution"
+      },
+      {
+        "account": "default",
+        "alias": "runJob",
+        "application": "vimeet",
+        "cloudProvider": "kubernetes",
+        "consumeArtifactSource": "none",
+        "credentials": "default",
+        "manifest": {
+          "apiVersion": "batch/v1",
+          "kind": "Job",
+          "metadata": {
+            "annotations": {
+              "strategy.spinnaker.io/recreate": "true"
+            },
+            "name": "${ templateVariables.jobName }",
+            "namespace": "vimeet"
+          },
+          "spec": {
+            "backoffLimit": 0,
+            "template": {
+              "spec": {
+                "containers": [
+                  {
+                    "args": [
+                      "${ templateVariables.cronCommand }\n"
+                    ],
+                    "command": [
+                      "sh",
+                      "-c"
+                    ],
+                    "envFrom": [
+                      {
+                        "configMapRef": {
+                          "name": "staging-vimeet"
+                        }
+                      },
+                      {
+                        "secretRef": {
+                          "name": "staging-vimeet"
+                        }
+                      }
+                    ],
+                    "image": "eu.gcr.io/proximum-vimeet-staging/vimeet",
+                    "imagePullPolicy": "Always",
+                    "name": "php",
+                    "resources": {
+                      "requests": {
+                        "cpu": "300m",
+                        "memory": "1024Mi"
+                      }
+                    },
+                    "volumeMounts": [
+                      {
+                        "mountPath": "/var/www/proximum-vimeet.project.local/htdocs/current/var/cache",
+                        "name": "vimeet-var-cache"
+                      },
+                      {
+                        "mountPath": "/var/www/proximum-vimeet.project.local/htdocs/current/var/participants_imports",
+                        "name": "vimeet-var-imports"
+                      },
+                      {
+                        "mountPath": "/share/shared",
+                        "name": "vimeet-data"
+                      }
+                    ]
+                  }
+                ],
+                "restartPolicy": "Never",
+                "securityContext": {
+                  "fsGroup": 33,
+                  "runAsGroup": 33,
+                  "runAsUser": 33
+                },
+                "volumes": [
+                  {
+                    "emptyDir": {},
+                    "name": "vimeet-var-cache"
+                  },
+                  {
+                    "emptyDir": {},
+                    "name": "vimeet-var-imports"
+                  },
+                  {
+                    "name": "vimeet-data",
+                    "persistentVolumeClaim": {
+                      "claimName": "fs-master"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "name": "Run Job (Manifest)",
+        "refId": "2",
+        "requiredArtifactIds": [
+          "57d11711-228c-4b9e-8a2d-26076c4553df"
+        ],
+        "requiredArtifacts": [],
+        "requisiteStageRefIds": [
+          "1"
+        ],
+        "source": "text",
+        "type": "runJobManifest"
+      }
+    ],
+    "triggers": [
+      {
+        "cronExpression": "${ templateVariables.cronExpression }",
+        "enabled": "${ templateVariables.cronEnabled }",
+        "id": "0375b37d-437c-47b1-bce3-a1d26fb21e71",
+        "type": "cron"
+      }
+    ],
+    "updateTs": "1600373921652"
+  },
+  "protect": false,
+  "schema": "v2",
+  "updateTs": "1601387783646",
+  "variables": [
+    {
+      "type": "string",
+      "defaultValue": "cron-template",
+      "description": "Job name",
+      "name": "jobName"
+    },
+    {
+      "type": "string",
+      "defaultValue": "true",
+      "description": "Cron is enabled",
+      "name": "cronEnabled"
+    },
+    {
+      "type": "string",
+      "defaultValue": "0 0/1 * 1/1 * ? *",
+      "description": "Cron expression",
+      "name": "cronExpression"
+    },
+    {
+      "type": "string",
+      "defaultValue": "bin/console command",
+      "description": "Command to run",
+      "name": "cronCommand"
+    }
+  ]
+}

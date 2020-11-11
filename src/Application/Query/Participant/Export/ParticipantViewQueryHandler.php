@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -18,8 +10,11 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Scan\Type;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -50,6 +45,18 @@ class ParticipantViewQueryHandler
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
+    /** @var array */
+    private $analytics;
+
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         TemplateDataFactory $templateDataFactory,
@@ -57,7 +64,10 @@ class ParticipantViewQueryHandler
         TranslatorInterface $translator,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         ScanRepositoryInterface $scanRepository,
-        HappeningRepositoryInterface $happeningRepository
+        HappeningRepositoryInterface $happeningRepository,
+        SheetRepositoryInterface $sheetRepository,
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory = $templateDataFactory;
@@ -66,10 +76,17 @@ class ParticipantViewQueryHandler
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->scanRepository = $scanRepository;
         $this->happeningRepository = $happeningRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->requestRepository = $requestRepository;
+        $this->meetingRepository = $meetingRepository;
     }
 
     public function handle(ParticipantViewQuery $query): ParticipantView
     {
+        if (null === $this->analytics) {
+            $this->analytics = $this->sheetRepository->getAnalyticsByUser($query->event);
+        }
+
         $registrationData = $this->getRegistrationData($query->participant, $query->locale);
 
         $participantProductId = null !== $query->participant->getParticipantProduct()
@@ -103,7 +120,11 @@ class ParticipantViewQueryHandler
             $daysChecking,
             $attributableProducts,
             $registrationData,
-            $happeningChecking
+            $happeningChecking,
+            $this->analytics[$query->participant->getUser()->getId()]['viewedSheets']??0,
+            $this->analytics[$query->participant->getUser()->getId()]['clickedElements']??0,
+            $this->requestRepository->getParticipantRequestsCount($query->participant),
+            $this->meetingRepository->getParticipantMeetingsCount($query->participant)
         );
 
         return $view;
@@ -123,12 +144,6 @@ class ParticipantViewQueryHandler
         return $attributableProductsIds;
     }
 
-    /**
-     * @param Participant $participant
-     * @param string      $locale
-     *
-     * @return array
-     */
     private function getRegistrationData(Participant $participant, string $locale): array
     {
         $registrationData = [];

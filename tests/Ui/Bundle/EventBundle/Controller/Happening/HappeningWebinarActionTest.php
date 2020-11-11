@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Happening;
 
 use PHPUnit\Framework\TestCase;
@@ -20,7 +12,7 @@ use Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCom
 use Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
-use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -266,7 +258,7 @@ class HappeningWebinarActionTest extends TestCase
         $this->commandBus->handle(Argument::type(ScanHappening::class))->shouldBeCalled();
 
         $this->request->getLocale()->shouldBeCalled()->willReturn('fr');
-        $webinarView = $this->prophesize(WebinarView::class);
+        $webinarView = $this->prophesize(ViewerWebinarView::class);
         $webinarView->reveal()->isSpeaker = false;
         $webinarView->isVideoWebinarAndHappeningIsEnded()->shouldBeCalled()->willReturn(false);
 

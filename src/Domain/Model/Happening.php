@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 /**
  * Domain language: "Conférence"  (aka "Sous-événement")
  */
-class Happening implements TimeRangeInterface
+class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 {
     /** @var int */
     private $id;
@@ -82,6 +82,9 @@ class Happening implements TimeRangeInterface
     /** @var null|string */
     private $webinarRecordZipFileUrl = null;
 
+    /** @var bool */
+    private $allowHls;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -96,7 +99,8 @@ class Happening implements TimeRangeInterface
         bool $videoWebinar = false,
         ?string $liveUrl = null,
         bool $sidebarAllowed = true,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = false
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -117,12 +121,17 @@ class Happening implements TimeRangeInterface
         $this->liveUrl = $liveUrl;
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
-        $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_HAPPENING;
     }
 
     public function getEvent(): Event
@@ -216,7 +225,8 @@ class Happening implements TimeRangeInterface
         ?string $invitationCode = null,
         ?string $liveUrl = null,
         bool $sidebarAllowed,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = true
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -226,11 +236,12 @@ class Happening implements TimeRangeInterface
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
-        $this->webinarRecorded = $webinarRecorded;
         $this->interactiveWebinar = $interactiveWebinar;
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
     }
 
     public function updateTranslation(
@@ -453,5 +464,10 @@ class Happening implements TimeRangeInterface
     public function getWebinarRecordZipFileUrl(): ?string
     {
         return $this->webinarRecordZipFileUrl;
+    }
+
+    public function allowWebinarOnHLS(): bool
+    {
+        return $this->allowHls;
     }
 }

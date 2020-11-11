@@ -35,6 +35,12 @@ interface ExtraDataRepositoryInterface
         $value
     ): ?ExtraData;
 
+    public function getExtraDataForEventNameAndMD5Value(
+        Event $event,
+        string $name,
+        $value
+    ): ?ExtraData;
+
     /**
      * @param ExtraData $extraData
      */

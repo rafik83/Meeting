@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Update;
@@ -139,6 +131,16 @@ class TypeUpdateType extends AbstractType
                 'required' => false,
             ])
         ;
+        if ($options['showAnalyticsSettings']) {
+            $builder
+                ->add('displayAnalyticsOnSheet', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('displayAnalyticsOnCatalog', CheckboxType::class, [
+                    'required' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -147,13 +149,14 @@ class TypeUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => Update::class,
+            'data_class' => Update::class,
             'csrf_token_id' => 'type_update',
         ]);
 
-        $resolver->setRequired(['event', 'type']);
+        $resolver->setRequired(['event', 'type', 'showAnalyticsSettings']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setAllowedTypes('type', Type::class);
+        $resolver->setAllowedTypes('showAnalyticsSettings', 'bool');
     }
 
     /**

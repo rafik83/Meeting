@@ -199,7 +199,7 @@ class ShowAction
 
     protected function getContact(User $contactUser, Event $event, Participant $participant): Contact
     {
-        $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
+        $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime, Contact::ORIGIN_NONE);
 
         return $this->contactRepository->find($contactQuery);
     }

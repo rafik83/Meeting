@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console jms-job-queue:clean-up",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-jobs-cleanup",
+    "cronEnabled": "true",
+    "cronExpression": "0 0/10 * ? * * *",
+    "cronCommand": "bin/console jms-job-queue:clean-up --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "jms-job-queue:clean-up",
+  "stages": []
+}

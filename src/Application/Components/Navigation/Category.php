@@ -57,6 +57,12 @@ final class Category
     public const VISIO = 'navigation.category.visio_test';
     public const VISIO_ICON = 'icon-Video_2';
 
+    const NETWORKING      = 'navigation.category.networking';
+    const NETWORKING_ICON = 'icon-Travail';
+
+    const CUSTOM_BUTTON_ICON = 'icon-DemandeRDV';
+    const CUSTOM_BUTTON_ICON_2 = 'icon-Suivant_1';
+
     public static $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
@@ -69,5 +75,6 @@ final class Category
         self::BADGE,
         self::FORMS,
         self::VISIO,
+        self::NETWORKING,
     ];
 }

@@ -1,0 +1,7 @@
+<script id="user-context" type="application/json">
+{{ {
+    'subscriberKey':getSnippetView.subscriberKey,
+    'providerUrl':getSnippetView.providerUrl,
+    'userTopic':getSnippetView.userTopic,
+} | json_encode | raw }}
+</script>

@@ -14,6 +14,7 @@ interface HappeningRepositoryInterface
 
     public function getById(int $id): ?Happening;
 
+
     /**
      * @param Event  $event
      * @param string $locale

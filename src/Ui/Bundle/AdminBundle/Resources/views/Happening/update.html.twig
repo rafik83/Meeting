@@ -25,9 +25,12 @@
     {% endif %}
     {{ form_row(form.category, {widget_columns: 3}) }}
     {{ form_row(form.happeningType) }}
+
     {% if form.webinarRecorded is defined %}
     {{ form_row(form.webinarRecorded) }}
     {% endif %}
+
+    {{ form_row(form.allowHls) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}
     {{ form_row(form.end, {widget_columns: 3}) }}
@@ -36,9 +39,10 @@
     <hr>
     {{ form_row(form.invitationCode, {widget_columns: 2}) }}
     {{ form_row(form.questionAllowed) }}
-    {{ form_row(form.sidebarAllowed) }}    
+    {{ form_row(form.sidebarAllowed) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
+    {{ form_row(form.liveUrl) }}
 
     {% if form.webinarRecorded is defined %}
     <script>
@@ -63,6 +67,15 @@
             )
         });
     </script>
+    {% endif %}
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="help-happening form-group">
+            {% if happening.hasWebinarSessionId %}
+            <small class="col-lg-3 col-md-3 col-sm-3 control-label">Happening Webinar Tokbox Session Id :</small>
+            <code class="col-lg-9 col-md-9 col-sm-9">{{ happening.getWebinarSessionId }}</code>
+            {% endif %}
+        </div>
     {% endif %}
 {% endblock form_content %}
 

@@ -17,6 +17,7 @@ function Settings(
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
+    this.chromeRequired = this.videoSettingsContainer.querySelector('#visio-chrome-required');
     this.invisibleModeOption = this.videoSettingsContainer.querySelector('#invisible-mode-option');
     this.enableInvisibleMode = enableInvisibleMode;
 
@@ -118,7 +119,9 @@ Settings.prototype.getUserMedia = function () {
                     const videoStream = stream.getVideoTracks();
 
                     if (videoStream.length > 0) {
-                        this.videoDeviceId = videoStream[0].getSettings().deviceId;
+                        if (this.videoDeviceId === null) {
+                            this.videoDeviceId = videoStream[0].getSettings().deviceId;
+                        }
                         this.videoBox.srcObject = stream;
                         this.currentStream = stream;
                     }
@@ -229,6 +232,9 @@ Settings.prototype.insertDevicesInSelect = function (mediaDevices) {
     let countAudio = 1;
 
     mediaDevices.forEach((mediaDevice) => {
+        if (mediaDevice.kind === 'audiooutput'){
+            return;
+        }
         const option = document.createElement("option");
         option.value = mediaDevice.deviceId;
 
@@ -241,15 +247,15 @@ Settings.prototype.insertDevicesInSelect = function (mediaDevices) {
 
         option.appendChild(textNode);
 
-        if (mediaDevice.deviceId === this.audioDeviceId
-            || mediaDevice.deviceId === this.videoDeviceId
+        if ((mediaDevice.deviceId === this.audioDeviceId && kind === "audio")
+            || (mediaDevice.deviceId === this.videoDeviceId && kind === "camera")
         ) {
             option.selected = true;
         }
 
-        if (mediaDevice.kind === "videoinput") {
+        if (kind === "camera") {
             this.videoSourceSelect.appendChild(option);
-        } else {
+        } else if (kind === "audio") {
             this.audioSourceSelect.appendChild(option);
         }
     });
@@ -312,7 +318,7 @@ Settings.prototype.prepareEventListener = function () {
     // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
     // Not compatible with safari and IE.
     navigator.mediaDevices.ondevicechange = () => {
-        // Useless to handle the devices of the settings modal is not focused.
+        // Useless to handle the devices if the settings modal is not focused.
         // As the permission modal can be focused.
         if (true === this.settingsModalFocus) {
             this.handleDevices();
@@ -326,13 +332,13 @@ Settings.prototype.prepareConstraints = function () {
 
     if (this.audioDeviceId) {
         audio = {
-            exact: this.audioDeviceId
+            deviceId: this.audioDeviceId
         };
     }
 
     if (this.videoDeviceId) {
         video = {
-            exact: this.videoDeviceId
+            deviceId: this.videoDeviceId
         };
     }
     this.constraints = {
@@ -367,13 +373,21 @@ Settings.prototype.closeSettings = function () {
     dispatchEvent(htmlEvent);
 }
 
-Settings.prototype.init = function () {
+Settings.prototype.init = function (chromeRequired) {
     this.settingsFocus = true;
     this.requestPermissionModalFocus = true;
     this.settingsModalFocus = false;
     showElement(this.videoSettingsContainer);
     showElement(this.requestPermissionModal);
     hideElement(this.settingsModal);
+
+    if (chromeRequired && !(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor))) {
+        showElement(this.chromeRequired);
+        hideElement(this.requestPermissionModal);
+        this.chromeRequired.querySelector('#visio-chrome-required-bypass').addEventListener('change', () => {
+            this.init(false);
+        });
+    }
 }
 
 // Theses methods do not need to be link to the Settings component.

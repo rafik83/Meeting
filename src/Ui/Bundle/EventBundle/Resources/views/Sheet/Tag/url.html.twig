@@ -1,1 +1,7 @@
-<a href="{{ taggedDataView.content }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}</a>
+{% import '@Event/Sheet/macro.html.twig' as macros %}
+
+{% if taggedDataView.originalUrl is not empty %}
+    <a href="{{ taggedDataView.content }}" class="btn btn-primary" target="_blank"><i class="icon-Desktop"></i>{{ label }}
+        {{ displayAnalyticsStat ? macros.badge_click_analytics(sheet, taggedDataView.objectId) }}
+    </a>
+{% endif %}

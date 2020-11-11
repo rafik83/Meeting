@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
@@ -146,7 +138,7 @@ class MeetingRequestController extends Controller
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = array_merge($defaults,
                 array_filter(
-                    $searchForm->getData(), function ($data) {
+                    $searchForm->getData(), static function ($data) {
                         return !empty($data);
                     }
                 )
@@ -459,7 +451,7 @@ class MeetingRequestController extends Controller
             /** @var ApproveRequestResult $approveRequestResult */
             $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if (null !== $approveRequestResult) {
+            if ($approveRequestResult->hasError || $approveRequestResult->meetingView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $approveRequestResult->meetingView,
                     'error'           => $approveRequestResult->hasError,
@@ -468,7 +460,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                null === $approveRequestResult || (null !== $approveRequestResult && null === $approveRequestResult->meetingView && !$approveRequestResult->hasError),
+                null === $approveRequestResult->meetingView && !$approveRequestResult->hasError,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,

@@ -152,7 +152,8 @@ class Preview
                     new TagView(
                         $taggedDataView->type,
                         $templateObject->getLabel($locale),
-                        $taggedDataView->content
+                        $taggedDataView->content,
+                        $taggedDataView->originalUrl
                     )
                 );
             }

@@ -13,11 +13,27 @@
 
 {% block body %}
     <div class="webinar webinar-viewer"
+         data-event-id="{{ webinarView.eventId }}"
+         data-happening-id="{{ webinarView.happeningId }}"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
          data-session-id="{{ webinarView.sessionId }}"
+         data-notifications-provider-url="{{ webinarView.notification.providerUrl }}"
+         data-notifications-subscriber-key="{{ webinarView.notification.subscriberKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+
+         data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+         data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+         data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+         data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+         data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+         data-chat-vote-message="{{ 'chat.vote'|trans }}"
+         data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+         data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+
+         data-questions-count="{{ webinarView.questionsCount }}"
+
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
@@ -28,6 +44,7 @@
          data-question-vote-message="{{ 'happening.webinar.questions.vote'|trans }}"
          data-question-unvote-message="{{ 'happening.webinar.questions.unvote'|trans }}"
          data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
+         data-webinar-hls="{{ webinarView.isWebinarHls ? 'true' : 'false' }}"
          {% if webinarView.liveUrl %}
             data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
@@ -36,7 +53,14 @@
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
         {% endif %}
 
-        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
+        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}>
+            {% if webinarView.isWebinarHls %}
+                <video id="webinar-video"
+                    data-hls-url="{{ webinarView.hlsUrl }}"
+                    data-start-view-url="{{ path('event_happening_webinar_view_broadcast', {happening: webinarView.happeningId}) }}"
+                ></video>
+            {% endif %}
+        </div>
 
         <div data-hide-on-desktop class="hide-on-desktop"></div>
 

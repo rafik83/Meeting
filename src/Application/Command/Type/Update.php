@@ -91,6 +91,12 @@ class Update implements Command
     /** @var bool */
     public $canSubmitValidation;
 
+    /** @var bool */
+    public $displayAnalyticsOnSheet;
+
+    /** @var bool */
+    public $displayAnalyticsOnCatalog;
+
     public function __construct(Type $type, string $locale)
     {
         $this->sheetTemplate = $type->getSheetTemplate();
@@ -117,6 +123,8 @@ class Update implements Command
         $this->canEvaluateMeeting = $type->canEvaluateMeeting();
         $this->mustEvaluateMeeting = $type->mustEvaluateMeeting();
         $this->canSubmitValidation = $type->canSubmitValidation();
+        $this->displayAnalyticsOnSheet = $type->canDisplayAnalyticsOnSheet();
+        $this->displayAnalyticsOnCatalog = $type->canDisplayAnalyticsOnCatalog();
 
         foreach ($type->getEvent()->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
@@ -126,4 +134,3 @@ class Update implements Command
         }
     }
 }
-

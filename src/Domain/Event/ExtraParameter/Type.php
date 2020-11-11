@@ -62,6 +62,9 @@ class Type
     // Tracking code
     public const TYPE_TRACKING_CODE = 'tracking_code';
 
+    public const TYPE_CUSTOM_BUTTON_1 = 'custom_button';
+    public const TYPE_CUSTOM_BUTTON_2 = 'custom_button_2';
+
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
@@ -86,5 +89,7 @@ class Type
         self::TYPE_TECH_EVENT_LOGIN_ENABLED,
         self::TYPE_CRISP_SITE_ID,
         self::TYPE_TRACKING_CODE,
+        self::TYPE_CUSTOM_BUTTON_1,
+        self::TYPE_CUSTOM_BUTTON_2
     ];
 }

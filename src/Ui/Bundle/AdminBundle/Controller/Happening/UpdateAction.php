@@ -86,6 +86,11 @@ class UpdateAction
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
+                if ($form->get('allowHls')->getData()
+                    && ($form->get('end')->getData()->getTimestamp() - $form->get('begin')->getData()->getTimestamp()) > 36000) {
+                    $this->flashBag->add('error', 'flash.admin.happening.error.maxDuration');
+                }
+
                 $this->commandBus->handle($update);
                 $this->flashBag->add('success', 'flash.admin.happening.update.success');
 

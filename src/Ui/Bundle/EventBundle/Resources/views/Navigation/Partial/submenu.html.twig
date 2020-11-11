@@ -1,17 +1,14 @@
 <ul class="sub-header__item">
-    {% for button in submenuView.submenuButtonViews %}
-        <li>
-            <a {% for attribute, value in button.attributes %}
-                  {{ attribute }}="{{ value }}"
-               {% endfor %}
-            href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
-                <i class="{{ button.icon }}"></i>
-                <span class="name pull-right">{{ button.label|trans }}</span>
+	{% for button in submenuView.submenuButtonViews %}
+		<li>
+			<a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
+				<i class="{{ button.icon }}"></i>
+				<span class="name pull-right">{{ button.label|trans }}</span>
 
-                {% if button.counter is not null %}
-                    <span class="alert-notification">{{ button.counter }}</span>
-                {% endif %}
-            </a>
-        </li>
-    {% endfor %}
+				{% if button.counter is not null and button.counter > 0 %}
+					<span class="alert-notification">{{ button.counter <= 99 ? button.counter : "99+"  }}</span>
+				{% endif %}
+			</a>
+		</li>
+	{% endfor %}
 </ul>

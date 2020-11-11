@@ -15,6 +15,7 @@ function Publisher(container) {
 
 /**
  * The Publisher object represents the view of a video you publish
+ * @see https://tokbox.com/developer/sdks/js/reference/OT.html#initPublisher
  *
  * @param {null|Object} options
  * @returns {null|Publisher}
@@ -63,7 +64,7 @@ Publisher.prototype.isScreensharing = function() {
 
 Publisher.prototype.handleError = function(error) {
   if (error) {
-    console.log('Publisher error:', error);
+    console.error('Publisher error:', error);
   }
 };
 

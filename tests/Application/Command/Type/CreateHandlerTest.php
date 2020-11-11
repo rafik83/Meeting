@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
 use PHPUnit\Framework\TestCase;
@@ -31,19 +23,19 @@ class CreateHandlerTest extends TestCase
     public function testHandle()
     {
         //Context
-        $event    = EventFactory::createEvent();
+        $event = EventFactory::createEvent();
         $dateTime = new \DateTime();
-        $package  = new Package($event, 'title', $dateTime);
+        $package = new Package($event, 'title', $dateTime);
         $event->setLocales(['fr'], 'fr');
 
-        $sheetTemplate        = new SheetTemplate('base Exposant', [], ['fr'], 'fr', $dateTime);
+        $sheetTemplate = new SheetTemplate('base Exposant', [], ['fr'], 'fr', $dateTime);
         $registrationTemplate = new RegistrationTemplate('base Exposant', [], ['fr'], 'fr', $dateTime);
         $formTemplate1 = new FormTemplate($event, 'title1', [], ['fr'], 'fr', $dateTime);
         $formTemplate2 = new FormTemplate($event, 'title2', [], ['fr'], 'fr', $dateTime);
 
         //Expected
-        $expectedSheetTemplate         = new SheetTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
-        $expectedRegistrationTemplate  = new RegistrationTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
+        $expectedSheetTemplate = new SheetTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
+        $expectedRegistrationTemplate = new RegistrationTemplate('Exposant', [], ['fr'], 'fr', $dateTime);
         $expectedSheetTemplate->setEvent($event);
         $expectedRegistrationTemplate->setEvent($event);
 
@@ -77,6 +69,8 @@ class CreateHandlerTest extends TestCase
         $create->canEvaluateMeeting = true;
         $create->mustEvaluateMeeting = true;
         $create->canSubmitValidation = true;
+        $create->displayAnalyticsOnSheet = true;
+        $create->displayAnalyticsOnCatalog = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
@@ -95,6 +89,8 @@ class CreateHandlerTest extends TestCase
                 && $actual->canEvaluateMeeting()
                 && $actual->mustEvaluateMeeting()
                 && $actual->canSubmitValidation()
+                && $actual->canDisplayAnalyticsOnSheet()
+                && $actual->canDisplayAnalyticsOnCatalog()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);

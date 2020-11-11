@@ -4,13 +4,218 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.68.0] - 2020-11-09
+### Added
+- VIMEET-2198 - Broadcast webinars in HLS
+
+## [2.67.1] - 2020-11-09
+### Fixed
+- MV-270 - Impossible to open a contact after a meeting
+
+## [2.67.0] - 2020-11-09
+### Fixed
+- VIMEET-2223 - ClearTimeout missing.
+
+### Added
+- VIMEET-2186 - Notifications when new messages or questions during webinar.
+
+### Changed
+- MV-267 - Brazil abolished DST in 2019
+
+## [2.66.1] - 2020-11-05
+### Fixed
+- MV264 - Networking tab only validated or accepted
+
+## [2.66.0] - 2020-11-04
+### Added
+- VIMEET-2223 - Add call visio on private chat (tab networking).
+- VIMEET-2229 - Add field date call visio in Admin.
+- VIMEET-2260 - Add button custom 2.
+
+## [2.65.2] - 2020-11-02
+### Fixed
+- Hotfix - Add default values for analytics options on participant type, to avoid error when type is created by an organizer admin
+
+## [2.65.1] - 2020-10-29
+### Fixed
+- Disable session lock on redis to avoid timeouts for some sessions
+
+## [2.65.0] - 2020-10-29
+### Added
+- VIMEET-2225 - Add related product to video template objects
+
+## [2.64.0] - 2020-10-28
+### Fixed
+- MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
+
+### Updated
+- VIMEET-2208 - Add counts to visit filters in catalog
+
+## [2.63.0] - 2020-10-28
+### Updated
+- VIMEET-2218 - Check networking access to avoid sending useless notifications
+- VIMEET-2242 - Suite Chat Vimeet - Button separate.
+- update translations
+
+## [2.62.1] - 2020-10-26
+### Fixed
+- disable redis doctrine cache
+
+## [2.62.0] - 2020-10-26
+### Added
+- VIMEET-2208 - Filter meeting request by sheet viewed
+
+### Fixed
+- VIMEET-2219 - Apply filter on users added on the fly
+- Add sheet card tag for datetime
+- Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+- VIMEET-2229 - Add call visio networking tab by key date
+
+## [2.61.0] - 2020-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
+## [2.60.0] - 2020-10-14
+### Added
+- VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
+- VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
+
+### Fixed
+- VIMEET-2224 - Avoid exceptions related to chat and networking submenu
+
+## [2.59.1] - 2020-10-13
+### Updated
+- Update translations
+
+## [2.59.0] - 2020-10-13
+### Added
+- VIMEET-2245 - Login with tech event token in md5
+
+## [2.58.0] - 2020-10-13
+### Added
+- VIMEET-2236 - Add participant id for custom button
+- VIMEET-2240 - Add tech event id contact in md5 for custom button
+- VIMEET-2240 - Add sheet id for custom button
+- VIMEET 2218 - Add tab private chat and tab general chat
+
+### Fixed
+- MV255 - move chat css to event guideline css
+- MV255 - move question css to event guideline css
+- MV255 - separate button chat and button question
+
+## [2.57.0] - 2020-10-13
+### Added
+- VIMEET-2218 - Networking tab and page
+- VIMEET-2219 - Networking tab search participant
+- VIMEET-2222 - Networking / Private chat
+- VIMEET-2221 - Private chat notification toast
+- VIMEET-2220 - Badge on networking tab with unread messages
+
+### Changed
+- Remove command bus usage for translations update commands to prevent DB connections
+
+### Revert
+- VIMEET-1925 - Restore mercure version, with fixed issue on chat update
+
+## [2.56.0] - 2020-10-09
+### Added
+- VIMET-2177 - Add metrics to sheet export
+
+## [2.55.0] - 2020-10-08
+### Fixed
+- Hotfix - Prevent invalid extensions (especially php) on uploaded files
+
+## [2.54.0] - 2020-10-07
+### Fixed
+- MV-254 - Display bullet point in help message
+- Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)
+
+## [2.53.0] - 2020-10-05
+### Added
+- VIMEET-2237 - Option to record webinars automatically
+
+## [2.52.0] - 2020-10-01
+### Revert
+- VIMEET-1925 - Revert chat and questions with Mercure, reintroduce chat and questions from Tokbox
+
+## [2.51.2] - 2020-10-01
+### Added
+- Hotfix - force refresh chat and questions in webinars
+
+## [2.51.1] - 2020-10-01
+### Added
+- Hotfix - add message to force speakers to use chrome
+
+## [2.51.0] - 2020-09-30
+### Added
+- VIMEET-1925 - New version of chat and questions decoupled from Tokbox
+
+## [2.50.6] - 2020-09-29
+### Fixed
+- Use absolute urls in sheet for pdf export
+- Use event url generator for absolute link on sheet pdf
+
+## [2.50.5] - 2020-09-29
+### Fixed
+- Limit resolution for webinar screen sharing
+
+## [2.50.4] - 2020-09-28
+### Added
+- Disable right click on webinar video for LM
+
+## [2.50.3] - 2020-09-28
+### Fixed
+- Add _locale parameters in links to avoid exception when pdf is generated with cli
+
+## [2.50.2] - 2020-09-28
+### Fixed
+- Don't show website url if value is empty to avoid exception on redirect page
+
+## [2.50.1] - 2020-09-28
+### Fixed
+- Avoid exception by allowing null for some return types and arguments
+
+## [2.50.0] - 2020-09-28
+### Added
+- VIMEET-2206 - Add option to activate analytics depending on participation type
+- VIMEET-2205 - Display analytics on sheet
+- VIMEET-2207 - Add analytics and number of meeting requests in participants export
+
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available, even before dday (side effect of VIMEET-2203)
+
+## [2.49.1] - 2020-09-25
+### Fixed
+- Prevent alert message to be displayed on a meeting approval when slots are available (side effect of VIMEET-2203)
+
+## [2.49.0] - 2020-09-25
+### Added
+- VIMEET-2228 - Button custom menu
+
+## [2.48.3] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (js)
+
+## [2.48.2] - 2020-09-24
+### Fixed
+- Allow fullscreen in iframe (webinars)
+
+## [2.48.1] - 2020-09-24
+### Added
+- VIMEET-2231 - Redirect to program or agenda after webinar
+
+### Updated
+- Exclude from Sentry alert AccessDeniedHttpException
+
+## [2.48.0] - 2020-09-24
 ### Added
 - VIMEET-2217 - Activate / deactivate the networking tab by key date
 - VIMEET-2204 - Hidden contact menu
 - VIMEET-2203 - Request Automatically Transformed Into Meeting
+- VIMEET-2233 - Disable right click on webinar video
 
 ## [2.47.0] - 2020-09-11
-### Added 
+### Added
 - VIMEET-2226 - Export multi-upload and media with sheet, add asynchronous export
 - VIMEET-2156 - Remove explicit error about email on login (security)
 
@@ -36,6 +241,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.44.0] - 2020-09-03
 ### Added
+- VIMEET-1925 - Chat API
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 - VIMEET-2213 - Translate timezones
