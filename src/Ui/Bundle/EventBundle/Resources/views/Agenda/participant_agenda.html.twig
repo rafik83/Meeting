@@ -96,7 +96,7 @@
     <div id="agenda" class="agenda-container" {% if agenda.isItDDay %} data-agenda-autorefresh {% endif %} data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}" data-slot-available="{{ 'agenda.slot.available'|trans }}" data-slot-unavailable="{{ 'agenda.slot.unavailable'|trans }}" data-slot-imperative-presence="{{ 'agenda.slot.imperative-presence'|trans }}">
         <div class="row">
             {% for day in agenda.days %}
-                <div class="col-md-12 agenda" data-begintimestamp="{{ day.begin.timestamp }}" data-endtimestamp="{{ day.end.timestamp }}" data-beginhour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endhour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotduration="{{ day.getScale }}">
+                <div class="col-md-12 agenda" data-beginTimestamp="{{ day.begin.timestamp }}" data-endTimestamp="{{ day.end.timestamp }}" data-beginHour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endhour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotDuration="{{ day.getScale }}">
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
@@ -153,7 +153,7 @@
 
                                     {% for availableSlotView in day.availableSlotViews %}
                                         <div class="meet available" 
-                                            data-beginhour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" 
+                                            data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" 
                                             data-duration="{{ availableSlotView.duration.format('%H:%I') }}" 
                                             data-slot-id="{{ availableSlotView.id }}">
                                             <header>
