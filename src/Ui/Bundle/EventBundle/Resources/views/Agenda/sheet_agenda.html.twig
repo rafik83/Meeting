@@ -22,7 +22,7 @@
                         {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
                         <span class="caret"></span>
                     </a>
-                    {% if otherParticipants|length > 0 %}
+                    {% if agenda.participants|length > 1 %}
                         <ul class="dropdown-menu">
                             {% for participantItem in agenda.participants %}
                                 {% if (participant is not null and participant.id == participantItem.id) %}

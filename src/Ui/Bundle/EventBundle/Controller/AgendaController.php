@@ -147,13 +147,7 @@ class AgendaController extends Controller
         }
 
         $myParticipant = $sheet->getUserParticipant($user);
-        $otherParticipants = $agenda->participants;
 
-        if ($myParticipant !== null) {
-            $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($myParticipant) {
-                return $myParticipant->getId() !== $otherParticipant->id;
-            });
-        }
 
 
         return $this->render(
@@ -163,7 +157,6 @@ class AgendaController extends Controller
                 'agenda' => $agenda,
                 'sheet' => $sheet,
                 'myParticipant' => $myParticipant,
-                'otherParticipants' => $otherParticipants,
                 'tipTranslationViews' => $tipTranslationViews,
                 'sendCodeForm' => $sendCodeForm,
                 'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
