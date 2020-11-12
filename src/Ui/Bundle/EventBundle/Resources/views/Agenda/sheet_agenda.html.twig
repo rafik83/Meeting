@@ -27,11 +27,10 @@
                             {% for participantItem in agenda.participants %}
                                 {% if (participant is not null and participant.id == participantItem.id) %}
                                     <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
-                                        <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                        <a  class="text-uppercase" href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
                                             {{ 'agenda.title'|trans }}
                                         </a>
                                     </li>
-                                    <li role="separator" class="divider"></li>
                                 {% else %}
                                     <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
                                         <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
