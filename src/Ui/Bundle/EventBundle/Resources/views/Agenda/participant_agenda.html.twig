@@ -17,7 +17,7 @@
                     <a class="btn btn-gray" href="{{ path('event_agenda_sheet', { 'sheet': sheet.id }) }}">
                         {{ 'agenda.sheetAgenda.button.title'|trans }}
                     </a>
-                    {% if agenda.participants|length > 1 %}
+                    {% if otherParticipants|length > 0 %}
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
