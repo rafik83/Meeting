@@ -1,6 +1,6 @@
 FROM gcr.io/synalabs-marketplace/github.com/synalabs/spin:bdfd5d7 AS spinnaker
 
-FROM php:7.2-apache-buster
+FROM php:7.4-apache-buster
 
 RUN set -eux \
   && mkdir -p /usr/share/man/man1 \

@@ -2,7 +2,7 @@
 FROM php:7.4-fpm
 
 RUN apt-get update
-RUN apt-get install -y make wget gnupg tzdata
+RUN apt-get install -y make wget gnupg tzdata python
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
