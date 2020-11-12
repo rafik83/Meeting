@@ -55,7 +55,7 @@ RUN set -x \
   xsl \
   zip
 
-RUN pecl install redis apcu lzf timezonedb wddx \
+RUN pecl install redis apcu lzf timezonedb \
   && yes '' | pecl install imagick \
   && docker-php-ext-enable redis apcu lzf imagick timezonedb \
   && rm -rf /tmp/pear
