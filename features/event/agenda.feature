@@ -45,7 +45,7 @@ Feature: Agenda
     And I should be on this page "/fr/sheet/1/fr"
     When I go to this page "/fr/sheet/1/agenda"
     Then I should be on this page "/fr/sheet/1/agenda/sheet"
-    And I should see "agenda.myAgenda.button.title"
+    And I should see "agenda.sheetAgenda.participantsAgenda.title"
     And I should see "agenda.sheetAgenda.button.title"
     Then I go to this page "/fr/sheet/1/agenda/participant/2"
     And the response status code should be 200
