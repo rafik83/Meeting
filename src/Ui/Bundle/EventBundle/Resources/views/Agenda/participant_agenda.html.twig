@@ -23,20 +23,19 @@
                                 {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
                                 <span class="caret"></span>
                             </a>
-
                             <ul class="dropdown-menu">
-                                {% for participantName in agenda.participants %}
-                                    {% if (myParticipant is not null and myParticipant.id == participantName.id) %}
-                                        <li {% if participantName.id == agenda.participant.id %} class="active" {% endif %}>
-                                            <a href="{{ path('event_agenda_participant', {'participant': participantName.id, 'sheet': sheet.id}) }}">
+                                {% for participantItem in agenda.participants %}
+                                    {% if (myParticipant is not null and myParticipant.id == participantItem.id) %}
+                                        <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
+                                            <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
                                                 {{ 'agenda.title'|trans }}
                                             </a>
                                         </li>
                                         <li role="separator" class="divider"></li>
                                     {% else %}
-                                        <li {% if participantName.id == agenda.participant.id %} class="active" {% endif %}>
-                                            <a href="{{ path('event_agenda_participant', {'participant': participantName.id, 'sheet': sheet.id}) }}">
-                                                {{ 'agenda.participant.view'|trans({'%participant%': participantName.fullName}) }}
+                                        <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
+                                            <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                                {{ 'agenda.participant.view'|trans({'%participant%': participantItem.fullName}) }}
                                             </a>
                                         </li>
 
@@ -48,7 +47,7 @@
                         </div>
 
                     {% else %}
-                        <a class"btn btn-primary" href="{{ path('event_agenda_participant', {'participant': participantName.id, 'sheet': sheet.id}) }}">
+                        <a class"btn btn-primary" href="{{ path('event_agenda_participant', {'participant': myParticipant.id, 'sheet': sheet.id}) }}">
                             {{ 'agenda.title'|trans }}
                         </a>
 
