@@ -22,7 +22,7 @@
                         {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
                         <span class="caret"></span>
                     </a>
-                    {% if agenda.participants|length > 1 %}
+                    {% if otherParticipants|length > 0 %}
                         <ul class="dropdown-menu">
                             {% for participantItem in agenda.participants %}
                                 {% if (participant is not null and participant.id == participantItem.id) %}
@@ -44,7 +44,7 @@
                         </ul>
 
                     {% else %}
-                        <a class"btn btn-gray " href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                        <a class"btn btn-gray " href="{{ path('event_agenda_participant', {'participant': participant.id, 'sheet': sheet.id}) }}">
                             {{ 'agenda.title'|trans }}
                         </a>
                     {% endif %}
