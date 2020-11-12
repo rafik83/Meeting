@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2220 Compute the private chat message count
 
+## [2.68.0] - 2020-11-09
+### Added
+- VIMEET-2198 - Broadcast webinars in HLS
+
 ## [2.67.1] - 2020-11-09
 ### Fixed
 - MV-270 - Impossible to open a contact after a meeting

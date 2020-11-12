@@ -7,6 +7,7 @@ import VideoSubscriber from './Subscriber';
 import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
+import HlsPlayer from './HlsPlayer';
 
 import 'bootstrap/js/tooltip';
 import 'bootstrap/js/popover'; // popover require tooltip
@@ -47,6 +48,8 @@ function Webinar(element, isSpeaker) {
     this.notificationSubscriber = new NotificationSubscriber(notificationProviderUrl);
     this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
     this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
+    this.topicStream = `https://vimeet.events/happening/${this.happeningId}/webinar/stream`;
+    this.topicSpeaker = `https://vimeet.events/happening/${this.happeningId}/webinar/speaker`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -126,7 +129,7 @@ function Webinar(element, isSpeaker) {
     this.timerContainer = element.querySelector('.timer-container');
     this.timerElement = this.timerContainer.querySelector('.timer');
     this.countDownContainer = this.timerContainer.querySelector('.timer span.countdown');
-    this.viewersCount = 0;
+    this.viewersCount = element.getAttribute('data-webinar-initial-viewers-count');
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
 
@@ -140,6 +143,10 @@ function Webinar(element, isSpeaker) {
     this.webinarAutoStart = element.getAttribute('data-webinar-auto-start');
     this.webinarStopTimestamp = element.getAttribute('data-webinar-stop-timestamp');
     this.isRecording = false;
+    this.isHls = element.getAttribute('data-webinar-hls') === 'true';
+    if (this.isHls) {
+        this.hlsVideoElement = element.querySelector('#webinar-video');
+    }
 
     const recordStatus = element.getAttribute('data-webinar-is-recording');
     if (this.isWebinarRecorded && this.canRecordWebinar && recordStatus) {
@@ -254,6 +261,22 @@ Webinar.prototype.init = function () {
         return;
     }
 
+    if (this.isHls && !this.isSpeaker) {
+        this.hlsPlayer = new HlsPlayer(this.hlsVideoElement, () => {
+            this.hideElement(this.helperContainer);
+            this.showViewerControls();
+            this.layout();
+        });
+        this.addShownChatSubscriber();
+        if (this.hlsVideoElement.dataset.hlsUrl) {
+            this.hlsPlayer.initHlsStreamPlayer(this.hlsVideoElement.dataset.hlsUrl);
+        }
+        this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
+        this.subscribeToStreamNotifications();
+
+        return;
+    }
+
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
     this.session.on('streamCreated', function (event) {
@@ -332,11 +355,46 @@ Webinar.prototype.updateViewers = function () {
     this.viewersTextContainer.textContent = this.viewersCount;
 };
 
+Webinar.prototype.subscribeToStreamNotifications = function () {
+    if (!this.isHls) {
+        return;
+    }
+
+    this.notificationSubscriber.addSubscriber(this.topicStream, this.notificationSubscriberKey, (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (!this.isSpeaker && payload.action === 'stream_started') {
+            this.hlsPlayer.updateHlsSource(payload.hlsUrl);
+            console.info('Received stream_started notification, hlsUrl: ' + payload.hlsUrl);
+        }
+    });
+
+};
+
+Webinar.prototype.subscribeToSpeakerNotifications = function () {
+    // if webinar is not in hls mode, updates will be sent with tokbox
+    if (!this.isHls) {
+        return;
+    }
+
+    this.notificationSubscriber.addSubscriber(this.topicSpeaker, this.notificationSubscriberKey, (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (payload.action === 'viewer_connected') {
+            // viewers + other speakers + current speaker
+            this.viewersCount = payload.viewersCount + this.subscribers.length + 1;
+            this.updateViewers();
+        }
+    });
+
+};
+
 /**
  * Connect to the session, create and publish your stream
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
+
         this.showElement(this.invisibleModeButton);
 
         if (!this.invisibleMode) {
@@ -349,16 +407,12 @@ Webinar.prototype.connect = function () {
         this.showElement(this.viewersContainer);
         this.initShareMedia();
 
-        if (!this.isMobile) {
-            this.toggleSideBar();
-        }
-
-        this.createToggleSidebarButton();
-        this.createFullscreenButton();
+        this.showViewerControls();
 
         if (!error) {
             if (this.isSpeaker) {
                 this.publishStream();
+                this.subscribeToSpeakerNotifications();
             }
 
             return;
@@ -367,6 +421,28 @@ Webinar.prototype.connect = function () {
         console.error(error);
     }.bind(this));
 };
+
+// declare viewer on server and get hlsUrl if not available when page loads
+Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
+    $.get(hlsConnectUrl, (response) => {
+        if (response.hlsUrl && !this.hlsPlayer.isInitialized()) {
+            this.hlsPlayer.initHlsStreamPlayer(response.hlsUrl)
+        }
+    })
+    .fail((error) => {
+        console.error(error.status, error.statusText, this.recordEndpoint);
+    });
+}
+
+Webinar.prototype.showViewerControls = function () {
+
+    if (!this.isMobile && !this.isSidebarOpened()) {
+        this.toggleSideBar();
+    }
+
+    this.createToggleSidebarButton();
+    this.createFullscreenButton();
+}
 
 Webinar.prototype.initShareMedia = function () {
     if (!this.isSpeaker) {
@@ -710,11 +786,11 @@ Webinar.prototype.handleStream = function (
         streamId: streamId,
         type: type,
         action: 'start'
-    }, (response) => {
     })
-        .fail((error) => {
-            console.error(error);
-        });
+    .fail((error) => {
+        this.showError('Stream creation failed');
+        console.error(error);
+    });
 };
 
 Webinar.prototype.handleStopStream = function (
@@ -730,6 +806,7 @@ Webinar.prototype.handleStopStream = function (
     }, (response) => {
     })
         .fail((error) => {
+            this.showError('Stream stop failed');
             console.error(error);
         });
 };
@@ -785,7 +862,7 @@ Webinar.prototype.screenshare = function () {
             publishAudio: true,
             name: this.currentUserId,
             insertDefaultUI: false,
-            maxResolution: {width: 1280, height: 720},
+            maxResolution: { width: 1280, height: 720 },
         });
 
         const endSharingButton = document.createElement('button');
@@ -1024,6 +1101,10 @@ Webinar.prototype.toggleButton = function (button, isOn) {
 };
 
 Webinar.prototype.addShownChatSubscriber = function () {
+    if (this.mobile) {
+        return;
+    }
+
     this.notificationSubscriber.addSubscriber(
         this.topicChat,
         this.notificationSubscriberKey,

@@ -489,6 +489,7 @@ form.generate_slot.children.recipes.prototype.children.end.label: à
 form.generate_slot.children.recipes.prototype.children.interval.label: 'Intervalle (en minutes)'
 form.generate_slot.children.submit.label: Enregistrer
 form.happening_create_update.speaker_linked_to_user: '%name% (Lié à un utilisateur)'
+form.happening_create.children.allowHls.label: 'Diffusion broadcast pour les spectateurs (HLS)'
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
@@ -518,6 +519,7 @@ form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_create.children.webinar.label: 'Webinaire activé'
 form.happening_create.children.webinarRecorded.label: 'Enregistrement du webinar'
 form.happening_create.speaker_not_user.error: 'Les intervenants à un webinaire doivent obligatoirement être liés à un compte utilisateur sur l''évènement'
+form.happening_update.children.allowHls.label: 'Diffusion broadcast pour les spectateurs (HLS)'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'

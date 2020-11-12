@@ -2685,9 +2685,15 @@ services:
             - '@open_tok'
             - '%tokbox_api_key%'
             - '%feature_video_conference_date_security_enabled%'
+            - '@Proximum\Vimeet\Infrastructure\Tokbox\Client'
 
     open_tok:
         class: OpenTok\OpenTok
+        arguments:
+            - '%tokbox_api_key%'
+            - '%tokbox_api_secret%'
+
+    Proximum\Vimeet\Infrastructure\Tokbox\Client:
         arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
@@ -5976,6 +5982,12 @@ services:
     Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessible: ~
 
     Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser:
+        arguments:
+            - '@datetime'
+
+    Proximum\Vimeet\Domain\Happening\IsUserSpeaker: ~
+
+    Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast:
         arguments:
             - '@datetime'
 
