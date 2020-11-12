@@ -156,8 +156,6 @@ class AgendaController extends Controller
         }
 
 
-
-
         return $this->render(
             '@Event/Agenda/participant_agenda.html.twig',
             [

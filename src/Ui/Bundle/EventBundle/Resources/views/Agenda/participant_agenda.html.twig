@@ -27,11 +27,10 @@
                                 {% for participantItem in agenda.participants %}
                                     {% if (myParticipant is not null and myParticipant.id == participantItem.id) %}
                                         <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
-                                            <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                            <a  class="text-uppercase" href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
                                                 {{ 'agenda.title'|trans }}
                                             </a>
                                         </li>
-                                        <li role="separator" class="divider"></li>
                                     {% else %}
                                         <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
                                             <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
@@ -96,7 +95,7 @@
     <div id="agenda" class="agenda-container" {% if agenda.isItDDay %} data-agenda-autorefresh {% endif %} data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}" data-slot-available="{{ 'agenda.slot.available'|trans }}" data-slot-unavailable="{{ 'agenda.slot.unavailable'|trans }}" data-slot-imperative-presence="{{ 'agenda.slot.imperative-presence'|trans }}">
         <div class="row">
             {% for day in agenda.days %}
-                <div class="col-md-12 agenda" data-beginTimestamp="{{ day.begin.timestamp }}" data-endTimestamp="{{ day.end.timestamp }}" data-beginHour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endhour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotDuration="{{ day.getScale }}">
+                <div class="col-md-12 agenda" data-beginTimestamp="{{ day.begin.timestamp }}" data-endTimestamp="{{ day.end.timestamp }}" data-beginHour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endHour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotDuration="{{ day.getScale }}">
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
