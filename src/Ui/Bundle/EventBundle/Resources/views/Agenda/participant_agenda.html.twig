@@ -152,10 +152,18 @@
                                     {% endfor %}
 
                                     {% for availableSlotView in day.availableSlotViews %}
-                                        <div class="meet available" data-beginhour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" data-duration="{{ availableSlotView.duration.format('%H:%I') }}" data-slot-id="{{ availableSlotView.id }}">
+                                        <div class="meet available" 
+                                            data-beginhour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" 
+                                            data-duration="{{ availableSlotView.duration.format('%H:%I') }}" 
+                                            data-slot-id="{{ availableSlotView.id }}">
                                             <header>
                                                 <div class="content">
-                                                    <a href="{{ path('event_catalog_index', { 'sheet': sheet.id, 'availableSlot': 'catalog_slot', 'slot_id': availableSlotView.id, 'orderBy': 'relevance' }) }}">
+                                                    <a href="{{ path('event_catalog_index', 
+                                                        { 'sheet': sheet.id, 
+                                                        'availableSlot': 'catalog_slot',
+                                                         'slot_id': availableSlotView.id, 
+                                                         'orderBy': 'relevance' }) 
+                                                         }}">
                                                         {{ 'agenda.availability.available_participant_for_this_slot'|trans }}
                                                     </a>
                                                 </div>
