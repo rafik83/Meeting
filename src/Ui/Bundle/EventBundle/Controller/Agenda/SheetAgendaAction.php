@@ -75,15 +75,10 @@ class SheetAgendaAction
             )
         );
 
-        $myParticipant = $sheet->getUserParticipant($user);
-        $otherParticipants = $agenda->participants;
 
-        if ($myParticipant !== null) {
-            $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($myParticipant) {
-                return $myParticipant->getId() !== $otherParticipant->id;
-            });
-        }
-
+        $otherParticipants = \array_filter($agenda->participants, function (ParticipantView $otherParticipant) use ($participant) {
+            return $participant->getId() !== $otherParticipant->id;
+        });
 
         return new Response(
             $this->engine->render(
@@ -92,7 +87,6 @@ class SheetAgendaAction
                     'event' => $event,
                     'sheet' => $sheet,
                     'agenda' => $agenda,
-                    'myParticipant' => $myParticipant,
                     'otherParticipants' => $otherParticipants,
                     'participant' => $participant,
                     'tipTranslationViews' => $this->queryBus->handle(new TipTranslationViewQuery(
