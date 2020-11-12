@@ -20,11 +20,13 @@ RUN set -eux \
   libpng-dev \
   libxml2-dev \
   libxslt-dev \
+  libzip-dev \
   libmagickwand-dev \
   unzip \
   msmtp \
   python-minimal \
   vim \
+  zip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -32,7 +34,7 @@ RUN set -x \
   && docker-php-ext-configure intl --enable-intl \
   && docker-php-ext-configure soap --enable-soap \
   && docker-php-ext-configure opcache --enable-opcache \
-  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
   && docker-php-ext-install \
   bcmath \
   bz2 \
@@ -51,14 +53,13 @@ RUN set -x \
   sysvmsg \
   sysvsem \
   sysvshm \
-  wddx \
   xmlrpc \
   xsl \
   zip
 
 RUN pecl install redis apcu lzf timezonedb \
   && yes '' | pecl install imagick \
-  && docker-php-ext-enable redis apcu lzf imagick timezonedb \
+  && docker-php-ext-enable redis apcu lzf imagick timezonedb wddx \
   && rm -rf /tmp/pear
 
 # Install New Relic but disable it by default

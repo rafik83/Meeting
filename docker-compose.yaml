@@ -31,21 +31,10 @@ services:
         networks:
             - proxy
 
-    nginx:
-        image: teamparis/v_nginx:latest
-        volumes:
-            - .:/srv
-        ports:
-            - "8080:80"
-        depends_on:
-            - php
-        networks:
-            - proxy
-
-    php:
-        build: docker/php
-        working_dir: /srv
+    php-ci:
+        build: docker/php-ci
         environment:
+            SYMFONY_ENV: "test"
             TZ: "Europe/Paris"
         volumes:
             - .:/srv
