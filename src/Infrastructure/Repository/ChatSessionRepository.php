@@ -148,7 +148,7 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->setParameter('event', $event)
             ->setMaxResults(1);
 
-        return !empty($queryBuilder->getQuery()->getArrayResult());
+        return !empty($queryBuilder->getQuery()->getOneOrNullResult());
     }
 
 }

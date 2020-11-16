@@ -70,7 +70,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
         self::assertEquals($expectedSubmenuButtonView, $result);
     }
 
-    public function testEventNotOpen()
+    public function testNotAllowedToAccess()
     {
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);

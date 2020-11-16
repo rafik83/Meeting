@@ -36,15 +36,15 @@ class CanAccessToContacts
             return false;
         }
 
-        if ($this->chatSessionRepository->hasAStartedVisio($event, $user)) {
+        if ($sheet->isInInternalCatalog()) {
+            return true;
+        }
+
+        if (null !== $this->chatSessionRepository->hasAStartedVisio($event, $user)) {
             return true;
         }
 
         if ($this->canScanParticipant->isSatisfiedBy($sheet)) {
-            return true;
-        }
-
-        if ($sheet->isInInternalCatalog()) {
             return true;
         }
 

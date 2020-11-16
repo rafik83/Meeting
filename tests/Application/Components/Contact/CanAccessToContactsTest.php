@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 
 class CanAccessToContactsTest extends TestCase
 {
-    public function testNotAllowedToAccess(): void {
+    public function testEventNotOpen(): void {
 
         $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
@@ -39,6 +39,30 @@ class CanAccessToContactsTest extends TestCase
         self::assertFalse($result);
     }
 
+    public function testIsInInternalCatalog(): void {
+
+        $event = $this->prophesize(Event::class);
+        $sheet = $this->prophesize(Sheet::class);
+        $user = $this->prophesize(User::class);
+
+        $eventOpenAccessChecker = $this->prophesize(EventOpenAccessChecker::class);
+        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
+        $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
+
+        $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
+
+        $canAccessToContacts = new CanAccessToContacts(
+            $eventOpenAccessChecker->reveal(),
+            $canScanParticipant->reveal(),
+            $chatSessionRepository->reveal()
+        );
+
+        $result = $canAccessToContacts->isSatisfiedBy($event->reveal(), $user->reveal(), $sheet->reveal());
+
+        self::assertTrue($result);
+    }
+
     public function testHasAStartedVisio(): void {
 
         $event = $this->prophesize(Event::class);
@@ -50,6 +74,7 @@ class CanAccessToContactsTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(false);
         $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
         $canAccessToContacts = new CanAccessToContacts(
@@ -63,7 +88,7 @@ class CanAccessToContactsTest extends TestCase
         self::assertTrue($result);
     }
 
-    public function testIsSatisfiedBy(): void {
+    public function  testCanScanParticipant(): void {
 
         $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
@@ -74,8 +99,9 @@ class CanAccessToContactsTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(false);
         $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
-        $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
+        $canScanParticipant->isSatisfiedBy($sheet->reveal());
 
         $canAccessToContacts = new CanAccessToContacts(
             $eventOpenAccessChecker->reveal(),
@@ -88,30 +114,5 @@ class CanAccessToContactsTest extends TestCase
         self::assertTrue($result);
     }
 
-    public function testIsInInternalCatalog(): void {
-
-        $event = $this->prophesize(Event::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $user = $this->prophesize(User::class);
-
-        $eventOpenAccessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
-
-        $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
-        $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
-        $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
-        $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(true);
-
-        $canAccessToContacts = new CanAccessToContacts(
-            $eventOpenAccessChecker->reveal(),
-            $canScanParticipant->reveal(),
-            $chatSessionRepository->reveal()
-        );
-
-        $result = $canAccessToContacts->isSatisfiedBy($event->reveal(), $user->reveal(), $sheet->reveal());
-
-        self::assertTrue($result);
-    }
 
 }
