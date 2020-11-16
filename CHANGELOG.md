@@ -4,11 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.69.0] - 2020-11-16
 ### Added
-- VIMEET 2270 - Contact tab display if call visio.
+- VIMEET-2270 - Contact tab display if call visio
 - VIMEET-2268 - Call visio analytics on admin dashboard
-- VIMEET-2220 Compute the private chat message count
+- VIMEET-2220 - Compute the private chat message count
 - VIMEET-2232 - Allow user to access video webinar when ended even with no participation
+- VIMEET-2237 - Allow user to access someone else agenda
 
 ## [2.68.0] - 2020-11-09
 ### Added
