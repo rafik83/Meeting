@@ -14,7 +14,7 @@
     <div class="row mg-tp">
         <div class="col-md-6">
             {% if agenda.participants|length > 1 %}
-                <div class="btn-group mg-tp" role="group">
+                <div class="btn-group" role="group">
                     <a class="btn btn-primary" href="{{ path('event_agenda_sheet', { 'sheet': sheet.id }) }}">
                         {{ 'agenda.sheetAgenda.button.title'|trans }}
                     </a>
