@@ -149,7 +149,7 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->setParameter('event', $event)
             ->setMaxResults(1);
 
-        return !empty($queryBuilder->getQuery()->getOneOrNullResult());
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     public function countCallVisioByEvent(Event $event): int

@@ -101,7 +101,7 @@ class CanAccessToContactsTest extends TestCase
         $eventOpenAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $sheet->isInInternalCatalog()->shouldBeCalled()->willReturn(false);
         $chatSessionRepository->hasAStartedVisio($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn(false);
-        $canScanParticipant->isSatisfiedBy($sheet->reveal());
+        $canScanParticipant->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $canAccessToContacts = new CanAccessToContacts(
             $eventOpenAccessChecker->reveal(),

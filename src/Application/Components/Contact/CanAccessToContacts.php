@@ -40,7 +40,7 @@ class CanAccessToContacts
             return true;
         }
 
-        if (null !== $this->chatSessionRepository->hasAStartedVisio($event, $user)) {
+        if ($this->chatSessionRepository->hasAStartedVisio($event, $user)) {
             return true;
         }
 
