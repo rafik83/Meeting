@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
@@ -15,14 +7,10 @@ use Proximum\Vimeet\Application\View\Happening\HappeningView;
 
 class HappeningViewQueryHandler
 {
-    /**
-     * @var SpeakerViewQueryHandler
-     */
+    /** @var SpeakerViewQueryHandler */
     private $speakerViewQueryHandler;
 
-    /**
-     * @var CategoryViewQueryHandler
-     */
+    /** @var CategoryViewQueryHandler */
     private $categoryViewQueryHandler;
 
     /** @var CanAccessToWebinar */
@@ -33,17 +21,12 @@ class HappeningViewQueryHandler
         CategoryViewQueryHandler $categoryViewQueryHandler,
         CanAccessToWebinar $canAccessToWebinar
     ) {
-        $this->speakerViewQueryHandler  = $speakerViewQueryHandler;
+        $this->speakerViewQueryHandler = $speakerViewQueryHandler;
         $this->categoryViewQueryHandler = $categoryViewQueryHandler;
         $this->canAccessToWebinar = $canAccessToWebinar;
     }
 
-    /**
-     * @param HappeningViewQuery $query
-     *
-     * @return HappeningView
-     */
-    public function handle(HappeningViewQuery $query)
+    public function handle(HappeningViewQuery $query): HappeningView
     {
         $happening = $query->happening;
         $user = $query->user;

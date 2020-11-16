@@ -54,6 +54,13 @@ class CanAccessToWebinar
             return false;
         }
 
+        // User can access video webinar with live url on webinar than are ended.
+        if ($happening->isVideoWebinarAndHasLiveUrl()
+            && $happening->getEnd() < $this->dateTime
+        ) {
+            return true;
+        }
+
         return $this->happeningParticipationRepository
                 ->findByHappeningAndUser($happening, $user) instanceof HappeningParticipation;
     }

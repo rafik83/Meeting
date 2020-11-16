@@ -339,6 +339,16 @@ services:
             - '@adapter.router'
 
     #
+    # Program
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Program\IndexAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.router'
+            - '@templating.engine.twig'
+
+    #
     # Badge
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Badge\ShowAction:
