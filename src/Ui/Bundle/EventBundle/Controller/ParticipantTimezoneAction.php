@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,8 +78,9 @@ class ParticipantTimezoneAction
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($command);
 
-            return new RedirectResponse($this->urlGenerator->generate('event_agenda', [
+            return new RedirectResponse($this->urlGenerator->generate('event_agenda_participant', [
                 'sheet' => $sheet->getId(),
+                'participant' => $participant->getId(),
             ]));
         }
 
