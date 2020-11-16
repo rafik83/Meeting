@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2268 - Call visio analytics on admin dashboard
 - VIMEET-2220 Compute the private chat message count
-- VIMEET-2247 - Max height fullname webinar
+- VIMEET-2247 - Limit height of spkeaker's title in webinars
 
 ## [2.68.0] - 2020-11-09
 ### Added
