@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface ChatSessionRepositoryInterface
@@ -30,4 +29,5 @@ interface ChatSessionRepositoryInterface
 
     public function countCallVisioByEvent(Event $event): int;
 
+    public function countCallVisioByEventAndUser(Event $event, User $user): int;
 }

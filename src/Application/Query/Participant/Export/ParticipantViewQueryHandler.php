@@ -8,6 +8,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -54,6 +55,9 @@ class ParticipantViewQueryHandler
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
+    /** @var ChatSessionRepositoryInterface */
+    private $chatSessionRepository;
+
     /** @var array */
     private $analytics;
 
@@ -67,7 +71,8 @@ class ParticipantViewQueryHandler
         HappeningRepositoryInterface $happeningRepository,
         SheetRepositoryInterface $sheetRepository,
         RequestRepositoryInterface $requestRepository,
-        MeetingRepositoryInterface $meetingRepository
+        MeetingRepositoryInterface $meetingRepository,
+        ChatSessionRepositoryInterface $chatSessionRepository
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory = $templateDataFactory;
@@ -79,6 +84,7 @@ class ParticipantViewQueryHandler
         $this->sheetRepository = $sheetRepository;
         $this->requestRepository = $requestRepository;
         $this->meetingRepository = $meetingRepository;
+        $this->chatSessionRepository = $chatSessionRepository;
     }
 
     public function handle(ParticipantViewQuery $query): ParticipantView
@@ -124,7 +130,8 @@ class ParticipantViewQueryHandler
             $this->analytics[$query->participant->getUser()->getId()]['viewedSheets']??0,
             $this->analytics[$query->participant->getUser()->getId()]['clickedElements']??0,
             $this->requestRepository->getParticipantRequestsCount($query->participant),
-            $this->meetingRepository->getParticipantMeetingsCount($query->participant)
+            $this->meetingRepository->getParticipantMeetingsCount($query->participant),
+            $this->chatSessionRepository->countCallVisioByEventAndUser($query->event, $query->participant->getUser())
         );
 
         return $view;
