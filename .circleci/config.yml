@@ -41,8 +41,6 @@ jobs:
             sleep 10
             dockerize -wait tcp://localhost:3306 -timeout 1m
             docker-compose -p vimeet exec php make install-app@test
-            dockerize -wait tcp://localhost:3306 -timeout 1m
-            docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test
             docker-compose -p vimeet exec php make install-dep
             docker-compose -p vimeet exec php make build@prod
