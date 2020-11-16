@@ -137,7 +137,8 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
         return !empty($queryBuilder->getQuery()->getArrayResult());
     }
 
-    public function hasAStartedVisio (Event $event, User $user): bool {
+    public function hasAStartedVisio (Event $event, User $user): bool
+    {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('session.id')
             ->from(ChatSession::class, 'session')
@@ -149,6 +150,20 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
             ->setMaxResults(1);
 
         return !empty($queryBuilder->getQuery()->getOneOrNullResult());
+    }
+
+    public function countCallVisioByEvent(Event $event): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(session)')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+
     }
 
 }

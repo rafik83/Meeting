@@ -11,7 +11,7 @@ interface ChatSessionRepositoryInterface
 {
     public function add(ChatSession $chatSession): ChatSession;
 
-    public function update(): void;
+    public function update():void;
 
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession;
 
@@ -27,4 +27,7 @@ interface ChatSessionRepositoryInterface
     public function hasMessageFromUser (ChatSession $chatSession, User $user): bool;
 
     public function hasAStartedVisio (Event $event, User $user): bool;
+
+    public function countCallVisioByEvent(Event $event): int;
+
 }

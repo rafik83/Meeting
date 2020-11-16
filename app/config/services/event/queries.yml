@@ -44,11 +44,20 @@ services:
             - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
             - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQuery }
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
         arguments:

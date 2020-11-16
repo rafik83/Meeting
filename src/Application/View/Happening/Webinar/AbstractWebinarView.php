@@ -1,14 +1,20 @@
 <?php
 
-namespace Proximum\Vimeet\Application\View\Happening;
+namespace Proximum\Vimeet\Application\View\Happening\Webinar;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
+use Proximum\Vimeet\Application\View\Happening\WebinarParticipantView;
+use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
-class WebinarView
+abstract class AbstractWebinarView
 {
     /** @var int */
     public $eventId;
+
+    /** @var bool */
+    public $isSpeaker = false;
 
     /** @var int */
     public $happeningId;
@@ -28,13 +34,10 @@ class WebinarView
     /** @var NotificationView */
     public $notification;
 
-    /** @var bool */
-    public $isSpeaker;
-
     /** @var TimeRangeView */
     public $slot;
 
-    /** @var \DateTimeInterface */
+    /** @var DateTimeInterface */
     public $currentTime;
 
     /** @var int */
@@ -43,7 +46,7 @@ class WebinarView
     /** @var int */
     public $warningTimeRemainingInSeconds;
 
-    /** @var int $endTimestamp used to stop record automatically */
+    /** @var int used to stop record automatically */
     public $stopTimestamp;
 
     /** @var string|null */
@@ -70,17 +73,8 @@ class WebinarView
     /** @var bool */
     public $isVideoWebinarAndHappeningIsEnded;
 
-    /** @var bool */
-    public $isWebinarRecorded;
-
-    /** @var bool */
-    public $isWebinarRecording;
-
-    /** @var bool */
-    public $isWebinarRecordAutoStart;
-
     /** @var int */
-    public $timeRemainingBeforeStartInSeconds;
+    public $questionsCount;
 
     /**
      * @param WebinarSpeakerView[]     $speakers
@@ -96,22 +90,15 @@ class WebinarView
         string $sessionId,
         string $apiKey,
         NotificationView $notification,
-        bool $isSpeaker,
         array $speakers,
         array $participantViews,
         TimeRangeView $slot,
-        \DateTimeInterface $currentTime,
-        int $timeRemainingInSeconds,
-        int $warningTimeRemainingInSeconds,
-        int $timeRemainingBeforeStartInSeconds,
-        int $stopTimestamp,
+        DateTimeInterface $currentTime,
         ?string $headerImage,
         ?string $liveUrl,
         bool $sidebarAllowed,
-        bool $isVideoWebinarAndHappeningIsEnded,
-        bool $isWebinarRecorded,
-        bool $isWebinarRecording,
-        bool $isWebinarRecordAutoStart
+        int $questionsCount,
+        bool $isVideoWebinarAndHappeningIsEnded
     ) {
         $this->eventId = $eventId;
         $this->happeningId = $happeningId;
@@ -121,13 +108,8 @@ class WebinarView
         $this->sessionId = $sessionId;
         $this->apiKey = $apiKey;
         $this->notification = $notification;
-        $this->isSpeaker = $isSpeaker;
         $this->slot = $slot;
         $this->currentTime = $currentTime;
-        $this->timeRemainingInSeconds = $timeRemainingInSeconds;
-        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
-        $this->stopTimestamp = $stopTimestamp;
-        $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->headerImage = $headerImage;
         $this->speakers = $speakers;
         $this->participantViews = $participantViews;
@@ -135,9 +117,7 @@ class WebinarView
         $this->sidebarAllowed = $sidebarAllowed;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
-        $this->isWebinarRecorded = $isWebinarRecorded;
-        $this->isWebinarRecording = $isWebinarRecording;
-        $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
+        $this->questionsCount = $questionsCount;
     }
 
     public function getSpeakerInfosByUserId(): string

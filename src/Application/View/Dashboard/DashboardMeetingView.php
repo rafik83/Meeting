@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Dashboard;
 
 class DashboardMeetingView
@@ -42,6 +34,9 @@ class DashboardMeetingView
     /** @var int */
     public $meetingCreatedByPlanner;
 
+    /** @var int */
+    public $meetingCallVisio;
+
     /** @var array */
     public $requestsByType;
 
@@ -54,6 +49,7 @@ class DashboardMeetingView
         int $meetingCreatedByParticipant,
         int $meetingCreatedByPlanner,
         int $meetingCreatedUpstreamByAdmin,
+        int $meetingCallVisio,
         int $approvedRequest,
         int $pendingRequest,
         int $refusedRequest,
@@ -65,6 +61,7 @@ class DashboardMeetingView
         $this->meetingCreatedByParticipant = $meetingCreatedByParticipant;
         $this->meetingCreatedByPlanner = $meetingCreatedByPlanner;
         $this->meetingCreatedUpstreamByAdmin = $meetingCreatedUpstreamByAdmin;
+        $this->meetingCallVisio = $meetingCallVisio;
 
         $this->approvedRequest = $approvedRequest;
         $this->pendingRequest = $pendingRequest;

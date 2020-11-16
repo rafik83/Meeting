@@ -1,9 +1,10 @@
 <?php
 
-namespace Application\Command\Happening\Webinar\Question;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler;
@@ -15,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionVoteRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class VoteHappeningQuestionHandlerTest extends TestCase
 {
@@ -30,7 +32,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
     /** @var VoteHappeningQuestionHandler */
     private $voteHappeningQuestionHandler;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->questionVoteRepository = $this->prophesize(QuestionVoteRepositoryInterface::class);
@@ -43,7 +45,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         );
     }
 
-    public function test_vote_happening_question()
+    public function test_vote_happening_question(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(1234);
@@ -58,22 +60,31 @@ class VoteHappeningQuestionHandlerTest extends TestCase
 
         $questionAuthor = $this->prophesize(User::class);
         $questionAuthor->getId()->shouldBeCalled()->willReturn(24);
+        $happening = $this->prophesize(Happening::class);
         $question = $this->prophesize(Question::class);
         $question->getCreatedBy()->shouldBeCalled()->willReturn($questionAuthor->reveal());
-        $question->getHappening()->shouldBeCalled()->willReturn($this->prophesize(Happening::class));
+        $question->getHappening()->shouldBeCalled()->willReturn($happening->reveal());
 
         $this->questionRepository->findById(42)->shouldBeCalled()->willReturn($question->reveal());
+        $this->questionRepository
+            ->getMessagesCountDuringHappening($happening->reveal())->willReturn(2000);
         $this->questionVoteRepository
             ->getByQuestionAndUser($question->reveal(), $user->reveal())
             ->shouldBeCalled()
             ->willReturn(null);
+
+        $this->notificationPublisher
+            ->publishHappeningNotification($happening->reveal(), AbstractNotification::TYPE_QUESTIONS, [
+            'action' => 'update',
+            'msg_count' => 2000,
+        ])->shouldBeCalled();
 
         $this->questionVoteRepository->add(Argument::type(QuestionVote::class))->shouldBeCalled();
 
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_unvote_happening_question()
+    public function test_unvote_happening_question(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(1234);
@@ -88,11 +99,14 @@ class VoteHappeningQuestionHandlerTest extends TestCase
 
         $questionAuthor = $this->prophesize(User::class);
         $questionAuthor->getId()->shouldBeCalled()->willReturn(24);
+        $happening = $this->prophesize(Happening::class);
         $question = $this->prophesize(Question::class);
         $question->getCreatedBy()->shouldBeCalled()->willReturn($questionAuthor->reveal());
-        $question->getHappening()->shouldBeCalled()->willReturn($this->prophesize(Happening::class));
+        $question->getHappening()->shouldBeCalled()->willReturn($happening);
 
         $this->questionRepository->findById(42)->shouldBeCalled()->willReturn($question->reveal());
+        $this->questionRepository
+            ->getMessagesCountDuringHappening($happening->reveal())->willReturn(2000);
 
         $questionVote = $this->prophesize(QuestionVote::class);
         $this->questionVoteRepository
@@ -103,10 +117,16 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->questionVoteRepository->remove($questionVote->reveal())->shouldBeCalled();
         $this->questionVoteRepository->add(Argument::any())->shouldNotBeCalled();
 
+        $this->notificationPublisher
+            ->publishHappeningNotification($happening->reveal(), AbstractNotification::TYPE_QUESTIONS, [
+                'action' => 'update',
+                'msg_count' => 2000,
+            ])->shouldBeCalled();
+
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_vote_unexpected_question()
+    public function test_vote_unexpected_question(): void
     {
         $this->expectException(QuestionNotFoundException::class);
 
@@ -119,10 +139,13 @@ class VoteHappeningQuestionHandlerTest extends TestCase
 
         $this->questionVoteRepository->add(Argument::any())->shouldNotBeCalled();
 
+        $this->notificationPublisher->publishHappeningNotification(Argument::any(), Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
+
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }
 
-    public function test_vote_self_question()
+    public function test_vote_self_question(): void
     {
         $this->expectException(QuestionNotAllowedException::class);
 
@@ -144,6 +167,9 @@ class VoteHappeningQuestionHandlerTest extends TestCase
         $this->questionRepository->findById(42)->shouldBeCalled()->willReturn($question->reveal());
 
         $this->questionVoteRepository->add(Argument::any())->shouldNotBeCalled();
+
+        $this->notificationPublisher->publishHappeningNotification(Argument::any(), Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
 
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());
     }

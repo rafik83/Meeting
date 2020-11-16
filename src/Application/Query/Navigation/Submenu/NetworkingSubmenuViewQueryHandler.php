@@ -50,41 +50,44 @@ class NetworkingSubmenuViewQueryHandler
             return null;
         }
 
-        if ($this->networkingAccessChecker->allowedToAccess($query->event)) {
-            $networkingTitle = 'navigation.category.networking';
+        if (!$this->networkingAccessChecker->allowedToAccess($query->event)) {
+            return null;
+        }
 
-            if (isset($query->staticFormulationsIndexedByCategory[Category::NETWORKING])) {
-                $networkingTitle = $query->staticFormulationsIndexedByCategory[Category::NETWORKING]->getTitle($query->locale);
-            }
+        $networkingTitle = 'navigation.category.networking';
+        if (isset($query->staticFormulationsIndexedByCategory[Category::NETWORKING])) {
+            $networkingTitle = $query->staticFormulationsIndexedByCategory[Category::NETWORKING]->getTitle($query->locale);
+        }
 
-            $eventMessagesCount = 0;
+        $eventMessagesCount = 0;
+        $privateChatSessionsCount = 0;
 
-            $isRouteNetworking = Route::isNetworking($query->route);
+        $isRouteNetworking = Route::isNetworking($query->route);
 
-            if (!$isRouteNetworking) {
-                $participant = $query->sheet->getUserParticipant($query->user);
-                if ($participant !== null) {
-                    $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByEvent(
-                        $query->event,
-                        $participant->getNetworkingChatViewedAt()
-                    );
-                }
-            }
+        $attributes =  ['data-submenu' => 'networking'];
 
+        if (!$isRouteNetworking) {
             $privateChatSessions = $this->chatSessionRepository->findSessionsByEventAndUser($query->event, $query->user);
             $privateChatSessionsCount = array_reduce($privateChatSessions, static function ($carry, $chatSession) use ($query) {
                 return $carry + ($chatSession['unreadMessages'][$query->user->getId()] ?? 0);
             }, 0);
-
-            return new SubmenuButtonView(
-                Category::NETWORKING_ICON,
-                $networkingTitle,
-                $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
-                $isRouteNetworking,
-                $eventMessagesCount + $privateChatSessionsCount,
-                true
-            );
+            $participant = $query->sheet->getUserParticipant($query->user);
+            if ($participant !== null) {
+                $eventMessagesCount = $this->chatMessageRepository->getMessagesCountByLinkableObject(
+                        $query->event,
+                        $participant->getNetworkingChatViewedAt()
+                    );
+            }
         }
-        return null;
+
+        return new SubmenuButtonView(
+            Category::NETWORKING_ICON,
+            $networkingTitle,
+            $this->navigationBuilder->getRoute('event_networking_index', ['sheet' => $query->sheet->getId()]),
+            $isRouteNetworking,
+            $eventMessagesCount + $privateChatSessionsCount,
+            true,
+            $attributes
+        );
     }
 }

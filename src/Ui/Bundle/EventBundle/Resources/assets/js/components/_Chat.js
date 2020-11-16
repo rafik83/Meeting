@@ -27,6 +27,7 @@ function Chat(element) {
     this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
 
     this.chatListeners = [];
+    this.chatMessagesCount = 0;
 }
 
 Chat.prototype.submitChat = function (event) {
@@ -76,10 +77,12 @@ Chat.prototype.initChat = function () {
     $.get(href, function (response) {
         this.removeChatListeners();
         $addChatFormList.empty();
+        let chatMessagesCount = 0;
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.id = `chat-message-${item.id}`;
             rowEl.classList.add('chat-row');
+            chatMessagesCount++;
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('chat-content');
@@ -203,6 +206,7 @@ Chat.prototype.initChat = function () {
             $addChatFormList[0].appendChild(rowEl);
         });
 
+        this.chatMessagesCount = chatMessagesCount;
         this.addChatFormList.scrollTop = this.addChatFormList.scrollHeight;
         this.chatLoaded = true;
         this.externalListener.forEach((callback) => callback(response));
@@ -228,6 +232,10 @@ Chat.prototype.reload = function () {
 Chat.prototype.removeChatListeners = function () {
     this.chatListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
     this.chatListeners = [];
+}
+
+Chat.prototype.getChatMessagesCount = function () {
+    return this.chatMessagesCount;
 }
 
 Chat.prototype.addListener = function (callback) {

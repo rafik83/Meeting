@@ -15,7 +15,7 @@ export default class Subscriber {
         const url = new URL(this.notificationProviderUrl);
         url.searchParams.append('topic', topic);
 
-        var eventSource = new EventSourcePolyfill(url, {
+        const eventSource = new EventSourcePolyfill(url, {
             headers: {
                 'Authorization': `Bearer ${subscriberKey}`
             }

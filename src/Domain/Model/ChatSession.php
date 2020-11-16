@@ -19,10 +19,10 @@ class ChatSession implements ChatMessageLinkableInterface
     /** @var array */
     private $unreadMessages;
 
-    /** @var string */
+    /** @var string|null */
     private $visioSessionId;
 
-    /** @var \DateTimeInterface */
+    /** @var \DateTimeInterface|null */
     private $visioStartedAt;
 
     public function __construct(Event $event, User $fromUser, User $toUser)

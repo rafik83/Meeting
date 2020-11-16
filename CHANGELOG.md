@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET 2270 - Contact tab display if call visio.
+- VIMEET-2268 - Call visio analytics on admin dashboard
+- VIMEET-2220 Compute the private chat message count
+
+## [2.68.0] - 2020-11-09
+### Added
+- VIMEET-2198 - Broadcast webinars in HLS
+
+## [2.67.1] - 2020-11-09
+### Fixed
+- MV-270 - Impossible to open a contact after a meeting
+
+## [2.67.0] - 2020-11-09
+### Fixed
+- VIMEET-2223 - ClearTimeout missing.
+
+### Added
+- VIMEET-2186 - Notifications when new messages or questions during webinar.
+
+### Changed
+- MV-267 - Brazil abolished DST in 2019
 
 ## [2.66.1] - 2020-11-05
 ### Fixed

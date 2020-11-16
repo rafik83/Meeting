@@ -2,6 +2,7 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
+import NetworkingNewMessageCounter from './components/_NetworkingNewMessageCounter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
@@ -209,4 +210,10 @@ export default function initNetworking(target, userConnection, notificationCallV
             modalManager.open(toUserParticipantNode);
         }
     }
+    const newMessageItems = document.querySelectorAll("[data-new-messages-count");
+    const networkingPageDataNodeElements = document.querySelectorAll("[data-submenu='networking']");
+
+    const networkingMessageCounter = new NetworkingNewMessageCounter(newMessageItems);
+
+    networkingMessageCounter.appendNewMessageBadge(networkingPageDataNodeElements);
 }
