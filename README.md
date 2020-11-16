@@ -71,16 +71,17 @@ sudo apt install php-intl    php-gd    php-xml    php-curl    php-mysql php-mbst
 cp app/config/parameters.yml.dist app/config/parameters.yml
 
 
+#### Install the php dependencies
+
+This projet uses a PHAR for composer (version 1.10) stored in `bin/composer.phar`.
+This file is used to install the dependencies on production and staging.
+
+The recommended way to install the dependencies on this project is to use this phar, by running :
+
 ```
 
-#### Install the composer dependencies
+    bin/composer.phar installer.phar install
 
-Unfortunately, this project works with composer 1.X only.
-
-You can install the dependencies by running
-
-```
-bin/composer.phar install
 ```
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
@@ -88,8 +89,10 @@ bin/composer.phar install
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```
+
 docker network create proxy
 docker-compose up -d
+
 ```
 
 ### Import a Database Dump
@@ -101,9 +104,11 @@ Then let's create the database and import this dump
 ##### Create the database
 
 ```
+
 mysql -h 127.0.0.1 -u root -p
 create database proximum_vimeet;
 exit
+
 ```
 
 **Import the dump**
@@ -111,7 +116,9 @@ exit
 Go to the folder where you've unzipped the sql dump and run
 
 ```
+
 mysql -u root -h 127.0.0.1 -p proximum_vimeet < <your_db_dump_name>.sql
+
 ```
 
 ##### Indexing Elastic Search DB
@@ -119,8 +126,10 @@ mysql -u root -h 127.0.0.1 -p proximum_vimeet < <your_db_dump_name>.sql
 Now it's time to index the Elastic Search Database
 
 ```
+
 php bin/console vimeet:elasticsearch:index
 php bin/console jms:run
+
 ```
 
 The last command will take ~1h to run . It's time to grab a coffee I guess.
@@ -134,13 +143,17 @@ The easiest way to install and manage node is by using [`nvm`](https://github.co
 ##### Install Nvm
 
 ```
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+
 ```
 
 Install the 8th version of node
 
 ```
+
 nvm install 8
+
 ```
 
 If you already have this node version just run `nvm use`
@@ -154,7 +167,9 @@ Vimeet uses [Yarn](https://yarnpkg.com/) as package manager. Please follow the i
 #### Install the node depenencies
 
 ```
+
 yarn install
+
 ```
 
 #### Build assets:
@@ -166,9 +181,11 @@ yarn install
 First you need to start the symfony server :
 
 ```
+
 symfony proxy:start
 symfony server:start -d
-```
+
+````
 
 Then you're ready to start hacking.
 
@@ -303,7 +320,7 @@ En admin, utiliser la méthode de l'event permettant de fallback, car la locale 
 
 ```php
 $locale = $event->getAvailableLocale($request->getLocale);
-```
+````
 
 ### Utils
 
