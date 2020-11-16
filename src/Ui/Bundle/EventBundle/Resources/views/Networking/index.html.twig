@@ -80,7 +80,7 @@
                                     </td>
                                     <td class="text-right">
                                         {% if chatSessionView.newMessagesCount > 0 %}
-                                            <span class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
+                                            <span data-new-messages-count="{{chatSessionView.newMessagesCount}}" class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
                                         {% else %}
                                             {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
                                         {% endif %}
