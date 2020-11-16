@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET 2270 - Contact tab display if call visio.
 - VIMEET-2268 - Call visio analytics on admin dashboard
 - VIMEET-2220 Compute the private chat message count
 - VIMEET-2232 - Allow user to access video webinar when ended even with no participation

@@ -10,6 +10,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Navigation\Submenu;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Components\Contact\CanAccessToContacts;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQueryHandler;
@@ -19,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Scan\CanScanParticipant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Navigation\NavigationBuilder;
 
@@ -26,18 +28,12 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
 {
     public function testContactsAvailable()
     {
-        $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn(1337);
-        $sheet->isInInternalCatalog()->willReturn(true);
-
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
-
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $canScanParticipant->isSatisfiedBy($sheet)->willReturn(true);
-
-        $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->shouldBeCalled()->willReturn(1337);
+        $canAccessToContacts = $this->prophesize(CanAccessToContacts::class);
+        $canAccessToContacts->isSatisfiedBy($event->reveal(), $user->reveal(), $sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
         $navigationBuilder->getRoute(
@@ -50,8 +46,7 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal(),
-            $canScanParticipant->reveal()
+            $canAccessToContacts->reveal()
         );
         $result = $badgeSubmenuViewQueryHandler->handle(
             new ContactsSubmenuViewQuery(
@@ -72,31 +67,25 @@ class ContactsSubmenuViewQueryHandlerTest extends TestCase
             true
         );
 
-        $this->assertEquals($expectedSubmenuButtonView, $result);
+        self::assertEquals($expectedSubmenuButtonView, $result);
     }
 
-    public function testEventNotOpen()
+    public function testNotAllowedToAccess()
     {
-        $sheet = $this->prophesize(Sheet::class);
-
         $user = $this->prophesize(User::class);
         $event = $this->prophesize(Event::class);
-
-        $accessChecker = $this->prophesize(EventOpenAccessChecker::class);
-        $accessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
-
-        $canScanParticipant = $this->prophesize(CanScanParticipant::class);
-        $canScanParticipant->isSatisfiedBy()->willReturn(true);
+        $sheet = $this->prophesize(Sheet::class);
+        $canAccessToContacts = $this->prophesize(CanAccessToContacts::class);
+        $canAccessToContacts->isSatisfiedBy($event->reveal(), $user->reveal(), $sheet->reveal())->shouldBeCalled()->willReturn(false);
 
         $navigationBuilder = $this->prophesize(NavigationBuilder::class);
 
         $badgeSubmenuViewQueryHandler = new ContactsSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
-            $accessChecker->reveal(),
-            $canScanParticipant->reveal()
+            $canAccessToContacts->reveal()
         );
 
-        $this->assertNull(
+        self::assertNull(
             $badgeSubmenuViewQueryHandler->handle(
                 new ContactsSubmenuViewQuery(
                     $user->reveal(),

@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface ChatSessionRepositoryInterface
@@ -25,5 +26,8 @@ interface ChatSessionRepositoryInterface
 
     public function hasMessageFromUser (ChatSession $chatSession, User $user): bool;
 
+    public function hasAStartedVisio (Event $event, User $user): bool;
+
     public function countCallVisioByEvent(Event $event): int;
+
 }
