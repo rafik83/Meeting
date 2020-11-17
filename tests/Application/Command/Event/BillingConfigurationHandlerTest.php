@@ -1,14 +1,6 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
-namespace Application\Command\Event;
+namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
@@ -26,8 +18,8 @@ class BillingConfigurationHandlerTest extends TestCase
         $event = EventFactory::createEvent();
 
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#CCCCCC', '#2F2F2F', '#2F2F2F', '#FFF');
-        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
-        $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
+        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
+        $event->getTranslations()->set('en', new EventTranslation($event, 'en', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $event->setInvoiceLogo('toto.jpg', 'jpg');
 
         $expectedEvent = EventFactory::createEvent();
@@ -39,21 +31,7 @@ class BillingConfigurationHandlerTest extends TestCase
         $expectedEvent->setInvoiceLogo('toto.jpg', 'jpg');
 
         // Command
-        $billingConfiguration               = new BillingConfiguration($event);
-        $billingConfiguration->translations = [
-            'fr' => [
-                'bankInfo'         => 'FR14-000',
-                'billingAddress'   => 'billing address',
-                'paymentCondition' => 'condition',
-                'paymentFooter'    => 'footers',
-            ],
-            'en' => [
-                'bankInfo'         => 'FR14-000',
-                'billingAddress'   => 'billing address',
-                'paymentCondition' => 'condition',
-                'paymentFooter'    => 'footers',
-            ],
-        ];
+        $billingConfiguration = new BillingConfiguration($event);
 
         // Mock
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Domain\Messaging;
 
 use PHPUnit\Framework\TestCase;
@@ -107,6 +99,7 @@ class SubstitutionsProviderTest extends TestCase
         $recipient = $this->prophesize(MailRecipientInterface::class)->reveal();
         $sheet     = $this->prophesize(Sheet::class);
         $event     = $this->prophesize(Event::class);
+        $event->getTitle()->willReturn('Lorem ipsum');
         $sheet->getEvent()->willReturn($event);
 
         $placeholders = [Compose::TAG_EVENT_NAME, '%INVALID-PLACEHOLDER%'];
