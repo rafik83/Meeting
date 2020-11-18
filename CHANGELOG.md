@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
 
-
 ## [2.69.1] - 2020-11-16
 ### Added
 - VIMEET-2137 - Allow user to access someone else agenda
