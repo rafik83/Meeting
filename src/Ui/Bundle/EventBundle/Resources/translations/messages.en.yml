@@ -33,6 +33,7 @@ agenda.meeting.updateSlot.error: 'Impossible to move this meeting'
 agenda.myAgenda.button.title: 'My calendar'
 agenda.participant.view: 'Schedule of %participant%'
 agenda.sheetAgenda.button.title: 'Global calendar'
+agenda.sheetAgenda.participantsAgenda.title: "Participant's Agenda"
 agenda.sheetAgenda.title: 'Global calendar'
 agenda.slot.available: Available
 agenda.slot.imperative-presence: 'Your presence is mandatory'

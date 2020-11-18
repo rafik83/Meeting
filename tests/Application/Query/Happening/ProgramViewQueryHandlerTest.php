@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 
 use PHPUnit\Framework\TestCase;
@@ -16,6 +8,7 @@ use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\FullHappeningQuery;
 use Proximum\Vimeet\Application\Query\Happening\FullHappeningQueryHandler;
+use Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQuery;
 use Proximum\Vimeet\Application\Query\Happening\HappeningParticipationQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler;
@@ -30,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class ProgramViewQueryHandlerTest extends TestCase
 {
-    public function testHandleException()
+    public function testHandleException(): void
     {
         $this->expectException(MissingEventDayConfigurationException::class);
 
@@ -67,7 +60,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         );
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $event      = EventFactory::createEvent();
         $user       = new User('user@vimeet.com', 'salt', 'password', 'fr');
@@ -115,10 +108,15 @@ class ProgramViewQueryHandlerTest extends TestCase
         ))->shouldBeCalled()->willReturn($dayView2);
 
         $happeningParticipationQueryHandler = $this->prophesize(HappeningParticipationQueryHandler::class);
-        $happeningParticipationQueryHandler->handle($expected, $sheet, $user);
+        $happeningParticipationQuery = new HappeningParticipationQuery(
+            $expected,
+            $sheet,
+            $user
+        );
+        $happeningParticipationQueryHandler->handle($happeningParticipationQuery)->shouldBeCalled();
 
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
-        $massRepository->findByType($sheet->getType(), 'fr')->shouldBeCalled()->willReturn([]);
+        $massRepository->findByTypes([$sheet->getType()], 'fr')->shouldBeCalled()->willReturn([]);
 
         $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
         $fullHappeningQueryHandler->handle(new FullHappeningQuery($expected, $event))->shouldBeCalled();

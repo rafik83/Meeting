@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -136,4 +137,47 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
         return !empty($queryBuilder->getQuery()->getArrayResult());
     }
 
+    public function hasAStartedVisio (Event $event, User $user): bool
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('session.id')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function countCallVisioByEvent(Event $event): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(session)')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+
+    }
+
+    public function countCallVisioByEventAndUser(Event $event, User $user): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(session)')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

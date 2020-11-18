@@ -1,36 +1,20 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class FullHappeningQueryHandler
 {
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
-    /**
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     */
     public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
     {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
-    /**
-     * @param FullHappeningQuery $query
-     */
-    public function handle(FullHappeningQuery $query)
+    public function handle(FullHappeningQuery $query): void
     {
         $participationCount = $this->happeningParticipationRepository->countParticipationByEvent($query->event);
 

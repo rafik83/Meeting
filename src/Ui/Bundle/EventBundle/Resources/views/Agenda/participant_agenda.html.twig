@@ -17,9 +17,40 @@
                     <a class="btn btn-gray" href="{{ path('event_agenda_sheet', { 'sheet': sheet.id }) }}">
                         {{ 'agenda.sheetAgenda.button.title'|trans }}
                     </a>
-                    <a class="btn btn-primary" href="{{ path('event_agenda_participant', { 'sheet': sheet.id, 'participant': participant.id }) }}">
-                        {{ 'agenda.myAgenda.button.title'|trans }}
-                    </a>
+                    {% if agenda.participants|length > 1 %}
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for participantItem in agenda.participants %}
+                                    {% if (myParticipant is not null and myParticipant.id == participantItem.id) %}
+                                        <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
+                                            <a  class="text-uppercase" href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                                {{ 'agenda.title'|trans }}
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
+                                            <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                                {{ 'agenda.participant.view'|trans({'%participant%': participantItem.fullName}) }}
+                                            </a>
+                                        </li>
+
+                                    {% endif %}
+
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+
+                    {% else %}
+                        <a class"btn btn-primary" href="{{ path('event_agenda_participant', {'participant': myParticipant.id, 'sheet': sheet.id}) }}">
+                            {{ 'agenda.title'|trans }}
+                        </a>
+
+                    {% endif %}
                 </div>
             {% else %}
                 <i class="icon-Calendrier"></i>
@@ -29,18 +60,26 @@
         <div class="col-md-6">
             {% if sheet.attend and not isUnavailabilityManagementDisabled %}
                 <div class="pull-right mg-tp">
-                    <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+                    <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal">
+                        <i class="icon-Verouiller_1"></i>
+                        {{ 'agenda.unavailability.add'|trans }}</a>
                 </div>
             {% endif %}
             {% if sheet.attend and isAvailabilityManagementEnabled %}
                 <div class="pull-right mg-tp saveAvailabilityButton">
-                    <button type="button" class="btn btn-primary"><i class="icon-Verouiller_1"></i>{{ 'agenda.availability.save'|trans }}</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="icon-Verouiller_1"></i>
+                        {{ 'agenda.availability.save'|trans }}</button>
                 </div>
                 <div class="pull-right mg-tp manageAvailabilityButton manageAvailabilityButton--enable">
-                    <button type="button" class="btn btn-primary"><i class="icon-Verouiller_1"></i>{{ 'agenda.availability.define'|trans }}</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="icon-Verouiller_1"></i>
+                        {{ 'agenda.availability.define'|trans }}</button>
                 </div>
                 <div class="pull-right mg-tp manageAvailabilityButton manageAvailabilityButton--disable">
-                    <button type="button" class="btn btn-primary"><i class="icon-Verouiller_1"></i>{{ 'agenda.availability.hide'|trans }}</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="icon-Verouiller_1"></i>
+                        {{ 'agenda.availability.hide'|trans }}</button>
                 </div>
             {% endif %}
             {% if isVisio and participant.timezone %}
@@ -53,8 +92,7 @@
             {% endif %}
         </div>
     </div>
-    <div id="agenda" class="agenda-container" {% if agenda.isItDDay %}data-agenda-autorefresh{% endif %} data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}"
-        data-slot-available="{{ 'agenda.slot.available'|trans }}" data-slot-unavailable="{{ 'agenda.slot.unavailable'|trans }}" data-slot-imperative-presence="{{ 'agenda.slot.imperative-presence'|trans }}">
+    <div id="agenda" class="agenda-container" {% if agenda.isItDDay %} data-agenda-autorefresh {% endif %} data-event-availabilities-ko-message="{{ 'agenda.availability.ko_message_on_save'|trans }}" data-event-availabilities-fail-message="{{ 'agenda.availability.fail_message_on_save'|trans }}" data-event-unavailabilities-create-url="{{ path('event_unavailabilities_create', {'sheet': sheet.id, 'participant': participant.id}) }}" data-slot-available="{{ 'agenda.slot.available'|trans }}" data-slot-unavailable="{{ 'agenda.slot.unavailable'|trans }}" data-slot-imperative-presence="{{ 'agenda.slot.imperative-presence'|trans }}">
         <div class="row">
             {% for day in agenda.days %}
                 <div class="col-md-12 agenda" data-beginTimestamp="{{ day.begin.timestamp }}" data-endTimestamp="{{ day.end.timestamp }}" data-beginHour="{{ day.begin|date('H:i', agenda.timezone) }}" data-endHour="{{ day.end|date('H:i', agenda.timezone) }}" data-slotDuration="{{ day.getScale }}">
@@ -66,7 +104,7 @@
                             </span>
                         </p>
                     </header>
-                    <div {% if day.isUnavailableForThisDay %}data-toggle-visibility data-toggle-visibility-display-type="inline"{% endif %}>
+                    <div {% if day.isUnavailableForThisDay %} data-toggle-visibility data-toggle-visibility-display-type="inline" {% endif %}>
                         {% if day.isUnavailableForThisDay %}
                             <p>
                                 <a href="#" class="btn btn-gray" data-toggle-visibility-show>
@@ -78,7 +116,7 @@
                             </p>
                         {% endif %}
 
-                        <div {% if day.isUnavailableForThisDay %}data-toggle-visibility-element-to-open{% endif %}>
+                        <div {% if day.isUnavailableForThisDay %} data-toggle-visibility-element-to-open {% endif %}>
                             <div class="meets">
                                 {% if day.isSheetAttendingTheEvent %}
                                     {% for happening in day.happenings %}
@@ -113,19 +151,18 @@
                                     {% endfor %}
 
                                     {% for availableSlotView in day.availableSlotViews %}
-                                        <div class="meet available"
-                                             data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}"
-                                             data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
-                                             data-slot-id="{{ availableSlotView.id }}"
-                                        >
+                                        <div class="meet available" 
+                                            data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" 
+                                            data-duration="{{ availableSlotView.duration.format('%H:%I') }}" 
+                                            data-slot-id="{{ availableSlotView.id }}">
                                             <header>
                                                 <div class="content">
-                                                    <a href="{{ path('event_catalog_index', {
-                                                        'sheet': sheet.id,
+                                                    <a href="{{ path('event_catalog_index', 
+                                                        { 'sheet': sheet.id, 
                                                         'availableSlot': 'catalog_slot',
-                                                        'slot_id': availableSlotView.id,
-                                                        'orderBy': 'relevance'
-                                                    }) }}">
+                                                         'slot_id': availableSlotView.id, 
+                                                         'orderBy': 'relevance' }) 
+                                                         }}">
                                                         {{ 'agenda.availability.available_participant_for_this_slot'|trans }}
                                                     </a>
                                                 </div>
@@ -146,7 +183,9 @@
 
     {% if sheet.attend and not isUnavailabilityManagementDisabled %}
         <div class="pull-right mg-tp mg-bt">
-            <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
+            <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal">
+                <i class="icon-Verouiller_1"></i>
+                {{ 'agenda.unavailability.add'|trans }}</a>
         </div>
         {{ include('EventBundle:Agenda:unavailability-modal.html.twig') }}
     {% endif %}

@@ -37,3 +37,9 @@ services:
     Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters:
         arguments:
             - '@repository.sheet.sheet_viewed_repository'
+
+    Proximum\Vimeet\Application\Components\Contact\CanAccessToContacts:
+        arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'

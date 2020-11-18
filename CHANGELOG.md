@@ -4,8 +4,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2269 - Call visio analytics in participants export
+
 ### Fixed
+- MV-273 - Fix count in multi-sheet meeting requests list
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
 - VIMEET-2198 - Show viewers and timer for viewers in hls mode
+
+## [2.69.1] - 2020-11-16
+### Added
+- VIMEET-2137 - Allow user to access someone else agenda
+
+## [2.69.0] - 2020-11-16
+### Added
+- VIMEET-2270 - Contact tab display if call visio
+- VIMEET-2268 - Call visio analytics on admin dashboard
+- VIMEET-2220 - Compute the private chat message count
+- VIMEET-2232 - Allow user to access video webinar when ended even with no participation
 
 ## [2.68.0] - 2020-11-09
 ### Added

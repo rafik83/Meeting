@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisab
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\ParticipantView;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -44,12 +45,10 @@ class AgendaController extends Controller
 
         $isUserAloneParticipant = null !== $user
             ? ParticipantHelper::isUserAloneParticipant($user, $sheet)
-            : false
-        ;
+            : false;
 
         $isUserParticipantMultipleSheet = $this->get('vimeet_infrastructure.repository.sheet_repository')
-            ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent())
-        ;
+            ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent());
 
         if (!$isUserAloneParticipant || $isUserParticipantMultipleSheet) {
             return $this->redirectToRoute(
@@ -147,19 +146,26 @@ class AgendaController extends Controller
             ]);
         }
 
+        $myParticipant = $sheet->getUserParticipant($user);
+
+
+
         return $this->render(
-            '@Event/Agenda/participant_agenda.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'agenda' => $agenda,
-            'sheet' => $sheet,
-            'tipTranslationViews' => $tipTranslationViews,
-            'sendCodeForm' => $sendCodeForm,
-            'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
-            'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
-            'participant' => $participant,
-            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
-            'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
-        ]);
+            '@Event/Agenda/participant_agenda.html.twig',
+            [
+                'event' => $eventDomain->getEvent(),
+                'agenda' => $agenda,
+                'sheet' => $sheet,
+                'myParticipant' => $myParticipant,
+                'tipTranslationViews' => $tipTranslationViews,
+                'sendCodeForm' => $sendCodeForm,
+                'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
+                'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
+                'participant' => $participant,
+                'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
+                'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
+            ]
+        );
     }
 
     /**
