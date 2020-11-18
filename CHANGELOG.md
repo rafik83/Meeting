@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- MV-273 - Fix count in multi-sheet meeting requests list
 - MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
 
 ## [2.69.1] - 2020-11-16
