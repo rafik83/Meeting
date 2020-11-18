@@ -85,6 +85,9 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     /** @var bool */
     private $allowHls;
 
+    /** @var bool */
+    private $isStreamOpenToPublic;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -122,6 +125,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
         $this->allowHls = $allowHls;
+        $this->isStreamOpenToPublic = false;
     }
 
     public function getId(): ?int
@@ -495,5 +499,15 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     public function allowWebinarOnHLS(): bool
     {
         return $this->allowHls;
+    }
+
+    public function isStreamOpenToPublic(): bool
+    {
+        return $this->isStreamOpenToPublic;
+    }
+
+    public function openStreamToPublic(): void
+    {
+        $this->isStreamOpenToPublic = true;
     }
 }

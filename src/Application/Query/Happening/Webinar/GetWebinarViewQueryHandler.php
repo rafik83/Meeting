@@ -189,7 +189,7 @@ class GetWebinarViewQueryHandler
 
     private function getHLSUrl(Happening $happening): ?string
     {
-        if (false === $happening->allowWebinarOnHLS()) {
+        if (false === $happening->allowWebinarOnHLS() || false === $happening->isStreamOpenToPublic()) {
             return null;
         }
 

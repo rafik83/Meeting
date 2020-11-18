@@ -70,6 +70,12 @@
                  'happening': webinarView.happeningId
              }
          ) }}"
+         data-webinar-open-stream-to-public-endpoint="{{ path(
+             'event_happening_webinar_open_stream_to_public',
+             {
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
          {% else %}
          data-webinar-stream-endpoint="{{ path(
              'event_happening_webinar_stream',
@@ -172,8 +178,11 @@
                 <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.stopSharing'|trans }}
             </button>
 
-            <button class="btn btn-primary end-webinar">
+            <button class="btn btn-primary end-webinar hide">
                 <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
+            </button>
+            <button class="btn btn-primary open-webinar">
+                <i class="icon-Disconnect"></i> {{ 'happening.webinar.open'|trans }}
             </button>
         </div>
 

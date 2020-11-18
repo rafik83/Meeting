@@ -1,6 +1,6 @@
 'use strict';
 
-import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import {CHROME_EXTENSION_URL, TokboxInstance} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
 import Publisher from './Publisher';
 import VideoSubscriber from './Subscriber';
@@ -235,12 +235,27 @@ function Webinar(element, isSpeaker) {
     this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
 
+    this.openToPublicButton = element.querySelector('.open-webinar');
+    this.openToPublicButton.addEventListener('click', this.onOpeningToPublic.bind(this));
+
+    if(this.isHls) {
+        this.openStreamToPublicEndpoint = element.getAttribute('data-webinar-open-stream-to-public-endpoint');
+    }
+
     // "preparation" modal
     this.prepareModal = this.element.querySelector('#visio-prepare');
     this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
     if (this.closePrepareMessageButton) {
         this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
     }
+}
+
+Webinar.prototype.onOpeningToPublic = function () {
+    $.post(this.openStreamToPublicEndpoint)
+        .fail((error) => {
+            this.showError({name: `${error.status}: ${error.statusText}`, message: 'Could not open to public'});
+            console.error(error.status, error.statusText, this.recordEndpoint);
+        });
 }
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
