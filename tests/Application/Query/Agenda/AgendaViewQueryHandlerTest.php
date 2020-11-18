@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
@@ -440,6 +432,8 @@ class AgendaViewQueryHandlerTest extends TestCase
             [
                 111 => new MeetingView(
                     111,
+                    42,
+                    24,
                     'Sheet 1',
                     1243,
                     [new SheetMetView('Sheet other', false)],
@@ -460,6 +454,8 @@ class AgendaViewQueryHandlerTest extends TestCase
                 ),
                 222 => new MeetingView(
                     111,
+                    43,
+                    25,
                     'Sheet 1',
                     14883,
                     [new SheetMetView('Another sheet', false)],

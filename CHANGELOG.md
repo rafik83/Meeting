@@ -5,7 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2255 - Add speaker's notification: I present
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present 
+
+### Fixed
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+
 
 ## [2.69.1] - 2020-11-16
 ### Added
