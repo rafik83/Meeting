@@ -245,6 +245,7 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
             }
         });
     }
+    this.join();
 }
 
 Webinar.prototype.join = function () {
