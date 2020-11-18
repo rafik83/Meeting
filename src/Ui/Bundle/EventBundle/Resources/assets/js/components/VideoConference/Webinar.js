@@ -14,6 +14,7 @@ import 'bootstrap/js/popover'; // popover require tooltip
 import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
+import DesktopNotification from './DesktopNotification';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -225,13 +226,26 @@ function Webinar(element, isSpeaker) {
         this.onSettingsValidate.bind(this),
         true
     );
+
+    this.desktopNotificationTitle = element.getAttribute('data-desktop-notification-title');
+    this.desktopNotificationBody = element.getAttribute('data-desktop-notification-body');
+    this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
 }
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
-    this.join();
-};
+
+    if (Notification.permission === 'granted') {
+        this.join();
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                this.join();
+            }
+        });
+    }
+}
 
 Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
@@ -888,9 +902,11 @@ Webinar.prototype.screenshare = function () {
 
         publisherScreen.on('streamCreated', (event) => {
             this.handleStream(event.stream, this.typeScreenShare);
+            this.desktopNotification.showPresent();
         });
         publisherScreen.on('streamDestroyed', (event) => {
             this.handleStopStream(event.stream, this.typeScreenShare);
+            this.desktopNotification.closePresent();
         });
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
