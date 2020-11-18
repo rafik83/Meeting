@@ -96,9 +96,6 @@ class GetWebinarViewQueryHandler
         );
 
         $topics = [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_STREAM];
-        if ($isSpeaker) {
-            $topics[] = AbstractNotification::TYPE_SPEAKER;
-        }
 
         $notificationView = new NotificationView(
             $this->notificationSubscriber->getUrl(),

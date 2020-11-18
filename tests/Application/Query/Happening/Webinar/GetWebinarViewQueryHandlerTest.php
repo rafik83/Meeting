@@ -184,7 +184,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->getHappeningSubscriberKey(
                 $happening->reveal(),
                 $user->reveal(),
-                array_merge(self::ALL_NOTIFICATIONS, [AbstractNotification::TYPE_SPEAKER])
+                self::ALL_NOTIFICATIONS
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
@@ -328,7 +328,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->getHappeningSubscriberKey(
                 $happening->reveal(),
                 $user->reveal(),
-                array_merge(self::ALL_NOTIFICATIONS, [AbstractNotification::TYPE_SPEAKER])
+                self::ALL_NOTIFICATIONS
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
@@ -453,7 +453,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->getHappeningSubscriberKey(
                 $happening->reveal(),
                 $user->reveal(),
-                array_merge(self::ALL_NOTIFICATIONS, [AbstractNotification::TYPE_SPEAKER])
+                self::ALL_NOTIFICATIONS
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
@@ -677,7 +677,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->getHappeningSubscriberKey(
                 $happening->reveal(),
                 $user->reveal(),
-                array_merge(self::ALL_NOTIFICATIONS, [AbstractNotification::TYPE_SPEAKER])
+                self::ALL_NOTIFICATIONS
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
