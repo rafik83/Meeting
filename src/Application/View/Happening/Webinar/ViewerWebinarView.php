@@ -36,7 +36,7 @@ class ViewerWebinarView extends AbstractWebinarView
         string $happeningTitle,
         bool $isVideoWebinarAndHasLiveUrl,
         string $token,
-        string $sessionId,
+        ?string $sessionId,
         string $apiKey,
         NotificationView $notification,
         array $speakers,

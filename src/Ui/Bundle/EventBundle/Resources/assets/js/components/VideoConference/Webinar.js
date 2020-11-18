@@ -124,10 +124,10 @@ function Webinar(element, isSpeaker) {
 
     this.liveUrl = element.getAttribute('data-live-url');
 
-    const endWebinarButton = element.querySelector('.end-webinar');
+    this.endWebinarButton = element.querySelector('.end-webinar');
 
-    if (endWebinarButton) {
-        endWebinarButton.addEventListener('click', this.disconnect.bind(this));
+    if (this.endWebinarButton) {
+        this.endWebinarButton.addEventListener('click', this.disconnect.bind(this));
     }
 
     this.timerContainer = element.querySelector('.timer-container');
@@ -185,6 +185,8 @@ function Webinar(element, isSpeaker) {
 
     this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
 
+    this.webRTCStackInitialized = false;
+
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
@@ -238,15 +240,17 @@ function Webinar(element, isSpeaker) {
     this.openToPublicButton = element.querySelector('.open-webinar');
     this.openToPublicButton.addEventListener('click', this.onOpeningToPublic.bind(this));
 
-    if(this.isHls) {
-        this.openStreamToPublicEndpoint = element.getAttribute('data-webinar-open-stream-to-public-endpoint');
-    }
+    this.openStreamToPublicEndpoint = element.getAttribute('data-webinar-open-stream-to-public-endpoint');
+
+    this.isStreamOpenToPublic = element.getAttribute('data-is-stream-open-to-public') === 'true';
 
     // "preparation" modal
-    this.prepareModal = this.element.querySelector('#visio-prepare');
-    this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
-    if (this.closePrepareMessageButton) {
-        this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
+    if (!this.isStreamOpenToPublic) {
+        this.prepareModal = this.element.querySelector('#visio-prepare');
+        this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
+        if (this.closePrepareMessageButton) {
+            this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
+        }
     }
 }
 
@@ -269,10 +273,10 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
 
 Webinar.prototype.showPrepareModalOrJoin = function()
 {
-    if (this.prepareModal) {
-        this.showElement(this.prepareModal);
-    } else {
+    if (this.isStreamOpenToPublic) {
         this.join();
+    } else {
+        this.showElement(this.prepareModal);
     }
 }
 
@@ -304,33 +308,27 @@ Webinar.prototype.join = function () {
     }
 };
 
-/**
- * Initialize session and subscribe to new other stream
- */
-Webinar.prototype.init = function () {
-    if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
-        alert(this.notCompatibleBrowserMessage);
-        return;
-    }
-
-    if (this.isHls && !this.isSpeaker) {
-        this.hlsPlayer = new HlsPlayer(this.hlsVideoElement, () => {
-            if (this.webinarWaitingPlayer) {
-                this.webinarWaitingPlayer.remove();
-            }
-            this.hideElement(this.waitingContainer);
-            this.showViewerControls();
-            this.layout();
-        });
-        this.addShownChatSubscriber();
-        if (this.hlsVideoElement.dataset.hlsUrl) {
-            this.hlsPlayer.initHlsStreamPlayer(this.hlsVideoElement.dataset.hlsUrl);
+Webinar.prototype.initHLSPlayer = function () {
+    this.hlsPlayer = new HlsPlayer(this.hlsVideoElement, () => {
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.remove();
         }
-        this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
-        this.subscribeToStreamNotifications();
+        this.hideElement(this.waitingContainer);
+        this.layout();
+    });
+    this.addShownChatSubscriber();
+    if (this.hlsVideoElement.dataset.hlsUrl) {
+        this.hlsPlayer.initHlsStreamPlayer(this.hlsVideoElement.dataset.hlsUrl);
+    }
+    this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
+}
 
+Webinar.prototype.initWebRTCStack = function() {
+    if (this.sessionId.length === 0 || this.webRTCStackInitialized) {
         return;
     }
+
+    this.webRTCStackInitialized = true;
 
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
@@ -407,6 +405,26 @@ Webinar.prototype.init = function () {
     }
 
     this.prepareRecordButtons();
+}
+
+/**
+ * Initialize session and subscribe to new other stream
+ */
+Webinar.prototype.init = function () {
+    if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
+        alert(this.notCompatibleBrowserMessage);
+        return;
+    }
+
+    this.showViewerControls();
+    this.subscribeToStreamNotifications();
+
+    if (this.isHls && !this.isSpeaker) {
+        this.initHLSPlayer();
+        return;
+    }
+
+    this.initWebRTCStack();
 };
 
 Webinar.prototype.updateViewers = function () {
@@ -414,24 +432,37 @@ Webinar.prototype.updateViewers = function () {
 };
 
 Webinar.prototype.subscribeToStreamNotifications = function () {
-    if (!this.isHls) {
-        return;
-    }
-
     this.notificationSubscriber.addSubscriber(this.topicStream, this.notificationSubscriberKey, (event) => {
         const payload = JSON.parse(event.data);
 
-        if (!this.isSpeaker && payload.action === 'stream_started') {
-            this.hlsPlayer.updateHlsSource(payload.hlsUrl);
-            console.info('Received stream_started notification, hlsUrl: ' + payload.hlsUrl);
+        if (payload.action === 'stream_started') {
+            if (this.isHls && !this.isSpeaker) {
+                const hlsUrl = payload.sessionReference;
+                this.hlsPlayer.updateHlsSource(hlsUrl);
+                console.info('Received stream_started notification, hlsUrl: ' + hlsUrl);
+            }
+
+            if (!this.isHls) {
+                this.sessionId = payload.sessionReference;
+                this.initWebRTCStack();
+            }
+
+            if (!this.isStreamOpenToPublic && this.isSpeaker) {
+                this.hideElement(this.openToPublicButton);
+                this.showElement(this.endWebinarButton);
+                this.isStreamOpenToPublic = true;
+            }
         }
 
         if (payload.action === 'viewer_connected') {
+            if (!this.isHls) {
+                return;
+            }
+
             this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }
     });
-
 };
 
 /**
@@ -439,6 +470,12 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
+
+        if(this.isStreamOpenToPublic) {
+            this.showElement(this.endWebinarButton);
+        } else {
+            this.showElement(this.openToPublicButton);
+        }
 
         this.showElement(this.invisibleModeButton);
 
@@ -449,8 +486,6 @@ Webinar.prototype.connect = function () {
 
         this.showElement(this.mediaStartSharingButton);
         this.initShareMedia();
-
-        this.showViewerControls();
 
         if (!error) {
             if (this.isSpeaker) {

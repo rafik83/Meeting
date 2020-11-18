@@ -219,7 +219,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 false,
-                0
+                0,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -362,7 +363,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 21,
-                false
+                false,
+                0,
+                true
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -514,7 +517,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 false,
                 21,
-                false
+                false,
+                0,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -717,7 +722,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 true,
-                42
+                42,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

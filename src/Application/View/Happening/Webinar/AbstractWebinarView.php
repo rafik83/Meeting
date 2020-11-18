@@ -25,7 +25,7 @@ abstract class AbstractWebinarView
     /** @var string */
     public $token;
 
-    /** @var string */
+    /** @var string|null */
     public $sessionId;
 
     /** @var string */
@@ -87,7 +87,7 @@ abstract class AbstractWebinarView
         string $happeningTitle,
         bool $isVideoWebinarAndHasLiveUrl,
         string $token,
-        string $sessionId,
+        ?string $sessionId,
         string $apiKey,
         NotificationView $notification,
         array $speakers,

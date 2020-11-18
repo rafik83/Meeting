@@ -142,7 +142,8 @@ class GetWebinarViewQueryHandler
                 $happening->getEvent()->getAutoArchiveWebinar(),
                 $questionsCount,
                 $happening->allowWebinarOnHLS(),
-                $viewersCount ?? 0
+                $viewersCount ?? 0,
+                $happening->isStreamOpenToPublic()
             );
         }
 
@@ -153,7 +154,7 @@ class GetWebinarViewQueryHandler
             $happening->getTitle($query->getLocale()),
             $happening->isVideoWebinarAndHasLiveUrl(),
             $sessionAndTokenView->token,
-            $sessionAndTokenView->sessionId,
+            $happening->isStreamOpenToPublic() ? $sessionAndTokenView->sessionId : null,
             $sessionAndTokenView->apiKey,
             $notificationView,
             $this->getSpeakerViews($happening, $query->getLocale()),

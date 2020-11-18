@@ -33,10 +33,16 @@ class OpenStreamToPublicCommandHandler
     {
         $happening = $command->happening;
 
-        $happeningBroadcast = $this->happeningBroadcastRepository->getByHappening($happening);
+        if ($happening->allowWebinarOnHLS()) {
+            $happeningBroadcast = $this->happeningBroadcastRepository->getByHappening($happening);
 
-        if (null === $happeningBroadcast) {
-            throw new HappeningBroadcastForHappeningNotFoundException($happening);
+            if (null === $happeningBroadcast) {
+                throw new HappeningBroadcastForHappeningNotFoundException($happening);
+            }
+
+            $sessionReference = $happeningBroadcast->getHlsUrl();
+        } else {
+            $sessionReference = $happening->getWebinarSessionId();
         }
 
         $happening->openStreamToPublic();
@@ -48,7 +54,7 @@ class OpenStreamToPublicCommandHandler
             AbstractNotification::TYPE_STREAM,
             [
                 'action' => 'stream_started',
-                'hlsUrl' => $happeningBroadcast->getHlsUrl(),
+                'sessionReference' => $sessionReference,
             ]
         );
     }
