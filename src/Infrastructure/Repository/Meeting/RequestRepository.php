@@ -763,7 +763,7 @@ class RequestRepository implements RequestRepositoryInterface
     ) {
         $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
 
-        $queryBuilder->select('count(request)');
+        $queryBuilder->select('count(distinct request)');
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
