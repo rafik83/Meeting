@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Components\Agenda;
 
 use PHPUnit\Framework\TestCase;
@@ -29,8 +37,6 @@ class AgendaCollisionManagerTest extends TestCase
         $endHappening2 = new \DateTime('2016-10-12 17:30:00');
         $meetingView = new MeetingView(
             1,
-            42,
-            24,
             'userSheetTitle',
             2,
             [new SheetMetView('Sheet title', false)],

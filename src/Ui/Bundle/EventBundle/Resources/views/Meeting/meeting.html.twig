@@ -74,7 +74,7 @@
             <div class="actions">
                 {% if meeting.isVisioAndAvailable %}
                     <a class="btn btn-primary start-visio"
-                       href="{{ path('event_video_video_meeting', { meeting: meeting.id, sheet: meeting.userSheetId, participant: meeting.userParticipantId }) }}"
+                       href="{{ path('event_video_video_meeting', { meeting: meeting.id, sheet: sheetId, participant: participantId }) }}"
                        target="_blank"
                     >
                         <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}

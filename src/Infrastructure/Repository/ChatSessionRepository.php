@@ -166,4 +166,18 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
 
     }
 
+    public function countCallVisioByEventAndUser(Event $event, User $user): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(session)')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('session.fromUser = :user OR session.toUser = :user')
+            ->setParameter('user', $user)
+            ->andWhere('session.visioStartedAt IS NOT NULL')
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

@@ -637,6 +637,7 @@ admin.participant_import_result.title.label: 'Resultat de l''importation des par
 admin.participant_import.header.registration: 'Inscription : '
 admin.participant_import.header.sheet: 'Fiche : '
 admin.participant_import.title: 'Importer les participants'
+admin.participant.export.fields.chat_sessions_call_visio: 'Participants rencontrés en call visio'
 admin.participant.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques des fiches'
 admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'

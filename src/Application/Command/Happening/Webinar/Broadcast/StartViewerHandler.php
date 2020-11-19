@@ -26,11 +26,11 @@ class StartViewerHandler
     {
         $happening = $command->happening;
 
-        $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
+        $connectedUsersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
 
-        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_SPEAKER, [
+        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_STREAM, [
             'action' => 'viewer_connected',
-            'viewersCount' => $viewersCount,
+            'connectedUsersCount' => $connectedUsersCount,
         ]);
     }
 }

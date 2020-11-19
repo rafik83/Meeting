@@ -7,8 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2255 - Add speaker's notification desktop webinar: I present 
 
-### Fixed
+### Revert
 - MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+
+## [2.70.0] - 2020-11-18
+### Added
+- VIMEET-2269 - Call visio analytics in participants export
+
+### Fixed
+- MV-273 - Fix count in multi-sheet meeting requests list
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+- VIMEET-2198 - Show viewers and timer for viewers in hls mode
 
 ## [2.69.1] - 2020-11-16
 ### Added
