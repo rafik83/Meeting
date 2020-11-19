@@ -19,15 +19,22 @@
                     </a>
                     {% if agenda.participants|length > 1 %}
                         <div class="btn-group" role="group">
-                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
-                                <span class="caret"></span>
-                            </a>
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% set currentParticipantLooked = agenda.currentParticipantView %}
+                                {% if currentParticipantLooked is not null %}
+                                    {% if myParticipant.id == currentParticipantLooked.id %}
+                                        {{ 'agenda.title'|trans }}
+                                    {% else %}
+                                        {{ 'agenda.participant.view'|trans({'%participant%': currentParticipantLooked.fullName}) }}
+                                    {% endif %}
+                                {% endif %}
+                                {% if agenda.participants|length > 1 %}<span class="caret"></span>{% endif %}
+                            </button>
                             <ul class="dropdown-menu">
                                 {% for participantItem in agenda.participants %}
                                     {% if (myParticipant is not null and myParticipant.id == participantItem.id) %}
-                                        <li {% if participantItem.id == agenda.participant.id %} class="active" {% endif %}>
-                                            <a  class="text-uppercase" href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                        <li {% if participantItem.id == agenda.participant.id %}class="active"{% endif %}>
+                                            <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
                                                 {{ 'agenda.title'|trans }}
                                             </a>
                                         </li>
@@ -46,10 +53,9 @@
                         </div>
 
                     {% else %}
-                        <a class"btn btn-primary" href="{{ path('event_agenda_participant', {'participant': myParticipant.id, 'sheet': sheet.id}) }}">
+                        <a class="btn btn-primary" href="{{ path('event_agenda_participant', {'participant': myParticipant.id, 'sheet': sheet.id}) }}">
                             {{ 'agenda.title'|trans }}
                         </a>
-
                     {% endif %}
                 </div>
             {% else %}
@@ -151,17 +157,17 @@
                                     {% endfor %}
 
                                     {% for availableSlotView in day.availableSlotViews %}
-                                        <div class="meet available" 
-                                            data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}" 
-                                            data-duration="{{ availableSlotView.duration.format('%H:%I') }}" 
+                                        <div class="meet available"
+                                            data-beginHour="{{ availableSlotView.beginHour|date('H:i', agenda.timezone) }}"
+                                            data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
                                             data-slot-id="{{ availableSlotView.id }}">
                                             <header>
                                                 <div class="content">
-                                                    <a href="{{ path('event_catalog_index', 
-                                                        { 'sheet': sheet.id, 
+                                                    <a href="{{ path('event_catalog_index',
+                                                        { 'sheet': sheet.id,
                                                         'availableSlot': 'catalog_slot',
-                                                         'slot_id': availableSlotView.id, 
-                                                         'orderBy': 'relevance' }) 
+                                                         'slot_id': availableSlotView.id,
+                                                         'orderBy': 'relevance' })
                                                          }}">
                                                         {{ 'agenda.availability.available_participant_for_this_slot'|trans }}
                                                     </a>
