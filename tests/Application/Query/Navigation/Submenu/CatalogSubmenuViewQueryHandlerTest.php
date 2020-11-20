@@ -11,6 +11,7 @@ use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -44,11 +45,11 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $dateTime = new \DateTime('2020-03-14T03:14:15');
-        $canSeetOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeetOtherSheets->reveal(), $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
 
         $result = $handler->handle(
             $query
@@ -85,11 +86,11 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $dateTime = new \DateTime('2020-03-14T03:14:15');
-        $canSeetOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeetOtherSheets->reveal(), $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
 
         $result = $handler->handle(
             $query
@@ -128,10 +129,10 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
-        $canSeetOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeetOtherSheets->reveal(), $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
 
         $result = $handler->handle(
             $query
@@ -179,12 +180,12 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
             'sheet' => $sheetId
         ])->shouldBeCalled()->willReturn("dummyRoute");
 
-        $canSeetOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
-        $canSeetOtherSheets->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeetOtherSheets->reveal(), $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
         $result = $handler->handle(
             $query
         );
@@ -237,13 +238,13 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
             'sheet' => $sheetId
         ])->shouldBeCalled()->willReturn("dummyRoute");
 
-        $canSeetOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
-        $canSeetOtherSheets->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository->countPendingPropositionReceivedBySheet($sheet->reveal())->shouldBeCalled()->willReturn(666);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeetOtherSheets->reveal(), $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
 
         $result = $handler->handle(
             $query
@@ -251,6 +252,74 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
 
         $expectedResult = [];
         $meetingTitle = 'navigation.category.meeting';
+
+        $expectedResult[] = new SubmenuButtonView(
+            Category::MEETING_ICON,
+            $meetingTitle,
+            'dummyRoute',
+            false,
+            666,
+            false
+        );
+
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function testShouldReturnANewMeetingTitle()
+    {
+        $sheetId = 666;
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->isInInternalCatalog()->willReturn(true);
+        $sheet->getId()->shouldBeCalled()->willReturn($sheetId);
+        $sheet->hasLinkedSheets()->shouldBeCalled()->willReturn(false);
+
+        $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(42);
+
+        $configuration = $this->prophesize(Configuration::class);
+
+        $dateTime = new \DateTime('2020-03-14T03:14:15');
+        $catalogOnlineDate = new \DateTime('2019-01-14T03:14:15');
+
+
+        $configuration->getCatalogOnlineDate()->shouldBeCalled()->willReturn($catalogOnlineDate);
+
+        $event = $this->prophesize(Event::class);
+        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
+
+        $meetingTitle = "WAZAAAAAAAAAAAAA";
+
+        $staticFormulation = $this->prophesize(StaticFormulation::class);
+        $locale = "fr";
+
+        $staticFormulation->getTitle($locale)->shouldBeCalled()->willReturn($meetingTitle);
+
+        $staticFormulationsIndexedByCategory = [Category::MEETING => $staticFormulation->reveal()];
+
+
+        $query = new CatalogSubmenuViewQuery($user->reveal(), $event->reveal(), $locale, $sheet->reveal(), '', $staticFormulationsIndexedByCategory);
+
+        $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
+
+
+        $navigationBuilder->getRoute('event_meeting_list_request', [
+            'sheet' => $sheetId
+        ])->shouldBeCalled()->willReturn("dummyRoute");
+
+        $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);
+        $canSeeOtherSheets->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(false);
+
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->countPendingPropositionReceivedBySheet($sheet->reveal())->shouldBeCalled()->willReturn(666);
+
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets->reveal(), $requestRepository->reveal());
+
+        $result = $handler->handle(
+            $query
+        );
+
+        $expectedResult = [];
+
 
         $expectedResult[] = new SubmenuButtonView(
             Category::MEETING_ICON,

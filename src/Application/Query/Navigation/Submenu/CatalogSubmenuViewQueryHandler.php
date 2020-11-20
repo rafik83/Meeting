@@ -81,14 +81,13 @@ class CatalogSubmenuViewQueryHandler
             );
         }
 
+        $meetingTitle = 'navigation.category.meeting';
 
         if (isset($query->staticFormulationsIndexedByCategory[Category::MEETING])) {
             $meetingTitle = $query->staticFormulationsIndexedByCategory[Category::MEETING]->getTitle($query->locale);
         }
 
         $pendingRequestCount = $this->requestRepository->countPendingPropositionReceivedBySheet($query->sheet);
-
-        $meetingTitle = 'navigation.category.meeting';
 
         $buttonViews[] = new SubmenuButtonView(
             Category::MEETING_ICON,
