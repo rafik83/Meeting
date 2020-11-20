@@ -38,6 +38,7 @@ jobs:
             docker network create proxy
             cp app/config/parameters_circle.yml app/config/parameters.yml
             docker-compose -p vimeet up -d
+            sleep 10
             dockerize -wait tcp://localhost:3306 -timeout 1m
             docker-compose -p vimeet exec php make install-app@test
             docker-compose -p vimeet exec php make install-db@test

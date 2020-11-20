@@ -14,6 +14,7 @@ import 'bootstrap/js/popover'; // popover require tooltip
 import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
+import DesktopNotification from './DesktopNotification';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -49,7 +50,6 @@ function Webinar(element, isSpeaker) {
     this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
     this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
     this.topicStream = `https://vimeet.events/happening/${this.happeningId}/webinar/stream`;
-    this.topicSpeaker = `https://vimeet.events/happening/${this.happeningId}/webinar/speaker`;
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
@@ -225,13 +225,27 @@ function Webinar(element, isSpeaker) {
         this.onSettingsValidate.bind(this),
         true
     );
+
+    this.desktopNotificationTitle = element.getAttribute('data-desktop-notification-title');
+    this.desktopNotificationBody = element.getAttribute('data-desktop-notification-body');
+    this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
 }
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
+
+    if (Notification.permission === 'granted') {
+        this.join();
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                this.join();
+            }
+        });
+    }
     this.join();
-};
+}
 
 Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
@@ -367,22 +381,9 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
             this.hlsPlayer.updateHlsSource(payload.hlsUrl);
             console.info('Received stream_started notification, hlsUrl: ' + payload.hlsUrl);
         }
-    });
-
-};
-
-Webinar.prototype.subscribeToSpeakerNotifications = function () {
-    // if webinar is not in hls mode, updates will be sent with tokbox
-    if (!this.isHls) {
-        return;
-    }
-
-    this.notificationSubscriber.addSubscriber(this.topicSpeaker, this.notificationSubscriberKey, (event) => {
-        const payload = JSON.parse(event.data);
 
         if (payload.action === 'viewer_connected') {
-            // viewers + other speakers + current speaker
-            this.viewersCount = payload.viewersCount + this.subscribers.length + 1;
+            this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }
     });
@@ -403,8 +404,6 @@ Webinar.prototype.connect = function () {
         }
 
         this.showElement(this.mediaStartSharingButton);
-        this.showElement(this.timerContainer);
-        this.showElement(this.viewersContainer);
         this.initShareMedia();
 
         this.showViewerControls();
@@ -412,7 +411,7 @@ Webinar.prototype.connect = function () {
         if (!error) {
             if (this.isSpeaker) {
                 this.publishStream();
-                this.subscribeToSpeakerNotifications();
+                this.subscribeToStreamNotifications();
             }
 
             return;
@@ -435,6 +434,8 @@ Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
 }
 
 Webinar.prototype.showViewerControls = function () {
+    this.showElement(this.timerContainer);
+    this.showElement(this.viewersContainer);
 
     if (!this.isMobile && !this.isSidebarOpened()) {
         this.toggleSideBar();
@@ -888,9 +889,11 @@ Webinar.prototype.screenshare = function () {
 
         publisherScreen.on('streamCreated', (event) => {
             this.handleStream(event.stream, this.typeScreenShare);
+            this.desktopNotification.showPresent();
         });
         publisherScreen.on('streamDestroyed', (event) => {
             this.handleStopStream(event.stream, this.typeScreenShare);
+            this.desktopNotification.closePresent();
         });
 
         publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));

@@ -1,25 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
 
 class MassUnavailabilityViewQueryHandler
 {
-    /**
-     * @param MassUnavailabilityViewQuery $query
-     *
-     * @return MassUnavailabilityView
-     */
-    public function handle(MassUnavailabilityViewQuery $query)
+    public function handle(MassUnavailabilityViewQuery $query): MassUnavailabilityView
     {
         return new MassUnavailabilityView(
             $query->mass->getId(),

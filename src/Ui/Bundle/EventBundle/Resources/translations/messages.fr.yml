@@ -33,6 +33,7 @@ agenda.meeting.updateSlot.error: 'Impossible de déplacer ce RDV'
 agenda.myAgenda.button.title: 'Mon agenda'
 agenda.participant.view: 'Agenda de %participant%'
 agenda.sheetAgenda.button.title: 'Agenda global'
+agenda.sheetAgenda.participantsAgenda.title: "Agenda des participants"
 agenda.sheetAgenda.title: 'Agenda global'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
@@ -276,6 +277,8 @@ happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.chat.tab: Chat
+happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
+happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
 happening.webinar.endingAt: 'Fin dans'
 happening.webinar.invisibleMode.button: 'Invisible mode'

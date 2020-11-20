@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening;
 
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
@@ -46,36 +38,22 @@ class HappeningView extends AbstractTimeEntityView implements ProgramElementView
 
     /** @var string */
     public $timeZone;
+
     /** @var bool */
     private $canAccessToWebinar;
 
-    /**
-     * HappeningView constructor.
-     *
-     * @param int                    $id
-     * @param HappeningCategoryView  $category
-     * @param \DateTimeInterface     $beginHour
-     * @param \DateTimeInterface     $endHour
-     * @param string                 $title
-     * @param string                 $description
-     * @param string|null            $picture
-     * @param HappeningSpeakerView[] $speakers
-     * @param string                 $timeZone
-     * @param null|int               $limitParticipant
-     * @param bool                   $isFull
-     */
     public function __construct(
-        $id,
+        int $id,
         HappeningCategoryView $category,
         \DateTimeInterface $beginHour,
         \DateTimeInterface $endHour,
-        $title,
-        $description,
-        $picture,
+        ?string $title,
+        ?string $description,
+        ?string $picture,
         array $speakers,
-        $timeZone,
-        $limitParticipant = null,
-        $isFull = false,
+        string $timeZone,
+        ?int $limitParticipant = null,
+        bool $isFull = false,
         bool $canAccessToWebinar = false
     ) {
         $this->id = $id;

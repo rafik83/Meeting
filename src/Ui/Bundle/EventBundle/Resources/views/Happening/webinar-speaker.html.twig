@@ -58,6 +58,8 @@
          data-sidebar-allowed="{{ webinarView.sidebarAllowed }}"
          data-webinar-hls="{{ webinarView.allowWebinarOnHLS ? 'true' : 'false' }}"
          data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
+         data-desktop-notification-title="{{ 'happening.webinar.desktopNotificationTitle'|trans }}"
+         data-desktop-notification-body="{{ 'happening.webinar.desktopNotificationBody'|trans }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
