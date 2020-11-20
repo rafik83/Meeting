@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV-268 - Start higher button webinar 
+- MV-277 - Allow to go to my agenda from the sheet agenda
 
 ## [2.70.1] - 2020-11-19
 ### Revert
