@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+<<<<<<< HEAD
+### Added
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present 
+
 ### Fixed
 - MV-268 - Start higher button webinar 
 - MV-277 - Allow to go to my agenda from the sheet agenda
