@@ -4,9 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-<<<<<<< HEAD
 ### Added
 - VIMEET-2255 - Add speaker's notification desktop webinar: I present 
+- VIMEET-2247 - Limit height of spkeaker's title in webinars
 
 ### Fixed
 - MV-268 - Start higher button webinar 
@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2270 - Contact tab display if call visio
 - VIMEET-2268 - Call visio analytics on admin dashboard
-- VIMEET-2220 - Compute the private chat message count
+- VIMEET-2220 Compute the private chat message count
 - VIMEET-2232 - Allow user to access video webinar when ended even with no participation
 
 ## [2.68.0] - 2020-11-09
