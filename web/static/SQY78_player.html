@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="utf-8">
+        <title>TV78</title>
+        <link rel="stylesheet" href="https://cdn.plyr.io/1.8.2/plyr.css">
+    </head>
+    <body style="background-color:black;">
+        <table  style="width:1280px; align:center">
+            <tr align=center style="width:100%">
+                <td>
+                    <h1 style="color:white">TV78</h1>
+                </td>
+            </tr>
+            <tr>
+                 <td>
+                    <br><br><br>
+                 </td>
+            </tr>
+            <tr>
+               <td>
+                    <video preload="none" id="player" autoplay controls crossorigin></video>
+                    <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.js"></script>
+                </td>
+            </tr>
+        </table>
+    <script>
+        (function () {
+            var video = document.querySelector('#player');
+            if (Hls.isSupported()) {
+                var hls = new Hls();hls.loadSource('https://streamtv.cdn.dvmr.fr/TV78/ngrp:tv78.stream_all/master.m3u8');
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                    video.play();
+                });
+            }
+            plyr.setup(video);}
+            )
+        ();
+    </script>
+    </body>
+</html>
