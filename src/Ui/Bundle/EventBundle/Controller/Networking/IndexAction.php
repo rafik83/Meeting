@@ -3,7 +3,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking;
 
-use Doctrine\Common\Util\Debug;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;

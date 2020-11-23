@@ -94,7 +94,7 @@ class UpdateActionTest extends TestCase
         $tip->isOnPackage()->willReturn(false);
         $tip->isOnContacts()->willReturn(false);
         $tip->isOnProgram()->willReturn(false);
-        $tip->isOnConfirmationPhone()->willReturn(true);
+        $tip->isOnConfirmationPhone()->willReturn(false);
         $tip->isOnNetworking()->willReturn(false);
         $update = new Update($tip->reveal());
         $form = $this->prophesize(Form::class);
