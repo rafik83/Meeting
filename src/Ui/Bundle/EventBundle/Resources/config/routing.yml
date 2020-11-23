@@ -1329,6 +1329,11 @@ event_chat_messages_vote:
     methods: [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\VoteAction
 
+event_api_happening_list:
+    path: /api/happenings
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\Happening\ListAction
+
 #
 # Custom
 #

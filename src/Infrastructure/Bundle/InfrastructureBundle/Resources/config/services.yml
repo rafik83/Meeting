@@ -7095,6 +7095,10 @@ services:
             - '@adapter.router'
             - '@datetime'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+
     #
     # QRCode
     #
