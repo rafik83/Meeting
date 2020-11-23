@@ -27,7 +27,10 @@ class GetApiListQueryHandler
         $this->happeningRepository = $happeningRepository;
     }
 
-    public function handle(GetApiListQuery $query)
+    /**
+     * @return ApiView[]
+     */
+    public function handle(GetApiListQuery $query): array
     {
         $happenings = $this->happeningRepository->findByEventAndTypes($query->event, $query->participantTypeIds);
 
@@ -51,7 +54,7 @@ class GetApiListQueryHandler
                 $happeningType = AbstractHappeningCommand::TYPE_WEBINAR_INTERACTIVE;
             } else if ($happening->isVideoWebinar()) {
                 $happeningType = AbstractHappeningCommand::TYPE_WEBINAR_VIDEO;
-            } else if ($happening->isVideoWebinar()) {
+            } else if ($happening->isWebinar()) {
                 $happeningType = AbstractHappeningCommand::TYPE_WEBINAR;
             }
 
