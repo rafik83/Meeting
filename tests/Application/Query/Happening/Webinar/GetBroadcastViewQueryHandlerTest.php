@@ -25,6 +25,7 @@ class GetBroadcastViewQueryHandlerTest extends TestCase
     protected function setUp()
     {
         $this->happening = $this->prophesize(Happening::class);
+        $this->happening->isStreamOpenToPublic()->willReturn(true);
 
         $this->happeningBroadcastRepository = $this->prophesize(HappeningBroadcastRepositoryInterface::class);
 
