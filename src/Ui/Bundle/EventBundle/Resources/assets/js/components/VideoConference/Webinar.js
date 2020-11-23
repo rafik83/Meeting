@@ -121,6 +121,8 @@ function Webinar(element, isSpeaker) {
 
     this.shareVideoElement = null;
     this.hasMediaSharing = false;
+    this.latestMediaSharingStreamId = null;
+    this.latestMediaSharingType = null;
 
     this.liveUrl = element.getAttribute('data-live-url');
 
@@ -255,7 +257,12 @@ function Webinar(element, isSpeaker) {
 }
 
 Webinar.prototype.onOpeningToPublic = function () {
-    $.post(this.openStreamToPublicEndpoint)
+    let params = {};
+    if (this.hasMediaSharing) {
+        params = {mediaSharingStream: this.latestMediaSharingStreamId, mediaSharingType: this.latestMediaSharingType};
+    }
+
+    $.post(this.openStreamToPublicEndpoint, params)
         .fail((error) => {
             this.showError({name: `${error.status}: ${error.statusText}`, message: 'Could not open to public'});
             console.error(error.status, error.statusText, this.recordEndpoint);
@@ -347,6 +354,8 @@ Webinar.prototype.initWebRTCStack = function() {
 
         if (this.isScreenShareStream(event.stream)) {
             this.hasMediaSharing = true;
+            this.latestMediaSharingStreamId = event.stream.streamId;
+            this.latestMediaSharingType = subscriber.stream.videoType;
             this.minimizeAllSubscribers();
             this.maximize(subscriber.element);
         } else {

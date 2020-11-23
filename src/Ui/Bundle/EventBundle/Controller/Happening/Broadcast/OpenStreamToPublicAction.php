@@ -55,7 +55,10 @@ class OpenStreamToPublicAction
             throw new AccessDeniedException('Access denied.');
         }
 
-        $this->commandBus->handle(new OpenStreamToPublicCommand($happening));
+        $mediaSharingType = $request->request->get('mediaSharingType');
+        $mediaSharingStream = $request->request->get('mediaSharingStream');
+
+        $this->commandBus->handle(new OpenStreamToPublicCommand($happening, $mediaSharingType, $mediaSharingStream));
 
         return new JsonResponse(['status' => 'ok',]);
     }

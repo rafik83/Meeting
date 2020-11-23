@@ -117,6 +117,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\OpenStreamToPublicCommand }
 

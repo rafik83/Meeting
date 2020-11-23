@@ -10,8 +10,16 @@ class OpenStreamToPublicCommand implements Command
     /** @var Happening */
     public $happening;
 
-    public function __construct(Happening $happening)
+    /** @var string|null */
+    public $mediaSharingType;
+
+    /** @var string|null */
+    public $mediaSharingStream;
+
+    public function __construct(Happening $happening, ?string $mediaSharingType, ?string $mediaSharingStream)
     {
         $this->happening = $happening;
+        $this->mediaSharingType = $mediaSharingType;
+        $this->mediaSharingStream = $mediaSharingStream;
     }
 }
