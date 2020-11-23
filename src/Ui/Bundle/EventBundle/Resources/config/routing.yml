@@ -1334,6 +1334,11 @@ event_api_happening_list:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\Happening\ListAction
 
+event_api_happening_list_options:
+    path: /api/happenings
+    methods: [OPTIONS]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\OptionsAction
+
 #
 # Custom
 #

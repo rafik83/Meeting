@@ -27,6 +27,10 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
     public function getCredentials(Request $request): array
     {
+        if ($request->isMethod(Request::METHOD_OPTIONS)) {
+            return ['is_options' => true];
+        }
+
         $token = $request->headers->get('X-API-Key');
 
         try {
@@ -43,12 +47,16 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
+        if ($credentials['is_options'] ?? false) {
+            return true;
+        }
+
         return $credentials['event']->getApiKey() === $credentials['token'];
     }
 
     public function supports(Request $request): bool
     {
-        return $request->headers->has('X-API-Key');
+        return $request->headers->has('X-API-Key') || $request->isMethod(Request::METHOD_OPTIONS);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception) {

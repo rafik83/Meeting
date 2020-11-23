@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\Happening;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Happening\GetApiListQuery;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\OptionsTrait;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ListAction
 {
+    use OptionsTrait;
+
     /** @var QueryBusInterface */
     private $queryBus;
 
@@ -39,6 +42,7 @@ class ListAction
         $response = new JsonResponse($this->queryBus->handle($getApiListQuery));
         $response->setPublic();
         $response->setMaxAge(600);
+        $this->setCorsHeaders($response);
 
         return $response;
     }
