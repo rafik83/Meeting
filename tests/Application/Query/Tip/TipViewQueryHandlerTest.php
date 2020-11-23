@@ -25,9 +25,9 @@ class TipViewQueryHandlerTest extends TestCase
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $dateTime = new \DateTime();
 
-        $tip1 = new Tip('tip_1', null, false, true, false, false, false, false, false, false, false, $dateTime);
-        $tip2 = new Tip('tip_2', null, false, true, false, false, false, false, false, false, false, $dateTime);
-        $tip3 = new Tip('tip_3', null, false, true, false, false, false, false, false, false, false, $dateTime);
+        $tip1 = new Tip('tip_1', null, false, true, false, false, false, false, false, false, false, false, $dateTime);
+        $tip2 = new Tip('tip_2', null, false, true, false, false, false, false, false, false, false, false, $dateTime);
+        $tip3 = new Tip('tip_3', null, false, true, false, false, false, false, false, false, false, false, $dateTime);
 
         $tips = [$tip1, $tip2, $tip3];
 

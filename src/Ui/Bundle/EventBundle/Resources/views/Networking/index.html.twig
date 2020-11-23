@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-
+    {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
     <div class="networking_container">
         <div class="networking_chat">
             <div data-chat-networking

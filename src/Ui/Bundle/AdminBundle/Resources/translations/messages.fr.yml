@@ -1184,6 +1184,7 @@ admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
 admin.tip.column.visible.onAgenda: Agenda
 admin.tip.column.visible.onConfirmationPhone: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
 admin.tip.column.visible.onContacts: Contacts
+admin.tip.column.visible.onNetworking: Networking
 admin.tip.column.visible.onPackage: Forfait
 admin.tip.column.visible.onProgram: Programme
 admin.tip.column.visible.onSheet: 'Fiche de présentation'

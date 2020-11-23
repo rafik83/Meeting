@@ -45,6 +45,10 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             type: boolean
             options:
                 default: false
+        onNetworking:
+            type: boolean
+            options:
+                default: false
         display:
             type: string
             options:
