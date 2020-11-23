@@ -234,17 +234,11 @@ function Webinar(element, isSpeaker) {
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
-
-    if (Notification.permission === 'granted') {
+    if (Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => this.join());
+    } else {
         this.join();
-    } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                this.join();
-            }
-        });
     }
-    this.join();
 }
 
 Webinar.prototype.join = function () {

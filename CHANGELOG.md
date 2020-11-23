@@ -8,15 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-278 - Video player SQY78 
 
 ## [2.71.1] - 2020-11-22
+### Fixed
 - MV-279 - Fix video webinar
 
 ## [2.71.0] - 2020-11-20
 ### Added
-- VIMEET-2255 - Add speaker's notification desktop webinar: I present 
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present
 - VIMEET-2247 - Limit height of spkeaker's title in webinars
 
 ### Fixed
-- MV-268 - Start higher button webinar 
+- MV-268 - Start higher button webinar
 - MV-277 - Allow to go to my agenda from the sheet agenda
 
 ## [2.70.1] - 2020-11-19
