@@ -7008,6 +7008,19 @@ services:
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
             - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@query.notification.notification_view_query_handler'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware'
+
+    #
+    # SheetRedirectionMiddleware
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.registration.step_manager'
 
     #
     # Event Day service

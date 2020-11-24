@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2249 - Notification page redirection
+
 ## [2.71.3] - 2020-11-25
 ### Fixed
 - MV-282 - Delete header on player video SQY78
