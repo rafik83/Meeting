@@ -11,6 +11,7 @@ use OpenTok\OpenTok;
 use OpenTok\OutputMode;
 use OpenTok\Role;
 use OpenTok\Session;
+use OpenTok\Stream;
 use OpenTok\StreamList;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
@@ -111,6 +112,21 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
                 'layoutClassList' => [$class]
             ]
         );
+    }
+
+    public function changeArchiveLayoutAuto(string $sessionId, string $archiveId): void
+    {
+        /** @var StreamList $streamList */
+        $streamList = $this->openTok->listStreams($sessionId);
+
+        /** @var Stream $stream */
+        foreach ($streamList->getItems() as $stream) {
+            if ($stream->videoType !== 'camera') {
+                $this->changeStreamClassList($sessionId, $stream->id, 'focus');
+                $this->changeArchiveToVertical($archiveId);
+                return;
+            }
+        }
     }
 
     public function changeBroadcastFocus(DomainBroadcast $broadcast, string $streamId): void
