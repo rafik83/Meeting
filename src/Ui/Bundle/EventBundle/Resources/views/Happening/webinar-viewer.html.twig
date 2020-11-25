@@ -66,13 +66,25 @@
 
         {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
-        <div class="video-helper">
-            <h1>{{ webinarView.happeningTitle }}</h1>
+        <div class="video-waiting">
+            {% if webinarView.hasWaitingMedia() %}
+                <div class="video-waiting-media hide" data-webinar-waiting-media>
+                {% if webinarView.waitingMediaView.type == 'video' %}
+                    <video src="{{ webinarView.waitingMediaView.file }}" controls loop data-webinar-waiting-player />
+                {% elseif webinarView.waitingMediaView.type == 'image' %}
+                    <img src="{{ webinarView.waitingMediaView.file }}" />
+                {% endif %}
+                </div>
+            {% endif %}
 
-            <div class="text-center">
-                <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            <div class="video-helper">
+                <h1>{{ webinarView.happeningTitle }}</h1>
+
+                <div class="text-center">
+                    <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+                </div>
+                <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
             </div>
-            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
         <div class="buttons-container">

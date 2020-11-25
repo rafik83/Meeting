@@ -197,6 +197,30 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         return $translation->getWebinarHeaderImage();
     }
 
+    public function getWebinarWaitingMediaFile(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaFile();
+    }
+
+    public function getWebinarWaitingMediaType(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaType();
+    }
+
     public function setTranslation(HappeningTranslation $translation): void
     {
         $this->translations->set($translation->getLocale(), $translation);
@@ -248,11 +272,13 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         string $locale,
         string $title,
         ?string $description,
-        ?string $webinarHeaderImage
+        ?string $webinarHeaderImage,
+        ?string $webinarWaitingMediaFile,
+        ?string $webinarWaitingMediaType
     ): void {
         /** @var HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
-        $translation->update($title, $description, $webinarHeaderImage);
+        $translation->update($title, $description, $webinarHeaderImage, $webinarWaitingMediaFile, $webinarWaitingMediaType);
     }
 
     public function getTalkings(): Collection

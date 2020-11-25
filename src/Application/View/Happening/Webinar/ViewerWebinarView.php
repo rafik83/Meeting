@@ -13,6 +13,9 @@ class ViewerWebinarView extends AbstractWebinarView
     /** @var int */
     public $timeRemainingInSeconds;
 
+    /** @var WaitingMediaView */
+    public $waitingMediaView;
+
     /** @var bool */
     public $isVideoWebinarAndHasLiveUrl;
 
@@ -42,6 +45,7 @@ class ViewerWebinarView extends AbstractWebinarView
         DateTimeInterface $currentTime,
         int $timeRemainingInSeconds,
         ?string $headerImage,
+        WaitingMediaView $waitingMediaView,
         ?string $liveUrl,
         bool $sidebarAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
@@ -71,8 +75,14 @@ class ViewerWebinarView extends AbstractWebinarView
         );
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
+        $this->waitingMediaView = $waitingMediaView;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isWebinarHls = $isWebinarHls;
         $this->hlsUrl = $hlsUrl;
+    }
+
+    public function hasWaitingMedia(): bool
+    {
+        return null !== $this->waitingMediaView->type;
     }
 }

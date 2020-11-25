@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
 use Proximum\Vimeet\Domain\Event\Image;
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -35,6 +36,12 @@ class TranslationType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+            ])
+            ->add('webinarWaitingMedia', FileType::class, [
+                'required' => false,
+                'attr' => [
+                    'accept' => implode(', ', MimeType::getMimeTypesByFormats([MimeType::FORMAT_IMAGE, MimeType::FORMAT_VIDEO])),
                 ],
             ])
         ;
