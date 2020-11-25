@@ -26,11 +26,19 @@ class StartViewerHandler
     {
         $happening = $command->happening;
 
+        // WebRTC viewers in open stream use js lib events
+        if ($happening->isStreamOpenToPublic() && !$happening->allowWebinarOnHLS()) {
+            return;
+        }
+
         $connectedUsersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
+
+        // with WebRTC, we need to tell to other viewers that someone is coming
+        $extraCount = !$happening->allowWebinarOnHLS() ? 1 : 0;
 
         $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_STREAM, [
             'action' => 'viewer_connected',
-            'connectedUsersCount' => $connectedUsersCount,
+            'connectedUsersCount' => $connectedUsersCount + $extraCount,
         ]);
     }
 }

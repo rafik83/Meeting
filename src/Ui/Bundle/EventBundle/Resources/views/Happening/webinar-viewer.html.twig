@@ -45,6 +45,7 @@
          data-question-unvote-message="{{ 'happening.webinar.questions.unvote'|trans }}"
          data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
          data-webinar-hls="{{ webinarView.isWebinarHls ? 'true' : 'false' }}"
+         data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
          {% if webinarView.liveUrl %}
             data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}

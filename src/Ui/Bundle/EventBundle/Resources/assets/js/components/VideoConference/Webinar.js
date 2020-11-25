@@ -425,6 +425,7 @@ Webinar.prototype.init = function () {
         return;
     }
 
+    this.updateViewers();
     this.showViewerControls();
     this.subscribeToStreamNotifications();
 
@@ -464,10 +465,6 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
         }
 
         if (payload.action === 'viewer_connected') {
-            if (!this.isHls) {
-                return;
-            }
-
             this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }

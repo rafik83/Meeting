@@ -7,6 +7,8 @@ use LogicException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
@@ -56,6 +58,9 @@ class GetWebinarViewQueryHandler
     /** @var HappeningBroadcastRepositoryInterface */
     private $happeningBroadcastRepository;
 
+    /** @var StartViewerHandler */
+    private $startViewerHandler;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
@@ -65,7 +70,8 @@ class GetWebinarViewQueryHandler
         HappeningBroadcastRepositoryInterface $happeningBroadcastRepository,
         IsRecordingAllowed $isRecordingAllowed,
         QuestionRepositoryInterface $questionRepository,
-        DateTimeInterface $dateTime
+        DateTimeInterface $dateTime,
+        StartViewerHandler $startViewerHandler
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
@@ -76,6 +82,7 @@ class GetWebinarViewQueryHandler
         $this->isRecordingAllowed = $isRecordingAllowed;
         $this->questionRepository = $questionRepository;
         $this->dateTime = $dateTime;
+        $this->startViewerHandler = $startViewerHandler;
     }
 
     public function handle(GetWebinarViewQuery $query): AbstractWebinarView
@@ -109,12 +116,9 @@ class GetWebinarViewQueryHandler
 
         $questionsCount = $this->questionRepository->getMessagesCountDuringHappening($happening);
 
+        $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
+
         if ($isSpeaker) {
-
-            if ($happening->allowWebinarOnHLS()) {
-                $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
-            }
-
             return new SpeakerWebinarView(
                 $happening->getEvent()->getId(),
                 $happening->getId(),
@@ -142,10 +146,12 @@ class GetWebinarViewQueryHandler
                 $happening->getEvent()->getAutoArchiveWebinar(),
                 $questionsCount,
                 $happening->allowWebinarOnHLS(),
-                $viewersCount ?? 0,
+                $viewersCount,
                 $happening->isStreamOpenToPublic()
             );
         }
+
+        $this->startViewerHandler->handle(new StartViewer($happening));
 
         return new ViewerWebinarView(
             $happening->getEvent()->getId(),
@@ -172,7 +178,8 @@ class GetWebinarViewQueryHandler
             $this->isVideoWebinarAndHappeningIsEnded($happening),
             $questionsCount,
             $happening->allowWebinarOnHLS(),
-            $this->getHLSUrl($happening)
+            $this->getHLSUrl($happening),
+            $viewersCount + 1
         );
     }
 

@@ -37,9 +37,6 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $allowWebinarOnHLS;
 
-    /** @var int $viewersCount, used only for broadcast mode */
-    public $viewersCount;
-
     /** @var bool */
     public $isStreamOpenToPublic;
 
@@ -95,7 +92,8 @@ class SpeakerWebinarView extends AbstractWebinarView
             $liveUrl,
             $sidebarAllowed,
             $questionsCount,
-            $isVideoWebinarAndHappeningIsEnded
+            $isVideoWebinarAndHappeningIsEnded,
+            $viewersCount
         );
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
@@ -106,7 +104,6 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->isWebinarRecording = $isWebinarRecording;
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
         $this->allowWebinarOnHLS = $allowWebinarOnHLS;
-        $this->viewersCount = $viewersCount;
         $this->isStreamOpenToPublic = $isStreamOpenToPublic;
     }
 }

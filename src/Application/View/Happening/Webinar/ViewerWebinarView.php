@@ -51,7 +51,8 @@ class ViewerWebinarView extends AbstractWebinarView
         bool $isVideoWebinarAndHappeningIsEnded,
         int $questionsCount,
         bool $isWebinarHls,
-        ?string $hlsUrl
+        ?string $hlsUrl,
+        int $viewersCount
     ) {
         parent::__construct(
             $eventId,
@@ -71,7 +72,8 @@ class ViewerWebinarView extends AbstractWebinarView
             $liveUrl,
             $sidebarAllowed,
             $questionsCount,
-            $isVideoWebinarAndHappeningIsEnded
+            $isVideoWebinarAndHappeningIsEnded,
+            $viewersCount
         );
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
