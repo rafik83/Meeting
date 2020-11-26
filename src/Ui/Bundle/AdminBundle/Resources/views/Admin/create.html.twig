@@ -4,6 +4,17 @@
 
 {% block content %}
     <h1 class="page-header">{{ 'admin.create_admin.title'|trans }}</h1>
+    {% if existingAdmin %}
+        <div class="form-group">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+            </div>
+            <div>
+                <p>{{ 'admin.create_admin.disabled_user' |trans({'%date%':existingAdmin.deletedAt.format('d/m/Y')}) }}
+                    <a href="{{ path('admin_un_delete_admin', {type:'admin', admin:existingAdmin.id}) }}" class="btn btn-primary">{{ 'admin.create_admin.reactivate_user' |trans }}</a>
+                </p>
+            </div>
+        </div>
+    {% endif %}
 
     {{ form(form) }}
 {% endblock %}
