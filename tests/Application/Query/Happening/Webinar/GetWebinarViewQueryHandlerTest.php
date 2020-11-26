@@ -9,6 +9,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
@@ -67,6 +69,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $questionRepository;
 
+    /** @var ObjectProphecy|StartViewerHandler */
+    private $startViewQueryHandler;
+
     private const ALL_NOTIFICATIONS = [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_STREAM];
 
     protected function setUp(): void
@@ -80,6 +85,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
+        $this->startViewQueryHandler = $this->prophesize(StartViewerHandler::class);
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
@@ -90,7 +96,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $this->questionRepository->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            $this->startViewQueryHandler->reveal()
         );
     }
 
@@ -191,6 +198,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
 
         $this->assertEquals(
             new SpeakerWebinarView(
@@ -325,7 +334,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $this->questionRepository->reveal(),
-            $date
+            $date,
+            $this->startViewQueryHandler->reveal()
         );
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
@@ -337,6 +347,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
 
         $this->assertEquals(
             new SpeakerWebinarView(
@@ -470,6 +482,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
+
         $this->assertEquals(
             new SpeakerWebinarView(
                 137,
@@ -564,6 +578,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
         $this->videoConferenceAdapter->generateAccessToken(Argument::any())->shouldNotBeCalled();
 
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
+
         $happening->getParticipations()->shouldNotBeCalled();
         $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
 
@@ -571,6 +587,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(41);
 
         $this->assertEquals(
             new ViewerWebinarView(
@@ -595,7 +613,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 21,
                 false,
-                null
+                null,
+                42
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -780,6 +799,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             false
         )->shouldBeCalled()->willReturn('User token');
 
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
+
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
         $this->notificationSubscriber
             ->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
@@ -795,6 +816,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             'http://some-video-provider.com/stream.hls'
         );
         $this->happeningBroadcastRepository->getByHappening($happening->reveal())->shouldBeCalled()->willReturn($happeningBroadcast);
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount($happeningId)->shouldBeCalled()->willReturn(41);
 
         $this->assertEquals(
             new ViewerWebinarView(
@@ -819,7 +842,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 true,
-                'http://some-video-provider.com/stream.hls'
+                'http://some-video-provider.com/stream.hls',
+                42
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -871,6 +895,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             false
         )->shouldBeCalled()->willReturn('User token');
 
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
+
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
         $this->notificationSubscriber
             ->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
@@ -885,6 +911,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             new \DateTimeImmutable('2020-10-27 12:30:00'),
             'http://some-video-provider.com/stream.hls'
         );
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount($happeningId)->shouldBeCalled()->willReturn(1);
 
         $this->assertEquals(
             new ViewerWebinarView(
@@ -909,7 +937,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 true,
-                null
+                null,
+                2
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

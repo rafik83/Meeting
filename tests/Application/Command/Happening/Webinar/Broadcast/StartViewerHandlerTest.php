@@ -13,10 +13,11 @@ class StartViewerHandlerTest extends TestCase
 {
     public function testHandle()
     {
-
         $happeningId = 1789;
         $happening = $this->prophesize(Happening::class);
         $happening->getId()->willReturn($happeningId);
+        $happening->isStreamOpenToPublic()->willReturn(false);
+        $happening->allowWebinarOnHLS()->willReturn(true);
 
         $subscriptionsCount = 42;
         $notificationSubscriptions = $this->prophesize(NotificationSubscriptionsInterface::class);
