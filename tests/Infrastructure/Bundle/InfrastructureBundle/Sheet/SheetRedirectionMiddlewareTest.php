@@ -13,17 +13,25 @@ use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 
 class SheetRedirectionMiddlewareTest extends TestCase
 {
-    private $router,
-    $isValidatedTransactionMissing,
-    $isValidatedRequiredPackageMissing,
-    $participantRepository,
-    $stepManager
-    ;
+    /** @var Router */
+    private $router;
+
+    /** @var IsValidatedTransactionMissing */
+    private $isValidatedTransactionMissing;
+
+    /** @var IsValidatedRequiredPackageMissing */
+    private $isValidatedRequiredPackageMissing;
+
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
+    /** @var StepManager */
+    private $stepManager;
 
     public function setUp(): void
     {
@@ -59,7 +67,7 @@ class SheetRedirectionMiddlewareTest extends TestCase
         );
 
         $response = $sheetRedirection->getForceRedirection($sheet->reveal(), $user->reveal());
-        self::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertEquals('/sheet/1/package', $response->getTargetUrl());
     }
 
@@ -88,11 +96,11 @@ class SheetRedirectionMiddlewareTest extends TestCase
         );
 
         $response = $sheetRedirection->getForceRedirection($sheet->reveal(), $user->reveal());
-        self::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertEquals('/sheet/1/package', $response->getTargetUrl());
     }
 
-    public function testParticipantNull(): void
+    public function testParticipantNullAndIsValidatedRequiredPackageMissingFalseOrIsValidatedTransactionMissingFalse(): void
     {
         $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
@@ -117,7 +125,7 @@ class SheetRedirectionMiddlewareTest extends TestCase
         self::assertNull($response);
     }
 
-    public function testParticipantNotNull(): void
+    public function testParticipantNotNullGetRedirectStep(): void
     {
         $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
@@ -129,11 +137,11 @@ class SheetRedirectionMiddlewareTest extends TestCase
 
         $this->stepManager->getRedirectStep($sheet->reveal(), $participantMock->reveal())
             ->shouldBeCalled()
-            ->willReturn(['redirect'=> true, 'route'=>'event_sheet_default', 'parameters'=>['sheet' => 1]]);
+            ->willReturn(['redirect'=> true, 'route'=>'event_participant_step', 'parameters'=>['participant' => 1]]);
 
-        $this->router->generate('event_sheet_default', ['sheet' => 1])
+        $this->router->generate('event_participant_step', ['participant' => 1])
             ->shouldBeCalled()
-            ->willReturn('/sheet/1');
+            ->willReturn('/participant/1/step/1');
 
         $sheetRedirection = new SheetRedirectionMiddleware(
             $this->router->reveal(),
@@ -144,7 +152,7 @@ class SheetRedirectionMiddlewareTest extends TestCase
         );
 
         $response = $sheetRedirection->getForceRedirection($sheet->reveal(), $user->reveal());
-        self::assertInstanceOf(Response::class, $response);
-        self::assertEquals('/sheet/1', $response->getTargetUrl());
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertEquals('/participant/1/step/1', $response->getTargetUrl());
     }
 }
