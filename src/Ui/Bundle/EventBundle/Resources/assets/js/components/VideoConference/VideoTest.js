@@ -5,6 +5,7 @@ import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
 import TokBoxNetworkTest from 'opentok-network-test-js';
 import VideoConference from './VideoConference';
 import isEdge from './../browser/isEdge';
+import Settings from './Settings';
 
 function VideoConferenceTest(element) {
     this.element = element;
@@ -17,9 +18,10 @@ function VideoConferenceTest(element) {
     this.progress = element.querySelector('[data-progress]');
     this.progressBar = this.progress.querySelector('.progress-bar');
     this.resultNetwork = element.querySelector('[data-result-network]');
-    this.resultVideo = element.querySelector('[data-result-video]');
-    this.resultAudio = element.querySelector('[data-result-audio]');
-    this.resultScreensharing = element.querySelector('[data-result-screensharing]');
+    this.resultQuality = element.querySelector('[data-result-quality]');
+    this.resultWarning = element.querySelector('[data-result-warning]');
+
+    this.settingsContainer = this.element.querySelector('[data-settings-container]');
 
     this.labelNotCompatibleBrowser = element.getAttribute('data-not-compatible-browser-message');
     this.labelTestInProgress = element.getAttribute('data-label-test-in-progress');
@@ -30,19 +32,22 @@ function VideoConferenceTest(element) {
 
     this.visioTestedUrl = element.getAttribute('data-visio-tested-url');
 
-    this.startButton = element.querySelector('[data-start-button]');
-    this.startButton.addEventListener('click', this.start.bind(this));
-    this.startButton.style.display = 'inline';
-
     this.videoConferencePreview = element.querySelector('.video-conference-preview');
     this.loading = element.querySelector('[data-loading]');
-    this.loading.style.display = 'none';
+    this.loading.classList.add('hide');
 
     this.labels = { 'success': 'label-success', 'warning': 'label-warning', 'error': 'label-danger'};
 
     if (isEdge) {
-        element.querySelector('[data-alert-edge]').style.display = 'block';
+        element.querySelector('[data-alert-edge]').classList.remove('hide');
     }
+
+    this.settings = new Settings(
+        this.settingsContainer.querySelector('#video-settings-section'),
+        this.start.bind(this),
+        false
+    );
+    this.settingsContainer.classList.remove('hide');
 }
 
 VideoConferenceTest.prototype.updateResult = function(element, comment, status) {
@@ -50,10 +55,15 @@ VideoConferenceTest.prototype.updateResult = function(element, comment, status) 
     commentElement.innerHTML = comment;
 
     if (status) {
-        var labelIconElement = element.querySelector('[data-label-icon]');
+        const labelIconElement = element.querySelector('[data-label-icon]');
         labelIconElement.classList.add('label');
         labelIconElement.classList.add(this.labels[status]);
     }
+};
+
+VideoConferenceTest.prototype.updateWarning = function(comment) {
+    this.resultWarning.classList.remove('hide')
+    this.resultWarning.innerHTML += comment + '<br>';
 };
 
 VideoConferenceTest.prototype.updateProgress = function(value) {
@@ -61,16 +71,16 @@ VideoConferenceTest.prototype.updateProgress = function(value) {
 };
 
 VideoConferenceTest.prototype.start = function() {
-    this.videoConferencePreview.style.display = 'block';
-    this.results.style.display = 'block';
-    this.progress.style.display = 'block';
-    this.startButton.style.display = 'none';
+    this.videoConferencePreview.classList.remove('hide');
+    this.results.classList.remove('hide');
+    this.progress.classList.remove('hide');
+    this.settingsContainer.classList.add('hide');
 
     var tokBoxNetworkTestInstance = new TokBoxNetworkTest(TokboxInstance, {
         apiKey: this.apiKey,
         sessionId: this.sessionId,
         token: this.token
-    });
+    }, {timeout: 10000});
 
     this.updateProgress(1);
     this.updateResult(this.resultNetwork, this.labelTestInProgress);
@@ -78,39 +88,38 @@ VideoConferenceTest.prototype.start = function() {
     tokBoxNetworkTestInstance.testConnectivity().then(function (results) {
         if (!results.success) {
             this.updateResult(this.resultNetwork, this.labelNetworkApiError, 'error');
-            this.progress.style.display = 'none';
+            this.progress.classList.add('hide');
 
             return;
         }
 
         this.updateProgress(10);
         this.updateResult(this.resultNetwork, this.labelTestSuccessful, 'success');
-        this.updateResult(this.resultAudio, this.labelTestInProgress);
-        this.updateResult(this.resultVideo, this.labelTestInProgress);
+        this.updateResult(this.resultQuality, this.labelTestInProgress);
 
         var callbackCount = 0;
 
         tokBoxNetworkTestInstance.testQuality(function updateCallback(stats) {
             callbackCount++;
             this.updateProgress(10 + Math.min(callbackCount*3, 80));
-            this.updateResult(this.resultAudio, this.labelTestInProgress);
-            this.updateResult(this.resultVideo, this.labelTestInProgress);
+            this.updateResult(this.resultQuality, this.labelTestInProgress);
 
         }.bind(this)).then(function (results) {
-            this.updateAudioVideoResult(this.resultAudio, results.audio);
-            this.updateAudioVideoResult(this.resultVideo, results.video);
+            console.log(results);
+            this.updateAudioVideoResult(results);
             tokBoxNetworkTestInstance.stop();
             this.checkScreenSharingCapability();
 
         }.bind(this)).catch(function (error) {
+            console.error('testQuality error', error);
             var isUnsupportedBrowser = 'UnsupportedBrowser' === error.name;
-            this.updateResult(this.resultAudio, error.description, isUnsupportedBrowser ? 'warning' : 'error');
-            this.updateResult(this.resultVideo, '', isUnsupportedBrowser ? 'warning' : 'error');
+            this.updateResult(this.resultQuality, error.toString(), isUnsupportedBrowser ? 'warning' : 'error');
             this.checkScreenSharingCapability();
         }.bind(this));
     }.bind(this)).catch(function(error) {
+        console.error('testConnectivity error', error);
         this.updateResult(this.resultNetwork, this.labelNetworkApiError, 'error');
-        this.progress.style.display = 'none';
+        this.progress.classList.add('hide');
     }.bind(this));
 };
 
@@ -119,29 +128,31 @@ VideoConferenceTest.prototype.checkScreenSharingCapability = function() {
 
     TokboxInstance.checkScreenSharingCapability(function(response) {
         if (!response.supported || response.extensionRegistered === false) {
-            this.updateResult(this.resultScreensharing, this.labelNotCompatibleBrowser, 'error');
+            this.updateWarning(this.labelNotCompatibleBrowser);
         } else if (response.extensionRegistered && response.extensionInstalled === false) {
-            this.updateResult(this.resultScreensharing, '<a href="' + CHROME_EXTENSION_URL + '" class="btn btn-link" target="_blank">' + this.labelInstallScreensharingExtension + '</a>', 'error');
-        } else {
-            this.updateResult(this.resultScreensharing, this.labelTestSuccessful, 'success');
+            this.updateWarning('<a href="' + CHROME_EXTENSION_URL + '" class="btn btn-link" target="_blank">' + this.labelInstallScreensharingExtension + '</a>', 'error');
         }
 
         this.end();
     }.bind(this));
 };
 
-VideoConferenceTest.prototype.updateAudioVideoResult = function(element, result) {
-    var comment = result.supported ? this.labelTestSuccessful + ' ' + this.labelQuality + ' ' + Math.round(result.mos * 100 / 4.5) + '%' : result.reason;
-    var status = result.supported ? 'success' : 'error';
-    this.updateResult(element, comment, status);
+VideoConferenceTest.prototype.updateAudioVideoResult = function(result) {
+    const isFullySupported = result.audio.supported && result.video.supported;
+    const grade = Math.round((result.audio.mos + result.video.mos) / 9 * 50) / 10;
+    var comment = isFullySupported
+                    ? `${this.labelTestSuccessful} ${this.labelQuality}: ${grade}/5`
+                    : result.audio.reason + ' ' + result.video.reason;
+    var status = isFullySupported ? 'success' : 'error';
+    this.updateResult(this.resultQuality, comment, status);
 };
 
 VideoConferenceTest.prototype.end = function() {
     this.updateProgress(100);
     this.progressBar.classList.remove('active');
     this.progressBar.classList.remove('progress-bar-striped');
-    this.videoConferencePreview.querySelector('.buttons-container').style.display = 'block';
-    this.videoConferencePreview.style.display = 'block';
+    this.videoConferencePreview.querySelector('.buttons-container').classList.remove('hide');
+    this.videoConferencePreview.classList.remove('hide');
     $.post(this.visioTestedUrl);
     new VideoConference(this.videoConferencePreview, false);
 };
