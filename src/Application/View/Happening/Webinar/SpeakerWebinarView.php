@@ -31,9 +31,6 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $isWebinarRecordAutoStart;
 
-    /** @var int */
-    public $timeRemainingBeforeStartInSeconds;
-
     /** @var bool */
     public $allowWebinarOnHLS;
 
@@ -72,7 +69,9 @@ class SpeakerWebinarView extends AbstractWebinarView
         int $questionsCount,
         bool $allowWebinarOnHLS,
         int $viewersCount,
-        bool $isStreamOpenToPublic
+        bool $isStreamOpenToPublic,
+        DateTimeInterface $happeningEnd,
+        string $timeZone
     ) {
         parent::__construct(
             $eventId,
@@ -93,11 +92,13 @@ class SpeakerWebinarView extends AbstractWebinarView
             $sidebarAllowed,
             $questionsCount,
             $isVideoWebinarAndHappeningIsEnded,
-            $viewersCount
+            $viewersCount,
+            $happeningEnd,
+            $timeZone,
+            $timeRemainingBeforeStartInSeconds
         );
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
-        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
         $this->stopTimestamp = $stopTimestamp;
         $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->isWebinarRecorded = $isWebinarRecorded;

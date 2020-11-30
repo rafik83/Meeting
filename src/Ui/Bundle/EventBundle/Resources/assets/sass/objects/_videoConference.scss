@@ -16,10 +16,13 @@
     max-height:unset;
   }
 
-  .viewers-container {
+  .viewers-container, .end-container, .current-container {
     color: white;
     display: inline-block;
     padding: 0 10px;
+    font-size: 18px;
+    line-height: 22px;
+    font-family: OpenSans, Helvetica, sans-serif;
   }
 
   .timer-container {

@@ -4,7 +4,6 @@ import {CHROME_EXTENSION_URL, TokboxInstance} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
 import Publisher from './Publisher';
 import VideoSubscriber from './Subscriber';
-import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
 import HlsPlayer from './HlsPlayer';
@@ -16,6 +15,7 @@ import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
 import DesktopNotification from './DesktopNotification';
 import Modal from './Modal';
+import WebinarStatus from './WebinarStatus';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -59,8 +59,6 @@ function Webinar(element, isSpeaker) {
         this.modalWarningBeforeStart = new Modal();
         this.modalWarningBeforeStart.init(modalBeforeStartElement);
     }
-    this.timeRemaining = element.getAttribute('data-time-remaining');
-    this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
     if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
@@ -132,9 +130,6 @@ function Webinar(element, isSpeaker) {
         this.endWebinarButton.addEventListener('click', this.disconnect.bind(this));
     }
 
-    this.timerContainer = element.querySelector('.timer-container');
-    this.timerElement = this.timerContainer.querySelector('.timer');
-    this.countDownContainer = this.timerContainer.querySelector('.timer span.countdown');
     this.viewersCount = element.getAttribute('data-webinar-initial-viewers-count');
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
@@ -182,8 +177,6 @@ function Webinar(element, isSpeaker) {
     document.addEventListener('mozfullscreenchange', this.changeFullscreenHandler.bind(this), false);
     document.addEventListener('fullscreenchange', this.changeFullscreenHandler.bind(this), false);
     document.addEventListener('MSFullscreenChange', this.changeFullscreenHandler.bind(this), false);
-
-    this.countDownBeforeEnd();
 
     this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
 
@@ -429,6 +422,8 @@ Webinar.prototype.init = function () {
     this.showViewerControls();
     this.subscribeToStreamNotifications();
 
+    new WebinarStatus(this.element, this.isSpeaker);
+
     if (this.isHls && !this.isSpeaker) {
         this.initHLSPlayer();
         return;
@@ -519,7 +514,6 @@ Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
 }
 
 Webinar.prototype.showViewerControls = function () {
-    this.showElement(this.timerContainer);
     this.showElement(this.viewersContainer);
 
     if (!this.isMobile && !this.isSidebarOpened()) {
@@ -1395,14 +1389,6 @@ Webinar.prototype.toggleVideo = function () {
 Webinar.prototype.installChromeExtension = function () {
     alert(this.installScreenSharingExtensionMessage);
     window.open(CHROME_EXTENSION_URL, '_blank');
-};
-
-Webinar.prototype.countDownBeforeEnd = function () {
-    if (!this.countDownContainer) {
-        return;
-    }
-
-    new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerElement);
 };
 
 Webinar.prototype.isScreenShareStream = function (stream) {

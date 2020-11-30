@@ -148,9 +148,17 @@
 
             <div class="timer-container hide">
                 <div class="timer">
-                    {{ 'happening.webinar.endingAt'|trans }}
+                    {{ 'happening.webinar.beginningAt'|trans }}
                     <span class="countdown"></span>
                 </div>
+            </div>
+
+            <div class="current-container hide">
+                {{ 'happening.webinar.endingAt'|trans({'%endTime%': webinarView.happeningEnd|date('H:i', webinarView.timeZone)}) }}
+            </div>
+
+            <div class="end-container hide">
+                {{ 'happening.webinar.ended'|trans }}
             </div>
 
             {% if webinarView.isWebinarRecorded %}

@@ -79,6 +79,15 @@ abstract class AbstractWebinarView
     /** @var int $viewersCount */
     public $viewersCount;
 
+    /** @var DateTimeInterface */
+    public $happeningEnd;
+
+    /** @var string */
+    public $timeZone;
+
+    /** @var int */
+    public $timeRemainingBeforeStartInSeconds;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -102,7 +111,10 @@ abstract class AbstractWebinarView
         bool $sidebarAllowed,
         int $questionsCount,
         bool $isVideoWebinarAndHappeningIsEnded,
-        int $viewersCount
+        int $viewersCount,
+        DateTimeInterface $happeningEnd,
+        string $timeZone,
+        int $timeRemainingBeforeStartInSeconds
     ) {
         $this->eventId = $eventId;
         $this->happeningId = $happeningId;
@@ -123,6 +135,9 @@ abstract class AbstractWebinarView
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->questionsCount = $questionsCount;
         $this->viewersCount = $viewersCount;
+        $this->happeningEnd = $happeningEnd;
+        $this->timeZone = $timeZone;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
     public function getSpeakerInfosByUserId(): string

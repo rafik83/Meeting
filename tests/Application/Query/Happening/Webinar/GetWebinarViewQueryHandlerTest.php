@@ -133,8 +133,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
-        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(3)->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
             'Webinar: how to work remotely during the Covid-19 crisis'
@@ -230,7 +232,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 false,
                 0,
-                true
+                true,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris'
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -243,6 +247,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $date = new \DateTime('2020-03-30 11:50:00');
         $user = $this->prophesize(User::class);
         $user->getFirstname()->willReturn('Michel');
@@ -286,7 +292,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
-        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(3)->willReturn($event->reveal());
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
@@ -379,7 +385,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 false,
                 0,
-                true
+                true,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris'
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -417,6 +425,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
@@ -536,7 +546,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 false,
                 0,
-                true
+                true,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris'
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -551,6 +563,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
@@ -614,7 +628,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 false,
                 null,
-                42
+                42,
+                new \DateTime('2020-03-30 11:45:00'),
+                'Europe/Paris',
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -652,8 +669,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
-        $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
+        $happening->getEvent()->shouldBeCalledTimes(3)->willReturn($event->reveal());
         $happeningId = 1;
         $happening->getId()->shouldBeCalled()->willReturn($happeningId);
         $happening->getTitle('en')->shouldBeCalled()->willReturn('Lorem ipsum dolor sit');
@@ -747,7 +766,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 true,
                 42,
-                true
+                true,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris'
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -762,6 +783,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->willReturn($event->reveal());
         $happeningId = 1558;
@@ -843,7 +866,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 true,
                 'http://some-video-provider.com/stream.hls',
-                42
+                42,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris',
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -858,6 +884,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->willReturn($event->reveal());
         $happeningId = 1558;
@@ -938,7 +965,10 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 true,
                 null,
-                2
+                2,
+                new \DateTime('2020-03-30 12:15:00'),
+                'Europe/Paris',
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

@@ -278,12 +278,14 @@ happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
+happening.webinar.beginningAt: 'Commence dans'
 happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.chat.tab: Chat
 happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
 happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
-happening.webinar.endingAt: 'Fin dans'
+happening.webinar.ended: Évènement terminé
+happening.webinar.endingAt: 'Fin à %endTime%'
 happening.webinar.invisibleMode.button: 'Invisible mode'
 happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)?'
 happening.webinar.invisibleMode.option: 'Invisible mode'
