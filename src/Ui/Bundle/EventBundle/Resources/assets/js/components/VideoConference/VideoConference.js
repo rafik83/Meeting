@@ -105,7 +105,7 @@ function VideoConference(
     this.join();
   }
 
-  this.startOnVisioStarted = this.timerContainer && -!!this.timerContainer.getAttribute('data-start-on-visio-started');
+  this.startOnVisioStarted = this.timerContainer && !!this.timerContainer.getAttribute('data-start-on-visio-started');
   if(!this.startOnVisioStarted) {
       this.countDownBeforeEnd();
   }

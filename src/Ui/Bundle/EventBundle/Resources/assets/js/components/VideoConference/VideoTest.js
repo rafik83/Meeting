@@ -105,7 +105,6 @@ VideoConferenceTest.prototype.start = function() {
             this.updateResult(this.resultQuality, this.labelTestInProgress);
 
         }.bind(this)).then(function (results) {
-            console.log(results);
             this.updateAudioVideoResult(results);
             tokBoxNetworkTestInstance.stop();
             this.checkScreenSharingCapability();
