@@ -54,6 +54,7 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
             return;
         }
 
+        $tempFiles = [];
         foreach ($files as $name => $archiveId) {
             if ($this->tokboxRecordS3StorageAdapter->hasFile($archiveId)) {
                 $tempFile = $this->filesystem->generateTemporaryPath();
@@ -67,6 +68,7 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
                     $tempFile,
                     $name
                 );
+                $tempFiles[] = $tempFile;
             } else {
                 $this->logger->warning(
                     sprintf('VIMEET : The file for the archive %s does not exist on the S3 Storage.', $archiveId)
@@ -75,6 +77,10 @@ class ZipRecordArchiveStorageAdapter implements ZipRecordArchiveStorageInterface
         }
 
         $this->zipArchive->close();
+
+        foreach ($tempFiles as $file) {
+            $this->filesystem->remove($file);
+        }
     }
 
     public function upload(

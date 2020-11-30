@@ -9,6 +9,10 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcastHandler;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler;
+use Proximum\Vimeet\Application\View\Happening\Webinar\StreamDTO;
+use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
@@ -22,21 +26,27 @@ class StopBroadcastHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $broadcastRepository;
 
+    /** @var ObjectProphecy */
+    private $streamCommandHandler;
+
     /** @var StopBroadcastHandler */
     private $stopBroadcastHandler;
 
     private const WEBINAR_SESSION_ID = '2_MX40Njg1Mzc4NH5-MTYwMDE2NTQ0MDEzNH41bVVVVTFpVXRvuXc2VjhhZkRRTFozdHZ-fg';
     private const HLS_URL = 'https://example.com/video.hls';
     private const BROADCAST_ID = '1234-5678-9012';
+    private const STREAM_ID = 'aa7bc86a-e0bc-4352-b34c-9754b491a6be';
 
     public function setUp(): void
     {
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $this->broadcastRepository = $this->prophesize(HappeningBroadcastRepositoryInterface::class);
+        $this->streamCommandHandler = $this->prophesize(StreamCommandHandler::class);
 
         $this->stopBroadcastHandler = new StopBroadcastHandler(
             $this->videoConferenceAdapter->reveal(),
-            $this->broadcastRepository->reveal()
+            $this->broadcastRepository->reveal(),
+            $this->streamCommandHandler->reveal()
         );
     }
 
@@ -60,7 +70,7 @@ class StopBroadcastHandlerTest extends TestCase
         $this->videoConferenceAdapter->stopBroadcast(self::BROADCAST_ID)->shouldBeCalled()->willReturn($existingBroadcast);
         $this->broadcastRepository->deleteForHappening($happening->reveal())->shouldBeCalled();
 
-        $command = new StopBroadcast($happening->reveal(), 'video');
+        $command = new StopBroadcast($happening->reveal(), 'video', self::STREAM_ID);
         $this->stopBroadcastHandler->handle($command);
     }
 
@@ -89,7 +99,7 @@ class StopBroadcastHandlerTest extends TestCase
         $this->videoConferenceAdapter->stopBroadcast($otherBroadcastId)->shouldBeCalled();
         $this->broadcastRepository->deleteForHappening($happening->reveal())->shouldBeCalled();
 
-        $command = new StopBroadcast($happening->reveal(), 'video');
+        $command = new StopBroadcast($happening->reveal(), 'video', self::STREAM_ID);
         $this->stopBroadcastHandler->handle($command);
     }
 
@@ -103,7 +113,7 @@ class StopBroadcastHandlerTest extends TestCase
         $this->videoConferenceAdapter->stopBroadcast(Argument::any())->shouldNotBeCalled();
         $this->broadcastRepository->deleteForHappening($happening->reveal())->shouldNotBeCalled();
 
-        $command = new StopBroadcast($happening->reveal(), 'video');
+        $command = new StopBroadcast($happening->reveal(), 'video', self::STREAM_ID);
         $this->stopBroadcastHandler->handle($command);
     }
 
@@ -127,7 +137,12 @@ class StopBroadcastHandlerTest extends TestCase
         $this->videoConferenceAdapter->stopBroadcast(Argument::any())->shouldNotBeCalled();
         $this->broadcastRepository->deleteForHappening(Argument::any())->shouldNotBeCalled();
 
-        $command = new StopBroadcast($happening->reveal(), 'screen');
+        $this->streamCommandHandler->handle(new StreamCommand(
+            $happening->reveal(),
+            new StreamDTO(self::STREAM_ID, 'screen', Stream::ACTION_STOP)
+        ))->shouldBeCalled();
+
+        $command = new StopBroadcast($happening->reveal(), 'screen', self::STREAM_ID);
         $this->stopBroadcastHandler->handle($command);
     }
 

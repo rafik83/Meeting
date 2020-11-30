@@ -69,6 +69,8 @@ class RecordHandler
             $happening->getTitle($event->getLocaleFallback())
         );
 
+        $this->videoConferenceAdapter->changeArchiveLayoutAuto($happening->getWebinarSessionId(), $videoConferenceArchive->id);
+
         $recordArchive = new RecordArchive(
             $happening,
             $videoConferenceArchive->id,

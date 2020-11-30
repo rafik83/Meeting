@@ -116,6 +116,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@datetime'
         tags:
@@ -125,6 +126,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast }
 
