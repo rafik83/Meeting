@@ -182,6 +182,8 @@ function Webinar(element, isSpeaker) {
 
     this.webRTCStackInitialized = false;
 
+    this.subscribeToStreamNotifications();
+
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
@@ -420,7 +422,6 @@ Webinar.prototype.init = function () {
 
     this.updateViewers();
     this.showViewerControls();
-    this.subscribeToStreamNotifications();
 
     new WebinarStatus(this.element, this.isSpeaker);
 
