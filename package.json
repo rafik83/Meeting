@@ -29,7 +29,7 @@
     "moment": ">=2.8",
     "moment-timezone": "^0.4.1",
     "opentok-layout-js": "3.4.0",
-    "opentok-network-test-js": "2.1.0",
+    "opentok-network-test-js": "^2.4.0",
     "opentok-text-chat": "^1.0.30",
     "phantomjs-prebuilt": "^2.1.13",
     "pubsub-js": "1.5.3",

@@ -4,8 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Added
-- VIMEET-2261 - Add new request count
+- VIMEET-2261 - Add pending request counter
+### Updated
+- VIMEET-2121 - Change visio test process, fix regressions due to changes in VideoConference
 
 ## [2.71.4] - 2020-11-30
 ### Fixed
