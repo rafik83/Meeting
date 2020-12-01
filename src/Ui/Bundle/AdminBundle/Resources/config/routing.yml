@@ -55,13 +55,12 @@ admin_delete_admin:
     methods: [DELETE, GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction }
 
-admin_un_delete_admin:
-    path: /admin/undelete/{type}/{admin}
+admin_restore_admin:
+    path: /admin/restore/{admin}
     requirements:
         admin: \d+
-        type: admin|operator
     methods: [GET]
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\UnDeleteAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\RestoreAction }
 
 #
 # Operator

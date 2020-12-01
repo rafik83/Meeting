@@ -6,7 +6,7 @@ namespace Proximum\Vimeet\Application\Command\Admin;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class UnDelete implements Command
+class Restore implements Command
 {
     /** @var Admin */
     public $admin;

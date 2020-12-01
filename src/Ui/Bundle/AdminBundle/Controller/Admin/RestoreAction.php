@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Admin\UnDelete;
+use Proximum\Vimeet\Application\Command\Admin\Restore;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Security\Voter\AdminVoter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class UnDeleteAction
+class RestoreAction
 {
     /** @var CommandBusInterface */
     private $commandBus;
@@ -45,19 +45,17 @@ class UnDeleteAction
         $this->flashBag = $flashBag;
     }
 
-    public function __invoke(Request $request, Admin $admin, string $type): RedirectResponse
+    public function __invoke(Request $request, Admin $admin): RedirectResponse
     {
         if (!$this->authorizationChecker->isGranted(AdminVoter::DELETE, $admin)) {
             $this->flashBag->add('error', 'flash.admin.reactivate.unauthorized');
         } else {
-            $this->commandBus->handle(new UnDelete($admin));
+            $this->commandBus->handle(new Restore($admin));
             $this->flashBag->add('success', 'flash.admin.reactivate.success');
         }
 
         return new RedirectResponse(
-            $this->urlGenerator->generate(
-                'admin' === $type ? 'admin_list_admin' : 'admin_list_operator'
-            )
+            $this->urlGenerator->generate('admin_list_admin')
         );
     }
 }

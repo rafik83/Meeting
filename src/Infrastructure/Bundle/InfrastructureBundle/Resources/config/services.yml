@@ -1116,12 +1116,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
-    Proximum\Vimeet\Application\Command\Admin\UnDeleteHandler:
+    Proximum\Vimeet\Application\Command\Admin\RestoreHandler:
         arguments:
             - '@repository.admin_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\UnDelete }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Restore }
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:

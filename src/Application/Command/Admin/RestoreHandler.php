@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
-class UnDeleteHandler
+class RestoreHandler
 {
     /** @var AdminRepositoryInterface */
     private $adminRepository;
@@ -21,9 +21,9 @@ class UnDeleteHandler
         $this->datetime = $datetime;
     }
 
-    public function handle(UnDelete $unDelete): void
+    public function handle(Restore $restore): void
     {
-        $unDelete->admin->setDeletedAt(null);
-        $this->adminRepository->set($unDelete->admin);
+        $restore->admin->setDeletedAt(null);
+        $this->adminRepository->set($restore->admin);
     }
 }
