@@ -105,19 +105,21 @@ function VideoConference(
     this.join();
   }
 
-  this.startOnVisioStarted = !!this.timerContainer.getAttribute('data-start-on-visio-started');
+  this.startOnVisioStarted = this.timerContainer && !!this.timerContainer.getAttribute('data-start-on-visio-started');
   if(!this.startOnVisioStarted) {
       this.countDownBeforeEnd();
   }
 
-  // call visio topic subscription
-  (function (element) {
-    const providerUrl = element.getAttribute('data-provider-url');
-    const callVisioTopic = element.getAttribute('data-callvisio-topic');
-    const subscriberKey = element.getAttribute('data-subscriber-key');
-    const subscriber = new MercureSubscriber(providerUrl);
-    subscriber.addSubscriber(callVisioTopic, subscriberKey, null);
-  })(element);
+  if (element.hasAttribute('data-provider-url')) {
+      // call visio topic subscription
+      (function (element) {
+        const providerUrl = element.getAttribute('data-provider-url');
+        const callVisioTopic = element.getAttribute('data-callvisio-topic');
+        const subscriberKey = element.getAttribute('data-subscriber-key');
+        const subscriber = new MercureSubscriber(providerUrl);
+        subscriber.addSubscriber(callVisioTopic, subscriberKey, null);
+      })(element);
+  }
 }
 
 VideoConference.prototype.join = function () {
