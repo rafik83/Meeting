@@ -5,12 +5,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2261 - Display pending request count
-- VIMEET-2255 - Add speaker's notification desktop webinar: I present 
+- VIMEET-2261 - Add new request count
+
+## [2.71.4] - 2020-11-30
+### Fixed
+- MV-281 - Fix webinar recording layout when HLS is activated
+
+## [2.71.3] - 2020-11-25
+### Fixed
+- MV-282 - Delete header on player video SQY78
+
+## [2.71.2] - 2020-11-23
+### Fixed
+- MV-278 - Video player SQY78
+
+## [2.71.1] - 2020-11-22
+### Fixed
+- MV-279 - Fix video webinar
+
+## [2.71.0] - 2020-11-20
+### Added
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present
 - VIMEET-2247 - Limit height of spkeaker's title in webinars
 
 ### Fixed
-- MV-268 - Start higher button webinar 
+- MV-268 - Start higher button webinar
 - MV-277 - Allow to go to my agenda from the sheet agenda
 
 ## [2.70.1] - 2020-11-19
