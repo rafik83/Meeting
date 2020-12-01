@@ -72,7 +72,7 @@ function Webinar(element, isSpeaker) {
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
-    this.waitingContainer = element.querySelector('.video-waiting');
+    this.waitingContainer = element.querySelector('.video-waiting-container');
 
     this.isMobile = 768 > (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 

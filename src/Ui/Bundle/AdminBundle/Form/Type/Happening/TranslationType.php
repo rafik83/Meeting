@@ -41,7 +41,7 @@ class TranslationType extends AbstractType
             ->add('webinarWaitingMedia', FileType::class, [
                 'required' => false,
                 'attr' => [
-                    'accept' => implode(', ', MimeType::getMimeTypesByFormats([MimeType::FORMAT_IMAGE, MimeType::FORMAT_VIDEO])),
+                    'accept' => implode(', ', MimeType::MEDIA_MIME_TYPES),
                 ],
             ])
         ;
