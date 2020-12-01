@@ -222,7 +222,7 @@ event.visio.test.edge: 'Votre navigateur, Edge, n''est pas compatible pour effec
 event.visio.test.error.network.api: 'Impossible de se connecter au serveur de visio conférence. Veuillez vérifier votre connexion ou la configuration de votre navigateur web afin d''autoriser l''accès à votre appareil photo et votre matériel audio.'
 event.visio.test.loading: 'Merci de patienter...'
 event.visio.test.network: Réseau
-event.visio.test.quality: 'Qualité :'
+event.visio.test.quality: 'Qualité'
 event.visio.test.screenSharing: 'Partage d''écran'
 event.visio.test.start: 'Démarrer le test'
 event.visio.test.testInProgress: 'Test en cours'
