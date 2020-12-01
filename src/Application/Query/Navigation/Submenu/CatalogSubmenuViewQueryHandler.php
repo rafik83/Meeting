@@ -89,6 +89,15 @@ class CatalogSubmenuViewQueryHandler
 
         $pendingRequestCount = $this->requestRepository->countPendingPropositionReceivedBySheet($query->sheet);
 
+        $queryParams = [
+            'sheet' => $query->sheet->getId(),
+
+        ];
+
+        if (null != $pendingRequestCount && $pendingRequestCount > 0) {
+            $queryParams["state"] = "recieve";
+        }
+
         $buttonViews[] = new SubmenuButtonView(
             Category::MEETING_ICON,
             $meetingTitle,
@@ -96,9 +105,8 @@ class CatalogSubmenuViewQueryHandler
                 $query->sheet->hasLinkedSheets()
                     ? 'event_meeting_request_merged_list'
                     : 'event_meeting_list_request',
-                [
-                    'sheet' => $query->sheet->getId(),
-                ]
+                $queryParams
+
             ),
             Route::isMeetingRequest($query->route),
             $pendingRequestCount,
