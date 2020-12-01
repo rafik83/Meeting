@@ -11,12 +11,6 @@
 
 {% block content %}
 <section class="main">
-    <header>
-        <h1>
-            {{ 'event.visio.test.title'|trans }}
-        </h1>
-    </header>
-
     <div class="main__container video-conference-test"
          data-token="{{ videoConferenceView.token }}"
          data-session-id="{{ videoConferenceView.sessionId }}"
@@ -30,6 +24,10 @@
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-visio-tested-url="{{ path('event_video_conference_network_tested') }}"
     >
+        <h1>
+            {{ 'event.visio.test.title'|trans }}
+        </h1>
+
         <p class="hide text-center alert alert-danger" data-alert-edge>{{ 'event.visio.test.edge'|trans }}</p>
 
 

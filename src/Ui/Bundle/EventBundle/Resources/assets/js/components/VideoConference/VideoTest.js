@@ -139,10 +139,13 @@ VideoConferenceTest.prototype.checkScreenSharingCapability = function() {
 VideoConferenceTest.prototype.updateAudioVideoResult = function(result) {
     const isFullySupported = result.audio.supported && result.video.supported;
     const grade = Math.round((result.audio.mos + result.video.mos) / 9 * 50) / 10;
-    var comment = isFullySupported
-                    ? `${this.labelTestSuccessful} ${this.labelQuality}: ${grade}/5`
-                    : result.audio.reason + ' ' + result.video.reason;
-    var status = isFullySupported ? 'success' : 'error';
+    let comment;
+    if (isFullySupported) {
+        comment = `${this.labelTestSuccessful} <br>${this.labelQuality}: ${grade}/5`;
+    } else {
+        comment = `Audio: ${result.audio.reason} <br>Video: ${result.video.reason}`;
+    }
+    const status = isFullySupported ? 'success' : 'error';
     this.updateResult(this.resultQuality, comment, status);
 };
 
