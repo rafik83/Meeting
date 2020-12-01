@@ -889,6 +889,7 @@ Webinar.prototype.screenshare = function () {
         this.layoutContainer.appendChild(this.screenElement);
         this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
 
+        this.hasMediaSharing = true;
         this.minimizeAllSubscribers();
         this.maximize(this.screenElement);
         this.layout();

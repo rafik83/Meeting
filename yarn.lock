@@ -583,9 +583,9 @@
     to-fast-properties "^2.0.0"
 
 "@opentok/client@^2.17.0":
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.18.1.tgz#0be14955e992024c2a768d91a00d8b3633f9340b"
-  integrity sha512-KVByBtZd8HVN8/BJRzw96pwO4X+QnHw459JWD8aCf8R8agtoKchrrrRnijsZOFsVl1Vcda2nKr4S6GBgbJpbfw==
+  version "2.18.2"
+  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.18.2.tgz#6eb4b21e7116ea6f15a41b4d1015a8e376a7e8c5"
+  integrity sha512-8B+sABOgZHJZQbwpvIAsQGxCoka6AjW3CO/ir8SEji5j9YfmkqBAFd/oV+H6BETxS1zu2mF4QyzYrKtNNWETKg==
 
 "@symfony/webpack-encore@^0.21":
   version "0.21.0"

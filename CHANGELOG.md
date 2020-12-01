@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2185 - Add waiting image/video to webinar
 
+## [2.71.4] - 2020-11-30
+### Fixed
+- MV-281 - Fix webinar recording layout when HLS is activated
+
 ## [2.71.3] - 2020-11-25
 ### Fixed
 - MV-282 - Delete header on player video SQY78
