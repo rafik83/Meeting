@@ -2,7 +2,7 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import NetworkingNewMessageCounter from './components/_NetworkingNewMessageCounter';
+import {NetworkingNewMessageCounter, PRIVATECHAT, GENERALCHAT} from './components/_NetworkingNewMessageCounter';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
@@ -33,11 +33,11 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
 
-    networkingMessageCounter.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], "privateChat");
-    networkingMessageCounter.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], "generalChat");
+    networkingMessageCounter.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT);
+    networkingMessageCounter.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT);
 
     const callback = () => {
-        networkingMessageCounter.incrementChatMessageCounter("privateChat");
+        networkingMessageCounter.incrementChatMessageCounter(PRIVATECHAT);
     }
 
     userConnection.addListener(callback);
@@ -98,10 +98,7 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
-
-                //soit message chat public soit chat privé (vérifier le targetCHat)
-
-                //Chat publique incrémenter le compteur que les messages qui sont après la date de dernière lecture
+                networkingMessageCounter.incrementChatMessageCounter(GENERALCHAT);
                 targetChat.reload();
                 return;
             }
@@ -181,7 +178,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
                 if (!isNaN(privateMessageRecievedFromParticipantCount)) {
                     networkingMessageCounter.decreaseChatMessageCounter(
-                        privateMessageRecievedFromParticipantCount, "privateCHat"
+                        privateMessageRecievedFromParticipantCount, PRIVATECHAT
                     );
                 }
             }

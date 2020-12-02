@@ -1,11 +1,14 @@
-class NetworkingNewMessageCounter {
+export const PRIVATECHAT = "privateChat";
+export const GENERALCHAT = "generalChat"
+
+export class NetworkingNewMessageCounter {
     constructor() {
-        this.chatMessageCountBadges = {};
+        this.chatMessageCountBadges = [];
     }
 
     getUnreadPrivateChatMessageStartingCount(node, chatKind) {
         const datasetName =
-            chatKind === "privateChat"
+            chatKind === PRIVATECHAT
                 ? "unreadPrivateChatMessageCount"
                 : "unreadGenralChatMessageCount";
 
@@ -23,7 +26,8 @@ class NetworkingNewMessageCounter {
 
     createChatMessageCountBadge(destinationNode, chatKind) {
         const startingCount = this.getUnreadPrivateChatMessageStartingCount(
-            destinationNode
+            destinationNode,
+            chatKind
         );
 
         this.chatMessageCountBadges[chatKind] = document.createElement("span");
@@ -35,9 +39,9 @@ class NetworkingNewMessageCounter {
             "alert-notification"
         );
 
-        // if (startingCount === 0) {
-        //     this.privateChatMessageCountBadgeNode.classList.add("hide");
-        // }
+        if (startingCount === 0) {
+            this.chatMessageCountBadges[chatKind].classList.add("hide");
+        }
 
         destinationNode.appendChild(this.chatMessageCountBadges[chatKind]);
     }
@@ -63,17 +67,21 @@ class NetworkingNewMessageCounter {
     }
 
     decreaseChatMessageCounter(value, chatKind) {
-        const currentPrivateChatMessageCount = parseInt(
+        const currentChatMessageCount = parseInt(
             this.chatMessageCountBadges[chatKind].textContent,
             10
         );
 
-        if (isNaN(currentPrivateChatMessageCount)) {
+        if (isNaN(currentChatMessageCount)) {
             return;
         }
 
+        if (currentChatMessageCount === 0) {
+            this.chatMessageCountBadges[chatKind].classList.add("hide");
+        }
+
         this.chatMessageCountBadges[chatKind].textContent =
-            currentPrivateChatMessageCount - value;
+            currentChatMessageCount - value;
     }
 
     countNewMessageFromPrivateChatIcons(dataSource) {
