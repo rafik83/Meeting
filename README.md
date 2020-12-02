@@ -60,16 +60,22 @@ If Symfony has been found you can run :
 ```bash
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
+```
 
 # Install PHP 7.2
+
+```
 sudo apt install php7.2
+```
 
 # Install required dependencies for php and php 7.2
-sudo apt install php7.2-intl php7.2-gd php7.2-xml php7.2-curl php7.2-mysql php7.2-mbstring  php7.2-apcu
-sudo apt install php-intl    php-gd    php-xml    php-curl    php-mysql php-mbstring php-apcu
+
+```
+sudo apt install php7.2-intl php7.2-gd php7.2-xml php7.2-curl php7.2-mysql php7.2-mbstring php7.2-apcu
+sudo apt install php-intl php-gd php-xml php-curl php-mysql php-mbstring php-apcu
+```
 
 cp app/config/parameters.yml.dist app/config/parameters.yml
-
 
 #### Install the php dependencies
 
@@ -79,9 +85,7 @@ This file is used to install the dependencies on production and staging.
 The recommended way to install the dependencies on this project is to use this phar, by running :
 
 ```
-
-    bin/composer.phar installer.phar install
-
+ bin/composer.phar installer.phar install
 ```
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
@@ -89,10 +93,8 @@ The recommended way to install the dependencies on this project is to use this p
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```
-
 docker network create proxy
 docker-compose up -d
-
 ```
 
 ### Import a Database Dump
@@ -104,11 +106,9 @@ Then let's create the database and import this dump
 ##### Create the database
 
 ```
-
 mysql -h 127.0.0.1 -u root -p
 create database proximum_vimeet;
 exit
-
 ```
 
 **Import the dump**
@@ -116,9 +116,7 @@ exit
 Go to the folder where you've unzipped the sql dump and run
 
 ```
-
 mysql -u root -h 127.0.0.1 -p proximum_vimeet < <your_db_dump_name>.sql
-
 ```
 
 ##### Indexing Elastic Search DB
@@ -126,10 +124,8 @@ mysql -u root -h 127.0.0.1 -p proximum_vimeet < <your_db_dump_name>.sql
 Now it's time to index the Elastic Search Database
 
 ```
-
 php bin/console vimeet:elasticsearch:index
 php bin/console jms:run
-
 ```
 
 The last command will take ~1h to run . It's time to grab a coffee I guess.
@@ -143,17 +139,13 @@ The easiest way to install and manage node is by using [`nvm`](https://github.co
 ##### Install Nvm
 
 ```
-
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
-
 ```
 
 Install the 8th version of node
 
 ```
-
 nvm install 8
-
 ```
 
 If you already have this node version just run `nvm use`
@@ -167,9 +159,7 @@ Vimeet uses [Yarn](https://yarnpkg.com/) as package manager. Please follow the i
 #### Install the node depenencies
 
 ```
-
 yarn install
-
 ```
 
 #### Build assets:
@@ -181,11 +171,9 @@ yarn install
 First you need to start the symfony server :
 
 ```
-
 symfony proxy:start
 symfony server:start -d
-
-````
+```
 
 Then you're ready to start hacking.
 
@@ -195,17 +183,23 @@ You should access the project via http://admin.vimeet.proximum.wip/app_dev.php/f
 
 **Build and watch assets:**
 
+```
     make watch
+```
 
 **Build Vimeet events assets**
 
 Sometime events use specific assets like specific css. To build those run :
 
+```
     bin/console vimeet:event:build-guideline-asset
+```
 
 **Enable/Disable php xdebug**
 
+```
        manala_php_xdebug [on|off]
+```
 
 - _Supervisor_: http://vimeet.proximum:9001
 - _phpMyAdmin_: http://vimeet.proximum:1979
@@ -213,37 +207,52 @@ Sometime events use specific assets like specific css. To build those run :
 
 **Install a Node dependency:**
 
+```
      yarn add <package>
+```
 
 **Remove a Node dependency:**
 
+```
     yarn remove <package>
+```
 
 **Upgrade a Node dependency:**
 
+```
     yarn upgrade <package>@<version>
+```
 
 Then check if everything ok (please check package version release notes).
 
 To do not forget to rebuild js bundles:
 
+```
     make build
+```
 
 ### Update
 
 To update the application, for example after git branch checkout:
 
+```
     make update-app
+```
 
 ### Migrations
 
 Drop DB and generate migrations diff:
 
-    ⇒ make migrations
+```
+⇒ make migrations
+```
 
 To generate migration file:
+
+```
 => make redis-flushdb@vm
 => bin/console doctrine:migrations:diff
+```
 
 ### Localization
 
@@ -273,11 +282,11 @@ To deploy to preprod and prod, you need to be connected to VPN with this ~/.ssh/
     Host vimeet-preprod
             User www-data
             Hostname 10.11.0.83
-
+    
     Host vimeet-prod1
             User www-data
             Hostname 10.11.0.31
-
+    
     Host vimeet-prod2
             User www-data
             Hostname 10.11.0.32
@@ -298,15 +307,15 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 
 - Update Elastic Search index (all events):
 
-  ⇒ bin/console vimeet:elasticsearch:index --env=prod
+  `⇒ bin/console vimeet:elasticsearch:index --env=prod`
 
 - Update Elastic Search index for only one event (save time when indexing in local dev):
 
-  ⇒ bin/console vimeet:event:index-sheets {eventId} no-reset --env=dev
+  `⇒ bin/console vimeet:event:index-sheets {eventId} no-reset --env=dev`
 
 - Rebuild events assets:
 
-  ⇒ bin/console vimeet:event:build-guideline-asset
+  `⇒ bin/console vimeet:event:build-guideline-asset`
 
 ### Styleguide
 
@@ -320,7 +329,7 @@ En admin, utiliser la méthode de l'event permettant de fallback, car la locale 
 
 ```php
 $locale = $event->getAvailableLocale($request->getLocale);
-````
+```
 
 ### Utils
 

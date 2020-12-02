@@ -9,6 +9,10 @@ use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler;
+use Proximum\Vimeet\Application\View\Happening\Webinar\StreamDTO;
+use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
@@ -21,6 +25,9 @@ class StartBroadcastHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $broadcastRepository;
+
+    /** @var ObjectProphecy */
+    private $streamCommandHandler;
 
     /** @var ObjectProphecy */
     private $notificationPublisher;
@@ -37,12 +44,14 @@ class StartBroadcastHandlerTest extends TestCase
     {
         $this->videoConferenceAdapter = $this->prophesize(VideoConferenceAdapterInterface::class);
         $this->broadcastRepository = $this->prophesize(HappeningBroadcastRepositoryInterface::class);
+        $this->streamCommandHandler = $this->prophesize(StreamCommandHandler::class);
         $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
         $this->dateTime = \DateTime::createFromFormat('!Y-m-d H:i', '2020-11-09 03:14');
 
         $this->startBroadcastHandler = new StartBroadcastHandler(
             $this->videoConferenceAdapter->reveal(),
             $this->broadcastRepository->reveal(),
+            $this->streamCommandHandler->reveal(),
             $this->notificationPublisher->reveal(),
             $this->dateTime
         );
@@ -59,6 +68,11 @@ class StartBroadcastHandlerTest extends TestCase
         $this->broadcastRepository->getByHappening($happening->reveal())->shouldBeCalled()->willReturn(null);
         $this->broadcastRepository->deleteForHappening($happening->reveal())->shouldBeCalled();
         $this->broadcastRepository->add(Argument::type(HappeningBroadcast::class))->shouldBeCalled();
+
+        $this->streamCommandHandler->handle(new StreamCommand(
+            $happening->reveal(),
+            new StreamDTO('1234-5678-9012', 'video', Stream::ACTION_START)
+        ))->shouldBeCalled();
 
         $this->notificationPublisher->publishHappeningNotification($happening, 'stream', [
             'action' => 'stream_started',
@@ -89,6 +103,11 @@ class StartBroadcastHandlerTest extends TestCase
             $hlsUrl
         );
         $this->broadcastRepository->getByHappening($happening->reveal())->shouldBeCalled()->willReturn($happeningBroadcast);
+
+        $this->streamCommandHandler->handle(new StreamCommand(
+            $happening->reveal(),
+            new StreamDTO('1234-5678-9012', 'video', Stream::ACTION_START)
+        ))->shouldBeCalled();
 
         $this->notificationPublisher->publishHappeningNotification($happening, 'stream', [
             'action' => 'stream_started',
@@ -122,6 +141,11 @@ class StartBroadcastHandlerTest extends TestCase
             $hlsUrl
         );
         $this->broadcastRepository->getByHappening($happening->reveal())->shouldBeCalled()->willReturn($happeningBroadcast);
+
+        $this->streamCommandHandler->handle(new StreamCommand(
+            $happening->reveal(),
+            new StreamDTO($streamId, 'screen', Stream::ACTION_START)
+        ))->shouldBeCalled();
 
         $this->notificationPublisher->publishHappeningNotification($happening, 'stream', [
             'action' => 'stream_started',

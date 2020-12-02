@@ -1,7 +1,9 @@
 <section id="video-settings-section">
-    <header>
-        <h1>{{ 'event.visio.settings.title'|trans }}</h1>
-    </header>
+    {% block header %}
+        <header>
+            <h1>{{ 'event.visio.settings.title'|trans }}</h1>
+        </header>
+    {% endblock %}
 
     <div class="main__content">
         <div id="visio-chrome-required" class="row hide">
@@ -20,7 +22,9 @@
         </div>
         <div id="visio-request-permission" class="row">
             <div class="col-md-12 text-center">
+                {% block requestDescription %}
                 <p>{{ 'event.visio.settings.askPermissionsDescription'|trans|nl2br }}</p>
+                {% endblock %}
                 <hr>
                 <button class="btn btn-primary" id="visio-request-permission-ask" autofocus>
                     <i class="icon-Video_2"></i> {{ 'event.visio.settings.askPermissions'|trans }}
@@ -77,9 +81,11 @@
                 </div>
                 <div class="text-center">
                     <hr>
+                    {% block action %}
                     <button class="btn btn-primary" id="visio-settings-validate">
                         {{ 'event.visio.settings.start'|trans }}
                     </button>
+                    {% endblock %}
                 </div>
             </div>
             <div class="col-md-7">

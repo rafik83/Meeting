@@ -130,14 +130,33 @@
     right: 60px !important;
   }
 
+  // video-conference waiting panel
+  .video-waiting-container {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
   .video-helper {
     background: #ffffff;
     padding: 10px;
     border-radius: 4px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  }
+
+  .video-waiting-media {
+    height: 50vh;
+    margin-bottom: 15px;
+    video {
+      height: 100%;
+    }
+    img {
+      height: 100%;
+    }
   }
 
   .layout-container {

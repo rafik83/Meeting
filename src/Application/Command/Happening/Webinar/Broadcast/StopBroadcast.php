@@ -13,9 +13,13 @@ class StopBroadcast implements Command
     /** @var string */
     public $type;
 
-    public function __construct(Happening $happening, string $type)
+    /** @var string */
+    public $streamId;
+
+    public function __construct(Happening $happening, string $type, string $streamId)
     {
         $this->happening = $happening;
         $this->type = $type;
+        $this->streamId = $streamId;
     }
 }
