@@ -218,12 +218,14 @@ export default function initNetworking(target, userConnection, notificationCallV
     
     const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
 
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
+
     const networkingMessageCounter = new NetworkingNewMessageCounter();
 
     networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
 
-    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
-
-    networkingMessageCounter.appendNewMessageBadgeInPrivateChatButton(unreadPrivateChatMessageCountNodes);
+    networkingMessageCounter.createPrivateChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0]);
+    
+    networkingMessageCounter.incrementPrivateChatMessageCounter();
 
 }
