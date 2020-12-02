@@ -122,7 +122,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);
@@ -143,7 +144,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);

@@ -54,7 +54,8 @@ Feature: List of tips by event and type
               "admin.tip.column.visible.onPackage",
               "admin.tip.column.visible.onContacts",
               "admin.tip.column.visible.onProgram",
-              "admin.tip.column.visible.onConfirmationPhone"
+              "admin.tip.column.visible.onConfirmationPhone",
+              "admin.tip.column.visible.onNetworking"
           ]
       }
       """

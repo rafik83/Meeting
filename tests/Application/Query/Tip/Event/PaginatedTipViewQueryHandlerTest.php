@@ -29,9 +29,9 @@ class PaginatedTipViewQueryHandlerTest extends TestCase
         $dateTime      = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip1 = new Tip('tip_1', null, false, true, false, false, true, false, false, false, false, $dateTime);
-        $tip2 = new Tip('tip_2', null, false, false, true, false, true, false, false,  false, false, $dateTime);
-        $tip3 = new Tip('tip_3', null, true, false, true, false, true, false, false,  false, false, $dateTime);
+        $tip1 = new Tip('tip_1', null, false, true, false, false, true, false, false, false, false, false, $dateTime);
+        $tip2 = new Tip('tip_2', null, false, false, true, false, true, false, false,  false, false, false, $dateTime);
+        $tip3 = new Tip('tip_3', null, true, false, true, false, true, false, false,  false, false, false, $dateTime);
         $tips = [$tip1, $tip2, $tip3];
 
         foreach ($tips as $tip) {
