@@ -225,7 +225,11 @@ export default function initNetworking(target, userConnection, notificationCallV
     networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
 
     networkingMessageCounter.createPrivateChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0]);
-    
-    networkingMessageCounter.incrementPrivateChatMessageCounter();
+
+    const callback = () => {
+        networkingMessageCounter.incrementPrivateChatMessageCounter();
+     }
+
+    userConnection.addListener(callback);
 
 }
