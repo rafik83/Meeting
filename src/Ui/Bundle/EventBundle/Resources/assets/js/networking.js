@@ -79,6 +79,10 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
+
+                //soit message chat public soit chat privé (vérifier le targetCHat)
+
+                //Chat publique incrémenter le compteur que les messages qui sont après la date de dernière lecture
                 targetChat.reload();
                 return;
             }
@@ -211,9 +215,10 @@ export default function initNetworking(target, userConnection, notificationCallV
         }
     }
     const newMessageItems = document.querySelectorAll("[data-new-messages-count");
-    const networkingPageDataNodeElements = document.querySelectorAll("[data-submenu='networking']");
+    
+    const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
 
     const networkingMessageCounter = new NetworkingNewMessageCounter(newMessageItems);
 
-    networkingMessageCounter.appendNewMessageBadge(networkingPageDataNodeElements);
+    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(headerSubmenuNetworkingBadgeNode);
 }

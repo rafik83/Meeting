@@ -1,12 +1,13 @@
 class NetworkingNewMessageCounter {
 
-    constructor(newMessageCountElements) {
-        this.newMessageCountElements = newMessageCountElements
+    constructor(dataSource) {
+        this.dataSource = dataSource
     }
 
-    getNewMessageCount() {
-        if (this.newMessageCountElements.length > 0) {
-            return Array.from(this.newMessageCountElements).reduce((prev, current) => {
+
+    countNewMessageFromPrivateChatIcon() {
+        if (this.dataSource.length > 0) {
+            return Array.from(this.dataSource).reduce((prev, current) => {
                 return prev + parseInt(current.dataset.newMessagesCount, 10);
             }, 0);
         }
@@ -14,8 +15,8 @@ class NetworkingNewMessageCounter {
         return 0;
     }
 
-    appendNewMessageBadge(networkingPageDataElements) {
-        const newMessageCount = this.getNewMessageCount();
+    appendNewMessageBadgeInHeaderSubmenu(destinationNodes) {
+        const newMessageCount = this.countNewMessageFromPrivateChatIcon();
         if (newMessageCount === 0) {
             return;
         }
@@ -24,9 +25,9 @@ class NetworkingNewMessageCounter {
         newMessageBadge.textContent = newMessageCount >= 99 ? "99+" : newMessageCount;
         newMessageBadge.classList.add('alert-notification');
 
-        networkingPageDataElements.forEach((item) => {
+        destinationNodes.forEach((node) => {
             const clone = newMessageBadge.cloneNode(true);
-            item.appendChild(clone);
+            node.appendChild(clone);
         });
     }
 }
