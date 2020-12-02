@@ -15,6 +15,7 @@ import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
 import DesktopNotification from './DesktopNotification';
+import Modal from './Modal';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -53,21 +54,22 @@ function Webinar(element, isSpeaker) {
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
-    this.timeRemainingBeforeStartMessage = element.getAttribute('data-time-remaining-before-start-message');
+    const modalBeforeStartElement = element.querySelector('[data-modal-warning-before-start]');
+    if (modalBeforeStartElement) {
+        this.modalWarningBeforeStart = new Modal();
+        this.modalWarningBeforeStart.init(modalBeforeStartElement);
+    }
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
     if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
-        const timerInterval = setInterval(() => {
-            const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
-
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                alert(this.timeRemainingBeforeStartMessage);
-            }
-        }, 500);
+        const remainingTime = startTime.getTime() - new Date().getTime();
+        setTimeout(() => {
+            this.modalWarningBeforeStart.show();
+            this.modalWarningBeforeStart.hideAfter(30000);
+        }, remainingTime);
     }
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
