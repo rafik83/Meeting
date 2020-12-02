@@ -1,7 +1,7 @@
 export const PRIVATECHAT = "privateChat";
 export const GENERALCHAT = "generalChat"
 
-export class NetworkingNewMessageCounter {
+export class NetworkingBadgeManager {
     constructor() {
         this.chatMessageCountBadges = [];
     }
@@ -113,4 +113,4 @@ export class NetworkingNewMessageCounter {
         });
     }
 }
-export default NetworkingNewMessageCounter;
+export default NetworkingBadgeManager;

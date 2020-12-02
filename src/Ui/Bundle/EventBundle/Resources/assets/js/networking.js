@@ -2,7 +2,7 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import {NetworkingNewMessageCounter, PRIVATECHAT, GENERALCHAT} from './components/_NetworkingNewMessageCounter';
+import {NetworkingBadgeManager, PRIVATECHAT, GENERALCHAT} from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
@@ -29,15 +29,15 @@ export default function initNetworking(target, userConnection, notificationCallV
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll("[data-unread-general-chat-message-count]");
 
-    const networkingMessageCounter = new NetworkingNewMessageCounter();
+    const networkingBadgeManager = new NetworkingBadgeManager();
 
-    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
+    networkingBadgeManager.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
 
-    networkingMessageCounter.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT);
-    networkingMessageCounter.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT);
+    networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT);
+    networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT);
 
     const callback = () => {
-        networkingMessageCounter.incrementChatMessageCounter(PRIVATECHAT);
+        networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
     }
 
     userConnection.addListener(callback);
@@ -98,7 +98,7 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
-                networkingMessageCounter.incrementChatMessageCounter(GENERALCHAT);
+                networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
                 targetChat.reload();
                 return;
             }
@@ -177,7 +177,7 @@ export default function initNetworking(target, userConnection, notificationCallV
                 );
 
                 if (!isNaN(privateMessageRecievedFromParticipantCount)) {
-                    networkingMessageCounter.decreaseChatMessageCounter(
+                    networkingBadgeManager.decreaseChatMessageCounter(
                         privateMessageRecievedFromParticipantCount, PRIVATECHAT
                     );
                 }
