@@ -5,7 +5,8 @@ class NetworkingNewMessageCounter {
 
     getUnreadPrivateChatMessageStartingCount(node) {
         const privateChatMessageCount = parseInt(
-            node.dataset.unreadPrivateChatMessageCount,10
+            node.dataset.unreadPrivateChatMessageCount,
+            10
         );
 
         if (isNaN(privateChatMessageCount)) {
@@ -25,11 +26,15 @@ class NetworkingNewMessageCounter {
         this.privateChatMessageCountBadgeNode.textContent =
             startingCount >= 99 ? "99+" : startingCount;
 
-        this.privateChatMessageCountBadgeNode.classList.add("alert-notification");
-
-        destinationNode.appendChild(
-            this.privateChatMessageCountBadgeNode
+        this.privateChatMessageCountBadgeNode.classList.add(
+            "alert-notification"
         );
+
+        if (startingCount === 0) {
+            this.privateChatMessageCountBadgeNode.classList.add("hide");
+        }
+
+        destinationNode.appendChild(this.privateChatMessageCountBadgeNode);
     }
 
     incrementPrivateChatMessageCounter() {
@@ -44,20 +49,26 @@ class NetworkingNewMessageCounter {
             return;
         }
 
+        if (currentPrivateChatMessageCount === 0) {
+            this.privateChatMessageCountBadgeNode.classList.remove("hide");
+        }
+
         this.privateChatMessageCountBadgeNode.textContent =
             currentPrivateChatMessageCount + 1;
     }
 
     decreasePrivateChatMessageCounter(value) {
         const currentPrivateChatMessageCount = parseInt(
-            this.privateChatMessageCountBadgeNode.textContent,10
+            this.privateChatMessageCountBadgeNode.textContent,
+            10
         );
 
         if (isNaN(currentPrivateChatMessageCount)) {
             return;
         }
 
-        this.privateChatMessageCountBadgeNode.textContent = currentPrivateChatMessageCount - value;
+        this.privateChatMessageCountBadgeNode.textContent =
+            currentPrivateChatMessageCount - value;
     }
 
     countNewMessageFromPrivateChatIcons(dataSource) {

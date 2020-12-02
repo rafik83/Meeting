@@ -25,20 +25,17 @@ export default function initNetworking(target, userConnection, notificationCallV
 
 
     const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
-    
     const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
-
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
 
     const networkingMessageCounter = new NetworkingNewMessageCounter();
 
     networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
-
     networkingMessageCounter.createPrivateChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0]);
 
     const callback = () => {
         networkingMessageCounter.incrementPrivateChatMessageCounter();
-     }
+    }
 
     userConnection.addListener(callback);
 
@@ -174,8 +171,6 @@ export default function initNetworking(target, userConnection, notificationCallV
             );
 
             if (datasetNodes.length > 0) {
-
-                console.log(datasetNodes[0].dataset);
                 const privateMessageRecievedFromParticipantCount = parseInt(
                     datasetNodes[0].dataset.newMessagesCount,
                     10
@@ -254,6 +249,4 @@ export default function initNetworking(target, userConnection, notificationCallV
             modalManager.open(toUserParticipantNode);
         }
     }
-
-
 }
