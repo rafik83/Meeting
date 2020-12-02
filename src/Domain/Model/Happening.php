@@ -503,7 +503,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 
     public function isStreamOpenToPublic(): bool
     {
-        return $this->isStreamOpenToPublic;
+        return $this->isStreamOpenToPublic || $this->isInteractiveWebinar();
     }
 
     public function openStreamToPublic(): void
