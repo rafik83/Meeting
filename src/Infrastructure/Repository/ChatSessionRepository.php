@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use Doctrine\DBAL\TransactionIsolationLevel;
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Exception\CallVisio\SessionIdAlreadyCreatedException;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatSession;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -30,6 +31,31 @@ class ChatSessionRepository implements ChatSessionRepositoryInterface
 
     public function update():void
     {
+        $this->entityManager->flush();
+    }
+
+    public function addNewSessionId(ChatSession $chatSession, string $sessionId): void
+    {
+        $this->entityManager->getConnection()->setTransactionIsolation(TransactionIsolationLevel::SERIALIZABLE);
+        $this->entityManager->beginTransaction();
+        $freshChatSession = $this->entityManager->createQueryBuilder()
+            ->select('session.visioSessionId')
+            ->from(ChatSession::class, 'session')
+            ->andWhere('session = :session')
+            ->setParameter('session', $chatSession->getId())
+            ->andWhere('session.visioSessionId IS NOT NULL')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $freshChatSessionId = $freshChatSession['visioSessionId'] ?? null;
+
+        if ($freshChatSessionId) {
+            $this->entityManager->rollback();
+            throw new SessionIdAlreadyCreatedException($freshChatSessionId);
+        }
+
+        $chatSession->setVisioSessionId($sessionId);
+        $this->entityManager->commit();
         $this->entityManager->flush();
     }
 
