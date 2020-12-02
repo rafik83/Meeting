@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.72.1] - 2020-12-02
 ### Fixed
-- MV-286 - Fix webinar recording layout when HLS is activated
+- MV-286 - Fix disconnection when alert is not closed
 
 ## [2.72.0] - 2020-12-02
 ### Added
