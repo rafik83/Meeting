@@ -70,7 +70,7 @@ class CreateAction
             'submit' => true,
         ]);
 
-        $existingAdmin = null;
+        $existingDeleteAdmin = null;
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -84,14 +84,14 @@ class CreateAction
                 );
 
                 if (null !== $ex->getExistingAdmin()->getDeletedAt()){
-                    $existingAdmin = $ex->getExistingAdmin();
+                    $existingDeleteAdmin = $ex->getExistingAdmin();
                 }
             }
         }
 
         return new Response($this->engine->render('AdminBundle:Admin:create.html.twig', [
             'form' => $form->createView(),
-            'existingAdmin' => $existingAdmin,
+            'existingAdmin' => $existingDeleteAdmin,
         ]));
     }
 }

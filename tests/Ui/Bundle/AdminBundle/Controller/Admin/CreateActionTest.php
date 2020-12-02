@@ -299,5 +299,4 @@ class CreateActionTest extends TestCase
         $result = $action($this->request->reveal());
         $this->assertEquals('<html></html>', $result->getContent());
     }
-
 }

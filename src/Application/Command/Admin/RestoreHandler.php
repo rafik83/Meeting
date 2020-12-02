@@ -23,7 +23,7 @@ class RestoreHandler
 
     public function handle(Restore $restore): void
     {
-        $restore->admin->setDeletedAt(null);
+        $restore->admin->restore();
         $this->adminRepository->set($restore->admin);
     }
 }

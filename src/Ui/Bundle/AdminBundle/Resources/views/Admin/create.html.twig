@@ -9,8 +9,8 @@
             <div class="col-lg-3 col-md-3 col-sm-3">
             </div>
             <div>
-                <p>{{ 'admin.create_admin.disabled_user' |trans({'%date%':existingAdmin.deletedAt.format('d/m/Y')}) }}
-                    <a href="{{ path('admin_restore_admin', {admin:existingAdmin.id}) }}" class="btn btn-primary">{{ 'admin.create_admin.reactivate_user' |trans }}</a>
+                <p>{{ 'admin.create_admin.disabled_user' |trans({'%date%': existingAdmin.deletedAt.format('d/m/Y')}) }}
+                    <a href="{{ path('admin_restore_admin', {admin: existingAdmin.id}) }}" class="btn btn-primary">{{ 'admin.create_admin.reactivate_user' |trans }}</a>
                 </p>
             </div>
         </div>

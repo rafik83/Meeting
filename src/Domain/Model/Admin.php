@@ -507,7 +507,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
         return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
+    public function setDeletedAt(\DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -520,5 +520,10 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
+    }
+
+    public function restore(): void
+    {
+        $this->deletedAt = null;
     }
 }
