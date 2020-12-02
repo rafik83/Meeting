@@ -15,6 +15,12 @@ Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
         webinarHeaderImage:
             type: string
             nullable: true
+        webinarWaitingMediaFile:
+            type: string
+            nullable: true
+        webinarWaitingMediaType:
+            type: string
+            nullable: true
         locale:
             type: string
     manyToOne:

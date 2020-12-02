@@ -112,11 +112,13 @@
 
         {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
-        <div class="video-helper" data-settings-container>
-            <h1>{{ webinarView.happeningTitle }}</h1>
-            <hr>
-            {{ include('EventBundle:Visio:settings.html.twig') }}
-            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+        <div class="video-waiting-container">
+            <div class="video-helper" data-settings-container>
+                <h1>{{ webinarView.happeningTitle }}</h1>
+                <hr>
+                {{ include('EventBundle:Visio:settings.html.twig') }}
+                <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+            </div>
         </div>
 
         <div class="buttons-container">
