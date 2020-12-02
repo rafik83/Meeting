@@ -23,6 +23,25 @@ export default function initNetworking(target, userConnection, notificationCallV
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
 
+
+    const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
+    
+    const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
+
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
+
+    const networkingMessageCounter = new NetworkingNewMessageCounter();
+
+    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
+
+    networkingMessageCounter.createPrivateChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0]);
+
+    const callback = () => {
+        networkingMessageCounter.incrementPrivateChatMessageCounter();
+     }
+
+    userConnection.addListener(callback);
+
     function showChatPrivate() {
         chatGeneralContainer.classList.add('hide');
         chatPrivateContainer.classList.remove('hide');
@@ -149,6 +168,27 @@ export default function initNetworking(target, userConnection, notificationCallV
             this.currentModal = null;
         },
         open: function (participantNode) {
+
+            const datasetNodes = participantNode.querySelectorAll(
+                "[data-new-messages-count]"
+            );
+
+            if (datasetNodes.length > 0) {
+
+                console.log(datasetNodes[0].dataset);
+                const privateMessageRecievedFromParticipantCount = parseInt(
+                    datasetNodes[0].dataset.newMessagesCount,
+                    10
+                );
+
+                if (!isNaN(privateMessageRecievedFromParticipantCount)) {
+                    networkingMessageCounter.decreasePrivateChatMessageCounter(
+                        privateMessageRecievedFromParticipantCount
+                    );
+                }
+            }
+
+  
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);
@@ -214,22 +254,6 @@ export default function initNetworking(target, userConnection, notificationCallV
             modalManager.open(toUserParticipantNode);
         }
     }
-    const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
-    
-    const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
 
-    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
-
-    const networkingMessageCounter = new NetworkingNewMessageCounter();
-
-    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
-
-    networkingMessageCounter.createPrivateChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0]);
-
-    const callback = () => {
-        networkingMessageCounter.incrementPrivateChatMessageCounter();
-     }
-
-    userConnection.addListener(callback);
 
 }

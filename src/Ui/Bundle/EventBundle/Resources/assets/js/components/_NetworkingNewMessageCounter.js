@@ -5,7 +5,7 @@ class NetworkingNewMessageCounter {
 
     getUnreadPrivateChatMessageStartingCount(node) {
         const privateChatMessageCount = parseInt(
-            node.dataset.unreadPrivateChatMessageCount
+            node.dataset.unreadPrivateChatMessageCount,10
         );
 
         if (isNaN(privateChatMessageCount)) {
@@ -46,6 +46,18 @@ class NetworkingNewMessageCounter {
 
         this.privateChatMessageCountBadgeNode.textContent =
             currentPrivateChatMessageCount + 1;
+    }
+
+    decreasePrivateChatMessageCounter(value) {
+        const currentPrivateChatMessageCount = parseInt(
+            this.privateChatMessageCountBadgeNode.textContent,10
+        );
+
+        if (isNaN(currentPrivateChatMessageCount)) {
+            return;
+        }
+
+        this.privateChatMessageCountBadgeNode.textContent = currentPrivateChatMessageCount - value;
     }
 
     countNewMessageFromPrivateChatIcons(dataSource) {
