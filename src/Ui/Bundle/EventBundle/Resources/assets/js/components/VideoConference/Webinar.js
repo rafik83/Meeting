@@ -268,6 +268,10 @@ function Webinar(element, isSpeaker) {
             this.hideElement(this.waitingContainer);
             this.hideElement(this.openToPublicReminderModal);
         });
+
+        this.hasOpenToPublicButtonBtnPrimaryClass = false;
+
+        this.blinkOpenToPublicBtnIntervalId = null;
     }
 }
 
@@ -478,6 +482,7 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
                 this.showElement(this.endWebinarButton);
                 this.isStreamOpenToPublic = true;
                 clearTimeout(this.openPublicReminderId);
+                clearTimeout(this.blinkOpenToPublicBtnIntervalId);
             }
         }
 
@@ -697,6 +702,16 @@ Webinar.prototype.showElement = function (element) {
     element.classList.remove('hide');
 };
 
+Webinar.prototype.blinkOpenToPublicBtnHandler = function() {
+    if (!this.hasOpenToPublicButtonBtnPrimaryClass) {
+        this.openToPublicButton.classList.add('btn-primary');
+    } else {
+        this.openToPublicButton.classList.remove('btn-primary');
+    }
+
+    this.hasOpenToPublicButtonBtnPrimaryClass = !this.hasOpenToPublicButtonBtnPrimaryClass;
+}
+
 /**
  *  Publish your camera and microphone stream
  */
@@ -708,6 +723,8 @@ Webinar.prototype.publishStream = function () {
         this.openPublicReminderId = setTimeout(() => {
             this.showElement(this.waitingContainer);
             this.showElement(this.openToPublicReminderModal);
+
+            this.blinkOpenToPublicBtnIntervalId = setInterval(this.blinkOpenToPublicBtnHandler.bind(this), 1000);
         }, this.timeRemainingBeforeStart * 1000);
     }
 
