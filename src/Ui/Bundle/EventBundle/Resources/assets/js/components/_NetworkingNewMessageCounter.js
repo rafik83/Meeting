@@ -1,48 +1,53 @@
 class NetworkingNewMessageCounter {
     constructor() {
-        this.privateChatMessageCountBadgeNode = undefined;
+        this.chatMessageCountBadges = {};
     }
 
-    getUnreadPrivateChatMessageStartingCount(node) {
-        const privateChatMessageCount = parseInt(
-            node.dataset.unreadPrivateChatMessageCount,
+    getUnreadPrivateChatMessageStartingCount(node, chatKind) {
+        const datasetName =
+            chatKind === "privateChat"
+                ? "unreadPrivateChatMessageCount"
+                : "unreadGenralChatMessageCount";
+
+        const chatMessageCount = parseInt(
+            node.dataset[datasetName],
             10
         );
 
-        if (isNaN(privateChatMessageCount)) {
+        if (isNaN(chatMessageCount)) {
             return 0;
         }
 
-        return privateChatMessageCount;
+        return chatMessageCount;
     }
 
-    createPrivateChatMessageCountBadge(destinationNode) {
+    createChatMessageCountBadge(destinationNode, chatKind) {
         const startingCount = this.getUnreadPrivateChatMessageStartingCount(
             destinationNode
         );
 
-        this.privateChatMessageCountBadgeNode = document.createElement("span");
+        this.chatMessageCountBadges[chatKind] = document.createElement("span");
 
-        this.privateChatMessageCountBadgeNode.textContent =
+        this.chatMessageCountBadges[chatKind].textContent =
             startingCount >= 99 ? "99+" : startingCount;
 
-        this.privateChatMessageCountBadgeNode.classList.add(
+        this.chatMessageCountBadges[chatKind].classList.add(
             "alert-notification"
         );
 
-        if (startingCount === 0) {
-            this.privateChatMessageCountBadgeNode.classList.add("hide");
-        }
+        // if (startingCount === 0) {
+        //     this.privateChatMessageCountBadgeNode.classList.add("hide");
+        // }
 
-        destinationNode.appendChild(this.privateChatMessageCountBadgeNode);
+        destinationNode.appendChild(this.chatMessageCountBadges[chatKind]);
     }
 
-    incrementPrivateChatMessageCounter() {
-        if (!this.privateChatMessageCountBadgeNode) {
+    incrementChatMessageCounter(chatKind) {
+        if (!this.chatMessageCountBadges[chatKind]) {
             return;
         }
         const currentPrivateChatMessageCount = parseInt(
-            this.privateChatMessageCountBadgeNode.textContent
+            this.chatMessageCountBadges[chatKind].textContent
         );
 
         if (isNaN(currentPrivateChatMessageCount)) {
@@ -50,16 +55,16 @@ class NetworkingNewMessageCounter {
         }
 
         if (currentPrivateChatMessageCount === 0) {
-            this.privateChatMessageCountBadgeNode.classList.remove("hide");
+            this.chatMessageCountBadges[chatKind].classList.remove("hide");
         }
 
-        this.privateChatMessageCountBadgeNode.textContent =
+        this.chatMessageCountBadges[chatKind].textContent =
             currentPrivateChatMessageCount + 1;
     }
 
-    decreasePrivateChatMessageCounter(value) {
+    decreaseChatMessageCounter(value, chatKind) {
         const currentPrivateChatMessageCount = parseInt(
-            this.privateChatMessageCountBadgeNode.textContent,
+            this.chatMessageCountBadges[chatKind].textContent,
             10
         );
 
@@ -67,7 +72,7 @@ class NetworkingNewMessageCounter {
             return;
         }
 
-        this.privateChatMessageCountBadgeNode.textContent =
+        this.chatMessageCountBadges[chatKind].textContent =
             currentPrivateChatMessageCount - value;
     }
 
