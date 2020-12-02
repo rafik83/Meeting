@@ -47,6 +47,9 @@ abstract class AbstractEventTip
     /** @var bool */
     public $onConfirmationPhone;
 
+    /** @var bool */
+    public $onNetworking;
+
     /** @var string */
     public $display;
 
