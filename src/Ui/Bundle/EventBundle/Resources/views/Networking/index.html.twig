@@ -34,10 +34,8 @@
                                 {{ networkingView.networkingChatNewMessages }}
                             </span>
                         {% endif %}</a>
-                    <a class="btn btn-gray" href="#" data-chat-private-button>{{ 'networking.chat.title'|trans }}
-                            {% if networkingView.privateChatNewMessages > 0 %}
-                                 <span class="alert-notification">{{ networkingView.privateChatNewMessages }}</span>
-                            {% endif %}
+                    <a class="btn btn-gray" href="#" data-unread-private-chat-message-count="{{networkingView.privateChatNewMessages}}"  data-chat-private-button>{{ 'networking.chat.title'|trans }}
+                
                     </a>
                 </div>
                 <div data-chat-container

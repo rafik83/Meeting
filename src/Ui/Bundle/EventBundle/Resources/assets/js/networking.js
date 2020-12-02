@@ -214,11 +214,16 @@ export default function initNetworking(target, userConnection, notificationCallV
             modalManager.open(toUserParticipantNode);
         }
     }
-    const newMessageItems = document.querySelectorAll("[data-new-messages-count");
+    const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
     
     const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
 
-    const networkingMessageCounter = new NetworkingNewMessageCounter(newMessageItems);
+    const networkingMessageCounter = new NetworkingNewMessageCounter();
 
-    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(headerSubmenuNetworkingBadgeNode);
+    networkingMessageCounter.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
+
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
+
+    networkingMessageCounter.appendNewMessageBadgeInPrivateChatButton(unreadPrivateChatMessageCountNodes);
+
 }
