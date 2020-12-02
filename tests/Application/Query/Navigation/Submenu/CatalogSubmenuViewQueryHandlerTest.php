@@ -236,7 +236,7 @@ class CatalogSubmenuViewQueryHandlerTest extends TestCase
 
         $navigationBuilder->getRoute('event_meeting_list_request', [
             'sheet' => $sheetId,
-            'state' => "recieve"
+            'state' => "receive"
         ])->shouldBeCalled()->willReturn("dummyRoute");
 
         $canSeeOtherSheets  = $this->prophesize(CanSeeOtherSheets::class);

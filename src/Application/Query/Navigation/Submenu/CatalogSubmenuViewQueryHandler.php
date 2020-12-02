@@ -95,7 +95,7 @@ class CatalogSubmenuViewQueryHandler
         ];
 
         if (null != $pendingRequestCount && $pendingRequestCount > 0) {
-            $queryParams["state"] = "recieve";
+            $queryParams["state"] = "receive";
         }
 
         $buttonViews[] = new SubmenuButtonView(
