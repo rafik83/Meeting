@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Updated
 - VIMEET-2121 - Change visio test process, fix regressions due to changes in VideoConference
+### Added
+- VIMEET-2185 - Add waiting image/video to webinar
 
 ## [2.71.4] - 2020-11-30
 ### Fixed
