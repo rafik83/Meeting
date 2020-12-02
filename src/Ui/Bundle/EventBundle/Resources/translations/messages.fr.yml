@@ -309,6 +309,9 @@ happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
 happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'Il y a déjà un partage d''écran en cours.'
 happening.webinar.start: Démarrez
+happening.webinar.timeToOpen.message: Il est l’heure.
+happening.webinar.timeToOpen.notOpen.button: Pas maintenant
+happening.webinar.timeToOpen.open.button: Ouvrir au public
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date

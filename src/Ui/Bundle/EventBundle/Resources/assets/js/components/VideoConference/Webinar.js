@@ -17,6 +17,11 @@ import DesktopNotification from './DesktopNotification';
 import Modal from './Modal';
 import WebinarStatus from './WebinarStatus';
 
+/**
+ * @param {Element} element
+ * @param {boolean} isSpeaker
+ * @constructor
+ */
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
@@ -234,6 +239,7 @@ function Webinar(element, isSpeaker) {
     this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
 
+    // open to public management
     this.openToPublicButton = element.querySelector('.open-webinar');
     this.openToPublicButton.addEventListener('click', this.onOpeningToPublic.bind(this));
 
@@ -241,13 +247,27 @@ function Webinar(element, isSpeaker) {
 
     this.isStreamOpenToPublic = element.getAttribute('data-is-stream-open-to-public') === 'true';
 
-    // "preparation" modal
     if (!this.isStreamOpenToPublic) {
+        // "preparation" modal
         this.prepareModal = this.element.querySelector('#visio-prepare');
         this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
         if (this.closePrepareMessageButton) {
             this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
         }
+
+        // "reminder to open to public" modal
+        this.openToPublicReminderModal = this.element.querySelector('#visio-openPublicReminder');
+        this.openToPublicReminderButton = this.element.querySelector('#visio-openPublicReminder-open');
+        this.openToPublicReminderButton.addEventListener('click', () => {
+            this.hideElement(this.waitingContainer);
+            this.hideElement(this.openToPublicReminderModal);
+            this.onOpeningToPublic();
+        });
+        this.notOpenToPublicReminderButton = this.element.querySelector('#visio-openPublicReminder-notOpen');
+        this.notOpenToPublicReminderButton.addEventListener('click', () => {
+            this.hideElement(this.waitingContainer);
+            this.hideElement(this.openToPublicReminderModal);
+        });
     }
 }
 
@@ -457,6 +477,7 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
                 this.hideElement(this.openToPublicButton);
                 this.showElement(this.endWebinarButton);
                 this.isStreamOpenToPublic = true;
+                clearTimeout(this.openPublicReminderId);
             }
         }
 
@@ -657,6 +678,9 @@ Webinar.prototype.toggleRecording = function (recording) {
     }
 };
 
+/**
+ * @param {Element} element
+ */
 Webinar.prototype.hideElement = function (element) {
     if (!element) {
         return;
@@ -678,6 +702,14 @@ Webinar.prototype.showElement = function (element) {
  */
 Webinar.prototype.publishStream = function () {
     this.hideElement(this.waitingContainer);
+    this.hideElement(this.webinarWaitingMessage);
+
+    if (!this.isStreamOpenToPublic) {
+        this.openPublicReminderId = setTimeout(() => {
+            this.showElement(this.waitingContainer);
+            this.showElement(this.openToPublicReminderModal);
+        }, this.timeRemainingBeforeStart * 1000);
+    }
 
     if (this.invisibleMode) {
         return;
