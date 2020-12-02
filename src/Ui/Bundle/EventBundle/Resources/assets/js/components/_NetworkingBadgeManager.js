@@ -1,5 +1,8 @@
-export const PRIVATECHAT = "privateChat";
-export const GENERALCHAT = "generalChat"
+
+export const CHATKIND = {
+    GENERALCHAT : "generalChat",
+    PRIVATECHAT : "privateChat"
+}
 
 export class NetworkingBadgeManager {
     constructor() {
@@ -8,7 +11,7 @@ export class NetworkingBadgeManager {
 
     getUnreadPrivateChatMessageStartingCount(node, chatKind) {
         const datasetName =
-            chatKind === PRIVATECHAT
+            chatKind === CHATKIND.PRIVATECHAT
                 ? "unreadPrivateChatMessageCount"
                 : "unreadGenralChatMessageCount";
 

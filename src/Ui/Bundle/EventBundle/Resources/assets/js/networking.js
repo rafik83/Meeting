@@ -2,10 +2,12 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import {NetworkingBadgeManager, PRIVATECHAT, GENERALCHAT} from './components/_NetworkingBadgeManager';
+import {NetworkingBadgeManager, CHATKIND} from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
+
+const {PRIVATECHAT, GENERALCHAT} = CHATKIND;
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
