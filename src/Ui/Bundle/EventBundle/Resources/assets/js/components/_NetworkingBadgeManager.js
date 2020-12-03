@@ -1,7 +1,8 @@
 
-export const CHATKIND = {
-    GENERALCHAT : "generalChat",
-    PRIVATECHAT : "privateChat"
+export const BADGE_TYPE = {
+    GENERALCHAT : "general-chat",
+    PRIVATECHAT : "private-chat",
+    NETWORKING_BUTTON : "networking"
 }
 
 export class NetworkingBadgeManager {
@@ -9,9 +10,9 @@ export class NetworkingBadgeManager {
         this.chatMessageCountBadges = [];
     }
 
-    getUnreadPrivateChatMessageStartingCount(node, chatKind) {
+    getUnreadPrivateChatMessageStartingCount(node, badgeType) {
         const datasetName =
-            chatKind === CHATKIND.PRIVATECHAT
+            badgeType === BADGE_TYPE.PRIVATECHAT
                 ? "unreadPrivateChatMessageCount"
                 : "unreadGenralChatMessageCount";
 
@@ -27,34 +28,34 @@ export class NetworkingBadgeManager {
         return chatMessageCount;
     }
 
-    createChatMessageCountBadge(destinationNode, chatKind) {
+    createChatMessageCountBadge(destinationNode, badgeType) {
         const startingCount = this.getUnreadPrivateChatMessageStartingCount(
             destinationNode,
-            chatKind
+            badgeType
         );
 
-        this.chatMessageCountBadges[chatKind] = document.createElement("span");
+        this.chatMessageCountBadges[badgeType] = document.createElement("span");
 
-        this.chatMessageCountBadges[chatKind].textContent =
+        this.chatMessageCountBadges[badgeType].textContent =
             startingCount >= 99 ? "99+" : startingCount;
 
-        this.chatMessageCountBadges[chatKind].classList.add(
+        this.chatMessageCountBadges[badgeType].classList.add(
             "alert-notification"
         );
 
         if (startingCount === 0) {
-            this.chatMessageCountBadges[chatKind].classList.add("hide");
+            this.chatMessageCountBadges[badgeType].classList.add("hide");
         }
 
-        destinationNode.appendChild(this.chatMessageCountBadges[chatKind]);
+        destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
     }
 
-    incrementChatMessageCounter(chatKind) {
-        if (!this.chatMessageCountBadges[chatKind]) {
+    incrementChatMessageCounter(badgeType) {
+        if (!this.chatMessageCountBadges[badgeType]) {
             return;
         }
         const currentPrivateChatMessageCount = parseInt(
-            this.chatMessageCountBadges[chatKind].textContent
+            this.chatMessageCountBadges[badgeType].textContent
         );
 
         if (isNaN(currentPrivateChatMessageCount)) {
@@ -62,16 +63,16 @@ export class NetworkingBadgeManager {
         }
 
         if (currentPrivateChatMessageCount === 0) {
-            this.chatMessageCountBadges[chatKind].classList.remove("hide");
+            this.chatMessageCountBadges[badgeType].classList.remove("hide");
         }
 
-        this.chatMessageCountBadges[chatKind].textContent =
+        this.chatMessageCountBadges[badgeType].textContent =
             currentPrivateChatMessageCount + 1;
     }
 
-    decreaseChatMessageCounter(value, chatKind) {
+    decreaseChatMessageCounter(value, badgeType) {
         const currentChatMessageCount = parseInt(
-            this.chatMessageCountBadges[chatKind].textContent,
+            this.chatMessageCountBadges[badgeType].textContent,
             10
         );
 
@@ -80,10 +81,10 @@ export class NetworkingBadgeManager {
         }
 
         if (currentChatMessageCount === 0) {
-            this.chatMessageCountBadges[chatKind].classList.add("hide");
+            this.chatMessageCountBadges[badgeType].classList.add("hide");
         }
 
-        this.chatMessageCountBadges[chatKind].textContent =
+        this.chatMessageCountBadges[badgeType].textContent =
             currentChatMessageCount - value;
     }
 

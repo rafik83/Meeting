@@ -2,12 +2,12 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import {NetworkingBadgeManager, CHATKIND} from './components/_NetworkingBadgeManager';
+import {NetworkingBadgeManager, BADGE_TYPE} from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
 
-const {PRIVATECHAT, GENERALCHAT} = CHATKIND;
+const {PRIVATECHAT, GENERALCHAT} = BADGE_TYPE;
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
@@ -28,8 +28,9 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
     const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
-    const unreadPrivateChatMessageCountNodes = document.querySelectorAll("[data-unread-private-chat-message-count]");
-    const unreadGeneralChatMessageCountNodes = document.querySelectorAll("[data-unread-general-chat-message-count]");
+    
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[data-unread-${PRIVATECHAT}-message-count]`);
+    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[data-unread-${GENERALCHAT}-message-count]`);;
 
     const networkingBadgeManager = new NetworkingBadgeManager();
 
