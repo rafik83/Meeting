@@ -1,23 +1,17 @@
-
 export const BADGE_TYPE = {
-    GENERALCHAT : "general-chat",
-    PRIVATECHAT : "private-chat",
-    NETWORKING_BUTTON : "networking"
-}
+    GENERALCHAT: "general-chat",
+    PRIVATECHAT: "private-chat",
+    NETWORKING_BUTTON: "networking-button",
+};
 
 export class NetworkingBadgeManager {
     constructor() {
         this.chatMessageCountBadges = [];
     }
 
-    getUnreadPrivateChatMessageStartingCount(node, badgeType) {
-        const datasetName =
-            badgeType === BADGE_TYPE.PRIVATECHAT
-                ? "unreadPrivateChatMessageCount"
-                : "unreadGenralChatMessageCount";
-
+    getUnreadeChatMessageStartingCount(node, badgeType) {
         const chatMessageCount = parseInt(
-            node.dataset[datasetName],
+            node.getAttribute(`data-unread-${badgeType}-message-count`),
             10
         );
 
@@ -29,7 +23,7 @@ export class NetworkingBadgeManager {
     }
 
     createChatMessageCountBadge(destinationNode, badgeType) {
-        const startingCount = this.getUnreadPrivateChatMessageStartingCount(
+        const startingCount = this.getUnreadeChatMessageStartingCount(
             destinationNode,
             badgeType
         );

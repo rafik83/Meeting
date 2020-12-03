@@ -1,13 +1,14 @@
 <ul class="sub-header__item">
 	{% for button in submenuView.submenuButtonViews %}
 		<li>
-			<a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
+			<a {% for attribute, value in button.attributes %} 
+				{{ attribute }}="{{ value }}" {% endfor %} 
+				href="{{ button.link }}" 
+				class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}"
+				data-unread-networking-button-message-count="{{button.counter}}"
+				>
 				<i class="{{ button.icon }}"></i>
 				<span class="name pull-right">{{ button.label|trans }}</span>
-
-				{% if button.counter is not null and button.counter > 0 %}
-					<span class="alert-notification">{{ button.counter <= 99 ? button.counter : "99+"  }}</span>
-				{% endif %}
 			</a>
 		</li>
 	{% endfor %}

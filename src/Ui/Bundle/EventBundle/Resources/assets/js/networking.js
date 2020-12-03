@@ -7,7 +7,7 @@ import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
 
-const {PRIVATECHAT, GENERALCHAT} = BADGE_TYPE;
+const {PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON} = BADGE_TYPE;
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
@@ -27,17 +27,30 @@ export default function initNetworking(target, userConnection, notificationCallV
 
 
     const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
-    const headerSubmenuNetworkingBadgeNode = document.querySelectorAll("[data-submenu='networking']");
-    
+
+    const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll("[data-submenu='networking']");
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[data-unread-${PRIVATECHAT}-message-count]`);
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[data-unread-${GENERALCHAT}-message-count]`);;
 
+
     const networkingBadgeManager = new NetworkingBadgeManager();
 
-    networkingBadgeManager.appendNewMessageBadgeInHeaderSubmenu(newMessageItems, headerSubmenuNetworkingBadgeNode);
 
-    networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT);
-    networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT);
+    const privateChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
+        unreadPrivateChatMessageCountNodes,
+        PRIVATECHAT
+    );
+
+    const generalChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
+        unreadGeneralChatMessageCountNodes,
+        GENERALCHAT
+    );
+
+    
+
+    networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
+    networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
+    networkingBadgeManager.createChatMessageCountBadge(headerSubmenuNetworkingBadgeNodes[0], NETWORKING_BUTTON, privateChatStartingCount + generalChatStartingCount);
 
     const callback = () => {
         networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
