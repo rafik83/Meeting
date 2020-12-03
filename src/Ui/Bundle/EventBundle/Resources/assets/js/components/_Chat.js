@@ -1,6 +1,7 @@
 'use strict';
 
 import $ from "jquery";
+import Modal from './Modal';
 
 function Chat(element) {
     this.chatContainer = element.querySelector('[data-chat-container]');
@@ -9,6 +10,7 @@ function Chat(element) {
     this.addChatFormAction = this.addChatForm.getAttribute('action');
     this.addChatFormSubmit = this.addChatForm.querySelector('button[type="submit"]');
     this.addChatFormList = this.chatContainer.querySelector('.chat-list');
+    this.canDelete = element.hasAttribute('data-chat-can-delete');
     this.externalListener = [];
     this.chatLoaded = false;
     this.toUserId = null;
@@ -28,6 +30,14 @@ function Chat(element) {
 
     this.chatListeners = [];
     this.chatMessagesCount = 0;
+
+    this.chatDeleteConfirmModalElement = element.querySelector('[data-modal-delete-chat-message]');
+    this.chatButtonConfirm = this.chatDeleteConfirmModalElement.querySelector('[data-modal-confirm]')
+
+    if (this.chatDeleteConfirmModalElement){
+        this.chatDeleteConfirmModal = new Modal();
+        this.chatDeleteConfirmModal.init(this.chatDeleteConfirmModalElement);
+    }
 }
 
 Chat.prototype.submitChat = function (event) {
@@ -135,6 +145,26 @@ Chat.prototype.initChat = function () {
             const chatCreatedAt = document.createElement('div');
             chatCreatedAt.textContent = item.formattedCreatedAt;
             chatAside.appendChild(chatCreatedAt);
+
+            const onConfirmDelete = function() {
+                this.chatDeleteConfirmModal.show();
+                /* Delete previous listener */
+                const clonedButton = this.chatButtonConfirm.cloneNode(true);
+                this.chatButtonConfirm.parentNode.replaceChild(clonedButton, this.chatButtonConfirm);
+                this.chatButtonConfirm = clonedButton;
+                this.chatButtonConfirm.addEventListener('click', ()=> {
+                    /* Todo delete message */
+                    this.chatDeleteConfirmModal.hide();
+                });
+            }.bind(this);
+
+            if (this.canDelete) {
+                const chatDeleteMessage = document.createElement('i');
+                chatDeleteMessage.classList.add('glyphicon', 'glyphicon-trash');
+                chatAside.appendChild(chatDeleteMessage);
+                chatDeleteMessage.addEventListener('click', onConfirmDelete);
+                this.chatListeners.push([chatDeleteMessage, onConfirmDelete]);
+            }
 
             contentEl.appendChild(chatAside);
             contentEl.appendChild(document.createTextNode(item.content));

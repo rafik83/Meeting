@@ -15,7 +15,7 @@ import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
 import DesktopNotification from './DesktopNotification';
-import Modal from './Modal';
+import Modal from '../Modal';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -33,6 +33,7 @@ function Webinar(element, isSpeaker) {
     this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
+    this.canDelete = element.hasAttribute('data-chat-can-delete');
 
     if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
