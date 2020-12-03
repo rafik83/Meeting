@@ -15,6 +15,7 @@ import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
 import DesktopNotification from './DesktopNotification';
+import Modal from './Modal';
 
 function Webinar(element, isSpeaker) {
     this.element = element;
@@ -53,26 +54,27 @@ function Webinar(element, isSpeaker) {
     this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
-    this.timeRemainingBeforeStartMessage = element.getAttribute('data-time-remaining-before-start-message');
+    const modalBeforeStartElement = element.querySelector('[data-modal-warning-before-start]');
+    if (modalBeforeStartElement) {
+        this.modalWarningBeforeStart = new Modal();
+        this.modalWarningBeforeStart.init(modalBeforeStartElement);
+    }
     this.timeRemaining = element.getAttribute('data-time-remaining');
     this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
 
     if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
-        const timerInterval = setInterval(() => {
-            const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
-
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                alert(this.timeRemainingBeforeStartMessage);
-            }
-        }, 500);
+        const remainingTime = startTime.getTime() - new Date().getTime();
+        setTimeout(() => {
+            this.modalWarningBeforeStart.show();
+            this.modalWarningBeforeStart.hideAfter(30000);
+        }, remainingTime);
     }
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
-    this.helperContainer = element.querySelector('.video-helper');
+    this.waitingContainer = element.querySelector('.video-waiting-container');
 
     this.isMobile = 768 > (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 
@@ -109,6 +111,8 @@ function Webinar(element, isSpeaker) {
     }
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
+    this.webinarWaitingMedia = element.querySelector('[data-webinar-waiting-media]');
+    this.webinarWaitingPlayer = element.querySelector('[data-webinar-waiting-player]');
 
     this.joinButton = element.querySelector('[data-webinar-join-button]');
 
@@ -245,10 +249,14 @@ Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
-        this.hideElement(this.helperContainer);
+        this.hideElement(this.waitingContainer);
         this.liveVideo();
     } else {
         this.showElement(this.webinarWaitingMessage);
+        this.showElement(this.webinarWaitingMedia);
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.play();
+        }
     }
 
     this.init();
@@ -271,7 +279,10 @@ Webinar.prototype.init = function () {
 
     if (this.isHls && !this.isSpeaker) {
         this.hlsPlayer = new HlsPlayer(this.hlsVideoElement, () => {
-            this.hideElement(this.helperContainer);
+            if (this.webinarWaitingPlayer) {
+                this.webinarWaitingPlayer.remove();
+            }
+            this.hideElement(this.waitingContainer);
             this.showViewerControls();
             this.layout();
         });
@@ -288,7 +299,10 @@ Webinar.prototype.init = function () {
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
     this.session.on('streamCreated', function (event) {
-        this.hideElement(this.helperContainer);
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.remove();
+        }
+        this.hideElement(this.waitingContainer);
 
         const subscriberManager = new VideoSubscriber(
             this.session,
@@ -591,7 +605,7 @@ Webinar.prototype.showElement = function (element) {
  *  Publish your camera and microphone stream
  */
 Webinar.prototype.publishStream = function () {
-    this.hideElement(this.helperContainer);
+    this.hideElement(this.waitingContainer);
 
     if (this.invisibleMode) {
         return;

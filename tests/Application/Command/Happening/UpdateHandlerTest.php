@@ -3,6 +3,8 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
@@ -41,7 +43,7 @@ class UpdateHandlerTest extends TestCase
 
         $happening = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10, 'toto');
         $happeningTranslation = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
-        $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
+        $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin', '/path/currentWebinarHeaderImageEn.jpg', '/path/webinarWaitingMediaEn.mp4', 'video/mp4');
 
         $happening->setTranslation($happeningTranslation);
         $happening->setTranslation($happeningTranslation2);
@@ -56,8 +58,17 @@ class UpdateHandlerTest extends TestCase
         $webinarHeaderImageEn = $this
             ->getMockBuilder(UploadedFile::class)
             ->enableOriginalConstructor()
-            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), 'header_image.png'), 'png'])
             ->getMock();
+        $webinarHeaderImageEn->method('getClientOriginalName')->willReturn('webinarHeaderImageEn.png');
+
+        $webinarWaitingMediaEn = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), 'waiting_image.png'), 'image/png'])
+            ->getMock();
+        $webinarWaitingMediaEn->method('getClientOriginalName')->willReturn('webinarWaitingMediaEn.png');
+        $webinarWaitingMediaEn->method('getMimeType')->willReturn('image/png');
 
         // Expected
         $expectedSubEvent = new Happening(
@@ -81,7 +92,9 @@ class UpdateHandlerTest extends TestCase
             'en',
             'tset',
             'ko',
-            '/path/webinarHeaderImageEn.jpg'
+            '/path/webinarHeaderImageEn.png',
+            '/path/webinarWaitingMediaEn.png',
+            'image'
         );
 
         $expectedSubEvent->setTranslation($expectedTranslation);
@@ -109,28 +122,44 @@ class UpdateHandlerTest extends TestCase
                 'title' => 'test',
                 'description' => 'ok',
                 'currentWebinarHeaderImage' => null,
+                'currentWebinarWaitingMediaFile' => null,
+                'currentWebinarWaitingMediaType' => null,
                 'webinarHeaderImage' => null,
+                'webinarWaitingMedia' => null,
             ],
             'en' => [
                 'title' => 'tset',
                 'description' => 'ko',
                 'currentWebinarHeaderImage' => '/path/currentWebinarHeaderImageEn.jpg',
+                'currentWebinarWaitingMediaFile' => '/path/currentWebinarWaitingMediaEn.mp4',
+                'currentWebinarWaitingMediaType' => 'video/mp4',
                 'webinarHeaderImage' => $webinarHeaderImageEn,
+                'webinarWaitingMedia' => $webinarWaitingMediaEn,
             ],
         ];
         $update->invitationCode = 'titi';
         $update->webinarRecorded = true;
         $update->happeningType = 'webinar';
 
+        /** @var ObjectProphecy */
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage
             ->remove('/path/currentWebinarHeaderImageEn.jpg')
             ->shouldBeCalled()
         ;
         $fileStorage
-            ->upload($webinarHeaderImageEn)
+            ->upload(Argument::which('getClientOriginalName', 'webinarHeaderImageEn.png'))
             ->shouldBeCalled()
-            ->willReturn('/path/webinarHeaderImageEn.jpg')
+            ->willReturn('/path/webinarHeaderImageEn.png')
+        ;
+        $fileStorage
+            ->remove('/path/currentWebinarWaitingMediaEn.mp4')
+            ->shouldBeCalled()
+        ;
+        $fileStorage
+            ->upload(Argument::which('getClientOriginalName', 'webinarWaitingMediaEn.png'))
+            ->shouldBeCalled()
+            ->willReturn('/path/webinarWaitingMediaEn.png')
         ;
 
         $handler = new UpdateHandler(

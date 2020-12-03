@@ -66,7 +66,8 @@ class UpdateHandler
                 $command->onPackage,
                 $command->onContacts,
                 $command->onProgram,
-                $command->onConfirmationPhone
+                $command->onConfirmationPhone,
+                $command->onNetworking
             )
         );
     }

@@ -66,6 +66,7 @@ class AffectHandler
             $globalTip->isOnContacts(),
             $globalTip->isOnProgram(),
             $globalTip->isOnConfirmationPhone(),
+            $globalTip->isOnNetworking(),
             $this->dateTime
         );
 

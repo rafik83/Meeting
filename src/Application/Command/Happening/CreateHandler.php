@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\Created;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -62,9 +63,16 @@ class CreateHandler
 
         foreach ($create->translations as $locale => $translation) {
             $webinarHeaderImage = null;
+            $webinarWaitingMediaFile = null;
+            $webinarWaitingMediaType = null;
 
             if ($translation['webinarHeaderImage'] instanceof UploadedFile) {
                 $webinarHeaderImage = $this->fileStorage->upload($translation['webinarHeaderImage']);
+            }
+
+            if ($translation['webinarWaitingMedia'] instanceof UploadedFile) {
+                $webinarWaitingMediaType = MimeType::getFormatByMimeType($translation['webinarWaitingMedia']->getMimeType());
+                $webinarWaitingMediaFile = $this->fileStorage->upload($translation['webinarWaitingMedia']);
             }
 
             $happening->setTranslation(
@@ -73,7 +81,9 @@ class CreateHandler
                     $locale,
                     $translation['title'],
                     $translation['description'],
-                    $webinarHeaderImage
+                    $webinarHeaderImage,
+                    $webinarWaitingMediaFile,
+                    $webinarWaitingMediaType
                 )
             );
         }

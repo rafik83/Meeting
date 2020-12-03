@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\View\Happening\WebinarSpeakerView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\SpeakerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\ViewerWebinarView;
 use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\WaitingMediaView;
 use Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
@@ -161,6 +162,10 @@ class GetWebinarViewQueryHandler
             $this->dateTime,
             $timeRemainingInSeconds,
             $happening->getWebinarHeaderImage($query->getLocale()),
+            new WaitingMediaView(
+                $happening->getWebinarWaitingMediaFile($query->getLocale()),
+                $happening->getWebinarWaitingMediaType($query->getLocale())
+            ),
             $liveUrl,
             $happening->isSidebarAllowed(),
             $this->isVideoWebinarAndHappeningIsEnded($happening),
