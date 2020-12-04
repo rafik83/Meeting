@@ -1,7 +1,7 @@
 export const BADGE_TYPE = {
-    GENERALCHAT: "general-chat",
-    PRIVATECHAT: "private-chat",
-    NETWORKING_BUTTON: "networking-button",
+    GENERALCHAT: "data-unread-general-chat-message-count",
+    PRIVATECHAT: "data-unread-private-chat-message-count",
+    NETWORKING_BUTTON: "data-submenu='networking'",
 };
 
 export class NetworkingBadgeManager {
@@ -11,7 +11,7 @@ export class NetworkingBadgeManager {
 
     getUnreadeChatMessageStartingCount(DOMnode, badgeType) {
         const chatMessageCount = parseInt(
-            DOMnode.getAttribute(`data-unread-${badgeType}-message-count`),
+            DOMnode.getAttribute(badgeType),
             10
         );
 

@@ -28,9 +28,9 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
 
-    const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll("[data-submenu='networking']");
-    const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[data-unread-${PRIVATECHAT}-message-count]`);
-    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[data-unread-${GENERALCHAT}-message-count]`);
+    const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
+    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
 
 
     const networkingBadgeManager = new NetworkingBadgeManager();
