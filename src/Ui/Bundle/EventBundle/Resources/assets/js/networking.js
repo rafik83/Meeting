@@ -30,23 +30,21 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll("[data-submenu='networking']");
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[data-unread-${PRIVATECHAT}-message-count]`);
-    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[data-unread-${GENERALCHAT}-message-count]`);;
+    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[data-unread-${GENERALCHAT}-message-count]`);
 
 
     const networkingBadgeManager = new NetworkingBadgeManager();
 
 
     const privateChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
-        unreadPrivateChatMessageCountNodes,
+        unreadPrivateChatMessageCountNodes[0],
         PRIVATECHAT
     );
 
     const generalChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
-        unreadGeneralChatMessageCountNodes,
+        unreadGeneralChatMessageCountNodes[0],
         GENERALCHAT
     );
-
-    
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
@@ -54,6 +52,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const callback = () => {
         networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
+        networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
     }
 
     userConnection.addListener(callback);
@@ -115,6 +114,8 @@ export default function initNetworking(target, userConnection, notificationCallV
 
             if (payload.action === 'add_chat_message') {
                 networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
+                networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
+
                 targetChat.reload();
                 return;
             }

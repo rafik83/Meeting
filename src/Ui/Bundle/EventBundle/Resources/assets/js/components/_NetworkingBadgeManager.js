@@ -9,25 +9,23 @@ export class NetworkingBadgeManager {
         this.chatMessageCountBadges = [];
     }
 
-    getUnreadeChatMessageStartingCount(node, badgeType) {
+    getUnreadeChatMessageStartingCount(DOMnode, badgeType) {
         const chatMessageCount = parseInt(
-            node.getAttribute(`data-unread-${badgeType}-message-count`),
+            DOMnode.getAttribute(`data-unread-${badgeType}-message-count`),
             10
         );
+
+ 
 
         if (isNaN(chatMessageCount)) {
             return 0;
         }
 
+
         return chatMessageCount;
     }
 
-    createChatMessageCountBadge(destinationNode, badgeType) {
-        const startingCount = this.getUnreadeChatMessageStartingCount(
-            destinationNode,
-            badgeType
-        );
-
+    createChatMessageCountBadge(destinationNode, badgeType, startingCount) {
         this.chatMessageCountBadges[badgeType] = document.createElement("span");
 
         this.chatMessageCountBadges[badgeType].textContent =
@@ -46,7 +44,7 @@ export class NetworkingBadgeManager {
 
     incrementChatMessageCounter(badgeType) {
         if (!this.chatMessageCountBadges[badgeType]) {
-            return;
+           throw new Error(`Cannot increment inexisting DOM node of type ${badgeType}`)
         }
         const currentPrivateChatMessageCount = parseInt(
             this.chatMessageCountBadges[badgeType].textContent
