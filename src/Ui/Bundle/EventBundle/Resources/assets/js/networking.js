@@ -197,6 +197,9 @@ export default function initNetworking(target, userConnection, notificationCallV
                     networkingBadgeManager.decreaseChatMessageCounter(
                         privateMessageRecievedFromParticipantCount, PRIVATECHAT
                     );
+                    networkingBadgeManager.decreaseChatMessageCounter(
+                        privateMessageRecievedFromParticipantCount, NETWORKING_BUTTON
+                    );
                 }
             }
 
