@@ -51,10 +51,14 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message, int $messageCount): void
-    {
+    public function publishChatMessageNotification(
+        ChatMessageLinkableInterface $object,
+        ChatMessage $message,
+        int $messageCount,
+        string $action = 'add_chat_message'
+    ): void {
         $payload = [
-            'action' => 'add_chat_message',
+            'action' => $action,
             'msg_count' => $messageCount,
         ];
 

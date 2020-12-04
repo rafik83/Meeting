@@ -12,7 +12,12 @@ interface NotificationPublisherInterface
 {
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void;
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message, int $messageCount): void;
+    public function publishChatMessageNotification(
+        ChatMessageLinkableInterface $object,
+        ChatMessage $message,
+        int $messageCount,
+        string $action = 'add_chat_message'
+    ): void;
 
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, ChatMessage $chatMessage, array $votes): void;
 

@@ -1,24 +1,19 @@
 <?php
 
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api;
-
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Command\Chat\VoteChatMessage;
-use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
-use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotFoundException;
+use Proximum\Vimeet\Application\Command\Chat\DeleteChatMessage;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class VoteAction
+class DeleteAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
@@ -26,39 +21,35 @@ class VoteAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var QueryBusInterface */
-    private $queryBus;
-
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        CommandBusInterface $commandBus,
-        QueryBusInterface $queryBus
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
-        $this->queryBus = $queryBus;
     }
 
     public function __invoke(
         Request $request,
+        EventDomain $eventDomain,
         UserDomain $userDomain,
         Sheet $sheet
     ): JsonResponse {
+        $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
 
         if (!$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)) {
             throw new AccessDeniedHttpException();
         }
 
-        $payload = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
+        $messageId = intval($data['id'] ?? 0);
 
-        try {
-            $this->commandBus->handle(new VoteChatMessage($payload['messageId'], $user, $payload['messageType']));
-        } catch (ChatMessageNotFoundException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        } catch (ChatMessageNotAllowedException $e) {
-            throw new AccessDeniedHttpException($e->getMessage(), $e);
+        if (!$messageId) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Missing id']);
         }
+
+        $this->commandBus->handle(new DeleteChatMessage($messageId, $user, $event));
 
         return new JsonResponse(['status' => 'ok']);
     }
