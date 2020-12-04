@@ -1124,7 +1124,7 @@ Webinar.prototype.addShownChatSubscriber = function () {
         (event) => {
             const payload = JSON.parse(event.data);
 
-            if (payload.action === 'add_chat_message') {
+            if (payload.action === 'add_chat_message' || payload.action === 'delete_chat_message') {
                 this.chat.reload();
             }
 

@@ -43,7 +43,7 @@ class DeleteAction
         }
 
         $data = json_decode($request->getContent(), true);
-        $messageId = intval($data['id'] ?? 0);
+        $messageId = (int)($data['messageId'] ?? 0);
 
         if (!$messageId) {
             return new JsonResponse(['status' => 'error', 'message' => 'Missing id']);
