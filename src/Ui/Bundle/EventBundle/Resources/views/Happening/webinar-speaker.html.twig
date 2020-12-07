@@ -32,7 +32,7 @@
          data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
          data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
 
-         data-chat-can-delete
+         {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
 
          data-questions-count="{{ webinarView.questionsCount }}"
 
