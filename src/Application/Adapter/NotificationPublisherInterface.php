@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Proximum\Vimeet\Application\Command\Chat\NotificationType;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -16,7 +17,7 @@ interface NotificationPublisherInterface
         ChatMessageLinkableInterface $object,
         ChatMessage $message,
         int $messageCount,
-        string $action = 'add_chat_message'
+        string $action = NotificationType::DELETE_CHAT_MESSAGE
     ): void;
 
     public function publishChatVoteNotification(ChatMessageLinkableInterface $object, ChatMessage $chatMessage, array $votes): void;

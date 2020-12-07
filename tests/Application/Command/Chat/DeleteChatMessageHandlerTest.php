@@ -8,6 +8,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Chat\DeleteChatMessage;
 use Proximum\Vimeet\Application\Command\Chat\DeleteChatMessageHandler;
+use Proximum\Vimeet\Application\Command\Chat\NotificationType;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotFoundException;
 use Proximum\Vimeet\Application\Exception\Chat\DeleteChatMessageNotAllowedException;
@@ -71,12 +72,11 @@ class DeleteChatMessageHandlerTest extends TestCase
 
         $this->canDeleteChatMessage->isSatisfiedBy($happening->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $this->messageRepository->getMessagesCountByLinkableObject($happening->reveal(), null)->willReturn(42);
         $this->notificationPublisher->publishChatMessageNotification(
                 $happening->reveal(),
                 $chatMessage->reveal(),
-                42,
-                'delete_chat_message'
+                -1,
+                NotificationType::DELETE_CHAT_MESSAGE
             )->shouldBeCalled();
         $this->messageRepository->delete($chatMessage->reveal())->shouldBeCalled();
 

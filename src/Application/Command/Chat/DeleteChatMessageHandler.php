@@ -61,8 +61,7 @@ class DeleteChatMessageHandler
             throw new DeleteChatMessageNotAllowedException(sprintf('Delete message #%d is not allowed for this user', $command->messageId));
         }
 
-        $messageCount = $this->messageRepository->getMessagesCountByLinkableObject($context, null);
-        $this->notificationPublisher->publishChatMessageNotification($context, $message, $messageCount, 'delete_chat_message');
+        $this->notificationPublisher->publishChatMessageNotification($context, $message, -1, NotificationType::DELETE_CHAT_MESSAGE);
 
         $this->messageRepository->delete($message);
     }
