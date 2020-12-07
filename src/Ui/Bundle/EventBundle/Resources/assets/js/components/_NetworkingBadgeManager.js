@@ -39,27 +39,25 @@ export class NetworkingBadgeManager {
 
     createMultipleMessageCountBadge(
         destinationNodes,
+        badgeType,
         startingCount
     ) {
         const newMessageBadge = document.createElement("span");
 
         newMessageBadge.textContent =
-        startingCount >= 99 ? "99+" : startingCount;
+            startingCount >= 99 ? "99+" : startingCount;
 
-        newMessageBadge.classList.add(
-            "alert-notification"
-        );
+        newMessageBadge.classList.add("alert-notification");
 
         if (startingCount === 0) {
             newMessageBadge.classList.add("hide");
         }
 
-
-        destinationNodes.forEach((node) => {
+        destinationNodes.forEach((node, index) => {
             const clone = newMessageBadge.cloneNode(true);
+            this.chatMessageCountBadges[`${badgeType}-${index}`] = clone;
             node.appendChild(clone);
         });
-      
     }
 
     createUnreadDiscussionCountBadge(destinationNode, startingCount) {
@@ -90,6 +88,45 @@ export class NetworkingBadgeManager {
 
         this.chatMessageCountBadges[badgeType].textContent =
             currentPrivateChatMessageCount + 1;
+
+            // console.log(this.chatMessageCountBadges)
+    }
+
+    incrementChatMessageCounterDOMNODE(domNode) {
+        if (!domNode) {
+            throw new Error(
+                `Cannot increment inexisting DOM node of type ${badgeType}`
+            );
+        }
+        const currentPrivateChatMessageCount = parseInt(domNode.textContent);
+
+        if (isNaN(currentPrivateChatMessageCount)) {
+            return;
+        }
+
+        if (currentPrivateChatMessageCount === 0) {
+            domNode.classList.remove("hide");
+        }
+
+        domNode.textContent = currentPrivateChatMessageCount + 1;
+
+       
+    }
+
+    incrementMultipleChatMessaeCounter(badgeType) {
+
+        const nodeToIncrement = Object.keys(this.chatMessageCountBadges)
+            .map((key) => {
+                if (key.startsWith(badgeType)) {
+                    return this.chatMessageCountBadges[key];
+                }
+            }).filter(item => item);
+
+     
+
+        nodeToIncrement.forEach((item) => {
+            this.incrementChatMessageCounterDOMNODE(item);
+        });
     }
 
     decreaseChatMessageCounter(value, badgeType) {

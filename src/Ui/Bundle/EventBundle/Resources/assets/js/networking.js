@@ -62,14 +62,14 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
-    networkingBadgeManager.createUnreadDiscussionCountBadge(unreadSingleDiscussionMessageCountNodes[0], discussionItemStartingCount);
-    networkingBadgeManager.createMultipleMessageCountBadge(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
+    networkingBadgeManager.createUnreadDiscussionCountBadge(unreadSingleDiscussionMessageCountNodes[0],SINGLE_DISCUSSION_ITEM, discussionItemStartingCount);
+    networkingBadgeManager.createMultipleMessageCountBadge(headerSubmenuNetworkingBadgeNodes, NETWORKING_BUTTON, privateChatStartingCount + generalChatStartingCount)
 
 
     const callback = () => {
         networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
-        networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
         networkingBadgeManager.incrementChatMessageCounter(SINGLE_DISCUSSION_ITEM);
+        networkingBadgeManager.incrementMultipleChatMessaeCounter(NETWORKING_BUTTON)
     }
 
     userConnection.addListener(callback);
