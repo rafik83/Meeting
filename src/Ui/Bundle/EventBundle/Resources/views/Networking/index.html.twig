@@ -76,9 +76,14 @@
                                     </td>
                                     <td class="text-right">
                                         {% if chatSessionView.newMessagesCount > 0 %}
-                                            <span data-new-messages-count="{{chatSessionView.newMessagesCount}}" class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
+                                            <span class="btn btn-xs btn-danger"> 
+                                            <span data-unread-discussion-message-count="{{chatSessionView.newMessagesCount}}"> </span>
+                                                {{ 'networking.chat.messages.new'|trans }}
+                                            </span>
                                         {% else %}
+                                        <span >
                                             {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
+                                        <span>
                                         {% endif %}
                                     </td>
                                 </tr>

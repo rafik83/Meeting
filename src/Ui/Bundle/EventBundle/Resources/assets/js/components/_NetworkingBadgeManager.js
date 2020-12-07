@@ -2,6 +2,7 @@ export const BADGE_TYPE = {
     GENERALCHAT: "data-unread-general-chat-message-count",
     PRIVATECHAT: "data-unread-private-chat-message-count",
     NETWORKING_BUTTON: "data-submenu='networking'",
+    SINGLE_DISCUSSION_ITEM : 'data-unread-discussion-message-count'
 };
 
 export class NetworkingBadgeManager {
@@ -34,6 +35,13 @@ export class NetworkingBadgeManager {
         }
 
         destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
+    }
+
+    createUnreadDiscussionCountBadge(destinationNode, startingCount) {
+
+        this.chatMessageCountBadges[BADGE_TYPE.SINGLE_DISCUSSION_ITEM] = destinationNode
+
+        destinationNode.textContent = startingCount 
     }
 
     incrementChatMessageCounter(badgeType) {

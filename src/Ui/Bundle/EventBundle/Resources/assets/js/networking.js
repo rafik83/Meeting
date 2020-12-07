@@ -14,7 +14,7 @@ const CHAT_TAB = {
     GENERAL : "general",
 }
 
-let chatTab;
+let activeChatTab;
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
@@ -40,6 +40,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
+    const unreadSingleDiscussionMessageCountNodes = document.querySelectorAll(`[${SINGLE_DISCUSSION_ITEM}]`);
 
 
     const networkingBadgeManager = new NetworkingBadgeManager();
@@ -55,13 +56,20 @@ export default function initNetworking(target, userConnection, notificationCallV
         GENERALCHAT
     );
 
+    const discussionItemStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
+        unreadSingleDiscussionMessageCountNodes[0],
+        SINGLE_DISCUSSION_ITEM
+    );
+
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(headerSubmenuNetworkingBadgeNodes[0], NETWORKING_BUTTON, privateChatStartingCount + generalChatStartingCount);
+    networkingBadgeManager.createUnreadDiscussionCountBadge(unreadSingleDiscussionMessageCountNodes[0], discussionItemStartingCount);
 
     const callback = () => {
         networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
         networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
+        networkingBadgeManager.incrementChatMessageCounter(SINGLE_DISCUSSION_ITEM);
     }
 
     userConnection.addListener(callback);
@@ -74,7 +82,7 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatGeneralButton.classList.add('btn-gray');
         chatGeneralButton.classList.remove('btn-primary');
 
-        chatTab = CHAT_TAB.PRIVATE
+        activeChatTab = CHAT_TAB.PRIVATE
     }
 
     function showChatGeneral() {
@@ -85,7 +93,7 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatGeneralButton.classList.remove('btn-gray');
         chatGeneralButton.classList.add('btn-primary');
 
-        chatTab = CHAT_TAB.GENERAL
+        activeChatTab = CHAT_TAB.GENERAL
     }
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
@@ -127,7 +135,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
             if (payload.action === 'add_chat_message') {
 
-                if(chatTab !== CHAT_TAB.GENERAL) {
+                if(activeChatTab !== CHAT_TAB.GENERAL) {
                     networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
                     networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
                 }
