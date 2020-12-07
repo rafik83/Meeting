@@ -42,6 +42,12 @@ class QuestionRepository implements QuestionRepositoryInterface
         $this->entityManager->flush($question);
     }
 
+    public function delete(Question $question): void
+    {
+        $this->entityManager->remove($question);
+        $this->entityManager->flush($question);
+    }
+
     /**
      * {@inheritdoc}
      */
