@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2252 - Reactivate account
 - VIMEET-2285 - Delete message chat webinar
+- VIMEET-2249 - Notification page redirection
 
 ## [2.72.1] - 2020-12-02
 ### Fixed

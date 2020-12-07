@@ -14,11 +14,10 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
-use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -75,21 +74,10 @@ class SheetController extends Controller
         $locale = $locale ?: $request->getLocale();
         $user = $userDomain->getUser();
 
-        $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
-        $participant           = $participantRepository->getParticipantForUserAndSheet($user, $sheet);
+        $redirectResponse = $this->get(SheetRedirectionMiddleware::class)->getForceRedirection($sheet, $user);
 
-        if (null !== $participant) {
-            $registrationStepManager = $this->get('components.registration.step_manager');
-            $redirectStep            = $registrationStepManager->getRedirectStep($sheet, $participant);
-
-            if (true === $redirectStep['redirect']) {
-                return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
-            }
-        }
-
-        if ($this->get(IsValidatedRequiredPackageMissing::class)->isSatisfiedBy($sheet) ||
-            $this->get(IsValidatedTransactionMissing::class)->isSatisfiedBy($sheet)) {
-            return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
+        if (null !== $redirectResponse) {
+            return $redirectResponse;
         }
 
         if ($sheet->isValidationDraft() && $sheet->getType()->canSubmitValidation()) {
