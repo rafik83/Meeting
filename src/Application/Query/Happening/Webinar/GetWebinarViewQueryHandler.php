@@ -142,7 +142,8 @@ class GetWebinarViewQueryHandler
                 $happening->getEvent()->getAutoArchiveWebinar(),
                 $questionsCount,
                 $happening->allowWebinarOnHLS(),
-                $viewersCount ?? 0
+                $viewersCount ?? 0,
+                $happening->hasSpeaker($query->getUser())
             );
         }
 

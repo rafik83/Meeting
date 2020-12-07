@@ -8,7 +8,7 @@ use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\Create;
 use Proximum\Vimeet\Application\Command\Admin\CreateHandler;
-use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\Admin\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -38,7 +38,7 @@ class CreateHandlerTest extends TestCase
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
+        $adminRepository->findByEmail($command->email, true)->shouldBeCalled()->willReturn(null);
         $adminRepository->add($expectedAdmin)->shouldBeCalled();
 
         $handler = new CreateHandler(
@@ -80,7 +80,7 @@ class CreateHandlerTest extends TestCase
         }), $command->password)->shouldBeCalled()->willReturn('encoded_password');
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(false);
+        $adminRepository->findByEmail($command->email, true)->shouldBeCalled()->willReturn(null);
         $adminRepository->add($expectedAdmin)->shouldBeCalled();
 
         $handler = new CreateHandler(
@@ -112,7 +112,7 @@ class CreateHandlerTest extends TestCase
         $passwordEncoder->encode(Argument::Any())->shouldNotBeCalled();
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
-        $adminRepository->emailExists($command->email)->shouldBeCalled()->willReturn(true);
+        $adminRepository->findByEmail($command->email, true)->shouldBeCalled()->willReturn($this->prophesize(Admin::class));
         $adminRepository->add(Argument::Any())->shouldNotBeCalled();
 
         $handler = new CreateHandler(

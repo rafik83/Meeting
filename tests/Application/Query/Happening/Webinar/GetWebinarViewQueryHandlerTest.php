@@ -219,7 +219,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 false,
-                0
+                0,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -362,7 +363,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 21,
-                false
+                false,
+                0,
+                true
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -414,6 +417,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
@@ -514,6 +518,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 false,
                 21,
+                false,
+                0,
                 false
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -717,7 +723,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 true,
-                42
+                42,
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

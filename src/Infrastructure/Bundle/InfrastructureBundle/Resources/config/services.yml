@@ -1116,6 +1116,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
+    Proximum\Vimeet\Application\Command\Admin\RestoreHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Restore }
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -7276,6 +7282,8 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
             - '@domain.key_dates.checker.networking_access_checker'
+
+    Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage: ~
 
     #
     # Networking

@@ -194,6 +194,6 @@ class SubmenuViewQueryHandler
             $buttonsViews[] = $visioSubmenuButtonView;
         }
 
-        return new SubmenuView($buttonsViews);
+        return new SubmenuView($buttonsViews, $customButtonViews);
     }
 }
