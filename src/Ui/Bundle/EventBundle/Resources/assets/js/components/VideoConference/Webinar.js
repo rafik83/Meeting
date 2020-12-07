@@ -1142,6 +1142,10 @@ Webinar.prototype.addHiddenChatSubscriber = function () {
         function (event) {
             const payload = JSON.parse(event.data);
 
+            if (payload.action === 'delete_chat_message') {
+                this.lastSeenChatMessagesCount = Math.max(0, this.lastSeenChatMessagesCount - 1);
+            }
+
             if (payload.action === 'add_chat_message') {
                 const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;
                 this.newMessageChatCountNotification.textContent = newMessageCount > 99 ? '99+' : newMessageCount;
