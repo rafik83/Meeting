@@ -7,10 +7,19 @@ import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
 
-const {PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON} = BADGE_TYPE;
+const {PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM} = BADGE_TYPE;
+
+const CHAT_TAB = {
+    PRIVATE : "private",
+    GENERAL : "general",
+}
+
+let chatTab;
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
+
+    
 
     if (!chatNetworkingElement) {
         return;
@@ -64,6 +73,8 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatPrivateButton.classList.remove('btn-gray');
         chatGeneralButton.classList.add('btn-gray');
         chatGeneralButton.classList.remove('btn-primary');
+
+        chatTab = CHAT_TAB.PRIVATE
     }
 
     function showChatGeneral() {
@@ -73,6 +84,8 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatPrivateButton.classList.add('btn-gray');
         chatGeneralButton.classList.remove('btn-gray');
         chatGeneralButton.classList.add('btn-primary');
+
+        chatTab = CHAT_TAB.GENERAL
     }
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
@@ -113,8 +126,11 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
-                networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
-                networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
+
+                if(chatTab !== CHAT_TAB.GENERAL) {
+                    networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
+                    networkingBadgeManager.incrementChatMessageCounter(NETWORKING_BUTTON);
+                }
 
                 targetChat.reload();
                 return;
