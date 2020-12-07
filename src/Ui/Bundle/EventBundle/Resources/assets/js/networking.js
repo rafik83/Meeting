@@ -42,7 +42,6 @@ export default function initNetworking(target, userConnection, notificationCallV
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
     const unreadSingleDiscussionMessageCountNodes = document.querySelectorAll(`[${SINGLE_DISCUSSION_ITEM}]`);
 
-
     const networkingBadgeManager = new NetworkingBadgeManager();
 
 
@@ -63,8 +62,9 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
-    networkingBadgeManager.createChatMessageCountBadge(headerSubmenuNetworkingBadgeNodes[0], NETWORKING_BUTTON, privateChatStartingCount + generalChatStartingCount);
     networkingBadgeManager.createUnreadDiscussionCountBadge(unreadSingleDiscussionMessageCountNodes[0], discussionItemStartingCount);
+    networkingBadgeManager.createMultipleMessageCountBadge(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
+
 
     const callback = () => {
         networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);

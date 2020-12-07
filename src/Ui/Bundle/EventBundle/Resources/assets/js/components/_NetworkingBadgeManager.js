@@ -2,7 +2,7 @@ export const BADGE_TYPE = {
     GENERALCHAT: "data-unread-general-chat-message-count",
     PRIVATECHAT: "data-unread-private-chat-message-count",
     NETWORKING_BUTTON: "data-submenu='networking'",
-    SINGLE_DISCUSSION_ITEM : 'data-unread-discussion-message-count'
+    SINGLE_DISCUSSION_ITEM: "data-unread-discussion-message-count",
 };
 
 export class NetworkingBadgeManager {
@@ -37,11 +37,37 @@ export class NetworkingBadgeManager {
         destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
     }
 
+    createMultipleMessageCountBadge(
+        destinationNodes,
+        startingCount
+    ) {
+        const newMessageBadge = document.createElement("span");
+
+        newMessageBadge.textContent =
+        startingCount >= 99 ? "99+" : startingCount;
+
+        newMessageBadge.classList.add(
+            "alert-notification"
+        );
+
+        if (startingCount === 0) {
+            newMessageBadge.classList.add("hide");
+        }
+
+
+        destinationNodes.forEach((node) => {
+            const clone = newMessageBadge.cloneNode(true);
+            node.appendChild(clone);
+        });
+      
+    }
+
     createUnreadDiscussionCountBadge(destinationNode, startingCount) {
+        this.chatMessageCountBadges[
+            BADGE_TYPE.SINGLE_DISCUSSION_ITEM
+        ] = destinationNode;
 
-        this.chatMessageCountBadges[BADGE_TYPE.SINGLE_DISCUSSION_ITEM] = destinationNode
-
-        destinationNode.textContent = startingCount 
+        destinationNode.textContent = startingCount;
     }
 
     incrementChatMessageCounter(badgeType) {
