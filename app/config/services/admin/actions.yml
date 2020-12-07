@@ -467,6 +467,14 @@ services:
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\RestoreAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@security.csrf.token_manager'
+            - '@router.default'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\CreateAction:
         arguments:
             - '@adapter.authorization_checker'

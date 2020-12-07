@@ -99,6 +99,8 @@ flash.admin.product.export.success: 'L''export des produits a été planifié, v
 flash.admin.product.import.success: 'Le catalogue de produits et les forfaits ont été importés'
 flash.admin.product.remove.success: 'Le produit a été supprimé avec succès'
 flash.admin.product.update.success: 'Le produit a été modifié avec succès'
+flash.admin.reactivate.success: 'L''utilisateur a bien été réactivé'
+flash.admin.reactivate.unauthorized: 'Vous n''êtes pas autorisé à réactiver cet utilisateur'
 flash.admin.remove.planner_job.unauthorized: 'Vous n''êtes pas autorisé à supprimer cet utilisateur, il est lié à un/des planner job.'
 flash.admin.remove.success: 'L''utilisateur a bien été supprimé'
 flash.admin.remove.unauthorized: 'Vous n''êtes pas autorisé à supprimer cet utilisateur'

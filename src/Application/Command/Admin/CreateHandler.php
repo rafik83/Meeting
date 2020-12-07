@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\Admin\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
 
@@ -12,8 +12,10 @@ class CreateHandler extends AbstractCreateHandler
     {
         $create->email = StringHelper::trimSpacesAndNonBreakSpaces($create->email);
 
-        if ($this->adminRepository->emailExists($create->email)) {
-            throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $create->email));
+        $existingAdmin = $this->adminRepository->findByEmail($create->email, true);
+
+        if ($existingAdmin !== null) {
+            throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $create->email), $existingAdmin);
         }
 
         $salt = $this->saltGenerator->generate();
