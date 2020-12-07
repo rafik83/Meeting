@@ -22,6 +22,7 @@ class Update extends AbstractEventTip
         $this->onPackage = $tip->isOnPackage();
         $this->onContacts = $tip->isOnContacts();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
+        $this->onNetworking = $tip->isOnNetworking();
         $this->types = $tip->getTypes();
         $this->display = $tip->getDisplay();
         $this->conditionOnOrders = $tip->getConditionOnOrders();
