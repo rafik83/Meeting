@@ -7270,6 +7270,8 @@ services:
             - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
             - '@domain.key_dates.checker.networking_access_checker'
 
+    Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage: ~
+
     #
     # Networking
     #
