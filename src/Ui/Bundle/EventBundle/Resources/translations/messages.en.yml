@@ -276,7 +276,7 @@ happening.participationUpdate.action: Edit
 happening.webinar.chat.add: 'Add your message'
 happening.webinar.chat.tab: Chat
 happening.webinar.end: Stop
-happening.webinar.endingAt: 'End at %endTime%'
+happening.webinar.endingAtTime: 'End at %endTime%'
 happening.webinar.media.share: Share
 happening.webinar.media.stopSharing: 'Stop sharing'
 happening.webinar.media.videoshare.title: 'Share a video'
