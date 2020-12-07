@@ -98,8 +98,10 @@ export class NetworkingBadgeManager {
                 `Cannot increment inexisting DOM node of type ${badgeType}`
             );
         }
-        const currentPrivateChatMessageCount = parseInt(domNode.textContent);
 
+ 
+        const currentPrivateChatMessageCount = parseInt(domNode.textContent);
+        console.log(currentPrivateChatMessageCount);
         if (isNaN(currentPrivateChatMessageCount)) {
             return;
         }
