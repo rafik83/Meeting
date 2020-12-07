@@ -77,6 +77,10 @@ vimeet_event:
     resource: '@EventBundle/Resources/config/routing.yml'
     prefix: /{_locale}
 
+vimeet_event_api:
+    resource: '@EventBundle/Resources/config/routing_api.yml'
+    prefix: /{_locale}
+
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 
