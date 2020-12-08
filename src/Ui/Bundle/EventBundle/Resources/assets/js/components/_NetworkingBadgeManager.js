@@ -173,5 +173,11 @@ export class NetworkingBadgeManager {
 
         this.chatMessageCountBadges[badgeType].textContent = newValue;
     }
+
+    decreaseChatItemMessageCounter(value, authorId) {
+        const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
+
+        this.decreaseChatMessageCounter(value, key);
+    }
 }
 export default NetworkingBadgeManager;

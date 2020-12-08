@@ -205,13 +205,16 @@ export default function initNetworking(target, userConnection, notificationCallV
         },
         open: function (participantNode) {
 
-            const datasetNodes = participantNode.querySelectorAll(
-                "[data-new-messages-count]"
-            );
+            console.log(participantNode);
 
-            if (datasetNodes.length > 0) {
+
+            const authorId =  participantNode.getAttribute("data-participant-user-id");
+            const chatNode =  participantNode.querySelectorAll("[data-discussion-item-messages-count]")[0];
+
+            const previousValue = chatNode.getAttribute(`${SINGLE_DISCUSSION_ITEM}`);
+
                 const privateMessageRecievedFromParticipantCount = parseInt(
-                    datasetNodes[0].dataset.newMessagesCount,
+                    previousValue,
                     10
                 );
 
@@ -219,11 +222,12 @@ export default function initNetworking(target, userConnection, notificationCallV
                     networkingBadgeManager.decreaseChatMessageCounter(
                         privateMessageRecievedFromParticipantCount, PRIVATECHAT
                     );
-                    networkingBadgeManager.decreaseChatMessageCounter(
-                        privateMessageRecievedFromParticipantCount, NETWORKING_BUTTON
+
+                    networkingBadgeManager.decreaseChatItemMessageCounter(
+                        privateMessageRecievedFromParticipantCount, authorId
                     );
+                
                 }
-            }
 
   
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
