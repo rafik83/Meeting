@@ -74,13 +74,7 @@
                                             {{ chatSessionView.otherUser.fullName }}
                                         </div>
                                     </td>
-                                    <td class="text-right">
-                                        {% if chatSessionView.newMessagesCount > 0 %}
-                                            <span data-new-messages-count="{{chatSessionView.newMessagesCount}}" class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
-                                        {% else %}
-                                            {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
-                                        {% endif %}
-                                    </td>
+                                    <td data-participant-user-id="{{ chatSessionView.otherUser.id }}" data-discussion-item-messages-count="{{chatSessionView.newMessagesCount}}">   </td>       
                                 </tr>
                             {% endfor %}
                         </table>

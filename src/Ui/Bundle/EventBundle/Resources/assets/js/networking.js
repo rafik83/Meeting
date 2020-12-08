@@ -40,6 +40,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
+    const chatItems = document.querySelectorAll(`[${SINGLE_DISCUSSION_ITEM}]`);
   
     const networkingBadgeManager = new NetworkingBadgeManager();
 
@@ -56,6 +57,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
+    networkingBadgeManager.createDiscussionItemBadgeCounter(chatItems);
     networkingBadgeManager.creatMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
 
 

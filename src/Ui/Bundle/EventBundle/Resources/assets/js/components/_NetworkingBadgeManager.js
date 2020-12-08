@@ -2,7 +2,7 @@ export const BADGE_TYPE = {
     GENERALCHAT: "data-unread-general-chat-message-count",
     PRIVATECHAT: "data-unread-private-chat-message-count",
     NETWORKING_BUTTON: "data-submenu='networking'",
-    SINGLE_DISCUSSION_ITEM: "data-unread-discussion-message-count",
+    SINGLE_DISCUSSION_ITEM: "data-discussion-item-messages-count",
 };
 
 export class NetworkingBadgeManager {
@@ -37,10 +37,37 @@ export class NetworkingBadgeManager {
         destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
     }
 
-    creatMenuBadgeCounters(
-        destinationNodes,
-        startingCount
-    ) {
+    createDiscussionItemBadgeCounter(destinationNodes) {
+        const newMessageBadge = document.createElement("span");
+
+        console.log({ destinationNodes });
+
+        destinationNodes.forEach((node, index) => {
+            const clone = newMessageBadge.cloneNode(true);
+
+            const userId = node.getAttribute("data-participant-user-id");
+
+            const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${userId}`;
+
+            const startingCount = this.getUnreadeChatMessageStartingCount(
+                node,
+                BADGE_TYPE.SINGLE_DISCUSSION_ITEM
+            );
+
+            clone.classList.add("alert-notification");
+
+            clone.textContent =
+            startingCount >= 99 ? "99+" : startingCount;
+
+            if (startingCount === 0) {
+                clone.classList.add("hide");
+            }
+
+            node.appendChild(clone);
+        });
+    }
+
+    creatMenuBadgeCounters(destinationNodes, startingCount) {
         const newMessageBadge = document.createElement("span");
 
         newMessageBadge.textContent =
@@ -54,7 +81,9 @@ export class NetworkingBadgeManager {
 
         destinationNodes.forEach((node, index) => {
             const clone = newMessageBadge.cloneNode(true);
-            this.chatMessageCountBadges[`${BADGE_TYPE.NETWORKING_BUTTON}-${index}`] = clone;
+            this.chatMessageCountBadges[
+                `${BADGE_TYPE.NETWORKING_BUTTON}-${index}`
+            ] = clone;
             node.appendChild(clone);
         });
     }
@@ -87,18 +116,16 @@ export class NetworkingBadgeManager {
 
         this.chatMessageCountBadges[badgeType].textContent =
             currentPrivateChatMessageCount + 1;
-
     }
 
     incrementChatMessageCounterFromDomNode(domNode) {
-
         if (!domNode) {
             throw new Error(
                 `Cannot increment inexisting DOM node of type ${badgeType}`
             );
         }
         const currentPrivateChatMessageCount = parseInt(domNode.textContent);
-   
+
         if (isNaN(currentPrivateChatMessageCount)) {
             return;
         }
@@ -108,19 +135,16 @@ export class NetworkingBadgeManager {
         }
 
         domNode.textContent = currentPrivateChatMessageCount + 1;
-
-       
     }
 
     incrementMenuBadgesCounter() {
-
         const nodesToIncrement = Object.keys(this.chatMessageCountBadges)
             .map((key) => {
                 if (key.startsWith(BADGE_TYPE.NETWORKING_BUTTON)) {
                     return this.chatMessageCountBadges[key];
                 }
-            }).filter(item => item);
-
+            })
+            .filter((item) => item);
 
         nodesToIncrement.forEach((item) => {
             this.incrementChatMessageCounterFromDomNode(item);
