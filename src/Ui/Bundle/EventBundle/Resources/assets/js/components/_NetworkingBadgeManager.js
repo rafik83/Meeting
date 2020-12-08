@@ -89,19 +89,17 @@ export class NetworkingBadgeManager {
         this.chatMessageCountBadges[badgeType].textContent =
             currentPrivateChatMessageCount + 1;
 
-            // console.log(this.chatMessageCountBadges)
     }
 
-    incrementChatMessageCounterDOMNODE(domNode) {
+    incrementChatMessageCounterFromDomNode(domNode) {
+
         if (!domNode) {
             throw new Error(
                 `Cannot increment inexisting DOM node of type ${badgeType}`
             );
         }
-
- 
         const currentPrivateChatMessageCount = parseInt(domNode.textContent);
-        console.log(currentPrivateChatMessageCount);
+   
         if (isNaN(currentPrivateChatMessageCount)) {
             return;
         }
@@ -115,19 +113,18 @@ export class NetworkingBadgeManager {
        
     }
 
-    incrementMultipleChatMessaeCounter(badgeType) {
+    incrementMenuBadgesCounter() {
 
-        const nodeToIncrement = Object.keys(this.chatMessageCountBadges)
+        const nodesToIncrement = Object.keys(this.chatMessageCountBadges)
             .map((key) => {
-                if (key.startsWith(badgeType)) {
+                if (key.startsWith(BADGE_TYPE.NETWORKING_BUTTON)) {
                     return this.chatMessageCountBadges[key];
                 }
             }).filter(item => item);
 
-     
 
-        nodeToIncrement.forEach((item) => {
-            this.incrementChatMessageCounterDOMNODE(item);
+        nodesToIncrement.forEach((item) => {
+            this.incrementChatMessageCounterFromDomNode(item);
         });
     }
 
