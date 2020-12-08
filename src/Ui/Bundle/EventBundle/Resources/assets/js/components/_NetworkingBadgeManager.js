@@ -66,11 +66,6 @@ export class NetworkingBadgeManager {
         });
     }
 
-    incrementChatItemBadgeCounter(authorId) {
-        const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
-        this.incrementChatMessageCounter(key);
-    }
-
     creatMenuBadgeCounters(destinationNodes, startingCount) {
         const newMessageBadge = document.createElement("span");
 
@@ -92,15 +87,12 @@ export class NetworkingBadgeManager {
         });
     }
 
-    createUnreadDiscussionCountBadge(destinationNode, startingCount) {
-        this.chatMessageCountBadges[
-            BADGE_TYPE.SINGLE_DISCUSSION_ITEM
-        ] = destinationNode;
-
-        destinationNode.textContent = startingCount;
+    incrementChatItemBadgeCounter(authorId) {
+        const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
+        this.incrementCounterFromBadgeType(key);
     }
 
-    incrementChatMessageCounter(badgeType) {
+    incrementCounterFromBadgeType(badgeType) {
         if (!this.chatMessageCountBadges[badgeType]) {
             throw new Error(
                 `Cannot increment inexisting DOM node of type ${badgeType}`
@@ -122,36 +114,85 @@ export class NetworkingBadgeManager {
             currentPrivateChatMessageCount + 1;
     }
 
-    incrementChatMessageCounterFromDomNode(domNode) {
-        if (!domNode) {
-            throw new Error(
-                `Cannot increment inexisting DOM node of type ${badgeType}`
-            );
-        }
-        const currentPrivateChatMessageCount = parseInt(domNode.textContent);
-
-        if (isNaN(currentPrivateChatMessageCount)) {
-            return;
-        }
-
-        if (currentPrivateChatMessageCount === 0) {
-            domNode.classList.remove("hide");
-        }
-
-        domNode.textContent = currentPrivateChatMessageCount + 1;
-    }
-
-    incrementMenuBadgesCounter() {
-        const nodesToIncrement = Object.keys(this.chatMessageCountBadges)
+    getNetworkingMenuBadges() {
+        return Object.keys(this.chatMessageCountBadges)
             .map((key) => {
                 if (key.startsWith(BADGE_TYPE.NETWORKING_BUTTON)) {
                     return this.chatMessageCountBadges[key];
                 }
             })
             .filter((item) => item);
+    }
 
-        nodesToIncrement.forEach((item) => {
-            this.incrementChatMessageCounterFromDomNode(item);
+    incrementMenuBadgesCounter() {
+        const incrementChatMessageCounterFromDomNode = (domNode) => {
+            if (!domNode) {
+                throw new Error(
+                    `Cannot increment inexisting DOM node of type ${badgeType}`
+                );
+            }
+            const currentPrivateChatMessageCount = parseInt(
+                domNode.textContent
+            );
+
+            if (isNaN(currentPrivateChatMessageCount)) {
+                return;
+            }
+
+            if (currentPrivateChatMessageCount === 0) {
+                domNode.classList.remove("hide");
+            }
+
+            domNode.textContent = currentPrivateChatMessageCount + 1;
+        };
+
+        this.getNetworkingMenuBadges().forEach((item) => {
+            incrementChatMessageCounterFromDomNode(item);
+        });
+    }
+
+    getCurrentCounterValueForChatItem(authorId) {
+        const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
+
+        const value = parseInt(
+            this.chatMessageCountBadges[key].textContent,
+            10
+        );
+
+        if (isNaN(value)) {
+            return 0;
+        }
+
+        return value;
+    }
+
+    decreaseMenuBadgesCounter(valueToRemove) {
+        const decrementValue = (domNode) => {
+            if (!domNode) {
+                throw new Error(
+                    `Cannot increment inexisting DOM node of type ${badgeType}`
+                );
+            }
+            const currentPrivateChatMessageCount = parseInt(
+                domNode.textContent,
+                10
+            );
+
+            if (isNaN(currentPrivateChatMessageCount)) {
+                return;
+            }
+
+            const newValue = currentPrivateChatMessageCount - valueToRemove;
+
+            if (newValue <= 0) {
+                domNode.classList.add("hide");
+            }
+
+            domNode.textContent = newValue;
+        };
+
+        this.getNetworkingMenuBadges().forEach((item) => {
+            decrementValue(item);
         });
     }
 
@@ -174,10 +215,12 @@ export class NetworkingBadgeManager {
         this.chatMessageCountBadges[badgeType].textContent = newValue;
     }
 
-    decreaseChatItemMessageCounter(value, authorId) {
+    decreaseChatItemMessageCounter(authorId) {
         const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
 
-        this.decreaseChatMessageCounter(value, key);
+        const valuetoRemove = this.getCurrentCounterValueForChatItem(authorId);
+
+        this.decreaseChatMessageCounter(valuetoRemove, key);
     }
 }
 export default NetworkingBadgeManager;

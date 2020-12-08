@@ -2,16 +2,16 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import {NetworkingBadgeManager, BADGE_TYPE} from './components/_NetworkingBadgeManager';
+import { NetworkingBadgeManager, BADGE_TYPE } from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
 
-const {PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM} = BADGE_TYPE;
+const { PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM } = BADGE_TYPE;
 
 const CHAT_TAB = {
-    PRIVATE : "private",
-    GENERAL : "general",
+    PRIVATE: "private",
+    GENERAL: "general",
 }
 
 let activeChatTab = CHAT_TAB.GENERAL;
@@ -19,7 +19,7 @@ let activeChatTab = CHAT_TAB.GENERAL;
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
-    
+
 
     if (!chatNetworkingElement) {
         return;
@@ -41,7 +41,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
     const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
     const chatItems = document.querySelectorAll(`[${SINGLE_DISCUSSION_ITEM}]`);
-  
+
     const networkingBadgeManager = new NetworkingBadgeManager();
 
 
@@ -65,7 +65,7 @@ export default function initNetworking(target, userConnection, notificationCallV
         const payload = JSON.parse(notification.data);
 
         if (payload.action === "add_chat_message") {
-            networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
+            networkingBadgeManager.incrementCounterFromBadgeType(PRIVATECHAT);
             networkingBadgeManager.incrementMenuBadgesCounter()
             networkingBadgeManager.incrementChatItemBadgeCounter(payload.authorId)
         }
@@ -133,8 +133,8 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
-                if(activeChatTab !== CHAT_TAB.GENERAL) {
-                    networkingBadgeManager.incrementChatMessageCounter(GENERALCHAT);
+                if (activeChatTab !== CHAT_TAB.GENERAL) {
+                    networkingBadgeManager.incrementCounterFromBadgeType(GENERALCHAT);
                     networkingBadgeManager.incrementMenuBadgesCounter();
                 }
 
@@ -205,31 +205,24 @@ export default function initNetworking(target, userConnection, notificationCallV
         },
         open: function (participantNode) {
 
-            console.log(participantNode);
 
 
-            const authorId =  participantNode.getAttribute("data-participant-user-id");
-            const chatNode =  participantNode.querySelectorAll("[data-discussion-item-messages-count]")[0];
 
-            const previousValue = chatNode.getAttribute(`${SINGLE_DISCUSSION_ITEM}`);
+            const authorId = participantNode.getAttribute("data-participant-user-id");
 
-                const privateMessageRecievedFromParticipantCount = parseInt(
-                    previousValue,
-                    10
-                );
+            const valueToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
 
-                if (!isNaN(privateMessageRecievedFromParticipantCount)) {
-                    networkingBadgeManager.decreaseChatMessageCounter(
-                        privateMessageRecievedFromParticipantCount, PRIVATECHAT
-                    );
+            networkingBadgeManager.decreaseChatMessageCounter(
+                valueToRemove, PRIVATECHAT
+            );
 
-                    networkingBadgeManager.decreaseChatItemMessageCounter(
-                        privateMessageRecievedFromParticipantCount, authorId
-                    );
-                
-                }
+            networkingBadgeManager.decreaseChatItemMessageCounter(
+                authorId
+            );
 
-  
+            networkingBadgeManager.decreaseMenuBadgesCounter(valueToRemove);
+
+
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);
@@ -281,7 +274,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     modalManager.close.bind(modalManager);
     participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
 
-    $('.networking_container').on('click', '[data-close-modal]', ()=> {
+    $('.networking_container').on('click', '[data-close-modal]', () => {
         modalManager.close();
     });
 
