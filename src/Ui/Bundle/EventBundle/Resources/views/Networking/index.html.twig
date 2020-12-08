@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-
+    {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
     <div class="networking_container">
         <div class="networking_chat">
             <div data-chat-networking
@@ -27,13 +27,17 @@
                  data-notifications-subscriber-key="{{ networkingView.subscriberKey }}"
             >
                 <div class="btn-group" role="group">
-                    <a class="btn btn-primary" data-unread-general-chat-message-count="{{networkingView.networkingChatNewMessages}}"t href="#"
-                       data-chat-general-button>
-                       
-                       {{ 'networking.chat.global.title'|trans }}
-                    </a>
-                    <a class="btn btn-gray" href="#" data-unread-private-chat-message-count="{{networkingView.privateChatNewMessages}}"  data-chat-private-button>
-                             {{ 'networking.chat.title'|trans }}
+                    <a class="btn btn-primary" href="#"
+                       data-chat-general-button>{{ 'networking.chat.global.title'|trans }}
+                        {% if networkingView.networkingChatNewMessages > 0 %}
+                            <span class="alert-notification">
+                                {{ networkingView.networkingChatNewMessages }}
+                            </span>
+                        {% endif %}</a>
+                    <a class="btn btn-gray" href="#" data-chat-private-button>{{ 'networking.chat.title'|trans }}
+                            {% if networkingView.privateChatNewMessages > 0 %}
+                                 <span class="alert-notification">{{ networkingView.privateChatNewMessages }}</span>
+                            {% endif %}
                     </a>
                 </div>
                 <div data-chat-container
@@ -76,14 +80,9 @@
                                     </td>
                                     <td class="text-right">
                                         {% if chatSessionView.newMessagesCount > 0 %}
-                                            <span class="btn btn-xs btn-danger"> 
-                                            <span data-unread-discussion-message-count="{{chatSessionView.newMessagesCount}}"> </span>
-                                                {{ 'networking.chat.messages.new'|trans }}
-                                            </span>
+                                            <span data-new-messages-count="{{chatSessionView.newMessagesCount}}" class="btn btn-xs btn-danger">{{ 'networking.chat.messages.new'|transchoice(chatSessionView.newMessagesCount, {'%count%': chatSessionView.newMessagesCount}) }}</span>
                                         {% else %}
-                                        <span >
                                             {{ 'networking.chat.messages.count'|transchoice(chatSessionView.messagesCount, {'%count%': chatSessionView.messagesCount}) }}
-                                        <span>
                                         {% endif %}
                                     </td>
                                 </tr>

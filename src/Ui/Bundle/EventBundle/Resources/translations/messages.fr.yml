@@ -422,7 +422,7 @@ navigation.menu: Menu
 networking.chat.add: 'Ajoutez votre message'
 networking.chat.global.title: 'Chat général'
 networking.chat.messages.count: '{0} Aucun message|{1} Un message|]1,Inf[ %count% messages'
-networking.chat.messages.new: 'nouveau(x) message(s)'
+networking.chat.messages.new: '{0} Aucun nouveau message|{1} Un nouveau message|]1,Inf[ %count% nouveaux messages'
 networking.chat.notification.open: 'Ouvrir dans le chat'
 networking.chat.title: 'Chat privé'
 networking.chat.visio.busy: 'Votre interlocuteur est occupé'
