@@ -25,10 +25,10 @@ class ApiView
     /** @var string */
     public $category;
 
-    /** @var array|null */
+    /** @var ApiSpeakerView[]|null */
     public $speakers;
 
-    /** @var array */
+    /** @var int[] */
     public $participantTypes;
 
     public function __construct(
@@ -39,7 +39,7 @@ class ApiView
         string $end,
         string $type,
         string $category,
-        ?array $speakers,
+        array $speakers,
         array $participantTypes
     ) {
         $this->id = $id;

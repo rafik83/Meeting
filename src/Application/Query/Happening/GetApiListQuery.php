@@ -16,7 +16,7 @@ class GetApiListQuery implements Query
     /** @var string */
     public $baseUrl;
 
-    /** @var array|null */
+    /** @var int[]|null */
     public $participantTypeIds;
 
     public function __construct(Event $event, string $locale, string $baseUrl, ?array $participantTypeIds)
