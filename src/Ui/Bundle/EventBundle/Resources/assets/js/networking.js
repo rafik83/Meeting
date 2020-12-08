@@ -67,6 +67,7 @@ export default function initNetworking(target, userConnection, notificationCallV
         if (payload.action === "add_chat_message") {
             networkingBadgeManager.incrementChatMessageCounter(PRIVATECHAT);
             networkingBadgeManager.incrementMenuBadgesCounter()
+            networkingBadgeManager.incrementChatItemBadgeCounter(payload.authorId)
         }
     };
 

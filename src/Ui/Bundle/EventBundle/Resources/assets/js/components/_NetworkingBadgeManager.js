@@ -40,8 +40,6 @@ export class NetworkingBadgeManager {
     createDiscussionItemBadgeCounter(destinationNodes) {
         const newMessageBadge = document.createElement("span");
 
-        console.log({ destinationNodes });
-
         destinationNodes.forEach((node, index) => {
             const clone = newMessageBadge.cloneNode(true);
 
@@ -56,15 +54,21 @@ export class NetworkingBadgeManager {
 
             clone.classList.add("alert-notification");
 
-            clone.textContent =
-            startingCount >= 99 ? "99+" : startingCount;
+            clone.textContent = startingCount >= 99 ? "99+" : startingCount;
 
             if (startingCount === 0) {
                 clone.classList.add("hide");
             }
 
+            this.chatMessageCountBadges[key] = clone;
+
             node.appendChild(clone);
         });
+    }
+
+    incrementChatItemBadgeCounter(authorId) {
+        const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
+        this.incrementChatMessageCounter(key);
     }
 
     creatMenuBadgeCounters(destinationNodes, startingCount) {
