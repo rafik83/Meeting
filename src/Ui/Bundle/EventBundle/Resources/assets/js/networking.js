@@ -56,7 +56,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
-    networkingBadgeManager.createMultipleMessageCountBadge(headerSubmenuNetworkingBadgeNodes, NETWORKING_BUTTON, privateChatStartingCount + generalChatStartingCount)
+    networkingBadgeManager.creatMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
 
 
     const callback = (notification) => {

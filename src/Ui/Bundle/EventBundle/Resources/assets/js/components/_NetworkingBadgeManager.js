@@ -37,9 +37,8 @@ export class NetworkingBadgeManager {
         destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
     }
 
-    createMultipleMessageCountBadge(
+    creatMenuBadgeCounters(
         destinationNodes,
-        badgeType,
         startingCount
     ) {
         const newMessageBadge = document.createElement("span");
@@ -55,7 +54,7 @@ export class NetworkingBadgeManager {
 
         destinationNodes.forEach((node, index) => {
             const clone = newMessageBadge.cloneNode(true);
-            this.chatMessageCountBadges[`${badgeType}-${index}`] = clone;
+            this.chatMessageCountBadges[`${BADGE_TYPE.NETWORKING_BUTTON}-${index}`] = clone;
             node.appendChild(clone);
         });
     }
