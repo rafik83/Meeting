@@ -62,7 +62,9 @@ class CreateHandlerTest extends TestCase
             'en',
             'How to do a meeting?',
             'All you want to know about doing good meeting.',
-            '/path/webinarHeaderImageEn.jpg'
+            '/path/webinarHeaderImageEn.jpg',
+            '/path/webinarWaitingMediaEn.mp4',
+            'video'
         );
 
         $expectedSubEvent->setTranslation($expectedTranslation);
@@ -78,6 +80,13 @@ class CreateHandlerTest extends TestCase
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
             ->getMock();
 
+        $webinarWaitingMediaEn = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'video/mp4'])
+            ->getMock();
+        $webinarWaitingMediaEn->method('getMimeType')->willReturn('video/mp4');
+
         // Command
         $create = new Create($event);
         $create->questionAllowed = true;
@@ -91,11 +100,13 @@ class CreateHandlerTest extends TestCase
                 'title' => 'Comment faire un RDV ?',
                 'description' => 'Explications sur comment faire un RDV',
                 'webinarHeaderImage' => null,
+                'webinarWaitingMedia' => null,
             ],
             'en' => [
                 'title' => 'How to do a meeting?',
                 'description' => 'All you want to know about doing good meeting.',
                 'webinarHeaderImage' => $webinarHeaderImageEn,
+                'webinarWaitingMedia' => $webinarWaitingMediaEn,
             ],
         ];
         $create->invitationCode = 'toto';
@@ -107,6 +118,12 @@ class CreateHandlerTest extends TestCase
             ->upload($webinarHeaderImageEn)
             ->shouldBeCalled()
             ->willReturn('/path/webinarHeaderImageEn.jpg')
+        ;
+
+        $fileStorage
+            ->upload($webinarWaitingMediaEn)
+            ->shouldBeCalled()
+            ->willReturn('/path/webinarWaitingMediaEn.mp4')
         ;
 
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);

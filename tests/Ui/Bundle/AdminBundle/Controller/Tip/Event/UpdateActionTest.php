@@ -79,6 +79,7 @@ class UpdateActionTest extends TestCase
         $this->tip->isOnPackage()->willReturn(true);
         $this->tip->isOnContacts()->willReturn(true);
         $this->tip->isOnConfirmationPhone()->willReturn(true);
+        $this->tip->isOnNetworking()->willReturn(false);
         $this->tip->getTypes()->willReturn([]);
         $this->tip->getTranslation('fr')->willReturn(null);
         $this->tip->getTranslation('en')->willReturn(null);

@@ -35,6 +35,7 @@ class CreateHandlerTest extends TestCase
             true,
             false,
             true,
+            false,
             $dateTime
         );
         $expected->setType($type1->reveal());
@@ -60,6 +61,7 @@ class CreateHandlerTest extends TestCase
         $create->onContacts = true;
         $create->onProgram = false;
         $create->onConfirmationPhone = true;
+        $create->onNetworking = false;
         $create->translations = [
             'fr' => [
                 'title' => 'title fr',

@@ -42,6 +42,9 @@ class Create
     /** @var bool */
     public $onConfirmationPhone;
 
+    /** @var bool */
+    public $onNetworking;
+
     /** @var array */
     public $translations;
 

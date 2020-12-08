@@ -43,6 +43,7 @@ class CreateHandler
             $command->onContacts,
             $command->onProgram,
             $command->onConfirmationPhone,
+            $command->onNetworking,
             $this->dateTime
         );
 

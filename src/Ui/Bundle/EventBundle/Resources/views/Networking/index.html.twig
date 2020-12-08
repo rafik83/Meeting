@@ -27,17 +27,13 @@
                  data-notifications-subscriber-key="{{ networkingView.subscriberKey }}"
             >
                 <div class="btn-group" role="group">
-                    <a class="btn btn-primary" href="#"
-                       data-chat-general-button>{{ 'networking.chat.global.title'|trans }}
-                        {% if networkingView.networkingChatNewMessages > 0 %}
-                            <span class="alert-notification">
-                                {{ networkingView.networkingChatNewMessages }}
-                            </span>
-                        {% endif %}</a>
-                    <a class="btn btn-gray" href="#" data-chat-private-button>{{ 'networking.chat.title'|trans }}
-                            {% if networkingView.privateChatNewMessages > 0 %}
-                                 <span class="alert-notification">{{ networkingView.privateChatNewMessages }}</span>
-                            {% endif %}
+                <a class="btn btn-primary" data-unread-general-chat-message-count="{{networkingView.networkingChatNewMessages}}"t href="#"
+                       data-chat-general-button>
+                       
+                       {{ 'networking.chat.global.title'|trans }}
+                    </a>
+                    <a class="btn btn-gray" href="#" data-unread-private-chat-message-count="{{networkingView.privateChatNewMessages}}"  data-chat-private-button>
+                             {{ 'networking.chat.title'|trans }}
                     </a>
                 </div>
                 <div data-chat-container
