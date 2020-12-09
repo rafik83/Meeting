@@ -30,10 +30,12 @@
                     <div class="video-container" id="video-{{ meeting.id }}">
                         <div class="subscriber hide" id="subscriber-{{ meeting.id }}"></div>
                         <div class="publisher hide" id="publisher-{{ meeting.id }}"></div>
-                        <div class="video-helper hide">
-                            <span>
-                                <i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
-                        </div>
+                        <video-waiting-container>
+                            <div class="video-helper hide">
+                                <span>
+                                    <i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
+                            </div>
+                        </video-waiting-container>
                     </div>
                 {% endif %}
 

@@ -4,6 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Updated
+- VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
+
+## [2.72.2] - 2020-12-07
+### Fixed
+- MV285 - Custom button display on mobile
+
+### Added
+- VIMEET-2252 - Reactivate account
+- VIMEET-2285 - Delete message chat webinar
+- VIMEET-2249 - Notification page redirection
 
 ## [2.72.1] - 2020-12-02
 ### Fixed

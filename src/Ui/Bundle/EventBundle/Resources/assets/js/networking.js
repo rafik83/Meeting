@@ -200,6 +200,8 @@ export default function initNetworking(target, userConnection, notificationCallV
         },
         open: function (participantNode) {
 
+            console.log(participantNode);
+
             if (participantNode) {
                 const authorId = participantNode.getAttribute("data-participant-user-id");
 

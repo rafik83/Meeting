@@ -40,7 +40,7 @@
             </div>
         </div>
         <div id="visio-settings" class="row hide">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="visio-settings-video-select">
                     <label for="visio-video-source-select">{{ 'event.visio.settings.selectVideo'|trans }}</label>
                     <select id="visio-video-source-select" name="video-source" class="form-control" required>
@@ -55,6 +55,12 @@
                 <label for="visio-audio-source-select">{{ 'event.visio.settings.selectAudio'|trans }}</label>
                 <select id="visio-audio-source-select" name="audio-source" class="form-control" required>
                 </select>
+                <label for="visio-audio-volume-bar">{{ 'event.visio.settings.audioVolumeBar.label'|trans }}</label>
+                <div id="visio-audio-volume-bar" class="progress" aria-label="{{ 'event.visio.settings.audioVolumeBar.help'|trans }}">
+                    <div class="progress-bar" id="visio-audio-volume" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span class="sr-only">0%</span>
+                    </div>
+                </div>
                 <hr />
                 <audio id="visio-audio-output">
                     <source src="{{ asset('assets/sounds/fight-bell.mp3') }}" type="audio/mp3">
@@ -88,17 +94,9 @@
                     {% endblock %}
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6 col-md-offset-2">
                 <b>{{ 'event.visio.settings.preview'|trans }}</b>
                 <video id="visio-video-box" class="img-responsive" autoplay playsinline muted></video>
-                <br/>
-                <hr/>
-                <label for="visio-audio-volume-bar">{{ 'event.visio.settings.audioVolumeBar.label'|trans }}</label>
-                <div id="visio-audio-volume-bar" class="progress" aria-label="{{ 'event.visio.settings.audioVolumeBar.help'|trans }}">
-                    <div class="progress-bar" id="visio-audio-volume" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">0%</span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
