@@ -37,7 +37,7 @@ export class NetworkingBadgeManager {
         destinationNode.appendChild(this.chatMessageCountBadges[badgeType]);
     }
 
-    createDiscussionItemBadgeCounter(destinationNodes) {
+    createDiscussionItemCounterBadge(destinationNodes) {
         const newMessageBadge = document.createElement("span");
 
         destinationNodes.forEach((node, index) => {
@@ -154,10 +154,13 @@ export class NetworkingBadgeManager {
     getCurrentCounterValueForChatItem(authorId) {
         const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
 
-        const value = parseInt(
-            this.chatMessageCountBadges[key].textContent,
-            10
-        );
+        const node = this.chatMessageCountBadges[key];
+
+        if (!node) {
+            return 0;
+        }
+
+        const value = parseInt(node.textContent, 10);
 
         if (isNaN(value)) {
             return 0;
@@ -197,10 +200,12 @@ export class NetworkingBadgeManager {
     }
 
     decreaseChatMessageCounter(value, badgeType) {
-        const currentChatMessageCount = parseInt(
-            this.chatMessageCountBadges[badgeType].textContent,
-            10
-        );
+        const node = this.chatMessageCountBadges[badgeType];
+
+        if (!node) {
+            return;
+        }
+        const currentChatMessageCount = parseInt(node.textContent, 10);
 
         if (isNaN(currentChatMessageCount)) {
             return;

@@ -57,7 +57,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
-    networkingBadgeManager.createDiscussionItemBadgeCounter(chatItems);
+    networkingBadgeManager.createDiscussionItemCounterBadge(chatItems);
     networkingBadgeManager.creatMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
 
 
@@ -205,24 +205,22 @@ export default function initNetworking(target, userConnection, notificationCallV
         },
         open: function (participantNode) {
 
+            if (participantNode) {
+                const authorId = participantNode.getAttribute("data-participant-user-id");
 
+                const valueToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
 
+                networkingBadgeManager.decreaseChatMessageCounter(
+                    valueToRemove, PRIVATECHAT
+                );
 
-            const authorId = participantNode.getAttribute("data-participant-user-id");
+                networkingBadgeManager.decreaseChatItemMessageCounter(
+                    authorId
+                );
 
-            const valueToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
+                networkingBadgeManager.decreaseMenuBadgesCounter(valueToRemove);
 
-            networkingBadgeManager.decreaseChatMessageCounter(
-                valueToRemove, PRIVATECHAT
-            );
-
-            networkingBadgeManager.decreaseChatItemMessageCounter(
-                authorId
-            );
-
-            networkingBadgeManager.decreaseMenuBadgesCounter(valueToRemove);
-
-
+            }
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);
