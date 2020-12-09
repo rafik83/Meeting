@@ -43,6 +43,9 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $canDeleteChatMessage;
 
+    /** @var bool */
+    public $canDeleteQuestionMessage;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -75,7 +78,8 @@ class SpeakerWebinarView extends AbstractWebinarView
         int $questionsCount = 0,
         bool $allowWebinarOnHLS = false,
         int $viewersCount = 0,
-        bool $canDeleteChatMessage = false
+        bool $canDeleteChatMessage = false,
+        bool $canDeleteQuestionMessage = false
     ) {
         parent::__construct(
             $eventId,
@@ -108,5 +112,6 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->allowWebinarOnHLS = $allowWebinarOnHLS;
         $this->viewersCount = $viewersCount;
         $this->canDeleteChatMessage = $canDeleteChatMessage;
+        $this->canDeleteQuestionMessage = $canDeleteQuestionMessage;
     }
 }

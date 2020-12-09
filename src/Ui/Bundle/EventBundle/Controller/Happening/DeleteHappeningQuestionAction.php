@@ -6,6 +6,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestion;
+use Proximum\Vimeet\Application\Exception\Happening\DeleteQuestionNotAllowedException;
+use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
+use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -67,7 +70,15 @@ class DeleteHappeningQuestionAction
             return new JsonResponse(['status' => 'error', 'message' => 'Missing id']);
         }
 
-        $this->commandBus->handle(new DeleteHappeningQuestion($messageId, $user, $happening));
+        try {
+            $this->commandBus->handle(new DeleteHappeningQuestion($messageId, $user, $happening));
+        } catch(QuestionNotFoundException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 403);
+        } catch(DeleteQuestionNotAllowedException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 404);
+        } catch(HappeningException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 400);
+        }
 
         return new JsonResponse(['status' => 'ok']);
     }

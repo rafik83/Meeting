@@ -55,10 +55,10 @@ Question.prototype.initQuestions = function () {
             divIcon.classList.add('question-div-icon');
 
             const questionAside = document.createElement('small');
-            questionAside.classList.add('pull-right', 'question-aside', 'question-vote');
+            questionAside.classList.add('pull-right', 'question-vote');
 
             const questionIcon = document.createElement('small');
-            questionIcon.classList.add('pull-right', 'question-aside', 'question-icon');
+            questionIcon.classList.add('pull-right', 'question-icon');
 
             const likeBlock = document.createElement('div');
             const voteCount = document.createElement('span');
@@ -150,8 +150,10 @@ Question.prototype.initQuestions = function () {
                     $.post(questionMessageDelete, JSON.stringify(payload), (response) => {
                         if (response.status !== 'ok') {
                             this.showError('Message delete failed');
-                        } /* Todo error 403 404 */
-                    }, 'json');
+                        }
+                    }).fail((response)=> {
+                        this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+                    });
                     this.questionDeleteConfirmModal.hide();
                 });
             }.bind(this);

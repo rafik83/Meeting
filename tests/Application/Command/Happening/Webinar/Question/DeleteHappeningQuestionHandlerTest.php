@@ -9,7 +9,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestionHandler;
-use Proximum\Vimeet\Application\Exception\Happening\DeleteQuestionMessageNotAllowException;
+use Proximum\Vimeet\Application\Exception\Happening\DeleteQuestionNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
@@ -77,9 +77,9 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
         ));
     }
 
-    public function test_hasSpeakerNull(): void
+    public function test_hasSpeaker_Null(): void
     {
-        $this->expectException(DeleteQuestionMessageNotAllowException::class);
+        $this->expectException(DeleteQuestionNotAllowedException::class);
         $happening = $this->prophesize(Happening::class);
         $createdBy = $this->prophesize(User::class);
 
@@ -98,7 +98,7 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
         $this->deleteHappeningQuestion->handle($deleteHappeningQuestion);
     }
 
-    public function test_questionNull(): void
+    public function test_question_Null(): void
     {
         $this->expectException(QuestionNotFoundException::class);
         $happening = $this->prophesize(Happening::class);

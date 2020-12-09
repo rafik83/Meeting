@@ -4,7 +4,7 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Question;
 
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
-use Proximum\Vimeet\Application\Exception\Happening\DeleteQuestionMessageNotAllowException;
+use Proximum\Vimeet\Application\Exception\Happening\DeleteQuestionNotAllowedException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
@@ -28,7 +28,7 @@ class DeleteHappeningQuestionHandler
     public function handle(DeleteHappeningQuestion $command): void
     {
         if (!$command->happening->hasSpeaker($command->user)) {
-            throw new DeleteQuestionMessageNotAllowException(sprintf('Delete question #%d is not allowed for this user', $command->messageId));
+            throw new DeleteQuestionNotAllowedException(sprintf('Delete question #%d is not allowed for this user', $command->messageId));
         }
 
         $question = $this->questionRepository->findById($command->messageId);
