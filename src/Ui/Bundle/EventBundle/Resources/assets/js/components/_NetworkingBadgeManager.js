@@ -92,7 +92,7 @@ export class NetworkingBadgeManager {
         this.updateBadgeCounterValue(key, 1);
     }
 
-    updateBadgeCounterValue(badgeType, value) {
+    updateBadgeCounterValue(badgeType, delta) {
         const element = this.chatMessageCountBadges[badgeType];
 
         if (!this.chatMessageCountBadges[badgeType]) {
@@ -101,16 +101,16 @@ export class NetworkingBadgeManager {
             );
         }
 
-        const currentPrivateChatMessageCount = parseInt(
+        const currentElementValue = parseInt(
             this.chatMessageCountBadges[badgeType].textContent,
             10
         );
 
-        if (isNaN(currentPrivateChatMessageCount)) {
+        if (isNaN(currentElementValue) || isNaN(delta)) {
             return;
         }
 
-        const newValue = currentPrivateChatMessageCount + value;
+        const newValue = currentElementValue + delta;
 
         if (newValue <= 0) {
             this.chatMessageCountBadges[badgeType].classList.add("hide");
@@ -168,7 +168,7 @@ export class NetworkingBadgeManager {
     decreaseChatItemMessageCounter(authorId) {
         const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
         const valuetoRemove = this.getCurrentCounterValueForChatItem(authorId);
-        this.updateBadgeCounterValue(key, -Math.abs(valuetoRemove));
+        this.updateBadgeCounterValue(key, -valuetoRemove);
     }
 }
 export default NetworkingBadgeManager;

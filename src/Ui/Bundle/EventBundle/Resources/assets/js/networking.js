@@ -203,17 +203,17 @@ export default function initNetworking(target, userConnection, notificationCallV
             if (participantNode) {
                 const authorId = participantNode.getAttribute("data-participant-user-id");
 
-                const valueToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
+                const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
 
                 networkingBadgeManager.updateBadgeCounterValue(
-                   PRIVATECHAT, -Math.abs(valueToRemove)
+                   PRIVATECHAT, -deltaToRemove
                 );
 
                 networkingBadgeManager.decreaseChatItemMessageCounter(
                     authorId
                 );
 
-                networkingBadgeManager.decreaseMenuBadgesCounter(valueToRemove);
+                networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
 
             }
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
