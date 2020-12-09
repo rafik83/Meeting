@@ -672,6 +672,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate'
             - '@domain.happening.participation_count'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -5965,6 +5966,10 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate:
+        arguments:
+            - '@datetime'
 
     Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
 

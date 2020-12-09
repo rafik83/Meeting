@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
+use Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate;
 use Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -73,8 +74,12 @@ class ParticipateHandler
 
     /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
+
     /** @var CanAccessToWebinar */
     private $canAccessToWebinar;
+
+    /** @var MustBeAvailableToParticipate */
+    private $mustBeAvailableToParticipate;
 
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -88,7 +93,8 @@ class ParticipateHandler
         RouterInterface $router,
         TranslatorInterface $translator,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
-        CanAccessToWebinar $canAccessToWebinar
+        CanAccessToWebinar $canAccessToWebinar,
+        MustBeAvailableToParticipate $mustBeAvailableToParticipate
     ) {
         $this->participantRepository = $participantRepository;
         $this->questionRepository = $questionRepository;
@@ -102,6 +108,7 @@ class ParticipateHandler
         $this->translator = $translator;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->canAccessToWebinar = $canAccessToWebinar;
+        $this->mustBeAvailableToParticipate = $mustBeAvailableToParticipate;
     }
 
     public function handle(Request $request, Happening $happening, Sheet $sheet, User $user): JsonResponse
@@ -134,10 +141,14 @@ class ParticipateHandler
             ->handle(new ParticipantsAllowedToAccessQuery($happening, $sheet->getParticipantsArray()))
         ;
 
-        $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
-            $participants,
-            $happening
-        );
+        if ($this->mustBeAvailableToParticipate->isSatisfiedBy($happening)) {
+            $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
+                $participants,
+                $happening
+            );
+        } else {
+            $availableParticipants = [$sheet->getUserParticipant($user)];
+        }
 
         $noAvailableParticipants = 0 === \count($availableParticipants);
 
