@@ -60,7 +60,7 @@ export default function initNetworking(target, userConnection, notificationCallV
         const payload = JSON.parse(notification.data);
 
         if (payload.action === "add_chat_message") {
-            networkingBadgeManager.incrementCounterFromBadgeType(PRIVATECHAT);
+            networkingBadgeManager.updateBadgeCounterValue(PRIVATECHAT,1);
             networkingBadgeManager.incrementMenuBadgesCounter()
             networkingBadgeManager.incrementChatItemBadgeCounter(payload.authorId)
         }
@@ -129,7 +129,7 @@ export default function initNetworking(target, userConnection, notificationCallV
 
             if (payload.action === 'add_chat_message') {
                 if (activeChatTab !== CHAT_TAB.GENERAL) {
-                    networkingBadgeManager.incrementCounterFromBadgeType(GENERALCHAT);
+                    networkingBadgeManager.updateBadgeCounterValue(GENERALCHAT, 1);
                     networkingBadgeManager.incrementMenuBadgesCounter();
                 }
 
@@ -205,8 +205,8 @@ export default function initNetworking(target, userConnection, notificationCallV
 
                 const valueToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
 
-                networkingBadgeManager.decreaseChatMessageCounter(
-                    valueToRemove, PRIVATECHAT
+                networkingBadgeManager.updateBadgeCounterValue(
+                   PRIVATECHAT, -Math.abs(valueToRemove)
                 );
 
                 networkingBadgeManager.decreaseChatItemMessageCounter(

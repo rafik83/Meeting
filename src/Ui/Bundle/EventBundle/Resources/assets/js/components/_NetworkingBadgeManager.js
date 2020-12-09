@@ -89,15 +89,18 @@ export class NetworkingBadgeManager {
 
     incrementChatItemBadgeCounter(authorId) {
         const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
-        this.incrementCounterFromBadgeType(key);
+        this.updateBadgeCounterValue(key, 1);
     }
 
-    incrementCounterFromBadgeType(badgeType) {
+    updateBadgeCounterValue(badgeType, value) {
+        const element = this.chatMessageCountBadges[badgeType];
+
         if (!this.chatMessageCountBadges[badgeType]) {
             throw new Error(
-                `Cannot increment inexisting DOM node of type ${badgeType}`
+                `Cannot update value of inexisting DOM node of type ${badgeType}`
             );
         }
+
         const currentPrivateChatMessageCount = parseInt(
             this.chatMessageCountBadges[badgeType].textContent,
             10
@@ -107,12 +110,17 @@ export class NetworkingBadgeManager {
             return;
         }
 
-        if (currentPrivateChatMessageCount === 0) {
+        const newValue = currentPrivateChatMessageCount + value;
+
+        if (newValue <= 0) {
+            this.chatMessageCountBadges[badgeType].classList.add("hide");
+        }
+
+        if (newValue > 0) {
             this.chatMessageCountBadges[badgeType].classList.remove("hide");
         }
 
-        this.chatMessageCountBadges[badgeType].textContent =
-            currentPrivateChatMessageCount + 1;
+        this.chatMessageCountBadges[badgeType].textContent = newValue;
     }
 
     getNetworkingMenuBadges() {
@@ -126,30 +134,9 @@ export class NetworkingBadgeManager {
     }
 
     incrementMenuBadgesCounter() {
-        const incrementChatMessageCounterFromDomNode = (domNode) => {
-            if (!domNode) {
-                throw new Error(
-                    `Cannot increment inexisting DOM node of type ${badgeType}`
-                );
-            }
-            const currentPrivateChatMessageCount = parseInt(
-                domNode.textContent,
-                10
-            );
-
-            if (isNaN(currentPrivateChatMessageCount)) {
-                return;
-            }
-
-            if (currentPrivateChatMessageCount === 0) {
-                domNode.classList.remove("hide");
-            }
-
-            domNode.textContent = currentPrivateChatMessageCount + 1;
-        };
-
-        this.getNetworkingMenuBadges().forEach((item) => {
-            incrementChatMessageCounterFromDomNode(item);
+        this.getNetworkingMenuBadges().forEach((item, index) => {
+            const key = `${BADGE_TYPE.NETWORKING_BUTTON}-${index}`;
+            this.updateBadgeCounterValue(key, 1);
         });
     }
 
@@ -172,60 +159,16 @@ export class NetworkingBadgeManager {
     }
 
     decreaseMenuBadgesCounter(valueToRemove) {
-        const decrementValue = (domNode) => {
-            if (!domNode) {
-                throw new Error(`Cannot decrease value of inexisting DOM node`);
-            }
-            const currentPrivateChatMessageCount = parseInt(
-                domNode.textContent,
-                10
-            );
-
-            if (isNaN(currentPrivateChatMessageCount)) {
-                return;
-            }
-
-            const newValue = currentPrivateChatMessageCount - valueToRemove;
-
-            if (newValue <= 0) {
-                domNode.classList.add("hide");
-            }
-
-            domNode.textContent = newValue;
-        };
-
-        this.getNetworkingMenuBadges().forEach((item) => {
-            decrementValue(item);
+        this.getNetworkingMenuBadges().forEach((item, index) => {
+            const key = `${BADGE_TYPE.NETWORKING_BUTTON}-${index}`;
+            this.updateBadgeCounterValue(key, -Math.abs(valueToRemove));
         });
-    }
-
-    decreaseChatMessageCounter(value, badgeType) {
-        const node = this.chatMessageCountBadges[badgeType];
-
-        if (!node) {
-            return;
-        }
-        const currentChatMessageCount = parseInt(node.textContent, 10);
-
-        if (isNaN(currentChatMessageCount)) {
-            return;
-        }
-
-        const newValue = currentChatMessageCount - value;
-
-        if (newValue === 0) {
-            this.chatMessageCountBadges[badgeType].classList.add("hide");
-        }
-
-        this.chatMessageCountBadges[badgeType].textContent = newValue;
     }
 
     decreaseChatItemMessageCounter(authorId) {
         const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${authorId}`;
-
         const valuetoRemove = this.getCurrentCounterValueForChatItem(authorId);
-
-        this.decreaseChatMessageCounter(valuetoRemove, key);
+        this.updateBadgeCounterValue(key, -Math.abs(valuetoRemove));
     }
 }
 export default NetworkingBadgeManager;
