@@ -173,7 +173,7 @@ export class NetworkingBadgeManager {
         const decrementValue = (domNode) => {
             if (!domNode) {
                 throw new Error(
-                    `Cannot increment inexisting DOM node of type ${badgeType}`
+                    `Cannot decrease value of inexisting DOM node`
                 );
             }
             const currentPrivateChatMessageCount = parseInt(
