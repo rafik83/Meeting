@@ -99,7 +99,8 @@ export class NetworkingBadgeManager {
             );
         }
         const currentPrivateChatMessageCount = parseInt(
-            this.chatMessageCountBadges[badgeType].textContent
+            this.chatMessageCountBadges[badgeType].textContent,
+            10
         );
 
         if (isNaN(currentPrivateChatMessageCount)) {
@@ -132,7 +133,8 @@ export class NetworkingBadgeManager {
                 );
             }
             const currentPrivateChatMessageCount = parseInt(
-                domNode.textContent
+                domNode.textContent,
+                10
             );
 
             if (isNaN(currentPrivateChatMessageCount)) {
@@ -172,9 +174,7 @@ export class NetworkingBadgeManager {
     decreaseMenuBadgesCounter(valueToRemove) {
         const decrementValue = (domNode) => {
             if (!domNode) {
-                throw new Error(
-                    `Cannot decrease value of inexisting DOM node`
-                );
+                throw new Error(`Cannot decrease value of inexisting DOM node`);
             }
             const currentPrivateChatMessageCount = parseInt(
                 domNode.textContent,
