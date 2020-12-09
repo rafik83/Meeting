@@ -8,27 +8,13 @@
     {% if tipTranslationViews is defined %}
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
     {% endif %}
-
-    {% if program.showTimeZone %}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="pull-right mg-tp" style="margin-right: 5px;">
-                    <a href="{{ path('event_participant_timezone', { 'sheet': sheet.id, 'participant': participant.id, 'fromProgram': '' }) }}" class="btn btn-primary">
-                        <i class="icon-Horaire"></i>
-                        {{ program.translatedTimeZone }}
-                    </a>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
     <div class="program-container">
         {% for day in program.days %}
             <div class="row">
                 <div class="col-md-12 program">
                     <header class="program-head text-center">
                         <p>
-                            <strong>{{ day.day|localizeddate('full', 'none', app.request.locale, program.timeZone)|capitalize }}</strong>
+                            <strong>{{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</strong>
                             <span>-
                                 {% if not program.hasCategory %}
                                     <i class="icon icon-Conference"></i>

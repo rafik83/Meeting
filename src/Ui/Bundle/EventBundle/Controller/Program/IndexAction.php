@@ -11,7 +11,6 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -36,21 +35,16 @@ class IndexAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var IsParticipantVisio */
-    private $isParticipantVisio;
-
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
         RouterInterface $router,
-        EngineInterface $engine,
-        IsParticipantVisio $isParticipantVisio
+        EngineInterface $engine
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
         $this->engine = $engine;
         $this->router = $router;
-        $this->isParticipantVisio = $isParticipantVisio;
     }
 
     /**
@@ -76,21 +70,6 @@ class IndexAction
 
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
-
-        $participant = $sheet->getUserParticipant($user);
-
-        if ($participant && $this->isParticipantVisio->isSatisfiedBy($participant) && !$participant->getTimezone()) {
-            return new RedirectResponse(
-                $this->router->generate(
-                    'event_participant_timezone',
-                    [
-                        'participant' => $participant->getId(),
-                        'sheet' => $sheet->getId(),
-                        'fromProgram' => '',
-                    ]
-                )
-            );
-        }
 
         try {
             /** @var ProgramView $program */
@@ -125,7 +104,6 @@ class IndexAction
             'program' => $program,
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'tipTranslationViews' => $tipTranslationViews,
-            'participant' => $participant,
         ]));
     }
 }

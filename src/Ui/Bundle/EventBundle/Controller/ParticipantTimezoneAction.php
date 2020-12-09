@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\ParticipantTimezone;
-use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -78,19 +77,6 @@ class ParticipantTimezoneAction
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($command);
-
-            $redirectToProgram = $request->query->has('fromProgram');
-
-            if ($redirectToProgram) {
-                return new RedirectResponse(
-                    $this->urlGenerator->generate(
-                        Route::PROGRAM,
-                        [
-                            'sheet' => $sheet->getId(),
-                        ]
-                    )
-                );
-            }
 
             return new RedirectResponse($this->urlGenerator->generate('event_agenda_participant', [
                 'sheet' => $sheet->getId(),

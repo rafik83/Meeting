@@ -7,12 +7,11 @@ use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Time\TimeRangeView;
 
 class DayViewQuery
 {
-    /** @var TimeRangeView */
-    public $timeRange;
+    /** @var Event\Day */
+    public $eventDay;
 
     /** @var string */
     public $locale;
@@ -36,7 +35,7 @@ class DayViewQuery
      * @param Event         $event
      * @param Sheet         $sheet
      * @param User          $user
-     * @param TimeRangeView $timeRange
+     * @param Event\Day     $eventDay
      * @param string        $locale
      * @param Category|null $category
      * @param Mass[]        $masses
@@ -45,14 +44,14 @@ class DayViewQuery
         Event $event,
         Sheet $sheet,
         User $user,
-        TimeRangeView $timeRange,
+        Event\Day $eventDay,
         string $locale,
         Category $category = null,
         array $masses = []
     ) {
         $this->locale = $locale;
         $this->event = $event;
-        $this->timeRange = $timeRange;
+        $this->eventDay = $eventDay;
         $this->category = $category;
         $this->masses = $masses;
         $this->sheet = $sheet;
