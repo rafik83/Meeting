@@ -287,7 +287,7 @@ class AgendaViewQueryHandler
     }
 
     /**
-     * @param array  $eventDays
+     * @param Event\Day[]  $eventDays
      * @param string $timezone
      *
      * @return TimeRangeView[]
