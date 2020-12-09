@@ -10,7 +10,7 @@ export class NetworkingBadgeManager {
         this.chatMessageCountBadges = [];
     }
 
-    getUnreadeChatMessageStartingCount(DOMnode, badgeType) {
+    getUnreadChatMessageStartingCount(DOMnode, badgeType) {
         const chatMessageCount = parseInt(DOMnode.getAttribute(badgeType), 10);
 
         if (isNaN(chatMessageCount)) {
@@ -47,7 +47,7 @@ export class NetworkingBadgeManager {
 
             const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${userId}`;
 
-            const startingCount = this.getUnreadeChatMessageStartingCount(
+            const startingCount = this.getUnreadChatMessageStartingCount(
                 node,
                 BADGE_TYPE.SINGLE_DISCUSSION_ITEM
             );
@@ -66,7 +66,7 @@ export class NetworkingBadgeManager {
         });
     }
 
-    creatMenuBadgeCounters(destinationNodes, startingCount) {
+    createMenuBadgeCounters(destinationNodes, startingCount) {
         const newMessageBadge = document.createElement("span");
 
         newMessageBadge.textContent =

@@ -19,8 +19,6 @@ let activeChatTab = CHAT_TAB.GENERAL;
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
-
-
     if (!chatNetworkingElement) {
         return;
     }
@@ -34,7 +32,6 @@ export default function initNetworking(target, userConnection, notificationCallV
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
 
-
     const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
 
     const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
@@ -44,13 +41,12 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const networkingBadgeManager = new NetworkingBadgeManager();
 
-
-    const privateChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
+    const privateChatStartingCount = networkingBadgeManager.getUnreadChatMessageStartingCount(
         unreadPrivateChatMessageCountNodes[0],
         PRIVATECHAT
     );
 
-    const generalChatStartingCount = networkingBadgeManager.getUnreadeChatMessageStartingCount(
+    const generalChatStartingCount = networkingBadgeManager.getUnreadChatMessageStartingCount(
         unreadGeneralChatMessageCountNodes[0],
         GENERALCHAT
     );
@@ -58,8 +54,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
     networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
     networkingBadgeManager.createDiscussionItemCounterBadge(chatItems);
-    networkingBadgeManager.creatMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
-
+    networkingBadgeManager.createMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
 
     const callback = (notification) => {
         const payload = JSON.parse(notification.data);
