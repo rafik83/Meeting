@@ -1116,6 +1116,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
+    Proximum\Vimeet\Application\Command\Admin\RestoreHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Restore }
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -7008,6 +7014,19 @@ services:
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
             - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@query.notification.notification_view_query_handler'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware'
+
+    #
+    # SheetRedirectionMiddleware
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.registration.step_manager'
 
     #
     # Event Day service
@@ -7263,6 +7282,8 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
             - '@domain.key_dates.checker.networking_access_checker'
+
+    Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage: ~
 
     #
     # Networking

@@ -3,12 +3,16 @@ export default class Modal {
         this.element = element;
         const closeButtons = this.element.querySelectorAll('[data-modal-close]');
         closeButtons.forEach((closeButton) => {
-            closeButton.addEventListener('click', () => this.element.classList.add('hide'));
+            closeButton.addEventListener('click', () => this.hide());
         });
     }
 
     show() {
         this.element.classList.remove('hide');
+    }
+
+    hide() {
+        this.element.classList.add('hide');
     }
 
     /**

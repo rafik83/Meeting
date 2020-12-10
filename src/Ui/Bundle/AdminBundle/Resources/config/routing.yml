@@ -50,10 +50,17 @@ admin_update_admin:
 admin_delete_admin:
     path: /admin/delete/{type}/{admin}
     requirements:
-        user: \d+
+        admin: \d+
         type: admin|operator
     methods: [DELETE, GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction }
+
+admin_restore_admin:
+    path: /admin/restore/{admin}
+    requirements:
+        admin: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\RestoreAction }
 
 #
 # Operator

@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
+use Proximum\Vimeet\Application\Command\Chat\NotificationType;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatSession;
@@ -51,10 +52,14 @@ class NotificationPublisher extends AbstractNotification implements Notification
         $this->publishMessage($postData);
     }
 
-    public function publishChatMessageNotification(ChatMessageLinkableInterface $object, ChatMessage $message, int $messageCount): void
-    {
+    public function publishChatMessageNotification(
+        ChatMessageLinkableInterface $object,
+        ChatMessage $message,
+        int $messageCount,
+        string $action = NotificationType::ADD_CHAT_MESSAGE
+    ): void {
         $payload = [
-            'action' => 'add_chat_message',
+            'action' => $action,
             'msg_count' => $messageCount,
         ];
 

@@ -5,15 +5,22 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Route
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery;
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Home\HomeDispatchView;
+use Proximum\Vimeet\Application\View\Notification\NotificationListView;
+use Proximum\Vimeet\Application\View\Notification\NotificationView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Notification\Notification;
 use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher;
@@ -27,7 +34,9 @@ class HomeUserDispatcherTest extends TestCase
         $dDayGuesser,
         $agendaAccessChecker,
         $isValidatedTransactionMissing,
-        $isValidatedRequiredPackageMissing
+        $isValidatedRequiredPackageMissing,
+        $notificationViewQueryHandler,
+        $sheetRedirectionMiddleware
     ;
 
     public function setUp(): void
@@ -40,6 +49,8 @@ class HomeUserDispatcherTest extends TestCase
         $this->agendaAccessChecker = $this->prophesize(AgendaAccessChecker::class);
         $this->isValidatedTransactionMissing = $this->prophesize(IsValidatedTransactionMissing::class);
         $this->isValidatedRequiredPackageMissing = $this->prophesize(IsValidatedRequiredPackageMissing::class);
+        $this->notificationViewQueryHandler = $this->prophesize(NotificationViewQueryHandler::class);
+        $this->sheetRedirectionMiddleware = $this->prophesize(SheetRedirectionMiddleware::class);
     }
 
     public function testAttemptDispatchMultiSheet(): void
@@ -77,7 +88,9 @@ class HomeUserDispatcherTest extends TestCase
             $this->dDayGuesser->reveal(),
             $this->agendaAccessChecker->reveal(),
             $this->isValidatedTransactionMissing->reveal(),
-            $this->isValidatedRequiredPackageMissing->reveal()
+            $this->isValidatedRequiredPackageMissing->reveal(),
+            $this->notificationViewQueryHandler->reveal(),
+            $this->sheetRedirectionMiddleware->reveal()
         );
 
         $response = $dispatcher->attemptDispatchUser($event->reveal(), $user->reveal());
@@ -93,6 +106,7 @@ class HomeUserDispatcherTest extends TestCase
         $homeDispatchView = $this->prophesize(HomeDispatchView::class);
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn(1);
+        $this->notificationViewQueryHandler->handle(new NotificationViewQuery($sheet->reveal()))->shouldBeCalled()->willReturn(new NotificationListView([]));
         $homeDispatchView->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $homeDispatchView->isGroup()->shouldBeCalled()->willReturn(false);
         $homeDispatchView->isOneSheet()->shouldBeCalled()->willReturn(true);
@@ -124,7 +138,9 @@ class HomeUserDispatcherTest extends TestCase
             $this->dDayGuesser->reveal(),
             $this->agendaAccessChecker->reveal(),
             $this->isValidatedTransactionMissing->reveal(),
-            $this->isValidatedRequiredPackageMissing->reveal()
+            $this->isValidatedRequiredPackageMissing->reveal(),
+            $this->notificationViewQueryHandler->reveal(),
+            $this->sheetRedirectionMiddleware->reveal()
         );
 
         $response = $dispatcher->attemptDispatchUser($event->reveal(), $user->reveal());
@@ -143,10 +159,9 @@ class HomeUserDispatcherTest extends TestCase
         $homeDispatchView->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $homeDispatchView->isGroup()->shouldBeCalled()->willReturn(false);
         $homeDispatchView->isOneSheet()->shouldBeCalled()->willReturn(true);
-
-        $this->router->generate('event_sheet_default', ['sheet' => 1])
+        $this->sheetRedirectionMiddleware->getForceRedirection($sheet->reveal(), $user->reveal())
             ->shouldBeCalled()
-            ->willReturn('/sheet/1');
+            ->willReturn(new RedirectResponse('/sheet/1/package'));
 
         $this->authorizationChecker
             ->isGranted('IS_AUTHENTICATED_REMEMBERED')
@@ -157,19 +172,6 @@ class HomeUserDispatcherTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($homeDispatchView->reveal());
 
-        $this->dDayGuesser->isItDDay($event->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true);
-
-        $this->isValidatedRequiredPackageMissing->isSatisfiedBy($sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
-        // Not called as package missing first called
-        $this->agendaAccessChecker->allowedToAccess($event->reveal())->shouldNotBeCalled();
-        $this->isValidatedTransactionMissing->isSatisfiedBy($sheet->reveal())->shouldNotBeCalled();
-
         $dispatcher = new HomeUserDispatcher(
             $this->router->reveal(),
             $this->homeDispatch->reveal(),
@@ -178,12 +180,14 @@ class HomeUserDispatcherTest extends TestCase
             $this->dDayGuesser->reveal(),
             $this->agendaAccessChecker->reveal(),
             $this->isValidatedTransactionMissing->reveal(),
-            $this->isValidatedRequiredPackageMissing->reveal()
+            $this->isValidatedRequiredPackageMissing->reveal(),
+            $this->notificationViewQueryHandler->reveal(),
+            $this->sheetRedirectionMiddleware->reveal()
         );
 
         $response = $dispatcher->attemptDispatchUser($event->reveal(), $user->reveal());
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('/sheet/1', $response->getTargetUrl());
+        $this->assertEquals('/sheet/1/package', $response->getTargetUrl());
     }
 
     public function testAttemptDispatchUserDDay(): void
@@ -197,6 +201,18 @@ class HomeUserDispatcherTest extends TestCase
         $homeDispatchView->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
         $homeDispatchView->isGroup()->shouldBeCalled()->willReturn(false);
         $homeDispatchView->isOneSheet()->shouldBeCalled()->willReturn(true);
+        $this->sheetRedirectionMiddleware->getForceRedirection($sheet->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $notificationView = new NotificationView(
+            new \DateTime(),
+            "icon",
+            "forfait" ,
+            "notification",
+            "/sheet/1/notification",
+            'none'
+        );
 
         $this->router->generate('event_agenda', ['sheet' => 1])
             ->shouldBeCalled()
@@ -219,15 +235,9 @@ class HomeUserDispatcherTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $this->isValidatedRequiredPackageMissing->isSatisfiedBy($sheet->reveal())
+        $this->notificationViewQueryHandler->handle(new NotificationViewQuery($sheet->reveal()))
             ->shouldBeCalled()
-            ->willReturn(false)
-        ;
-
-        $this->isValidatedTransactionMissing->isSatisfiedBy($sheet->reveal())
-            ->shouldBeCalled()
-            ->willReturn(false)
-        ;
+            ->willReturn(new NotificationListView([$notificationView]));
 
         $dispatcher = new HomeUserDispatcher(
             $this->router->reveal(),
@@ -237,11 +247,77 @@ class HomeUserDispatcherTest extends TestCase
             $this->dDayGuesser->reveal(),
             $this->agendaAccessChecker->reveal(),
             $this->isValidatedTransactionMissing->reveal(),
-            $this->isValidatedRequiredPackageMissing->reveal()
+            $this->isValidatedRequiredPackageMissing->reveal(),
+            $this->notificationViewQueryHandler->reveal(),
+            $this->sheetRedirectionMiddleware->reveal()
         );
 
         $response = $dispatcher->attemptDispatchUser($event->reveal(), $user->reveal());
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals('/sheet/1/agenda', $response->getTargetUrl());
+    }
+
+    public function getPriorities(): array
+    {
+        return [[Notification::PRIORITY_REQUIRED], [Notification::PRIORITY_IMPORTANT]];
+    }
+
+    /**
+     * @dataProvider getPriorities()
+     * @param string $priority
+     */
+    public function testNotificationRequiredOrImportant(string $priority): void
+    {
+
+        $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
+        $homeDispatchView = $this->prophesize(HomeDispatchView::class);
+        $notificationView = new NotificationView(
+            new \DateTime(),
+            "icon",
+            "forfait" ,
+            "notification",
+            "/sheet/1/notification",
+            $priority
+        );
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->willReturn(1);
+        $homeDispatchView->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
+        $homeDispatchView->isGroup()->shouldBeCalled()->willReturn(false);
+        $homeDispatchView->isOneSheet()->shouldBeCalled()->willReturn(true);
+
+        $this->router->generate('event_notification_list', ['sheet' => 1])
+            ->shouldBeCalled()
+            ->willReturn('/sheet/1/notification');
+
+        $this->authorizationChecker
+            ->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $this->homeDispatch->handle($event->reveal(), $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn($homeDispatchView->reveal());
+
+        $this->notificationViewQueryHandler->handle(new NotificationViewQuery($sheet->reveal()))
+            ->shouldBeCalled()
+            ->willReturn(new NotificationListView([$notificationView]));
+
+        $dispatcher = new HomeUserDispatcher(
+            $this->router->reveal(),
+            $this->homeDispatch->reveal(),
+            $this->homeDispatchAnonymousUser->reveal(),
+            $this->authorizationChecker->reveal(),
+            $this->dDayGuesser->reveal(),
+            $this->agendaAccessChecker->reveal(),
+            $this->isValidatedTransactionMissing->reveal(),
+            $this->isValidatedRequiredPackageMissing->reveal(),
+            $this->notificationViewQueryHandler->reveal(),
+            $this->sheetRedirectionMiddleware->reveal()
+        );
+
+        $response = $dispatcher->attemptDispatchUser($event->reveal(), $user->reveal());
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals('/sheet/1/notification', $response->getTargetUrl());
     }
 }

@@ -48,7 +48,7 @@ interface AdminRepositoryInterface
      *
      * @return Admin|null
      */
-    public function findByEmail($email);
+    public function findByEmail(string $email, bool $includeDeleted = false);
 
     /**
      * @param array $filters
