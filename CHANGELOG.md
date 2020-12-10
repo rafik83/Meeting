@@ -5,12 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- fix overlay problem with opentok
 - MV-284 - Fix race conditions on sessionId creation for call visio
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
 ### Updated
 - VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
-
-### Fixed
-- MV290 - Internet Explorer doesn't support forEach method on NodeList
 
 ## [2.72.2] - 2020-12-07
 ### Fixed
@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2252 - Reactivate account
 - VIMEET-2285 - Delete message chat webinar
 - VIMEET-2249 - Notification page redirection
+>>>>>>> origin/master
 
 ## [2.72.1] - 2020-12-02
 ### Fixed
