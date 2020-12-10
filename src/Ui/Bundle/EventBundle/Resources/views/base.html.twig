@@ -58,10 +58,9 @@
 
         {% if sheet is defined %}
             {# notification toast #}
-            <div id="notification-toast"
-                class="hide"
-                data-notification-toast
-                data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}"
+            <div class="notification-toast-template notification-toast hide"
+                 data-notification-toast
+                 data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}"
             >
                 <button class="close">&times;</button>
                 <p><em class="message-author"></em></p>
@@ -69,6 +68,11 @@
                 <p>
                     <a class="message-link btn btn-sm btn-primary" href="#">{{ 'networking.chat.notification.open'|trans }}</a>
                 </p>
+            </div>
+
+            <div class="notification-toast-container hide"
+                 data-notification-toast-container
+            >
             </div>
 
             <div class="modal fade notificationCallVisio hide" id="notificationCallVisio" data-notification-call-visio tabindex="-1" role="dialog" data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}">
