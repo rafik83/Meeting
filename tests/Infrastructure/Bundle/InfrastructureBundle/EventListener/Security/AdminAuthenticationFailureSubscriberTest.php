@@ -49,8 +49,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $token = $this->prophesize(UsernamePasswordToken::class);
         $token->getProviderKey()->shouldBeCalled()->willReturn('admin');
 
-        $submittedUser = $this->prophesize(UserInterface::class);
-        $token->getUser()->shouldBeCalled()->willReturn($submittedUser);
+        $token->getUser()->shouldBeCalled()->willReturn('test@yahoo.fr');
 
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
@@ -58,7 +57,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $foundAdmin->updateLastFailedAuthentication($this->datetime)->shouldBeCalled();
         $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(false);
 
-        $this->adminRepository->findByEmail($submittedUser)->shouldBeCalled()->willReturn($foundAdmin->reveal());
+        $this->adminRepository->findByEmail('test@yahoo.fr')->shouldBeCalled()->willReturn($foundAdmin->reveal());
         $this->adminRepository->set($foundAdmin->reveal())->shouldBeCalled();
 
         $this->eventDispatcher->dispatch()->shouldNotBeCalled();
@@ -80,8 +79,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $token = $this->prophesize(UsernamePasswordToken::class);
         $token->getProviderKey()->shouldBeCalled()->willReturn('admin');
 
-        $submittedUser = $this->prophesize(UserInterface::class);
-        $token->getUser()->shouldBeCalled()->willReturn($submittedUser);
+        $token->getUser()->shouldBeCalled()->willReturn('test@yahoo.fr');
 
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
@@ -90,7 +88,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(true);
         $foundAdmin->getLocale()->willReturn('fr');
 
-        $this->adminRepository->findByEmail($submittedUser)->shouldBeCalled()->willReturn($foundAdmin->reveal());
+        $this->adminRepository->findByEmail('test@yahoo.fr')->shouldBeCalled()->willReturn($foundAdmin->reveal());
         $this->adminRepository->set($foundAdmin->reveal())->shouldBeCalled();
 
         $this->eventDispatcher->dispatch(

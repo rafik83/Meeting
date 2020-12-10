@@ -147,6 +147,8 @@ admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
 admin.common.export.no: Non
 admin.common.export.yes: Oui
+admin.create_admin.disabled_user: 'Cet utilisateur a été désactivé le %date%'
+admin.create_admin.reactivate_user: 'Réactiver l''utilisateur'
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'

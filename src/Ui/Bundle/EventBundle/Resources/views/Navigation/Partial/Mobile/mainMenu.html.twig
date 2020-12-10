@@ -37,6 +37,14 @@
             {% endfor %}
         {% endif %}
 
+        {% if submenuView %}
+            {% for customMenuView in submenuView.customButtonViews %}
+                <a href="{{ customMenuView.link }}" class="btn btn-primary btn-lg btn-inactive" target="_blank">
+                    <i class="{{ customMenuView.icon }}"></i> {{ customMenuView.label|trans }}
+                </a>
+            {% endfor %}
+        {% endif %}
+
         {% if menuHeaderView.event is defined %}
             {% for locale, path in menuHeaderView.localeRoutes %}
                 <a href="{{ path }}" class="btn btn-primary btn-lg btn-inactive">

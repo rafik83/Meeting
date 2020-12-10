@@ -242,6 +242,12 @@
 }
 
 .video-conference-test {
+  .video-helper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
+  }
+
   .video-conference-preview {
     .buttons-container {
       position: relative;

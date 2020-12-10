@@ -8,7 +8,6 @@ use Proximum\Vimeet\Application\Query\Chat\View\ChatMessageView;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatMessageVote;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 
 class ChatMessageRepository implements ChatMessageRepositoryInterface
@@ -30,6 +29,12 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
         $this->entityManager->flush($chatMessage);
 
         return $chatMessage;
+    }
+
+    public function delete(ChatMessage $chatMessage): void
+    {
+        $this->entityManager->remove($chatMessage);
+        $this->entityManager->flush();
     }
 
     /**
