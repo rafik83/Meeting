@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
 
+### Fixed
+- MV-284 - Generate tokbox token on each meeting start
+
 ## [2.72.2] - 2020-12-07
 ### Fixed
 - MV285 - Custom button display on mobile
