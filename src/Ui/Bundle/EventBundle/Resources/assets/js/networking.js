@@ -16,6 +16,13 @@ const CHAT_TAB = {
 
 let activeChatTab = CHAT_TAB.GENERAL;
 
+const doesChatItemExistsFromAuthor = (authorId) => {
+    const elements = document.querySelectorAll('[chat-item-for-user-id]');
+    return Array.from(elements).findIndex((item) => {
+        return item.getAttribute('chat-item-for-user-id') == authorId;
+    }) !== -1
+}
+
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
 
@@ -59,8 +66,8 @@ export default function initNetworking(target, userConnection, notificationCallV
     const callback = (notification) => {
         const payload = JSON.parse(notification.data);
 
-        if (payload.action === "add_chat_message") {
-            networkingBadgeManager.updateBadgeCounterValue(PRIVATECHAT,1);
+        if (payload.action === "add_chat_message" && doesChatItemExistsFromAuthor(payload.authorId)) {
+            networkingBadgeManager.updateBadgeCounterValue(PRIVATECHAT, 1);
             networkingBadgeManager.incrementMenuBadgesCounter()
             networkingBadgeManager.incrementChatItemBadgeCounter(payload.authorId)
         }
@@ -200,24 +207,20 @@ export default function initNetworking(target, userConnection, notificationCallV
         },
         open: function (participantNode) {
 
-            console.log(participantNode);
+            const authorId = participantNode.getAttribute("data-participant-user-id");
 
-            if (participantNode) {
-                const authorId = participantNode.getAttribute("data-participant-user-id");
-
+            if (doesChatItemExistsFromAuthor(authorId)) {
                 const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
-
                 networkingBadgeManager.updateBadgeCounterValue(
-                   PRIVATECHAT, -deltaToRemove
+                    PRIVATECHAT, -deltaToRemove
                 );
 
                 networkingBadgeManager.decreaseChatItemMessageCounter(
                     authorId
                 );
-
                 networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
-
             }
+
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);

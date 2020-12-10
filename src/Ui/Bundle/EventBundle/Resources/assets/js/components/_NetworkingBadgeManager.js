@@ -43,7 +43,7 @@ export class NetworkingBadgeManager {
         destinationNodes.forEach((element, index) => {
             const clone = newMessageBadge.cloneNode(true);
 
-            const userId = element.getAttribute("data-participant-user-id");
+            const userId = element.getAttribute("chat-item-for-user-id");
 
             const key = `${BADGE_TYPE.SINGLE_DISCUSSION_ITEM}-${userId}`;
 
