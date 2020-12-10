@@ -23,7 +23,7 @@ use stdClass;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    public const DELAY_AFTER_END_TIME = '+15 minutes';
+    public const DELAY_AFTER_END_TIME = 15 * 60;
     public const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
     /** @var OpenTok */
@@ -206,14 +206,8 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         array $options = [],
         bool $isPublisher = true
     ): string {
-        if (true === $this->hasSecurity) {
-            $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
-
-            if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {
-                throw new \LogicException('Impossible to modify the date');
-            }
-
-            $options['expireTime'] = $sessionEndDate->getTimeStamp();
+        if ($this->hasSecurity) {
+            $options['expireTime'] = $endDateTime->getTimeStamp() + self::DELAY_AFTER_END_TIME;
         }
 
         $options['role'] = $isPublisher ? Role::PUBLISHER : Role::SUBSCRIBER;
