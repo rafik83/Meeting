@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV289 - Error management chat
 
+## [2.73.0] - 2020-12-10
+### Fixed
+- fix overlay problem with opentok
+- MV-284 - Fix race conditions on sessionId creation for call visio
+- MV-284 - Generate tokbox token on each meeting start
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
 ### Updated
 - VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
 

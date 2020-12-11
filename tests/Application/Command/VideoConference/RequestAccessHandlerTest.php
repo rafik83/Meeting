@@ -73,7 +73,6 @@ class RequestAccessHandlerTest extends TestCase
         ;
 
         $videoConference = new VideoConference('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9', $meeting->reveal());
-        $videoConference->setToken(new VideoConferenceToken($videoConference, $user->reveal(), 'TOKEN'));
 
         $videoConferenceRepository->add($videoConference)->shouldBeCalled();
 
@@ -133,7 +132,6 @@ class RequestAccessHandlerTest extends TestCase
         $videoConferenceInterface  = $this->prophesize(VideoConferenceAdapterInterface::class);
         $videoConferenceRepository = $this->prophesize(VideoConferenceRepositoryInterface::class);
 
-        $videoConference->getTokenByUser($user->reveal())->willReturn(null);
         $videoConference->getSessionId()->willReturn('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9');
         $videoConferenceInterface->getApiKey()->shouldBeCalled()->willReturn('API_KEY');
 
@@ -161,17 +159,6 @@ class RequestAccessHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('TOKEN')
         ;
-
-        $videoConference->setToken(
-            new VideoConferenceToken(
-                $videoConference->reveal(),
-                $user->reveal(),
-                'TOKEN'
-            )
-        )->shouldBeCalled()
-        ;
-
-        $videoConferenceRepository->set($videoConference)->shouldBeCalled();
 
         $addParticipantToMeetingHandler = $this->prophesize(AddParticipantToMeetingHandler::class);
         $addParticipantToMeetingHandler

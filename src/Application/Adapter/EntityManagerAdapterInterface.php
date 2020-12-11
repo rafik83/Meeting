@@ -45,4 +45,10 @@ interface EntityManagerAdapterInterface
      * @param object $entity The entity to detach.
      */
     public function detach($entity);
+
+    public function beginTransaction();
+
+    public function commit();
+
+    public function rollback();
 }

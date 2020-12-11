@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Exception\CallVisio\CallVisioNotAllowedException;
+use Proximum\Vimeet\Application\Exception\CallVisio\SessionIdAlreadyCreatedException;
 use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\Query\Networking\CallVisioQuery;
 use Proximum\Vimeet\Application\Query\Networking\CallVisioQueryHandler;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Visio\VisioSettings;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Visio\VisioSettingsRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter;
+use Psr\Log\LoggerInterface;
 
 class CallVisioQueryHandlerTest extends TestCase
 {
@@ -134,8 +136,7 @@ class CallVisioQueryHandlerTest extends TestCase
 
         $this->videoConferenceAdapter->createSession()->shouldBeCalled()->willReturn($this->session->reveal());
         $this->session->getSessionId()->shouldBeCalled()->willReturn(123456);
-        $this->chatSession->setVisioSessionId(123456)->shouldBeCalled();
-        $this->chatSessionRepository->update()->shouldBeCalled();
+        $this->chatSessionRepository->addNewSessionId($this->chatSession->reveal(), 123456)->shouldBeCalled();
 
         $this->now->add(new \DateInterval('PT1H'))->shouldBeCalled()->willReturn($this->endTokenDateTime);
         $this->videoConferenceAdapter->generateAccessToken($this->session->reveal(), $this->endTokenDateTime)->shouldBeCalled()->willReturn('token');
@@ -164,6 +165,128 @@ class CallVisioQueryHandlerTest extends TestCase
         $expectedResult = new CallVisioView(
             'token',
             123456,
+            'hiouh67jjkk',
+            15*60,
+            180,
+            'header',
+            'sound',
+            'endImage',
+            'Message de fin',
+            'Networking',
+            'http://www.google.fr',
+            'HRFGD45ghg56'
+        );
+
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function testRaceConditionOnCreatingSessionWithoutLogger(): void
+    {
+        $this->sheet->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
+        $this->chatSessionRepository->findOneByEventAndUsers($this->event->reveal(), $this->fromUser->reveal(), $this->toUser->reveal())->shouldBeCalled()->willReturn($this->chatSession->reveal());
+
+        $this->callVisioPrivateChatAccessChecker->allowedToAccess($this->event->reveal(), $this->chatSession->reveal())->shouldBeCalled()->willReturn(true);
+
+        $this->chatSession->getVisioSessionId()->shouldBeCalled()->willReturn(null);
+
+        $sessionIdAlreadyCreatedException = new SessionIdAlreadyCreatedException(123457);
+
+        $this->videoConferenceAdapter->createSession()->shouldBeCalled()->willReturn($this->session->reveal());
+        $this->session->getSessionId()->shouldBeCalled()->willReturn(123456);
+        $this->chatSessionRepository->addNewSessionId($this->chatSession->reveal(), 123456)->shouldBeCalled()
+            ->willThrow($sessionIdAlreadyCreatedException);
+
+        $this->now->add(new \DateInterval('PT1H'))->shouldBeCalled()->willReturn($this->endTokenDateTime);
+        $this->videoConferenceAdapter->generateAccessToken($this->session->reveal(), $this->endTokenDateTime)->shouldBeCalled()->willReturn('token');
+
+        $this->visioSettingsRepository->getByEvent($this->event->reveal())->shouldBeCalled()->willReturn($this->visioSetting->reveal());
+        $this->notificationSubscriber->getCallVisioTopic($this->event->reveal())->shouldBeCalled()->willReturn('Networking');
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://www.google.fr');
+        $this->notificationSubscriber->getUserSubscriberKey($this->sheet->reveal(), $this->fromUser->reveal())->shouldBeCalled()->willReturn('HRFGD45ghg56');
+        $this->visioSetting->getHeader('FR')->shouldBeCalled()->willReturn('header');
+        $this->visioSetting->getEndSound('FR')->shouldBeCalled()->willReturn('sound');
+        $this->visioSetting->getEndImage('FR')->shouldBeCalled()->willReturn('endImage');
+        $this->visioSetting->getEndMessage('FR')->shouldBeCalled()->willReturn('Message de fin');
+        $this->videoConferenceAdapter->getApiKey()->shouldBeCalled()->willReturn('hiouh67jjkk');
+
+        $query = new CallVisioQuery($this->sheet->reveal(), $this->fromUser->reveal(), $this->toUser->reveal(),'FR');
+        $handler = new CallVisioQueryHandler(
+            $this->notificationSubscriber->reveal(),
+            $this->chatSessionRepository->reveal(),
+            $this->callVisioPrivateChatAccessChecker->reveal(),
+            $this->videoConferenceAdapter->reveal(),
+            $this->visioSettingsRepository->reveal(),
+            $this->now->reveal()
+        );
+        $result = $handler->handle($query);
+
+        $expectedResult = new CallVisioView(
+            'token',
+            123457,
+            'hiouh67jjkk',
+            15*60,
+            180,
+            'header',
+            'sound',
+            'endImage',
+            'Message de fin',
+            'Networking',
+            'http://www.google.fr',
+            'HRFGD45ghg56'
+        );
+
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function testRaceConditionOnCreatingSessionWithLogger(): void
+    {
+        $this->sheet->getEvent()->shouldBeCalled()->willReturn($this->event->reveal());
+        $this->chatSessionRepository->findOneByEventAndUsers($this->event->reveal(), $this->fromUser->reveal(), $this->toUser->reveal())->shouldBeCalled()->willReturn($this->chatSession->reveal());
+
+        $this->callVisioPrivateChatAccessChecker->allowedToAccess($this->event->reveal(), $this->chatSession->reveal())->shouldBeCalled()->willReturn(true);
+
+        $this->chatSession->getVisioSessionId()->shouldBeCalled()->willReturn(null);
+        $this->chatSession->getId()->willReturn(111111111);
+
+        $sessionIdAlreadyCreatedException = new SessionIdAlreadyCreatedException(123457);
+
+        $this->videoConferenceAdapter->createSession()->shouldBeCalled()->willReturn($this->session->reveal());
+        $this->session->getSessionId()->shouldBeCalled()->willReturn(123456);
+        $this->chatSessionRepository->addNewSessionId($this->chatSession->reveal(), 123456)->shouldBeCalled()
+            ->willThrow($sessionIdAlreadyCreatedException);
+
+        $this->now->add(new \DateInterval('PT1H'))->shouldBeCalled()->willReturn($this->endTokenDateTime);
+        $this->videoConferenceAdapter->generateAccessToken($this->session->reveal(), $this->endTokenDateTime)->shouldBeCalled()->willReturn('token');
+
+        $this->visioSettingsRepository->getByEvent($this->event->reveal())->shouldBeCalled()->willReturn($this->visioSetting->reveal());
+        $this->notificationSubscriber->getCallVisioTopic($this->event->reveal())->shouldBeCalled()->willReturn('Networking');
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://www.google.fr');
+        $this->notificationSubscriber->getUserSubscriberKey($this->sheet->reveal(), $this->fromUser->reveal())->shouldBeCalled()->willReturn('HRFGD45ghg56');
+        $this->visioSetting->getHeader('FR')->shouldBeCalled()->willReturn('header');
+        $this->visioSetting->getEndSound('FR')->shouldBeCalled()->willReturn('sound');
+        $this->visioSetting->getEndImage('FR')->shouldBeCalled()->willReturn('endImage');
+        $this->visioSetting->getEndMessage('FR')->shouldBeCalled()->willReturn('Message de fin');
+        $this->videoConferenceAdapter->getApiKey()->shouldBeCalled()->willReturn('hiouh67jjkk');
+
+        $logger = $this->prophesize(LoggerInterface::class);
+        $logger->warning('[CallVisioQueryHandler] ChatSession #111111111 has already a sessionId (likely due to race condition)')
+            ->shouldBeCalled();
+
+        $query = new CallVisioQuery($this->sheet->reveal(), $this->fromUser->reveal(), $this->toUser->reveal(),'FR');
+        $handler = new CallVisioQueryHandler(
+            $this->notificationSubscriber->reveal(),
+            $this->chatSessionRepository->reveal(),
+            $this->callVisioPrivateChatAccessChecker->reveal(),
+            $this->videoConferenceAdapter->reveal(),
+            $this->visioSettingsRepository->reveal(),
+            $this->now->reveal(),
+            $logger->reveal()
+        );
+        $result = $handler->handle($query);
+
+        $expectedResult = new CallVisioView(
+            'token',
+            123457,
             'hiouh67jjkk',
             15*60,
             180,
