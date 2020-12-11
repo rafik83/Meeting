@@ -160,8 +160,10 @@ Chat.prototype.initChat = function () {
                     $.post(chatMessageDelete, JSON.stringify(payload), (response) => {
                         if (response.status !== 'ok') {
                             this.showError('Message delete failed');
-                        } /* Todo error 403 404 */
-                    }, 'json');
+                        }
+                    }).fail((response)=> {
+                        this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+                    });
                     this.chatDeleteConfirmModal.hide();
                 });
             }.bind(this);
