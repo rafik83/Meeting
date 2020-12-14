@@ -37,6 +37,9 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $isStreamOpenToPublic;
 
+    /** @var bool */
+    public $canDeleteChatMessage;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -71,7 +74,8 @@ class SpeakerWebinarView extends AbstractWebinarView
         int $viewersCount,
         bool $isStreamOpenToPublic,
         DateTimeInterface $happeningEnd,
-        string $timeZone
+        string $timeZone,
+        bool $canDeleteChatMessage = false
     ) {
         parent::__construct(
             $eventId,
@@ -106,5 +110,7 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
         $this->allowWebinarOnHLS = $allowWebinarOnHLS;
         $this->isStreamOpenToPublic = $isStreamOpenToPublic;
+        $this->viewersCount = $viewersCount;
+        $this->canDeleteChatMessage = $canDeleteChatMessage;
     }
 }

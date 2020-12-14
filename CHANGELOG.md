@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2184 - Speakers can prepare before their webinar
 
+## [2.74.0] - 2020-12-12
+### Updated
+- Upgrade PHP to 7.4
+
+## [2.73.0] - 2020-12-10
+### Fixed
+- fix overlay problem with opentok
+- MV-284 - Fix race conditions on sessionId creation for call visio
+- MV-284 - Generate tokbox token on each meeting start
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
+### Updated
+- VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
+
+## [2.72.2] - 2020-12-07
+### Fixed
+- MV285 - Custom button display on mobile
+
+### Added
+- VIMEET-2252 - Reactivate account
+- VIMEET-2285 - Delete message chat webinar
+- VIMEET-2249 - Notification page redirection
+
 ## [2.72.1] - 2020-12-02
 ### Fixed
 - MV-286 - Fix disconnection when alert is not closed

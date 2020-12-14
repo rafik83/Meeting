@@ -14,7 +14,7 @@ import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
 import DesktopNotification from './DesktopNotification';
-import Modal from './Modal';
+import Modal from '../Modal';
 import WebinarStatus from './WebinarStatus';
 
 /**
@@ -38,6 +38,7 @@ function Webinar(element, isSpeaker) {
     this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
+    this.canDelete = element.hasAttribute('data-chat-can-delete');
 
     if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
@@ -1244,7 +1245,7 @@ Webinar.prototype.addShownChatSubscriber = function () {
         (event) => {
             const payload = JSON.parse(event.data);
 
-            if (payload.action === 'add_chat_message') {
+            if (payload.action === 'add_chat_message' || payload.action === 'delete_chat_message') {
                 this.chat.reload();
             }
 
@@ -1261,6 +1262,10 @@ Webinar.prototype.addHiddenChatSubscriber = function () {
         this.notificationSubscriberKey,
         function (event) {
             const payload = JSON.parse(event.data);
+
+            if (payload.action === 'delete_chat_message') {
+                this.lastSeenChatMessagesCount = Math.max(0, this.lastSeenChatMessagesCount - 1);
+            }
 
             if (payload.action === 'add_chat_message') {
                 const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;

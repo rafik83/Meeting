@@ -234,7 +234,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 true,
                 new \DateTime('2020-03-30 12:15:00'),
-                'Europe/Paris'
+                'Europe/Paris',
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -387,7 +388,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 true,
                 new \DateTime('2020-03-30 12:15:00'),
-                'Europe/Paris'
+                'Europe/Paris',
+                true
             ),
             $getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -441,6 +443,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
+        $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
@@ -548,7 +551,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 true,
                 new \DateTime('2020-03-30 12:15:00'),
-                'Europe/Paris'
+                'Europe/Paris',
+                false
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -768,7 +772,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 42,
                 true,
                 new \DateTime('2020-03-30 12:15:00'),
-                'Europe/Paris'
+                'Europe/Paris',
+                true
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

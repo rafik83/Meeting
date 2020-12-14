@@ -149,7 +149,8 @@ class GetWebinarViewQueryHandler
                 $viewersCount,
                 $happening->isStreamOpenToPublic(),
                 $happening->getEnd(),
-                $happening->getEvent()->getTimeZone()
+                $happening->getEvent()->getTimeZone(),
+                $happening->hasSpeaker($query->getUser())
             );
         }
 

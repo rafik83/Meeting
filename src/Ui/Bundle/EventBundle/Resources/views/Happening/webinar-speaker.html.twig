@@ -32,6 +32,8 @@
          data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
          data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
 
+         {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
+
          data-questions-count="{{ webinarView.questionsCount }}"
 
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
@@ -217,6 +219,18 @@
                     {{ 'happening.webinar.messageWarningBeforeStart'|trans }}
                 </p>
                 <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hide video-modal" data-modal-delete-chat-message>
+            <div class="video-modal-body">
+                <p class="video-modal-content">
+                    {{ 'happening.webinar.messageChatConfirm'|trans }}
+                </p>
+                <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-confirm>{{ 'modal.confirm'|trans }}</button>
                     <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
                 </div>
             </div>

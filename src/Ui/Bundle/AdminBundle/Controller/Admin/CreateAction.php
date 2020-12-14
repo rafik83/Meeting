@@ -6,7 +6,7 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Admin\Create;
-use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Application\Exception\Admin\EmailAlreadyExistsException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\CreateType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -70,6 +70,8 @@ class CreateAction
             'submit' => true,
         ]);
 
+        $existingDeleteAdmin = null;
+
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->commandBus->handle($create);
@@ -80,11 +82,16 @@ class CreateAction
                 $form->get('email')->addError(
                     $this->errorFactory->create('validators.emailAlreadyExist', $request->getLocale())
                 );
+
+                if (null !== $ex->getExistingAdmin()->getDeletedAt()){
+                    $existingDeleteAdmin = $ex->getExistingAdmin();
+                }
             }
         }
 
         return new Response($this->engine->render('AdminBundle:Admin:create.html.twig', [
             'form' => $form->createView(),
+            'existingAdmin' => $existingDeleteAdmin,
         ]));
     }
 }

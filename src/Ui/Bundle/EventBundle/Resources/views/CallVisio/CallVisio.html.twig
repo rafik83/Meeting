@@ -44,8 +44,10 @@
 
         <div class="layout-container" {% if visioView.hasHeader %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
-        <div class="video-helper" data-meeting-settings-container>
-            {{ include('EventBundle:Visio:settings.html.twig') }}
+        <div class="video-waiting-container">
+            <div class="video-helper" data-meeting-settings-container>
+                {{ include('EventBundle:Visio:settings.html.twig') }}
+            </div>
         </div>
         <div class="modal" tabindex="-1" role="dialog" data-visio-meeting-end-container>
             <div class="modal-dialog" role="document">
@@ -99,4 +101,3 @@
         </div>
     </div>
 {% endblock %}
-

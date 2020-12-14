@@ -295,6 +295,7 @@ happening.webinar.media.share: Partager
 happening.webinar.media.stopSharing: 'Arrêter le partage'
 happening.webinar.media.videoshare.title: 'Partager une vidéo'
 happening.webinar.media.videoshare.url: 'Url de la vidéo'
+happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.open: Ouvrir au public
 happening.webinar.questions.add: 'Ajoutez votre question'
@@ -349,6 +350,7 @@ meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
+modal.confirm: Confirmer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 modal.submit: Valider
 multiple_sheets.modal.close: Fermer

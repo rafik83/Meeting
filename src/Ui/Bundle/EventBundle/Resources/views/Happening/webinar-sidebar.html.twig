@@ -8,6 +8,7 @@
         <div data-chat-container
              data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'happening', objectId: webinarView.happeningId }) }}"
              data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
+             data-chat-message-delete="{{ path('event_chat_messages_delete', {sheet: sheet.id}) }}"
         >
             <div class="chat-list">
                 {# content filled with javascript #}
