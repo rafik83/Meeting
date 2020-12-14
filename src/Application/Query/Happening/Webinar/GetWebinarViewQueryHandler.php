@@ -115,6 +115,8 @@ class GetWebinarViewQueryHandler
                 $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
             }
 
+            $isRegisteredSpeaker = $happening->hasSpeaker($query->getUser());
+
             return new SpeakerWebinarView(
                 $happening->getEvent()->getId(),
                 $happening->getId(),
@@ -143,7 +145,8 @@ class GetWebinarViewQueryHandler
                 $questionsCount,
                 $happening->allowWebinarOnHLS(),
                 $viewersCount ?? 0,
-                $happening->hasSpeaker($query->getUser())
+                $isRegisteredSpeaker,
+                $isRegisteredSpeaker
             );
         }
 

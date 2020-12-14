@@ -291,6 +291,7 @@ happening.webinar.media.stopSharing: 'Arrêter le partage'
 happening.webinar.media.videoshare.title: 'Partager une vidéo'
 happening.webinar.media.videoshare.url: 'Url de la vidéo'
 happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
+happening.webinar.messageQuestionConfirm: 'Souhaitez-vous effacer la question ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.tab: Questions

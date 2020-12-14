@@ -33,6 +33,7 @@
          data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
 
          {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
+         {% if webinarView.canDeleteQuestionMessage %}data-question-can-delete{% endif %}
 
          data-questions-count="{{ webinarView.questionsCount }}"
 
@@ -179,16 +180,7 @@
             </div>
         </div>
 
-        <div class="hide video-modal" data-modal-delete-chat-message>
-            <div class="video-modal-body">
-                <p class="video-modal-content">
-                    {{ 'happening.webinar.messageChatConfirm'|trans }}
-                </p>
-                <div class="video-modal-footer">
-                    <button class="btn btn-primary" data-modal-confirm>{{ 'modal.confirm'|trans }}</button>
-                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
-                </div>
-            </div>
-        </div>
+        {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-chat-message', content:'happening.webinar.messageChatConfirm'} %}
+        {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-question-message', content:'happening.webinar.messageQuestionConfirm'} %}
     </div>
 {% endblock body %}
