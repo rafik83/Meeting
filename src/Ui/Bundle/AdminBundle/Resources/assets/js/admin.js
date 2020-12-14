@@ -1,3 +1,4 @@
+import '../../../../../../../assets/js/components/Polyfills';
 import $ from 'jquery';
 import Confirm from './components/_Confirm';
 import CheckAllCheckbox from './components/_CheckAllCheckbox';

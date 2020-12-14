@@ -7297,6 +7297,7 @@ services:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
             - '@datetime'
+            - '@logger'
         tags:
             - { name: tactician.handler, typehints: true }
 
