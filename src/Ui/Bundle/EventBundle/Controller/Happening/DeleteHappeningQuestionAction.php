@@ -72,9 +72,9 @@ class DeleteHappeningQuestionAction
 
         try {
             $this->commandBus->handle(new DeleteHappeningQuestion($messageId, $user, $happening));
-        } catch(QuestionNotFoundException $e) {
+        }  catch(DeleteQuestionNotAllowedException $e) {
             return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 403);
-        } catch(DeleteQuestionNotAllowedException $e) {
+        } catch(QuestionNotFoundException $e) {
             return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 404);
         } catch(HappeningException $e) {
             return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 400);
