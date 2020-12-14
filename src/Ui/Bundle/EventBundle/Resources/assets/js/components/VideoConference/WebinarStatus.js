@@ -11,7 +11,8 @@ class WebinarStatus {
         this.timerElement = element.querySelector('.timer-container');
         this.currentElement = element.querySelector('.current-container');
         this.endElement = element.querySelector('.end-container');
-        this.countDownContainer = this.timerElement.querySelector('.timer span.countdown');
+        this.beforeStartCountDownContainer = this.timerElement.querySelector('.timer span.countdown');
+        this.beforeEndCountDownContainer = this.currentElement.querySelector('.timer span.countdown');
 
         this.timeRemainingBeforeStart = parseInt(element.getAttribute('data-time-remaining-before-start'), 10);
         this.timeRemaining = parseInt(element.getAttribute('data-time-remaining'), 10);
@@ -21,7 +22,10 @@ class WebinarStatus {
         const endTime = new Date(new Date().getTime() + this.timeRemaining * 1000);
 
         // before start counter
-        new Counter(this.timeRemainingBeforeStart, this.warningRemainingTime, this.countDownContainer, this.timerElement);
+        new Counter(this.timeRemainingBeforeStart, this.warningRemainingTime, this.beforeStartCountDownContainer, this.timerElement.querySelector('.timer'));
+
+        // before end counter
+        new Counter(this.timeRemaining, this.warningRemainingTime, this.beforeEndCountDownContainer, this.currentElement.querySelector('.timer'));
 
         // show one container at a time (3 possible)
         const remainingTimeBeforeStart = Math.round((startTime.getTime() - new Date().getTime()) / 1000);

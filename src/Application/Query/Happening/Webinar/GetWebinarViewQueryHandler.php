@@ -148,8 +148,6 @@ class GetWebinarViewQueryHandler
                 $happening->allowWebinarOnHLS(),
                 $viewersCount,
                 $happening->isStreamOpenToPublic(),
-                $happening->getEnd(),
-                $happening->getEvent()->getTimeZone(),
                 $happening->hasSpeaker($query->getUser())
             );
         }
@@ -183,8 +181,6 @@ class GetWebinarViewQueryHandler
             $happening->allowWebinarOnHLS(),
             $this->getHLSUrl($happening),
             $viewersCount + 1,
-            $happening->getEnd(),
-            $happening->getEvent()->getTimeZone(),
             $timeRemainingBeforeStartInSeconds
         );
     }

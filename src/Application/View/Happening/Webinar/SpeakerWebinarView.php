@@ -73,8 +73,6 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $allowWebinarOnHLS,
         int $viewersCount,
         bool $isStreamOpenToPublic,
-        DateTimeInterface $happeningEnd,
-        string $timeZone,
         bool $canDeleteChatMessage = false
     ) {
         parent::__construct(
@@ -97,8 +95,6 @@ class SpeakerWebinarView extends AbstractWebinarView
             $questionsCount,
             $isVideoWebinarAndHappeningIsEnded,
             $viewersCount,
-            $happeningEnd,
-            $timeZone,
             $timeRemainingBeforeStartInSeconds
         );
 

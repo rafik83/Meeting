@@ -79,12 +79,6 @@ abstract class AbstractWebinarView
     /** @var int $viewersCount */
     public $viewersCount;
 
-    /** @var DateTimeInterface */
-    public $happeningEnd;
-
-    /** @var string */
-    public $timeZone;
-
     /** @var int */
     public $timeRemainingBeforeStartInSeconds;
 
@@ -112,8 +106,6 @@ abstract class AbstractWebinarView
         int $questionsCount,
         bool $isVideoWebinarAndHappeningIsEnded,
         int $viewersCount,
-        DateTimeInterface $happeningEnd,
-        string $timeZone,
         int $timeRemainingBeforeStartInSeconds
     ) {
         $this->eventId = $eventId;
@@ -135,8 +127,6 @@ abstract class AbstractWebinarView
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->questionsCount = $questionsCount;
         $this->viewersCount = $viewersCount;
-        $this->happeningEnd = $happeningEnd;
-        $this->timeZone = $timeZone;
         $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 

@@ -285,7 +285,7 @@ happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le w
 happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
 happening.webinar.ended: Évènement terminé
-happening.webinar.endingAtTime: 'Fin à %endTime%'
+happening.webinar.endingAt: 'Fin dans'
 happening.webinar.invisibleMode.button: 'Invisible mode'
 happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)?'
 happening.webinar.invisibleMode.option: 'Invisible mode'

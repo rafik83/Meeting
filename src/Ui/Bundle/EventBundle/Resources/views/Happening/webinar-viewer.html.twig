@@ -103,7 +103,10 @@
             </div>
 
             <div class="current-container hide">
-                {{ 'happening.webinar.endingAtTime'|trans({'%endTime%': webinarView.happeningEnd|date('H:i', webinarView.timeZone)}) }}
+                <div class="timer">
+                    {{ 'happening.webinar.endingAt'|trans() }}
+                    <span class="countdown"></span>
+                </div>
             </div>
 
             <div class="end-container hide">
