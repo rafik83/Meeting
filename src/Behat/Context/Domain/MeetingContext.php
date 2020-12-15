@@ -47,6 +47,23 @@ class MeetingContext implements Context
     }
 
     /**
+     * @Given /^there is a meeting slot from (?P<fromDate>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) to (?P<toDate>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})$/
+     */
+    public function thereIsAMeetingSlot(string $fromDate, string $toDate)
+    {
+        $event = $this->meetingContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $meetingManager = $this->meetingContextProxy->getMeetingManager();
+
+        $meetingSlot = $meetingManager->createMeetingSlot($event, new \DateTime($fromDate), new \DateTime($toDate));
+        $this->meetingContextProxy->getStorage()->set('meetingSlot', $meetingSlot);
+    }
+
+    /**
      * @Given /^there is a meeting on slot "(?P<slotId>\d+)"$/
      *
      * @param int $slotId
@@ -143,5 +160,23 @@ class MeetingContext implements Context
 
         $this->meetingContextProxy->getMeetingManager()
             ->createMeetingFromRequest($event, $request, $slot, $spot);
+    }
+
+    /**
+     * @Given /^there is a video meeting for this participant$/
+     */
+    public function thereIsAVideoMeetingForThisParticipant()
+    {
+        /** @var Participant|null $participant */
+        $participant = $this->meetingContextProxy->getStorage()->get('participant');
+        $event = $this->meetingContextProxy->getStorage()->get('event');
+
+        if (null === $participant) {
+            throw new \InvalidArgumentException('Missing Participant');
+        }
+
+        $meetingManager = $this->meetingContextProxy->getMeetingManager();
+        $meeting = $meetingManager->createVideoMeetingForParticipant($event, $participant);
+        $this->meetingContextProxy->getStorage()->set('meeting', $meeting);
     }
 }

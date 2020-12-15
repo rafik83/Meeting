@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Participant\Export;
 
 class ParticipantView
@@ -57,6 +49,21 @@ class ParticipantView
     /** @var string[] */
     public $happeningChecking;
 
+    /** @var int */
+    public $viewedSheets;
+
+    /** @var int */
+    public $clickedElements;
+
+    /** @var int */
+    public $requestedMeetings;
+
+    /** @var int */
+    public $scheduledMeetings;
+
+    /** @var int */
+    public $chatSessionsCallVisio;
+
     public function __construct(
         int $sheetId,
         string $typeTitle,
@@ -72,7 +79,12 @@ class ParticipantView
         array $daysChecking,
         array $attributableProducts,
         array $registrationData,
-        array $happeningChecking
+        array $happeningChecking,
+        int $viewedSheets,
+        int $clickedElements,
+        int $requestedMeetings,
+        int $scheduledMeetings,
+        int $chatSessionsCallVisio
     ) {
         $this->sheetId = $sheetId;
         $this->typeTitle = $typeTitle;
@@ -89,5 +101,10 @@ class ParticipantView
         $this->registrationData = $registrationData;
         $this->daysChecking = $daysChecking;
         $this->happeningChecking = $happeningChecking;
+        $this->viewedSheets = $viewedSheets;
+        $this->clickedElements = $clickedElements;
+        $this->requestedMeetings = $requestedMeetings;
+        $this->scheduledMeetings = $scheduledMeetings;
+        $this->chatSessionsCallVisio = $chatSessionsCallVisio;
     }
 }

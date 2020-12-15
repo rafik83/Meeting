@@ -1,4 +1,4 @@
-var Form = require('./_Form');
+import Form from "./_Form";
 
 /**
  * @param element
@@ -80,4 +80,4 @@ TemplateTaggableObject.prototype.save = function ()
   return true;
 };
 
-module.exports = TemplateTaggableObject;
+export default TemplateTaggableObject;

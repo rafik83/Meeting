@@ -1,0 +1,108 @@
+.questions-list {
+  height: calc(100vh - 160px);
+  margin-top: 10px;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding-right: 5px;
+
+  .question-row {
+    border: 1px solid $color-highlighted;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    .question-content {
+      font-size: 16px;
+      padding: 10px;
+      color: $color-highlighted;
+    }
+
+    .question-aside {
+      text-align: right;
+    }
+
+    .question-vote-count {
+      background-color: $gray-lighter;
+      border-radius: 4px;
+      color: $gray-light;
+      font-size: 10px;
+      font-weight: bold;
+      margin-right: 4px;
+      padding: 2px 8px;
+      vertical-align: sub;
+    }
+
+    .question-author {
+      align-items: flex-end;
+      @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+      color: $button-text-color;
+      clear: right;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      padding: 4px 10px;
+      text-align: right;
+    }
+
+    .question-author-name {
+      align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .question-author-title {
+      display: inline-block;
+      margin-left: 5px;
+      font-style: italic;
+      text-align: right;
+    }
+
+    .question-author-avatar {
+      align-self: center;
+
+      img {
+        border-radius: 50%;
+        display: inline-block;
+        height: 32px;
+        margin-left: 10px;
+        object-fit: cover;
+        width: 32px;
+      }
+    }
+  }
+}
+
+.questions-form {
+  align-items: center;
+  border: 1px solid $color-highlighted;
+  display: flex;
+  height: 34px;
+
+  input {
+    border: 0;
+    flex-grow: 1;
+    font-size: 16px;
+    margin-right: 10px;
+    outline: 0;
+    padding: 0 5px;
+  }
+
+  button {
+    right: 0;
+    width: 51px;
+    height: 32px;
+    background-color: #f2f2f2;
+    outline: 0;
+    border: 0;
+    font-family: 'PictoOutline';
+  }
+
+  button::before {
+    content: "=";
+  }
+
+  button:hover {
+    background-color: #999;
+  }
+}

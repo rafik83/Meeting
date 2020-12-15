@@ -10,11 +10,14 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractUser implements UserInterface, EquatableInterface, \Serializable
 {
+    private const FAILED_AUTHENTICATION_MAX = 5;
+
     /**
      * @var int
      */
@@ -39,6 +42,12 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      * @var string
      */
     protected $locale;
+
+    /** @var int */
+    protected $failedAuthentication = 0;
+
+    /** @var null|\DateTimeInterface */
+    protected $lastFailedAuthentication;
 
     /**
      * @param string $email
@@ -168,7 +177,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      */
     public function updatePassword($salt, $password)
     {
-        $this->salt     = $salt;
+        $this->salt = $salt;
         $this->password = $password;
 
         return $this;
@@ -184,5 +193,41 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
         $this->email = $email;
 
         return $this;
+    }
+
+    public function updateLastFailedAuthentication(\DateTimeInterface $now): void
+    {
+        if ($this->isLastFailedAuthenticationExpired($now)) {
+            $this->failedAuthentication = 0;
+        }
+
+        $this->lastFailedAuthentication = $now;
+        ++$this->failedAuthentication;
+    }
+
+    public function isLastFailedAuthenticationExpired(\DateTimeInterface $now): bool
+    {
+        if (null === $this->lastFailedAuthentication) {
+            return true;
+        }
+
+        $lastFailedAuthenticationPlus15Minutes = DaysHelper::cloneDateTime($this->lastFailedAuthentication);
+        $lastFailedAuthenticationPlus15Minutes->add(new \DateInterval('PT15M'));
+
+        return $lastFailedAuthenticationPlus15Minutes < $now;
+    }
+
+    public function isTemporarilyDisabledDueToFailedAuthentication(\DateTimeInterface $now): bool
+    {
+        if (self::FAILED_AUTHENTICATION_MAX > $this->failedAuthentication) {
+            return false;
+        }
+
+        return !$this->isLastFailedAuthenticationExpired($now);
+    }
+
+    public function getRemainingAuthenticationAttempt(\DateTimeInterface $now): int
+    {
+        return self::FAILED_AUTHENTICATION_MAX - $this->failedAuthentication;
     }
 }

@@ -1,29 +1,25 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Admin\ActivateAccountTokenRepositoryInterface;
 
 class AdminManager
 {
     /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @param AdminRepositoryInterface $adminRepository
-     */
-    public function __construct(AdminRepositoryInterface $adminRepository)
+    /** @var ActivateAccountTokenRepositoryInterface */
+    private $activateAccountTokenRepository;
+
+    public function __construct(AdminRepositoryInterface $adminRepository, ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository)
     {
         $this->adminRepository = $adminRepository;
+        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
     }
 
     /**
@@ -32,25 +28,39 @@ class AdminManager
      *
      * @return Admin
      */
-    public function create(string $email = null, string $role)
-    {
+    public function create(
+        string $email = null,
+        string $role
+    ): Admin {
         if (null === $email) {
             $email = sprintf('%s@example.net', uniqid());
         }
 
         $admin = new Admin(
             $email,
-            'D/TBAVl5oYyYU6/4F7gOT0mQkbBD8c5rBHga80zO',
-            'YzzBNEhw7I6H5xPuziQEAPAsg5g=',
+            '221e7e2646071ec7c0f39602f8a900d6516907ed',
+            '$argon2i$v=19$m=65536,t=4,p=1$bElLS0RnV1EvbDhPLmN1eQ$oUWZgn3mFLvergOyQHLFX/Vm8pstN/pDVdfh8vU5D/0',
             'fr',
             'Bob',
             'Teemiv',
             $role,
             new \DateTime()
-        ); // password: vimeet_admin
+        ); // password: Vimeet_admin1
 
         $this->adminRepository->add($admin);
 
         return $admin;
+    }
+
+    public function assignEvent(Admin $admin, Event $event): void
+    {
+        $admin->addEvent($event);
+        $this->adminRepository->set($admin);
+    }
+
+    public function assignToken(Admin $admin, string $token): void
+    {
+        $activateAccountToken = new ActivateAccountToken($admin, $token, new \DateTime('+1 hour'));
+        $this->activateAccountTokenRepository->create($activateAccountToken);
     }
 }

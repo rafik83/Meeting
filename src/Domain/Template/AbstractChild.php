@@ -28,6 +28,7 @@ abstract class AbstractChild
     public const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
     public const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
     public const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
+    public const TEMPLATE_OBJECT_TYPE_VIDEO         = 'video';
 
     /**
      * @var string
@@ -48,6 +49,11 @@ abstract class AbstractChild
      * @var string
      */
     protected $fallback;
+
+    /**
+     * @var string|null
+     */
+    private $uid;
 
     /**
      * AbstractChild constructor.
@@ -117,6 +123,11 @@ abstract class AbstractChild
         return self::TEMPLATE_OBJECT_TYPE_UPLOAD === $this->type;
     }
 
+    public function isVideo(): bool
+    {
+        return self::TEMPLATE_OBJECT_TYPE_VIDEO === $this->type;
+    }
+
     /**
      * @return string
      */
@@ -150,4 +161,14 @@ abstract class AbstractChild
      * @return array
      */
     abstract public function normalize();
+
+    public function setUid(string $name): void
+    {
+        $this->uid = $name;
+    }
+
+    public function getUid(): ?string
+    {
+        return $this->uid;
+    }
 }

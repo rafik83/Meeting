@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -17,17 +9,22 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MultiUploadCollectionObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -68,6 +65,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     public const COL_COMMENTS = 'comments';
     public const COL_COMMERCIAL_STATUS = 'commercial_status';
     public const COL_SPOT = 'sheet_spot';
+    public const COL_SENT_REQUESTS = 'sent_requests';
+    public const COL_RECEIVED_REQUESTS = 'received_requests';
+    public const COL_SCHEDULED_MEETINGS = 'scheduled_meetings';
+    public const COL_VIEWS = 'views';
+    public const COL_CLICKED_ELEMENTS = 'clicked_elements';
 
     public const TRANSLATION_KEY_COMMERCIAL_STATUS = 'admin.sheet.details.crm.record.trace.set_commercial_status.';
     public const TRANSLATION_KEY_COMMENT = 'admin.sheet.export.field.comment';
@@ -97,6 +99,11 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         self::COL_BALANCE,
         self::COL_COMMENTS,
         self::COL_COMMERCIAL_STATUS,
+        self::COL_SENT_REQUESTS,
+        self::COL_RECEIVED_REQUESTS,
+        self::COL_SCHEDULED_MEETINGS,
+        self::COL_VIEWS,
+        self::COL_CLICKED_ELEMENTS,
     ];
 
     protected $normalizerType = 'sheet';
@@ -146,16 +153,27 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
-    /**
-     * @param TranslatorInterface        $translator
-     * @param SheetRepositoryInterface   $sheetRepository
-     * @param TemplateDataFactory        $templateDataFactory
-     * @param OrderRepositoryInterface   $orderRepository
-     * @param Merger                     $merger
-     * @param Balance                    $balance
-     * @param RecordViewsQueryHandler    $recordViewsQueryHandler
-     * @param EventUrlGeneratorInterface $eventUrlGenerator
-     */
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
+    /** @var string[] indexed by type id */
+    private $typeTitles = [];
+
+    /** @var string[] indexed by type id */
+    private $categories = [];
+
+    /** @var int[] indexed by sheet id */
+    private $sentRequests;
+
+    /** @var int[] indexed by sheet id */
+    private $receivedRequests;
+
+    /** @var int[] indexed by sheet id */
+    private $scheduledMeetings;
+
     public function __construct(
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository,
@@ -164,7 +182,9 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         Merger $merger,
         Balance $balance,
         RecordViewsQueryHandler $recordViewsQueryHandler,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator,
+        RequestRepositoryInterface $requestRepository,
+        MeetingRepositoryInterface $meetingRepository
     ) {
         parent::__construct($translator);
 
@@ -177,6 +197,8 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $this->orderRepository = $orderRepository;
         $this->recordViewsQueryHandler = $recordViewsQueryHandler;
         $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->requestRepository = $requestRepository;
+        $this->meetingRepository = $meetingRepository;
     }
 
     /**
@@ -193,16 +215,36 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $locale = $context['locale'];
         $charset = $context['charset'];
 
+        $availableLocale = $event->getAvailableLocale($locale);
+        $fallbackLocale = $event->getLocaleFallback();
+        $eventUrl = $this->eventUrlGenerator->generateBaseEventAbsoluteUrl($event);
+
         // Preload transaction and order to avoid a query by sheet
         $this->balance->loadAllForSheetIds($event, $sheetIds);
+
+        // Preload requests count
+        $this->sentRequests = $this->requestRepository->getSheetSentRequestsCount($sheetIds);
+        $this->receivedRequests = $this->requestRepository->getSheetReceivedRequestsCount($sheetIds);
+
+        // Preload meetings count
+        $this->scheduledMeetings = $this->meetingRepository->getSheetScheduledMeetingsCount($sheetIds);
 
         $sheets = $this->sheetRepository->getSheetsByEventAndIds($event, $sheetIds);
 
         $rawSheets = [];
 
         foreach ($sheets as $sheet) {
-            $rawSheets[] = $this->getSheetRawData($sheet, $locale, $context);
+            $rawSheets[] = $this->getSheetRawData(
+                $event,
+                $sheet,
+                $availableLocale,
+                $fallbackLocale,
+                $eventUrl,
+                $context
+            );
         }
+
+        unset($sheets, $event);
 
         $normalizedSheets = [];
 
@@ -216,7 +258,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof SheetIdsView && 'csv' === $format;
     }
@@ -225,27 +267,25 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * Return an array of raw data for a given Sheet and locale ('raw' meaning unescaped content, untranslated column
      * names, not human-readable column names for dynamic columns, etc.)
      *
+     * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
+     * @param string $fallbackLocale
+     * @param string $eventUrl
      * @param array  $context
      *
      * @return array Raw data about sheet
      */
-    private function getSheetRawData(Sheet $sheet, string $locale, array $context)
-    {
-        $event = $sheet->getEvent();
+    private function getSheetRawData(
+        Event $event,
+        Sheet $sheet,
+        string $locale,
+        string $fallbackLocale,
+        string $eventUrl,
+        array $context
+    ): array {
         $owner = $sheet->getOwner();
         $follower = $sheet->getFollower();
-
-        $availableLocale = $event->getAvailableLocale($locale);
-        $fallbackLocale = $event->getFallback();
-
-        $categories = implode(';', array_map(
-            function (Category $category) use ($availableLocale) {
-                return str_replace(';', ',', $category->getTitle($availableLocale));
-            },
-            $sheet->getType()->getCategories()->toArray()
-        ));
 
         $promotionCodes = [];
         $notCancelledOrders = $this->orderRepository->findNotCancelledBySheet($sheet);
@@ -263,40 +303,77 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // 1. Common fields (event ID, event name, etc.)
         $rawData = [
-            self::COL_EVENT_ID          => $event->getId(),
-            self::COL_EVENT_NAME        => $event->getTitle(),
-            self::COL_SHEET_ID          => $sheet->getId(),
-            self::COL_SHEET_ENABLE      => $this->normalizeBoolean($sheet->isEnabled()),
-            self::COL_SHEET_STATE       => $sheet->getState(),
-            self::COL_SPOT              => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
-            self::COL_OWNER_ID          => $owner->getId(),
-            self::COL_OWNER_FIRSTNAME   => $owner->getFirstName(),
-            self::COL_OWNER_LASTNAME    => $owner->getLastName(),
-            self::COL_OWNER_EMAIL       => $owner->getEmail(),
-            self::COL_OWNER_PHONE       => $owner->getPhone(),
-            self::COL_OWNER_MOBILE      => $owner->getMobile(),
-            self::COL_TYPE              => $sheet->getType()->getTitle($availableLocale),
-            self::COL_CATEGORY          => $categories,
+            self::COL_EVENT_ID => $event->getId(),
+            self::COL_EVENT_NAME => $event->getTitle(),
+            self::COL_SHEET_ID => $sheet->getId(),
+            self::COL_SHEET_ENABLE => $this->normalizeBoolean($sheet->isEnabled()),
+            self::COL_SHEET_STATE => $sheet->getState(),
+            self::COL_SPOT => $sheet->getSpot() instanceof Spot ? $sheet->getSpot()->getReference() : null,
+            self::COL_OWNER_ID => $owner->getId(),
+            self::COL_OWNER_FIRSTNAME => $owner->getFirstName(),
+            self::COL_OWNER_LASTNAME => $owner->getLastName(),
+            self::COL_OWNER_EMAIL => $owner->getEmail(),
+            self::COL_OWNER_PHONE => $owner->getPhone(),
+            self::COL_OWNER_MOBILE => $owner->getMobile(),
+            self::COL_TYPE => $this->getTypeTitle($sheet, $locale),
+            self::COL_CATEGORY => $this->getCategories($sheet, $locale),
             self::COL_REGISTRATION_DATE => $sheet->getCreatedAt()->format('d/m/Y'),
-            self::COL_PARTICIPANTS      => $sheet->countParticipants(),
-            self::COL_STATUS            => $sheet->getValidationState(),
-            self::COL_FOLLOWING         => null !== $follower ? $follower->getDisplayName() : '',
-            self::COL_IN_CATALOG        => $this->normalizeBoolean($sheet->isInCatalog()),
-            self::COL_ORDER_PROMO_CODE  => implode(',', $promotionCodes),
-            self::COL_TOTAL_ORDER       => $totalWithoutVat,
-            self::COL_BALANCE           => $balance,
-            self::COL_COMMENTS          => $this->getCommentHistoric($sheet, $locale),
+            self::COL_PARTICIPANTS => $sheet->countParticipants(),
+            self::COL_STATUS => $sheet->getValidationState(),
+            self::COL_FOLLOWING => null !== $follower ? $follower->getDisplayName() : '',
+            self::COL_IN_CATALOG => $this->normalizeBoolean($sheet->isInInternalCatalog()),
+            self::COL_ORDER_PROMO_CODE => implode(',', $promotionCodes),
+            self::COL_TOTAL_ORDER => $totalWithoutVat,
+            self::COL_BALANCE => $balance,
+            self::COL_COMMENTS => $this->getCommentHistoric($sheet, $locale),
             self::COL_COMMERCIAL_STATUS => $this->getCommercialStatus($sheet),
+            self::COL_SENT_REQUESTS => $this->sentRequests[$sheet->getId()] ?? 0,
+            self::COL_RECEIVED_REQUESTS => $this->receivedRequests[$sheet->getId()] ?? 0,
+            self::COL_SCHEDULED_MEETINGS => $this->scheduledMeetings[$sheet->getId()] ?? 0,
+            self::COL_VIEWS => $sheet->getAnalytics()->getViews(),
+            self::COL_CLICKED_ELEMENTS => $sheet->getAnalytics()->getClickedElementsTotal(),
         ];
 
-
         // 2. Registration data
-        $this->addRegistrationRawData($rawData, $sheet, $availableLocale, $fallbackLocale, $context);
+        $this->addRegistrationRawData($rawData, $sheet, $locale, $fallbackLocale, $context);
 
         // 3. Sheet presentation data
-        $this->addPresentationRawData($rawData, $sheet, $availableLocale, $fallbackLocale, $context);
+        $this->addPresentationRawData($rawData, $sheet, $locale, $fallbackLocale, $eventUrl, $context);
 
         return $rawData;
+    }
+
+    private function getTypeTitle(Sheet $sheet, string $locale): string
+    {
+        $typeId = $sheet->getType()->getId();
+
+        if (isset($this->typeTitles[$typeId])) {
+            return $this->typeTitles[$typeId];
+        }
+
+        $this->typeTitles[$typeId] = $sheet->getType()->getTitle($locale);
+
+        return $this->typeTitles[$typeId];
+    }
+
+    private function getCategories(Sheet $sheet, string $locale): string
+    {
+        $typeId = $sheet->getType()->getId();
+
+        if (isset($this->categories[$typeId])) {
+            return $this->categories[$typeId];
+        }
+
+        $categories = implode(';', array_map(
+            static function (Category $category) use ($locale) {
+                return str_replace(';', ',', $category->getTitle($locale));
+            },
+            $sheet->getType()->getCategories()->toArray()
+        ));
+
+        $this->categories[$typeId] = $categories;
+
+        return $this->categories[$typeId];
     }
 
     private function getCommercialStatus(Sheet $sheet): string
@@ -333,18 +410,27 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param string $availableLocale
      * @param string $fallbackLocale
      * @param array  $context
+     * @param string $eventUrl
      */
-    private function addPresentationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale, array $context = []): void
-    {
+    private function addPresentationRawData(
+        &$rawData,
+        Sheet $sheet,
+        string $availableLocale,
+        string $fallbackLocale,
+        string $eventUrl,
+        array $context = []
+    ): void {
         $presentationTemplateData = $this->templateDataFactory->createFromSheet($sheet, $availableLocale);
 
         // the tagged data are used in case of empty field
         $taggedData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale)->getAllTaggedDatas();
-        $eventUrl = $this->eventUrlGenerator->generateBaseEventAbsoluteUrl($sheet->getEvent());
 
+        $sheetId = $sheet->getId();
         $context = array_merge($context, ['taggedData' => $taggedData]);
 
-        foreach ($presentationTemplateData->getExportableObjects() as $presentationObject) {
+        /** @var ExportableObjectInterface|MultiUploadCollectionObject|MediaCollection $presentationObject */
+        foreach ($presentationTemplateData->getExportableObjectsWithMediaAndUpload() as $presentationObject) {
+            $data = null;
             $key = $presentationObject->getKey();
 
             if (!isset($this->sheetFields[$key])) {
@@ -352,14 +438,22 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
                 $this->sheetFields[$key] = $fieldName;
             }
 
-            $data = $this->getExportableContent($presentationObject, $context);
+            if ($presentationObject instanceof ExportableObjectInterface) {
+                $data = $this->getExportableContent($presentationObject, $context);
 
-            if($presentationObject instanceof Image && $data !== '') {
-                $data = $eventUrl.$data;
+                if($presentationObject instanceof Image && $data !== '') {
+                    $data = $eventUrl.$data;
+                }
+            } elseif ($presentationObject instanceof MediaCollection) {
+                $data = $presentationObject->getExportableContent();
+            } elseif ($presentationObject instanceof MultiUploadCollectionObject) {
+                $data = $presentationObject->getExportableUploads($eventUrl, $sheetId, $fallbackLocale);
             }
 
             $rawData[$key] = $data;
         }
+
+        unset($presentationTemplateData, $taggedData);
     }
 
     /**
@@ -371,8 +465,13 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      * @param string $fallbackLocale
      * @param array  $context
      */
-    private function addRegistrationRawData(&$rawData, Sheet $sheet, $availableLocale, $fallbackLocale, array $context = []): void
-    {
+    private function addRegistrationRawData(
+        &$rawData,
+        Sheet $sheet,
+        string $availableLocale,
+        string $fallbackLocale,
+        array $context = []
+    ): void {
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $availableLocale);
 
         foreach ($registrationTemplateData->getEditableSheetDataExceptedImageObjects() as $registrationObject) {
@@ -388,15 +487,16 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             }
         }
 
+        unset($registrationTemplateData);
     }
 
     /**
      * @param ExportableObjectInterface $exportableObject
      * @param array                     $context
      *
-     * @return string
+     * @return string|null
      */
-    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context)
+    private function getExportableContent(ExportableObjectInterface $exportableObject, array $context): ?string
     {
         $displayNomenclatureIds = $context['displayNomenclatureIds'] ?? false;
 
@@ -416,7 +516,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      *
      * @return array
      */
-    private function normalizeSheetRawData($rawData, $charset = Charset::WINDOWS_1252)
+    private function normalizeSheetRawData($rawData, $charset = Charset::WINDOWS_1252): array
     {
         $normalizedData = [];
 
@@ -440,7 +540,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = $rawData[$fieldKey] ?? null;
 
             // Avoid set to null in field with same name
             if (null === $input && isset($normalizedData[$fieldName])) {
@@ -453,7 +553,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
 
         // Sheet data
         foreach ($this->sheetFields as $fieldKey => $fieldName) {
-            $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $input = $rawData[$fieldKey] ?? null;
 
             // Avoid set to null in field with same name
             if (null === $input && isset($normalizedData[$fieldName])) {

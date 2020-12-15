@@ -1,0 +1,16 @@
+apiVersion: v1
+name: vimeet
+version: 1.0.0
+appVersion: 2.0
+description: Proximum Vimeet
+keywords:
+- http
+- web
+- php
+home: https://www.vimeet.events
+sources:
+- https://github.com/proximum/vimeet
+maintainers:
+- name: Synalabs
+  email: info@synalabs.com
+engine: gotpl

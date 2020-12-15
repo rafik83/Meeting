@@ -1,36 +1,19 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class ImportMappingViewQuery
+class ImportMappingViewQuery implements Query
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var Type
-     */
+    /** @var Type */
     public $type;
 
-    /**
-     * ImportMappingViewQuery constructor.
-     *
-     * @param Type   $type
-     * @param string $locale
-     */
-    public function __construct(Type $type, $locale)
+    public function __construct(Type $type, string $locale)
     {
         $this->locale = $locale;
         $this->type   = $type;

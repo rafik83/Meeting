@@ -139,6 +139,10 @@ class Preview
                 $previewView->canDisplayImage = $templateObject->canDisplayImage();
             }
 
+            if ($templateObject instanceof TemplateObject\Video) {
+                $previewView->fileMimeType = $templateObject->getMimeType();
+            }
+
             return $previewView;
         }
 
@@ -148,7 +152,8 @@ class Preview
                     new TagView(
                         $taggedDataView->type,
                         $templateObject->getLabel($locale),
-                        $taggedDataView->content
+                        $taggedDataView->content,
+                        $taggedDataView->originalUrl
                     )
                 );
             }

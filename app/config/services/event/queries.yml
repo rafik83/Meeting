@@ -16,6 +16,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQueryHandler'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery }
 
@@ -40,10 +41,37 @@ services:
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler:
         arguments:
+            - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
             - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordingAllowed'
+            - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQuery }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PrepareContent }
 
     #
     # Participant
@@ -53,6 +81,13 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\Sheet\ParticipantListViewQuery }
+
+    Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler:
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@sheet.sheet_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos }
 
     #
     # Form Template
@@ -89,3 +124,46 @@ services:
     Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQueryHandler:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObject }
+
+    Proximum\Vimeet\Application\Query\Chat\ListChatMessagesHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
+            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Chat\ListChatMessages }
+
+    #
+    # Sheet
+    #
+    Proximum\Vimeet\Application\Query\Sheet\Template\TemplateObjectUrlQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@adapter.event_url_generator'
+            - '@logger'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Template\TemplateObjectUrlQuery }
+
+    #
+    # User Cta
+    #
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@repository.user.event.extra_data_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }

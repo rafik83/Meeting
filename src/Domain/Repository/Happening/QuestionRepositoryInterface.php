@@ -23,24 +23,25 @@ interface QuestionRepositoryInterface
     public function add(Question $question);
 
     /**
-     * @param User      $user
-     * @param Happening $happening
-     *
-     * @return null|Question
+     * @return Question[]
      */
-    public function getByUserAndHappening(User $user, Happening $happening);
+    public function getByUserAndHappening(User $user, Happening $happening): array;
 
-    /**
-     * @param User      $user
-     * @param Happening $happening
-     */
     public function removeQuestionFromUserForHappening(User $user, Happening $happening);
 
     /**
-     * @param Happening $happening
-     * @param Sheet     $sheet
-     *
-     * @return Question|null
+     * @return Question[]
      */
-    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet);
+    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet): array;
+
+    /**
+     * @param User $currentUser to indicate which questions have been voted for
+     *
+     * @return Question[]
+     */
+    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser): array;
+
+    public function findById(int $id): ?Question;
+
+    public function getMessagesCountDuringHappening(Happening $happening): int;
 }

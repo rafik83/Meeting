@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Participant\Export;
 
 use PHPUnit\Framework\TestCase;
@@ -24,10 +16,14 @@ use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -51,6 +47,18 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $productAttributedToParticipantRepository;
+
+    /** @var ObjectProphecy */
+    private $sheetRepository;
+
+    /** @var ObjectProphecy */
+    private $requestRepository;
+
+    /** @var ObjectProphecy */
+    private $meetingRepository;
+
+    /** @var ObjectProphecy */
+    private $chatSessionRepository;
 
     /** @var ObjectProphecy */
     private $scanRepository;
@@ -98,6 +106,10 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
         $this->productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $this->participant = $this->prophesize(Participant::class);
         $this->event = $this->prophesize(Event::class);
@@ -246,6 +258,22 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($scan);
 
+        $this->sheetRepository->getAnalyticsByUser($this->event->reveal())
+            ->shouldBeCalledOnce()
+            ->willReturn([123 => ['viewedSheets' => 42, 'clickedElements' => 24]]);
+
+        $this->requestRepository->getParticipantRequestsCount($this->participant->reveal())
+            ->shouldBeCalled()
+            ->willReturn(5);
+
+        $this->meetingRepository->getParticipantMeetingsCount($this->participant->reveal())
+            ->shouldBeCalled()
+            ->willReturn(3);
+
+        $this->chatSessionRepository->countCallVisioByEventAndUser($this->event->reveal(), $this->user->reveal())
+            ->shouldBeCalled()
+            ->willReturn(7);
+
         $handler = new ParticipantViewQueryHandler(
             $this->happeningParticipationRepository->reveal(),
             $this->templateDataFactory->reveal(),
@@ -253,7 +281,11 @@ class ParticipantViewQueryHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
             $this->scanRepository->reveal(),
-            $happeningRepository->reveal()
+            $happeningRepository->reveal(),
+            $this->sheetRepository->reveal(),
+            $this->requestRepository->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->chatSessionRepository->reveal()
         );
 
         $result = $handler->handle($query);
@@ -285,7 +317,12 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ],
             [
                 'happening_1' => '09/10/2018 15:38'
-            ]
+            ],
+            42,
+            24,
+            5,
+            3,
+            7
         );
 
         $this->assertEquals($expected, $result);

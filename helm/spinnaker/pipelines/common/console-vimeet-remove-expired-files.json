@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:remove:expired-files",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-remove-expired-files",
+    "cronEnabled": "true",
+    "cronExpression": "0 0 4 ? * * *",
+    "cronCommand": "bin/console vimeet:remove:expired_files --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:remove:expired-files",
+  "stages": []
+}

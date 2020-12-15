@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Command\Command;
@@ -92,6 +84,15 @@ class Create implements Command
     /** @var bool */
     public $mustEvaluateMeeting = false;
 
+    /** @var bool */
+    public $canSubmitValidation = true;
+
+    /** @var bool */
+    public $displayAnalyticsOnSheet = false;
+
+    /** @var bool */
+    public $displayAnalyticsOnCatalog = false;
+
     public function __construct(Event $event, string $locale)
     {
         $this->event  = $event;
@@ -99,10 +100,9 @@ class Create implements Command
 
         foreach ($event->getLocales() as $eventLocale) {
             $this->translations[$eventLocale] = [
-                'title'       => '',
+                'title' => '',
                 'description' => '',
             ];
         }
     }
 }
-

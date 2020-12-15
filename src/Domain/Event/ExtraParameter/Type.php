@@ -54,12 +54,16 @@ class Type
 
     // TechEvent
     public const TYPE_TECH_EVENT_CONFIGURATION = 'tech_event_configuration';
+    public const TYPE_TECH_EVENT_LOGIN_ENABLED = 'tech_event_login_enabled';
 
     // Crisp
     public const TYPE_CRISP_SITE_ID = 'crisp_site_id';
 
     // Tracking code
     public const TYPE_TRACKING_CODE = 'tracking_code';
+
+    public const TYPE_CUSTOM_BUTTON_1 = 'custom_button';
+    public const TYPE_CUSTOM_BUTTON_2 = 'custom_button_2';
 
     public const TYPES = [
         self::TYPE_LENI_USER,
@@ -82,7 +86,10 @@ class Type
         self::TYPE_COMEXPOSIUM_SSO_SESSION_SALON,
         self::TYPE_COMEXPOSIUM_SSO_APPLICATION,
         self::TYPE_TECH_EVENT_CONFIGURATION,
+        self::TYPE_TECH_EVENT_LOGIN_ENABLED,
         self::TYPE_CRISP_SITE_ID,
         self::TYPE_TRACKING_CODE,
+        self::TYPE_CUSTOM_BUTTON_1,
+        self::TYPE_CUSTOM_BUTTON_2
     ];
 }

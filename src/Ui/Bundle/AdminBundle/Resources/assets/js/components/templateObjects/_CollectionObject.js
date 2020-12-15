@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 /**
  * CollectionObject
@@ -46,4 +46,4 @@ CollectionObject.prototype.save = function ()
   return true;
 };
 
-module.exports = CollectionObject;
+export default CollectionObject;

@@ -1,0 +1,8 @@
+email;sheet_title;group_title;first_name;last_name
+existing-user-without-group@example.net;EDM;New Group;"Élisabeth
+";De Monnier
+existing-user-with-group@example.net;DH;Existing Group;Daniel;Hamel
+new-user-1@example.net;Lion SA;Should Not Have group;Alix;Vincent
+new-user-2@example.net;Super SA;Super;Véronique;Joly
+new-user-2@example.net;Super SARL;Super;Véronique;Joly
+new-user-2@example.net;Super SCOP;Super;Véronique;Joly

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Tip\Event;
 
 use League\Tactician\CommandBus;
@@ -64,7 +56,7 @@ class UpdateActionTest extends TestCase
     /** @var ObjectProphecy */
     private $tip;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->admin = $this->prophesize(Admin::class);
         $this->tip = $this->prophesize(Tip::class);
@@ -87,11 +79,13 @@ class UpdateActionTest extends TestCase
         $this->tip->isOnPackage()->willReturn(true);
         $this->tip->isOnContacts()->willReturn(true);
         $this->tip->isOnConfirmationPhone()->willReturn(true);
+        $this->tip->isOnNetworking()->willReturn(false);
         $this->tip->getTypes()->willReturn([]);
-        $this->tip->getTranslations()->willReturn([]);
+        $this->tip->getTranslation('fr')->willReturn(null);
+        $this->tip->getTranslation('en')->willReturn(null);
     }
 
-    public function testAccessDeniedRole()
+    public function testAccessDeniedRole(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(false);
@@ -142,7 +136,7 @@ class UpdateActionTest extends TestCase
         $action($this->request->reveal(), $this->event->reveal(), $this->tip->reveal(), $this->admin->reveal());
     }
 
-    public function testAccessDeniedEventDifferent()
+    public function testAccessDeniedEventDifferent(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
@@ -172,7 +166,7 @@ class UpdateActionTest extends TestCase
         $action($this->request->reveal(), $this->event->reveal(), $this->tip->reveal(), $this->admin->reveal());
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
         $this->authorizationCheckerAdapter
@@ -243,7 +237,7 @@ class UpdateActionTest extends TestCase
         $this->assertEquals($response, $result);
     }
 
-    public function testHandle()
+    public function testHandle(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
         $this->authorizationCheckerAdapter

@@ -1,131 +1,100 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 
 class HappeningTranslation
 {
-    /**
-     * @var int
-     */
+    /** @var int|null */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     private $happening;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var null|string
-     */
+    /** @var string|null */
     private $description;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $webinarHeaderImage;
+
+    /**
+     * @var string|null
+     */
+    private $webinarWaitingMediaFile;
+
+    /**
+     * @var string|null
+     */
+    private $webinarWaitingMediaType;
 
     public function __construct(
         Happening $happening,
         string $locale,
         string $title,
         ?string $description,
-        ?string $webinarHeaderImage = null
+        ?string $webinarHeaderImage = null,
+        ?string $webinarWaitingMediaFile = null,
+        ?string $webinarWaitingMediaType = null
     ) {
         $this->happening = $happening;
         $this->locale = $locale;
         $this->title = $title;
         $this->description = $description;
         $this->webinarHeaderImage = $webinarHeaderImage;
+        $this->webinarWaitingMediaFile = $webinarWaitingMediaFile;
+        $this->webinarWaitingMediaType = $webinarWaitingMediaType;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     */
-    public function setLocale($locale)
+    public function setLocale(string $locale): void
     {
         $this->locale = $locale;
     }
 
-    /**
-     * @return Happening
-     */
-    public function getHappening()
+    public function getHappening(): Happening
     {
         return $this->happening;
     }
 
-    /**
-     * @param Happening $happening
-     */
-    public function setHappening($happening)
+    public function setHappening(happening $happening): void
     {
         $this->happening = $happening;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle($title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
@@ -135,10 +104,27 @@ class HappeningTranslation
         return $this->webinarHeaderImage;
     }
 
-    public function update(string $title, ?string $description, ?string $webinarHeaderImage): void
+    public function getWebinarWaitingMediaFile(): ?string
     {
+        return $this->webinarWaitingMediaFile;
+    }
+
+    public function getWebinarWaitingMediaType(): ?string
+    {
+        return $this->webinarWaitingMediaType;
+    }
+
+    public function update(
+        string $title,
+        ?string $description,
+        ?string $webinarHeaderImage,
+        ?string $webinarWaitingMediaFile,
+        ?string $webinarWaitingMediaType
+    ): void {
         $this->title = $title;
         $this->description = $description;
         $this->webinarHeaderImage = $webinarHeaderImage;
+        $this->webinarWaitingMediaFile = $webinarWaitingMediaFile;
+        $this->webinarWaitingMediaType = $webinarWaitingMediaType;
     }
 }

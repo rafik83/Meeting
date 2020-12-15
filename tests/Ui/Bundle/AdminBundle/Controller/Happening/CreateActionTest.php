@@ -120,6 +120,10 @@ class CreateActionTest extends TestCase
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
         $form->createView()->willReturn($formView->reveal());
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
+
         $create = new Create($this->event->reveal());
         $this->formFactory
             ->create(
@@ -186,6 +190,9 @@ class CreateActionTest extends TestCase
         ;
 
         $this->event->getId()->willReturn(12);
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);

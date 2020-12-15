@@ -2,4 +2,10 @@
 
 {% block form_title 'admin.partner.update.title'|trans %}
 
-{% block goback_link path('admin_list_operator') %}
+{% if not isSuperAdmin %}
+    {% set path = path('admin_list_operator') %}
+{% else %}
+    {% set path = path('admin_list_admin') %}
+{% endif %}
+
+{% block goback_link path %}

@@ -1,23 +1,23 @@
-var $ = require('jquery'),
-  TextObject = require('./../templateObjects/_TextObject'),
-  EditableTextObject = require('./../templateObjects/_EditableTextObject'),
-  ButtonLinkObject = require('./../templateObjects/_ButtonLinkObject'),
-  ParticipantObject = require('./../templateObjects/_ParticipantObject'),
-  ImageObject = require('./../templateObjects/_ImageObject'),
-  TagObject = require('./../templateObjects/_TagObject'),
-  CollectionObject = require('./../templateObjects/_CollectionObject'),
-  NomenclatureObject = require('./../templateObjects/_NomenclatureObject'),
-  MediaObject = require('./../templateObjects/_MediaObject'),
-  TagsObject = require('./../templateObjects/_TagsObject'),
-  PhoneObject = require('./../templateObjects/_PhoneObject'),
-  CountryObject = require('./../templateObjects/_CountryObject'),
-  UrlObject = require('./../templateObjects/_UrlObject'),
-  BooleanObject = require('./../templateObjects/_BooleanObject'),
-  GenderObject = require('./../templateObjects/_GenderObject'),
-  UploadObject = require('./../templateObjects/_UploadObject'),
-  DatetimeObject = require('./../templateObjects/_DatetimeObject'),
-  MultiUploadObject = require('./../templateObjects/_MultiUploadObject')
-;
+import $ from 'jquery';
+import TextObject from "../templateObjects/_TextObject";
+import EditableTextObject from "../templateObjects/_EditableTextObject";
+import ButtonLinkObject from "../templateObjects/_ButtonLinkObject";
+import ParticipantObject from "../templateObjects/_ParticipantObject";
+import ImageObject from "../templateObjects/_ImageObject";
+import TagObject from "../templateObjects/_TagObject";
+import CollectionObject from "../templateObjects/_CollectionObject";
+import NomenclatureObject from "../templateObjects/_NomenclatureObject";
+import MediaObject from "../templateObjects/_MediaObject";
+import TagsObject from "../templateObjects/_TagsObject";
+import PhoneObject from "../templateObjects/_PhoneObject";
+import UrlObject from "../templateObjects/_UrlObject";
+import BooleanObject from "../templateObjects/_BooleanObject";
+import CountryObject from "../templateObjects/_CountryObject";
+import GenderObject from "../templateObjects/_GenderObject";
+import UploadObject from "../templateObjects/_UploadObject";
+import DatetimeObject from "../templateObjects/_DatetimeObject";
+import MultiUploadObject from "../templateObjects/_MultiUploadObject";
+import VideoObject from "../templateObjects/_VideoObject";
 
 /**
  * Template Object
@@ -108,6 +108,9 @@ function TemplateObject(element, locale, builderType)
     case 'multi-upload':
       this.object = new MultiUploadObject(this.element, this.locale, this.builderType);
       break;
+    case 'video':
+      this.object = new VideoObject(this.element, this.locale, this.builderType);
+      break;
   }
 
   this.object.fill();
@@ -159,4 +162,4 @@ TemplateObject.prototype.normalize = function ()
   };
 };
 
-module.exports = TemplateObject;
+export default TemplateObject;

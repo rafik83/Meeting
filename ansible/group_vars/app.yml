@@ -3,7 +3,7 @@
 app_options:
 
   php:                   true
-  php_version:           '7.2'
+  php_version:           '7.4'
   nodejs:                true
   nodejs_version:        '12'
   mysql:                 true
@@ -11,6 +11,7 @@ app_options:
   elasticsearch:         true
   elasticsearch_version: '1.7'
   redis:                 true
+  redis_version:         '5'
 
 app_patterns:
 

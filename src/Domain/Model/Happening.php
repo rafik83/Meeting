@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
@@ -21,7 +14,7 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 /**
  * Domain language: "Conférence"  (aka "Sous-événement")
  */
-class Happening implements TimeRangeInterface
+class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 {
     /** @var int */
     private $id;
@@ -68,20 +61,30 @@ class Happening implements TimeRangeInterface
     /** @var bool */
     private $webinar;
 
+    /** @var bool */
+    private $interactiveWebinar;
+
+    /** @var bool */
+    private $videoWebinar;
+
     /** @var null|string */
     private $webinarSessionId;
 
-    /**
-     * @param Event              $event
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param CategoryHappening  $category
-     * @param array              $types
-     * @param bool               $questionAllowed
-     * @param int|null           $limitParticipant
-     * @param null|string        $invitationCode
-     * @param bool               $webinar
-     */
+    /** @var null|string */
+    private $liveUrl;
+
+    /** @var bool */
+    private $webinarRecorded;
+
+    /** @var bool */
+    private $sidebarAllowed = true;
+
+    /** @var null|string */
+    private $webinarRecordZipFileUrl = null;
+
+    /** @var bool */
+    private $allowHls;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -91,113 +94,98 @@ class Happening implements TimeRangeInterface
         bool $questionAllowed = false,
         ?int $limitParticipant = null,
         ?string $invitationCode = null,
-        bool $webinar = false
+        bool $webinar = false,
+        bool $interactiveWebinar = false,
+        bool $videoWebinar = false,
+        ?string $liveUrl = null,
+        bool $sidebarAllowed = true,
+        bool $webinarRecorded = true,
+        bool $allowHls = false
     ) {
-        $this->event            = $event;
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->category         = $category;
-        $this->translations     = new ArrayCollection();
-        $this->talkings         = new ArrayCollection();
-        $this->participations   = new ArrayCollection();
-        $this->questions        = new ArrayCollection();
-        $this->types            = new ArrayCollection($types);
-        $this->questionAllowed  = $questionAllowed;
+        $this->event = $event;
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->category = $category;
+        $this->translations = new ArrayCollection();
+        $this->talkings = new ArrayCollection();
+        $this->participations = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->types = new ArrayCollection($types);
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
-        $this->invitationCode   = $invitationCode;
+        $this->invitationCode = $invitationCode;
         $this->products = new ArrayCollection();
         $this->webinar = $webinar;
+        $this->interactiveWebinar = $interactiveWebinar;
+        $this->videoWebinar = $videoWebinar;
+        $this->liveUrl = $liveUrl;
+        $this->webinarRecorded = $webinarRecorded;
+        $this->sidebarAllowed = $sidebarAllowed;
+        $this->allowHls = $allowHls;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_HAPPENING;
+    }
+
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return CategoryHappening
-     */
-    public function getCategory()
+    public function getCategory(): CategoryHappening
     {
         return $this->category;
     }
 
-    /**
-     * @param CategoryHappening $category
-     */
-    public function setCategory($category)
+    public function setCategory(CategoryHappening $category): void
     {
         $this->category = $category;
     }
 
-    /**
-     * Get begin.
-     *
-     * @return \DateTimeInterface
-     */
-    public function getBegin()
+    public function getBegin(): \DateTimeInterface
     {
         return $this->begin;
     }
 
-    /**
-     * @param \DateTimeInterface $begin
-     */
-    public function setBegin($begin)
+    public function setBegin(\DateTimeInterface $begin): void
     {
         $this->begin = $begin;
     }
 
-    /**
-     * Get end.
-     *
-     * @return \DateTimeInterface
-     */
-    public function getEnd()
+    public function getEnd(): \DateTimeInterface
     {
         return $this->end;
     }
 
-    /**
-     * @param \DateTimeInterface $end
-     */
-    public function setEnd($end)
+    public function setEnd(\DateTimeInterface $end): void
     {
         $this->end = $end;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getTitle($locale)
+    public function getTitle(string $locale): string
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getTitle() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getDescription($locale)
+    public function getDescription(string $locale): string
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+        if ($this->translations->containsKey($locale)) {
+            $description = $this->translations->get($locale)->getDescription();
+
+            return $description ?? '';
+        }
+
+        return '';
     }
 
-    public function getWebinarHeaderImage($locale): ?string
+    public function getWebinarHeaderImage(string $locale): ?string
     {
         /** @var null|HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
@@ -209,32 +197,45 @@ class Happening implements TimeRangeInterface
         return $translation->getWebinarHeaderImage();
     }
 
-    /**
-     * @param HappeningTranslation $translation
-     */
-    public function setTranslation(HappeningTranslation $translation)
+    public function getWebinarWaitingMediaFile(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaFile();
+    }
+
+    public function getWebinarWaitingMediaType(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaType();
+    }
+
+    public function setTranslation(HappeningTranslation $translation): void
     {
         $this->translations->set($translation->getLocale(), $translation);
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    /**
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param CategoryHappening  $category
-     * @param array              $types
-     * @param bool               $questionAllowed
-     * @param int|null           $limitParticipant
-     * @param bool               $webinar
-     * @param null|string        $invitationCode
-     */
+    public function isWebinarRecorded(): bool
+    {
+        return $this->webinarRecorded;
+    }
+
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
@@ -243,29 +244,44 @@ class Happening implements TimeRangeInterface
         bool $questionAllowed,
         ?int $limitParticipant,
         bool $webinar,
-        ?string $invitationCode = null
-    ) {
-        $this->begin            = $begin;
-        $this->end              = $end;
-        $this->types            = new ArrayCollection($types);
-        $this->category         = $category;
-        $this->questionAllowed  = $questionAllowed;
+        bool $interactiveWebinar,
+        bool $videoWebinar,
+        ?string $invitationCode = null,
+        ?string $liveUrl = null,
+        bool $sidebarAllowed,
+        bool $webinarRecorded = true,
+        bool $allowHls = true
+    ): void {
+        $this->begin = $begin;
+        $this->end = $end;
+        $this->types = new ArrayCollection($types);
+        $this->category = $category;
+        $this->questionAllowed = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
-        $this->invitationCode   = $invitationCode;
+        $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
+        $this->interactiveWebinar = $interactiveWebinar;
+        $this->videoWebinar = $videoWebinar;
+        $this->liveUrl = $liveUrl;
+        $this->sidebarAllowed = $sidebarAllowed;
+        $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
     }
 
-    public function updateTranslation(string $locale, string $title, ?string $description, ?string $webinarHeaderImage)
-    {
+    public function updateTranslation(
+        string $locale,
+        string $title,
+        ?string $description,
+        ?string $webinarHeaderImage,
+        ?string $webinarWaitingMediaFile,
+        ?string $webinarWaitingMediaType
+    ): void {
         /** @var HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
-        $translation->update($title, $description, $webinarHeaderImage);
+        $translation->update($title, $description, $webinarHeaderImage, $webinarWaitingMediaFile, $webinarWaitingMediaType);
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getTalkings()
+    public function getTalkings(): Collection
     {
         return $this->talkings;
     }
@@ -273,12 +289,12 @@ class Happening implements TimeRangeInterface
     /**
      * @return Speaker[]
      */
-    public function getSpeakers()
+    public function getSpeakers(): array
     {
         return $this
             ->talkings
             ->matching(Criteria::create()->orderBy(['position' => 'ASC']))
-            ->map(function (Talking $talking) {
+            ->map(static function (Talking $talking) {
                 return $talking->getSpeaker();
             })
             ->toArray();
@@ -296,12 +312,7 @@ class Happening implements TimeRangeInterface
         return false;
     }
 
-    /**
-     * @param array $speakers
-     *
-     * @return Happening
-     */
-    public function setSpeakers(array $speakers)
+    public function setSpeakers(array $speakers): void
     {
         // Make sure a speaker doesn't appear more than once
         $speakers = array_unique($speakers, SORT_REGULAR);
@@ -319,46 +330,29 @@ class Happening implements TimeRangeInterface
                 $this->talkings->add(new Talking($speaker, $this, $position));
             }
         }
-
-        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isQuestionAllowed()
+    public function isQuestionAllowed(): bool
     {
         return $this->questionAllowed;
     }
 
-    /**
-     * @param bool $questionAllowed
-     */
-    public function setQuestionAllowed($questionAllowed)
+    public function setQuestionAllowed(bool $questionAllowed): void
     {
         $this->questionAllowed = $questionAllowed;
     }
 
-    /**
-     * @return bool
-     */
-    public function isParticipantLimited()
+    public function isParticipantLimited(): bool
     {
         return null !== $this->limitParticipant;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getLimitParticipant()
+    public function getLimitParticipant(): ?int
     {
         return $this->limitParticipant;
     }
 
-    /**
-     * @param int|null $limitParticipant
-     */
-    public function setLimitParticipant($limitParticipant)
+    public function setLimitParticipant(?int $limitParticipant): void
     {
         $this->limitParticipant = $limitParticipant;
     }
@@ -366,7 +360,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return HappeningParticipation[]
      */
-    public function getParticipations()
+    public function getParticipations(): array
     {
         return $this->participations->toArray();
     }
@@ -374,7 +368,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return ArrayCollection of Question
      */
-    public function getQuestions()
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -382,7 +376,7 @@ class Happening implements TimeRangeInterface
     /**
      * @param HappeningParticipation[] $participations
      */
-    public function setParticipations(array $participations)
+    public function setParticipations(array $participations): void
     {
         $this->participations = new ArrayCollection($participations);
     }
@@ -395,36 +389,29 @@ class Happening implements TimeRangeInterface
         return $this->types->toArray();
     }
 
-    /**
-     * @return null|string
-     */
     public function getInvitationCode(): ?string
     {
         return $this->invitationCode;
     }
 
-    /**
-     * @return bool
-     */
     public function hasInvitationCode(): bool
     {
         return null !== $this->invitationCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isPrivate(): bool
     {
         return $this->hasInvitationCode();
     }
 
-    /**
-     * @param string $invitationCode
-     */
-    public function setInvitationCode(string $invitationCode)
+    public function setInvitationCode(string $invitationCode): void
     {
         $this->invitationCode = $invitationCode;
+    }
+
+    public function isSidebarAllowed() : bool
+    {
+        return $this->sidebarAllowed;
     }
 
     /**
@@ -467,6 +454,46 @@ class Happening implements TimeRangeInterface
 
     public function isWebinar(): bool
     {
-        return $this->webinar;
+        return $this->webinar || $this->interactiveWebinar || $this->videoWebinar;
+    }
+
+    public function isInteractiveWebinar(): bool
+    {
+        return $this->interactiveWebinar;
+    }
+
+    public function isVideoWebinar(): bool
+    {
+        return $this->videoWebinar;
+    }
+
+    public function getLiveUrl(): ?string
+    {
+        return $this->liveUrl;
+    }
+
+    public function isVideoWebinarAndHasLiveUrl(): bool
+    {
+        return $this->isVideoWebinar() && null !== $this->getLiveUrl();
+    }
+
+    public function addWebinarRecordZipFileUrl(?string $url): void
+    {
+        $this->webinarRecordZipFileUrl = $url;
+    }
+
+    public function hasWebinarRecordZipFileUrl(): bool
+    {
+        return !empty($this->getWebinarRecordZipFileUrl());
+    }
+
+    public function getWebinarRecordZipFileUrl(): ?string
+    {
+        return $this->webinarRecordZipFileUrl;
+    }
+
+    public function allowWebinarOnHLS(): bool
+    {
+        return $this->allowHls;
     }
 }

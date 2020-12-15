@@ -6,22 +6,30 @@ admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportan
 admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
 admin.mail.export_form_template_data.subject: 'Export des données du formulaire de template'
+admin.mail.export_happening_participants.content: "Bonjour,\n\nVoici le fichier que vous avez demandé et comportant les participants aux conférences."
+admin.mail.export_happening_participants.linkTitle: Télécharger
+admin.mail.export_happening_participants.subject: '[%event%] Export des participants conférences'
 admin.mail.export_rooming_list.body: "Bonjour,\nVoici le fichier comportant l'export de la rooming list\n"
 admin.mail.export_rooming_list.end: Cordialement\n
 admin.mail.export_rooming_list.file_link: 'Fichier CSV'
 admin.mail.export_rooming_list.subject: 'Export de la rooming list'
+admin.mail.export_sheets.content: "Bonjour,\n\nVous pouvez télécharger le fichier CSV des fiches sélectionnées en cliquant sur le bouton ci-dessous."
+admin.mail.export_sheets.linkTitle: 'Télécharger le fichier'
+admin.mail.export_sheets.subject: '%event% : Votre export de fiches est prêt'
 admin.mail.invoices.print.body: "Bonjour,\nVoici le lien pour télécharger les factures souhaitées\n"
 admin.mail.invoices.print.end: 'Cordialement,'
 admin.mail.invoices.print.link_label: 'Télécharger le document'
 admin.mail.invoices.print.subject: 'Génération du PDF des factures'
-admin.mail.meetings.deletedAll.subject: 'Suppression de tous les RDV'
 admin.mail.meetings.deletedAll.body: 'Tous les RDV de l''évènement "%event%" ont été supprimés par %admin%.'
+admin.mail.meetings.deletedAll.subject: 'Suppression de tous les RDV'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
 admin.mail.resetPassword.link: 'Réinitialiser le mot de passe'
 admin.mail.resetPassword.subject: 'Mot de passe oublié'
-admin.mail.translations.downloaded.body: "Bonjour,\nLes traductions ont été téléchargés depuis openl10n.\n"
+admin.mail.translations.downloaded.body: "Hello,\nTranslations have been downloaded from openl10n."
 admin.mail.translations.downloaded.subject: 'Téléchargement des traductions'
+admin.mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"
+admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
 mail.activateAccount.activate: 'Activer votre compte'
 mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace participant, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'
@@ -30,16 +38,16 @@ mail.agenda.version_diff_changed.body: "Bonjour %firstname% %lastname%,\n\nVotre
 mail.agenda.version_diff_changed.end: 'Cordialement,'
 mail.agenda.version_diff_changed.link: 'Accéder à votre planning'
 mail.agenda.version_diff_changed.subject: '[%event%] Votre planning a changé'
+mail.changeMail.link: 'Confirmer votre changement d''email'
 mail.changeMailNew.body: "Bonjour,\n\nVous avez choisi une nouvelle adresse comme nouvel identifiant ViMeet au lieu de %currentEmail%\n\nPour confirmer que vous êtes le propriétaire de cette adresse e-mail, veuillez cliquer sur le lien ci-dessous pour vous connecter à votre espace participant."
 mail.changeMailNew.end: Cordialement
-mail.changeMail.link: 'Confirmer votre changement d''email'
 mail.changeMailNew.subject: 'Votre nouvel identifiant'
 mail.changeMailNew.validate: 'Valider votre nouvel email'
 mail.changeMailOld.body: "Bonjour,\n\nVous venez d'effectuer une demande de changement d'email pour l'email %newMail%.\n\nConsultez la boite email de cette nouvelle adresse pour valider le changement.\n\nSi vous n'avez pas demandé ce changement, veuillez contacter un administrateur.\n\nCordialement,"
 mail.changeMailOld.subject: 'Demande de changement d''email'
-mail.completeProfile.body: "Vous avez été invité en tant que participant pour l'événement %event%.\nPour y accéder, cliquer sur le lien suivant et entrer votre mot de passe pour compléter votre profil participant."
+mail.completeProfile.body: "Vous avez été invité(e) en tant que participant à l'événement %event%.\nPour y accéder, cliquez sur le lien suivant et entrez votre mot de passe afin de compléter votre profil participant."
 mail.completeProfile.end: 'Cordialement,'
-mail.completeProfile.link: 'Compléter votre profil participant'
+mail.completeProfile.link: 'Complétez votre profil participant'
 mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirm.test_visio_configuration.link: 'Tester ma configuration visio'
@@ -61,11 +69,21 @@ mail.event.sheets_duplicated.sheetTitle: 'Titre fiche'
 mail.event.sheets_duplicated.subject: 'Fiches dupliquées de "%eventOrigin%" vers "%event%"'
 mail.event.sheets_duplicated.userAlreadyGroupManagerOnSameEvent: 'Erreur : impossible de créer une entité avec cet email car déjà gestionnaire d''une entité multi-fiches :'
 mail.event.sheets_duplicated.userAlreadyParticipantOrOwnerOnGroupOnSameEvent: 'Erreur : impossible de créer une entité avec cet email car déjà participant ou propriétaire sur une autre fiche :'
-mail.footer.contact: Contact
+mail.footer.contact: Contact(s)
 mail.happening.participation.intro: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.register: '%name% inscrit'
 mail.happening.participation.subject: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.unregister: '%name% désinscrit'
+mail.happening.webinar.admin.zip_record_archive_not_prepared.content: "Bonjour,\n\n Le fichier de l''enregistrement du webinar %happeningTitle% n''est pas encore disponible au téléchargement car le webinar est toujours en cours d''enregistrement. Veuillez réessayer ultérieurement ou attendre la génération automatique."
+mail.happening.webinar.admin.zip_record_archive_not_prepared.subject: '%happeningTitle% : L''enregistrement ne peut pas être télécharger pour le moment'
+mail.happening.webinar.admin.zip_record_archive_prepared.intro: "Bonjour,\n\n Le fichier de l'enregistrement du webinar %happeningTitle% est disponible au téléchargement :"
+mail.happening.webinar.admin.zip_record_archive_prepared.link: 'Télécharger l''enregistrement'
+mail.happening.webinar.admin.zip_record_archive_prepared.outro: 'Bonne journée'
+mail.happening.webinar.admin.zip_record_archive_prepared.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
+mail.happening.webinar.zip_record_archive_available_for_speaker.intro: "Bonjour,\n\n Le fichier de l'enregistrement du webinar %happeningTitle% est disponible au téléchargement. Attention, ce lien est valide que pour 7 jours."
+mail.happening.webinar.zip_record_archive_available_for_speaker.link: 'Télécharger l''enregistrement'
+mail.happening.webinar.zip_record_archive_available_for_speaker.outro: 'Bonne journée'
+mail.happening.webinar.zip_record_archive_available_for_speaker.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
 mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
 mail.omz.export.link.click: 'Télécharger le fichier des participants OMZ'
 mail.omz.export.subject: 'Fichier d''export OMZ'
@@ -162,5 +180,5 @@ mail.thirdParty.comexposium.sso.participantAdded.link: Connectez-vous
 mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activer votre compte'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
 mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"
+mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'

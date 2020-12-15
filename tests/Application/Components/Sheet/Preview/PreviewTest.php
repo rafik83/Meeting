@@ -75,7 +75,9 @@ class PreviewTest extends TestCase
             ['fr' => 'test', 'en' => 'test'],
             'test',
             'TAG_1',
-            false
+            false,
+            null,
+            'r@nd0m'
         );
         $taggedDataView2 = new TaggedDataView(
             AbstractChild::TEMPLATE_OBJECT_TYPE_COUNTRY,
@@ -83,7 +85,9 @@ class PreviewTest extends TestCase
             [],
             'FR',
             'TAG_2',
-            false
+            false,
+            null,
+            'r@nd0m'
         );
         $tagObject->getTaggedDataViews()->willReturn([
             $taggedDataView1,
@@ -143,10 +147,10 @@ class PreviewTest extends TestCase
             AbstractChild::TEMPLATE_OBJECT_TYPE_TAG
         );
         $previewTag->addTagView(
-            new TagView(AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT, 'Label', 'test')
+            new TagView(AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT, 'Label', 'test', null)
         );
         $previewTag->addTagView(
-            new TagView(AbstractChild::TEMPLATE_OBJECT_TYPE_COUNTRY, 'Label', 'FR')
+            new TagView(AbstractChild::TEMPLATE_OBJECT_TYPE_COUNTRY, 'Label', 'FR', null)
         );
 
         $this->assertEquals([$previewParticipant, $previewText, $previewTag], $result);

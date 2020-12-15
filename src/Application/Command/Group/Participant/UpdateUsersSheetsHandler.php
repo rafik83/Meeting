@@ -78,7 +78,7 @@ class UpdateUsersSheetsHandler
      *
      * @return UpdateUsersSheetsResultView[]
      */
-    public function handle(UpdateUsersSheets $updateUsersSheets)
+    public function handle(UpdateUsersSheets $updateUsersSheets): array
     {
         $updateUsersSheetsResultViews = [];
 

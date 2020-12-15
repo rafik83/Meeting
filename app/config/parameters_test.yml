@@ -1,7 +1,10 @@
 parameters:
+    scheme: http
     feature_video_conference_enabled: true
     feature_video_conference_date_security_enabled: false
     feature_event_dates_to_current_date_enabled: true
     feature_dday_enabled: true
     feature_availability_confirmation_enabled: false
     feature_product_vat_enabled: true
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum

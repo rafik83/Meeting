@@ -112,3 +112,15 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             type: boolean
             options:
                 default: false
+        networkingOpenDate:
+            type: datetime
+            nullable: true
+        networkingCloseDate:
+            type: datetime
+            nullable: true
+        callVisioOpenDate:
+            type: datetime
+            nullable: true
+        callVisioCloseDate:
+            type: datetime
+            nullable: true

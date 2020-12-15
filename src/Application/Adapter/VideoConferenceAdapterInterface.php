@@ -1,17 +1,13 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
+use OpenTok\Archive;
+use OpenTok\ArchiveList;
+use OpenTok\Layout;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
+use Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\Broadcast;
 
 interface VideoConferenceAdapterInterface
 {
@@ -28,6 +24,30 @@ interface VideoConferenceAdapterInterface
      * @return Session
      */
     public function getSession(string $sessionId): Session;
+    public function getSessionStreamCount($sessionId): int;
+
+    public function archive(string $sessionId, string $name): Archive;
+
+    public function changeArchiveLayout(string $archiveId, Layout $layout): void;
+
+    public function changeArchiveToVertical(string $archiveId): void;
+    public function changeArchiveToBestFit(string $archiveId): void;
+    public function changeArchiveLayoutAuto(string $sessionId, string $archiveId): void;
+
+    public function changeStreamClassList(string $sessionId, string $streamId, string $class): void;
+    public function changeBroadcastFocus(Broadcast $broadcast, string $streamId): void;
+    public function resetBroadcastFocus(string $broadcastId): void;
+
+    public function stopArchive(string $archiveId): Archive;
+
+    public function getArchive(string $archiveId): Archive;
+
+    public function listArchives(string $sessionId): ArchiveList;
+
+    public function listArchiveUrls(string $sessionId): array;
+    public function listArchiveIds(string $sessionId): array;
+
+    public function isRecording(string $sessionId): bool;
 
     /**
      * @param Session            $session
@@ -50,4 +70,24 @@ interface VideoConferenceAdapterInterface
      * @return string
      */
     public function getApiKey(): string;
+
+    public function startBroadcast(
+        string $sessionId,
+        int $duration
+    ): Broadcast;
+
+    public function stopBroadcast(string $broadcastId): Broadcast;
+
+    public function getBroadcastForSession(string $session): ?Broadcast;
+
+    /**
+     * In some case, when a broadcast is started but not stopped
+     * Tokbox leaves old broadcast up
+     * And in these case, can be useful to get them.
+     *
+     * @param string $session
+     *
+     * @return Broadcast[]
+     */
+    public function getBroadcastsForSession(string $session): array;
 }

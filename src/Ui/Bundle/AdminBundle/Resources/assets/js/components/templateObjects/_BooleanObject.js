@@ -1,6 +1,5 @@
-var Form = require('./../template/_Form'),
-    TemplateTaggableObject = require('./../template/_TemplateTaggableObject')
-;
+import Form from './../template/_Form';
+import TemplateTaggableObject from './../template/_TemplateTaggableObject';
 
 /**
  * BooleanObject
@@ -70,4 +69,4 @@ BooleanObject.prototype.toggleDisplayLabelFilter = function (displayed)
     this.filterLabel.style.display = displayed ? 'block' : 'none';
 };
 
-module.exports = BooleanObject;
+export default BooleanObject;

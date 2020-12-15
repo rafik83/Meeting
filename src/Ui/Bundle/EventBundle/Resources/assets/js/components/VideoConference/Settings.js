@@ -6,7 +6,8 @@ const WEBAUDIO_ANALYZER_SMOOTHING_TIME = 0.8;
  */
 function Settings(
     videoSettingsContainer,
-    settingsValidateCallback
+    settingsValidateCallback,
+    enableInvisibleMode
 ) {
     this.videoSettingsContainer = videoSettingsContainer;
     this.settingsValidateCallback = settingsValidateCallback;
@@ -16,6 +17,13 @@ function Settings(
     this.requestPermissionModal = this.videoSettingsContainer.querySelector('#visio-request-permission');
     this.settingsModal = this.videoSettingsContainer.querySelector('#visio-settings');
     this.requestPermissionErrorContainer = this.videoSettingsContainer.querySelector('#visio-request-permission-error');
+    this.chromeRequired = this.videoSettingsContainer.querySelector('#visio-chrome-required');
+    this.invisibleModeOption = this.videoSettingsContainer.querySelector('#invisible-mode-option');
+    this.enableInvisibleMode = enableInvisibleMode;
+
+    if (enableInvisibleMode) {
+        showElement(this.invisibleModeOption);
+    }
 
     this.audioDeviceId = null;
     this.videoDeviceId = null;
@@ -111,7 +119,9 @@ Settings.prototype.getUserMedia = function () {
                     const videoStream = stream.getVideoTracks();
 
                     if (videoStream.length > 0) {
-                        this.videoDeviceId = videoStream[0].getSettings().deviceId;
+                        if (this.videoDeviceId === null) {
+                            this.videoDeviceId = videoStream[0].getSettings().deviceId;
+                        }
                         this.videoBox.srcObject = stream;
                         this.currentStream = stream;
                     }
@@ -222,6 +232,9 @@ Settings.prototype.insertDevicesInSelect = function (mediaDevices) {
     let countAudio = 1;
 
     mediaDevices.forEach((mediaDevice) => {
+        if (mediaDevice.kind === 'audiooutput'){
+            return;
+        }
         const option = document.createElement("option");
         option.value = mediaDevice.deviceId;
 
@@ -234,15 +247,15 @@ Settings.prototype.insertDevicesInSelect = function (mediaDevices) {
 
         option.appendChild(textNode);
 
-        if (mediaDevice.deviceId === this.audioDeviceId
-            || mediaDevice.deviceId === this.videoDeviceId
+        if ((mediaDevice.deviceId === this.audioDeviceId && kind === "audio")
+            || (mediaDevice.deviceId === this.videoDeviceId && kind === "camera")
         ) {
             option.selected = true;
         }
 
-        if (mediaDevice.kind === "videoinput") {
+        if (kind === "camera") {
             this.videoSourceSelect.appendChild(option);
-        } else {
+        } else if (kind === "audio") {
             this.audioSourceSelect.appendChild(option);
         }
     });
@@ -298,13 +311,14 @@ Settings.prototype.prepareEventListener = function () {
 
     this.validateSettingsButton.addEventListener('click', (event) => {
         this.closeSettings();
-        this.settingsValidateCallback();
+        const invisibleMode = this.enableInvisibleMode && this.invisibleModeOption.querySelector('input[type=checkbox]').checked;
+        this.settingsValidateCallback(invisibleMode);
     });
 
     // Event dispatched when a device is plugged or unplugged from the computer/device of the user.
     // Not compatible with safari and IE.
     navigator.mediaDevices.ondevicechange = () => {
-        // Useless to handle the devices of the settings modal is not focused.
+        // Useless to handle the devices if the settings modal is not focused.
         // As the permission modal can be focused.
         if (true === this.settingsModalFocus) {
             this.handleDevices();
@@ -318,13 +332,13 @@ Settings.prototype.prepareConstraints = function () {
 
     if (this.audioDeviceId) {
         audio = {
-            exact: this.audioDeviceId
+            deviceId: this.audioDeviceId
         };
     }
 
     if (this.videoDeviceId) {
         video = {
-            exact: this.videoDeviceId
+            deviceId: this.videoDeviceId
         };
     }
     this.constraints = {
@@ -359,13 +373,21 @@ Settings.prototype.closeSettings = function () {
     dispatchEvent(htmlEvent);
 }
 
-Settings.prototype.init = function () {
+Settings.prototype.init = function (chromeRequired) {
     this.settingsFocus = true;
     this.requestPermissionModalFocus = true;
     this.settingsModalFocus = false;
     showElement(this.videoSettingsContainer);
     showElement(this.requestPermissionModal);
     hideElement(this.settingsModal);
+
+    if (chromeRequired && !(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor))) {
+        showElement(this.chromeRequired);
+        hideElement(this.requestPermissionModal);
+        this.chromeRequired.querySelector('#visio-chrome-required-bypass').addEventListener('change', () => {
+            this.init(false);
+        });
+    }
 }
 
 // Theses methods do not need to be link to the Settings component.
@@ -375,7 +397,7 @@ Settings.prototype.init = function () {
  * @param samples
  * @returns {number}
  */
-timeDomainDataToAudioLevel = function (samples) {
+function timeDomainDataToAudioLevel(samples) {
     let maxVolume = 0;
 
     const length = samples.length;
@@ -396,7 +418,7 @@ timeDomainDataToAudioLevel = function (samples) {
  *
  * @returns {number}
  */
-animateLevel = function (newLevel, lastLevel) {
+function animateLevel(newLevel, lastLevel) {
     let value = 0;
     const diff = lastLevel - newLevel;
 
@@ -411,12 +433,12 @@ animateLevel = function (newLevel, lastLevel) {
     return parseFloat(value.toFixed(3));
 }
 
-showElement = function(element) {
+function showElement(element) {
     element.classList.remove('hide');
-};
+}
 
-hideElement = function (element) {
+function hideElement(element) {
     element.classList.add('hide');
-};
+}
 
-module.exports = Settings;
+export default Settings;

@@ -18,8 +18,10 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\SheetSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuView;
 
@@ -51,6 +53,21 @@ class SubmenuViewQueryHandler
                 $submenuViewQuery->staticFormulationsIndexByCategories[Category::BADGE] ?? null
             )
         );
+
+        $networkingButtonViews = $this->queryBus->handle(
+            new NetworkingSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->route,
+                $submenuViewQuery->staticFormulationsIndexByCategories[Category::NETWORKING] ?? null
+            )
+        );
+
+        if (null !== $networkingButtonViews) {
+            $buttonsViews[] = $networkingButtonViews;
+        }
 
         if (null !== $badgeSubmenuView) {
             $buttonsViews[] = $badgeSubmenuView;
@@ -126,6 +143,17 @@ class SubmenuViewQueryHandler
 
         $buttonsViews = array_merge($buttonsViews, $catalogButtonViews);
 
+        $customButtonViews = $this->queryBus->handle(
+            new UserCtaSubmenuViewQuery(
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale,
+                $submenuViewQuery->sheet
+            )
+        );
+
+        $buttonsViews = array_merge($buttonsViews, $customButtonViews);
+
         $agendaButtonViews = $this->queryBus->handle(
             new AgendaSubmenuViewQuery(
                 $submenuViewQuery->user,
@@ -166,6 +194,6 @@ class SubmenuViewQueryHandler
             $buttonsViews[] = $visioSubmenuButtonView;
         }
 
-        return new SubmenuView($buttonsViews);
+        return new SubmenuView($buttonsViews, $customButtonViews);
     }
 }

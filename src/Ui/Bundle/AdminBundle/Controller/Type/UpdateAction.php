@@ -86,9 +86,10 @@ class UpdateAction
         }
 
         $update = new Update($type, $event->getAvailableLocale($request->getLocale()));
-        $form   = $this->formFactory->create(TypeUpdateType::class, $update, [
-            'event'  => $event,
-            'type'   => $type,
+        $form = $this->formFactory->create(TypeUpdateType::class, $update, [
+            'event' => $event,
+            'type' => $type,
+            'showAnalyticsSettings' => $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'),
             'submit' => true,
         ]);
 

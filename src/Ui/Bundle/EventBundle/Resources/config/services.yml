@@ -66,6 +66,15 @@ services:
             - '@components.security.admin_sheet_access'
         tags:
             - { name: security.voter }
+
+    security.admin_user_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter
+        arguments:
+            - '@components.security.admin_sheet_access'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: security.voter }
+
     security_voter.happening_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
         arguments:
@@ -111,6 +120,13 @@ services:
         arguments:
             - '@request_stack'
             - '@security.validate_mobile_process_access_checker'
+        tags:
+            - { name: security.voter }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
         tags:
             - { name: security.voter }
 
@@ -161,6 +177,13 @@ services:
             - '@template.participant_info_guesser'
         tags:
             - { name: 'form.type' }
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantTimezoneType:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        tags:
+            - { name: 'form.type' }
+
     vimeet_app.form_type_participant.type_choice:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
         arguments:
@@ -231,6 +254,15 @@ services:
             - '@translator'
         tags:
             - { name: form.type }
+    form_type_sheet_data.video_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\VideoDataType
+        arguments:
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: 'form.type' }
     form_type_package.participant_and_planning_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
         arguments:
@@ -488,6 +520,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Analytics\SheetsUserActivityEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Sheet\AddViewHandler'
+        tags:
+            - { name: kernel.event_subscriber }
+
     event_listener.sheet.phone.phone_validation_status_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone\PhoneValidationStatusEventSubscriber
         arguments:
@@ -510,6 +548,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -555,6 +595,7 @@ services:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
             - '%secret%'
+            - '@datetime'
 
     security.authentication.switchuser_listener: # this service name must not be changed in order to override symfony default SwitchUserListener service
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchUserListener
@@ -796,4 +837,9 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler:
         arguments:
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler:
+        arguments:
+            - '@form.factory'
             - '@adapter.router'

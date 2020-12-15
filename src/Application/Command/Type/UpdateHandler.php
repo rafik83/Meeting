@@ -34,8 +34,8 @@ class UpdateHandler
         SheetTemplateCloner $sheetTemplateCloner,
         RegistrationTemplateCloner $registrationTemplateCloner
     ) {
-        $this->typeRepository             = $typeRepository;
-        $this->sheetTemplateCloner        = $sheetTemplateCloner;
+        $this->typeRepository = $typeRepository;
+        $this->sheetTemplateCloner = $sheetTemplateCloner;
         $this->registrationTemplateCloner = $registrationTemplateCloner;
     }
 
@@ -67,7 +67,10 @@ class UpdateHandler
             $update->numberMaxOfHappeningsPerUser,
             $update->numberMaxOfMeetingsPerSheet,
             $update->canEvaluateMeeting,
-            $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false
+            $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false,
+            $update->canSubmitValidation,
+            $update->displayAnalyticsOnSheet,
+            $update->displayAnalyticsOnCatalog
         );
         $type->setHidden($update->hidden);
 

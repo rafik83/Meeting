@@ -78,8 +78,9 @@ class ParticipantTimezoneAction
         if ($form->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($command);
 
-            return new RedirectResponse($this->urlGenerator->generate('event_agenda', [
+            return new RedirectResponse($this->urlGenerator->generate('event_agenda_participant', [
                 'sheet' => $sheet->getId(),
+                'participant' => $participant->getId(),
             ]));
         }
 

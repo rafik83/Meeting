@@ -5,6 +5,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
             - '@template.participant_info_guesser'
 
+    Proximum\Vimeet\Application\Components\Participant\ParticipantGuesser:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
     Proximum\Vimeet\Application\Components\Template\Object\UploadObjectDownloadPathGetter:
         arguments:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
@@ -29,3 +33,13 @@ services:
             - '@datetime'
             - '%feature_video_conference_date_security_enabled%'
             - '%feature_video_conference_enabled%'
+
+    Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters:
+        arguments:
+            - '@repository.sheet.sheet_viewed_repository'
+
+    Proximum\Vimeet\Application\Components\Contact\CanAccessToContacts:
+        arguments:
+            - '@domain.key_dates.checker.event_open_access_checker'
+            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
@@ -146,7 +138,7 @@ class MeetingRequestController extends Controller
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = array_merge($defaults,
                 array_filter(
-                    $searchForm->getData(), function ($data) {
+                    $searchForm->getData(), static function ($data) {
                         return !empty($data);
                     }
                 )
@@ -341,7 +333,7 @@ class MeetingRequestController extends Controller
 
         $this->authorizeToCreateRequest($request, $eventDomain->getEvent(), $sheet, $toSheet);
 
-        $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user);
+        $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user, $request->getLocale());
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
                 'sheet'   => $sheet->getId(),
@@ -355,6 +347,31 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($createRequest);
+
+            if ($result instanceof ApproveRequestResult) {
+                $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
+                    'meetingDdayView' => $result->meetingView,
+                    'error'           => $result->hasError,
+                ]);
+
+                return new JsonResponse($this->createJsonResponseData(
+                    true,
+                    null === $result || (null !== $result && null === $result->meetingView && !$result->hasError),
+                    $this->renderView('EventBundle:MeetingRequest\Button:approvedRequest.html.twig', [
+                        'sheet'                        => $sheet,
+                        'meetingRequest'               => $result->request,
+                        'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                            ->allowedToAccess($eventDomain->getEvent()),
+                        'isMeetingRequestUpdateLocked' => $eventDomain
+                            ->getEvent()
+                            ->getConfiguration()
+                            ->isMeetingRequestUpdateLocked(),
+                        'isPhoneValidationRequired' => false,
+                    ]),
+                    '',
+                    $flashMessageView ?? null
+                ));
+            }
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
@@ -434,7 +451,7 @@ class MeetingRequestController extends Controller
             /** @var ApproveRequestResult $approveRequestResult */
             $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if (null !== $approveRequestResult) {
+            if ($approveRequestResult->hasError || $approveRequestResult->meetingView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $approveRequestResult->meetingView,
                     'error'           => $approveRequestResult->hasError,
@@ -443,7 +460,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                null === $approveRequestResult || (null !== $approveRequestResult && null === $approveRequestResult->meetingView && !$approveRequestResult->hasError),
+                null === $approveRequestResult->meetingView && !$approveRequestResult->hasError,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
@@ -913,7 +930,7 @@ class MeetingRequestController extends Controller
      */
     private function displayEditForm(DiscussionMeetingRequestView $discussion, Sheet $sheet)
     {
-        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipant();
+        return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipants();
     }
 
     /**

@@ -1,5 +1,5 @@
-var $ = require('jquery');
-require('select2');
+import $ from 'jquery';
+import 'select2';
 
 function PackageParticipantRow(parent, element)
 {
@@ -144,4 +144,4 @@ PackageParticipantRow.prototype.formatState = function (state)
     + '</div></div>');
 };
 
-module.exports = PackageParticipantRow;
+export default PackageParticipantRow;

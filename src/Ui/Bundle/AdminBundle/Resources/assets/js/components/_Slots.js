@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 function Slots(element)
 {
@@ -38,4 +38,4 @@ Slots.prototype.getData = function ()
   return { 'participants': ids };
 };
 
-module.exports = Slots;
+export default Slots;

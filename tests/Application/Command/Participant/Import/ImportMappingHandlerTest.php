@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Participant\Import;
 
 use PHPUnit\Framework\TestCase;
@@ -32,7 +24,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class ImportMappingHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $datetime = new \DateTime();
         $locale   = 'fr';
@@ -92,19 +84,17 @@ class ImportMappingHandlerTest extends TestCase
         $localFileStorage            = $this->prophesize(LocalFileStorageAdapter::class);
         $participantImportRepository = $this->prophesize(ParticipantImportRepositoryInterface::class);
         $participantImportLogger     = $this->prophesize(ParticipantImportLogger::class);
-        $participantImport           = $this->prophesize(ParticipantImport::class);
 
         $participantImportLogger->getSheets()->willReturn([]);
         $participantImportLogger->toArray()->willReturn([]);
-
-        $participantImport->getId()->willReturn(123);
 
         $command = new ImportMapping(
             $event->reveal(),
             $type->reveal(),
             $admin->reveal(),
             $locale,
-            new ImportMappingView($csvHeaders, $registrationHeaders)
+            new ImportMappingView($csvHeaders, $registrationHeaders, false, null),
+            null
         );
 
         $command->setMappings($mapping);
@@ -123,7 +113,7 @@ class ImportMappingHandlerTest extends TestCase
             'Facture - Adresse' => 'address',
         ];
 
-        $this->assertEquals($expectedReMapping, $command->getMappings());
+        $this->assertEquals($expectedReMapping, $command->getMappingsIndexedByFileHeader());
 
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled()->willReturn($filename);
         $localFileStorage->remove($filename, true)->shouldBeCalled();
@@ -131,15 +121,34 @@ class ImportMappingHandlerTest extends TestCase
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled();
         $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled();
         $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET)->shouldBeCalled();
+        $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING)->shouldBeCalled();
+        $session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET)->shouldBeCalled();
         $session->set(ParticipantImportLogger::PARTICIPANT_IMPORT_ID, Argument::any())->shouldBeCalled();
 
-        $participantImportRepository->add($participantImport->reveal());
+        $participantImport = new ParticipantImport(
+            $type->reveal(),
+            [],
+            [
+                'Nom participant' => 'lastname',
+                'Prénom participant' => 'firstname',
+                'Société Acheteur' => 'company',
+                'E-mail Acheteur' => 'participant_import.field.mail',
+                'Mobile' => 'mobile',
+                'Pays Acheteur' => 'country',
+                'Facture - Ville' => 'city',
+                'Facture - Code postal' => 'zipcode',
+                'Facture - Adresse' => 'address',
+            ],
+            $datetime,
+            null
+        );
+        $participantImportRepository->add($participantImport)->shouldBeCalled();
 
         $eventDispatcher
             ->dispatch(
                 Events::PARTICIPANT_IMPORTED,
                 Argument::that(
-                    function (ParticipantImportedEvent $event) {
+                    static function (ParticipantImportedEvent $event) {
                         return true;
                     }
                 )
@@ -154,7 +163,7 @@ class ImportMappingHandlerTest extends TestCase
                 'csv',
                 [
                     'csv_delimiter' => ';',
-                    'mappings'      => [
+                    'mappings' => [
                         'Nom participant'       => 'lastname',
                         'Prénom participant'    => 'firstname',
                         'Société Acheteur'      => 'company',
@@ -165,9 +174,10 @@ class ImportMappingHandlerTest extends TestCase
                         'Facture - Code postal' => 'zipcode',
                         'Facture - Adresse'     => 'address',
                     ],
-                    'event'         => $event->reveal(),
-                    'type'          => $type->reveal(),
-                    'locale'        => 'fr',
+                    'event' => $event->reveal(),
+                    'type' => $type->reveal(),
+                    'locale' => 'fr',
+                    'allowMultiSheet' => false,
                 ]
             )
             ->shouldBeCalled()

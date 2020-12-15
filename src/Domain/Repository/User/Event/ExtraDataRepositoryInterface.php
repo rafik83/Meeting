@@ -29,6 +29,18 @@ interface ExtraDataRepositoryInterface
      */
     public function getExtraDataForEventIdAndNameIndexedByUserId(int $eventId, string $name): array;
 
+    public function getExtraDataForEventNameAndValue(
+        Event $event,
+        string $name,
+        $value
+    ): ?ExtraData;
+
+    public function getExtraDataForEventNameAndMD5Value(
+        Event $event,
+        string $name,
+        $value
+    ): ?ExtraData;
+
     /**
      * @param ExtraData $extraData
      */

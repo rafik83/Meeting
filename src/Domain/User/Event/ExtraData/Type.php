@@ -43,6 +43,12 @@ final class Type
      * User imported from the Tech event Webservice, value of the IDCONTACT
      */
     public const IMPORTED_FROM_TECH_EVENT = 'imported_from_tech_event';
+    public const TECH_EVENT_IDENTIFIER_MD5 = 'tech_event_identifier_md5';
+
+    /**
+     * Data to use to log the user from Tech Event.
+     */
+    public const TECH_EVENT_LOGIN_DATA = 'tech_event_login_data';
 
     /**
      * Protected key to encrypt / decrypt files for this user in the event

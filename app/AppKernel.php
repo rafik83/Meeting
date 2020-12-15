@@ -21,9 +21,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
-            new Elao\Bundle\FormBundle\ElaoFormBundle(),
             new Elao\Bundle\FormTranslationBundle\ElaoFormTranslationBundle(),
-            new Elao\Bundle\Theme\TwitterBootstrap3Bundle\ElaoThemeTwitterBootstrap3Bundle(),
             new FOS\ElasticaBundle\FOSElasticaBundle(),
             new League\Tactician\Bundle\TacticianBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
@@ -31,9 +29,6 @@ class AppKernel extends Kernel
 
             // JMS Job Queue
             new JMS\JobQueueBundle\JMSJobQueueBundle(),
-
-            // Redis
-            new Snc\RedisBundle\SncRedisBundle(),
 
             // Sentry
             new Sentry\SentryBundle\SentryBundle(),
@@ -51,13 +46,21 @@ class AppKernel extends Kernel
             new Proximum\Vimeet\Ui\Bundle\MailBundle\MailBundle(),
         );
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if ('dev' === $this->getEnvironment()) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
+        }
+
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
 
             // Fixtures
             $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
+        }
+
+        if (in_array($this->getEnvironment(), ['prod', 'dev'])) {
+            // Redis
+            $bundles[] = new Snc\RedisBundle\SncRedisBundle();
         }
 
         return $bundles;

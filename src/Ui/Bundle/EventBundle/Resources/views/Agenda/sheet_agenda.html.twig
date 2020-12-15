@@ -17,9 +17,29 @@
                 <a class="btn btn-primary" href="{{ path('event_agenda_sheet', { 'sheet': sheet.id }) }}">
                     {{ 'agenda.sheetAgenda.button.title'|trans }}
                 </a>
-                <a class="btn btn-gray" href="{{ path('event_agenda_participant', { 'sheet': sheet.id, 'participant': participant.id }) }}">
-                    {{ 'agenda.myAgenda.button.title'|trans }}
-                </a>
+                {% if agenda.participants|length > 1 %}
+                <div class="btn-group" role="group">
+                    <button class="btn btn-gray dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{ 'agenda.sheetAgenda.participantsAgenda.title'|trans }}
+                        {% if agenda.participants|length > 1 %}<span class="caret"></span>{% endif %}
+                    </button>
+                    {% if agenda.participants|length > 1 %}
+                        <ul class="dropdown-menu">
+                            {% for participantItem in agenda.participants %}
+                                <li>
+                                    <a href="{{ path('event_agenda_participant', {'participant': participantItem.id, 'sheet': sheet.id}) }}">
+                                        {{ 'agenda.participant.view'|trans({'%participant%': participantItem.fullName}) }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {% else %}
+                    <a class="btn btn-gray" href="{{ path('event_agenda_participant', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+                        {{ 'agenda.myAgenda.button.title'|trans }}
+                    </a>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-6">
@@ -27,14 +47,14 @@
                 <div class="pull-right" style="margin-right: 5px;">
                     <a href="{{ path('event_participant_timezone', { 'sheet': sheet.id, 'participant': participant.id }) }}" class="btn btn-primary">
                         <i class="icon-Horaire"></i>
-                        {{ participant.timezone }}
+                        {{ agenda.timezoneTranslated }}
                     </a>
                 </div>
             {% endif %}
         </div>
     </div>
 
-    <div id="agendaAllSheet" class="agenda-container" {% if agenda.isItDDay %}data-agenda-autorefresh{% endif %}>
+    <div id="agendaAllSheet" class="agenda-container" {% if agenda.isItDDay %} data-agenda-autorefresh {% endif %}>
         <div class="agenda all-sheet">
             {% for day in agenda.days %}
                 <header class="agenda-head">

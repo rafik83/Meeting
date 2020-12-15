@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
@@ -27,6 +19,8 @@ use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent as AdminActivat
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent as AdminResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchiveNotPreparedEvent;
+use Proximum\Vimeet\Application\Event\Happening\Webinar\ZipRecordArchivePreparedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingsDeletedAllEvent;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Sheet\AbstractGroupEvent;
@@ -37,6 +31,7 @@ use Proximum\Vimeet\Application\Event\Sheet\SheetGroupUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent as UserActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountFromLoginEvent as UserActivateAccountFromLoginEvent;
+use Proximum\Vimeet\Application\Event\User\AdminTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent as UserCompleteProfileEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent as UserRegisteredEvent;
@@ -46,10 +41,15 @@ use Proximum\Vimeet\Application\Event\User\UserTemporarilyDisabledEvent;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\AccountTemporarilyDisabledMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ActivateAccountMail as AdminActivateAccountMail;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Admin\ResetPasswordMail as AdminResetPasswordMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\AdminZipRecordArchiveNotPreparedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\AdminZipRecordArchivePreparedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\Webinar\ZipRecordArchiveAvailableForSpeakerMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\AdminMeetingsDeletedAllMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetGroupCreatedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\ResetPasswordMail as UserResetPasswordMail;
@@ -191,6 +191,18 @@ class MailEventSubscriber implements EventSubscriberInterface
         );
 
         $this->mailer->send($mail);
+    }
+
+    public function onAdminAccountTemporarilyDisabled(AdminTemporarilyDisabledEvent $event): void
+    {
+        $this->mailer->send(
+            new AccountTemporarilyDisabledMail(
+                $this->sender->generate(),
+                $event->getAdmin()->getEmail(),
+                $event->getLocale(),
+                $event->getAdmin()
+            )
+        );
     }
 
     /**
@@ -373,10 +385,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $this->mailer->send($mail);
     }
 
-    /**
-     * @param SheetGroupCreatedEvent $event
-     */
-    public function onSheetGroupCreated(SheetGroupCreatedEvent $event)
+    public function onSheetGroupCreated(SheetGroupCreatedEvent $event): void
     {
         $mail = $this->getSheetGroupMail($event);
 
@@ -432,13 +441,63 @@ class MailEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function onHappeningZipRecordArchivePrepared(ZipRecordArchivePreparedEvent $event): void
+    {
+        $domainEvent = $event->getEvent();
+        $happening = $event->getHappening();
+
+        if ($event->hasAdmin()) {
+            $this->mailer->send(
+                new AdminZipRecordArchivePreparedMail(
+                    $happening,
+                    $domainEvent,
+                    $this->sender->generate($domainEvent),
+                    $event->getAdmin()->getEmail(),
+                    $event->getLocale()
+                )
+            );
+        } else {
+            /*
+            foreach ($happening->getSpeakers() as $speaker) {
+                $speakerUser = $speaker->getUser();
+
+                if ($speakerUser instanceof User) {
+                    $this->mailer->send(
+                        new ZipRecordArchiveAvailableForSpeakerMail(
+                            $happening,
+                            $domainEvent,
+                            $this->sender->generate($domainEvent),
+                            $speakerUser->getEmail(),
+                            $domainEvent->getAvailableLocale($speakerUser->getLocale())
+                        )
+                    );
+                }
+            }
+            */
+        }
+    }
+
+    public function onHappeningZipRecordArchiveNotPrepared(ZipRecordArchiveNotPreparedEvent $event): void
+    {
+        $this->mailer->send(
+            new AdminZipRecordArchiveNotPreparedMail(
+                $event->getHappening(),
+                $event->getEvent(),
+                $this->sender->generate($event->getEvent()),
+                $event->getAdmin()->getEmail(),
+                $event->getLocale()
+            )
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
+            Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED => 'onAdminAccountTemporarilyDisabled',
             Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
             Events::ADMIN_MEETINGS_DELETED_ALL         => 'onAdminMeetingsDeletedAll',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
@@ -456,6 +515,8 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
             Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
             Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated',
+            Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED => 'onHappeningZipRecordArchivePrepared',
+            Events::HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED => 'onHappeningZipRecordArchiveNotPrepared',
         ];
     }
 

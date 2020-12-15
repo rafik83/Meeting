@@ -1,6 +1,5 @@
-
-var $             = require('jquery'),
-    SharedChoices = require('./_SharedChoices');
+import $ from 'jquery';
+import SharedChoices from "./_SharedChoices";
 
 function SharedChoicesCollection(element, name)
 {
@@ -37,4 +36,4 @@ SharedChoicesCollection.prototype.refresh = function ()
     }
 };
 
-module.exports = SharedChoicesCollection;
+export default SharedChoicesCollection;

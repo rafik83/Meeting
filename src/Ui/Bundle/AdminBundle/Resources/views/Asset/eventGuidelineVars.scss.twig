@@ -9,6 +9,9 @@ $color-notification: #FF4902;
 $button-text-color: #FFFFFF;
 $button-bg-color-inactive: rgba(#FFFFFF, .15);
 $button-bg-color-inactive-hover: rgba(#FFFFFF, .3);
+$gray-base: #000 !default;
+$gray-light: lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter: lighten($gray-base, 93.5%) !default; // #eee
 
 $image-path: '{{ imagePath }}';
 $gradient-header-button-left-color: {{ gradientHeaderButtonLeftColor }};
@@ -20,33 +23,36 @@ $gradient-left-color: {{ gradientLeftColor }};
 $gradient-right-color: {{ gradientRightColor }};
 $color-highlighted: {{ colorHighLighted }};
 
-@import "{{ bundleGuidelinePath }}/base/mixins";
-@import "{{ bundleGuidelinePath }}/base/layout";
+@import "base/mixins";
+@import "base/layout";
 
-@import "{{ bundleGuidelinePath }}/generic/links";
-@import "{{ bundleGuidelinePath }}/generic/lists";
-@import "{{ bundleGuidelinePath }}/generic/buttons";
-@import "{{ bundleGuidelinePath }}/generic/form";
-@import "{{ bundleGuidelinePath }}/generic/modals";
+@import "generic/links";
+@import "generic/lists";
+@import "generic/buttons";
+@import "generic/form";
+@import "generic/modals";
 
-@import "{{ bundleGuidelinePath }}/blocks/style";
+@import "blocks/style";
 
-@import "{{ bundleGuidelinePath }}/objects/header";
-@import "{{ bundleGuidelinePath }}/objects/section";
-@import "{{ bundleGuidelinePath }}/objects/tabs";
-@import "{{ bundleGuidelinePath }}/objects/profile";
-@import "{{ bundleGuidelinePath }}/objects/carousel";
-@import "{{ bundleGuidelinePath }}/objects/choice";
-@import "{{ bundleGuidelinePath }}/objects/collection";
-@import "{{ bundleGuidelinePath }}/objects/editable-text";
-@import "{{ bundleGuidelinePath }}/objects/image";
-@import "{{ bundleGuidelinePath }}/objects/media";
-@import "{{ bundleGuidelinePath }}/objects/nomenclature";
-@import "{{ bundleGuidelinePath }}/objects/tag";
-@import "{{ bundleGuidelinePath }}/objects/text";
-@import "{{ bundleGuidelinePath }}/objects/product";
-@import "{{ bundleGuidelinePath }}/objects/tunnel-step";
-@import "{{ bundleGuidelinePath }}/objects/catalog";
+@import "objects/chat";
+@import "objects/header";
+@import "objects/section";
+@import "objects/tabs";
+@import "objects/profile";
+@import "objects/carousel";
+@import "objects/choice";
+@import "objects/collection";
+@import "objects/editable-text";
+@import "objects/image";
+@import "objects/video";
+@import "objects/media";
+@import "objects/nomenclature";
+@import "objects/tag";
+@import "objects/text";
+@import "objects/product";
+@import "objects/tunnel-step";
+@import "objects/catalog";
+@import "objects/videoConferenceQuestions";
 
 .text-highlighted {
   color: $color-highlighted;

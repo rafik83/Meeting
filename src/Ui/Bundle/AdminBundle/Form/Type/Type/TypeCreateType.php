@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
@@ -123,7 +115,20 @@ class TypeCreateType extends AbstractType
             ->add('mustEvaluateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('canSubmitValidation', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
+        if ($options['showAnalyticsSettings']) {
+            $builder
+                ->add('displayAnalyticsOnSheet', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('displayAnalyticsOnCatalog', CheckboxType::class, [
+                    'required' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -131,10 +136,11 @@ class TypeCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event']);
+        $resolver->setRequired(['event', 'showAnalyticsSettings']);
         $resolver->setAllowedTypes('event', Model\Event::class);
+        $resolver->setAllowedTypes('showAnalyticsSettings', 'bool');
         $resolver->setDefaults([
-            'data_class'    => Create::class,
+            'data_class' => Create::class,
             'csrf_token_id' => 'type_create',
         ]);
     }

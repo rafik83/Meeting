@@ -40,14 +40,24 @@ class CanAccessToWebinar
             return false;
         }
 
+        if ($happening->hasSpeaker($user)) {
+            return true;
+        }
+
         $start = DaysHelper::cloneDateTime($happening->getBegin())->modify('-5 min');
         $end = DaysHelper::cloneDateTime($happening->getEnd())->modify('+15 min');
 
-        if ($this->hasSecurity && ($this->dateTime < $start || $this->dateTime > $end)) {
+        if ($this->hasSecurity
+            && !$happening->isVideoWebinarAndHasLiveUrl()
+            && ($this->dateTime < $start || $this->dateTime > $end)
+        ) {
             return false;
         }
 
-        if ($happening->hasSpeaker($user)) {
+        // User can access video webinar with live url on webinar than are ended.
+        if ($happening->isVideoWebinarAndHasLiveUrl()
+            && $happening->getEnd() < $this->dateTime
+        ) {
             return true;
         }
 

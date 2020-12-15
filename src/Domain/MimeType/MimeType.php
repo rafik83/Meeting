@@ -1,14 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\MimeType;
+
+use InvalidArgumentException;
 
 final class MimeType
 {
@@ -17,6 +11,7 @@ final class MimeType
     public const FORMAT_PDF = 'pdf';
     public const FORMAT_PPT = 'ppt';
     public const FORMAT_CSV = 'csv';
+    public const FORMAT_VIDEO = 'video';
 
     public const AVAILABLE_MIME_TYPES_BY_FORMAT = [
         self::FORMAT_IMAGE => self::IMAGE_MIME_TYPES,
@@ -24,6 +19,7 @@ final class MimeType
         self::FORMAT_PDF => self::PDF_MIME_TYPES,
         self::FORMAT_PPT => self::PPT_MIME_TYPES,
         self::FORMAT_CSV => self::CSV_MIME_TYPES,
+        self::FORMAT_VIDEO => self::VIDEO_MIME_TYPES,
     ];
 
     public const IMAGE_MIME_TYPES = [
@@ -65,6 +61,24 @@ final class MimeType
         'application/csv',
     ];
 
+    public const VIDEO_MIME_TYPES = [
+        'video/mp4', // .mp4
+        'video/x-msvideo', // .avi
+        'video/webm', // .webm
+    ];
+
+    public const MEDIA_MIME_TYPES = [
+        'image/gif',
+        'image/jpeg',
+        'image/pjpeg',
+        'image/png',
+        'image/x-png',
+        'video/mp4', // .mp4
+        'video/x-msvideo', // .avi
+        'video/webm', // .webm
+
+    ];
+
     public static function getMimeTypesByFormats(array $formats = []): array
     {
         $mimeTypes = [];
@@ -81,5 +95,29 @@ final class MimeType
         }
 
         return $mimeTypes;
+    }
+
+    public static function getFormatByMimeType(string $mimeType): string
+    {
+        if (in_array($mimeType, self::VIDEO_MIME_TYPES, true)) {
+            return MimeType::FORMAT_VIDEO;
+        }
+        if (in_array($mimeType, self::IMAGE_MIME_TYPES, true)) {
+            return MimeType::FORMAT_IMAGE;
+        }
+        if (in_array($mimeType, self::VECTOR_IMAGE_MIME_TYPES, true)) {
+            return MimeType::FORMAT_VECTOR_IMAGE;
+        }
+        if (in_array($mimeType, self::CSV_MIME_TYPES, true)) {
+            return MimeType::FORMAT_CSV;
+        }
+        if (in_array($mimeType, self::PDF_MIME_TYPES, true)) {
+            return MimeType::FORMAT_PDF;
+        }
+        if (in_array($mimeType, self::PPT_MIME_TYPES, true)) {
+            return MimeType::FORMAT_PPT;
+        }
+
+        throw new InvalidArgumentException('Unsupported mime type '.$mimeType);
     }
 }

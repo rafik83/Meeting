@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -17,9 +9,6 @@ class Update extends AbstractEventTip
     /** @var Tip */
     public $tip;
 
-    /**
-     * @param Tip $tip
-     */
     public function __construct(Tip $tip)
     {
         $this->tip = $tip;
@@ -33,6 +22,7 @@ class Update extends AbstractEventTip
         $this->onPackage = $tip->isOnPackage();
         $this->onContacts = $tip->isOnContacts();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
+        $this->onNetworking = $tip->isOnNetworking();
         $this->types = $tip->getTypes();
         $this->display = $tip->getDisplay();
         $this->conditionOnOrders = $tip->getConditionOnOrders();
@@ -42,10 +32,14 @@ class Update extends AbstractEventTip
         $this->conditionIsCompleteSheet = $tip->hasConditionCompleteSheet();
         $this->conditionIsPhoneConfirmed = $tip->hasConditionPhoneConfirmed();
 
-        foreach ($tip->getTranslations() as $translation) {
-            $this->translations[$translation->getLocale()] = [
-                'title' => $translation->getTitle(),
-                'content' => $translation->getContent(),
+        foreach ($tip->getEvent()->getLocales() as $locale) {
+            $translation = $tip->getTranslation($locale);
+            $translationTitle = $translation ? $translation->getTitle() : '';
+            $translationContent = $translation ? $translation->getContent() : '';
+
+            $this->translations[$locale] = [
+                'title' => $translationTitle,
+                'content' => $translationContent,
             ];
         }
     }

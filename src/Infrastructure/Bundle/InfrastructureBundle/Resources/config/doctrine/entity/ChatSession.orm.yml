@@ -1,0 +1,31 @@
+Proximum\Vimeet\Domain\Model\ChatSession:
+    type:  entity
+    table: chat_session
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        unreadMessages:
+            type: json
+        visioSessionId:
+            type: string
+            nullable: true
+        visioStartedAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        fromUser:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+        toUser:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE

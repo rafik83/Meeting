@@ -80,8 +80,6 @@ class Transaction
     private $hidden = false;
 
     /**
-     * Transaction constructor.
-     *
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date

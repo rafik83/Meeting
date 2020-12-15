@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -47,14 +39,12 @@ class Update
     /** @var bool */
     public $onConfirmationPhone;
 
+    /** @var bool */
+    public $onNetworking;
+
     /** @var array */
     public $translations;
 
-    /**
-     * Update constructor.
-     *
-     * @param Tip $tip
-     */
     public function __construct(Tip $tip)
     {
         $this->tip                 = $tip;
@@ -68,6 +58,7 @@ class Update
         $this->onProgram           = $tip->isOnProgram();
         $this->onContacts          = $tip->isOnContacts();
         $this->onConfirmationPhone = $tip->isOnConfirmationPhone();
+        $this->onNetworking        = $tip->isOnNetworking();
 
         foreach ($this->tip->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

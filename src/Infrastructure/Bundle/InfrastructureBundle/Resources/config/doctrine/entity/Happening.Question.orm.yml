@@ -11,6 +11,10 @@ Proximum\Vimeet\Domain\Model\Happening\Question:
             type: string
         createdAt:
             type: datetime
+        askedDuringWebinar:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening

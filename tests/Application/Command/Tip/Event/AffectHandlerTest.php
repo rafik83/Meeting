@@ -62,6 +62,7 @@ class AffectHandlerTest extends TestCase
         $globalTip->isOnContacts()->willReturn(true);
         $globalTip->isOnProgram()->willReturn(false);
         $globalTip->isOnConfirmationPhone()->willReturn(true);
+        $globalTip->isOnNetworking()->willReturn(false);
         $globalTip->getTranslationTitle('fr')->willReturn('title');
         $globalTip->getTranslationContent('fr')->willReturn('content');
 
@@ -77,6 +78,7 @@ class AffectHandlerTest extends TestCase
             true,
             false,
             true,
+            false,
             $dateTime
         );
 
@@ -100,6 +102,7 @@ class AffectHandlerTest extends TestCase
                 && true === $tip->isOnContacts()
                 && false === $tip->isOnProgram()
                 && true === $tip->isOnConfirmationPhone()
+                && false === $tip->isOnNetworking()
                 && 'title' === $tip->getTranslationTitle('fr')
                 && 'content' === $tip->getTranslationContent('fr')
                 && in_array($type->reveal(), $tip->getTypes(), true)

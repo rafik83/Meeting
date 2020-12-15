@@ -1,16 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
+namespace Proximum\Vimeet\Tests\Application\Command\VideoConference;
 
 use OpenTok\Session;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler;
 use Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever;
@@ -18,6 +14,8 @@ use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
@@ -32,6 +30,11 @@ class RequestAccessHandlerTest extends TestCase
         $meeting = $this->prophesize(Meeting::class);
         $slot    = $this->prophesize(MeetingSlot::class);
         $user    = $this->prophesize(User::class);
+
+        $sheet = $this->prophesize(Sheet::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
+        $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
 
         $slot->getEnd()->shouldBeCalled()->willReturn($slotEnd);
         $meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
@@ -70,11 +73,17 @@ class RequestAccessHandlerTest extends TestCase
         ;
 
         $videoConference = new VideoConference('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9', $meeting->reveal());
-        $videoConference->setToken(new VideoConferenceToken($videoConference, $user->reveal(), 'TOKEN'));
 
         $videoConferenceRepository->add($videoConference)->shouldBeCalled();
 
+        $addParticipantToMeetingHandler = $this->prophesize(AddParticipantToMeetingHandler::class);
+        $addParticipantToMeetingHandler
+            ->handle(new AddParticipantToMeeting($participant->reveal(), $meeting->reveal()))
+            ->shouldBeCalled()
+        ;
+
         $handler = new RequestAccessHandler(
+            $addParticipantToMeetingHandler->reveal(),
             $videoConferenceAdapter->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
@@ -94,7 +103,7 @@ class RequestAccessHandlerTest extends TestCase
         $videoConferenceView = $handler->handle(
             new RequestAccess(
                 $meeting->reveal(),
-                $user->reveal(),
+                $participant->reveal(),
                 'fr'
             )
         );
@@ -109,6 +118,11 @@ class RequestAccessHandlerTest extends TestCase
         $slot    = $this->prophesize(MeetingSlot::class);
         $user    = $this->prophesize(User::class);
 
+        $sheet = $this->prophesize(Sheet::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getSheet()->shouldBeCalled()->willReturn($sheet->reveal());
+        $participant->getUser()->shouldBeCalled()->willReturn($user->reveal());
+
         $slot->getEnd()->shouldBeCalled()->willReturn($slotEnd);
         $meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
 
@@ -118,7 +132,6 @@ class RequestAccessHandlerTest extends TestCase
         $videoConferenceInterface  = $this->prophesize(VideoConferenceAdapterInterface::class);
         $videoConferenceRepository = $this->prophesize(VideoConferenceRepositoryInterface::class);
 
-        $videoConference->getTokenByUser($user->reveal())->willReturn(null);
         $videoConference->getSessionId()->willReturn('T1==cGFydG5lcl9pZD00NTkyNjE2MiZzaWc9');
         $videoConferenceInterface->getApiKey()->shouldBeCalled()->willReturn('API_KEY');
 
@@ -147,18 +160,14 @@ class RequestAccessHandlerTest extends TestCase
             ->willReturn('TOKEN')
         ;
 
-        $videoConference->setToken(
-            new VideoConferenceToken(
-                $videoConference->reveal(),
-                $user->reveal(),
-                'TOKEN'
-            )
-        )->shouldBeCalled()
+        $addParticipantToMeetingHandler = $this->prophesize(AddParticipantToMeetingHandler::class);
+        $addParticipantToMeetingHandler
+            ->handle(new AddParticipantToMeeting($participant->reveal(), $meeting->reveal()))
+            ->shouldBeCalled()
         ;
 
-        $videoConferenceRepository->set($videoConference)->shouldBeCalled();
-
         $handler = new RequestAccessHandler(
+            $addParticipantToMeetingHandler->reveal(),
             $videoConferenceInterface->reveal(),
             $videoConferenceRepository->reveal(),
             $visioSettingsRetriever->reveal()
@@ -178,7 +187,7 @@ class RequestAccessHandlerTest extends TestCase
         $videoConferenceView = $handler->handle(
             new RequestAccess(
                 $meeting->reveal(),
-                $user->reveal(),
+                $participant->reveal(),
                 'fr'
             )
         );

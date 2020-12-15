@@ -47,6 +47,12 @@ class Question
     private $content;
 
     /**
+     * Has question been ask during webinar (true), or on registration (false)
+     * @var bool
+     */
+    private $askedDuringWebinar;
+
+    /**
      * Question constructor.
      *
      * @param Happening          $happening
@@ -60,19 +66,21 @@ class Question
         Sheet $sheet,
         User $createdBy,
         \DateTimeInterface $createdAt,
-        $content
+        $content,
+        $askedDuringWebinar = false
     ) {
         $this->happening = $happening;
-        $this->sheet     = $sheet;
+        $this->sheet = $sheet;
         $this->createdBy = $createdBy;
         $this->createdAt = $createdAt;
-        $this->content   = $content;
+        $this->content = $content;
+        $this->askedDuringWebinar = $askedDuringWebinar;
     }
 
     /**
      * @return Happening
      */
-    public function getHappening()
+    public function getHappening(): Happening
     {
         return $this->happening;
     }
@@ -80,7 +88,7 @@ class Question
     /**
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
@@ -88,7 +96,7 @@ class Question
     /**
      * @return User
      */
-    public function getCreatedBy()
+    public function getCreatedBy(): User
     {
         return $this->createdBy;
     }
@@ -96,7 +104,7 @@ class Question
     /**
      * @return \DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -104,7 +112,7 @@ class Question
     /**
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -115,5 +123,13 @@ class Question
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAskedDuringWebinar(): bool
+    {
+        return $this->askedDuringWebinar;
     }
 }

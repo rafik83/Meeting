@@ -1,10 +1,10 @@
-var updateParticipantForm = require('./../form/updateParticipantForm'),
-    options               = require('../../../vueComponents/options'),
-    AgendaApiEndpoints    = require('../../../components/_AgendaApiEndpoints');
+import updateParticipantForm from './../form/updateParticipantForm';
+import options from '../../../vueComponents/options';
+import AgendaApiEndpoints from "../../../components/_AgendaApiEndpoints";
 
 var api = new AgendaApiEndpoints();
 
-module.exports = {
+export default {
     template: '#update-participant-modal',
     delimiters: options.delimiters,
     props: ['show'],

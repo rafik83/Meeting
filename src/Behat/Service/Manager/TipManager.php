@@ -81,7 +81,7 @@ class TipManager
     public function createForEvent($tipTitle, $eventTitle)
     {
         $event = $this->eventManager->create($eventTitle);
-        $type  = $this->typeManager->create($event);
+        $type  = $this->typeManager->create($event, 'Type 1');
         $tip   = TipFactory::createTip($tipTitle, $event);
 
         $tip->setType($type);
@@ -122,7 +122,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);
@@ -143,7 +144,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);

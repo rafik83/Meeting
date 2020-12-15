@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Tip\Event;
 
 use PHPUnit\Framework\TestCase;
@@ -23,7 +15,7 @@ use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $type1 = $this->prophesize(Type::class);
@@ -43,6 +35,7 @@ class CreateHandlerTest extends TestCase
             true,
             false,
             true,
+            false,
             $dateTime
         );
         $expected->setType($type1->reveal());
@@ -68,6 +61,7 @@ class CreateHandlerTest extends TestCase
         $create->onContacts = true;
         $create->onProgram = false;
         $create->onConfirmationPhone = true;
+        $create->onNetworking = false;
         $create->translations = [
             'fr' => [
                 'title' => 'title fr',

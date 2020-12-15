@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\View\TypeView;
 
 class TypeRepository implements TypeRepositoryInterface
 {
@@ -107,8 +108,10 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
-            ->from('Entity:Type', 'type', 'type.id')
+            ->select(
+                sprintf('NEW %s(type.id, translations.title, translations.description, type.hidden)', TypeView::class)
+            )
+            ->from(Type::class, 'type', 'type.id')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
@@ -126,8 +129,10 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
-            ->from('Entity:Type', 'type', 'type.id')
+            ->select(
+                sprintf('NEW %s(type.id, translations.title, translations.description, type.hidden)', TypeView::class)
+            )
+            ->from(Type::class, 'type', 'type.id')
             ->join('type.translations', 'translations', 'WITH', 'type.id IN (:typeIds) AND translations.locale = :locale')
             ->setParameter('typeIds', $typeIds)
             ->setParameter('locale', $locale);
@@ -143,8 +148,10 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
-            ->from('Entity:Type', 'type', 'type.id')
+            ->select(
+                sprintf('NEW %s(type.id, translations.title, translations.description, type.hidden)', TypeView::class)
+            )
+            ->from(Type::class, 'type', 'type.id')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.id = :typeId')
@@ -164,8 +171,10 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
-            ->from('Entity:Type', 'type')
+            ->select(
+                sprintf('NEW %s(type.id, translations.title, translations.description, type.hidden)', TypeView::class)
+            )
+            ->from(Type::class, 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.event = :event')
@@ -198,8 +207,10 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('NEW Proximum\Vimeet\Domain\View\TypeView(type.id, translations.title, translations.description)')
-            ->from('Entity:Type', 'type')
+            ->select(
+                sprintf('NEW %s(type.id, translations.title, translations.description, type.hidden)', TypeView::class)
+            )
+            ->from(Type::class, 'type')
             ->join('type.translations', 'translations', 'WITH', 'translations.locale = :locale')
             ->setParameter('locale', $locale)
             ->where('type.event = :event')

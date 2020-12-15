@@ -6,7 +6,7 @@ parameters:
     database_port:     3306
     database_name:     proximum_vimeet
     database_user:     root
-    database_password: ~
+    database_password: password
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -26,7 +26,8 @@ parameters:
     mailer_error_encryption: ~
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            LcTdBOetSYwmhWirRZHleWO8FJknzXLu
+    secret:      LcTdBOetSYwmhWirRZHleWO8FJknzXLu
+    adminSecret: 'y7UriWwW@LKcBM*xU3wuao5o$K9kJkw%7ZaxrH#&dqa*XoegEVQ5n5KVcFBg'
 
     redis_dsn: 'redis://localhost'
 
@@ -38,9 +39,9 @@ parameters:
 
     sendgrid_api_key: ~
 
-    domain: vimeet.proximum
-    admin_domain: admin.vimeet.proximum
-    scheme: http
+    domain: vimeet.proximum.wip
+    admin_domain: admin.vimeet.proximum.wip
+    scheme: https
 
     timezone_default: Europe/Paris
 
@@ -109,10 +110,37 @@ parameters:
     agenda_version_diff_dday_notification_time_in_minutes: 10
 
     # Features flag
-    feature_video_conference_enabled: false
+    feature_video_conference_enabled: true
     feature_video_conference_date_security_enabled: false
     feature_event_dates_to_current_date_enabled: false
     feature_dday_enabled: false
     feature_availability_confirmation_enabled: true
     feature_registration_template_builder_enabled: false
     feature_product_vat_enabled: false
+    liip_imagine_data_root: "%kernel.project_dir%/web"
+
+    aws_s3_key: ''
+    aws_s3_secret: ''
+    aws_s3_bucket_name: ''
+    aws_s3_region: 'eu-west-3'
+
+    google_cloud_storage_video_uri: 'https://video-cdn.vimeet.events'
+    google_cloud_storage_config:
+        project_id: ''
+        bucket_name: ''
+        type: ''
+        private_key_id: ''
+        private_key: ''
+        client_email: ''
+        client_id: ''
+        auth_uri: ''
+        token_uri: ''
+        auth_provider_x509_cert_url: ''
+        client_x509_cert_url: ''
+
+    # should be accessible from PHP
+    mercure_hub_publisher_url: 'http://mercure/.well-known/mercure'
+    mercure_publisher_key: ''
+    # should be accessible from browser
+    mercure_hub_subscriber_url: 'https://notifications.k8s.vimeet.events/.well-known/mercure'
+    mercure_subscriber_key: ''

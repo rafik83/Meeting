@@ -9,6 +9,11 @@
     <script src="{{ asset('assets/js/visio.js') }}"></script>
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/videoConferenceChatTokbox.css') }}">
+{% endblock %}
+
 {% block body_attributes 'class="background-black"' %}
 
 {% block body %}
@@ -25,6 +30,7 @@
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
          data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+         data-media-screenShareStatus-message="{{ 'meeting.video.media.share.screenShareStatus'|trans }}"
          data-participant-presence-action="{{ participantPresenceAction }}"
          data-user-complete-name="{{ userCompleteName }}"
 
@@ -33,7 +39,7 @@
             data-warning-time-remaining="{{ meetingView.warningTimeRemainingInSeconds }}"
 
             data-current-user-id="{{ currentUserId }}"
-            data-subscriber-mapping="{{ meetingView.participantInfosByUserIdEncoded }}"
+            data-subscriber-mapping="{{ meetingView.participantInfosByUserId|json_encode }}"
         {% endif %}
 
         {% if videoConferenceView.hasEndSound %}
@@ -50,34 +56,38 @@
 
         <div class="layout-container" {% if videoConferenceView.hasHeader %}style="top:125px"{% endif %}></div>
         <div class="chat-container hide"></div>
-        <div class="video-helper" data-meeting-settings-container>
-            {{ include('EventBundle:Visio:settings.html.twig') }}
-        </div>
-        <div class="video-helper hide" data-meeting-waiting-helper>
-            {% if meetingView is defined %}
-                <h1>
-                    {% for sheetMetView in meetingView.sheetMetTitle %}
-                        {% if sheetMetView.isHighlighted %}
-                            <b>{{ sheetMetView.title }}</b>
-                        {% else %}
-                            {{ sheetMetView.title }}
-                        {% endif %}
-                    {% endfor %}
-                </h1>
 
-                <div class="list list--users">
-                    {% for participantView in meetingView.participants %}
-                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
-                    {% endfor %}
+        <div class="video-waiting-container">
+            <div class="video-helper" data-meeting-settings-container>
+                {{ include('EventBundle:Visio:settings.html.twig') }}
+            </div>
+            <div class="video-helper hide" data-meeting-waiting-helper>
+                {% if meetingView is defined %}
+                    <h1>
+                        {% for sheetMetView in meetingView.sheetMetTitle %}
+                            {% if sheetMetView.isHighlighted %}
+                                <b>{{ sheetMetView.title }}</b>
+                            {% else %}
+                                {{ sheetMetView.title }}
+                            {% endif %}
+                        {% endfor %}
+                    </h1>
+
+                    <div class="list list--users">
+                        {% for participantView in meetingView.participants %}
+                            {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+                {% endif %}
+
+                <div data-meeting-waiting-message class="hide">
+                    <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
                 </div>
-
-                <hr>
-            {% endif %}
-
-            <div data-meeting-waiting-message class="hide">
-                <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
             </div>
         </div>
+
         <div class="modal" tabindex="-1" role="dialog" data-visio-meeting-end-container>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

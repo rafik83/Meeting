@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class Meeting implements MessageSubjectInterface
+class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
 {
     public const STATE_SCHEDULED = 'scheduled';
     public const STATE_CANCELED  = 'canceled';
@@ -156,6 +156,11 @@ class Meeting implements MessageSubjectInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_MEETING;
     }
 
     /**
@@ -474,6 +479,27 @@ class Meeting implements MessageSubjectInterface
         return [];
     }
 
+    public function addParticipant(Participant $participant): void
+    {
+        if ($participant->getSheet()->getId() === $this->fromSheet->getId()) {
+            $this->fromParticipants->add($participant);
+
+            return;
+        }
+
+        if ($participant->getSheet()->getId() === $this->toSheet->getId()) {
+            $this->toParticipants->add($participant);
+
+            return;
+        }
+
+        throw new \InvalidArgumentException('Participant sheet not known for this meeting');
+    }
+
+    public function hasParticipant(Participant $participant): bool
+    {
+       return in_array($participant, $this->getAllParticipants(), true);
+    }
 
     public function getCreatedType(): string
     {
@@ -511,10 +537,7 @@ class Meeting implements MessageSubjectInterface
         return array_merge($this->getFromParticipantsArray(), $this->getToParticipantsArray());
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }

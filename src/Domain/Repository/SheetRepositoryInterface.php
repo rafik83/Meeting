@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -187,12 +179,12 @@ interface SheetRepositoryInterface
     /**
      * Get only enabled sheet of users on this event
      *
-     * @param User[] $users
-     * @param Event  $event
+     * @param User[]|int[] $users
+     * @param Event $event
      *
      * @return Sheet[]
      */
-    public function getSheetsByUsersAndEvent(array $users, Event $event);
+    public function getSheetsByUsersAndEvent(array $users, Event $event): array;
 
     /**
      * Get count enabled sheet by user or user's participant
@@ -396,7 +388,7 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getByUser(User $user);
+    public function getByUser(User $user): array;
 
     /**
      * @param Group $group
@@ -491,4 +483,9 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function filterWithScheduledMeetings(array $sheets): array;
+
+    /**
+     * Get analytics (views and clicks) indexed by userId
+     */
+    public function getAnalyticsByUser(Event $event): array;
 }

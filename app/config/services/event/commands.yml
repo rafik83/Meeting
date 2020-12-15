@@ -58,11 +58,84 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@vimeet_infrastructure.repository.happening_question_vote_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion }
+
     Proximum\Vimeet\Application\Command\Sheet\SortParticipantsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SortParticipants }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Export }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExportHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExport }
+
+    Proximum\Vimeet\Application\Command\File\PersistContentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.common_export_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\File\PersistContent }
+
+    Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Notify }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcastHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer }
 
     #
     # Unavailabilities
@@ -92,3 +165,196 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting }
+
+    Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeeting }
+
+    #
+    # Account
+    #
+    Proximum\Vimeet\Application\Command\User\ChangeMailHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+            - '@components.token.change_mail_token_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@vimeet_infrastructure.adapter.encoder_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMail }
+    Proximum\Vimeet\Application\Command\User\ChangeMailActivationHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.change_mail_token_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\ChangeMailActivation }
+
+    #
+    # Sheet object
+    #
+    Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideoHandler:
+        arguments:
+            - '@command.sheet.remove_data_handler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoStorageAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\TemplateObject\Video\RemoveVideo }
+
+    Proximum\Vimeet\Application\Command\Sheet\AddViewHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@impersonating_user_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddView }
+
+    Proximum\Vimeet\Application\Command\Sheet\AddClickHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@impersonating_user_checker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddClick }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Command\Chat\AddChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }
+
+    Proximum\Vimeet\Application\Command\Chat\DeleteChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
+            - '@Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\DeleteChatMessage }
+
+    Proximum\Vimeet\Application\Command\Chat\VoteChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository'
+            - '@Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages'
+            - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\VoteChatMessage }
+
+    Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessagesHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\ResetSessionUnreadMessages }
+
+    #
+    # Networking
+    #
+    Proximum\Vimeet\Application\Command\Networking\RequestVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RequestVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\RefuseVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\RefuseVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\AbandonVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\AbandonVisio }
+
+    Proximum\Vimeet\Application\Command\Networking\JoinVisioHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Networking\JoinVisio }
+
+    #
+    # Webinar
+    #
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+            - '@datetime'
+            - '@logger'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Record }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecordHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecord }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ReconciliateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallbackHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchiveHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareZipRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchiveHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
+            - '@adapter.file_system_adapter'
+            - '@adapter.video_conference_adapter'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@logger'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ZipRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchive }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler:
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }

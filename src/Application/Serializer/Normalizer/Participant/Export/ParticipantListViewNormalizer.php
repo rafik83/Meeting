@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Serializer\Normalizer\Participant\Export;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -28,6 +20,11 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     public const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
     public const COL_HAPPENING_SUBSCRIBER = 'happening_subscriber';
     public const COL_PARTICIPATION_PAID = 'participation_paid';
+    public const COL_VIEWED_SHEETS = 'viewed_sheets';
+    public const COL_CLICKED_ELEMENTS = 'clicked_elements';
+    public const COL_REQUESTED_MEETINGS = 'requested_meetings';
+    public const COL_SCHEDULED_MEETINGS = 'scheduled_meetings';
+    public const COL_CHAT_SESSIONS_CALL_VISIO = 'chat_sessions_call_visio';
     public const TRANSLATION_KEY = 'admin.participant.export.fields.';
 
     public const COMMON_COL = [
@@ -41,6 +38,11 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         self::COL_PARTICIPANT_CREATED_AT,
         self::COL_HAPPENING_SUBSCRIBER,
         self::COL_PARTICIPATION_PAID,
+        self::COL_VIEWED_SHEETS,
+        self::COL_CLICKED_ELEMENTS,
+        self::COL_REQUESTED_MEETINGS,
+        self::COL_SCHEDULED_MEETINGS,
+        self::COL_CHAT_SESSIONS_CALL_VISIO,
     ];
 
     /** @var TranslatorInterface */
@@ -160,6 +162,11 @@ class ParticipantListViewNormalizer implements NormalizerInterface
                     $participantListView->locale
                 )
             ),
+            self::COL_VIEWED_SHEETS => $participantView->viewedSheets,
+            self::COL_CLICKED_ELEMENTS => $participantView->clickedElements,
+            self::COL_REQUESTED_MEETINGS => $participantView->requestedMeetings,
+            self::COL_SCHEDULED_MEETINGS => $participantView->scheduledMeetings,
+            self::COL_CHAT_SESSIONS_CALL_VISIO => $participantView->chatSessionsCallVisio,
         ];
 
         foreach ($participantView->daysChecking as $dayKey => $checkin) {

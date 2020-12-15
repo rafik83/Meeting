@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -19,23 +11,21 @@ class HappeningViewQuery
     /** @var User */
     public $user;
 
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     public $happening;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    public function __construct(User $user, Happening $happening, Event $event, $locale)
-    {
+    public function __construct(
+        User $user,
+        Happening $happening,
+        Event $event,
+        string $locale
+    ) {
         $this->user = $user;
         $this->happening = $happening;
         $this->event = $event;

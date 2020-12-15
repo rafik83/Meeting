@@ -21,12 +21,12 @@ admin_logout:
 admin_account:
     path: /account
     methods: [GET]
-    defaults: { _controller: AdminBundle:Account:index }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction
 
 admin_update_password:
     path: /account/password
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Account:updatePassword }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction
 
 #
 # Create Admin/Organizer
@@ -40,23 +40,30 @@ admin_list_admin:
 admin_create_admin:
     path: /admin/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Admin:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\CreateAction
 
 admin_update_admin:
     path: /admin/update/{admin}
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Admin:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\UpdateAction
 
 admin_delete_admin:
     path: /admin/delete/{type}/{admin}
     requirements:
-        user: \d+
+        admin: \d+
         type: admin|operator
     methods: [DELETE, GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\DeleteAction }
 
+admin_restore_admin:
+    path: /admin/restore/{admin}
+    requirements:
+        admin: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\RestoreAction }
+
 #
-# Create Operator
+# Operator
 #
 
 admin_list_operator:
@@ -67,30 +74,29 @@ admin_list_operator:
 admin_create_operator:
     path: /operator/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Operator:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\CreateAction
 
 admin_update_operator:
     path: /operator/update/{operator}
     methods: [GET, POST]
     requirements:
         operator: \d+
-    defaults: { _controller: AdminBundle:Operator:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\UpdateAction
 
 #
-# Create Partner
+# Partner
 #
-
 admin_create_partner:
     path: /partner/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Partner:create }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\CreateAction
 
 admin_update_partner:
     path: /partner/update/{partner}
     methods: [GET, POST]
     requirements:
         partner: \d+
-    defaults: { _controller: AdminBundle:Partner:update }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\UpdateAction
 
 #
 # Activate Operator account
@@ -534,6 +540,15 @@ admin_omz_export_download:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction }
 
+admin_file_download:
+    path: /event/{event}/file/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+        hash: \w+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction
+
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
     requirements:
@@ -884,12 +899,13 @@ admin_event_qr_code_reader:
     path: /event/{event}/access
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction }
+
 admin_sheet_export_sheet:
     path: /event/{event}/sheet/export/sheet
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet/Export:exportSheet }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Export\PrepareExportAction
 
 admin_participant_prepare_export:
     path: /event/{event}/sheet/export/participant/prepare
@@ -904,25 +920,30 @@ admin_participant_export:
         file: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction }
+
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:import }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ConfigureImportAction
+
 admin_sheet_import_mapping:
     path: /event/{event}/sheet/{type}/import/mapping
     requirements:
         event: \d+
+        type: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:importMapping }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ImportMappingAction
+
 admin_sheet_import_result:
     path: /event/{event}/sheet/{type}/import/result
     requirements:
         event: \d+
         type: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet:importResult }
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction
+
 admin_sheet_assign_spot:
     path: /event/{event}/sheet/{sheet}/assign-spot
     requirements:
@@ -1054,6 +1075,19 @@ admin_happening_update:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
 
+happening_webinar_status_change_callback:
+    path: /happening/webinar/record/archive/status-change
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction
+
+admin_happening_download:
+    path: /event/{event}/happening/{happening}/download
+    requirements:
+        event: \d+
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\PrepareDownloadWebinarAction
+
 #
 # Happening Category
 #
@@ -1083,7 +1117,7 @@ admin_happening_participant_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
-    methods: [GET]
+    methods: [POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportParticipantAction }
 
 admin_happening_export:
@@ -1230,6 +1264,17 @@ admin_export_form_template_user_data:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction
 
 #
+# Count template
+#
+admin_count_media_ressource:
+    path: /event/{event}/type/{type}/count/media/ressource
+    methods: [GET]
+    requirements:
+        event: \d+
+        type: \d+
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Count\MediaResourceCountAction
+
+#
 # Package
 #
 admin_package_list:
@@ -1270,7 +1315,7 @@ admin_template_sheet_add_locale:
         template: \d+
 admin_template_sheet_preview_update:
     path: /template/sheet/{template}/preview
-    defaults: { _controller: AdminBundle:Template\Sheet\Preview:updatePreview }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Preview\UpdateAction
     methods: [GET, POST]
     requirements:
         template: \d+
@@ -1298,14 +1343,14 @@ admin_template_sheet_update:
 
 admin_template_sheet_print_template_builder:
     path: /template/sheet/{template}/print
-    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\BuilderAction
     methods: [GET]
     requirements:
         template: \d+
 
 admin_template_sheet_print_template_save:
     path: /template/sheet/{template}/print/save
-    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\SaveAction
     methods: [POST]
     requirements:
         template: \d+
@@ -2350,3 +2395,12 @@ admin_event_fast_checkin_action_checkin:
         user: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\CheckinEventEntranceAction
+
+# Impersonate
+admin_impersonate:
+    path: /event/{event}/impersonate/{user}
+    requirements:
+        event: \d+
+        user: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Impersonate\ImpersonateAction

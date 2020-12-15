@@ -62,13 +62,20 @@
 @import "components/_modal";
 
 @import "objects/_agenda";
+@import "objects/_chat";
+@import "objects/_card";
+
 @import "objects/_program";
 @import "objects/_catalog-mobile-filters";
 @import "objects/_tip";
 @import "objects/_messages";
+@import "objects/_networking";
+@import "objects/_toast";
+@import "objects/_modal-call-visio";
 @import "objects/_select-from-nomenclature-field";
 @import "objects/_videoConference";
 @import "objects/_videoConferenceChat";
+
 
 @import "generic/_titles";
 @import "generic/_buttons";
@@ -329,4 +336,22 @@
 
 .reduce-padding {
   padding: 10px 15px 0px 15px;
+}
+
+.dot {
+  height: 18px;
+  width: 18px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.recording {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }

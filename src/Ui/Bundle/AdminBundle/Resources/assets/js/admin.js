@@ -1,42 +1,42 @@
-var $ = require('jquery'),
-    Confirm = require('./components/_Confirm'),
-    CheckAllCheckbox = require('./components/_CheckAllCheckbox'),
-    LoadingButton = require('./components/_LoadingButton'),
-    TemplateBuilder = require('./components/template/_TemplateBuilder'),
-    FormTemplateBuilder = require('./components/template/_FormTemplateBuilder'),
-    PrintTemplateBuilder = require('./components/template/_PrintTemplateBuilder'),
-    Batch = require('./components/_Batch'),
-    Slots = require('./components/_Slots'),
-    SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
-    SortableCollection = require('./components/_SortableCollection'),
-    Update = require('./components/_Update'),
-    UpdateAndReconcile = require('./components/_UpdateAndReconcile'),
-    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
-    AnchorFocuser = require('./components/_AnchorFocuser'),
-    DateTimePicker = require('../../../../../../../assets/js/components/DateTimePicker'),
-    MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
-    ParticipantVisio = require('./components/_ParticipantVisio'),
-    TipPreview = require('./components/_TipPreview'),
-    ToggleVisibility = require('./components/_ToggleVisibility'),
-    CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
-    AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
-    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal'),
-    SelectPreviousNextMover = require('./components/_SelectPreviousNextMover'),
-    RadioGroupAjax = require('./components/_RadioGroupAjax'),
-    FilterBuilder = require('./components/_FilterBuilder'),
-    ButtonGroupDefaultStateChanger = require('./components/_ButtonGroupDefaultStateChanger'),
-    ParticipantPresence = require('./components/_ParticipantPresence'),
-    ShowModal = require('./components/_ShowModal'),
-    AssignAccommodationStay = require('./components/_AssignAccommodationStay')
-;
+import '../../../../../../../assets/js/components/Polyfills';
+import $ from 'jquery';
+import Confirm from './components/_Confirm';
+import CheckAllCheckbox from './components/_CheckAllCheckbox';
+import LoadingButton from './components/_LoadingButton';
+import TemplateBuilder from './components/template/_TemplateBuilder';
+import FormTemplateBuilder from './components/template/_FormTemplateBuilder';
+import PrintTemplateBuilder from './components/template/_PrintTemplateBuilder';
+import Batch from './components/_Batch';
+import Slots from './components/_Slots';
+import SharedChoicesCollection from './components/_SharedChoicesCollection';
+import SortableCollection from './components/_SortableCollection';
+import Update from './components/_Update';
+import UpdateAndReconcile from './components/_UpdateAndReconcile';
+import PreventMultipleSubmit from './components/_PreventMultipleSubmit';
+import AnchorFocuser from './components/_AnchorFocuser';
+import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
+import MessagingMessagePreview from './components/_MessagingMessagePreview';
+import ParticipantVisio from './components/_ParticipantVisio';
+import TipPreview from './components/_TipPreview';
+import ToggleVisibility from './components/_ToggleVisibility';
+import CommercialStatusSelect from './components/_CommercialStatusSelect';
+import AttributableProductToggleHappening from './components/_AttributableProductToggleHappening';
+import DuplicationSheetsModal from './components/_DuplicationSheetsModal';
+import SelectPreviousNextMover from './components/_SelectPreviousNextMover';
+import RadioGroupAjax from './components/_RadioGroupAjax';
+import FilterBuilder from './components/_FilterBuilder';
+import ButtonGroupDefaultStateChanger from './components/_ButtonGroupDefaultStateChanger';
+import ParticipantPresence from './components/_ParticipantPresence';
+import ShowModal from './components/_ShowModal';
+import AssignAccommodationStay from './components/_AssignAccommodationStay';
 
-require('bootstrap');
-require('elao-form.js');
-require('select2');
-require('moment/locale/fr');
-require('moment/locale/en-gb');
-require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
-require('./zendesk/zendesk');
+import 'bootstrap';
+import 'elao-form.js';
+import 'select2';
+import 'moment/locale/fr';
+import 'moment/locale/en-gb';
+import './vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox';
+import './zendesk/zendesk';
 
 // Init function
 

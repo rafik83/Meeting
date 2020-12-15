@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Rule\TagIdentifier;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -74,6 +75,25 @@ class SeeWhatType extends AbstractType
                 'required'                  => false,
             ])
         ;
+
+        $grades = range(1, 5);
+        $gradeChoices = array_combine($grades, $grades);
+        $builder
+            ->add('phoneAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
+                'choices' => $gradeChoices,
+            ])
+            ->add('emailAccessMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'form.rule_see_what.children.unrestricted',
+                'choices' => $gradeChoices,
+            ])
+            ->add('requestAutomaticallyTransformedIntoMeeting', CheckboxType::class, [
+                'required' => false,
+            ])
+        ;
+
     }
 
     /**

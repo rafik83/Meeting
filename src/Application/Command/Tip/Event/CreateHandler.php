@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -27,11 +19,6 @@ class CreateHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @param TipRepositoryInterface          $tipRepository
-     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
-     * @param \DateTimeInterface              $dateTime
-     */
     public function __construct(
         TipRepositoryInterface $tipRepository,
         DelayedEventDispatcherInterface $delayedEventDispatcher,
@@ -42,9 +29,6 @@ class CreateHandler
         $this->dateTime = $dateTime;
     }
 
-    /**
-     * @param Create $command
-     */
     public function handle(Create $command): void
     {
         $tip = new Tip(
@@ -59,6 +43,7 @@ class CreateHandler
             $command->onContacts,
             $command->onProgram,
             $command->onConfirmationPhone,
+            $command->onNetworking,
             $this->dateTime
         );
 

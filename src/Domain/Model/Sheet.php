@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\Analytics;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Sheet\LinkedSheets;
@@ -197,6 +198,9 @@ class Sheet implements TraceableInterface
     /** @var LinkedSheets|null */
     private $linkedSheets;
 
+    /** @var Analytics|null */
+    private $analytics;
+
     /**
      * Sheet constructor.
      *
@@ -213,7 +217,7 @@ class Sheet implements TraceableInterface
         array $data,
         User $owner,
         DateTimeInterface $createdAt,
-        Group $group = null
+        ?Group $group = null
     ) {
         $this->event        = $event;
         $this->type         = $type;
@@ -227,6 +231,13 @@ class Sheet implements TraceableInterface
         $this->completeness = 0;
         $this->group        = $group;
         $this->availableSlots = new ArrayCollection();
+
+        $this->analytics = new Analytics();
+    }
+
+    public function __tostring()
+    {
+        return $this->title.' '.$this->id.' '.$this->type->getIdentifier();
     }
 
     /**
@@ -295,7 +306,7 @@ class Sheet implements TraceableInterface
      *
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -305,7 +316,7 @@ class Sheet implements TraceableInterface
      *
      * @return Type
      */
-    public function getType()
+    public function getType(): Type
     {
         return $this->type;
     }
@@ -360,7 +371,7 @@ class Sheet implements TraceableInterface
         return $participants;
     }
 
-        /**
+    /**
      * @throws SheetException
      *
      * @return Participant
@@ -491,7 +502,7 @@ class Sheet implements TraceableInterface
      *
      * @return DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -565,7 +576,7 @@ class Sheet implements TraceableInterface
      *
      * @return User
      */
-    public function getOwner()
+    public function getOwner(): User
     {
         return $this->owner;
     }
@@ -1055,7 +1066,7 @@ class Sheet implements TraceableInterface
     /**
      * @return null|Group
      */
-    public function getGroup()
+    public function getGroup(): ?Group
     {
         return $this->group;
     }
@@ -1075,16 +1086,9 @@ class Sheet implements TraceableInterface
         return $this->group ? $this->group->getTitle() : null;
     }
 
-    /**
-     * @param Group $group
-     *
-     * @return $this
-     */
-    public function setGroup(Group $group)
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
-
-        return $this;
     }
 
     public function setLinkedSheets(LinkedSheets $linkedSheets): self
@@ -1328,5 +1332,17 @@ class Sheet implements TraceableInterface
     public function changeOwner(User $owner): void
     {
         $this->owner = $owner;
+    }
+
+    /**
+     * @return Analytics
+     */
+    public function getAnalytics(): Analytics
+    {
+        if (null === $this->analytics) {
+            $this->analytics = new Analytics();
+        }
+
+        return $this->analytics;
     }
 }

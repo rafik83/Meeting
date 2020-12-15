@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -114,6 +106,15 @@ class Type implements WhoInterface, TypeInterface
 
     /** @var bool */
     private $mustEvaluateMeeting = false;
+
+    /** @var bool */
+    public $canSubmitValidation = true;
+
+    /** @var bool */
+    private $displayAnalyticsOnSheet = false;
+
+    /** @var bool */
+    private $displayAnalyticsOnCatalog = false;
 
     public function __construct(Event $event)
     {
@@ -458,7 +459,10 @@ class Type implements WhoInterface, TypeInterface
         ?int $numberMaxOfHappeningsPerUser = null,
         ?int $numberMaxOfMeetingsPerSheet = null,
         bool $canEvaluateMeeting = true,
-        bool $mustEvaluateMeeting = false
+        bool $mustEvaluateMeeting = false,
+        bool $canSubmitValidation = true,
+        bool $displayAnalyticsOnSheet = false,
+        bool $displayAnalyticsOnCatalog = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
@@ -475,6 +479,9 @@ class Type implements WhoInterface, TypeInterface
         $this->numberMaxOfMeetingsPerSheet = $numberMaxOfMeetingsPerSheet;
         $this->canEvaluateMeeting = $canEvaluateMeeting;
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
+        $this->canSubmitValidation = $canSubmitValidation;
+        $this->displayAnalyticsOnSheet = $displayAnalyticsOnSheet;
+        $this->displayAnalyticsOnCatalog = $displayAnalyticsOnCatalog;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -547,5 +554,20 @@ class Type implements WhoInterface, TypeInterface
     public function mustEvaluateMeeting(): bool
     {
         return $this->mustEvaluateMeeting;
+    }
+
+    public function canSubmitValidation(): bool
+    {
+        return $this->canSubmitValidation;
+    }
+
+    public function canDisplayAnalyticsOnSheet(): bool
+    {
+        return $this->displayAnalyticsOnSheet;
+    }
+
+    public function canDisplayAnalyticsOnCatalog(): bool
+    {
+        return $this->displayAnalyticsOnCatalog;
     }
 }

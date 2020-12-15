@@ -1,14 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Participant;
+
+use Proximum\Vimeet\Domain\Model\Sheet\ImportMapping;
 
 class ImportMappingView
 {
@@ -26,15 +20,21 @@ class ImportMappingView
      */
     public $registrationHeaders;
 
-    /**
-     * ImportMappingView constructor.
-     *
-     * @param array $fieldHeaders
-     * @param array $registrationHeaders
-     */
-    public function __construct(array $fieldHeaders, array $registrationHeaders)
-    {
-        $this->fieldHeaders        = $fieldHeaders;
+    /** @var bool */
+    public $allowMultiSheet;
+
+    /** @var ImportMapping|null */
+    public $savedImportMapping;
+
+    public function __construct(
+        array $fieldHeaders,
+        array $registrationHeaders,
+        bool $allowMultiSheet,
+        ?ImportMapping $savedImportMapping
+    ) {
+        $this->fieldHeaders = $fieldHeaders;
         $this->registrationHeaders = $registrationHeaders;
+        $this->allowMultiSheet = $allowMultiSheet;
+        $this->savedImportMapping = $savedImportMapping;
     }
 }

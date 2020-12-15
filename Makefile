@@ -99,10 +99,10 @@ install@test: install-app@test install-db@test install-db-fixtures@test install-
 install@prod: install-dep build@prod
 
 composer-install:
-	composer install --no-progress --no-interaction --ignore-platform-reqs
+	php bin/composer.phar install --no-progress --no-interaction
 
 install-app@test:
-	SYMFONY_ENV=test composer install --no-progress --no-interaction
+	SYMFONY_ENV=test php bin/composer.phar --no-progress --no-interaction install
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
@@ -322,6 +322,22 @@ event-build-guideline-asset@preprod:
 event-build-guideline-asset@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
+import-preprod-db@local:
+	bin/console doctrine:database:drop --force
+	bin/console doctrine:database:create
+	mysql -u root proximum_vimeet < preprod.sql
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.wip')"
+	make post-import-db
+
+post-import-db:
+	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
+	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
+	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
+	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
+	bin/console doctrine:migrations:migrate --no-interaction
+	bin/console vimeet:event:build-guideline-asset
+	bin/console vimeet:elasticsearch:index --env=dev
+
 # next targets must be run in VM
 ifeq ($(HOST), vimeet)
 
@@ -364,23 +380,14 @@ import-preprod-db@vm:
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
-	make post-import-db@vm
+	make post-import-db
 
 import-prod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < prod.sql
 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
-	make post-import-db@vm
-
-post-import-db@vm:
-	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
-	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
-	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
-	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
-	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console vimeet:event:build-guideline-asset
-	bin/console vimeet:elasticsearch:index --env=dev
+	make post-import-db
 
 sync-db-from-prod@preprod:
 	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \

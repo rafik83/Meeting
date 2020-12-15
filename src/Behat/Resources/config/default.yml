@@ -31,6 +31,8 @@ default:
                     - '@behat_proxy.admin_context'
                 - Proximum\Vimeet\Behat\Context\Domain\TypeContext:
                     - '@behat_proxy.type_context'
+                - Proximum\Vimeet\Behat\Context\Domain\CategoryContext:
+                    - '@behat_proxy.category_context'
                 - Proximum\Vimeet\Behat\Context\Domain\SheetContext:
                     - '@behat_proxy.sheet_context'
                 - Proximum\Vimeet\Behat\Context\Domain\GroupContext:
@@ -77,5 +79,27 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\BillingInfoContext:
                     - '@Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Happening\CategoryContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Unavailability\CategoryContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Unavailability\MassContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Unavailability\MassContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Messaging\MessageContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Notification\NotificationContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Sheet\SheetCompletenessContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Transaction\TransactionContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\HappeningContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\HappeningContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Template\RegistrationTemplateContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Template\RegistrationTemplateContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Template\SheetTemplateContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\Template\SheetTemplateContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\NomenclatureContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\NomenclatureContextProxy'
                 - behatch:context:json
                 - behatch:context:rest

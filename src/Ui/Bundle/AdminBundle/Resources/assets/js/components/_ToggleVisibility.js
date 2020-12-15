@@ -25,4 +25,4 @@ ToggleVisibility.prototype.onClick = function (event)
     }
 };
 
-module.exports = ToggleVisibility;
+export default ToggleVisibility;

@@ -1,6 +1,21 @@
 {% set link = phoneValidationLink is defined and phoneValidationLink is not null ? phoneValidationLink : null %}
 
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
+
+{% if displayAnalyticsStat|default(false) %}
+    <div class="row">
+        <div class="col-md-12 tip tip--stats" role="contentinfo">
+            <i class="glyphicon glyphicon-stats"></i>
+            {{ 'analytics.view_counter'|transchoice(sheet.analytics.views, {'%views%': sheet.analytics.views, '%uniqueViews%': sheet.analytics.uniqueViews}) }}
+            {% if displayAnalyticsViewLink|default(false) %}
+            <a href="{{ path('event_catalog_index', {'sheet': sheet.id, 'sheetVisit[]': 'viewedBySheet' }) }}" class="btn btn-sm btn-gray">
+                {{ 'analytics.view_link'|trans }}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
     <header class="sheet-header">
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
@@ -35,9 +50,9 @@
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">
-                <li{% if locale == event.fallback %} class="active"{% endif %}>
+                <li{% if locale == event.localeFallback %} class="active"{% endif %}>
                     <a href="{{ path('event_sheet_locale', { 'sheet': sheet.id, 'locale': event.fallback }) }}">
-                        <span class="name">{{ event.fallback|locale }}*</span>
+                        <span class="name">{{ event.localeFallback|locale }}*</span>
                     </a>
                 </li>
                 {% for event_locale in event.locales if event_locale != event.fallback %}
@@ -73,6 +88,7 @@
                 'phoneValidationLink': link,
                 'hideMeetingRequest': hideMeetingRequest|default(false),
                 'canAddParticipant': canAddParticipant|default(false),
+                'displayAnalyticsStat': displayAnalyticsStat|default(false),
             }, false) }}
         {% endfor %}
     </div>

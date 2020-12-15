@@ -1,23 +1,19 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\BooleanConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\GenderConverter;
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Converter\TelephoneConverter;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 
 class ContactNormalizer
 {
-    public function normalize(array $contact, array $normalizerMapping): array
-    {
+    public function normalize(
+        array $contact,
+        array $normalizerMapping,
+        ?string $countryKey = null
+    ): array {
         if (empty($normalizerMapping)) {
             return $contact;
         }
@@ -33,7 +29,7 @@ class ContactNormalizer
                 $contactsNormalized[$key] = $this->convert(
                     $contactData,
                     $normalizerMapping[$key],
-                    $contact['IDPAYS'] ?? ''
+                    null !== $countryKey ? ($contact[$countryKey] ?? '') : ''
                 );
 
                 continue;
@@ -55,7 +51,7 @@ class ContactNormalizer
             case 'telephone':
                 return TelephoneConverter::convert($dataToConvert, $country);
             default:
-                return $dataToConvert;
+                return StringHelper::trimSpacesAndNonBreakSpaces($dataToConvert);
         }
     }
 }

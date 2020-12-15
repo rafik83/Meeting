@@ -516,4 +516,14 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     {
         return $this->deletedAt instanceof \DateTime;
     }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+
+    public function restore(): void
+    {
+        $this->deletedAt = null;
+    }
 }

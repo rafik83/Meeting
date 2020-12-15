@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -28,12 +20,6 @@ class PackageManager
         $this->packageRepository = $packageRepository;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $title
-     *
-     * @return Package
-     */
     public function create(Event $event, string $title = 'Package'): Package
     {
         $package = new Package($event, $title, new \DateTime());
@@ -42,10 +28,6 @@ class PackageManager
         return $package;
     }
 
-    /**
-     * @param Package $package
-     * @param Product $product
-     */
     public function assignProductParticipant(Package $package, Product $product)
     {
         if (!$product->isParticipant()) {
@@ -64,10 +46,6 @@ class PackageManager
         $this->packageRepository->set($package);
     }
 
-    /**
-     * @param Package $package
-     * @param Product $product
-     */
     public function assignPlan(Package $package, Product $product)
     {
         if (!$product->isPlan()) {
@@ -86,10 +64,6 @@ class PackageManager
         $this->packageRepository->set($package);
     }
 
-    /**
-     * @param Package $package
-     * @param Product $planning
-     */
     public function assignPlanning(Package $package, Product $planning)
     {
         if (!$planning->isPlanning()) {
@@ -109,7 +83,6 @@ class PackageManager
     }
 
     /**
-     * @param Package   $package
      * @param Product[] $options
      */
     public function setOptions(Package $package, array $options)
@@ -132,6 +105,12 @@ class PackageManager
     public function setPlanningNotSelectable(Package $package): void
     {
         $package->setPlanningSelectable(false);
+        $this->packageRepository->set($package);
+    }
+
+    public function enable(Package $package): void
+    {
+        $package->enable(true, true, true);
         $this->packageRepository->set($package);
     }
 }

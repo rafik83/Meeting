@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -16,6 +8,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -40,12 +33,9 @@ class UpdateHandler
         $this->fileStorage = $fileStorage;
     }
 
-    /**
-     * @param Update $update
-     */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
-        if ($update->webinar) {
+        if ($update->isWebinar()) {
             foreach ($update->talkings as $talking) {
                 if ($talking["speaker"]->getUser() === null) {
                     throw new SpeakerNotUserException();
@@ -55,7 +45,7 @@ class UpdateHandler
 
         $previousTypes = $update->happening->getTypes();
         $previousBegin = $update->happening->getBegin();
-        $previousEnd   = $update->happening->getEnd();
+        $previousEnd = $update->happening->getEnd();
 
         $happening = $update->happening;
         $happening->update(
@@ -65,8 +55,14 @@ class UpdateHandler
             $update->types,
             $update->questionAllowed,
             $update->limitParticipant,
-            $update->webinar,
-            $update->invitationCode
+            $update->isWebinar(),
+            $update->isInteractiveWebinar(),
+            $update->isVideoWebinar(),
+            $update->invitationCode,
+            $update->liveUrl,
+            $update->sidebarAllowed,
+            $update->isWebinar() && $update->webinarRecorded,
+            $update->isWebinar() && $update->allowHls
         );
 
         foreach ($update->translations as $locale => $translation) {
@@ -81,23 +77,43 @@ class UpdateHandler
                 $webinarHeaderImage = $this->fileStorage->upload($translation['webinarHeaderImage']);
             }
 
+            $currentWebinarWaitingMediaFile = $translation['currentWebinarWaitingMediaFile'];
+            $webinarWaitingMediaFile = $currentWebinarWaitingMediaFile;
+            $webinarWaitingMediaType = $translation['currentWebinarWaitingMediaType'];
+
+            if ($translation['webinarWaitingMedia'] instanceof UploadedFile) {
+                if ($currentWebinarWaitingMediaFile) {
+                    $this->fileStorage->remove($currentWebinarWaitingMediaFile);
+                }
+
+                $webinarWaitingMediaType = MimeType::getFormatByMimeType($translation['webinarWaitingMedia']->getMimeType());
+                $webinarWaitingMediaFile = $this->fileStorage->upload($translation['webinarWaitingMedia']);
+
+            }
+
             $happening->updateTranslation(
                 $locale,
                 $translation['title'],
                 $translation['description'],
-                $webinarHeaderImage
+                $webinarHeaderImage,
+                $webinarWaitingMediaFile,
+                $webinarWaitingMediaType
             );
         }
 
-        array_walk($update->talkings, function (array &$talking, $key) {
+        array_walk($update->talkings, static function (array &$talking, $key) {
             $talking['position'] += $key;
         });
 
         // Sort speakers by position
-        usort($update->talkings, function (array $one, array $another) { return $one['position'] - $another['position']; });
+        usort($update->talkings, static function (array $one, array $another) { return $one['position'] - $another['position']; });
 
         // Set speakers
-        $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
+        $happening->setSpeakers(
+            array_map(static function (array $talking) {
+                return $talking['speaker'];
+            }, $update->talkings)
+        );
 
         $this->happeningRepository->set($happening);
 

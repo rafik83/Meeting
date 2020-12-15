@@ -17,62 +17,41 @@ use Symfony\Component\EventDispatcher;
 
 class ParticipantImportedEvent extends EventDispatcher\Event
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     private $admin;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $date;
 
-    /**
-     * @var Sheet[]
-     */
+    /** @var Sheet[] */
     private $sheets;
 
-    /**
-     * ParticipantImportedEvent constructor.
-     *
-     * @param Admin              $admin
-     * @param Event              $event
-     * @param \DateTimeInterface $date
-     * @param Sheet[]            $sheets
-     */
-    public function __construct(Admin $admin, Event $event, \DateTimeInterface $date, array $sheets)
-    {
+    public function __construct(
+        Admin $admin,
+        Event $event,
+        \DateTimeInterface $date,
+        array $sheets
+    ) {
         $this->admin  = $admin;
         $this->event  = $event;
         $this->date   = $date;
         $this->sheets = $sheets;
     }
 
-    /**
-     * @return Admin
-     */
-    public function getAdmin()
+    public function getAdmin(): Admin
     {
         return $this->admin;
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }
@@ -80,7 +59,7 @@ class ParticipantImportedEvent extends EventDispatcher\Event
     /**
      * @return Sheet[]
      */
-    public function getSheets()
+    public function getSheets(): array
     {
         return $this->sheets;
     }

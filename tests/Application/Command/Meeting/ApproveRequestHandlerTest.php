@@ -16,6 +16,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
+use Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler;
@@ -84,11 +85,15 @@ class ApproveRequestHandlerTest extends TestCase
 
         $ddayGuesser->isItDDayAndFeatureEnabled($event)->shouldBeCalled()->willReturn(false);
 
+        $allowTransformAutomaticallyRequestIntoMeeting = $this->prophesize(AllowTransformAutomaticallyRequestIntoMeeting::class);
+        $allowTransformAutomaticallyRequestIntoMeeting->__invoke($approveRequest->request)->willReturn(false);
+
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
             ->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
+            $allowTransformAutomaticallyRequestIntoMeeting->reveal(),
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
@@ -152,6 +157,9 @@ class ApproveRequestHandlerTest extends TestCase
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
         $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
 
+        $allowTransformAutomaticallyRequestIntoMeeting = $this->prophesize(AllowTransformAutomaticallyRequestIntoMeeting::class);
+        $allowTransformAutomaticallyRequestIntoMeeting->__invoke($approveRequest->request)->willReturn(false);
+
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
             ->shouldNotBeCalled();
@@ -159,6 +167,7 @@ class ApproveRequestHandlerTest extends TestCase
         $ddayGuesser->isItDDay($event)->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
+            $allowTransformAutomaticallyRequestIntoMeeting->reveal(),
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),

@@ -1,10 +1,9 @@
-var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
-    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement'),
-    PubSub = require('pubsub-js'),
-    $ = require('jquery')
-;
+import TypeFilterElement from './_CatalogMobileTypeFilterElement';
+import AvailableSlotFilterElement from './_CatalogMobileAvailableSlotFilterElement';
+import PubSub from 'pubsub-js';
+import $ from 'jquery';
 
-require('select2');
+import 'select2';
 
 /**
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
@@ -222,4 +221,4 @@ CatalogMobileFilters.prototype.handleRemoveContent = function (event) {
     PubSub.publish('mobile-input-content-purge');
 };
 
-module.exports = CatalogMobileFilters;
+export default CatalogMobileFilters;

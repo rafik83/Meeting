@@ -68,4 +68,4 @@ DuplicationSheetsModal.prototype.hideDuplicateButton = function() {
     this.duplicateButton.style = 'display: none;'
 };
 
-module.exports = DuplicationSheetsModal;
+export default DuplicationSheetsModal;

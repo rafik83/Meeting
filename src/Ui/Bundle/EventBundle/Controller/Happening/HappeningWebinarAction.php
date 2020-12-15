@@ -1,22 +1,15 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand;
+use Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
-use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -45,18 +38,23 @@ class HappeningWebinarAction
     /** @var QueryBusInterface */
     private $queryBus;
 
+    /** @var \DateTimeInterface */
+    private $datetime;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
-        QueryBusInterface $queryBus
+        QueryBusInterface $queryBus,
+        \DateTimeInterface $datetime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
+        $this->datetime = $datetime;
     }
 
     public function __invoke(
@@ -82,14 +80,14 @@ class HappeningWebinarAction
 
         $this->commandBus->handle(new StartWebinarSessionCommand($happening));
 
-        /** @var WebinarView $webinarView */
+        $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->datetime));
+
+        /** @var AbstractWebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
 
         return new Response(
             $this->engine->render(
-                $webinarView->isSpeaker
-                    ? '@Event/Happening/webinar-speaker.html.twig'
-                    : '@Event/Happening/webinar-viewer.html.twig',
+                $this->getTemplateNameDependingOnContext($webinarView),
                 [
                     'event' => $event,
                     'sheet' => $sheet,
@@ -98,5 +96,16 @@ class HappeningWebinarAction
                 ]
             )
         );
+    }
+
+    private function getTemplateNameDependingOnContext(AbstractWebinarView $webinarView): string
+    {
+        if ($webinarView->isVideoWebinarAndHappeningIsEnded()) {
+            return '@Event/Happening/webinar-video.html.twig';
+        }
+
+        return $webinarView->isSpeaker
+            ? '@Event/Happening/webinar-speaker.html.twig'
+            : '@Event/Happening/webinar-viewer.html.twig';
     }
 }

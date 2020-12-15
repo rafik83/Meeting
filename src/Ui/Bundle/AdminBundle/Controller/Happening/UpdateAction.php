@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -31,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UpdateAction
 {
-    const TEMPLATE = 'AdminBundle:Happening:update.html.twig';
+    public const TEMPLATE = 'AdminBundle:Happening:update.html.twig';
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -54,15 +46,6 @@ class UpdateAction
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param EngineInterface                      $engine
-     * @param RouterInterface                      $router
-     * @param CommandBusInterface                  $commandBus
-     * @param FlashBagInterface                    $flashBag
-     * @param TranslatorInterface                  $translator
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
@@ -81,16 +64,12 @@ class UpdateAction
         $this->translator = $translator;
     }
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param Happening   $happening
-     * @param AdminDomain $adminDomain
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request, Event $event, Happening $happening, AdminDomain $adminDomain): Response
-    {
+    public function __invoke(
+        Request $request,
+        Event $event,
+        Happening $happening,
+        AdminDomain $adminDomain
+    ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
             || $event !== $happening->getEvent()
         ) {
@@ -98,15 +77,20 @@ class UpdateAction
         }
 
         $update = new Update($happening);
-        $form   = $this->formFactory->create(UpdateType::class, $update, [
+        $form = $this->formFactory->create(UpdateType::class, $update, [
             'admin' => $adminDomain->getAdmin(),
-            'event'  => $event,
+            'event' => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
+                if ($form->get('allowHls')->getData()
+                    && ($form->get('end')->getData()->getTimestamp() - $form->get('begin')->getData()->getTimestamp()) > 36000) {
+                    $this->flashBag->add('error', 'flash.admin.happening.error.maxDuration');
+                }
+
                 $this->commandBus->handle($update);
                 $this->flashBag->add('success', 'flash.admin.happening.update.success');
 
@@ -120,15 +104,18 @@ class UpdateAction
                     )
                 );
             } catch (SpeakerNotUserException $speakerNotUserException) {
-                $error = new FormError($this->translator->trans('form.happening_update.speaker_not_user.error', [], 'forms'));
+                $error = new FormError(
+                    $this->translator->trans('form.happening_update.speaker_not_user.error', [], 'forms')
+                );
                 $form->addError($error);
             }
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'products' => $happening->getProducts(),
+            'happening' => $happening,
         ]);
     }
 }

@@ -25,7 +25,7 @@ class AddHandler
             return;
         }
 
-        $contact = new Contact($add->event, $add->user, $add->contact, $this->dateTime, true);
+        $contact = new Contact($add->event, $add->user, $add->contact, $this->dateTime, $add->origin);
 
         if (null !== $this->contactRepository->find($contact)) {
             return;

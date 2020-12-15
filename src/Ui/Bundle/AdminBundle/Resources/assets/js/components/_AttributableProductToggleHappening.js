@@ -34,4 +34,4 @@ AttributableProductToggleHappening.prototype.onClick = function (event)
     this.resetHappeningSelect();
 };
 
-module.exports = AttributableProductToggleHappening;
+export default AttributableProductToggleHappening;

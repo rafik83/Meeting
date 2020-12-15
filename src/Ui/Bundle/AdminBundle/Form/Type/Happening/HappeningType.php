@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Application\Command\Happening\AbstractHappeningCommand;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
@@ -20,7 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
@@ -31,28 +27,35 @@ abstract class HappeningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $event = $options['event'];
 
         $builder
             ->add('category', CategoryType::class, ['event' => $event, 'locale' => $options['locale']])
-            ->add('webinar', CheckboxType::class, [
-                'required' => false,
+            ->add('happeningType', ChoiceType::class, [
+                'choices' => [
+                    'form.happening.happeningType.default.label' => AbstractHappeningCommand::TYPE_DEFAULT,
+                    'form.happening.happeningType.webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR,
+                    'form.happening.happeningType.interactive_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_INTERACTIVE,
+                    'form.happening.happeningType.video_webinar.label' => AbstractHappeningCommand::TYPE_WEBINAR_VIDEO,
+                ],
+                'expanded' => true,
+                'required' => true,
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationType::class,
-                'label'      => false,
+                'label' => false,
             ])
             ->add('begin', DateTimePickerType::class, [
-                'format'        => 'd/m/Y H:i',
+                'format' => 'd/m/Y H:i',
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',
                 ],
             ])
             ->add('end', DateTimePickerType::class, [
-                'format'        => 'd/m/Y H:i',
+                'format' => 'd/m/Y H:i',
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',
@@ -68,37 +71,67 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('limitParticipant', IntegerType::class, [
                 'required' => false,
-                'attr'     => [
+                'attr' => [
                     'min' => 0,
                 ],
                 'help' => 'form.happening_create.children.limitParticipant.help',
             ])
             ->add('types', TypeChoiceType::class, [
-                'event'    => $options['event'],
+                'event' => $options['event'],
                 'expanded' => true,
-                'locale'   => $options['locale'],
+                'locale' => $options['locale'],
                 'multiple' => true,
                 'required' => false,
-                'user'     => $options['admin'],
+                'user' => $options['admin'],
             ])
             ->add('talkings', CollectionType::class, [
-                'required'       => false,
-                'entry_type'     => TalkingType::class,
-                'entry_options'  => ['label' => false, 'event' => $event],
+                'required' => false,
+                'entry_type' => TalkingType::class,
+                'entry_options' => ['label' => false, 'event' => $event],
                 'prototype_data' => ['speaker' => null, 'position' => 0],
-                'allow_add'      => true,
-                'allow_delete'   => true,
+                'allow_add' => true,
+                'allow_delete' => true,
             ])
             ->add('invitationCode', TextType::class, [
                 'required' => false,
             ])
+            ->add('liveUrl', UrlType::class, [
+                'required' => false,
+                'help' => 'form.happening_create.children.liveUrl.help',
+                'default_protocol' => 'https',
+            ])
+            ->add('sidebarAllowed', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.sidebarAllowed.answer.true'  => true,
+                    'form.happening_create.children.sidebarAllowed.answer.false' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])
+            ->add('allowHls', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) use ($options) {
+            /** @var Admin $admin */
+            $admin = $options['admin'];
+            $form = $event->getForm();
+
+            if ($admin->isSuperAdmin()) {
+                $form
+                    ->add('webinarRecorded', CheckboxType::class, [
+                        'required' => false,
+                    ])
+                ;
+            }
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         foreach ($view->children['translations'] as $translation) {
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
@@ -108,7 +141,7 @@ abstract class HappeningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired(['event', 'locale', 'admin']);
         $resolver->setAllowedTypes('event', Event::class);
@@ -119,7 +152,7 @@ abstract class HappeningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'happening';
     }

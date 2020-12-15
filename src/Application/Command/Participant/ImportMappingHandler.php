@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
@@ -16,6 +8,7 @@ use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\ParticipantImport;
 use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
@@ -24,44 +17,24 @@ use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class ImportMappingHandler
 {
-    /**
-     * @var SessionInterface
-     */
+    /** @var SessionInterface */
     private $session;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $date;
 
-    /**
-     * @var LocalFileStorageAdapter
-     */
+    /** @var LocalFileStorageAdapter */
     private $localFileStorage;
 
-    /**
-     * @var ParticipantImportRepositoryInterface
-     */
+    /** @var ParticipantImportRepositoryInterface */
     private $participantImportRepository;
 
-    /**
-     * @var SerializerAdapterInterface
-     */
+    /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
-    /**
-     * @param SerializerAdapterInterface           $serializerAdapter
-     * @param SessionInterface                     $session
-     * @param DelayedEventDispatcher               $eventDispatcher
-     * @param LocalFileStorageAdapter              $localFileStorage
-     * @param \DateTimeInterface                   $date
-     * @param ParticipantImportRepositoryInterface $participantImportRepository
-     */
     public function __construct(
         SerializerAdapterInterface $serializerAdapter,
         SessionInterface $session,
@@ -70,20 +43,18 @@ class ImportMappingHandler
         \DateTimeInterface $date,
         ParticipantImportRepositoryInterface $participantImportRepository
     ) {
-        $this->serializerAdapter           = $serializerAdapter;
-        $this->session                     = $session;
-        $this->eventDispatcher             = $eventDispatcher;
-        $this->date                        = $date;
-        $this->localFileStorage            = $localFileStorage;
+        $this->serializerAdapter = $serializerAdapter;
+        $this->session  = $session;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->date = $date;
+        $this->localFileStorage = $localFileStorage;
         $this->participantImportRepository = $participantImportRepository;
     }
 
-    /**
-     * @param ImportMapping $importMapping
-     */
-    public function handle(ImportMapping $importMapping)
+    public function handle(ImportMapping $importMapping): void
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
+        $mappings = $this->removeIgnoreFields($importMapping->getMappingsIndexedByFileHeader());
 
         /** @var ParticipantImportLogger $importLogger */
         $importLogger = $this->serializerAdapter->deserialize(
@@ -92,17 +63,20 @@ class ImportMappingHandler
             'csv',
             [
                 'csv_delimiter' => ';',
-                'mappings'      => $this->removeIgnoreFields($importMapping->getMappings()),
-                'event'         => $importMapping->event,
-                'type'          => $importMapping->type,
-                'locale'        => $importMapping->locale,
+                'mappings' => $mappings,
+                'event' => $importMapping->event,
+                'type' => $importMapping->type,
+                'locale' => $importMapping->locale,
+                'allowMultiSheet' => $importMapping->importMappingView->allowMultiSheet,
             ]
         );
 
         $participantImport = new ParticipantImport(
             $importMapping->type,
             $importLogger->toArray(),
-            $this->date
+            $mappings,
+            $this->date,
+            $importMapping->importMappingView->savedImportMapping
         );
 
         $this->participantImportRepository->add($participantImport);
@@ -114,6 +88,8 @@ class ImportMappingHandler
 
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
         $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_CHARSET);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING);
+        $this->session->remove(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET);
 
         $this->eventDispatcher->dispatch(Events::PARTICIPANT_IMPORTED, new ParticipantImportedEvent(
             $importMapping->admin,
@@ -125,15 +101,26 @@ class ImportMappingHandler
         $this->session->set(ParticipantImportLogger::PARTICIPANT_IMPORT_ID, $participantImport->getId());
     }
 
-    /**
-     * @param array $mappings
-     *
-     * @return array
-     */
-    private function removeIgnoreFields(array $mappings)
+    private function removeIgnoreFields(array $mappings): array
     {
-        return array_filter($mappings, function ($value) {
-            return ParticipantImportTag::REGISTRATION_FIELD_IGNORE != $value;
+        return array_filter($mappings, static function ($value) {
+            return ParticipantImportTag::REGISTRATION_FIELD_IGNORE !== $value;
         });
+    }
+
+    private function getAssociatedMapping(
+        array $mappings,
+        ImportMappingView $importMappingView
+    ): array {
+        $associatedMapping = [];
+        $csvHeaders = $importMappingView->fieldHeaders;
+
+        foreach ($mappings as $fileColumn => $value) {
+            if (isset($csvHeaders[$fileColumn])) {
+                $associatedMapping[$csvHeaders[$fileColumn]] = $value;
+            }
+        }
+
+        return $associatedMapping;
     }
 }

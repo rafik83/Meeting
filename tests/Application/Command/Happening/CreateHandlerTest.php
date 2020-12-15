@@ -1,19 +1,14 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\Created;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
@@ -24,16 +19,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CreateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = EventFactory::createEvent();
         $event->setLocales(['fr', 'en'], 'fr');
 
         $begin = new \DateTime('2016-01-27 00:00:00');
-        $end   = new \DateTime('2016-01-29 00:00:00');
+        $end = new \DateTime('2016-01-29 00:00:00');
 
         // Current
-        $category        = new Category($event, 'picto1', 0, '#AABB56', '#123456');
+        $category = new Category($event, 'picto1', 0, '#AABB56', '#123456');
         $catTranslation1 = new CategoryTranslation($category, 'fr', 'truc');
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
@@ -41,7 +36,21 @@ class CreateHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto');
+        $expectedSubEvent = new Happening(
+            $event,
+            $begin,
+            $end,
+            $category,
+            [$type->reveal()],
+            true,
+            10,
+            'toto',
+            true,
+            true,
+            false,
+            null,
+            true
+        );
         $expectedTranslation = new Happening\HappeningTranslation(
             $expectedSubEvent,
             'fr',
@@ -53,7 +62,9 @@ class CreateHandlerTest extends TestCase
             'en',
             'How to do a meeting?',
             'All you want to know about doing good meeting.',
-            '/path/webinarHeaderImageEn.jpg'
+            '/path/webinarHeaderImageEn.jpg',
+            '/path/webinarWaitingMediaEn.mp4',
+            'video'
         );
 
         $expectedSubEvent->setTranslation($expectedTranslation);
@@ -69,29 +80,38 @@ class CreateHandlerTest extends TestCase
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'png'])
             ->getMock();
 
+        $webinarWaitingMediaEn = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'video/mp4'])
+            ->getMock();
+        $webinarWaitingMediaEn->method('getMimeType')->willReturn('video/mp4');
+
         // Command
-        $create                   = new Create($event);
-        $create->questionAllowed  = true;
-        $create->begin            = $begin;
-        $create->category         = $category;
-        $create->end              = $end;
+        $create = new Create($event);
+        $create->questionAllowed = true;
+        $create->begin = $begin;
+        $create->category = $category;
+        $create->end = $end;
         $create->limitParticipant = 10;
-        $create->types            = [$type->reveal()];
-        $create->translations     = [
+        $create->types = [$type->reveal()];
+        $create->translations = [
             'fr' => [
                 'title' => 'Comment faire un RDV ?',
                 'description' => 'Explications sur comment faire un RDV',
                 'webinarHeaderImage' => null,
+                'webinarWaitingMedia' => null,
             ],
             'en' => [
                 'title' => 'How to do a meeting?',
                 'description' => 'All you want to know about doing good meeting.',
                 'webinarHeaderImage' => $webinarHeaderImageEn,
+                'webinarWaitingMedia' => $webinarWaitingMediaEn,
             ],
         ];
         $create->invitationCode = 'toto';
-        $create->webinar = false;
-
+        $create->happeningType = 'webinar_interactive';
+        $create->webinarRecorded = true;
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage
@@ -100,7 +120,23 @@ class CreateHandlerTest extends TestCase
             ->willReturn('/path/webinarHeaderImageEn.jpg')
         ;
 
-        $handler = new CreateHandler($happeningRepository->reveal(), $fileStorage->reveal());
+        $fileStorage
+            ->upload($webinarWaitingMediaEn)
+            ->shouldBeCalled()
+            ->willReturn('/path/webinarWaitingMediaEn.mp4')
+        ;
+
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $delayedEventDispatcher
+            ->dispatch(Events::HAPPENING_CREATED, new Created($expectedSubEvent))
+            ->shouldBeCalled()
+        ;
+
+        $handler = new CreateHandler(
+            $happeningRepository->reveal(),
+            $fileStorage->reveal(),
+            $delayedEventDispatcher->reveal()
+        );
         $handler->handle($create);
     }
 }

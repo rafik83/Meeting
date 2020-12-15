@@ -25,6 +25,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\UserManager
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
 
     behat_manager.event:
         class: Proximum\Vimeet\Behat\Service\Manager\EventManager
@@ -38,6 +39,13 @@ services:
             - '@behat_manager.user'
             - '@behat_manager.sheet_template'
             - '@behat_manager.registration_template'
+            - '@behat_manager.nomenclature'
+
+    behat_manager.category:
+        class: Proximum\Vimeet\Behat\Service\Manager\CategoryManager
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
 
     behat_manager.sheet_template:
         class: Proximum\Vimeet\Behat\Service\Manager\SheetTemplateManager
@@ -61,6 +69,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\RuleManager
         arguments:
             - '@repository.rule_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
 
     behat_manager.group:
         class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
@@ -79,9 +88,15 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\ParticipantManager
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.user.event.extra_data_repository'
             - '@behat_manager.sheet'
             - '@behat_manager.user'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    behat_manager.nomenclature:
+        class: Proximum\Vimeet\Behat\Service\Manager\NomenclatureManager
+        arguments:
+            - '@repository.nomenclature_repository'
 
     behat_manager.slot:
         class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
@@ -149,6 +164,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
         arguments:
             - '@repository.admin_repository'
+            - '@repository.admin_activate_account_token_repository'
 
     behat_manager.invoice.prefix_manager:
         class: Proximum\Vimeet\Behat\Service\Manager\Invoice\PrefixManager
@@ -183,6 +199,40 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
 
+    Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager:
+        arguments:
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager:
+        arguments:
+            - '@repository.unavailability.category_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager:
+        arguments:
+            - '@repository.unavailability.mass_repository'
+            - '@repository.unavailability.mass_assignment_repository'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+
+    Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager:
+        arguments:
+            - '@repository.messaging.message_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.notification_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager:
+        arguments:
+            - '@repository.sheet.completeness_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager:
+        arguments:
+            - '@repository.transaction'
+
+    Proximum\Vimeet\Behat\Service\Manager\HappeningManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     #
     # Proxies
@@ -222,6 +272,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.type'
+
+    behat_proxy.category_context:
+        class: Proximum\Vimeet\Behat\Proxy\CategoryContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.category'
 
     behat_proxy.sheet_context:
         class: Proximum\Vimeet\Behat\Proxy\SheetContextProxy
@@ -328,6 +384,62 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.billing_info'
+
+    Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Unavailability\MassContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager'
+
+    Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
+
+    Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
+
+    Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager'
+
+    Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
+
+    Proximum\Vimeet\Behat\Proxy\HappeningContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\HappeningManager'
+            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+
+    Proximum\Vimeet\Behat\Proxy\Template\RegistrationTemplateContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.registration_template'
+
+    Proximum\Vimeet\Behat\Proxy\Template\SheetTemplateContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.sheet_template'
+
+    Proximum\Vimeet\Behat\Proxy\NomenclatureContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.nomenclature'
 
     #
     # Other services

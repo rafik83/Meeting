@@ -20,7 +20,7 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
 /**
  * "Evènement".
  */
-class Event implements EventInterface, TraceableInterface
+class Event implements EventInterface, TraceableInterface, ChatMessageLinkableInterface
 {
     /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
@@ -138,6 +138,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $showCheckinStatus;
 
+    /** @var bool */
+    private $autoArchiveWebinar;
+
     public function __construct(
         string $title,
         string $fallback,
@@ -159,7 +162,8 @@ class Event implements EventInterface, TraceableInterface
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
-        bool $showCheckinStatus = false
+        bool $showCheckinStatus = false,
+        bool $autoArchiveWebinar = false
     ) {
         $this->translations = new ArrayCollection();
         $this->configuration = new Configuration();
@@ -189,6 +193,7 @@ class Event implements EventInterface, TraceableInterface
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
+        $this->autoArchiveWebinar = $autoArchiveWebinar;
     }
 
     /**
@@ -339,8 +344,14 @@ class Event implements EventInterface, TraceableInterface
      * Get fallback.
      *
      * @return string
+     * @deprecated use getLocaleFallback()
      */
     public function getFallback()
+    {
+        return $this->getLocaleFallback();
+    }
+
+    public function getLocaleFallback(): string
     {
         return $this->fallback;
     }
@@ -350,13 +361,13 @@ class Event implements EventInterface, TraceableInterface
      *
      * @return string
      */
-    public function getAvailableLocale($locale)
+    public function getAvailableLocale($locale): string
     {
         if (\in_array($locale, $this->getLocales(), true)) {
             return $locale;
         }
 
-        return $this->getFallback();
+        return $this->getLocaleFallback();
     }
 
     /**
@@ -488,7 +499,8 @@ class Event implements EventInterface, TraceableInterface
         bool $googleLoginEnabled = false,
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
-        bool $showCheckinStatus = false
+        bool $showCheckinStatus = false,
+        bool $autoArchiveWebinar = false
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -510,6 +522,7 @@ class Event implements EventInterface, TraceableInterface
         $this->linkedinLoginEnabled = $linkedinLoginEnabled;
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
+        $this->autoArchiveWebinar = $autoArchiveWebinar;
     }
 
     /**
@@ -895,32 +908,28 @@ class Event implements EventInterface, TraceableInterface
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogo(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedNotificationImage(string $locale): ?string
@@ -971,5 +980,20 @@ class Event implements EventInterface, TraceableInterface
             $notificationImageExtension
         );
         $this->translations->set($locale, $eventTranslation);
+    }
+
+    public function getAutoArchiveWebinar(): bool
+    {
+        return $this->autoArchiveWebinar;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_NETWORKING;
+    }
+
+    public function getEvent(): Event
+    {
+        return $this;
     }
 }

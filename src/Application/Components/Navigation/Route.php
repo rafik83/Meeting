@@ -19,6 +19,7 @@ final class Route
 
     public const LOGIN = 'event_login';
     public const EVENT_LOGIN_CHECK = 'event_login_check';
+    public const TECH_EVENT_LOGIN_CHECK = 'event_tech_event_login_check';
     public const USER_EVENT_AUTHENTICATION_TOKEN_LOGIN = 'vimeet_event_authentication_token_login';
 
     public const SHEET = [
@@ -28,6 +29,7 @@ final class Route
     ];
 
     public const SHEET_DEFAULT = 'event_sheet_default';
+    public const SHEET_UPDATE = 'event_sheet_update';
 
     public const PARTICIPANT = [
         self::PARTICIPANT_ACCOUNT,
@@ -88,6 +90,8 @@ final class Route
     public const VISIO_TEST_CONFIGURATION = 'event_video_conference_create_network_test';
     public const VISIO_TEST_SHEET_CREATE_TEST = 'event_sheet_video_conference_create_network_test';
     public const VISIO_TEST_SHEET_CONFIGURATION = 'event_sheet_video_conference_network_test';
+
+    public const NETWORKING = 'event_networking_index';
 
     public static function isSheet(string $route): bool
     {
@@ -162,5 +166,10 @@ final class Route
             ],
             true
         );
+    }
+
+    public static function isNetworking(string $route): bool
+    {
+        return self::NETWORKING === $route;
     }
 }

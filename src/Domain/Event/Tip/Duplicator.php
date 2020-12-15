@@ -60,6 +60,7 @@ class Duplicator
                 $tip->isOnContacts(),
                 $tip->isOnProgram(),
                 $tip->isOnConfirmationPhone(),
+                $tip->isOnNetworking(),
                 $this->dateTime
             );
 

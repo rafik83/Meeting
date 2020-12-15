@@ -1,5 +1,5 @@
-var $                     = require('jquery'),
-    EditableTextIndicator = require('./_EditableTextIndicator');
+import $ from 'jquery';
+import EditableTextIndicator from "./_EditableTextIndicator";
 
 function Happening(happening, modal)
 {
@@ -123,6 +123,10 @@ Happening.prototype.validateParticipation = function (response) {
         buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i> ' + this.labelUpdate;
         this.happeningParticipateIcon.classList.remove('hide');
     } else if ('participate' === label) {
+        // in case webinar is started and user cancel participation, reload to hide start button
+        if (this.happeningParticipateAction.getAttribute('data-webinar-open') == 1) {
+            document.location.reload();
+        }
         buttonLabel = '<i class="icon icon-Valider_4 happeningParticipateIcon"></i> ' + this.labelParticipate;
         this.happeningParticipateIcon.classList.add('hide');
     }
@@ -131,4 +135,4 @@ Happening.prototype.validateParticipation = function (response) {
     }
 };
 
-module.exports = Happening;
+export default Happening;

@@ -206,6 +206,10 @@ h1 .label {
   box-shadow: none;
 }
 
+.dropdown-min-width {
+  min-width: 106px;
+}
+
 button, a {
   &:active, &:hover, &:focus, &:link, &:target, &:visited {
     outline:none !important;
@@ -357,4 +361,12 @@ div.rule-value-container .select2-search__field {
 
 th.vertical-divider, td.vertical-divider {
   border-right: 1px solid #ddd;
+}
+
+.label {
+  display: inline-block;
+}
+
+.media-preview {
+  max-height: 125px;
 }

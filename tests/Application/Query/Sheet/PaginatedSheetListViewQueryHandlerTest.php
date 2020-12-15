@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
 use PHPUnit\Framework\TestCase;
@@ -37,7 +29,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Imperson
 
 class PaginatedSheetListViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $admin = $this->prophesize(Admin::class);
@@ -57,7 +49,9 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $ownerSheet2->getAccount()->willReturn($account1->reveal());
         $account1->getFirstName()->willReturn('truc');
         $account1->getLastName()->willReturn('muche');
+        $ownerSheet1->getId()->willReturn(123);
         $ownerSheet1->getEmail()->willReturn('email1@sheet.fr');
+        $ownerSheet2->getId()->willReturn(456);
         $ownerSheet2->getEmail()->willReturn('email2@sheet.fr');
 
         $group = $this->prophesize(Sheet\Group::class);
@@ -79,7 +73,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->getValidationState()->willReturn('validationState1');
         $sheet1->getCompleteness()->willReturn(45);
         $sheet1->isEnabled()->willReturn(true);
-        $sheet1->isInCatalog()->willReturn(true);
+        $sheet1->isInInternalCatalog()->willReturn(true);
         $sheet1->isAccepted()->willReturn(true);
         $sheet1->isValidated()->willReturn(false);
         $sheet1->attend()->willReturn(true);
@@ -96,7 +90,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $type2->getCategoriesTitles('fr')->willReturn([]);
         $type2->getTitle('fr')->willReturn('type2');
         $sheet1->getType()->willReturn($type1->reveal());
-        $sheet1->countParticipant()->willReturn(1);
+        $sheet1->countParticipants()->willReturn(1);
         $sheet1->getGroup()->willReturn($group->reveal());
         $sheet1->getTraceableName()->willReturn('Sheet');
         $group->getTitle()->willReturn('group title 1');
@@ -110,9 +104,9 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->getValidationState()->willReturn('validationState2');
         $sheet2->getCompleteness()->willReturn(75);
         $sheet2->isEnabled()->willReturn(false);
-        $sheet2->isInCatalog()->willReturn(false);
+        $sheet2->isInInternalCatalog()->willReturn(false);
         $sheet2->getType()->willReturn($type2->reveal());
-        $sheet2->countParticipant()->willReturn(2);
+        $sheet2->countParticipants()->willReturn(2);
         $sheet2->getGroup()->willReturn(null);
         $sheet2->getSpot()->willReturn(null);
         $sheet2->isAccepted()->willReturn(false);
@@ -126,16 +120,13 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
-        $sheetSearchAdapter->paginate($event->reveal(), [], null, 1, 20, 'fr', false, [], [], [], null)->shouldBeCalled()->willReturn($paginatedResult);
+        $sheetSearchAdapter->paginate($event->reveal(), [], null, 1, 20, 'fr', false, [], [], [], null, null)->shouldBeCalled()->willReturn($paginatedResult);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 1');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 2');
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantFirstName($participant->reveal(), 'fr')->shouldBeCalled()->willReturn('participant first name');
         $participantInfoGuesser->guessParticipantLastName($participant->reveal(), 'fr')->shouldBeCalled()->willReturn('participant last name');
-        $impersonate = $this->prophesize(Impersonate::class);
-        $impersonate->getEncodedToken($admin->reveal(), $ownerSheet1->reveal())->shouldBeCalled()->willReturn('token1');
-        $impersonate->getEncodedToken($admin->reveal(), $ownerSheet2->reveal())->shouldBeCalled()->willReturn('token2');
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->findFullSheets([$sheet1->reveal(), $sheet2->reveal()])->shouldBeCalled()->willReturn([$sheet1->reveal(), $sheet2->reveal()]);
         $traceRepository = $this->prophesize(TraceRepositoryInterface::class);
@@ -154,7 +145,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             $sheetSearchAdapter->reveal(),
             $sheetInfoGuesser->reveal(),
             $participantInfoGuesser->reveal(),
-            $impersonate->reveal(),
             $sheetRepository->reveal(),
             $traceRepository->reveal(),
             $typeRepository->reveal()
@@ -181,13 +171,12 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             ['Category'],
             ['Title'],
             'type1',
-            new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
+            new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr', 123),
             'admin name',
             CommercialStatus::STATUS_INTEREST,
             $datetime1,
             $datetime1,
             $datetime1,
-            'token1',
             1,
             true,
             'group title 1',
@@ -206,13 +195,12 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             [],
             [],
             'type2',
-            new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
+            new SheetParticipantView('truc', 'muche', 'email2@sheet.fr', 456),
             '',
             CommercialStatus::STATUS_DO_NOT_CALL,
             $datetime1,
             $datetime2,
             $datetime2,
-            'token2',
             2,
             false,
             null,
@@ -224,6 +212,6 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             $expectedSheet2,
         ], 1, 20, 2);
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 }

@@ -12,38 +12,23 @@ namespace Proximum\Vimeet\Application\View\Sheet;
 
 class SheetParticipantView
 {
-    /**
-     * "Nom"
-     *
-     * @var string
-     */
+    /** @var string */
     public $firstname;
 
-    /**
-     * "Prénom"
-     *
-     * @var string
-     */
+    /** @var string */
     public $lastname;
 
-    /**
-     * "Email"
-     *
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * SheetParticipantView constructor.
-     *
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     */
-    public function __construct($firstname, $lastname, $email)
+    /** @var int */
+    public $id;
+
+    public function __construct(string $firstname, string $lastname, string $email, int $id)
     {
         $this->firstname = $firstname;
-        $this->lastname  = $lastname;
-        $this->email     = $email;
+        $this->lastname = $lastname;
+        $this->email = $email;
+        $this->id = $id;
     }
 }

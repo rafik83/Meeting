@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Partner;
 
 use PHPUnit\Framework\TestCase;
@@ -20,18 +12,18 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $dateTime = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $oldType  = new Type($event);
-        $type     = new Type($event);
+        $event = EventFactory::createEvent();
+        $oldType = new Type($event);
+        $type = new Type($event);
 
         $partner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);
         $partner->addEvent($event);
         $partner->addType($oldType);
 
-        $command        = new Update($partner);
+        $command = new Update($partner);
         $command->types = [$oldType, $type];
 
         $expectedPartner = new Admin('partner@vimeet.com', '__salt__', 'encoded_password', 'fr', 'toto', 'tata', Admin::ROLE_PARTNER, $dateTime);

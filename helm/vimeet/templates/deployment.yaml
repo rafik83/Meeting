@@ -1,0 +1,107 @@
+{{- if include "vimeet.host" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "vimeet.fullname" . }}
+  labels:
+    app: "{{ template "vimeet.name" . }}"
+    tier: apache
+    chart: "{{ template "vimeet.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ .Values.hpa.minReplicas }}
+  selector:
+    matchLabels:
+      app: {{ template "vimeet.name" . }}
+      tier: apache
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ template "vimeet.name" . }}"
+        tier: apache
+        chart: "{{ template "vimeet.chart" . }}"
+        release: {{ .Release.Name | quote }}
+{{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+{{- include "vimeet.imagePullSecrets" . | indent 6 }}
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - "status.localhost"
+      - ip: "10.11.0.95"
+        hostnames:
+          - "optaplanner"
+{{- if .Values.initContainers }}
+      initContainers:
+{{- range $key, $value := .Values.initContainers }}
+        - name: {{ $key }}
+{{ toYaml $value | indent 10 }}
+{{- end }}
+{{- end }}
+      containers:
+      - name: {{ template "vimeet.fullname" . }}
+        image: {{ template "vimeet.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        envFrom:
+          - configMapRef:
+              name: {{ template "vimeet.fullname" . }}
+          - secretRef:
+              name: {{ template "vimeet.fullname" . }}
+        ports:
+        - name: http
+          containerPort: 80
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /state.php?mode=liveness
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "vimeet.host" . | quote }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /state.php?mode=readiness
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ include "vimeet.host" . | quote }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+          name: vimeet-var-cache
+        - mountPath: /share/shared
+          name: vimeet-data
+      volumes:
+      - name: vimeet-var-cache
+        emptyDir: {}
+      - name: vimeet-data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "vimeet.fullname" . }}-data{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+{{- end -}}

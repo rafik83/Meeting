@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Dashboard;
 
 use PHPUnit\Framework\TestCase;
@@ -19,6 +11,7 @@ use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardRequestView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardMeetingView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 
@@ -33,11 +26,15 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $requestRepository;
 
+    /** @var ObjectProphecy */
+    private $chatSessionRepository;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
         $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $this->chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
     }
 
     public function testHandleEventWithoutDay()
@@ -61,6 +58,11 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             ->countUpstreamByEventAndType(Argument::any())
             ->shouldNotBeCalled()
         ;
+        $this->chatSessionRepository
+            ->countCallVisioByEvent($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(3)
+        ;
 
         $this->requestRepository
             ->getDashboardRequestViewsByEvent($this->event->reveal())
@@ -76,17 +78,19 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
 
         $handler = new DashboardMeetingViewQueryHandler(
             $this->meetingRepository->reveal(),
-            $this->requestRepository->reveal()
+            $this->requestRepository->reveal(),
+            $this->chatSessionRepository->reveal()
         );
 
         $result = $handler->handle(new DashboardMeetingViewQuery($this->event->reveal()));
 
         $expected = new DashboardMeetingView(
-            200,
+            203,
             0,
             10,
             10,
             0,
+            3,
             2,
             1,
             2,
@@ -168,19 +172,27 @@ class DashboardMeetingViewQueryHandlerTest extends TestCase
             ])
         ;
 
+        $this->chatSessionRepository
+            ->countCallVisioByEvent($this->event->reveal())
+            ->shouldBeCalled()
+            ->willReturn(3)
+        ;
+
         $handler = new DashboardMeetingViewQueryHandler(
             $this->meetingRepository->reveal(),
-            $this->requestRepository->reveal()
+            $this->requestRepository->reveal(),
+            $this->chatSessionRepository->reveal()
         );
 
         $result = $handler->handle(new DashboardMeetingViewQuery($this->event->reveal()));
 
         $expected = new DashboardMeetingView(
-            200,
+            203,
             20,
             40,
             30,
             140,
+            3,
             2,
             1,
             2,

@@ -1,17 +1,7 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Participant\Import;
-use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -21,10 +11,8 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\ConditionRules\Filters\GetFiltersByTypeAndLocaleQuery;
-use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
-use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Filter\SheetFilter;
@@ -35,8 +23,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
@@ -158,7 +144,7 @@ class SheetController extends Controller
                 'admin_sheet_batch',
                 [
                     'event' => $event->getId(),
-                    'page'  => $selectedSheetsPage,
+                    'page' => $selectedSheetsPage,
                 ]
             ),
         ]);
@@ -169,20 +155,20 @@ class SheetController extends Controller
         );
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
-            'locale'           => $request->getLocale(),
-            'event'            => $event,
-            'typesByEvent'     => $this->getTypesByEvent($types, $request->getLocale()),
-            'sheets'           => $sheets,
-            'filters_summary'  => $this->get('filter_summary')->getFilters(
+            'locale' => $request->getLocale(),
+            'event' => $event,
+            'typesByEvent' => $this->getTypesByEvent($types, $request->getLocale()),
+            'sheets' => $sheets,
+            'filters_summary' => $this->get('filter_summary')->getFilters(
                 $sheetFilterView,
                 $filters,
                 $event,
                 $request->getLocale()
             ),
-            'batch_form'       => $batchForm->createView(),
-            'filter_form'      => $sheetFilterView,
-            'rules'            => $this->get(RuleStorageInterface::class)->getRulesQuery($event, 'sheet'),
-            'filters'          => $queryBuilderFilters,
+            'batch_form' => $batchForm->createView(),
+            'filter_form' => $sheetFilterView,
+            'rules' => $this->get(RuleStorageInterface::class)->getRulesQuery($event, 'sheet'),
+            'filters' => $queryBuilderFilters,
         ]);
     }
 
@@ -210,7 +196,8 @@ class SheetController extends Controller
             $event,
             $admin,
             $event->getAvailableLocale($request->getLocale()),
-            $filters
+            $filters,
+            $this->get(RuleStorageInterface::class)->getRules($event, $event->getAvailableLocale($request->getLocale()), 'sheet')
         );
 
         $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
@@ -219,20 +206,20 @@ class SheetController extends Controller
         ));
 
         $batchForm = $this->createForm(BatchType::class, $batch, [
-            'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
-            'event'  => $event,
-            'types'  => $types,
+            'ids' => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
+            'event' => $event,
+            'types' => $types,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
 
         if ($batchForm->handleRequest($request)->isSubmitted()) {
             if ($batchForm->isValid()) {
-                $batch->assign             = $batchForm->get('assign')->isClicked();
-                $batch->accept             = $batchForm->get('accept')->isClicked();
-                $batch->pending            = $batchForm->get('pending')->isClicked();
-                $batch->validate           = $batchForm->get('validate')->isClicked();
-                $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
+                $batch->assign = $batchForm->get('assign')->isClicked();
+                $batch->accept = $batchForm->get('accept')->isClicked();
+                $batch->pending = $batchForm->get('pending')->isClicked();
+                $batch->validate = $batchForm->get('validate')->isClicked();
+                $batch->draft = $batchForm->get('validationStateDraft')->isClicked();
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
                 $batch->duplicate = $batchForm->has('duplicate')
@@ -253,11 +240,11 @@ class SheetController extends Controller
                 }
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
-                    $batch->enable          = $batchForm->get('enable')->isClicked();
-                    $batch->disable         = $batchForm->get('disable')->isClicked();
-                    $batch->addCatalog      = $batchForm->get('addCatalog')->isClicked();
-                    $batch->removeCatalog   = $batchForm->get('removeCatalog')->isClicked();
-                    $batch->assignToGroup   = $batchForm->get('assignToGroup')->isClicked();
+                    $batch->enable = $batchForm->get('enable')->isClicked();
+                    $batch->disable = $batchForm->get('disable')->isClicked();
+                    $batch->addCatalog = $batchForm->get('addCatalog')->isClicked();
+                    $batch->removeCatalog = $batchForm->get('removeCatalog')->isClicked();
+                    $batch->assignToGroup = $batchForm->get('assignToGroup')->isClicked();
 
                     if ($batchForm->has('generateInvoice')) {
                         $batch->generateInvoice = $batchForm->get('generateInvoice')->isClicked();
@@ -298,9 +285,9 @@ class SheetController extends Controller
     private function createFilterForm($type, $data, array $options = [])
     {
         return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
-            'method'             => 'GET',
-            'csrf_protection'    => false,
-            'required'           => false,
+            'method' => 'GET',
+            'csrf_protection' => false,
+            'required' => false,
             'allow_extra_fields' => true,
         ]));
     }
@@ -351,112 +338,6 @@ class SheetController extends Controller
                 'value' => $command->spotCode,
             ], $infos)
         );
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function importAction(Request $request, Event $event)
-    {
-        $this->checkAccess($event);
-
-        $import = new Import();
-
-        $form = $this->createForm(ImportType::class, $import, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'user'   => $this->getUser(),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($import);
-
-            return $this->redirectToRoute('admin_sheet_import_mapping', [
-                'event' => $event->getId(),
-                'type'  => $import->type->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Sheet:import.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Type    $type
-     *
-     * @return Response
-     */
-    public function importMappingAction(Request $request, Event $event, Type $type)
-    {
-        $this->checkAccess($event);
-        $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $importMappingViewQuery = new ImportMappingViewQuery($type, $locale);
-
-        try {
-            /** @var ImportMappingView $importMappingView */
-            $importMappingView = $this->get('tactician.commandbus.query')->handle($importMappingViewQuery);
-        } catch (\Exception $exception) {
-            $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
-
-            return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
-        }
-
-        $importMapping = new ImportMapping(
-            $event,
-            $type,
-            $this->getUser(),
-            $locale,
-            $importMappingView
-        );
-
-        $form = $this->createForm(ImportMappingType::class, $importMapping, [
-            'locale'            => $locale,
-            'importMappingView' => $importMappingView,
-            'submit'            => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($importMapping);
-
-            return $this->redirectToRoute('admin_sheet_import_result', [
-                'event' => $event->getId(),
-                'type'  => $type->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Sheet:importMapping.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $event,
-        ]);
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function importResultAction(Event $event)
-    {
-        $this->checkAccess($event);
-
-        $participantDenormalizerView = $this->get('query.participant.import.import_result_view_query_handler')
-            ->handle();
-
-        return $this->render('AdminBundle:Sheet:importResult.html.twig', [
-            'event' => $event,
-            'view'  => $participantDenormalizerView,
-        ]);
     }
 
     /**
@@ -548,7 +429,7 @@ class SheetController extends Controller
     /**
      * @param Event $event
      */
-    private function checkAccess(Event $event)
+    private function checkAccess(Event $event): void
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');

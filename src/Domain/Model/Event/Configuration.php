@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Event;
 
 use Proximum\Vimeet\Domain\Payment\Mode;
@@ -136,6 +128,18 @@ class Configuration
 
     /** @var bool */
     private $visio = false;
+
+    /** @var \DateTimeInterface|null "Date d'ouverture du networking" */
+    private $networkingOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture du networking" */
+    private $networkingCloseDate;
+
+    /** @var \DateTimeInterface|null "Date d'ouverture des call visio dans l'onglet networking" */
+    public $callVisioOpenDate;
+
+    /** @var \DateTimeInterface|null "Date de cloture des call visio dans l'onglet networking" */
+    public $callVisioCloseDate;
 
     public function __construct()
     {
@@ -396,7 +400,11 @@ class Configuration
         \DateTimeInterface $registrationOpenDate = null,
         \DateTimeInterface $registrationCloseDate = null,
         \DateTimeInterface $enableBadgeForParticipantDate = null,
-        \DateTimeInterface $enableVisioTestMenuButtonDate = null
+        \DateTimeInterface $enableVisioTestMenuButtonDate = null,
+        \DateTimeInterface $networkingOpenDate = null,
+        \DateTimeInterface $networkingCloseDate = null,
+        \DateTimeInterface $callVisioOpenDate = null,
+        \DateTimeInterface $callVisioCloseDate = null
     ): self {
         $this->catalogOnlineDate = $catalogOnlineDate;
         $this->happeningsOpenDate = $happeningsOpenDate;
@@ -409,6 +417,10 @@ class Configuration
         $this->registrationCloseDate = $registrationCloseDate;
         $this->enableBadgeForParticipantDate = $enableBadgeForParticipantDate;
         $this->enableVisioTestMenuButtonDate = $enableVisioTestMenuButtonDate;
+        $this->networkingOpenDate = $networkingOpenDate;
+        $this->networkingCloseDate = $networkingCloseDate;
+        $this->callVisioOpenDate = $callVisioOpenDate;
+        $this->callVisioCloseDate = $callVisioCloseDate;
 
         return $this;
     }
@@ -596,5 +608,31 @@ class Configuration
     ): void {
         $this->displayParticipantNameOnPlanning = $displayParticipantNameOnPlanning;
         $this->displayParticipantPositionOnPlanning = $displayParticipantPositionOnPlanning;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getNetworkingOpenDate(): ?\DateTimeInterface
+    {
+        return $this->networkingOpenDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getNetworkingCloseDate(): ?\DateTimeInterface
+    {
+        return $this->networkingCloseDate;
+    }
+
+    public function getCallVisioOpenDate(): ?\DateTimeInterface
+    {
+        return $this->callVisioOpenDate;
+    }
+
+    public function getCallVisioCloseDate(): ?\DateTimeInterface
+    {
+        return $this->callVisioCloseDate;
     }
 }

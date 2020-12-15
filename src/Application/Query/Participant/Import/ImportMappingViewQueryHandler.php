@@ -1,19 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Participant\Import;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
+use Proximum\Vimeet\Domain\Repository\Sheet\ImportMappingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter;
@@ -35,12 +28,17 @@ class ImportMappingViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ImportMappingRepositoryInterface */
+    private $importMappingRepository;
+
     public function __construct(
+        ImportMappingRepositoryInterface $importMappingRepository,
         SerializerAdapterInterface $serializerAdapter,
         SessionAdapter $session,
         TemplateDataFactory $templateDataFactory,
         TranslatorInterface $translator
     ) {
+        $this->importMappingRepository = $importMappingRepository;
         $this->serializerAdapter = $serializerAdapter;
         $this->session = $session;
         $this->templateDataFactory = $templateDataFactory;
@@ -72,6 +70,11 @@ class ImportMappingViewQueryHandler
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
             ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
         ];
+
+        $allowMultiSheet = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET) ?? false;
+        if ($allowMultiSheet) {
+            $headers[ParticipantImportTag::FIELD_GROUP_TITLE] = 'form.participant_import.field.group_title';
+        }
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($query->type, $query->locale);
         $templateObjects = $registrationTemplate->getParticipantAndSheetDataExceptedImageObject();
@@ -107,6 +110,13 @@ class ImportMappingViewQueryHandler
             }
         }
 
-        return new ImportMappingView($csvHeaders, $headers);
+        $savedImportMapping = null;
+        $savedImportMappingId = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_SAVED_MAPPING);
+
+        if ($savedImportMappingId) {
+            $savedImportMapping = $this->importMappingRepository->getById($savedImportMappingId);
+        }
+
+        return new ImportMappingView($csvHeaders, $headers, $allowMultiSheet, $savedImportMapping);
     }
 }

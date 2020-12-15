@@ -45,4 +45,9 @@ class TextareaExtension extends AbstractTypeExtension
     {
         return TextareaType::class;
     }
+
+    public static function getExtendedTypes(): iterable
+    {
+        return [TextareaType::class];
+    }
 }

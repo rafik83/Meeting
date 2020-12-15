@@ -9,6 +9,10 @@ class ContainsAtLeastOneUppercaseValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
+        if (null === $value) {
+            return;
+        }
+
         if (!preg_match("~[A-Z]~", $value)) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();

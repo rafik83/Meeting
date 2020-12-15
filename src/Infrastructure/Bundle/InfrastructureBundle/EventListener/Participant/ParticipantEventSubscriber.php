@@ -119,8 +119,9 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onParticipantImportedFromApi(ParticipantImportedFromApiEvent $participantImportedFromApiEvent): void
-    {
+    public function onParticipantImportedFromApi(
+        ParticipantImportedFromApiEvent $participantImportedFromApiEvent
+    ): void {
         $this->commandBus->handle(
             new Update(
                 $participantImportedFromApiEvent->participant->getUser(),
@@ -131,7 +132,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
 
     public function onParticipantCreatedByGroupManager(
         ParticipantCreatedByGroupManagerEvent $participantCreatedByGroupManagerEvent
-    ) {
+    ): void {
         $this->commandBus->handle(
             new Update(
                 $participantCreatedByGroupManagerEvent->participant->getUser(),
@@ -142,7 +143,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
 
     public function onParticipantRemovedByGroupManager(
         ParticipantRemovedByGroupManagerEvent $participantRemovedByGroupManagerEvent
-    ) {
+    ): void {
         $this->commandBus->handle(
             new Update(
                 $participantRemovedByGroupManagerEvent->user,
@@ -151,7 +152,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent)
+    public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent): void
     {
         $event = $sheetCreatedByManagerEvent->sheet->getEvent();
 
@@ -160,7 +161,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onRegistrationStepCompleted(RegistrationStepEvent $registrationStepEvent)
+    public function onRegistrationStepCompleted(RegistrationStepEvent $registrationStepEvent): void
     {
         if (1 !== $registrationStepEvent->getStep()) {
             return;
@@ -174,7 +175,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent)
+    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent): void
     {
         $event = $participantRemovedEvent->sheet->getEvent();
 

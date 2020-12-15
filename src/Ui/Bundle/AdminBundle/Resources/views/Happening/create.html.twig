@@ -6,7 +6,11 @@
 
 {% block form_content %}
     {{ form_row(form.category, {widget_columns: 3}) }}
-    {{ form_row(form.webinar) }}
+    {{ form_row(form.happeningType) }}
+    {% if form.webinarRecorded is defined %}
+        {{ form_row(form.webinarRecorded) }}
+    {% endif %}
+    {{ form_row(form.allowHls) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}
     {{ form_row(form.end, {widget_columns: 3}) }}
@@ -15,8 +19,32 @@
     <hr>
     {{ form_row(form.invitationCode, {widget_columns: 2}) }}
     {{ form_row(form.questionAllowed) }}
+    {{ form_row(form.liveUrl) }}
+    {{ form_row(form.sidebarAllowed) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
-{% endblock %}
+
+    {% if form.webinarRecorded is defined %}
+    <script>
+        const webinarRecordedGroup = document.getElementById('happening_create_webinarRecorded-group');
+        webinarRecordedGroup.classList.add('hide');
+
+        let happeningTypeRadios = document.getElementsByName('happening_create[happeningType]');
+
+        happeningTypeRadios.forEach((happeningTypeRadio) => {
+            happeningTypeRadio.addEventListener(
+                'click',
+                function (event) {
+                    if (event.target.value === 'default') {
+                        webinarRecordedGroup.classList.add('hide');
+                    } else {
+                        webinarRecordedGroup.classList.remove('hide');
+                    }
+                }
+            )
+        });
+    </script>
+    {% endif %}
+{% endblock form_content %}
 
 {% block goback_link path('admin_happening_list', { 'event': event.id }) %}

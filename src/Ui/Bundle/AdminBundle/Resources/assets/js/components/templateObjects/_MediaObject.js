@@ -1,4 +1,4 @@
-var Form = require('./../template/_Form');
+import Form from './../template/_Form';
 
 /**
  * MediaObject
@@ -46,4 +46,4 @@ MediaObject.prototype.save = function ()
   return true;
 };
 
-module.exports = MediaObject;
+export default MediaObject;

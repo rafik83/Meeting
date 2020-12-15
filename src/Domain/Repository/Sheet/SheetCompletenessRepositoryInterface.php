@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -15,21 +7,9 @@ use Proximum\Vimeet\Domain\Model\SheetCompleteness;
 
 interface SheetCompletenessRepositoryInterface
 {
-    /**
-     * @param SheetCompleteness $sheetCompleteness
-     */
-    public function add(SheetCompleteness $sheetCompleteness);
+    public function add(SheetCompleteness $sheetCompleteness): void;
 
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return SheetCompleteness|null
-     */
-    public function findCompleteness(Sheet $sheet, $locale);
+    public function findCompleteness(Sheet $sheet, $locale): ?SheetCompleteness;
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function removeForSheet(Sheet $sheet);
+    public function removeForSheet(Sheet $sheet): void;
 }

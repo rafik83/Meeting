@@ -1,22 +1,19 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route;
 
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQuery;
+use Proximum\Vimeet\Application\Query\Notification\NotificationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
+use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,13 +38,29 @@ class HomeUserDispatcher
     /** @var AgendaAccessChecker */
     private $agendaAccessChecker;
 
+    /** @var IsValidatedTransactionMissing */
+    private $isValidatedTransactionMissing;
+
+    /** @var IsValidatedRequiredPackageMissing */
+    private $isValidatedRequiredPackageMissing;
+
+    /** @var NotificationViewQueryHandler */
+    private $notificationViewQueryHandler;
+
+    /** @var SheetRedirectionMiddleware */
+    private $sheetRedirectionMiddleware;
+
     public function __construct(
         Router $router,
         HomeDispatch $homeDispatch,
         HomeDispatchAnonymousUser $homeDispatchAnonynmousUser,
         AuthorizationCheckerAdapter $authorizationChecker,
         DDayGuesser $dayGuesser,
-        AgendaAccessChecker $agendaAccessChecker
+        AgendaAccessChecker $agendaAccessChecker,
+        IsValidatedTransactionMissing $isValidatedTransactionMissing,
+        IsValidatedRequiredPackageMissing $isValidatedRequiredPackageMissing,
+        NotificationViewQueryHandler $notificationViewQueryHandler,
+        SheetRedirectionMiddleware $sheetRedirectionMiddleware
     ) {
         $this->router = $router;
         $this->homeDispatch = $homeDispatch;
@@ -55,6 +68,10 @@ class HomeUserDispatcher
         $this->authorizationChecker = $authorizationChecker;
         $this->dayGuesser = $dayGuesser;
         $this->agendaAccessChecker = $agendaAccessChecker;
+        $this->isValidatedTransactionMissing = $isValidatedTransactionMissing;
+        $this->isValidatedRequiredPackageMissing = $isValidatedRequiredPackageMissing;
+        $this->notificationViewQueryHandler = $notificationViewQueryHandler;
+        $this->sheetRedirectionMiddleware = $sheetRedirectionMiddleware;
     }
 
     /**
@@ -97,16 +114,36 @@ class HomeUserDispatcher
             }
 
             if ($homeDispatchView->isOneSheet()) {
-                if ($this->dayGuesser->isItDDay($event) && $this->agendaAccessChecker->allowedToAccess($event)) {
-                    return new RedirectResponse($this->router->generate(
-                        'event_agenda',
-                        ['sheet' => $homeDispatchView->getSheet()->getId()]
-                    ));
+                $sheet = $homeDispatchView->getSheet();
+
+                $redirectResponse = $this->sheetRedirectionMiddleware->getForceRedirection($sheet, $user);
+
+                if (null !== $redirectResponse) {
+                    return $redirectResponse;
+                }
+
+                $notificationListView = $this->notificationViewQueryHandler->handle(new NotificationViewQuery($sheet));
+                foreach ($notificationListView->getNotificationViews() as $notificationView) {
+                    if ($notificationView->isImportant() || $notificationView->isRequired()) {
+                        return new RedirectResponse($this->router->generate(
+                            'event_notification_list',
+                            ['sheet' => $sheet->getId()]
+                        ));
+                    }
+                }
+
+                if ($this->dayGuesser->isItDDay($event)){
+                    if ($this->agendaAccessChecker->allowedToAccess($event)) {
+                        return new RedirectResponse($this->router->generate(
+                            'event_agenda',
+                            ['sheet' => $sheet->getId()]
+                        ));
+                    }
                 }
 
                 return new RedirectResponse($this->router->generate(
                     'event_sheet_default',
-                    ['sheet' => $homeDispatchView->getSheet()->getId()]
+                    ['sheet' => $sheet->getId()]
                 ));
             }
 

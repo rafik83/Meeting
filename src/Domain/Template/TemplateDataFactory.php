@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
@@ -54,6 +46,7 @@ class TemplateDataFactory
         'upload'                => TemplateObject\UploadObject::class,
         'datetime'              => TemplateObject\DateTime::class,
         'multi-upload'          => TemplateObject\MultiUploadCollectionObject::class,
+        'video'                 => TemplateObject\Video::class,
     ];
 
     /**

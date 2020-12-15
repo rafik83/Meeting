@@ -93,8 +93,8 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
  */
 Subscriber.prototype.handleError = function (error) {
   if (error) {
-    console.log('Subscriber error:', error);
+    console.error('Subscriber error:', error);
   }
 };
 
-module.exports = Subscriber;
+export default Subscriber;

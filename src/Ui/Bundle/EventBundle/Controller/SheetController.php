@@ -1,42 +1,28 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
-use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
-use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollection;
-use Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat;
+use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
-use Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,13 +54,15 @@ class SheetController extends Controller
         return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
     }
 
+
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Sheet       $sheet
-     * @param string      $locale
+     * @param string|null $locale
      *
      * @return RedirectResponse|Response
      */
@@ -86,24 +74,13 @@ class SheetController extends Controller
         $locale = $locale ?: $request->getLocale();
         $user = $userDomain->getUser();
 
-        $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
-        $participant           = $participantRepository->getParticipantForUserAndSheet($user, $sheet);
+        $redirectResponse = $this->get(SheetRedirectionMiddleware::class)->getForceRedirection($sheet, $user);
 
-        if (null !== $participant) {
-            $registrationStepManager = $this->get('components.registration.step_manager');
-            $redirectStep            = $registrationStepManager->getRedirectStep($sheet, $participant);
-
-            if (true === $redirectStep['redirect']) {
-                return $this->redirectToRoute($redirectStep['route'], $redirectStep['parameters']);
-            }
+        if (null !== $redirectResponse) {
+            return $redirectResponse;
         }
 
-        if ($this->get(IsValidatedRequiredPackageMissing::class)->isSatisfiedBy($sheet) ||
-            $this->get(IsValidatedTransactionMissing::class)->isSatisfiedBy($sheet)) {
-            return $this->redirectToRoute('event_package_redirect_depending_on_context', ['sheet' => $sheet->getId()]);
-        }
-
-        if ($sheet->isValidationDraft()) {
+        if ($sheet->isValidationDraft() && $sheet->getType()->canSubmitValidation()) {
             $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
                 new SheetValidationViewQuery(
                     $sheet,
@@ -112,7 +89,7 @@ class SheetController extends Controller
             );
         }
 
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
             $locale
@@ -133,6 +110,10 @@ class SheetController extends Controller
 
         $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
 
+        $displayAnalyticsStat = $this->get(CanDisplayAnalyticsStat::class)->isSatisfiedBy($sheet);
+
+        $displayAnalyticsViewLink = $this->get(CanDisplayAnalyticsViewLink::class)->isSatisfiedBy($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
@@ -143,11 +124,13 @@ class SheetController extends Controller
             'participants'            => $participants,
             'templateData'            => $templateData,
             'popinWelcome'            => $popinWelcome,
-            'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
+            'sheetValidationView'     => $sheetValidationView ?? null,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
+            'displayAnalyticsStat' => $displayAnalyticsStat,
+            'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
         ]);
     }
 
@@ -167,6 +150,8 @@ class SheetController extends Controller
         $sheetToDisplay,
         $locale
     ) {
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
         $sheetToDisplay = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($sheetToDisplay);
@@ -193,6 +178,8 @@ class SheetController extends Controller
     }
 
     /**
+     * No access restriction, to allow phantomjs to open this route
+     *
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param User        $user
@@ -222,14 +209,14 @@ class SheetController extends Controller
             $locale
         );
 
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
             $user,
             $locale
         );
 
         if ($sheetToDisplay !== $sheet) {
-            if (!$sheet->isInCatalog() || !$isCatalogAllowed) {
+            if (!$sheet->isInInternalCatalog() || !$isCatalogAllowed) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
@@ -257,218 +244,6 @@ class SheetController extends Controller
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
             'templateData'  => $templateData,
-        ]);
-    }
-
-    /**
-     * Render the form of an object. Loaded by ajax from the sheet.
-     *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
-     * @return Response
-     */
-    public function formAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        try {
-            $templateObjectView = $this
-                ->get('tactician.commandbus')
-                ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-            ;
-        } catch (Template\Exception\ObjectNotFoundException $exception) {
-            throw $this->createNotFoundException($exception->getMessage());
-        }
-
-        $form = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
-
-        return $this->render('EventBundle:Sheet:form.html.twig', [
-            'sheet'    => $sheet,
-            'uid'      => $key,
-            'form'     => $form->createView(),
-            'locale'   => $locale,
-            'currency' => $eventDomain->getEvent()->getCurrency(),
-            'vatMode'  => $eventDomain->getEvent()->getMode(),
-            'label'    => $templateObjectView->label,
-            'templateObjectView' => $templateObjectView,
-        ]);
-    }
-
-    /**
-     * @param Template\TemplateObject $object
-     * @param string                  $locale
-     * @param string                  $key
-     *
-     * @return FormInterface
-     */
-    private function createObjectForm(Template\TemplateObject $object, $locale, $key): FormInterface
-    {
-        $types = [
-            'editable-text' => Data\EditableTextDataType::class,
-            'button-link'   => Data\ButtonLinkDataType::class,
-            'media'         => Data\MediaCollectionDataType::class,
-            'collection'    => Data\ItemCollectionDataType::class,
-            'nomenclature'  => Data\NomenclatureDataType::class,
-            'image'         => Data\ImageDataType::class,
-            'tags'          => Data\ItemCollectionDataType::class,
-            'multi-upload'  => Data\MultiUploadDataType::class,
-        ];
-
-        if (!isset($types[$object->getType()])) {
-            throw $this->createNotFoundException('No form found for this object');
-        }
-
-        return $this->createForm($types[$object->getType()], $object, [
-            'action' => $this->generateUrl(
-                'event_sheet_update',
-                ['sheet' => $object->getSheet()->getId(), 'locale' => $locale, 'key' => $key]
-            ),
-            'submit'      => true,
-            'locale'      => $locale,
-            'help'        => $object->getHelp(),
-            'placeholder' => $object->getPlaceholder(),
-            'object'      => $object,
-            'required'    => $object->getRequired(),
-        ]);
-    }
-
-    /**
-     * Update an object and display the sheet with the modal in case of form error.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param UserDomain  $userDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale, $key)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
-        $user = $userDomain->getUser();
-        $templateData       = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $levelsArchitecture = [];
-
-        try {
-            $object = $templateData->getObject($key);
-        } catch (Template\Exception\ObjectNotFoundException $exception) {
-            throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
-        }
-
-        if ($object instanceof Template\TemplateObject\Nomenclature) {
-            $nomenclature = $object->getNomenclatureModel();
-            $depth        = $nomenclature->getDepth();
-
-            if (2 === $depth || 3 === $depth) {
-                $levelsArchitecture = $nomenclature->getLevelsArchitecture($locale);
-            }
-        }
-
-        $products = $this->get('package.product.template_product_guesser')->getProducts(
-            $object,
-            $sheet->getPackage()
-        );
-
-        $object->setBuyableProducts($products);
-        $object->setSheet($sheet);
-
-        $savedObject = null;
-        if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
-            $savedObject = clone $object;
-        }
-
-        $templateObjectView = $this
-            ->get('tactician.commandbus')
-            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-        ;
-
-        $form = $this->createObjectForm($object, $locale, $key);
-
-        // Handle the form, update the object and redirect to the sheet if valid
-        if ($form->handleRequest($request)->isSubmitted()) {
-            if ($form->isValid()) {
-                if ($object instanceof Template\TemplateObject\Image) {
-                    $file = $form->get('file')->getData();
-
-                    if ($file instanceof UploadedFile) {
-                        $image       = $object->getImage();
-                        $fileStorage = $this->get('adapter.local_file_storage');
-
-                        if (null !== $image) {
-                            $fileStorage->remove($image);
-                        }
-
-                        $newImage = $fileStorage->upload($file);
-                        $object->setImage($newImage);
-                    }
-                }
-
-                if ($object instanceof Template\TemplateObject\MultiUploadCollectionObject) {
-                    $objectData = $this->get(MultiUploadCollectionHandler::class)
-                        ->handle(new MultiUploadCollection($savedObject, $object));
-                    $object->setData($objectData);
-                }
-
-                $this->get('tactician.commandbus')->handle(new UpdateData($sheet, $templateData, $object));
-
-                return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
-            } else {
-                // If the form is not valid, re-render the templateData
-                $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-            }
-        }
-
-        // If the form is not valid, render the sheet and force the popin with the object form
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
-            $sheet,
-            $this->getUser(),
-            $locale
-        );
-        $label = $templateData->getObject($key)->getLabel($locale, $sheet->getEvent()->getFallback());
-
-        $tipTranslationViewQuery = new TipTranslationViewQuery(
-            $sheet,
-            $user,
-            TipTranslationViewQueryHandler::CONTEXT_SHEET,
-            $request->getLocale()
-        );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
-
-        $twig = 'nomenclature' === $object->getType()
-            ? 'EventBundle:Sheet:nomenclatures.html.twig'
-            : 'EventBundle:Sheet:sheet.html.twig';
-
-        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
-
-        return $this->render($twig, [
-            'canAddParticipant'       => $canAddParticipant,
-            'event'                   => $eventDomain->getEvent(),
-            'form'                    => $form->createView(),
-            'label'                   => $label,
-            'levelsArchitecture'      => $levelsArchitecture,
-            'locale'                  => $locale,
-            'nomenclatures'           => $nomenclatures,
-            'object'                  => $object,
-            'participants'            => $participants,
-            'sheet'                   => $sheet,
-            'taggedData'              => $taggedData,
-            'templateData'            => $templateData,
-            'uid'                     => $key,
-            'currency'                => $eventDomain->getEvent()->getCurrency(),
-            'vatMode'                 => $eventDomain->getEvent()->getMode(),
-            'isRequestMeetingEnabled' => false,
-            'isCatalog'               => false,
-            'tipTranslationViews'     => $tipTranslationViews,
-            'templateObjectView'      => $templateObjectView,
-            'isPhoneValidationRequired' => false,
         ]);
     }
 
@@ -509,6 +284,10 @@ class SheetController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+
+        if (!$sheet->getType()->canSubmitValidation()) {
+            throw $this->createAccessDeniedException();
+        }
 
         $submitValidation = new SubmitValidation($sheet, $user);
 

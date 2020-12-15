@@ -57,6 +57,15 @@ class Rule
      */
     private $priority;
 
+    /** @var int|null */
+    private $phoneAccessMinEvaluation;
+
+    /** @var int|null */
+    private $emailAccessMinEvaluation;
+
+    /** @var bool */
+    private $requestAutomaticallyTransformedIntoMeeting = false;
+
     /**
      * Rule constructor.
      *
@@ -65,12 +74,14 @@ class Rule
      * @param WhoInterface $seeable
      * @param array        $what
      * @param int          $priority
+     * @param bool         $requestAutomaticallyTransformedIntoMeeting
      */
-    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what, $priority = 0)
+    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what, $priority = 0, bool $requestAutomaticallyTransformedIntoMeeting = false)
     {
         $this->event    = $event;
         $this->what     = $what;
         $this->priority = $priority;
+        $this->requestAutomaticallyTransformedIntoMeeting = $requestAutomaticallyTransformedIntoMeeting;
 
         if ($seer instanceof Type) {
             $this->seerType = $seer;
@@ -202,13 +213,37 @@ class Rule
         return $this->priority;
     }
 
+    public function getPhoneAccessMinEvaluation(): ?int
+    {
+        return $this->phoneAccessMinEvaluation;
+    }
+
+    public function getEmailAccessMinEvaluation(): ?int
+    {
+        return $this->emailAccessMinEvaluation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRequestAutomaticallyTransformedIntoMeeting(): bool
+    {
+        return $this->requestAutomaticallyTransformedIntoMeeting;
+    }
+
     /**
      * @param array $what
-     * @param int   $priority
+     * @param int $priority
+     * @param int|null $phoneAccessMinEvaluation
+     * @param int|null $emailAccessMinEvaluation
+     * @param bool $requestAutomaticallyTransformedIntoMeeting
      */
-    public function update(array $what, $priority)
+    public function update(array $what, $priority, ?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation, bool $requestAutomaticallyTransformedIntoMeeting = false)
     {
         $this->what     = $what;
         $this->priority = $priority;
+        $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
+        $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
+        $this->requestAutomaticallyTransformedIntoMeeting = $requestAutomaticallyTransformedIntoMeeting;
     }
 }

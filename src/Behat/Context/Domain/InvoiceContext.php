@@ -39,7 +39,8 @@ class InvoiceContext implements Context
             throw new \InvalidArgumentException('Missing Sheet');
         }
 
-        $invoice = $this->invoiceContextProxy->getInvoiceManager()->create($sheet->getEvent(), $numero, $sheet);
+        $order = $this->invoiceContextProxy->getStorage()->get('order');
+        $invoice = $this->invoiceContextProxy->getInvoiceManager()->create($sheet->getEvent(), $numero, $sheet, $order);
         $this->invoiceContextProxy->getStorage()->set('invoice', $invoice);
     }
 }

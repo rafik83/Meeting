@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\Command\Participant\SheetAndParticipantTemplateDataHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedFromApiEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\Event\UpdatedEvent;
 use Proximum\Vimeet\Application\View\Participant\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -48,7 +50,7 @@ class ConvertToParticipantHandlerTest extends TestCase
     private $sheetTemplateData;
     private $sheetAndParticipantTemplateDataHandler;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -67,7 +69,7 @@ class ConvertToParticipantHandlerTest extends TestCase
         $this->dateTime = new \DateTime();
     }
 
-    public function testHandleNotKnownUser()
+    public function testHandleNotKnownUser(): void
     {
         $email = 'korben@dallas.us';
         $dataIndexedByTag = ['whatever-data'];
@@ -163,7 +165,7 @@ class ConvertToParticipantHandlerTest extends TestCase
         $this->assertEquals($participant, $result);
     }
 
-    public function testHandleKnownUserWithNoExtraData()
+    public function testHandleKnownUserWithNoExtraData(): void
     {
         $email = 'korben@dallas.us';
         $dataIndexedByTag = [];
@@ -204,8 +206,8 @@ class ConvertToParticipantHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this
-            ->sheetAndParticipantTemplateDataHandler->handle(
+        $this->sheetAndParticipantTemplateDataHandler
+            ->handle(
                 $dataIndexedByTag,
                 $this->registrationTemplateData->reveal(),
                 $this->sheetTemplateData->reveal()
@@ -220,6 +222,13 @@ class ConvertToParticipantHandlerTest extends TestCase
                 )
             )
         ;
+
+        $this
+            ->eventDispatcher
+            ->dispatch(Events::PARTICIPANT_IMPORTED_FROM_API, new ParticipantImportedFromApiEvent($participant))
+            ->shouldBeCalled()
+        ;
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($sheet))->shouldBeCalled();
 
         $this->synchronizer->set($this->registrationTemplateData->reveal(), $user->reveal())->shouldBeCalled();
 
@@ -251,7 +260,7 @@ class ConvertToParticipantHandlerTest extends TestCase
         $this->assertEquals($participant, $result);
     }
 
-    public function testHandleKnownUserWithExtraData()
+    public function testHandleKnownUserWithExtraData(): void
     {
         $email = 'korben@dallas.us';
         $dataIndexedByTag = [];
@@ -270,6 +279,12 @@ class ConvertToParticipantHandlerTest extends TestCase
             ->getExtraDataForEventNameAndUser($event->reveal(), 'whatever-extra-data', $user->reveal())
             ->shouldBeCalled()
             ->willReturn($whateverExtraData->reveal())
+        ;
+
+        $this
+            ->eventDispatcher
+            ->dispatch(Argument::any())
+            ->shouldNotBeCalled()
         ;
 
         $convertToParticipantHandler = new ConvertToParticipantHandler(

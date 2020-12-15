@@ -39,17 +39,17 @@ class CreateRequest
     public $fromPriority = false;
 
     /**
-     * @param Event $event
-     * @param Sheet $from
-     * @param Sheet $to
-     * @param User  $creator
+     * @var string
      */
-    public function __construct(Event $event, Sheet $from, Sheet $to, User $creator)
+    public $locale;
+
+    public function __construct(Event $event, Sheet $from, Sheet $to, User $creator, string $locale)
     {
         $this->event        = $event;
         $this->from         = $from;
         $this->to           = $to;
         $this->creator      = $creator;
         $this->participants = [];
+        $this->locale = $locale;
     }
 }

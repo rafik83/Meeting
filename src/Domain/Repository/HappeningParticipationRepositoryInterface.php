@@ -164,4 +164,6 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation[]
      */
     public function findBySpeaker(User $user, Event $event): array;
+
+    public function hasHappeningParticipant(Event $event): bool;
 }

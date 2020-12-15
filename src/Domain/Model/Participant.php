@@ -78,6 +78,9 @@ class Participant implements MailRecipientInterface
     /** @var \DateTimeInterface */
     private $registrationDate;
 
+    /** @var \DateTimeInterface */
+    private $networkingChatViewedAt;
+
     /** @var int */
     private $rank = 0;
 
@@ -367,6 +370,11 @@ class Participant implements MailRecipientInterface
         return $this->timezone;
     }
 
+    public function getTimezoneFormatted(): ?string
+    {
+        return str_replace(['_', '/'], [' ', ' / '], $this->timezone);
+    }
+
     public function setTimezone(string $timezone): void
     {
         $this->timezone = $timezone;
@@ -375,6 +383,11 @@ class Participant implements MailRecipientInterface
     public function getRegistrationDate(): \DateTimeInterface
     {
         return $this->registrationDate;
+    }
+
+    public function getNetworkingChatViewedAt(): ?\DateTimeInterface
+    {
+        return $this->networkingChatViewedAt;
     }
 
     public function getRank(): int

@@ -72,6 +72,18 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
+        canSubmitValidation:
+            type: boolean
+            options:
+                default: true
+        displayAnalyticsOnSheet:
+            type: boolean
+            options:
+                default: false
+        displayAnalyticsOnCatalog:
+            type: boolean
+            options:
+                default: false
     embedded:
         validationCriteria:
             class: Proximum\Vimeet\Domain\Model\ValidationCriteria

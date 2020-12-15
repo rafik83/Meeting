@@ -31,10 +31,10 @@ class TipTranslationViewQueryHandlerTest extends TestCase
         $sheet = SheetFactory::create($event);
         $user = UserFactory::create();
 
-        $tip = new Tip('tip', null, true, true, true, false, false, false, false, false, false, $dateTime);
+        $tip = new Tip('tip', null, true, true, true, false, false, false, false, false, false, false, $dateTime);
         $tip->setTranslation('fr', 'title', 'content', $dateTime);
 
-        $tip2 = new Tip('tip2', null, true, true, true, false, false, false, false, false, false, $dateTime);
+        $tip2 = new Tip('tip2', null, true, true, true, false, false, false, false, false, false, false, $dateTime);
         $tip2->setTranslation('fr', 'title2', 'content2', $dateTime);
 
         $tipTranslationView1 = new TipTranslationView(1, 'title', 'content', 'Title 1', Tip::DISPLAY_DEFAULT);

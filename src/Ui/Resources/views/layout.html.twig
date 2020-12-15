@@ -1,4 +1,4 @@
-{% extends 'ElaoThemeTwitterBootstrap3Bundle:Form:form_horizontal_layout.html.twig' %}
+{% extends '@Infrastructure/Form/form_horizontal_layout.html.twig' %}
 
 {% block box_widget %}
     {% set label =  '<span>' ~ label|trans({}, translation_domain) ~ '</span>' %}
@@ -138,6 +138,23 @@
         </label>
         <div class="col-lg-9 col-md-9 col-sm-9">
             <img src="{{ form.parent.vars.data.currentWebinarHeaderImage }}" class="img-responsive">
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block _happening_update_translations_entry_webinarWaitingMedia_row %}
+    {{ form_row(form) }}
+
+    {% if form.parent.vars.data.currentWebinarWaitingMediaFile %}
+        <label class="col-lg-3 col-md-3 col-sm-3 control-label">
+            {{ 'form.happening_create.children.translations.prototype.children.currentWebinarWaitingMedia.label'|trans({}, 'forms') }}
+        </label>
+        <div class="col-lg-9 col-md-9 col-sm-9">
+            {% if form.parent.vars.data.currentWebinarWaitingMediaType == 'image' %}
+                <img src="{{ form.parent.vars.data.currentWebinarWaitingMediaFile }}" class="img-responsive media-preview">
+            {% elseif form.parent.vars.data.currentWebinarWaitingMediaType == 'video' %}
+                <video src="{{ form.parent.vars.data.currentWebinarWaitingMediaFile }}" controls class="media-preview">
+            {% endif %}
         </div>
     {% endif %}
 {% endblock %}

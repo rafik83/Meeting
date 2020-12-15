@@ -1,20 +1,14 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
+use DateTime;
 use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -32,6 +26,9 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Ind
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\CreateZipRecordArchiveCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ForceZipRecordArchiveCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\PrintInvoicesCommand;
@@ -45,6 +42,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Product\E
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export\ExportRoomingListCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Export\ExportSheetCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -510,6 +508,72 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             ScheduleUpdateTranslationsCommand::NAME,
             $emailToNotify && $locale ? [$emailToNotify, $locale] : []
+        );
+
+        $this->setJob($job);
+    }
+
+    public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void
+    {
+        $this->setJob(new Job(ExportParticipantsCommand::NAME, [$event->getId(), $admin->getId(), $locale]));
+    }
+
+    public function zipRecordArchive(
+        Happening $happening,
+        bool $forceRegeneration = false,
+        ?Admin $admin = null,
+        ?string $locale = null
+    ): void {
+        $arguments = [
+            $happening->getId(),
+            $forceRegeneration ? 'force' : 'no-force'
+        ];
+
+        if ($admin instanceof Admin) {
+            $arguments[] = $admin->getId();
+
+            if ($locale) {
+                $arguments[] = $locale;
+            }
+        }
+        $job = new Job(
+            ForceZipRecordArchiveCommand::NAME,
+            $arguments
+        );
+
+        $this->setJob($job);
+    }
+
+    public function planDownloadRecordArchive(
+        Happening $happening,
+        DateTime $dueDate
+    ): void {
+        $job = new Job(
+            CreateZipRecordArchiveCommand::NAME,
+            [$happening->getId()]
+        );
+
+        $job->setExecuteAfter($dueDate);
+
+        $this->setJob($job);
+    }
+
+    public function exportSheet(
+        Event $event,
+        Admin $admin,
+        Event\ExtraData $extraData,
+        string $locale,
+        bool $displayNomenclatureIds
+    ): void {
+        $job = new Job(
+            ExportSheetCommand::NAME,
+            [
+                sprintf('--eventId=%s', $event->getId()),
+                sprintf('--extraDataWithSheetIds=%s', $extraData->getId()),
+                sprintf('--adminId=%s', $admin->getId()),
+                sprintf('--locale=%s', $locale),
+                sprintf('--displayNomenclatureIds=%s', $displayNomenclatureIds ? 'true' : 'false'),
+            ]
         );
 
         $this->setJob($job);

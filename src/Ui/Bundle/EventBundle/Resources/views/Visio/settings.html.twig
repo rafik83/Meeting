@@ -1,12 +1,30 @@
 <section id="video-settings-section">
-    <header>
-        <h1>{{ 'event.visio.settings.title'|trans }}</h1>
-    </header>
+    {% block header %}
+        <header>
+            <h1>{{ 'event.visio.settings.title'|trans }}</h1>
+        </header>
+    {% endblock %}
 
     <div class="main__content">
+        <div id="visio-chrome-required" class="row hide">
+            <div class="col-md-12 text-center">
+                <p class="important fail">
+                    <strong>{{ 'event.visio.settings.chromeRequired'|trans }}</strong>
+                </p>
+                <p>
+                    <a href="https://www.google.com/chrome/" target="_blank">{{ 'event.visio.settings.chromeInstall'|trans }}</a>
+                </p>
+                <p>
+                    <input type="checkbox" id="visio-chrome-required-bypass">
+                    <small class="font-italic pointer"><em>{{ 'event.visio.settings.chromeInstallUnavailable'|trans }}</em></small>
+                </p>
+            </div>
+        </div>
         <div id="visio-request-permission" class="row">
             <div class="col-md-12 text-center">
+                {% block requestDescription %}
                 <p>{{ 'event.visio.settings.askPermissionsDescription'|trans|nl2br }}</p>
+                {% endblock %}
                 <hr>
                 <button class="btn btn-primary" id="visio-request-permission-ask" autofocus>
                     <i class="icon-Video_2"></i> {{ 'event.visio.settings.askPermissions'|trans }}
@@ -22,7 +40,7 @@
             </div>
         </div>
         <div id="visio-settings" class="row hide">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="visio-settings-video-select">
                     <label for="visio-video-source-select">{{ 'event.visio.settings.selectVideo'|trans }}</label>
                     <select id="visio-video-source-select" name="video-source" class="form-control" required>
@@ -37,6 +55,12 @@
                 <label for="visio-audio-source-select">{{ 'event.visio.settings.selectAudio'|trans }}</label>
                 <select id="visio-audio-source-select" name="audio-source" class="form-control" required>
                 </select>
+                <label for="visio-audio-volume-bar">{{ 'event.visio.settings.audioVolumeBar.label'|trans }}</label>
+                <div id="visio-audio-volume-bar" class="progress" aria-label="{{ 'event.visio.settings.audioVolumeBar.help'|trans }}">
+                    <div class="progress-bar" id="visio-audio-volume" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span class="sr-only">0%</span>
+                    </div>
+                </div>
                 <hr />
                 <audio id="visio-audio-output">
                     <source src="{{ asset('assets/sounds/fight-bell.mp3') }}" type="audio/mp3">
@@ -49,24 +73,30 @@
                 >
                     <i class="glyphicon glyphicon-volume-up"></i> {{ 'event.visio.settings.testAudio'|trans }}
                 </button>
-            </div>
-            <div class="col-md-7">
-                <b>{{ 'event.visio.settings.preview'|trans }}</b>
-                <video id="visio-video-box" class="img-responsive" autoplay playsinline muted></video>
-                <br/>
-                <hr/>
-                <label for="visio-audio-volume-bar">{{ 'event.visio.settings.audioVolumeBar.label'|trans }}</label>
-                <div id="visio-audio-volume-bar" class="progress" aria-label="{{ 'event.visio.settings.audioVolumeBar.help'|trans }}">
-                    <div class="progress-bar" id="visio-audio-volume" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">0%</span>
-                    </div>
+
+                <div id="invisible-mode-option" class="hide">
+                    <hr/>
+                    <label>
+                        <input type="checkbox" name="invisible-mode" value="1">
+                        <span>{{ 'happening.webinar.invisibleMode.option'|trans }}</span>
+                        <p class="help-block">
+                            {{ 'happening.webinar.invisibleMode.optionHelp'|trans }}
+                            <i class="glyphicon glyphicon-ban-circle"></i>
+                        </p>
+                    </label>
+                </div>
+                <div class="text-center">
+                    <hr>
+                    {% block action %}
+                    <button class="btn btn-primary" id="visio-settings-validate">
+                        {{ 'event.visio.settings.start'|trans }}
+                    </button>
+                    {% endblock %}
                 </div>
             </div>
-            <div class="col-md-12 text-center">
-                <hr>
-                <button class="btn btn-primary" id="visio-settings-validate">
-                    {{ 'event.visio.settings.start'|trans }}
-                </button>
+            <div class="col-md-6 col-md-offset-2">
+                <b>{{ 'event.visio.settings.preview'|trans }}</b>
+                <video id="visio-video-box" class="img-responsive" autoplay playsinline muted></video>
             </div>
         </div>
     </div>

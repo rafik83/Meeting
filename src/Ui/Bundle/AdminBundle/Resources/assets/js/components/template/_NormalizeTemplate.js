@@ -30,4 +30,4 @@ function normalizeTemplate(builder, item) {
   return config;
 }
 
-module.exports = normalizeTemplate;
+export default normalizeTemplate;

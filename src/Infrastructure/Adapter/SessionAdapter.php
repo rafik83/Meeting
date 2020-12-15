@@ -57,7 +57,7 @@ class SessionAdapter implements SessionInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $data)
+    public function set($key, $data): void
     {
         $this->session->set($key, $data);
     }
@@ -68,5 +68,10 @@ class SessionAdapter implements SessionInterface
     public function remove($key)
     {
         $this->session->remove($key);
+    }
+
+    public function getLastUsed(): int
+    {
+        return $this->session->getMetadataBag()->getLastUsed();
     }
 }

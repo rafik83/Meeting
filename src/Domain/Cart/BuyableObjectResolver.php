@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\Order;
@@ -20,36 +12,20 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Product\Id
 
 class BuyableObjectResolver
 {
-    const PAYABLE_OPTION_QUANTITY = 1;
+    public const PAYABLE_OPTION_QUANTITY = 1;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var IdToProductTransformer
-     */
+    /** @var IdToProductTransformer */
     private $productTransformer;
 
-    /**
-     * @var TemplateProductGuesser
-     */
+    /** @var TemplateProductGuesser */
     private $templateProductGuesser;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
-    /**
-     * TemplateCartManager constructor.
-     *
-     * @param CartManager            $cartManager
-     * @param IdToProductTransformer $productTransformer
-     * @param TemplateProductGuesser $templateProductGuesser
-     * @param Merger                 $orderMerger
-     */
     public function __construct(
         CartManager $cartManager,
         IdToProductTransformer $productTransformer,
@@ -62,11 +38,7 @@ class BuyableObjectResolver
         $this->orderMerger            = $orderMerger;
     }
 
-    /**
-     * @param Sheet          $sheet
-     * @param TemplateObject $object
-     */
-    public function updateCart(Sheet $sheet, TemplateObject $object)
+    public function updateCart(Sheet $sheet, TemplateObject $object): void
     {
         $cart  = $this->cartManager->getCart($sheet);
         $order = null;
@@ -81,6 +53,7 @@ class BuyableObjectResolver
 
         if ($object instanceof TemplateObject\Image
             || $object instanceof TemplateObject\MediaCollection
+            || $object instanceof TemplateObject\Video
         ) {
             $this->addPayableProduct($object, $cart, $order);
         }
@@ -94,7 +67,7 @@ class BuyableObjectResolver
      * @param Sheet   $sheet
      * @param Product $plan
      */
-    public function resolvePlan(Sheet $sheet, Product $plan)
+    public function resolvePlan(Sheet $sheet, Product $plan): void
     {
         $cart = $this->cartManager->getCart($sheet);
 
@@ -127,7 +100,7 @@ class BuyableObjectResolver
      *
      * @param Sheet $sheet
      */
-    public function resolveTemplate(Sheet $sheet)
+    public function resolveTemplate(Sheet $sheet): void
     {
         $objects = $this->templateProductGuesser->getBuyableObjects($sheet);
 
@@ -177,15 +150,15 @@ class BuyableObjectResolver
      * @param Sheet          $sheet
      * @param TemplateObject $object
      */
-    public function removePayableProduct(Sheet $sheet, TemplateObject $object)
+    public function removePayableProduct(Sheet $sheet, TemplateObject $object): void
     {
         if (null === $object->getSelectedProduct()) {
             return;
         }
 
-        $cart              = $this->cartManager->getCart($sheet);
-        $product           = $this->productTransformer->transform($object->getSelectedProduct());
-        $cartRow           = $cart->getCartRowForProduct($product);
+        $cart = $this->cartManager->getCart($sheet);
+        $product = $this->productTransformer->transform($object->getSelectedProduct());
+        $cartRow = $cart->getCartRowForProduct($product);
         $productSeveralUse = $this->templateProductGuesser->hasSeveralUse($sheet, $product);
 
         // option is not in the cart
@@ -219,7 +192,7 @@ class BuyableObjectResolver
      *
      * @return int|null
      */
-    public function getSelectedProduct(TemplateObject $object)
+    public function getSelectedProduct(TemplateObject $object): ?int
     {
         if (null !== $object->getSelectedProduct()) {
             return $object->getSelectedProduct();
@@ -252,8 +225,11 @@ class BuyableObjectResolver
      *
      * @return bool
      */
-    private function hasCartPlanIncludedProduct(Cart $cart, Product $product, Order $orderMerged = null)
-    {
+    private function hasCartPlanIncludedProduct(
+        Cart $cart,
+        Product $product,
+        Order $orderMerged = null
+    ): bool {
         $plan = null;
 
         if (null !== $orderMerged) {
@@ -275,7 +251,7 @@ class BuyableObjectResolver
      *
      * @return bool
      */
-    private function isMoreExpensive(Product $product, Product $otherProduct)
+    private function isMoreExpensive(Product $product, Product $otherProduct): bool
     {
         return $product->getUnitPrice() <= $otherProduct->getUnitPrice();
     }

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
@@ -20,7 +12,6 @@ use Proximum\Vimeet\Application\Query\ConditionRules\Rules\GetConditionRulesQuer
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListViewQuery;
-use Proximum\Vimeet\Domain\ConditionRules\Storage\RuleStorageInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\CreateCampaignType;
@@ -40,12 +31,9 @@ class CampaignController extends Controller
      * First step of a messaging campaign creation: display the list of active sheets for the current event
      * and enable the user to select some criteria to filter that list (campaign's "targets").
      *
-     * @param Request $request
-     * @param Event   $event
-     *
      * @return Response|RedirectResponse
      */
-    public function selectSheetsAction(Request $request, Event $event)
+    public function selectSheetsAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
@@ -63,12 +51,14 @@ class CampaignController extends Controller
             'attr' => ['class' => 'btn btn-default'],
         ]);
 
-        $filters = [];
         $filterForm->handleRequest($request);
 
-        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            $filters = $filterForm->getData();
+        if (!$filterForm->isSubmitted()) {
+            // if $createCampaignForm is submitted, we need to submit data to $filterForm too,
+            // to normalize filter values (especially booleans)
+            $filterForm->submit($request->query->get('targetting', []));
         }
+        $filters = $filterForm->getData();
 
         $rules = null;
         if ($request->query->get('rules')) {
@@ -87,8 +77,8 @@ class CampaignController extends Controller
 
         $createCampaignCommand = new Create($event, $request->get($filterForm->getName(), []));
         $createCampaignForm = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
-            'sheet_ids' => array_map(function (SheetListView $sheet) { return $sheet->id; }, $sheets),
-            'action' => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
+            'sheet_ids' => array_map(static function (SheetListView $sheet) { return $sheet->id; }, $sheets),
+            'action' => $request->getUri(),
         ]);
 
         if ($createCampaignForm->handleRequest($request)->isSubmitted() && $createCampaignForm->isValid()) {

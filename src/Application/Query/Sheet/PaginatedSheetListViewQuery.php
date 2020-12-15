@@ -58,12 +58,12 @@ class PaginatedSheetListViewQuery
         Admin $admin,
         RuleInterface $condition = null
     ) {
-        $this->event   = $event;
+        $this->event = $event;
         $this->filters = $filters;
-        $this->page    = $page;
-        $this->limit   = $limit;
-        $this->locale  = $locale;
-        $this->admin   = $admin;
+        $this->page = $page;
+        $this->limit = $limit;
+        $this->locale = $locale;
+        $this->admin = $admin;
         $this->condition = $condition;
     }
 }

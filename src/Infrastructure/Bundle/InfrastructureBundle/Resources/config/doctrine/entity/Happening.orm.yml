@@ -25,9 +25,36 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: boolean
             options:
                 default: false
+        interactiveWebinar:
+            type: boolean
+            options:
+                default: false
+        videoWebinar:
+            type: boolean
+            options:
+                default: false
         webinarSessionId:
             type: string
             nullable: true
+        liveUrl:
+            type: string
+            length: 5000
+            nullable: true
+        sidebarAllowed:
+            type: boolean
+            options:
+                default: true
+        webinarRecorded:
+            type: boolean
+            options:
+                default: false
+        webinarRecordZipFileUrl:
+            type: text
+            nullable: true
+        allowHls:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

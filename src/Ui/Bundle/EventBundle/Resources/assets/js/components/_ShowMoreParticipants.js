@@ -40,4 +40,4 @@ ShowMoreParticipants.prototype.getIcon = function()
     return '<i class="icon-Voir_1"></i> ';
 };
 
-module.exports = ShowMoreParticipants;
+export default ShowMoreParticipants;
