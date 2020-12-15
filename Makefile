@@ -102,7 +102,7 @@ composer-install:
 	php bin/composer.phar install --no-progress --no-interaction
 
 install-app@test:
-	SYMFONY_ENV=test composer install --no-progress --no-interaction
+	SYMFONY_ENV=test php bin/composer.phar install --no-progress --no-interaction
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
