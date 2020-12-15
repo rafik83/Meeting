@@ -86,9 +86,11 @@ class RequestAccessHandler
 
         try {
             $this->videoConferenceRepository->add($videoConference);
+            /* Use catch when simultaneous openings meetings */
         } catch (UniqueConstraintViolationException $e) {
             $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
             $sessionId = $videoConference->getSessionId();
+            $session = $this->videoConferenceAdapter->getSession($sessionId);
         }
 
         $token = $this->videoConferenceAdapter->generateAccessToken(
