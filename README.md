@@ -132,7 +132,9 @@ The last command will take ~1h to run . It's time to grab a coffee I guess.
 
 ### Frontend Setup
 
-Currently the app frontend works on node version 8.
+The app frontend works with the LTS (long-term support) of node.
+
+Currently the LTS version is v14.x
 
 The easiest way to install and manage node is by using [`nvm`](https://github.com/nvm-sh/nvm)
 
@@ -142,10 +144,10 @@ The easiest way to install and manage node is by using [`nvm`](https://github.co
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 ```
 
-Install the 8th version of node
+Install the lts version of node
 
 ```
-nvm install 8
+nvm install --lts
 ```
 
 If you already have this node version just run `nvm use`
@@ -282,11 +284,11 @@ To deploy to preprod and prod, you need to be connected to VPN with this ~/.ssh/
     Host vimeet-preprod
             User www-data
             Hostname 10.11.0.83
-    
+
     Host vimeet-prod1
             User www-data
             Hostname 10.11.0.31
-    
+
     Host vimeet-prod2
             User www-data
             Hostname 10.11.0.32
