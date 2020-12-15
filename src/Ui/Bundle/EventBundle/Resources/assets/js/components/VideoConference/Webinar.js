@@ -33,9 +33,6 @@ function Webinar(element, isSpeaker) {
     this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
-    this.canDelete = element.hasAttribute('data-chat-can-delete');
-    this.questionCanDelete = element.hasAttribute('data-question-can-delete');
-
     if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
     } else {

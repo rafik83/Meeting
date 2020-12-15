@@ -5,7 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2284 - Delete question webinar
+- VIMEET-2284 - Delete webinar question
+- VIMEET-2191 - Reply to webinar question
 
 ## [2.74.0] - 2020-12-12
 ### Updated

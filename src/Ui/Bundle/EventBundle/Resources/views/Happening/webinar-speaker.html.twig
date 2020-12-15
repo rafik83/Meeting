@@ -33,7 +33,7 @@
          data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
 
          {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
-         {% if webinarView.canDeleteQuestionMessage %}data-question-can-delete{% endif %}
+         {% if webinarView.canModerateQuestion %}data-question-can-moderate{% endif %}
 
          data-questions-count="{{ webinarView.questionsCount }}"
 
@@ -182,5 +182,6 @@
 
         {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-chat-message', content:'happening.webinar.messageChatConfirm'} %}
         {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-question-message', content:'happening.webinar.messageQuestionConfirm'} %}
+        {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-question-reply', content:'happening.webinar.confirmDeleteReply'} %}
     </div>
 {% endblock body %}

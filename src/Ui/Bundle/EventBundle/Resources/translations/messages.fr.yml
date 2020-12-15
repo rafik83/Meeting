@@ -277,6 +277,7 @@ happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.chat.tab: Chat
+happening.webinar.confirmDeleteReply: 'Souhaitez-vous supprimer la réponse ?'
 happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
 happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
@@ -294,6 +295,8 @@ happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
 happening.webinar.messageQuestionConfirm: 'Souhaitez-vous effacer la question ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.questions.add: 'Ajoutez votre question'
+happening.webinar.questions.reply: 'Réponse de %name% :'
+happening.webinar.questions.reply_button: 'Répondre'
 happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Retirer mon vote'
 happening.webinar.questions.vote: 'Voter pour cette question'

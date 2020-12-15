@@ -33,10 +33,7 @@ class QuestionRepository implements QuestionRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function add(Question $question)
+    public function add(Question $question): void
     {
         $this->entityManager->persist($question);
         $this->entityManager->flush($question);
@@ -45,6 +42,11 @@ class QuestionRepository implements QuestionRepositoryInterface
     public function delete(Question $question): void
     {
         $this->entityManager->remove($question);
+        $this->entityManager->flush($question);
+    }
+
+    public function update(Question $question): void
+    {
         $this->entityManager->flush($question);
     }
 
@@ -136,6 +138,7 @@ class QuestionRepository implements QuestionRepositoryInterface
 
     public function getMessagesCountDuringHappening(Happening $happening): int
     {
+        // todo: count replies too
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
