@@ -122,7 +122,7 @@ install-db-fixtures@test:
 	#bin/console doctrine:fixtures:load -n --env=test
 
 install-dep:
-	yarn install
+	yarn install --force
 
 clearcache:
 	bin/console cache:clear --env=dev
