@@ -1,4 +1,4 @@
-FROM node:12.18-alpine
+FROM node:lts-alpine3.10
 
 WORKDIR /srv
 

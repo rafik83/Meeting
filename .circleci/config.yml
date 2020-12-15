@@ -3,7 +3,6 @@ version: 2
 jobs:
   build:
     machine:
-      enabled: true
       image: circleci/classic:edge
     environment:
       COMPOSE_FILE: "docker-compose.yaml"
@@ -18,20 +17,19 @@ jobs:
       - restore_cache:
           name: "[cache] restoring packages"
           keys:
-            - package-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - package-master-{{ checksum "package-lock.json" }}
+            - package-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - package-master-{{ checksum "yarn.lock" }}
             - package-master
       - restore_cache:
           key: dockerize-{{ arch }}-v0.6.1
       - run:
           name: "install dockerize if not found in cache"
-          command:
-                if \[ -f /usr/local/bin/dockerize \]; then
-                    echo "dockerize found; skipping installation";
-                    else wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
-                        && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
-                        && rm dockerize-linux-amd64-v0.6.1.tar.gz;
-                    fi
+          command: if \[ -f /usr/local/bin/dockerize \]; then
+            echo "dockerize found; skipping installation";
+            else wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
+            && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
+            && rm dockerize-linux-amd64-v0.6.1.tar.gz;
+            fi
       - run:
           name: "[build] install the project"
           command: |
@@ -42,8 +40,8 @@ jobs:
             dockerize -wait tcp://localhost:3306 -timeout 1m
             docker-compose -p vimeet exec php-ci make install-app@test
             docker-compose -p vimeet exec php-ci make install-db@test
-            docker-compose -p vimeet exec php-ci make install-dep
-            docker-compose -p vimeet exec php-ci make build@prod
+            docker-compose -p vimeet run node yarn install
+            docker-compose -p vimeet run node make build@prod
       - run:
           name: "[test] phpunit"
           command: |

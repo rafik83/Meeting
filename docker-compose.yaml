@@ -61,3 +61,13 @@ services:
             SUBSCRIPTIONS: "1"
         networks:
             - proxy
+    node:
+        build:
+            context: .
+            dockerfile: docker/node/Dockerfile
+        working_dir: /srv
+        environment:
+            - NODE_SASS_PLATFORM=alpine
+            - NODE_ENV=dev
+        volumes:
+            - ./:/srv
