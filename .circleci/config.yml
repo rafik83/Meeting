@@ -58,7 +58,7 @@ jobs:
             - vendor
       - save_cache:
           name: "[cache] saving packages"
-          key: package-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: package-{{ .Branch }}-{{ checksum "yarn.json" }}
           paths:
             - node_modules
       - save_cache:
