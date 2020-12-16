@@ -155,6 +155,7 @@ Question.prototype.initQuestions = function () {
 
             if (item.reply) {
                 this.addReply(item.questionId, item.reply, rowEl);
+                questionMessageCount++;
             }
 
             if (this.questionCanModerate) {

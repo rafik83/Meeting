@@ -63,7 +63,7 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
             ->shouldBeCalled();
 
         $this->notificationPublisher
-            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'delete'])
+            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'delete', 'delta' => -1])
             ->shouldBeCalled();
 
         $this->deleteHappeningQuestion->handle(new DeleteHappeningQuestion(

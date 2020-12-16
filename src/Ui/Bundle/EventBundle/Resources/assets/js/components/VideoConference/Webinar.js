@@ -182,8 +182,7 @@ function Webinar(element, isSpeaker) {
 
     this.countDownBeforeEnd();
 
-    this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
-
+    this.lastSeenQuestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
@@ -1162,13 +1161,13 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
             const payload = JSON.parse(event.data);
 
             if (payload.action === 'update') {
-                const newQuestionCount = payload.msg_count - this.lastSeenquestionMessageCount;
+                const newQuestionCount = payload.msg_count - this.lastSeenQuestionMessageCount;
                 this.newMessageQuestionCountNotification.textContent = newQuestionCount > 99 ? '99+' : newQuestionCount;
                 this.newMessageQuestionCountNotification.classList.add('alert-notification');
             }
 
             if (payload.action === 'delete') {
-                this.lastSeenquestionMessageCount = Math.max(0, this.lastSeenquestionMessageCount -1);
+                this.lastSeenQuestionMessageCount = Math.max(0, this.lastSeenQuestionMessageCount + payload.delta);
             }
 
         }.bind(this)
@@ -1178,7 +1177,7 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
     this.openTab = 'chat';
-    this.lastSeenquestionMessageCount = this.question.questionMessageCount;
+    this.lastSeenQuestionMessageCount = this.question.questionMessageCount;
     this.questionsButton.classList.remove('btn-primary');
     this.questionsButton.classList.add('btn-gray');
     this.chatButton.classList.remove('btn-gray');

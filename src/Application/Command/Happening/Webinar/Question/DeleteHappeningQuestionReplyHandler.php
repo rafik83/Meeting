@@ -41,6 +41,7 @@ class DeleteHappeningQuestionReplyHandler
 
         $this->notificationPublisher->publishHappeningNotification($question->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
             'action' => 'delete',
+            'delta' => -1,
         ]);
     }
 }

@@ -51,12 +51,11 @@ class ReplyHappeningQuestionHandler
         }
 
         $question->setReply($command->replyContent, $command->repliedBy, $this->datetime);
+        $this->questionRepository->update($question);
 
         $this->notificationPublisher->publishHappeningNotification($question->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
             'action' => 'update',
             'msg_count' => $this->questionRepository->getMessagesCountDuringHappening($question->getHappening()),
         ]);
-
-        $this->questionRepository->update($question);
     }
 }

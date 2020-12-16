@@ -138,11 +138,11 @@ class QuestionRepository implements QuestionRepositoryInterface
 
     public function getMessagesCountDuringHappening(Happening $happening): int
     {
-        // todo: count replies too
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(question.id)')
+            // ->select('COUNT(question.id)')
+            ->select('SUM(CASE WHEN question.replyContent IS NULL THEN 1 ELSE 2 END)')
             ->from(Question::class, 'question')
             ->where('question.happening = :happening')
             ->andWhere('question.askedDuringWebinar = true')
