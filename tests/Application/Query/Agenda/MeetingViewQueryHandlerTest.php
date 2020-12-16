@@ -66,7 +66,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $sheetMetLinkedSheet->getTitle()->willReturn('sheetMetLinkedSheet');
 
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn(42);
         $sheet->getType()->willReturn($type);
         $sheet->getTitle()->willReturn('Korben Dallas LTD');
         $sheet->hasOnlyOneParticipant()->shouldBeCalled()->willReturn(true);
@@ -92,9 +91,7 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $user1 = $this->prophesize(User::class);
         $user2 = $this->prophesize(User::class);
-        $participant = $this->prophesize(Participant::class);
-        $participant->getId()->willReturn(24);
-        $sheet->getUserParticipant($user)->willReturn($participant->reveal());
+        $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
         $participant->getUser()->willReturn($user1);
         $participant2->getUser()->willReturn($user2);
@@ -176,8 +173,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
             1,
-            42,
-            24,
             'Korben Dallas LTD',
             2,
             [$sheetMetView, $sheetMetView2],
@@ -216,7 +211,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $type = new Type($event);
 
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn(42);
         $sheet->getTitle()->willReturn('userSheetTitle');
         $sheet->getType()->willReturn($type);
         $sheet->hasOnlyOneParticipant()->shouldBeCalled()->willReturn(false);
@@ -231,9 +225,7 @@ class MeetingViewQueryHandlerTest extends TestCase
 
         $userParticipant1 = $this->prophesize(User::class);
         $userParticipant2 = $this->prophesize(User::class);
-        $participant = $this->prophesize(Participant::class);
-        $participant->getId()->willReturn(24);
-        $sheet->getUserParticipant($user)->willReturn($participant->reveal());
+        $participant  = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
         $participant->getUser()->willReturn($userParticipant1->reveal());
         $participant2->getUser()->willReturn($userParticipant2->reveal());
@@ -322,8 +314,6 @@ class MeetingViewQueryHandlerTest extends TestCase
         $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
             1,
-            42,
-            24,
             'userSheetTitle',
             1,
             [$sheetMetView],

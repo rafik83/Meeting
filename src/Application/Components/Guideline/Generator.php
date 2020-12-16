@@ -1,20 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Guideline;
 
-use ScssPhp\ScssPhp\Compiler;
-use ScssPhp\ScssPhp\Exception\ParserException;
-use ScssPhp\ScssPhp\Formatter\Compressed;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use ScssPhp\ScssPhp\Compiler;
+use ScssPhp\ScssPhp\Exception\ParserException;
+use ScssPhp\ScssPhp\OutputStyle;
 
 class Generator
 {
@@ -36,44 +28,32 @@ class Generator
     /** @var string */
     private $rootPath;
 
-    /**
-     * @param \Twig_Environment $twig
-     * @param string            $rootPath
-     * @param string            $webAssetsPath
-     * @param string            $bundleGuidelinePath
-     * @param string            $fontPath
-     * @param string            $imagePath
-     */
     public function __construct(
         \Twig_Environment $twig,
-        $rootPath,
-        $webAssetsPath,
-        $bundleGuidelinePath,
-        $fontPath,
-        $imagePath
+        string $rootPath,
+        string $webAssetsPath,
+        string $bundleGuidelinePath,
+        string $fontPath,
+        string $imagePath
     ) {
-        $this->twig                = $twig;
-        $this->rootPath            = $rootPath;
-        $this->webAssetsPath       = $webAssetsPath;
+        $this->twig = $twig;
+        $this->rootPath = $rootPath;
+        $this->webAssetsPath = $webAssetsPath;
         $this->bundleGuidelinePath = $bundleGuidelinePath;
-        $this->fontPath            = $fontPath;
-        $this->imagePath           = $imagePath;
+        $this->fontPath = $fontPath;
+        $this->imagePath = $imagePath;
     }
 
     /**
-     * @param Event $event
-     *
      * @throws GuidelineAssetBuildFailedException
-     *
-     * @return string
      */
-    public function generate(Event $event)
+    public function generate(Event $event): string
     {
-        $gradientLeftColor  = $event->getConfiguration()->getLeftColor();
+        $gradientLeftColor = $event->getConfiguration()->getLeftColor();
         $gradientRightColor = $event->getConfiguration()->getRightColor();
-        $gradientHeaderLeftColor  = $event->getConfiguration()->getHeaderLeftColor();
+        $gradientHeaderLeftColor = $event->getConfiguration()->getHeaderLeftColor();
         $gradientHeaderRightColor = $event->getConfiguration()->getHeaderRightColor();
-        $colorHighlighted   = $event->getConfiguration()->getTextColor();
+        $colorHighlighted = $event->getConfiguration()->getTextColor();
         $gradientHeaderButtonLeftColor = $event->getConfiguration()->getHeaderButtonLeftColor();
         $gradientHeaderButtonRightColor = $event->getConfiguration()->getHeaderButtonRightColor();
         $gradientHeaderButtonTextColor = $event->getConfiguration()->getHeaderButtonTextColor();
@@ -95,7 +75,6 @@ class Generator
             'gradientHeaderButtonRightColor' => $gradientHeaderButtonRightColor,
             'gradientHeaderButtonTextColor' => $gradientHeaderButtonTextColor,
             'colorHighLighted' => $colorHighlighted,
-            'bundleGuidelinePath' => $this->bundleGuidelinePath,
             'fontPath' => $this->fontPath,
             'imagePath' => $this->imagePath,
             'backgroundImage' => $event->getConfiguration()->getBackgroundImage(),
@@ -109,7 +88,8 @@ class Generator
 
         $scss = new Compiler();
 
-        $scss->setFormatter(Compressed::class);
+        $scss->setOutputStyle(OutputStyle::COMPRESSED);
+        $scss->addImportPath($this->bundleGuidelinePath);
 
         try {
             $cssOut = $scss->compile(file_get_contents($fullPath . DIRECTORY_SEPARATOR . $varsFileName));
@@ -123,21 +103,14 @@ class Generator
         return $this->webAssetsPath . DIRECTORY_SEPARATOR . $repoName . DIRECTORY_SEPARATOR . $mainFileName;
     }
 
-    /**
-     * @param string $path
-     */
-    private function createDirIfNotExist($path)
+    private function createDirIfNotExist(string $path): void
     {
         if (!file_exists($path) && !is_dir($path)) {
             $this->mkdir($path);
         }
     }
 
-    /**
-     * @param string $path
-     * @param string $file
-     */
-    public function removeOldFiles($path, $file)
+    private function removeOldFiles(string $path, string $file): void
     {
         // Delete all scss files
         foreach (glob($path . DIRECTORY_SEPARATOR . '*.scss') as $filename) {
@@ -153,11 +126,9 @@ class Generator
     }
 
     /**
-     * @param string $filename
-     *
      * @throws GuidelineAssetBuildFailedException
      */
-    private function unlink($filename)
+    private function unlink(string $filename): void
     {
         if (false === @unlink($filename)) {
             throw new GuidelineAssetBuildFailedException(sprintf('Unable to unlink "%s"', $filename), 0, $this->createLastErrorException());
@@ -165,11 +136,9 @@ class Generator
     }
 
     /**
-     * @param string $path
-     *
      * @throws GuidelineAssetBuildFailedException
      */
-    private function mkdir($path)
+    private function mkdir(string $path): void
     {
         if (false === @mkdir($path)) {
             throw new GuidelineAssetBuildFailedException(sprintf('Unable to mkdir "%s"', $path), 0, $this->createLastErrorException());
@@ -177,22 +146,16 @@ class Generator
     }
 
     /**
-     * @param string $filename
-     * @param string $contents
-     *
      * @throws GuidelineAssetBuildFailedException
      */
-    private function put($filename, $contents)
+    private function put(string $filename, string $contents): void
     {
         if (false === @file_put_contents($filename, $contents)) {
             throw new GuidelineAssetBuildFailedException(sprintf('Unable to put contents in "%s"', $filename), 0, $this->createLastErrorException());
         }
     }
 
-    /**
-     * @return GuidelineAssetBuildFailedException
-     */
-    private function createLastErrorException()
+    private function createLastErrorException(): GuidelineAssetBuildFailedException
     {
         return new GuidelineAssetBuildFailedException(print_r(error_get_last(), true));
     }

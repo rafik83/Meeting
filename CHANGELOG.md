@@ -6,6 +6,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2234 - API endpoint to access list of happenings
+- Add health check route
+
+## [2.74.1] - 2020-12-14
+### Fixed
+MV-292 - Restrict sendgrid http client to version 3.7
+
+## [2.74.0] - 2020-12-12
+### Updated
+- Upgrade PHP to 7.4
+
+## [2.73.0] - 2020-12-10
+### Fixed
+- fix overlay problem with opentok
+- MV-284 - Fix race conditions on sessionId creation for call visio
+- MV-284 - Generate tokbox token on each meeting start
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
+### Updated
+- VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
+
+## [2.72.2] - 2020-12-07
+### Fixed
+- MV285 - Custom button display on mobile
+
+### Added
+- VIMEET-2252 - Reactivate account
+- VIMEET-2285 - Delete message chat webinar
+- VIMEET-2249 - Notification page redirection
+
+## [2.72.1] - 2020-12-02
+### Fixed
+- MV-286 - Fix disconnection when alert is not closed
+
+## [2.72.0] - 2020-12-02
+### Added
+- VIMEET-2185 - Add waiting image/video to webinar
+- VIMEET-2248 - Help tip networking
+
+### Updated
+- VIMEET-2121 - Change visio test process, fix regressions due to changes in VideoConference
+
+## [2.71.4] - 2020-11-30
+### Fixed
+- MV-281 - Fix webinar recording layout when HLS is activated
+
+## [2.71.3] - 2020-11-25
+### Fixed
+- MV-282 - Delete header on player video SQY78
+
+## [2.71.2] - 2020-11-23
+### Fixed
+- MV-278 - Video player SQY78
+
+## [2.71.1] - 2020-11-22
+### Fixed
+- MV-279 - Fix video webinar
+
+## [2.71.0] - 2020-11-20
+### Added
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present
+- VIMEET-2247 - Limit height of spkeaker's title in webinars
+
+### Fixed
+- MV-268 - Start higher button webinar
+- MV-277 - Allow to go to my agenda from the sheet agenda
+
+## [2.70.1] - 2020-11-19
+### Revert
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
 
 ## [2.70.0] - 2020-11-18
 ### Added
@@ -24,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2270 - Contact tab display if call visio
 - VIMEET-2268 - Call visio analytics on admin dashboard
-- VIMEET-2220 - Compute the private chat message count
+- VIMEET-2220 Compute the private chat message count
 - VIMEET-2232 - Allow user to access video webinar when ended even with no participation
 
 ## [2.68.0] - 2020-11-09

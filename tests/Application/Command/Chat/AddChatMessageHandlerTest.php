@@ -61,8 +61,8 @@ class AddChatMessageHandlerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getTitle()->shouldBeCalled()->willReturn('World Company');
 
-        $savedChatMesssage = $this->prophesize(ChatMessage::class);
-        $savedChatMesssage->getId()->willReturn(43);
+        $savedChatMessage = $this->prophesize(ChatMessage::class);
+        $savedChatMessage->getId()->willReturn(43);
         $this->messageRepository->add(
             new ChatMessage(
                 $meeting->reveal(),
@@ -72,13 +72,13 @@ class AddChatMessageHandlerTest extends TestCase
                 'Paul DUPOND',
                 'World Company'
             )
-        )->shouldBeCalled()->willReturn($savedChatMesssage->reveal());
+        )->shouldBeCalled()->willReturn($savedChatMessage->reveal());
 
         $this->messageRepository->getMessagesCountByLinkableObject($meeting->reveal(), null)->shouldBeCalled()->willReturn(42);
 
         $this->checkAccessToChatMessages->isSatisfiedBy($meeting->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $this->notificationPublisher->publishChatMessageNotification($meeting->reveal(), $savedChatMesssage->reveal(), 42)->shouldBeCalled();
+        $this->notificationPublisher->publishChatMessageNotification($meeting->reveal(), $savedChatMessage->reveal(), 42)->shouldBeCalled();
 
         $this->addChatMessageHandler->handle(new AddChatMessage($meeting->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }
@@ -96,8 +96,8 @@ class AddChatMessageHandlerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getTitle()->shouldBeCalled()->willReturn('World Company');
 
-        $savedChatMesssage = $this->prophesize(ChatMessage::class);
-        $savedChatMesssage->getId()->willReturn(43);
+        $savedChatMessage = $this->prophesize(ChatMessage::class);
+        $savedChatMessage->getId()->willReturn(43);
         $this->messageRepository->add(
             new ChatMessage(
                 $chatSession->reveal(),
@@ -107,13 +107,13 @@ class AddChatMessageHandlerTest extends TestCase
                 'Paul DUPOND',
                 'World Company'
             )
-        )->shouldBeCalled()->willReturn($savedChatMesssage->reveal());
+        )->shouldBeCalled()->willReturn($savedChatMessage->reveal());
 
         $this->messageRepository->getMessagesCountByLinkableObject($chatSession->reveal(), null)->shouldBeCalled()->willReturn(43);
 
         $this->checkAccessToChatMessages->isSatisfiedBy($chatSession->reveal(), $user->reveal())->shouldBeCalled()->willReturn(true);
 
-        $this->notificationPublisher->publishChatMessageNotification($chatSession->reveal(), $savedChatMesssage->reveal(), 43)->shouldBeCalled();
+        $this->notificationPublisher->publishChatMessageNotification($chatSession->reveal(), $savedChatMessage->reveal(), 43)->shouldBeCalled();
 
         $this->addChatMessageHandler->handle(new AddChatMessage($chatSession->reveal(), $user->reveal(), $sheet->reveal(), 'Bonjour'));
     }

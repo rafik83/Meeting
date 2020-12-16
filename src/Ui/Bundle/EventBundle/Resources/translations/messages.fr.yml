@@ -222,7 +222,7 @@ event.visio.test.edge: 'Votre navigateur, Edge, n''est pas compatible pour effec
 event.visio.test.error.network.api: 'Impossible de se connecter au serveur de visio conférence. Veuillez vérifier votre connexion ou la configuration de votre navigateur web afin d''autoriser l''accès à votre appareil photo et votre matériel audio.'
 event.visio.test.loading: 'Merci de patienter...'
 event.visio.test.network: Réseau
-event.visio.test.quality: 'Qualité :'
+event.visio.test.quality: 'Qualité'
 event.visio.test.screenSharing: 'Partage d''écran'
 event.visio.test.start: 'Démarrer le test'
 event.visio.test.testInProgress: 'Test en cours'
@@ -277,6 +277,8 @@ happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
 happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.chat.tab: Chat
+happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
+happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
 happening.webinar.endingAt: 'Fin dans'
 happening.webinar.invisibleMode.button: 'Invisible mode'
@@ -288,6 +290,7 @@ happening.webinar.media.share: Partager
 happening.webinar.media.stopSharing: 'Arrêter le partage'
 happening.webinar.media.videoshare.title: 'Partager une vidéo'
 happening.webinar.media.videoshare.url: 'Url de la vidéo'
+happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.tab: Questions
@@ -338,6 +341,7 @@ meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
+modal.confirm: Confirmer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
 modal.submit: Valider
 multiple_sheets.modal.close: Fermer

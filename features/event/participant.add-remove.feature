@@ -35,8 +35,7 @@ Feature: Manage participant
 
   Scenario: I can remove a participant of my sheet
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     And I should see "sheet.object.action.remove"
     Then I follow "sheet.object.action.remove"
     ## There is a problem with the radio here as they don't have a label

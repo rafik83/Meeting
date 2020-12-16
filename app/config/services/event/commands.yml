@@ -116,6 +116,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@datetime'
         tags:
@@ -125,6 +126,7 @@ services:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcast }
 
@@ -227,6 +229,15 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\AddChatMessage }
+
+    Proximum\Vimeet\Application\Command\Chat\DeleteChatMessageHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Application\Query\Chat\GuessChatMessageLinkableObjectHandler'
+            - '@Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Chat\DeleteChatMessage }
 
     Proximum\Vimeet\Application\Command\Chat\VoteChatMessageHandler:
         arguments:

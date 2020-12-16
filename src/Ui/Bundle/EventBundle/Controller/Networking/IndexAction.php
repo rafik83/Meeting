@@ -8,11 +8,14 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt;
 use Proximum\Vimeet\Application\Query\Networking\NetworkingQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
+use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
@@ -56,7 +59,8 @@ class IndexAction
     public function __invoke(
         EventDomain $eventDomain,
         UserDomain $userDomain,
-        Sheet $sheet
+        Sheet $sheet,
+        Request $request
     ) {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedException();
@@ -73,6 +77,14 @@ class IndexAction
 
         $this->commandBus->handle(new UpdateNetworkingChatViewedAt($sheet, $user));
 
+        $tipTranslationViewQuery = new TipTranslationViewQuery(
+            $sheet,
+            $user,
+            TipTranslationViewQueryHandler::CONTEXT_NETWORKING,
+            $request->getLocale()
+        );
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
+
         return new Response(
             $this->engine->render(
                 '@Event/Networking/index.html.twig',
@@ -82,6 +94,7 @@ class IndexAction
                     'event' => $event,
                     'currentUser' => $user,
                     'isEventOpen' => $this->eventOpenAccessChecker->allowedToAccess($event),
+                    'tipTranslationViews' => $tipTranslationViews,
                 ]
             )
         );

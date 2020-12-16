@@ -30,10 +30,12 @@
                     <div class="video-container" id="video-{{ meeting.id }}">
                         <div class="subscriber hide" id="subscriber-{{ meeting.id }}"></div>
                         <div class="publisher hide" id="publisher-{{ meeting.id }}"></div>
-                        <div class="video-helper hide">
-                            <span>
-                                <i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
-                        </div>
+                        <video-waiting-container>
+                            <div class="video-helper hide">
+                                <span>
+                                    <i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
+                            </div>
+                        </video-waiting-container>
                     </div>
                 {% endif %}
 
@@ -74,7 +76,7 @@
             <div class="actions">
                 {% if meeting.isVisioAndAvailable %}
                     <a class="btn btn-primary start-visio"
-                       href="{{ path('event_video_video_meeting', { meeting: meeting.id, sheet: meeting.userSheetId, participant: meeting.userParticipantId }) }}"
+                       href="{{ path('event_video_video_meeting', { meeting: meeting.id, sheet: sheetId, participant: participantId }) }}"
                        target="_blank"
                     >
                         <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}

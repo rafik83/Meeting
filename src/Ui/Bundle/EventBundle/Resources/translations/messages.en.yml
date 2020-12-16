@@ -219,7 +219,7 @@ event.visio.test.edge: 'Your browser, Edge, is not compatible to perform all aud
 event.visio.test.error.network.api: 'Can not connect to the video conference server. Please check your connection or your browser configuration to allow access to your camera and audio equipment.'
 event.visio.test.loading: 'Please wait...'
 event.visio.test.network: Network
-event.visio.test.quality: 'Quality:'
+event.visio.test.quality: 'Quality'
 event.visio.test.screenSharing: 'Screen sharing'
 event.visio.test.start: 'Start the test'
 event.visio.test.testInProgress: 'Test in progress'

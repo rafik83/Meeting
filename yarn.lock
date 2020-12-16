@@ -583,9 +583,9 @@
     to-fast-properties "^2.0.0"
 
 "@opentok/client@^2.17.0":
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.18.1.tgz#0be14955e992024c2a768d91a00d8b3633f9340b"
-  integrity sha512-KVByBtZd8HVN8/BJRzw96pwO4X+QnHw459JWD8aCf8R8agtoKchrrrRnijsZOFsVl1Vcda2nKr4S6GBgbJpbfw==
+  version "2.18.2"
+  resolved "https://registry.yarnpkg.com/@opentok/client/-/client-2.18.2.tgz#6eb4b21e7116ea6f15a41b4d1015a8e376a7e8c5"
+  integrity sha512-8B+sABOgZHJZQbwpvIAsQGxCoka6AjW3CO/ir8SEji5j9YfmkqBAFd/oV+H6BETxS1zu2mF4QyzYrKtNNWETKg==
 
 "@symfony/webpack-encore@^0.21":
   version "0.21.0"
@@ -5003,27 +5003,27 @@ opentok-layout-js@3.4.0:
   resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-3.4.0.tgz#55cc4ec40fcb2c2348738a128996d98d27a37722"
   integrity sha512-V1Kl1v9HcW1r+qNejAdbawVhtqGu4LMXbRK5UebaVTSbNvJvGXRrwLuLkntxXnf8l2Zp4eXzjSoJ8k0CZu8eWQ==
 
-opentok-network-test-js@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/opentok-network-test-js/-/opentok-network-test-js-2.1.0.tgz#07b323732818f7e6c3f22f9322e2273c37fc1e18"
-  integrity sha512-EYJTBdXB/405EV3AcCWRLf9UjDAO+PXKigrh+EXjHrzG1Q9xp95DTlMrq4bQmsydgiPsuzMb5Jj6ZIxgoAgBhw==
+opentok-network-test-js@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/opentok-network-test-js/-/opentok-network-test-js-2.4.0.tgz#f726af54464c5d2dba934e215651acd973d3202a"
+  integrity sha512-Jpb5yhRpRXbNzhlFD4RGr+xAx0sAwJwmIsgXzL1PZUI4rJrM9tbCWDq8M/NU8juHzGKrilSLtNH/ZDym4E7xOQ==
   dependencies:
     axios "^0.19.0"
-    opentok-solutions-logging "^1.0.15"
+    opentok-solutions-logging "^1.1.0"
     promise "^8.0.1"
-
-opentok-solutions-logging@^1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.0.15.tgz#47e6463eaae03ce302c585587b95dfbc8c185cad"
-  integrity sha512-o8alNMf+A1Vd4oLFTP26F87qLm9xYokEi97QKR+n7+ZZfa/IlwrWM54msA65yyB+0YLbk7qHxNFfJ2ezGb+xOg==
-  dependencies:
-    axios "^0.19.0"
 
 opentok-solutions-logging@^1.0.6:
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.0.14.tgz#6f36a698e1c7d3360dc54f97195a191d02d175ec"
   dependencies:
     axios "^0.15.3"
+
+opentok-solutions-logging@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/opentok-solutions-logging/-/opentok-solutions-logging-1.1.0.tgz#96f2c1553197195798680c62e5bc0f275c5cbc29"
+  integrity sha512-4D/l9d/1q7TLs17mm05tKsZCZhv0qZkF5P18u3ltlMnPIPkw5l+uq0rimIQ4AKvDM0XfNIV2R6bD39ThyL4/0A==
+  dependencies:
+    axios "^0.19.0"
 
 opentok-text-chat@^1.0.30:
   version "1.0.30"

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
@@ -333,8 +341,6 @@ class DayViewQueryHandlerTest extends TestCase
         $meeting     = new Meeting($request, $slot, $this->sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
         $meetingView = new MeetingView(
             1,
-            42,
-            24,
             'userSheetTitle',
             2,
             [new SheetMetView('Sheet title', false)],

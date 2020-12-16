@@ -32,6 +32,8 @@
          data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
          data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
 
+         {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
+
          data-questions-count="{{ webinarView.questionsCount }}"
 
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
@@ -52,12 +54,13 @@
          data-time-remaining-before-start="{{ webinarView.timeRemainingBeforeStartInSeconds }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
-         data-time-remaining-before-start-message="{{ 'happening.webinar.messageWarningBeforeStart'|trans }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
          data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
          data-sidebar-allowed="{{ webinarView.sidebarAllowed }}"
          data-webinar-hls="{{ webinarView.allowWebinarOnHLS ? 'true' : 'false' }}"
          data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
+         data-desktop-notification-title="{{ 'happening.webinar.desktopNotificationTitle'|trans }}"
+         data-desktop-notification-body="{{ 'happening.webinar.desktopNotificationBody'|trans }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
@@ -110,11 +113,13 @@
 
         {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
-        <div class="video-helper" data-settings-container>
-            <h1>{{ webinarView.happeningTitle }}</h1>
-            <hr>
-            {{ include('EventBundle:Visio:settings.html.twig') }}
-            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+        <div class="video-waiting-container">
+            <div class="video-helper" data-settings-container>
+                <h1>{{ webinarView.happeningTitle }}</h1>
+                <hr>
+                {{ include('EventBundle:Visio:settings.html.twig') }}
+                <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+            </div>
         </div>
 
         <div class="buttons-container">
@@ -161,6 +166,29 @@
             <button class="btn btn-primary end-webinar">
                 <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
             </button>
+        </div>
+
+        <div class="hide video-modal" data-modal-warning-before-start>
+            <div class="video-modal-body">
+                <p class="video-modal-content">
+                    {{ 'happening.webinar.messageWarningBeforeStart'|trans }}
+                </p>
+                <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hide video-modal" data-modal-delete-chat-message>
+            <div class="video-modal-body">
+                <p class="video-modal-content">
+                    {{ 'happening.webinar.messageChatConfirm'|trans }}
+                </p>
+                <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-confirm>{{ 'modal.confirm'|trans }}</button>
+                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock body %}

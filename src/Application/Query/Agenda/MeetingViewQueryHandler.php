@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
@@ -90,7 +98,6 @@ class MeetingViewQueryHandler
         }
 
         $meetingOwnSheetParticipantViews = [];
-        $userParticipantId = null;
 
         foreach ($query->meeting->getParticipants($userSheet) as $participant) {
             $userId = $participant->getUser()->getId();
@@ -113,13 +120,6 @@ class MeetingViewQueryHandler
                 $participantPosition,
                 $userSheet->getTitle()
             );
-            if ($userId === $query->user->getId()) {
-                $userParticipantId = $participant->getId();
-            }
-        }
-
-        if (null === $userParticipantId) {
-            $userParticipantId = $userSheet->getUserParticipant($query->user)->getId();
         }
 
         $timeRemainingInSeconds = max(
@@ -129,8 +129,6 @@ class MeetingViewQueryHandler
 
         return new MeetingView(
             $query->meeting->getId(),
-            $userSheet->getId(),
-            $userParticipantId,
             $userSheet->getTitle(),
             $sheetMet->getId(),
             $sheetMetTitles,

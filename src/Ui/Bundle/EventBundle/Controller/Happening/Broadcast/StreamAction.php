@@ -67,7 +67,7 @@ class StreamAction
             break;
             case 'stop':
                 $message = 'stream_stopped';
-                $this->commandBus->handle(new StopBroadcast($happening, $type));
+                $this->commandBus->handle(new StopBroadcast($happening, $type, $streamId));
             break;
             default:
                 throw new BadRequestHttpException('Unsupported action');

@@ -5,6 +5,9 @@ namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler;
+use Proximum\Vimeet\Application\View\Happening\Webinar\StreamDTO;
 use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
@@ -16,23 +19,28 @@ class StartBroadcastHandler
     /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
-    /** @var DateTimeInterface */
-    private $dateTime;
-
     /** @var HappeningBroadcastRepositoryInterface */
     private $broadcastRepository;
+
+    /** @var StreamCommandHandler */
+    private $streamCommandHandler;
 
     /** @var NotificationPublisherInterface */
     private $notificationPublisher;
 
+    /** @var DateTimeInterface */
+    private $dateTime;
+
     public function __construct(
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         HappeningBroadcastRepositoryInterface $broadcastRepository,
+        StreamCommandHandler $streamCommandHandler,
         NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->broadcastRepository = $broadcastRepository;
+        $this->streamCommandHandler = $streamCommandHandler;
         $this->notificationPublisher = $notificationPublisher;
         $this->dateTime = $dateTime;
     }
@@ -91,6 +99,12 @@ class StartBroadcastHandler
             $this->broadcastRepository->deleteForHappening($happening);
             $this->broadcastRepository->add($happeningBroadcast);
         }
+
+        // if webinar is recorded, call handler to switch layout if needed
+        $this->streamCommandHandler->handle(new StreamCommand(
+            $happening,
+            new StreamDTO($startBroadcast->streamId, $startBroadcast->type, Stream::ACTION_START)
+        ));
 
         $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_STREAM, [
             'action' => 'stream_started',

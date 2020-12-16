@@ -94,4 +94,9 @@ class NotificationView
     {
         return Notification::PRIORITY_IMPORTANT === $this->priority;
     }
+
+    public function isRequired(): bool
+    {
+        return Notification::PRIORITY_REQUIRED === $this->priority;
+    }
 }

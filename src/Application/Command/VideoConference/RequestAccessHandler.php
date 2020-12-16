@@ -63,26 +63,10 @@ class RequestAccessHandler
         $visioSettings = $this->visioSettingsRetriever->get($requestAccess->meeting->getEvent());
 
         if (null !== $videoConference) {
-            $videoConferenceToken = $videoConference->getTokenByUser($requestAccess->user);
-
-            if (null === $videoConferenceToken) {
-                $token = $this->videoConferenceAdapter->generateAccessToken(
-                    $this->videoConferenceAdapter->getSession($videoConference->getSessionId()),
-                    $requestAccess->meeting->getSlot()->getEnd()
-                );
-
-                $videoConference->setToken(
-                    new VideoConferenceToken(
-                        $videoConference,
-                        $requestAccess->user,
-                        $token
-                    )
-                );
-
-                $this->videoConferenceRepository->set($videoConference);
-            } else {
-                $token = $videoConferenceToken->getToken();
-            }
+            $token = $this->videoConferenceAdapter->generateAccessToken(
+                $this->videoConferenceAdapter->getSession($videoConference->getSessionId()),
+                $requestAccess->meeting->getSlot()->getEnd()
+            );
 
             return new VideoConferenceView(
                 $token,
@@ -102,11 +86,6 @@ class RequestAccessHandler
         );
 
         $videoConference = new VideoConference($session->getSessionId(), $requestAccess->meeting);
-        $videoConference->setToken(new VideoConferenceToken(
-            $videoConference,
-            $requestAccess->user,
-            $token
-        ));
 
         $this->videoConferenceRepository->add($videoConference);
 

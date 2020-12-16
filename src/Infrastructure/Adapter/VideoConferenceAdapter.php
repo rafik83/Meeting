@@ -11,6 +11,7 @@ use OpenTok\OpenTok;
 use OpenTok\OutputMode;
 use OpenTok\Role;
 use OpenTok\Session;
+use OpenTok\Stream;
 use OpenTok\StreamList;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
@@ -22,7 +23,7 @@ use stdClass;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    public const DELAY_AFTER_END_TIME = '+15 minutes';
+    public const DELAY_AFTER_END_TIME = 15 * 60;
     public const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
     /** @var OpenTok */
@@ -113,6 +114,21 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         );
     }
 
+    public function changeArchiveLayoutAuto(string $sessionId, string $archiveId): void
+    {
+        /** @var StreamList $streamList */
+        $streamList = $this->openTok->listStreams($sessionId);
+
+        /** @var Stream $stream */
+        foreach ($streamList->getItems() as $stream) {
+            if ($stream->videoType !== 'camera') {
+                $this->changeStreamClassList($sessionId, $stream->id, 'focus');
+                $this->changeArchiveToVertical($archiveId);
+                return;
+            }
+        }
+    }
+
     public function changeBroadcastFocus(DomainBroadcast $broadcast, string $streamId): void
     {
         $this->changeStreamClassList($broadcast->getSessionId(), $streamId, 'focus');
@@ -191,13 +207,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         bool $isPublisher = true
     ): string {
         if (true === $this->hasSecurity) {
-            $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
-
-            if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {
-                throw new \LogicException('Impossible to modify the date');
-            }
-
-            $options['expireTime'] = $sessionEndDate->getTimeStamp();
+            $options['expireTime'] = $endDateTime->getTimeStamp() + self::DELAY_AFTER_END_TIME;
         }
 
         $options['role'] = $isPublisher ? Role::PUBLISHER : Role::SUBSCRIBER;

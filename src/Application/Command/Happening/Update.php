@@ -44,14 +44,20 @@ class Update extends AbstractHappeningCommand
                     'title' => $translation->getTitle(),
                     'description' => $translation->getDescription(),
                     'currentWebinarHeaderImage' => $translation->getWebinarHeaderImage(),
+                    'currentWebinarWaitingMediaFile' => $translation->getWebinarWaitingMediaFile(),
+                    'currentWebinarWaitingMediaType' => $translation->getWebinarWaitingMediaType(),
                     'webinarHeaderImage' => null,
+                    'webinarWaitingMedia' => null,
                 ];
             } else {
                 $this->translations[$locale] = [
                     'title' => '',
                     'description' => '',
                     'currentWebinarHeaderImage' => null,
+                    'currentWebinarWaitingMediaFile' => null,
+                    'currentWebinarWaitingMediaType' => null,
                     'webinarHeaderImage' => null,
+                    'webinarWaitingMedia' => null,
                 ];
             }
         }
