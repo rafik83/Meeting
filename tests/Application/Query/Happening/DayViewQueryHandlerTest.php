@@ -41,15 +41,17 @@ class DayViewQueryHandlerTest extends TestCase
         $sheet     = $this->prophesize(Sheet::class);
         $type      = $this->prophesize(Type::class);
         $category  = null;
-        $startTime = new \DateTime('2016-10-12 10:00:00');
-        $endTime   = new \DateTime('2016-10-12 18:00:00');
-        $timeRange = new TimeRangeView($startTime, $endTime);
+        $massStartTime = new \DateTime('2016-10-12 11:00:00');
+        $massEndTime   = new \DateTime('2016-10-12 19:00:00');
+        $timeRangeStartTime = new \DateTime('2016-10-12 10:00:00');
+        $timeRangeEndTime   = new \DateTime('2016-10-12 18:00:00');
+        $timeRange = new TimeRangeView($timeRangeStartTime, $timeRangeEndTime);
 
         $sheet->getType()->willReturn($type->reveal());
 
         // Mass
         $categoryMass = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
-        $mass = new Unavailability\Mass($event, $categoryMass, 'name', $startTime, $endTime, true);
+        $mass = new Unavailability\Mass($event, $categoryMass, 'name', $massStartTime, $massEndTime, true);
 
         // Data
         $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
@@ -113,8 +115,8 @@ class DayViewQueryHandlerTest extends TestCase
 
         $massView = new MassUnavailabilityView(
             1,
-            $startTime,
-            $endTime,
+            $massStartTime,
+            $massEndTime,
             'title',
             'description',
             'picto',
@@ -125,8 +127,8 @@ class DayViewQueryHandlerTest extends TestCase
         );
 
         $expected = new DayView(
-            $startTime,
-            $endTime,
+            $timeRangeStartTime,
+            $timeRangeEndTime,
             $event->getConfiguration()->getScheduleScale(),
             [
                 $happeningView1,

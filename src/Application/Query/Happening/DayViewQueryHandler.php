@@ -50,7 +50,7 @@ class DayViewQueryHandler
 
         foreach ($query->masses as $mass) {
             if ($mass->getBegin() >= $query->timeRange->getBegin()
-                && $mass->getEnd() <= $query->timeRange->getEnd()
+                && $mass->getBegin() <= $query->timeRange->getEnd()
             ) {
                 $massViews[] = $this->massUnavailabilityViewQueryHandler->handle(
                     new MassUnavailabilityViewQuery($mass, $query->event, $query->locale)
