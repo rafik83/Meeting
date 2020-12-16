@@ -168,3 +168,12 @@ services:
             - '@repository.user.event.extra_data_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\UserCtaSubmenuViewQuery }
+
+    #
+    # Api
+    #
+    Proximum\Vimeet\Application\Query\Happening\GetApiListQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\GetApiListQuery }
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
