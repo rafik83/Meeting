@@ -1033,6 +1033,14 @@ event_sheet_happening_webinar_question_delete:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionAction
 
+event_sheet_happening_webinar_question_begin_reply:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/begin-reply
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\BeginReplyHappeningQuestionAction
+
 event_sheet_happening_webinar_question_reply:
     path: /sheet/{sheet}/happening/{happening}/webinar/question/reply
     requirements:

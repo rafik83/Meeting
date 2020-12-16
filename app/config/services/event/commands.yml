@@ -73,6 +73,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestion }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\BeginReplyHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\BeginReplyHappeningQuestion }
+
     Proximum\Vimeet\Application\Command\Happening\Webinar\Question\ReplyHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'

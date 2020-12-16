@@ -62,7 +62,7 @@ class DeleteHappeningQuestionReplyAction
         }
 
         $payload = json_decode($request->getContent(), true);
-        $questionId = (int) $payload['questionId'];
+        $questionId = (int) ($payload['questionId'] ?? null);
 
         if (!$questionId) {
             return new JsonResponse(['status' => 'error', 'message' => 'Empty or bad id for question'], 400);

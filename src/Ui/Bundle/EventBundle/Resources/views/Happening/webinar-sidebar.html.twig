@@ -27,6 +27,8 @@
             data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
             data-vote-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
             data-question-message-delete="{{ path('event_sheet_happening_webinar_question_delete', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+            data-question-begin-reply="{{ path('event_sheet_happening_webinar_question_begin_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+            data-question-begin-reply-label="{{ 'happening.webinar.questions.reply_writing'|trans }}"
             data-question-reply="{{ path('event_sheet_happening_webinar_question_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
             data-question-reply-label="{{ 'happening.webinar.questions.reply'|trans }}"
             data-question-reply-button-label="{{ 'happening.webinar.questions.reply_button'|trans }}"

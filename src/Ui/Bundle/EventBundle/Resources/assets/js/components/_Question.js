@@ -13,18 +13,21 @@ function Question(element) {
 
     this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
-    this.chatUnVoteMessage = element.getAttribute('data-chat-unvote-message');
-    this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
+    this.questionVoteMessage = element.getAttribute('data-question-vote-message');
+    this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
+    this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
 
     this.questionCanModerate = element.hasAttribute('data-question-can-moderate');
     this.questionReplyLabel = this.questionsContainer.getAttribute('data-question-reply-label');
+    this.questionReplyWriting = this.questionsContainer.getAttribute('data-question-begin-reply-label');
 
     if (this.questionCanModerate){
         this.questionDeleteConfirmModalElement = element.querySelector('[data-modal-delete-question-message]');
         this.questionDeleteConfirmModal = new Modal();
         this.questionDeleteConfirmModal.init(this.questionDeleteConfirmModalElement);
 
-        this.questionsReplyFormAction = this.questionsContainer.getAttribute('data-question-reply');
+        this.questionsBeginReplyEndPoint = this.questionsContainer.getAttribute('data-question-begin-reply');
+        this.questionsReplyEndPoint = this.questionsContainer.getAttribute('data-question-reply');
         this.questionReplyButtonLabel = this.questionsContainer.getAttribute('data-question-reply-button-label');
         this.questionDeleteReplyConfirmModalElement = element.querySelector('[data-modal-delete-question-reply]');
         this.questionDeleteReplyConfirmModal = new Modal();
@@ -50,6 +53,7 @@ Question.prototype.initQuestions = function () {
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.classList.add('question-row');
+            rowEl.id = 'question-' + item.questionId;
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
@@ -282,6 +286,21 @@ Question.prototype.submitQuestion = function (event) {
         });
 }
 
+Question.prototype.showWritingRepy = function (questionId, author) {
+    const questionRow = this.questionsContainer.querySelector('#question-'+questionId);
+    if (!questionRow) {
+        return;
+    }
+
+    const questionReplyContainer = document.createElement('div');
+    questionReplyContainer.classList.add('question-reply');
+    const writingReply = document.createElement('div');
+    writingReply.classList.add('replied-by');
+    writingReply.textContent = this.questionReplyWriting.replace('%name%', author);
+    questionReplyContainer.appendChild(writingReply);
+    questionRow.appendChild(questionReplyContainer);
+}
+
 Question.prototype.openReply = function (targetElement, questionId, defaultContent) {
     // clone add question form
     const questionFormSource = this.questionsContainer.querySelector('[data-questions-form]');
@@ -300,6 +319,11 @@ Question.prototype.openReply = function (targetElement, questionId, defaultConte
     questionFormInput.focus();
 
     questionForm.addEventListener('submit', (event) => this.submitQuestionReply(event, questionId, questionFormInput.value));
+
+    $.post(this.questionsBeginReplyEndPoint, JSON.stringify({questionId}))
+        .fail((response) => {
+            this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+        });
 }
 
 Question.prototype.submitQuestionReply = function (event, questionId, content) {
@@ -318,7 +342,7 @@ Question.prototype.submitQuestionReply = function (event, questionId, content) {
     replyForm.querySelectorAll('input,button').forEach((node) => node.disabled = true);
 
     $.post(
-        this.questionsReplyFormAction,
+        this.questionsReplyEndPoint,
         JSON.stringify({questionId, content}),
         (payload) => {
             if (payload.status === 'ok') {

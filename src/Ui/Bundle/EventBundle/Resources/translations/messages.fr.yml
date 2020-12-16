@@ -297,6 +297,7 @@ happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de com
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.reply: 'Réponse de %name% :'
 happening.webinar.questions.reply_button: 'Répondre'
+happening.webinar.questions.reply_writing: '%name% est en train de répondre...'
 happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Retirer mon vote'
 happening.webinar.questions.vote: 'Voter pour cette question'

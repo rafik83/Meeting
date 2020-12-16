@@ -99,10 +99,6 @@ function Webinar(element, isSpeaker) {
         this.chatButton = element.querySelector('[data-chat-button]');
         this.chatButton.addEventListener('click', this.showChat.bind(this));
 
-        this.questionVoteMessage = element.getAttribute('data-question-vote-message');
-        this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
-        this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
-
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
 
@@ -1220,6 +1216,10 @@ Webinar.prototype.showQuestions = function (event) {
             const payload = JSON.parse(event.data);
             if (payload.action === 'update' || payload.action === 'delete') {
                 this.question.initQuestions();
+            }
+
+            if (payload.action === 'begin_reply' && payload.authorId != this.currentUserId) {
+                this.question.showWritingRepy(payload.questionId, payload.author);
             }
         }
     );

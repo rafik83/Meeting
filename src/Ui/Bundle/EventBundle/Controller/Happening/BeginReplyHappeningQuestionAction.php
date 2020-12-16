@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\ReplyHappeningQuestion;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\BeginReplyHappeningQuestion;
 use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
 use Proximum\Vimeet\Application\Exception\Happening\QuestionNotFoundException;
 use Proximum\Vimeet\Application\Exception\Happening\ReplyQuestionNotAllowedException;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ReplyHappeningQuestionAction
+class BeginReplyHappeningQuestionAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -69,7 +69,7 @@ class ReplyHappeningQuestionAction
         }
 
         try {
-            $this->commandBus->handle(new ReplyHappeningQuestion($questionId, $user, $payload['content']??''));
+            $this->commandBus->handle(new BeginReplyHappeningQuestion($questionId, $user));
         } catch(QuestionNotFoundException $e) {
             return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 404);
         } catch(ReplyQuestionNotAllowedException $e) {
