@@ -188,6 +188,12 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\OpenStreamToPublicAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StreamAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
