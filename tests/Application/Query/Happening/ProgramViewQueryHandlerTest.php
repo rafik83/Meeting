@@ -14,10 +14,14 @@ use Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\ProgramViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Application\View\Happening\ProgramView;
+use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeViewTransformer;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
@@ -38,6 +42,8 @@ class ProgramViewQueryHandlerTest extends TestCase
         $happeningParticipationQueryHandler = $this->prophesize(HappeningParticipationQueryHandler::class);
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
+        $getTimeZoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
 
         // Handler
         $handler = new ProgramViewQueryHandler(
@@ -45,7 +51,9 @@ class ProgramViewQueryHandlerTest extends TestCase
             $dayViewQueryHandler->reveal(),
             $happeningParticipationQueryHandler->reveal(),
             $massRepository->reveal(),
-            $fullHappeningQueryHandler->reveal()
+            $fullHappeningQueryHandler->reveal(),
+            $getTimeZoneHelper->reveal(),
+            $isParticipantVisio->reveal()
         );
 
         $handler->handle(
@@ -72,13 +80,17 @@ class ProgramViewQueryHandlerTest extends TestCase
         $eventDay1  = new Day($event, $startTime1, $endTime1);
         $eventDay2  = new Day($event, $startTime2, $endTime2);
 
+        $timeRangeDay1View = new TimeRangeView($startTime1, $endTime1);
+        $timeRangeDay2View = new TimeRangeView($startTime2, $endTime2);
+
         // Expected
         $dayView1 = new DayView($startTime1, $endTime1, $event->getConfiguration()->getScheduleScale(), []);
         $dayView2 = new DayView($startTime2, $endTime2, $event->getConfiguration()->getScheduleScale(), []);
 
-        $expected = new ProgramView([
-            $dayView1, $dayView2,
-        ], null, null);
+        $expected = new ProgramView(
+            false, 'Lisboa', 'Europe/Lisbon',
+            [$dayView1, $dayView2,], null, null
+        );
 
         // Mock
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);
@@ -92,7 +104,7 @@ class ProgramViewQueryHandlerTest extends TestCase
             $event,
             $sheet,
             $user,
-            $eventDay1,
+            $timeRangeDay1View,
              'fr',
             null,
             []
@@ -101,7 +113,7 @@ class ProgramViewQueryHandlerTest extends TestCase
             $event,
             $sheet,
             $user,
-            $eventDay2,
+            $timeRangeDay2View,
             'fr',
             null,
             []
@@ -121,13 +133,21 @@ class ProgramViewQueryHandlerTest extends TestCase
         $fullHappeningQueryHandler = $this->prophesize(FullHappeningQueryHandler::class);
         $fullHappeningQueryHandler->handle(new FullHappeningQuery($expected, $event))->shouldBeCalled();
 
+        $getTimeZoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $getTimeZoneHelper->getTimezoneByEventAndUser($event, $user)->willReturn('Europe/Lisbon');
+        $getTimeZoneHelper->getTimezoneTranslated('Europe/Lisbon')->willReturn('Lisboa');
+
+        $isParticipantVisio = $this->prophesize(IsParticipantVisio::class);
+
         // Handler
         $handler = new ProgramViewQueryHandler(
             $dayRepository->reveal(),
             $dayViewQueryHandler->reveal(),
             $happeningParticipationQueryHandler->reveal(),
             $massRepository->reveal(),
-            $fullHappeningQueryHandler->reveal()
+            $fullHappeningQueryHandler->reveal(),
+            $getTimeZoneHelper->reveal(),
+            $isParticipantVisio->reveal()
         );
 
         $result = $handler->handle(

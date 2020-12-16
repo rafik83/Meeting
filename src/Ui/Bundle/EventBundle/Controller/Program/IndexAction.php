@@ -125,6 +125,7 @@ class IndexAction
             'program' => $program,
             'isUserAloneParticipant' => $isUserAloneParticipant,
             'tipTranslationViews' => $tipTranslationViews,
+            'participant' => $participant,
         ]));
     }
 }

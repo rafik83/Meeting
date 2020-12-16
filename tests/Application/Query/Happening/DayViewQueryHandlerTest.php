@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
@@ -42,7 +43,7 @@ class DayViewQueryHandlerTest extends TestCase
         $category  = null;
         $startTime = new \DateTime('2016-10-12 10:00:00');
         $endTime   = new \DateTime('2016-10-12 18:00:00');
-        $eventDay  = new Day($event, $startTime, $endTime);
+        $timeRange = new TimeRangeView($startTime, $endTime);
 
         $sheet->getType()->willReturn($type->reveal());
 
@@ -143,7 +144,7 @@ class DayViewQueryHandlerTest extends TestCase
         $happeningRepository->findByEventAndTypeAndDayAndCategory(
             $event,
             $type->reveal(),
-            $eventDay->getDay(),
+            $timeRange->getBegin(),
             $category
         )->shouldBeCalled()->willReturn($happenings);
 
@@ -180,7 +181,7 @@ class DayViewQueryHandlerTest extends TestCase
             $event,
             $sheet->reveal(),
             $user,
-            $eventDay,
+            $timeRange,
             'fr',
             $category,
             [$mass]
