@@ -526,3 +526,10 @@ services:
             - '@domain.key_dates.checker.networking_access_checker'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Api
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\Happening\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

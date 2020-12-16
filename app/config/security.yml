@@ -26,6 +26,11 @@ security:
                     phantomjs:
                         password: '%phantomjs_http_password%'
                         roles: 'ROLE_PHANTOMJS'
+        api_key_user_provider:
+            memory:
+                users:
+                    api:
+                        roles: 'ROLE_API'
 
     firewalls:
         dev:
@@ -39,6 +44,14 @@ security:
             provider: user_provider # unless a provider is specified explicitly, the first provider is always used
             http_basic:
                 provider: phantomjs_provider
+
+        api:
+            pattern: '^/([a-z]{2})/api/'
+            stateless: true
+            guard:
+                authenticators:
+                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator
+            provider: api_key_user_provider
 
         planner:
             pattern: '^/planner/callback'

@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2234 - API endpoint to access list of happenings
 - Add health check route
 
 ## [2.74.1] - 2020-12-14
