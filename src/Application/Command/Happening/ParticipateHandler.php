@@ -44,6 +44,9 @@ class ParticipateHandler
     /** @var ParticipateToHappeningWithProductToBuyChecker */
     private $participateToHappeningWithProductToBuyChecker;
 
+    /** @var MustBeAvailableToParticipate */
+    private $mustBeAvailableToParticipate;
+
     /** @var ParticipationCount */
     private $participationCount;
 
@@ -155,13 +158,14 @@ class ParticipateHandler
                 if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $participate->sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {
                     throw new MaxNumberHappeningParticipationReachedException($participant);
                 }
+                $isParticipationVisible = $this->dateTime < $participate->happening->getBegin();
                 if (null !== $happeningParticipation) {
-                    $this->happeningParticipationRepository->update(
-                        $happeningParticipation->setDisabled(false)
-                    );
+                    $happeningParticipation->setDisabled(false);
+                    $happeningParticipation->setVisible($isParticipationVisible);
+                    $this->happeningParticipationRepository->update($happeningParticipation);
                 } else {
                     $this->happeningParticipationRepository->add(
-                        new HappeningParticipation($participate->happening, $participant->getUser())
+                        new HappeningParticipation($participate->happening, $participant->getUser(), false, $isParticipationVisible)
                     );
                 }
 

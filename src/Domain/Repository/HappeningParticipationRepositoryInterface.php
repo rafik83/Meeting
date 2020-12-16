@@ -30,13 +30,9 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param User  $user
-     * @param Event $event
-     * @param bool  $excludeDisabled
-     *
      * @return HappeningParticipation[]
      */
-    public function findByUser(User $user, Event $event, bool $excludeDisabled): array;
+    public function findByUser(User $user, Event $event, bool $excludeDisabled, bool $onlyVisible = false): array;
 
     /**
      * @param User  $user

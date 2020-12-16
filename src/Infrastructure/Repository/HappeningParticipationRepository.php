@@ -55,7 +55,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByUser(User $user, Event $event, bool $excludeDisabled): array
+    public function findByUser(User $user, Event $event, bool $excludeDisabled, bool $onlyVisible = false): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -73,6 +73,10 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         if ($excludeDisabled) {
             $queryBuilder->andWhere('participation.disabled = false');
+        }
+
+        if ($onlyVisible) {
+            $queryBuilder->andWhere('participation.visible = true');
         }
 
         return $queryBuilder->getQuery()->getResult();

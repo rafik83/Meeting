@@ -91,7 +91,7 @@ class ParticipateHandlerTest extends TestCase
     public function setUp()
     {
         $this->event = EventFactory::createEvent();
-        $this->datetime = new \DateTime();
+        $this->datetime = new \DateTime('2015-12-21 09:00:00');
         $this->user = new User('user@vimeet.com', 'salt', 'password', 'fr');
         $this->sheet = SheetFactory::create($this->event, $this->user);
         $this->participant = ParticipantFactory::create($this->sheet, $this->user);
@@ -218,6 +218,7 @@ class ParticipateHandlerTest extends TestCase
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getBegin()->willReturn(new \DateTime('2015-12-21 08:00:00'));
         $happening->getInvitationCode()->shouldNotBeCalled();
 
         $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant1->reveal(), $happening->reveal())
@@ -236,14 +237,17 @@ class ParticipateHandlerTest extends TestCase
         ;
         $this->mustBeAvailableToParticipate->isSatisfiedBy($happening->reveal())->willReturn(false);
 
-        $this->happeningParticipationRepository->findByHappeningAndUser($happening->reveal(), $user1->reveal())->shouldBeCalled()->willReturn(null);
+        $this->happeningParticipationRepository
+            ->findByHappeningAndUser($happening->reveal(), $user1->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null);
 
         $type->getNumberMaxOfHappeningsPerUser()->shouldBeCalled()->willReturn(3);
 
         $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
 
         $this->happeningParticipationRepository->add(
-            new HappeningParticipation($happening->reveal(), $user1->reveal())
+            new HappeningParticipation($happening->reveal(), $user1->reveal(), false, false)
         )->shouldBeCalled();
 
         $happening->isQuestionAllowed()->shouldBeCalled()->willReturn(true);
@@ -341,7 +345,7 @@ class ParticipateHandlerTest extends TestCase
 
         $this->happeningParticipationRepository
             ->add(
-                new HappeningParticipation($this->happening, $this->user)
+                new HappeningParticipation($this->happening, $this->user, false, true)
             )
             ->shouldBeCalled()
         ;
@@ -601,7 +605,7 @@ class ParticipateHandlerTest extends TestCase
         $this
             ->happeningParticipationRepository
             ->add(
-                new HappeningParticipation($this->happening, $user2)
+                new HappeningParticipation($this->happening, $user2, false, true)
             )
             ->shouldBeCalled()
         ;
@@ -668,7 +672,7 @@ class ParticipateHandlerTest extends TestCase
 
         $this->happeningParticipationRepository
             ->add(
-                new HappeningParticipation($this->happening, $this->user)
+                new HappeningParticipation($this->happening, $this->user, false, true)
             )
             ->shouldBeCalled()
         ;
@@ -731,7 +735,7 @@ class ParticipateHandlerTest extends TestCase
         $this
             ->happeningParticipationRepository
             ->add(
-                new HappeningParticipation($this->happening, $this->user)
+                new HappeningParticipation($this->happening, $this->user, false, true)
             )
             ->shouldBeCalled()
         ;
@@ -837,6 +841,7 @@ class ParticipateHandlerTest extends TestCase
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getBegin()->willReturn(new \DateTime('2016-01-01 09:00:00'));
         $happening->getInvitationCode()->shouldNotBeCalled();
 
         $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
@@ -854,7 +859,7 @@ class ParticipateHandlerTest extends TestCase
         $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
 
         $this->happeningParticipationRepository->add(
-            new HappeningParticipation($happening->reveal(), $user1->reveal())
+            new HappeningParticipation($happening->reveal(), $user1->reveal(), false, true)
         )->shouldBeCalled();
 
         $happening->isQuestionAllowed()->shouldBeCalled()->willReturn(true);
@@ -888,6 +893,7 @@ class ParticipateHandlerTest extends TestCase
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $happening->isPrivate()->shouldBeCalled()->willReturn(false);
+        $happening->getBegin()->willReturn(new \DateTime('2016-01-01 09:00:00'));
         $happening->getInvitationCode()->shouldNotBeCalled();
 
         $this->participantRepository->getParticipantsForHappening($sheet->reveal(), $happening->reveal())->shouldBeCalled()->willReturn([]);
@@ -907,7 +913,7 @@ class ParticipateHandlerTest extends TestCase
         $this->happeningParticipationRepository->countByUserAndEvent($user1->reveal(), $event->reveal())->shouldBeCalled()->willReturn(2);
 
         $this->happeningParticipationRepository->add(
-            new HappeningParticipation($happening->reveal(), $user1->reveal())
+            new HappeningParticipation($happening->reveal(), $user1->reveal(), false, true)
         )->shouldBeCalled();
 
         $this->happeningParticipationRepository->countByUserAndEvent($user2->reveal(), $event->reveal())->shouldBeCalled()->willReturn(3);
