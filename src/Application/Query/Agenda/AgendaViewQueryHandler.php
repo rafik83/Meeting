@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\DaysHelper;
 use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeViewTransformer;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
@@ -205,7 +206,7 @@ class AgendaViewQueryHandler
             }
         }
 
-        $timezonedDays = $this->getTimezonedDays($eventDays, $timezone);
+        $timezonedDays = TimeRangeViewTransformer::fromEventDays($eventDays, $timezone);
         $dayViews = [];
 
         foreach ($timezonedDays as $day) {
@@ -284,25 +285,5 @@ class AgendaViewQueryHandler
         }
 
         return $happeningParticipations;
-    }
-
-    /**
-     * @param array  $eventDays
-     * @param string $timezone
-     *
-     * @return TimeRangeView[]
-     */
-    private function getTimezonedDays(array $eventDays, string $timezone): array
-    {
-        $timezonedTimeRangeViews = [];
-
-        foreach ($eventDays as $day) {
-            $timezonedTimeRangeViews[] = new TimeRangeView(
-                DaysHelper::cloneDateTime($day->getBegin(), $timezone),
-                DaysHelper::cloneDateTime($day->getEnd(), $timezone)
-            );
-        }
-
-        return DaysHelper::splitDays($timezonedTimeRangeViews);
     }
 }
