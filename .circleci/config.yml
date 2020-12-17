@@ -40,19 +40,19 @@ jobs:
             docker-compose -p vimeet up -d
             sleep 10
             dockerize -wait tcp://localhost:3306 -timeout 1m
-            docker-compose -p vimeet exec php make install-app@test
-            docker-compose -p vimeet exec php make install-db@test
-            docker-compose -p vimeet exec php make install-dep
-            docker-compose -p vimeet exec php make build@prod
+            docker-compose -p vimeet exec php-ci make install-app@test
+            docker-compose -p vimeet exec php-ci make install-db@test
+            docker-compose -p vimeet exec php-ci make install-dep
+            docker-compose -p vimeet exec php-ci make build@prod
       - run:
           name: "[test] phpunit"
           command: |
-            docker-compose -p vimeet exec php bin/phpunit
+            docker-compose -p vimeet exec php-ci bin/phpunit
       - run:
           name: "[test] behat"
           command: |
-            docker-compose -p vimeet exec php php bin/console fos:elastica:reset --env=test --no-debug
-            docker-compose -p vimeet exec php php -d memory_limit=-1 bin/behat --format progress --no-interaction
+            docker-compose -p vimeet exec php-ci php bin/console fos:elastica:reset --env=test --no-debug
+            docker-compose -p vimeet exec php-ci php -d memory_limit=-1 bin/behat --format progress --no-interaction
       - save_cache:
           name: "[cache] saving composer"
           key: composer-{{ .Branch }}-{{ checksum "composer.lock" }}

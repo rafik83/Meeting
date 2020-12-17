@@ -7114,6 +7114,10 @@ services:
             - '@adapter.router'
             - '@datetime'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+
     #
     # QRCode
     #
@@ -7297,6 +7301,7 @@ services:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
             - '@datetime'
+            - '@logger'
         tags:
             - { name: tactician.handler, typehints: true }
 

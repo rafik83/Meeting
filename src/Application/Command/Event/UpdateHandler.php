@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
@@ -25,10 +17,6 @@ class UpdateHandler
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @param EventRepositoryInterface $eventRepository
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         EventDispatcherInterface $eventDispatcher
@@ -55,6 +43,14 @@ class UpdateHandler
         }
 
         $event = $update->event;
+        $apiKey = $event->getApiKey();
+        if (null === $apiKey && $update->apiKeyAvailable) {
+            $apiKey = hash_hmac('SHA1', random_bytes(8), random_bytes(4));
+        }
+        if (null !== $apiKey && !$update->apiKeyAvailable) {
+            $apiKey = null;
+        }
+
         $event->update(
             $update->title,
             $update->locales,
@@ -76,7 +72,8 @@ class UpdateHandler
             $update->linkedinLoginEnabled,
             $update->accessControlEnabled,
             $update->showCheckinStatus,
-            $update->autoArchiveWebinar
+            $update->autoArchiveWebinar,
+            $apiKey
         );
 
         $event->getConfiguration()->setVisio($update->visio);

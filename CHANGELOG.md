@@ -6,6 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2284 - Delete question webinar
+- VIMEET-2184 - Speakers can prepare before their webinar
+- VIMEET-2234 - API endpoint to access list of happenings
+- Add health check route
+
+## [2.74.1] - 2020-12-14
+### Fixed
+MV-292 - Restrict sendgrid http client to version 3.7
+
+## [2.74.0] - 2020-12-12
+### Updated
+- Upgrade PHP to 7.4
+
+## [2.73.0] - 2020-12-10
+### Fixed
+- fix overlay problem with opentok
+- MV-284 - Fix race conditions on sessionId creation for call visio
+- MV-284 - Generate tokbox token on each meeting start
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
+### Updated
+- VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
 
 ## [2.72.2] - 2020-12-07
 ### Fixed

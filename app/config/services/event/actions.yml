@@ -194,6 +194,12 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Domain\Happening\Webinar\IsRecordedFileAccessibleForUser'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\OpenStreamToPublicAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StreamAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -532,3 +538,10 @@ services:
             - '@domain.key_dates.checker.networking_access_checker'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Api
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Api\Happening\ListAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

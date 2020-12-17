@@ -53,6 +53,11 @@ interface HappeningRepositoryInterface
     );
 
     /**
+     * @return Happening[]
+     */
+    public function findByEventAndTypes(Event $event, ?array $participantTypes): array;
+
+    /**
      * @param Speaker $speaker
      * @param string  $locale
      *
