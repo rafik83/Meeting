@@ -112,12 +112,20 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\Notify }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\OpenStreamToPublicCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\OpenStreamToPublicCommand }
+
     Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler:
         arguments:
             - '@adapter.video_conference_adapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcast }

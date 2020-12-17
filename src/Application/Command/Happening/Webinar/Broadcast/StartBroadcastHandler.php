@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler;
@@ -12,7 +11,6 @@ use Proximum\Vimeet\Domain\Happening\Webinar\Stream;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast;
 use Proximum\Vimeet\Domain\Repository\Happening\HappeningBroadcastRepositoryInterface;
 use Proximum\Vimeet\Domain\Time\DaysHelper;
-use Proximum\Vimeet\Infrastructure\Adapter\Mercure\AbstractNotification;
 
 class StartBroadcastHandler
 {
@@ -25,9 +23,6 @@ class StartBroadcastHandler
     /** @var StreamCommandHandler */
     private $streamCommandHandler;
 
-    /** @var NotificationPublisherInterface */
-    private $notificationPublisher;
-
     /** @var DateTimeInterface */
     private $dateTime;
 
@@ -35,13 +30,11 @@ class StartBroadcastHandler
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         HappeningBroadcastRepositoryInterface $broadcastRepository,
         StreamCommandHandler $streamCommandHandler,
-        NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $dateTime
     ) {
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->broadcastRepository = $broadcastRepository;
         $this->streamCommandHandler = $streamCommandHandler;
-        $this->notificationPublisher = $notificationPublisher;
         $this->dateTime = $dateTime;
     }
 
@@ -105,11 +98,6 @@ class StartBroadcastHandler
             $happening,
             new StreamDTO($startBroadcast->streamId, $startBroadcast->type, Stream::ACTION_START)
         ));
-
-        $this->notificationPublisher->publishHappeningNotification($happening, AbstractNotification::TYPE_STREAM, [
-            'action' => 'stream_started',
-            'hlsUrl' => $happeningBroadcast->getHlsUrl(),
-        ]);
 
         return $happeningBroadcast->getHlsUrl();
     }
