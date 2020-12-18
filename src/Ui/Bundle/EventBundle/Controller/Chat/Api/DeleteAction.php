@@ -5,6 +5,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Chat\DeleteChatMessage;
+use Proximum\Vimeet\Application\Exception\Chat\ChatException;
+use Proximum\Vimeet\Application\Exception\Chat\ChatMessageNotAllowedException;
+use Proximum\Vimeet\Application\Exception\Chat\DeleteChatMessageNotAllowedException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -49,7 +52,15 @@ class DeleteAction
             return new JsonResponse(['status' => 'error', 'message' => 'Missing id']);
         }
 
-        $this->commandBus->handle(new DeleteChatMessage($messageId, $user, $event));
+        try {
+            $this->commandBus->handle(new DeleteChatMessage($messageId, $user, $event));
+        } catch(ChatMessageNotAllowedException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 403);
+        } catch(DeleteChatMessageNotAllowedException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 404);
+        } catch(ChatException $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 400);
+        }
 
         return new JsonResponse(['status' => 'ok']);
     }

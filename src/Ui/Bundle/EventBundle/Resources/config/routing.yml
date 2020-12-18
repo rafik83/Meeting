@@ -1096,6 +1096,13 @@ event_happening_webinar_stream:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
 
+event_happening_webinar_open_stream_to_public:
+    path: /happening/{happening}/webinar/open/stream
+    requirements:
+        happening: \d+
+    methods: [ POST ]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\OpenStreamToPublicAction
+
 event_happening_webinar_stream_broadcast:
     path: /happening/{happening}/webinar/broadcast/stream
     requirements:

@@ -357,6 +357,7 @@ form.event_update_design.children.submit.label: Sauvegarder
 form.event_update_design.children.textColor.label: 'Couleur du texte'
 form.event_update.children.accessControlEnabled.label: 'Contrôle d''accès activé'
 form.event_update.children.analyticsCode.label: 'Code analytique'
+form.event_update.children.apiKeyAvailable.label: 'Activer l''API'
 form.event_update.children.autoArchiveWebinar.label: 'Enregistrement automatique des webinaires'
 form.event_update.children.backgroundColor.label: 'Couleur de fond'
 form.event_update.children.backgroundImage.label: 'Image de fond'

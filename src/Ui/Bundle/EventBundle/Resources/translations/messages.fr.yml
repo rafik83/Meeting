@@ -197,6 +197,8 @@ event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléph
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
+event.visio.close_warning_preparation: 'Fermer ce message'
+event.visio.preparation: "Le webinaire n’est pas encore ouvert au public, vous pouvez préparer votre intervention.\nUn compte à rebours vous indique l’heure de début du webinaire. Vous pouvez alors cliquer sur \"Ouvrir au public\"."
 event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
 event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez nous.'
 event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre une room visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la possibilité de les désactiver à n'importe quel moment du rendez-vous."
@@ -212,6 +214,7 @@ event.visio.settings.selectAudio: 'Select your microphone :'
 event.visio.settings.selectVideo: 'Sélectionnez votre caméra :'
 event.visio.settings.selectVideoNotFound: 'Aucune caméra ne semble présente, vous pouvez effectuer l''appel visio en audio uniquement ou brancher une caméra et rafraichir la page.'
 event.visio.settings.start: Démarrer
+event.visio.settings.start_preparation: 'Préparer mon intervention'
 event.visio.settings.startMeeting: 'Démarrez le rendez-vous visio'
 event.visio.settings.testAudio: 'Tester votre sortie audio'
 event.visio.settings.testAudioHelp: 'Cliquer pour entendre un son et tester votre sortie audio'
@@ -275,12 +278,14 @@ happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
+happening.webinar.beginningAt: 'Commence dans'
 happening.webinar.chat.add: 'Ajoutez votre message'
 happening.webinar.chat.tab: Chat
 happening.webinar.confirmDeleteReply: 'Souhaitez-vous supprimer la réponse ?'
 happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
 happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
+happening.webinar.ended: Évènement terminé
 happening.webinar.endingAt: 'Fin dans'
 happening.webinar.invisibleMode.button: 'Invisible mode'
 happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)?'
@@ -294,6 +299,7 @@ happening.webinar.media.videoshare.url: 'Url de la vidéo'
 happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
 happening.webinar.messageQuestionConfirm: 'Souhaitez-vous effacer la question ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
+happening.webinar.open: Ouvrir au public
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.reply: 'Réponse de %name% :'
 happening.webinar.questions.reply_button: 'Répondre'
@@ -309,6 +315,9 @@ happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
 happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'Il y a déjà un partage d''écran en cours.'
 happening.webinar.start: Démarrez
+happening.webinar.timeToOpen.message: Il est l’heure.
+happening.webinar.timeToOpen.notOpen.button: Pas maintenant
+happening.webinar.timeToOpen.open.button: Ouvrir au public
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date
