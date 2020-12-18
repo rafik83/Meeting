@@ -26,8 +26,8 @@ function Question(element) {
         this.questionDeleteConfirmModal = new Modal();
         this.questionDeleteConfirmModal.init(this.questionDeleteConfirmModalElement);
 
-        this.questionsBeginReplyEndPoint = this.questionsContainer.getAttribute('data-question-begin-reply');
-        this.questionsReplyEndPoint = this.questionsContainer.getAttribute('data-question-reply');
+        this.questionBeginReplyEndPoint = this.questionsContainer.getAttribute('data-question-begin-reply');
+        this.questionReplyEndPoint = this.questionsContainer.getAttribute('data-question-reply');
         this.questionReplyButtonLabel = this.questionsContainer.getAttribute('data-question-reply-button-label');
         this.questionDeleteReplyConfirmModalElement = element.querySelector('[data-modal-delete-question-reply]');
         this.questionDeleteReplyConfirmModal = new Modal();
@@ -320,7 +320,7 @@ Question.prototype.openReply = function (targetElement, questionId, defaultConte
 
     questionForm.addEventListener('submit', (event) => this.submitQuestionReply(event, questionId, questionFormInput.value));
 
-    $.post(this.questionsBeginReplyEndPoint, JSON.stringify({questionId}))
+    $.post(this.questionBeginReplyEndPoint, JSON.stringify({questionId}))
         .fail((response) => {
             this.showError(response.responseJSON ? response.responseJSON.message : response.status);
         });
@@ -342,7 +342,7 @@ Question.prototype.submitQuestionReply = function (event, questionId, content) {
     replyForm.querySelectorAll('input,button').forEach((node) => node.disabled = true);
 
     $.post(
-        this.questionsReplyEndPoint,
+        this.questionReplyEndPoint,
         JSON.stringify({questionId, content}),
         (payload) => {
             if (payload.status === 'ok') {

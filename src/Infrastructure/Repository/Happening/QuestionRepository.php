@@ -141,7 +141,6 @@ class QuestionRepository implements QuestionRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            // ->select('COUNT(question.id)')
             ->select('SUM(CASE WHEN question.replyContent IS NULL THEN 1 ELSE 2 END)')
             ->from(Question::class, 'question')
             ->where('question.happening = :happening')
@@ -149,6 +148,6 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->setParameter('happening', $happening)
         ;
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        return $queryBuilder->getQuery()->getSingleScalarResult() ?? 0;
     }
 }
