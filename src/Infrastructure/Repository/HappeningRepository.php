@@ -158,6 +158,32 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventAndTypes(Event $event, ?array $participantTypes): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening, translations, category, talking, speaker')
+            ->from(Happening::class, 'happening')
+            ->join('happening.translations', 'translations', 'WITH', 'happening.event = :event')
+            ->join('happening.category', 'category')
+            ->leftJoin('happening.talkings', 'talking')
+            ->leftJoin('talking.speaker', 'speaker')
+            ->orderBy('happening.begin')
+            ->setParameter('event', $event);
+
+        if (!empty($participantTypes)) {
+            $queryBuilder
+                ->join('happening.types', 'type', 'WITH', 'type IN (:types)')
+                ->setParameter('types', $participantTypes);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findBySpeaker(Speaker $speaker, $locale)
     {
         $queryBuilder = $this

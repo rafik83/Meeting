@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 
 use IntlDateFormatter;
@@ -31,6 +23,8 @@ class ExportHandlerTest extends TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
+        $event->getId()->willReturn(33);
+        $event->getTimeZone()->willReturn('Europe/Paris');
         $beginDate  = new \DateTime('2016-06-23 12:00:00');
         $endDate  = new \DateTime('2016-06-23 23:59:59.999');
 

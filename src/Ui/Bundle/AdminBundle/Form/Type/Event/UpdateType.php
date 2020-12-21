@@ -107,7 +107,11 @@ class UpdateType extends AbstractEventType
                     [
                         'required' => false,
                     ]
-                );
+                )
+                ->add('apiKeyAvailable', CheckboxType::class, [
+                    'required' => false,
+                    'help' => $options['api_key']
+                ]);
         }
     }
 
@@ -132,6 +136,7 @@ class UpdateType extends AbstractEventType
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Update::class,
+            'api_key' => null,
         ]);
     }
 

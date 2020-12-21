@@ -1,0 +1,5 @@
+services:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Controller\HealthCheckAction:
+        arguments:
+            - '@doctrine'
+            - '@logger'
