@@ -209,6 +209,7 @@ event.visio.settings.selectAudio: 'Select your microphone'
 event.visio.settings.selectVideo: 'Select your camera :'
 event.visio.settings.selectVideoNotFound: 'No camera seems to be detected, you can make the video call in audio only or connect a camera and refresh the page.'
 event.visio.settings.start: Start
+event.visio.settings.start_preparation: 'Prepare my intervention'
 event.visio.settings.startMeeting: 'Start the visio meeting'
 event.visio.settings.testAudio: 'Test your audio output'
 event.visio.settings.testAudioHelp: 'Click to hear a sound and test your audio output'

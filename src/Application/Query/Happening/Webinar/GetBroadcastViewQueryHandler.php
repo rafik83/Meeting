@@ -15,6 +15,10 @@ class GetBroadcastViewQueryHandler
 
     public function handle(GetBroadcastViewQuery $query): ?string
     {
+        if (false === $query->happening->isStreamOpenToPublic()) {
+            return null;
+        }
+
         $happeningBroadcast = $this->happeningBroadcastRepository->getByHappening($query->happening);
         if (null === $happeningBroadcast) {
             return null;
