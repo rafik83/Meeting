@@ -1,0 +1,22 @@
+{
+  "schema": "v2",
+  "application": "vimeet",
+  "name": "console vimeet:comexposium:prepare-import",
+  "template": {
+    "artifactAccount": "front50ArtifactCredentials",
+    "reference": "spinnaker://vimeetCronTemplate",
+    "type": "front50/pipelineTemplate"
+  },
+  "variables": {
+    "jobName": "console-vimeet-comexposium-prepare-import",
+    "cronEnabled": "true",
+    "cronExpression": "0 0/10 * ? * * *",
+    "cronCommand": "bin/console vimeet:comexposium:prepare-import --env=prod"
+  },
+  "exclude": [],
+  "triggers": [],
+  "parameters": [],
+  "notifications": [],
+  "description": "vimeet:comexposium:prepare-import",
+  "stages": []
+}

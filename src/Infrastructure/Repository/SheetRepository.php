@@ -316,7 +316,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsByUsersAndEvent(array $users, Event $event)
+    public function getSheetsByUsersAndEvent(array $users, Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -1164,7 +1164,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.event = :event')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.enable = true AND sheet.event = :event')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
         ;

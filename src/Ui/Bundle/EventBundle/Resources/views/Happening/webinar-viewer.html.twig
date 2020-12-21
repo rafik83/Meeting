@@ -13,13 +13,30 @@
 
 {% block body %}
     <div class="webinar webinar-viewer"
+         data-event-id="{{ webinarView.eventId }}"
+         data-happening-id="{{ webinarView.happeningId }}"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
          data-session-id="{{ webinarView.sessionId }}"
+         data-notifications-provider-url="{{ webinarView.notification.providerUrl }}"
+         data-notifications-subscriber-key="{{ webinarView.notification.subscriberKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+
+         data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+         data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+         data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+         data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+         data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+         data-chat-vote-message="{{ 'chat.vote'|trans }}"
+         data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+         data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+
+         data-questions-count="{{ webinarView.questionsCount }}"
+
          data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
          data-user-complete-name="{{ userCompleteName }}"
+         data-time-remaining-before-start="{{ webinarView.timeRemainingBeforeStartInSeconds }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
@@ -28,6 +45,8 @@
          data-question-vote-message="{{ 'happening.webinar.questions.vote'|trans }}"
          data-question-unvote-message="{{ 'happening.webinar.questions.unvote'|trans }}"
          data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
+         data-webinar-hls="{{ webinarView.isWebinarHls ? 'true' : 'false' }}"
+         data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
          {% if webinarView.liveUrl %}
             data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
@@ -36,19 +55,38 @@
             <div class="webinar-header"><img src="{{ webinarView.headerImage }}" class="img-responsive"></div>
         {% endif %}
 
-        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}></div>
+        <div class="layout-container" {% if webinarView.headerImage %}style="top:125px"{% endif %}>
+            {% if webinarView.isWebinarHls %}
+                <video id="webinar-video"
+                    data-hls-url="{{ webinarView.hlsUrl }}"
+                    data-start-view-url="{{ path('event_happening_webinar_view_broadcast', {happening: webinarView.happeningId}) }}"
+                ></video>
+            {% endif %}
+        </div>
 
         <div data-hide-on-desktop class="hide-on-desktop"></div>
 
         {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
-        <div class="video-helper">
-            <h1>{{ webinarView.happeningTitle }}</h1>
+        <div class="video-waiting-container">
+            {% if webinarView.hasWaitingMedia() %}
+                <div class="video-waiting-media hide" data-webinar-waiting-media>
+                {% if webinarView.waitingMediaView.type == 'video' %}
+                    <video src="{{ webinarView.waitingMediaView.file }}" controls loop data-webinar-waiting-player />
+                {% elseif webinarView.waitingMediaView.type == 'image' %}
+                    <img src="{{ webinarView.waitingMediaView.file }}" />
+                {% endif %}
+                </div>
+            {% endif %}
 
-            <div class="text-center">
-                <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+            <div class="video-helper">
+                <h1>{{ webinarView.happeningTitle }}</h1>
+
+                <div class="text-center">
+                    <button class="btn btn-primary" data-webinar-join-button>{{ 'happening.webinar.start'|trans }}</button>
+                </div>
+                <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
             </div>
-            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
         </div>
 
         <div class="buttons-container">
@@ -59,9 +97,20 @@
 
             <div class="timer-container hide">
                 <div class="timer">
-                    {{ 'happening.webinar.endingAt'|trans }}
+                    {{ 'happening.webinar.beginningAt'|trans }}
                     <span class="countdown"></span>
                 </div>
+            </div>
+
+            <div class="current-container hide">
+                <div class="timer">
+                    {{ 'happening.webinar.endingAt'|trans() }}
+                    <span class="countdown"></span>
+                </div>
+            </div>
+
+            <div class="end-container hide">
+                {{ 'happening.webinar.ended'|trans }}
             </div>
 
             <button class="btn btn-primary end-webinar">

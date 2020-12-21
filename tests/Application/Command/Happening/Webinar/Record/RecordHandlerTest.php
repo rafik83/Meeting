@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Record;
 
 use DateTime;
 use OpenTok\Archive;
-use OpenTok\ArchiveList;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -57,6 +56,12 @@ class RecordHandlerTest extends TestCase
                 'apiUrl' => 'https://example.net/azertyuiop',
             ]
         );
+
+        $videoConferenceAdapter
+            ->changeArchiveLayoutAuto('azerty', '2516a93f-d04a-4ae9-b088-80efe9e48115')
+            ->shouldBeCalled()
+        ;
+
         $videoConferenceAdapter
             ->isRecording('azerty')
             ->shouldBeCalled()

@@ -4,19 +4,28 @@
 
 .webinar, .webinar-video, .video-conference, .video-conference-preview {
   .visio-user-name {
-    top: 0;
+    bottom: 0;
     position: absolute;
-    padding: 10px;
+    padding: 5px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
+    max-height:3.3em;
   }
-  .viewers-container {
+
+  .visio-user-name:hover{
+    max-height:unset;
+  }
+
+  .viewers-container, .end-container {
     color: white;
     display: inline-block;
     padding: 0 10px;
+    font-size: 18px;
+    line-height: 22px;
+    font-family: OpenSans, Helvetica, sans-serif;
   }
 
-  .timer-container {
+  .timer-container, .current-container {
     padding: 0 10px;
     display: inline-block;
 
@@ -25,10 +34,10 @@
       font-size: 18px;
       line-height: 22px;
       font-family: OpenSans, Helvetica, sans-serif;
-    }
-    .warning {
-      font-weight: bold;
-      color: red;
+      &.warning {
+        font-weight: bold;
+        color: red;
+      }
     }
   }
 
@@ -69,6 +78,18 @@
         }
       }
     }
+  }
+
+  .btn-group > .btn:first-child {
+    &:not(:last-child):not(.dropdown-toggle) {
+      @include border-right-radius(18px);
+      margin-right:10px;
+    }
+  }
+
+  .btn-group > .btn:last-child:not(:first-child),
+  .btn-group > .dropdown-toggle:not(:first-child) {
+    @include border-left-radius(18px);
   }
 
   .toggle-sidebar-button {
@@ -112,14 +133,35 @@
     right: 60px !important;
   }
 
+  // video-conference waiting panel
+  .video-waiting-container {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    // need z-index, otherwise in some cases, opentok can be over this container
+    z-index: 1;
+  }
+
   .video-helper {
     background: #ffffff;
     padding: 10px;
     border-radius: 4px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  }
+
+  .video-waiting-media {
+    height: 50vh;
+    margin-bottom: 15px;
+    video {
+      height: 100%;
+    }
+    img {
+      height: 100%;
+    }
   }
 
   .layout-container {
@@ -161,9 +203,54 @@
       text-align: center;
     }
   }
+
+  .video-modal {
+    align-items: center;
+    background-color: rgba($color: #000000, $alpha: 0.8);
+    bottom: 0;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top:0;
+    // need z-index, otherwise in some cases, opentok can be over this container
+    z-index: 1;
+
+    .video-modal-body {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 1em;
+
+      .video-modal-content {
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .video-modal-footer {
+        margin-top: 1em;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.side-container {
+  span.alert-notification {
+    display: inline-block;
+  }
+
 }
 
 .video-conference-test {
+  .video-helper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
+  }
+
   .video-conference-preview {
     .buttons-container {
       position: relative;

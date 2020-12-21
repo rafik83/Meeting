@@ -59,4 +59,28 @@ class EntityManagerAdapter implements EntityManagerAdapterInterface
     {
         $this->entityManager->detach($entity);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beginTransaction()
+    {
+        $this->entityManager->beginTransaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function commit()
+    {
+        $this->entityManager->commit();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rollback()
+    {
+        $this->entityManager->rollback();
+    }
 }

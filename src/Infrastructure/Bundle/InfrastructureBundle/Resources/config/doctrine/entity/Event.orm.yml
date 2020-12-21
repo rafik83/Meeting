@@ -96,6 +96,9 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
+        apiKey:
+            type: string
+            nullable: true
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address

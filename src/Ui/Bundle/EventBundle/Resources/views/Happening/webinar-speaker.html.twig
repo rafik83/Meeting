@@ -13,11 +13,29 @@
 
 {% block body %}
     <div class="webinar webinar-speaker"
+         data-event-id="{{ webinarView.eventId }}"
+         data-happening-id="{{ webinarView.happeningId }}"
          data-api-key="{{ webinarView.apiKey }}"
          data-token="{{ webinarView.token }}"
          data-session-id="{{ webinarView.sessionId }}"
+         data-notifications-provider-url="{{ webinarView.notification.providerUrl }}"
+         data-notifications-subscriber-key="{{ webinarView.notification.subscriberKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
          data-chat-waiting-message="{{ 'meeting.video.chat.waitingMessage'|trans }}"
+
+         data-chat-vote-like="{{ 'chat.vote.like'|trans }}"
+         data-chat-vote-happy="{{ 'chat.vote.happy'|trans }}"
+         data-chat-vote-heart="{{ 'chat.vote.heart'|trans }}"
+         data-chat-vote-acclaim="{{ 'chat.vote.acclaim'|trans }}"
+         data-chat-vote-instructive="{{ 'chat.vote.instructive'|trans }}"
+         data-chat-vote-message="{{ 'chat.vote'|trans }}"
+         data-chat-unvote-message="{{ 'chat.unvote'|trans }}"
+         data-chat-vote-disabled-message="{{ 'chat.voteDisabled'|trans }}"
+
+         {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
+
+         data-questions-count="{{ webinarView.questionsCount }}"
+
          data-screen-share-already-in-progress-message="{{ 'happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress'|trans }}"
          data-invisibleMode-quitConfirmation-message="{{ 'happening.webinar.invisibleMode.quitConfirmation'|trans }}"
          data-invisibleMode-enableConfirmation-message="{{ 'happening.webinar.invisibleMode.enableConfirmation'|trans }}"
@@ -36,14 +54,34 @@
          data-time-remaining-before-start="{{ webinarView.timeRemainingBeforeStartInSeconds }}"
          data-time-remaining="{{ webinarView.timeRemainingInSeconds }}"
          data-warning-time-remaining="{{ webinarView.warningTimeRemainingInSeconds }}"
-         data-time-remaining-before-start-message="{{ 'happening.webinar.messageWarningBeforeStart'|trans }}"
          data-current-user-id="{{ webinarView.currentUserId }}"
          data-subscriber-mapping="{{ webinarView.speakerInfosByUserId }}"
          data-sidebar-allowed="{{ webinarView.sidebarAllowed }}"
+         data-webinar-hls="{{ webinarView.allowWebinarOnHLS ? 'true' : 'false' }}"
+         data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
+         data-desktop-notification-title="{{ 'happening.webinar.desktopNotificationTitle'|trans }}"
+         data-desktop-notification-body="{{ 'happening.webinar.desktopNotificationBody'|trans }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
 
+         data-webinar-open-stream-to-public-endpoint="{{ path(
+             'event_happening_webinar_open_stream_to_public',
+             {
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+
+         data-is-stream-open-to-public="{{ webinarView.isStreamOpenToPublic ? 'true' : 'false' }}"
+
+         {% if webinarView.allowWebinarOnHLS %}
+         data-webinar-stream-endpoint="{{ path(
+             'event_happening_webinar_stream_broadcast',
+             {
+                 'happening': webinarView.happeningId
+             }
+         ) }}"
+         {% else %}
          data-webinar-stream-endpoint="{{ path(
              'event_happening_webinar_stream',
              {
@@ -51,6 +89,7 @@
                  'happening': webinarView.happeningId
              }
          ) }}"
+         {% endif %}
 
         {% if webinarView.isWebinarRecorded %}
             data-webinar-recorded="true"
@@ -83,11 +122,38 @@
 
         {% include 'EventBundle:Happening:webinar-sidebar.html.twig' %}
 
-        <div class="video-helper" data-settings-container>
-            <h1>{{ webinarView.happeningTitle }}</h1>
-            <hr>
-            {{ include('EventBundle:Visio:settings.html.twig') }}
-            <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+        <div class="video-waiting-container">
+            <div class="video-helper" data-settings-container>
+                <h1>{{ webinarView.happeningTitle }}</h1>
+                <hr>
+                {{ include('EventBundle:Visio:settings.html.twig', {needPreparation: not webinarView.isStreamOpenToPublic}) }}
+                <div data-webinar-waiting-message class="hide"><i class="icon-Alerter_1"></i> {{ 'happening.webinar.waiting.message'|trans }}</div>
+                <div id="visio-prepare" class="row hide">
+                    <div class="col-md-12 text-center">
+                        <p>{{ 'event.visio.preparation'|trans|nl2br }}</p>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <hr>
+                        <button class="btn btn-primary" id="visio-prepare-validate">
+                            {{ 'event.visio.close_warning_preparation'|trans }}
+                        </button>
+                    </div>
+                </div>
+                <div id="visio-openPublicReminder" class="row hide">
+                    <div class="col-md-12 text-center">
+                        <p>{{ 'happening.webinar.timeToOpen.message'|trans }}</p>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <hr>
+                        <button class="btn btn-primary" id="visio-openPublicReminder-notOpen">
+                            {{ 'happening.webinar.timeToOpen.notOpen.button'|trans }}
+                        </button>
+                        <button class="btn btn-primary" id="visio-openPublicReminder-open">
+                            {{ 'happening.webinar.timeToOpen.open.button'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="buttons-container">
@@ -98,9 +164,20 @@
 
             <div class="timer-container hide">
                 <div class="timer">
-                    {{ 'happening.webinar.endingAt'|trans }}
+                    {{ 'happening.webinar.beginningAt'|trans }}
                     <span class="countdown"></span>
                 </div>
+            </div>
+
+            <div class="current-container hide">
+                <div class="timer">
+                    {{ 'happening.webinar.endingAt'|trans() }}
+                    <span class="countdown"></span>
+                </div>
+            </div>
+
+            <div class="end-container hide">
+                {{ 'happening.webinar.ended'|trans }}
             </div>
 
             {% if webinarView.isWebinarRecorded %}
@@ -131,9 +208,35 @@
                 <i class="glyphicon glyphicon-share"></i>{{ 'happening.webinar.media.stopSharing'|trans }}
             </button>
 
-            <button class="btn btn-primary end-webinar">
+            <button class="btn btn-primary end-webinar hide">
                 <i class="icon-Disconnect"></i> {{ 'happening.webinar.end'|trans }}
             </button>
+            <button class="btn open-webinar hide">
+                {{ 'happening.webinar.open'|trans }}
+            </button>
+        </div>
+
+        <div class="hide video-modal" data-modal-warning-before-start>
+            <div class="video-modal-body">
+                <p class="video-modal-content">
+                    {{ 'happening.webinar.messageWarningBeforeStart'|trans }}
+                </p>
+                <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hide video-modal" data-modal-delete-chat-message>
+            <div class="video-modal-body">
+                <p class="video-modal-content">
+                    {{ 'happening.webinar.messageChatConfirm'|trans }}
+                </p>
+                <div class="video-modal-footer">
+                    <button class="btn btn-primary" data-modal-confirm>{{ 'modal.confirm'|trans }}</button>
+                    <button class="btn btn-primary" data-modal-close>{{ 'modal.close'|trans }}</button>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock body %}

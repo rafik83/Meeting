@@ -15,6 +15,7 @@ interface TagFilterAggregator
         string $locale,
         array $filters,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array;
 }

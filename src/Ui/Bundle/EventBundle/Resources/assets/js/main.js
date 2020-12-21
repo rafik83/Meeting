@@ -1,3 +1,4 @@
+import '../../../../../../../assets/js/components/Polyfills';
 import '@babel/polyfill';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
@@ -13,7 +14,7 @@ import EditableTextIndicator from './components/_EditableTextIndicator';
 import ProductSelector from './components/_ProductSelector';
 import QuantitySelector from './components/_QuantitySelector';
 import CatalogSheetCard from './components/_CatalogSheetCard';
-import {init as initAgenda} from './components/agenda';
+import { init as initAgenda } from './components/agenda';
 import AgendaRefresh from './components/agenda/_Refresh';
 import AgendaAllSheet from './components/agenda/_AgendaAllSheet';
 import Program from './components/agenda/_Program';
@@ -34,14 +35,19 @@ import CatalogSelectFromNomenclaturesField from './components/_CatalogSelectFrom
 import SortParticipants from './components/_SortParticipants';
 import DateTimePicker from '../../../../../../../assets/js/components/DateTimePicker';
 import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitEventListenerOnElementChange';
+import { showSpinnerOnSubmit } from './components/form/_ShowSpinnerOnSubmit';
 import SheetVideo from './components/_SheetVideo';
+import UserConnectionRegister from './components/_UserConnectionRegister';
+import NotificationToast from './components/_NotificationToast';
+import NotificationCallVisio from './components/_NotificationCallVisio';
+import initNetworking from './networking'
 
 import 'bootstrap';
 import 'elao-form.js';
 import 'intl-tel-input';
 import 'select2';
 
-function init (target) {
+function init(target) {
     // always first one in order to avoid collision
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
         $(element).select2({
@@ -67,7 +73,7 @@ function init (target) {
     });
 
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
-        var anchor         = window.location.hash.substring(1);
+        var anchor = window.location.hash.substring(1);
         var anchorElements = target.getElementsByName(anchor);
 
         if (anchor !== '' && anchor !== null && anchorElements.length > 0) {
@@ -132,8 +138,8 @@ function init (target) {
         new AgendaAllSheet(agendaAllSheetElement);
     }
 
-    [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function(element) {
-       new Program(element);
+    [].forEach.call(target.querySelectorAll('.program-happening, .program-mass'), function (element) {
+        new Program(element);
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__meeting_request'), function (element) {
@@ -158,8 +164,8 @@ function init (target) {
 
     $('#navigation-mobile, .mobile-menu .navigation__close', target).on('click', function (e) {
         $('.mobile-menu').toggle();
-        setTimeout(function() {
-          $('body').toggleClass('menu-mobile-opened').scrollTop(0);
+        setTimeout(function () {
+            $('body').toggleClass('menu-mobile-opened').scrollTop(0);
         }, 1);
     });
 
@@ -175,7 +181,7 @@ function init (target) {
         .on('loaded.bs.modal', function (event) {
             PubSub.publish('dom.added', event.target);
         }.bind(this))
-    ;
+        ;
 
     $('.show-modal', target).modal('show');
 
@@ -271,6 +277,8 @@ function init (target) {
     addSubmitEventListenerOnElementChange(target, 'evaluation', 'evaluation');
     addSubmitEventListenerOnElementChange(target, 'evaluate_meeting', 'evaluation');
 
+    showSpinnerOnSubmit();
+
     if (target.querySelector('[data-agenda-autorefresh]')) {
         new AgendaRefresh();
     }
@@ -278,6 +286,16 @@ function init (target) {
     [].forEach.call(target.querySelectorAll('.sort-participants'), function (element) {
         new SortParticipants(element);
     });
+
+    const userConnectionRegister = new UserConnectionRegister();
+    userConnectionRegister.connect();
+
+    const notificationCallVisio = new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
+
+    initNetworking(document, userConnectionRegister, notificationCallVisio);
+
+    new NotificationToast(target.querySelector('[data-notification-toast]'), userConnectionRegister);
+
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

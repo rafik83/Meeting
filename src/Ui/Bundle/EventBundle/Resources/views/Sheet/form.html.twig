@@ -54,7 +54,12 @@
     </div>
 {% endif %}
 
-{{ form_start(form) }}
+{% set widgetVars = {} %}
+{% if templateObject.isVideo %}
+    {% set widgetVars = {'attr': {'data-show-spin-on-submit': 'sheet-modal-form-spinner'}} %}
+{% endif %}
+
+{{ form_start(form, widgetVars) }}
 {{ form_errors(form) }}
 
     <div class="modal-body">
@@ -79,7 +84,9 @@
                     {% for product in templateObject.buyableProducts %}
                         <tr class="buyable-product-line">
                             <td class="col-xs-1">
-                                <div class="buyable-product-row">{{ form_widget(form.selectedProduct[product.id]) }}</div>
+                                <div class="buyable-product-row">
+                                    {{ form_widget(form.selectedProduct[product.id], {attr: form.selectedProduct[product.id].parent.vars.attr}) }}
+                                </div>
                             </td>
                             <td class="col-xs-8">
                                 <div class="buyable-product-row">{{ product.name }}</div>
@@ -105,12 +112,7 @@
         <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
             <i class="icon-Retour"></i>{{ 'sheet.object.action.backToSheet'|trans }}
         </button>
-        {% set onClick = null %}
-        {% if templateObject.isVideo %}
-            {% set onClick = "document.getElementById('sheet-modal-form-spinner').classList.remove('hide')" %}
-        {% endif %}
-        {{ form_widget(form.submit, {'attr': {'onClick': onClick}}) }}
+        {{ form_widget(form.submit) }}
     </div>
 
 {{ form_end(form) }}
-

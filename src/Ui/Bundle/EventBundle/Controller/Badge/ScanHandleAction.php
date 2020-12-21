@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Contact\Add;
 use Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierToUserQuery;
+use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\User\Sheet\HasAccessToSheet;
@@ -88,7 +89,7 @@ class ScanHandleAction
             return new JsonResponse('User not found', 404);
         }
 
-        $this->commandBus->handle(new Add($event, $user, $contact));
+        $this->commandBus->handle(new Add($event, $user, $contact, Contact::ORIGIN_SCAN));
 
         return new JsonResponse(
             [

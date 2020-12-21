@@ -8,6 +8,6 @@ class CanDisplayAnalyticsStat
 {
     public function isSatisfiedBy(Sheet $sheet): bool
     {
-        return $sheet->isInInternalCatalog() && $sheet->getType()->displayAnalyticsOnSheet;
+        return $sheet->isInInternalCatalog() && $sheet->getType()->canDisplayAnalyticsOnSheet();
     }
 }

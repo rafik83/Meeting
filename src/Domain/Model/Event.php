@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -20,7 +13,7 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
 /**
  * "Evènement".
  */
-class Event implements EventInterface, TraceableInterface
+class Event implements EventInterface, TraceableInterface, ChatMessageLinkableInterface
 {
     /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
@@ -51,7 +44,7 @@ class Event implements EventInterface, TraceableInterface
     /** @var string */
     private $timeZone;
 
-    /** @var ArrayCollection */
+    /** @var ArrayCollection|Collection */
     private $translations;
 
     /** @var array */
@@ -141,6 +134,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $autoArchiveWebinar;
 
+    /** @var bool */
+    private $apiKey;
+
     public function __construct(
         string $title,
         string $fallback,
@@ -163,7 +159,8 @@ class Event implements EventInterface, TraceableInterface
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
         bool $showCheckinStatus = false,
-        bool $autoArchiveWebinar = false
+        bool $autoArchiveWebinar = false,
+        string $apiKey = null
     ) {
         $this->translations = new ArrayCollection();
         $this->configuration = new Configuration();
@@ -194,145 +191,85 @@ class Event implements EventInterface, TraceableInterface
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
         $this->autoArchiveWebinar = $autoArchiveWebinar;
+        $this->apiKey = $apiKey;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getDomain(): string
     {
         return $this->domain;
     }
 
-    /**
-     * @param string $domain
-     */
     public function setDomain(string $domain)
     {
         $this->domain = $domain;
     }
 
-    /**
-     * @return Configuration
-     */
-    public function getConfiguration()
+    public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getDescription($locale)
+    public function getDescription(string $locale): ?string
     {
         $isTranslatable = $this->translations->containsKey($locale);
 
         return $isTranslatable ? $this->translations->get($locale)->getDescription() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getBankInfo($locale)
+    public function getBankInfo(string $locale): ?string
     {
         $isTranslatable = $this->translations->containsKey($locale);
 
         return $isTranslatable ? $this->translations->get($locale)->getBankInfo() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getBillingAddress($locale)
+    public function getBillingAddress(string $locale): ?string
     {
         $isTranslatable = $this->translations->containsKey($locale);
 
         return $isTranslatable ? $this->translations->get($locale)->getBillingAddress() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getPaymentCondition($locale)
+    public function getPaymentCondition(string $locale): ?string
     {
         $isTranslatable = $this->translations->containsKey($locale);
 
         return $isTranslatable ? $this->translations->get($locale)->getPaymentCondition() : '';
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getPaymentFooter($locale)
+    public function getPaymentFooter(string $locale): ?string
     {
         $isTranslatable = $this->translations->containsKey($locale);
 
         return $isTranslatable ? $this->translations->get($locale)->getPaymentFooter() : '';
     }
 
-    /**
-     * @return string
-     */
-    public function getTimeZone()
+    public function getTimeZone(): string
     {
         return $this->timeZone;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    /**
-     * Get locales.
-     *
-     * @return array
-     */
-    public function getLocales()
+    public function getLocales(): array
     {
         return $this->locales;
     }
 
-    /**
-     * Set locales.
-     *
-     * @param array  $locales
-     * @param string $fallback
-     *
-     * @return Event
-     */
-    public function setLocales(array $locales, $fallback = null)
+    public function setLocales(array $locales, string $fallback = null): Event
     {
         $this->locales  = $locales;
         $this->fallback = $fallback ? $fallback : reset($locales);
@@ -356,12 +293,7 @@ class Event implements EventInterface, TraceableInterface
         return $this->fallback;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function getAvailableLocale($locale): string
+    public function getAvailableLocale(string $locale): string
     {
         if (\in_array($locale, $this->getLocales(), true)) {
             return $locale;
@@ -370,20 +302,12 @@ class Event implements EventInterface, TraceableInterface
         return $this->getLocaleFallback();
     }
 
-    /**
-     * @return string
-     */
-    public function getAssetPath()
+    public function getAssetPath(): string
     {
         return $this->assetPath;
     }
 
-    /**
-     * @param string $assetPath
-     *
-     * @return Event
-     */
-    public function setAssetPath($assetPath)
+    public function setAssetPath(string $assetPath): Event
     {
         $this->assetPath = $assetPath;
 
@@ -423,74 +347,39 @@ class Event implements EventInterface, TraceableInterface
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getInvoiceLogo()
+    public function getInvoiceLogo(): ?string
     {
         return $this->invoiceLogo;
     }
 
-    /**
-     * @param string $invoiceLogo
-     * @param string $invoiceLogoExtension
-     */
-    public function setInvoiceLogo($invoiceLogo, $invoiceLogoExtension)
+    public function setInvoiceLogo(?string $invoiceLogo, ?string $invoiceLogoExtension)
     {
         $this->invoiceLogo = $invoiceLogo;
         $this->invoiceLogoExtension = $invoiceLogoExtension;
     }
 
-    /**
-     * @return string
-     */
-    public function getInvoiceLogoExtension()
+    public function getInvoiceLogoExtension(): ?string
     {
         return $this->invoiceLogoExtension;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getEmailTeam()
+    public function getEmailTeam(): ?string
     {
         return $this->emailTeam;
     }
 
-    /**
-     * @param string      $title
-     * @param array       $locales
-     * @param string      $fallback
-     * @param string      $mode
-     * @param float       $vat
-     * @param string      $country
-     * @param string      $currency
-     * @param string      $timeZone
-     * @param string      $domain
-     * @param string      $organiserName
-     * @param string|null $emailTeam
-     * @param null|Prefix $invoicePrefix
-     * @param bool        $visible
-     * @param bool        $welcomeEnabled
-     * @param bool        $disabledEmailChanging
-     * @param bool        $disabledPasswordChanging
-     * @param bool        $googleLoginEnabled
-     * @param bool        $linkedinLoginEnabled
-     * @param bool        $accessControlEnabled
-     * @param bool        $showCheckinStatus
-     */
     public function update(
-        $title,
+        string $title,
         array $locales,
-        $fallback,
-        $mode,
-        $vat,
-        $country,
-        $currency,
-        $timeZone,
-        $domain,
-        $organiserName,
-        $emailTeam,
+        string $fallback,
+        string $mode,
+        float $vat,
+        string $country,
+        string $currency,
+        string $timeZone,
+        string $domain,
+        ?string $organiserName,
+        ?string $emailTeam,
         Prefix $invoicePrefix,
         bool $visible,
         bool $welcomeEnabled,
@@ -500,7 +389,8 @@ class Event implements EventInterface, TraceableInterface
         bool $linkedinLoginEnabled = false,
         bool $accessControlEnabled = false,
         bool $showCheckinStatus = false,
-        bool $autoArchiveWebinar = false
+        bool $autoArchiveWebinar = false,
+        ?string $apiKey = null
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -523,80 +413,53 @@ class Event implements EventInterface, TraceableInterface
         $this->accessControlEnabled = $accessControlEnabled;
         $this->showCheckinStatus = $showCheckinStatus;
         $this->autoArchiveWebinar = $autoArchiveWebinar;
+        $this->apiKey = $apiKey;
     }
 
-    /**
-     * @param string $organiserName
-     * @param string $organiserEmail
-     */
-    public function updateOrganiserInfo($organiserName, $organiserEmail)
+    public function updateOrganiserInfo(?string $organiserName, ?string $organiserEmail)
     {
         $this->organiserName  = $organiserName;
         $this->organiserEmail = $organiserEmail;
     }
 
-    /**
-     * @return string
-     */
-    public function getOrganiserName()
+    public function getOrganiserName(): ?string
     {
         return $this->organiserName;
     }
 
-    /**
-     * @param string $organiserName
-     *
-     * @return Event
-     */
-    public function setOrganiserName($organiserName)
+    public function setOrganiserName(?string $organiserName): self
     {
         $this->organiserName = $organiserName;
 
         return $this;
     }
 
-    /**
-     * @return Address
-     */
-    public function getPaymentAddress()
+    public function getPaymentAddress(): Address
     {
         return $this->paymentAddress;
     }
 
-    /**
-     * @return string
-     */
-    public function getOrganiserEmail()
+    public function getOrganiserEmail(): ?string
     {
         return $this->organiserEmail;
     }
 
-    /**
-     * @param string $organiserEmail
-     *
-     * @return $this
-     */
-    public function setOrganiserEmail($organiserEmail)
+    public function setOrganiserEmail(?string $organiserEmail): self
     {
         $this->organiserEmail = $organiserEmail;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLegalInformation()
+    public function getLegalInformation(): ?string
     {
         return $this->legalInformation;
     }
 
     /**
      * Get VAT mode
-     *
-     * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -609,69 +472,41 @@ class Event implements EventInterface, TraceableInterface
         $this->mode = self::VAT_MODE_ET;
     }
 
-    /**
-     * @return float
-     */
-    public function getVat()
+    public function getVat(): float
     {
         return $this->vat;
     }
 
-    /**
-     * @return string
-     */
-    public function getElementToJoinWithInvoice()
+    public function getElementToJoinWithInvoice(): string
     {
         return $this->elementToJoinWithInvoice;
     }
 
-    /**
-     * @return string
-     */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
-    /**
-     * @return Prefix
-     */
-    public function getInvoicePrefix()
+    public function getInvoicePrefix(): Prefix
     {
         return $this->invoicePrefix;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @param string $currency
-     */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency)
     {
         $this->currency = $currency;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return bool
-     */
     public function hasSvgLogo(string $locale): bool
     {
         return 'svg' === $this->getLocalizedLogoExtension($locale);
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return bool
-     */
     public function hasSvgMobileLogo(string $locale): bool
     {
         return 'svg' === $this->getLocalizedMobileLogoExtension($locale);
@@ -697,7 +532,7 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return Event\Day[]
      */
-    public function getDays()
+    public function getDays(): array
     {
         $days = $this->days->toArray();
 
@@ -708,28 +543,20 @@ class Event implements EventInterface, TraceableInterface
         return $days;
     }
 
-    /**
-     * @return string
-     */
-    public function getTraceableName()
+    public function getTraceableName(): string
     {
         return TraceableName::EVENT_TRACEABLE_NAME;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasDay()
+    public function hasDay(): bool
     {
         return !empty($this->days->toArray());
     }
 
     /**
-     * @return Event\Day
      * @throws DayNotDefinedException
-     *
      */
-    public function getFirstDay()
+    public function getFirstDay(): Event\Day
     {
         if (!$this->hasDay()) {
             throw new DayNotDefinedException();
@@ -741,11 +568,9 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @return Event\Day
      * @throws DayNotDefinedException
-     *
      */
-    public function getLastDay()
+    public function getLastDay(): Event\Day
     {
         if (!$this->hasDay()) {
             throw new DayNotDefinedException();
@@ -756,10 +581,7 @@ class Event implements EventInterface, TraceableInterface
         return end($days);
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getOpenDate()
+    public function getOpenDate(): ?\DateTimeInterface
     {
         try {
             return $this->getFirstDay()->getStartTime();
@@ -768,19 +590,11 @@ class Event implements EventInterface, TraceableInterface
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isExternalCatalogEnabled(): bool
     {
         return true === $this->externalCatalogEnabled;
     }
 
-    /**
-     * @param bool $state
-     *
-     * @return Event
-     */
     public function setExternalCatalog(bool $state): Event
     {
         $this->externalCatalogEnabled = $state;
@@ -788,33 +602,21 @@ class Event implements EventInterface, TraceableInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isUserAgendaVersionsGenerated(): bool
     {
         return $this->userAgendaVersionsGenerated;
     }
 
-    /**
-     * @param bool $userAgendaVersionsGenerated
-     */
     public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
     {
         $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
     }
 
-    /**
-     * @return bool
-     */
     public function isVisible(): bool
     {
         return $this->visible;
     }
 
-    /**
-     * @return bool
-     */
     public function isArchived(): bool
     {
         return $this->archived;
@@ -836,17 +638,11 @@ class Event implements EventInterface, TraceableInterface
         $this->archived = false;
     }
 
-    /**
-     * @return null|Event
-     */
     public function getDuplicatedFrom(): ?Event
     {
         return $this->duplicatedFrom;
     }
 
-    /**
-     * @return bool
-     */
     public function isWelcomeEnabled(): bool
     {
         return $this->welcomeEnabled;
@@ -893,11 +689,7 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @param \DateTimeInterface $datetime
-     *
-     * @return bool
      * @throws DayNotDefinedException
-     *
      */
     public function isFinished(\DateTimeInterface $datetime): bool
     {
@@ -908,32 +700,28 @@ class Event implements EventInterface, TraceableInterface
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogo(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogo()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedMobileLogoExtension(string $locale): ?string
     {
         return $this->translations->containsKey($locale)
             ? $this->translations->get($locale)->getMobileLogoExtension()
-            : null
-        ;
+            : null;
     }
 
     public function getLocalizedNotificationImage(string $locale): ?string
@@ -989,5 +777,20 @@ class Event implements EventInterface, TraceableInterface
     public function getAutoArchiveWebinar(): bool
     {
         return $this->autoArchiveWebinar;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->apiKey;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_NETWORKING;
+    }
+
+    public function getEvent(): Event
+    {
+        return $this;
     }
 }

@@ -1,0 +1,12 @@
+dependencies:
+- name: mysql
+  repository: https://storage.googleapis.com/synalabs-kubernetes-charts/
+  version: 1.4.0
+- name: elasticsearch
+  repository: https://storage.googleapis.com/synalabs-kubernetes-charts/
+  version: 7.7.0-SNAPSHOT
+- name: redis
+  repository: https://storage.googleapis.com/synalabs-kubernetes-charts/
+  version: 9.4.3
+digest: sha256:219a5877aeb65e69919de37620f4c0b0706ff544044765be113328aab8f90391
+generated: "2020-05-07T12:57:43.2350869+02:00"

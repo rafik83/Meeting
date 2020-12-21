@@ -26,6 +26,11 @@ security:
                     phantomjs:
                         password: '%phantomjs_http_password%'
                         roles: 'ROLE_PHANTOMJS'
+        api_key_user_provider:
+            memory:
+                users:
+                    api:
+                        roles: 'ROLE_API'
 
     firewalls:
         dev:
@@ -39,6 +44,14 @@ security:
             provider: user_provider # unless a provider is specified explicitly, the first provider is always used
             http_basic:
                 provider: phantomjs_provider
+
+        api:
+            pattern: '^/([a-z]{2})/api/'
+            stateless: true
+            guard:
+                authenticators:
+                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator
+            provider: api_key_user_provider
 
         planner:
             pattern: '^/planner/callback'
@@ -118,6 +131,7 @@ security:
         - { path: '^/(fr|en)/event/archived', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/[0-9]+/impersonate', role: ROLE_ALLOWED_TO_SWITCH, host: '%admin_domain%' }
         - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/meeting-request', role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/meeting', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
@@ -126,6 +140,7 @@ security:
         - { path: ^/(fr|en)/logout, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
         - { path: '^/(fr|en)/_internal', roles: ROLE_PHANTOMJS, host: '%admin_domain%' }
         - { path: '/(fr|en)/happening/webinar/record/archive/status-change', role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' } # Tokbox Callback
+        - { path: '/healthz', role: IS_AUTHENTICATED_ANONYMOUSLY } # Healthcheck
         - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         # Front
         - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }

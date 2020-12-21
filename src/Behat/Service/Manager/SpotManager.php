@@ -22,9 +22,25 @@ class SpotManager
         $this->sheetRepository = $sheetRepository;
     }
 
-    public function create(Event $event, string $reference, int $size, int $meetingCapacity, int $seatCapacity, bool $active = true): Spot
-    {
-        $spot = new Spot($reference, $event, $size, $meetingCapacity, $seatCapacity, $active);
+    public function create(
+        Event $event,
+        string $reference,
+        int $size,
+        int $meetingCapacity,
+        int $seatCapacity,
+        bool $active = true,
+        bool $isVisio = false
+    ): Spot {
+        $spot = new Spot(
+            $reference,
+            $event,
+            $size,
+            $meetingCapacity,
+            $seatCapacity,
+            $active,
+            Spot::PRIORITY_MUTUALIZE,
+            $isVisio
+        );
         $this->spotRepository->add($spot);
 
         return $spot;

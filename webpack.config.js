@@ -13,9 +13,13 @@ Encore
     // empty the outputPath dir before each build
     .cleanupOutputBeforeBuild()
 
+    // allow sass/scss files to be processed
+    .enableSassLoader()
+
     // will output as web/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
     .addEntry('js/visio', './src/Ui/Bundle/EventBundle/Resources/assets/js/visio.js')
+    .addEntry('js/networking', './src/Ui/Bundle/EventBundle/Resources/assets/js/networking.js')
     .addEntry('js/badge-scan', './src/Ui/Bundle/EventBundle/Resources/assets/js/components/badge/scan.js')
     .addEntry('js/admin', './src/Ui/Bundle/AdminBundle/Resources/assets/js/admin.js')
     .addEntry('js/chart', './src/Ui/Bundle/AdminBundle/Resources/assets/js/chart.js')
@@ -32,9 +36,8 @@ Encore
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')
     .addStyleEntry('css/mainStyle', './src/Ui/Bundle/EventBundle/Resources/assets/sass/main.scss')
     .addStyleEntry('tinymce/tinymceStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/tinymce.scss')
-
-    // allow sass/scss files to be processed
-    .enableSassLoader()
+    // css tokbox chat (legacy)
+    .addStyleEntry('css/videoConferenceChatTokbox', './src/Ui/Bundle/EventBundle/Resources/assets/sass/objects/_videoConferenceChatTokbox.scss')
 
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()

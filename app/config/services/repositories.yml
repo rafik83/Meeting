@@ -96,6 +96,22 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\ChatMessageVoteRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository:
         arguments:
             - '@doctrine.orm.entity_manager'

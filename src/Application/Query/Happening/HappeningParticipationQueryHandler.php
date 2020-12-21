@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
@@ -16,35 +8,27 @@ use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 
 class HappeningParticipationQueryHandler
 {
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
-    /**
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     */
     public function __construct(HappeningParticipationRepositoryInterface $happeningParticipationRepository)
     {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
-    /**
-     * @param HappeningParticipationQuery $happeningParticipationQuery
-     */
-    public function handle(HappeningParticipationQuery $happeningParticipationQuery)
+    public function handle(HappeningParticipationQuery $happeningParticipationQuery): void
     {
-        $sheet       = $happeningParticipationQuery->sheet;
-        $user        = $happeningParticipationQuery->currentUser;
+        $sheet = $happeningParticipationQuery->sheet;
+        $user = $happeningParticipationQuery->currentUser;
         $participant = $sheet->getUserParticipant($user);
 
         $happeningList = [];
         /** @var HappeningView[] $happenings */
-        $happenings    = [];
+        $happenings = [];
 
         foreach ($happeningParticipationQuery->programView->days as $day) {
             foreach ($day->happenings as $happening) {
-                $happeningList[]                 = $happening->getId();
+                $happeningList[] = $happening->getId();
                 $happenings[$happening->getId()] = $happening;
             }
         }

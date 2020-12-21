@@ -1,0 +1,529 @@
+## Global parameters
+
+## Vimeet environment
+## Default to 'dev', possibles other values: 'production'
+environment: dev
+
+## Vimeet Timezone
+tz: Europe/Paris
+
+## Vimeet Symfony parameters
+parameters:
+  parameters_yml: |
+    database_host:     127.0.0.1
+    database_port:     3306
+    database_name:     proximum_vimeet
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_port:       ~
+    mailer_sender:     "vimeet@proximum.com"
+    mailer_encryption: ~
+    mailer_error_transport: smtp
+    mailer_error_host:      127.0.0.1
+    mailer_error_user:      ~
+    mailer_error_password:  ~
+    mailer_error_port:      ~
+    mailer_error_from:      "vimeet@proximum.com"
+    mailer_error_encryption: ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:      'LcTdBOetSYwmhWirRZHleWO8FJknzXLu'
+    adminSecret: 'y7UriWwW@LKcBM*xU3wuao5o$K9kJkw%7ZaxrH#&dqa*XoegEVQ5n5KVcFBg'
+
+    redis_dsn: 'redis://localhost'
+
+    oauth_google_client_id: 'client_id_to_change'
+    oauth_google_client_secret: 'client_secret_to_change'
+
+    oauth_linkedin_client_id: 'client_id_to_change'
+    oauth_linkedin_client_secret: 'client_secret_to_change'
+
+    sendgrid_api_key: ~
+
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum
+    scheme: http
+
+    timezone_default: Europe/Paris
+
+    trusted_proxies: []
+    elastic_host: localhost
+    elastic_port: 9200
+
+    paypal_username:  "richard.hanna-facilitator_api1.elao.com"
+    paypal_password:  "U3BUA8GS7FM44K7F"
+    paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
+    paypal_sandbox:   true
+
+    phantomjs_path:                '%kernel.root_dir%/../node_modules/.bin/phantomjs'
+    phantomjs_script:              '%kernel.root_dir%/../phantomjs/render.js'
+    phantomjs_render_script_path:  '%kernel.root_dir%/../phantomjs/'
+    phantomjs_render_badge_script: 'renderBadge.js'
+    phantomjs_http_user:           'phantomjs'
+    phantomjs_http_password:       '7DSJD2sm8YpzfjmnXeethPuybb'
+
+    openl10n_config_file: '%kernel.root_dir%/../.openl10n.yml'
+
+    user_activate_account_token_expiration: 'P7D'
+
+    sentry_dsn: ~
+
+    admin_menu_color: "#222"
+
+    ovh_endpoint_name:      'thisEndPointIsNotSecretYouShouldChangeIt'
+    ovh_application_key:    'thisApplicationKeyIsNotSecretYouShouldChangeIt'
+    ovh_application_secret: 'thisApplicationSecretIsNotSecretYouShouldChangeIt'
+    ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
+    ovh_service_name:       'thisServiceNameIsNotSecretYouShouldChangeIt'
+    ovh_sender_name:        'thisSenderNameIsNotSecretYouShouldChangeIt'
+    twilio_sid: 'thisSIDIsNotSecretYouShouldChangeIt'
+    twilio_token: 'thisTokenIsNotSecretYouShouldChangeIt'
+    twilio_number: 'thisNumberIsNotSecretYouShouldChangeIt'
+
+    tokbox_api_key: ~
+    tokbox_api_secret: ~
+    visio_screen_sharing_chrome_extension: https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp
+
+    planner_files_path: '%kernel.root_dir%/../var/planner'
+    planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
+    planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
+
+    shared_uploaded_files: '%kernel.project_dir%/var/shared_uploaded_files'
+
+    jenkins_user: vimeet
+    jenkins_password: PasswordYouShouldChangeIt
+    jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
+
+    jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+    jenkins_update_translations_build_names: ['vimeet_translations_update_front1', 'vimeet_translations_update_front2']
+
+    comexposium_check_user_token_endpoint: "https://comexposium-host/_plugin/Comexposium/user/checkUserToken"
+    comexposium_login_endpoint: "https://comexposium-host/_login/local"
+    comexposium_get_user_endpoint: "https://comexposium-host/_plugin/Comexposium/thirdParty/getUser/%%email%%"
+    comexposium_create_user_endpoint: "https://comexposium-host/_plugin/Comexposium/user/create"
+    comexposium_sso_loader_lib_endpoint: "https://comexposium-cdn/js/loader.min.js"
+    comexposium_sso_username: informatique@proximumgroup.com
+    comexposium_sso_password: password
+    comexposium_username: comexposiumUsername
+    comexposium_password: comexposiumPassword
+
+    agenda_version_diff_notification_time_in_minutes: 30
+    agenda_version_diff_dday_notification_time_in_minutes: 10
+
+    # Features flag
+    feature_video_conference_enabled: false
+    feature_video_conference_date_security_enabled: false
+    feature_event_dates_to_current_date_enabled: false
+    feature_dday_enabled: false
+    feature_availability_confirmation_enabled: true
+    feature_registration_template_builder_enabled: false
+    feature_product_vat_enabled: false
+    liip_imagine_data_root: "%kernel.project_dir%/web"
+
+    google_cloud_storage_video_uri: 'https://video-cdn.vimeet.events'
+    google_cloud_storage_config:
+      project_id: ''
+      bucket_name: ''
+      type: ''
+      private_key_id: ''
+      private_key: ''
+      client_email: ''
+      client_id: ''
+      auth_uri: ''
+      token_uri: ''
+      auth_provider_x509_cert_url: ''
+      client_x509_cert_url: ''
+
+image:
+  registry: ""
+  repository: proximum-vimeet-staging
+  tag: latest
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Never
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override vimeet.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override vimeet.fullname template
+##
+# fullnameOverride:
+
+## Vimeet host to create application URLs
+## When using Ingress, it will be set to the Ingress hostname.
+##
+## vimeetHost: vimeet.local
+
+##
+## Worker
+##
+worker:
+  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console jms-job-queue:run --no-interaction --env=dev --verbose"
+
+##
+## External database configuration
+##
+externalDatabase:
+  ## Database host
+  host:
+
+  ## Database port
+  port: 3306
+
+  ## Database user
+  user: vimeet
+
+  ## Database password
+  password: vimeet
+
+  ## Database name
+  database: proximum_vimeet
+
+  ## Slave configuration
+  slave:
+      hostList:
+      port: 3306
+      user: externaldb
+      password:
+      database: externaldb
+
+##
+## Mysql chart configuration
+##
+mysql:
+  ## Whether to deploy a mysql server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  enabled: true
+  imageTag: "5.6.33"
+
+  mysqlDatabase: proximum_vimeet
+  mysqlUser: vimeet
+  mysqlPassword: vimeet
+
+  ## Mysql admin password
+  ## Default: random 10 character string
+  # mysqlRootPassword:
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    ## mysql data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+
+  extraVolumes: |
+    - name: initdb
+      persistentVolumeClaim:
+        claimName: vimeet-mysql-initdb
+
+  extraVolumeMounts: |
+    - name: initdb
+      mountPath: /docker-entrypoint-initdb.d
+      readOnly: true
+
+##
+## External Elasticsearch configuration
+##
+externalElasticsearch:
+    ## Elasticsearch host
+    host:
+
+    ## Elasticsearch port
+    port: 9200
+
+##
+## Elasticsearch chart configuration
+##
+elasticsearch:
+  ## Whether to deploy an elasticsearch server to satisfy the applications  requirements. To use an external database set this to false and configure the externalElasticsearch parameters
+  enabled: true
+  image: "elasticsearch"
+  imageTag: "1.7.6"
+
+  clusterName: "local-elastic"
+
+  # Permit co-located instances for solitary minikube virtual machines.
+  antiAffinity: "soft"
+
+  # Shrink default JVM heap.
+  esJavaOpts: "-Xmx128m -Xms128m"
+
+  esConfig:
+    elasticsearch.yml: |
+      network.host: "0.0.0.0"
+      discovery:
+        zen.ping.multicast.enabled: false
+        zen.ping.unicast.hosts:
+          - local-master-0.local-master-headless.vimeet.svc.cluster.local:9300
+          - local-master-1.local-master-headless.vimeet.svc.cluster.local:9300
+          - local-master-2.local-master-headless.vimeet.svc.cluster.local:9300
+
+  # Allocate smaller chunks of memory per pod.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512M"
+    limits:
+      cpu: "1000m"
+      memory: "512M"
+
+  # Request smaller persistent volumes.
+  volumeClaimTemplate:
+    ## elasticsearch data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    resources:
+      requests:
+        storage: 1Gi
+
+##
+## External redis configuration
+##
+externalRedis:
+  ## Redis host
+  host:
+
+  ## Redis port
+  port: 6379
+
+##
+## Redis chart configuration
+##
+redis:
+  enabled: true
+  cluster:
+    enabled: false
+  usePassword: false
+  master:
+    disableCommands: |
+
+## New Relic configuration
+##
+newrelic:
+  enabled: false
+  #appName: "My Application"
+  #licenseKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
+
+## Proxy cache configuration
+##
+proxyCache:
+  enabled: false
+  ## host:
+
+## Kubernetes configuration
+##
+service:
+  type: NodePort
+  # HTTP Port
+  port: 80
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  nodePorts:
+    http: ""
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Local
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  sessionAffinity: "None"
+  ## Service annotations done as key:value pairs
+  annotations: {}
+
+## Configure the ingress resource that allows you to access the
+## Vimeet installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## Set to true to enable ingress record generation
+  enabled: true
+
+  ## Set to true if any of the hosts has TLS enabled
+  tls: false
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  certManager: false
+
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
+
+  # Ingress basic-auth login and hashed passwords (using htpasswd)
+  basicAuth:
+    enabled: false
+
+  ## The list of hostnames to be covered with this ingress record.
+  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  hosts:
+  - name: www.vimeet.project.local
+    path: /
+
+    # Set this to true in order to enable TLS on the ingress record
+    tls: false
+
+    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+    tlsSecret: vimeet.local-tls
+
+    # Send trafic to GCE varnish via external service
+    varnish:
+      enabled: false
+      port: 54270
+
+  secrets:
+  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  # - name: vimeet.local-tls
+  #   key:
+  #   certificate:
+
+## Apache Replica scaling
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetAverageUtilization: 60
+
+# JMS worker Replica scaling
+hpaWorker:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetAverageUtilization: 60
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  nfs:
+    enabled: false
+    server: fs-master.vimeet.internal
+    path: /shared
+  ## Vimeet Data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  #existingClaim:
+
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+# Add your own init container or uncomment and modify the given example.
+initContainers:
+  {}
+#  cache-clear:
+#    image: eu.gcr.io/proximum-vimeet-staging/vimeet
+#    imagePullPolicy: Always
+#    command:
+#      - sh
+#      - -c
+#      - cd /var/www/proximum-vimeet.project.local/htdocs/current && bin/console cache:clear --env=prod && exit 0
+#    securityContext:
+#      runAsUser: 33
+#    volumeMounts:
+#      - mountPath: /share/shared
+#        name: vimeet-data
+#      - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+#        name: vimeet-var-cache
+#  cache-warmup:
+#    image: eu.gcr.io/proximum-vimeet-staging/vimeet
+#    imagePullPolicy: Always
+#    command:
+#      - sh
+#      - -c
+#      - cd /var/www/proximum-vimeet.project.local/htdocs/current && bin/console cache:warmup --env=prod
+#    securityContext:
+#      runAsUser: 33
+#    volumeMounts:
+#      - mountPath: /share/shared
+#        name: vimeet-data
+#      - mountPath: /var/www/proximum-vimeet.project.local/htdocs/current/var/cache
+#        name: vimeet-var-cache

@@ -85,8 +85,8 @@
                 {{ form_row(filter_form.hasSpot, {'inline': true}) }}
                 {{ form_row(filter_form.type) }}
 
-                {% if filter_form.category is defined %}
-                    {{ form_row(filter_form.category) }}
+                {% if filter_form.categories is defined %}
+                    {{ form_row(filter_form.categories) }}
                 {% endif %}
 
                 {{ form_row(filter_form.follower) }}

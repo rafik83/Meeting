@@ -24,6 +24,8 @@ interface MeetingRepositoryInterface
      */
     public function set(Meeting $meeting);
 
+    public function findById(int $id): ?Meeting;
+
     /**
      * @param Event  $event
      * @param int    $page

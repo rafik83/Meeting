@@ -85,7 +85,7 @@ class TechEventTokenAuthenticator extends AbstractGuardAuthenticator
     {
         $extraData = $this->extraDataRepository->getExtraDataForEventNameAndValue(
             $credentials['event'],
-            Type::IMPORTED_FROM_TECH_EVENT,
+            Type::TECH_EVENT_IDENTIFIER_MD5,
             $credentials['techtoken']
         );
 

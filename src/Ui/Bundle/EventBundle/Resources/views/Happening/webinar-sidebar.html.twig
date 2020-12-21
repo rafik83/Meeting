@@ -1,11 +1,27 @@
 <div class="side-container hide">
     {% if webinarView.sidebarAllowed %}
         <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i class="icon-Suivant_3"></i></button>
-        <div class="btn-group" role="group">
-            <a class="btn btn-primary" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}</a>
-            <a class="btn btn-gray" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }}</a>
+        <div class="btn-group btn-sidebar" role="group">
+            <a class="btn btn-primary btn-chat" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }} <span></span></a>
+            <a class="btn btn-gray btn-question" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }} <span></span></a>
         </div>
-        <div data-chat-container></div>
+        <div data-chat-container
+             data-href="{{ path('event_chat_messages_list', {sheet: sheet.id, objectType: 'happening', objectId: webinarView.happeningId }) }}"
+             data-vote-chat-href="{{ path('event_chat_messages_vote', {sheet: sheet.id}) }}"
+             data-chat-message-delete="{{ path('event_chat_messages_delete', {sheet: sheet.id}) }}"
+        >
+            <div class="chat-list">
+                {# content filled with javascript #}
+            </div>
+            <form
+                    action="{{ path('event_chat_messages_add', {sheet: sheet.id, objectType: 'happening', objectId: webinarView.happeningId }) }}"
+                    class="chat-form"
+                    data-chat-form
+            >
+                <input type="text" name="content" placeholder="{{ 'happening.webinar.chat.add'|trans }}" maxlength="250" autocomplete="off">
+                <button type="submit"></button>
+            </form>
+        </div>
         <div class="hide"
             data-questions-container
             data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId }) }}"

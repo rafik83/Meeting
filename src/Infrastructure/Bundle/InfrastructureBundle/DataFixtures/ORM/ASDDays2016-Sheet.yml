@@ -151,7 +151,7 @@ Proximum\Vimeet\Domain\Model\SheetCompleteness:
         __construct:
             - '@sheet_asddays_1'
             - 'en'
-            - 50
+            - 100
 
 Proximum\Vimeet\Domain\Model\Participant:
     participant_asddays_1:

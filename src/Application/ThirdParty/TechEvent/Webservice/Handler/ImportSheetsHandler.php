@@ -3,8 +3,8 @@
 namespace Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Handler;
 
 use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Client\WSClient;
+use Proximum\Vimeet\Application\ThirdParty\TechEvent\Webservice\Configuration\MappingConfigurationChecker;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Psr\Log\LoggerInterface;
@@ -26,9 +26,13 @@ class ImportSheetsHandler
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var MappingConfigurationChecker */
+    private $mappingConfigurationChecker;
+
     public function __construct(
         WSClient $WSClient,
         TypeRepositoryInterface $typeRepository,
+        MappingConfigurationChecker $mappingConfigurationChecker,
         TemplateDataFactory $templateDataFactory,
         ConvertContactToSheet $convertContactToSheet,
         LoggerInterface $logger
@@ -38,23 +42,35 @@ class ImportSheetsHandler
         $this->templateDataFactory = $templateDataFactory;
         $this->convertContactToSheet = $convertContactToSheet;
         $this->logger = $logger;
+        $this->mappingConfigurationChecker = $mappingConfigurationChecker;
     }
 
     public function handle(Event $event, array $eventConfiguration): void
     {
         $endpoint = $eventConfiguration['endpoint'] ?? null;
-        $typeId = $eventConfiguration['type'] ?? null;
+
+        if (!$this->mappingConfigurationChecker->isMappingConfigurationValid($eventConfiguration)) {
+            $this->logger->warning(
+                sprintf(
+                    'VIMEET - The mapping for the event %d is not valid : %s',
+                    $event->getId(),
+                    json_encode($eventConfiguration)
+                )
+            );
+
+            return;
+        }
 
         // Unique identifier of the contact, can be IDCONTACT, IdContact for eg.
         $identifier = $eventConfiguration['mandatory_keys']['identifier'] ?? null;
 
-        if (null === $endpoint || null === $typeId || null === $identifier) {
+        if (null === $identifier) {
             return;
         }
 
-        $type = $this->typeRepository->getById($typeId);
+        $types = $this->typeRepository->getTypesByEvent($event);
 
-        if (!$type instanceof Type) {
+        if (empty($types)) {
             return;
         }
 
@@ -64,15 +80,21 @@ class ImportSheetsHandler
             sprintf('VIMEET : Importing %d contacts from techevent on event "%d".', count($contacts), $event->getId())
         );
 
-        $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
-        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type, null);
+        $registrationTemplates = [];
+        $sheetTemplates = [];
+
+        // index templates by type id.
+        foreach ($types as $type) {
+            $registrationTemplates[$type->getId()] = $this->templateDataFactory->createRegistrationFromType($type, null);
+            $sheetTemplates[$type->getId()] = $this->templateDataFactory->createSheetTemplateFromType($type, null);
+        }
 
         foreach ($contacts as $contact) {
             $this->convertContactToSheet->handle(
                 $event,
-                $type,
-                $registrationTemplate,
-                $sheetTemplate,
+                $types,
+                $registrationTemplates,
+                $sheetTemplates,
                 $contact,
                 $eventConfiguration
             );

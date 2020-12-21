@@ -6,16 +6,226 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Updated
 - Update Elasticsearch to 5.6
+- Upgrade NODE version 14.x (LTS)
 
-## [2.56.0] - 2010-10-09
+### Fixed
+- MV289 - Error management chat
+
+### Added
+- VIMEET-2184 - Speakers can prepare before their webinar
+- VIMEET-2234 - API endpoint to access list of happenings
+- Add health check route
+
+## [2.74.1] - 2020-12-14
+### Fixed
+MV-292 - Restrict sendgrid http client to version 3.7
+
+## [2.74.0] - 2020-12-12
+### Updated
+- Upgrade PHP to 7.4
+
+## [2.73.0] - 2020-12-10
+### Fixed
+- fix overlay problem with opentok
+- MV-284 - Fix race conditions on sessionId creation for call visio
+- MV-284 - Generate tokbox token on each meeting start
+- MV290 - Internet Explorer doesn't support forEach method on NodeList
+
+### Updated
+- VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
+
+## [2.72.2] - 2020-12-07
+### Fixed
+- MV285 - Custom button display on mobile
+
+### Added
+- VIMEET-2252 - Reactivate account
+- VIMEET-2285 - Delete message chat webinar
+- VIMEET-2249 - Notification page redirection
+
+## [2.72.1] - 2020-12-02
+### Fixed
+- MV-286 - Fix disconnection when alert is not closed
+
+## [2.72.0] - 2020-12-02
+### Added
+- VIMEET-2185 - Add waiting image/video to webinar
+- VIMEET-2248 - Help tip networking
+
+### Updated
+- VIMEET-2121 - Change visio test process, fix regressions due to changes in VideoConference
+
+## [2.71.4] - 2020-11-30
+### Fixed
+- MV-281 - Fix webinar recording layout when HLS is activated
+
+## [2.71.3] - 2020-11-25
+### Fixed
+- MV-282 - Delete header on player video SQY78
+
+## [2.71.2] - 2020-11-23
+### Fixed
+- MV-278 - Video player SQY78
+
+## [2.71.1] - 2020-11-22
+### Fixed
+- MV-279 - Fix video webinar
+
+## [2.71.0] - 2020-11-20
+### Added
+- VIMEET-2255 - Add speaker's notification desktop webinar: I present
+- VIMEET-2247 - Limit height of spkeaker's title in webinars
+
+### Fixed
+- MV-268 - Start higher button webinar
+- MV-277 - Allow to go to my agenda from the sheet agenda
+
+## [2.70.1] - 2020-11-19
+### Revert
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+
+## [2.70.0] - 2020-11-18
+### Added
+- VIMEET-2269 - Call visio analytics in participants export
+
+### Fixed
+- MV-273 - Fix count in multi-sheet meeting requests list
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+- VIMEET-2198 - Show viewers and timer for viewers in hls mode
+
+## [2.69.1] - 2020-11-16
+### Added
+- VIMEET-2137 - Allow user to access someone else agenda
+
+## [2.69.0] - 2020-11-16
+### Added
+- VIMEET-2270 - Contact tab display if call visio
+- VIMEET-2268 - Call visio analytics on admin dashboard
+- VIMEET-2220 Compute the private chat message count
+- VIMEET-2232 - Allow user to access video webinar when ended even with no participation
+
+## [2.68.0] - 2020-11-09
+### Added
+- VIMEET-2198 - Broadcast webinars in HLS
+
+## [2.67.1] - 2020-11-09
+### Fixed
+- MV-270 - Impossible to open a contact after a meeting
+
+## [2.67.0] - 2020-11-09
+### Fixed
+- VIMEET-2223 - ClearTimeout missing.
+
+### Added
+- VIMEET-2186 - Notifications when new messages or questions during webinar.
+
+### Changed
+- MV-267 - Brazil abolished DST in 2019
+
+## [2.66.1] - 2020-11-05
+### Fixed
+- MV264 - Networking tab only validated or accepted
+
+## [2.66.0] - 2020-11-04
+### Added
+- VIMEET-2223 - Add call visio on private chat (tab networking).
+- VIMEET-2229 - Add field date call visio in Admin.
+- VIMEET-2260 - Add button custom 2.
+
+## [2.65.2] - 2020-11-02
+### Fixed
+- Hotfix - Add default values for analytics options on participant type, to avoid error when type is created by an organizer admin
+
+## [2.65.1] - 2020-10-29
+### Fixed
+- Disable session lock on redis to avoid timeouts for some sessions
+
+## [2.65.0] - 2020-10-29
+### Added
+- VIMEET-2225 - Add related product to video template objects
+
+## [2.64.0] - 2020-10-28
+### Fixed
+- MV-262 - Fix issue in campaign target selector, when using hasRemainingToPay filter
+
+### Updated
+- VIMEET-2208 - Add counts to visit filters in catalog
+
+## [2.63.0] - 2020-10-28
+### Updated
+- VIMEET-2218 - Check networking access to avoid sending useless notifications
+- VIMEET-2242 - Suite Chat Vimeet - Button separate.
+- update translations
+
+## [2.62.1] - 2020-10-26
+### Fixed
+- disable redis doctrine cache
+
+## [2.62.0] - 2020-10-26
+### Added
+- VIMEET-2208 - Filter meeting request by sheet viewed
+
+### Fixed
+- VIMEET-2219 - Apply filter on users added on the fly
+- Add sheet card tag for datetime
+- Fix impersonation route for role with ROLE_ALLOWED_TO_SWITCH
+- VIMEET-2229 - Add call visio networking tab by key date
+
+## [2.61.0] - 2020-10-15
+### Added
+- VIMEET-2244 - Tech Event - Api mapping configuration is now conditional by type.
+
+## [2.60.0] - 2020-10-14
+### Added
+- VIMEET-2240 - Tech Event - custom button in menu use identifier in md5.
+- VIMEET-2245 - Tech Event - retrieve identifier in md5 from source.
+
+### Fixed
+- VIMEET-2224 - Avoid exceptions related to chat and networking submenu
+
+## [2.59.1] - 2020-10-13
+### Updated
+- Update translations
+
+## [2.59.0] - 2020-10-13
+### Added
+- VIMEET-2245 - Login with tech event token in md5
+
+## [2.58.0] - 2020-10-13
+### Added
+- VIMEET-2236 - Add participant id for custom button
+- VIMEET-2240 - Add tech event id contact in md5 for custom button
+- VIMEET-2240 - Add sheet id for custom button
+- VIMEET 2218 - Add tab private chat and tab general chat
+
+### Fixed
+- MV255 - move chat css to event guideline css
+- MV255 - move question css to event guideline css
+- MV255 - separate button chat and button question
+
+## [2.57.0] - 2020-10-13
+### Added
+- VIMEET-2218 - Networking tab and page
+- VIMEET-2219 - Networking tab search participant
+- VIMEET-2222 - Networking / Private chat
+- VIMEET-2221 - Private chat notification toast
+- VIMEET-2220 - Badge on networking tab with unread messages
+
+### Changed
+- Remove command bus usage for translations update commands to prevent DB connections
+
+### Revert
+- VIMEET-1925 - Restore mercure version, with fixed issue on chat update
+
+## [2.56.0] - 2020-10-09
 ### Added
 - VIMET-2177 - Add metrics to sheet export
 
-## [2.55.0] - 2010-10-08
+## [2.55.0] - 2020-10-08
 ### Fixed
 - Hotfix - Prevent invalid extensions (especially php) on uploaded files
 
-## [2.54.0] - 2010-10-07
+## [2.54.0] - 2020-10-07
 ### Fixed
 - MV-254 - Display bullet point in help message
 - Hotfix - Force nomenclature values to lower case (issue Franchise expo 2020)
@@ -131,6 +341,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.44.0] - 2020-09-03
 ### Added
+- VIMEET-1925 - Chat API
 - VIMEET-2106 - The speaking user video is maximized based on audio level
 - Deploy: DB migration without interaction
 - VIMEET-2213 - Translate timezones

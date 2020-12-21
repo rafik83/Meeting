@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Domain\MimeType;
 
+use InvalidArgumentException;
+
 final class MimeType
 {
     public const FORMAT_IMAGE = 'image';
@@ -65,6 +67,18 @@ final class MimeType
         'video/webm', // .webm
     ];
 
+    public const MEDIA_MIME_TYPES = [
+        'image/gif',
+        'image/jpeg',
+        'image/pjpeg',
+        'image/png',
+        'image/x-png',
+        'video/mp4', // .mp4
+        'video/x-msvideo', // .avi
+        'video/webm', // .webm
+
+    ];
+
     public static function getMimeTypesByFormats(array $formats = []): array
     {
         $mimeTypes = [];
@@ -81,5 +95,29 @@ final class MimeType
         }
 
         return $mimeTypes;
+    }
+
+    public static function getFormatByMimeType(string $mimeType): string
+    {
+        if (in_array($mimeType, self::VIDEO_MIME_TYPES, true)) {
+            return MimeType::FORMAT_VIDEO;
+        }
+        if (in_array($mimeType, self::IMAGE_MIME_TYPES, true)) {
+            return MimeType::FORMAT_IMAGE;
+        }
+        if (in_array($mimeType, self::VECTOR_IMAGE_MIME_TYPES, true)) {
+            return MimeType::FORMAT_VECTOR_IMAGE;
+        }
+        if (in_array($mimeType, self::CSV_MIME_TYPES, true)) {
+            return MimeType::FORMAT_CSV;
+        }
+        if (in_array($mimeType, self::PDF_MIME_TYPES, true)) {
+            return MimeType::FORMAT_PDF;
+        }
+        if (in_array($mimeType, self::PPT_MIME_TYPES, true)) {
+            return MimeType::FORMAT_PPT;
+        }
+
+        throw new InvalidArgumentException('Unsupported mime type '.$mimeType);
     }
 }

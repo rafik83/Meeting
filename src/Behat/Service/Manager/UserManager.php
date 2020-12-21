@@ -63,4 +63,14 @@ class UserManager
 
         return $userEvent;
     }
+
+    public function fillInformation(User $user, string $firstname, string $lastname)
+    {
+        $account = new User\Account();
+        $account->setFirstName($firstname);
+        $account->setLastName($lastname);
+        $user->setAccount($account);
+
+        $this->userRepository->set($user);
+    }
 }

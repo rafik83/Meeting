@@ -127,4 +127,19 @@ class QuestionRepository implements QuestionRepositoryInterface
     {
         return $this->entityManager->find(Question::class, $id);
     }
+
+    public function getMessagesCountDuringHappening(Happening $happening): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(question.id)')
+            ->from(Question::class, 'question')
+            ->where('question.happening = :happening')
+            ->andWhere('question.askedDuringWebinar = true')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

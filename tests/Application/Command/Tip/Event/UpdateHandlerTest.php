@@ -38,6 +38,7 @@ class UpdateHandlerTest extends TestCase
             true,
             false,
             true,
+            true,
             $oldDateTime
         );
         $expected->setType($type1->reveal());
@@ -57,6 +58,7 @@ class UpdateHandlerTest extends TestCase
             false,
             true,
             false,
+            true,
             $oldDateTime
         );
 
@@ -80,6 +82,7 @@ class UpdateHandlerTest extends TestCase
                 && $tip->isOnContacts() === $expected->isOnContacts()
                 && $tip->isOnProgram() === $expected->isOnProgram()
                 && $tip->isOnConfirmationPhone() === $expected->isOnConfirmationPhone()
+                && $tip->isOnNetworking() === $expected->isOnNetworking()
                 && $tip->getTranslationTitle('fr') === $expected->getTranslationTitle('fr')
                 && $tip->getTranslationTitle('en') === $expected->getTranslationTitle('en')
                 && $tip->getTranslationContent('fr') === $expected->getTranslationContent('fr')
@@ -105,6 +108,7 @@ class UpdateHandlerTest extends TestCase
         $update->onContacts = true;
         $update->onProgram = false;
         $update->onConfirmationPhone = true;
+        $update->onNetworking = true;
         $update->translations = [
             'fr' => [
                 'title' => 'title fr',

@@ -44,7 +44,7 @@ class EvaluateMeetingHandler
             $fromUser,
             $toUser,
             $this->dateTime,
-            false
+            Contact::ORIGIN_MEETING
         );
 
         $foundContact = $this->contactRepository->find($contact);

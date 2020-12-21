@@ -1,0 +1,3 @@
+Proximum\Vimeet\Domain\Template\TemplateObject\Video:
+    constraints:
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoConstraint: ~

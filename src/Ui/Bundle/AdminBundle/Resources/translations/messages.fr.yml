@@ -147,6 +147,8 @@ admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
 admin.common.export.no: Non
 admin.common.export.yes: Oui
+admin.create_admin.disabled_user: 'Cet utilisateur a été désactivé le %date%'
+admin.create_admin.reactivate_user: 'Réactiver l''utilisateur'
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
@@ -194,7 +196,7 @@ admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
-admin.event.qrcode.checkinAt: Checkin le
+admin.event.qrcode.checkinAt: 'Checkin le'
 admin.event.qrcode.date_checkin: 'Date de checkin'
 admin.event.qrcode.fastcheckin: 'Création de badge'
 admin.event.qrcode.firstName: Prénom
@@ -269,7 +271,8 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO Salon'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO SessionSalon'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 admin.extraParameter.type.crisp_site_id: 'Crisp site ID'
-admin.extraParameter.type.custom_button: 'Bouton custom'
+admin.extraParameter.type.custom_button: 'Bouton custom 1'
+admin.extraParameter.type.custom_button_2: 'Bouton custom 2'
 admin.extraParameter.type.leni_badge_link: 'LENI lien pour le badge'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
@@ -361,7 +364,7 @@ admin.happening.private: Privé
 admin.happening.products: 'Ce sous-évènement est lié aux produits suivants'
 admin.happening.products.tooltip: 'Lié à des produits'
 admin.happening.title: Conférences
-admin.happening.type.interactiveWebinar: Webinaire interactif
+admin.happening.type.interactiveWebinar: 'Webinaire interactif'
 admin.happening.type.videoWebinar: 'Webinaire vidéo'
 admin.happening.type.webinar: Webinaire
 admin.happening.update: Modifier
@@ -427,11 +430,12 @@ admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
 admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l''ensemble des rendez-vous ?'
-admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.deleteAll.meetingPublished: 'Les agendas de RDV ont déjà été publiés.'
+admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
+admin.meeting.dashboard.callVisio: 'RDV en visio lors d''un chat privé'
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
 admin.meeting.dashboard.createdByPlanner: 'RDV algo'
 admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'
@@ -635,6 +639,8 @@ admin.participant_import_result.title.label: 'Resultat de l''importation des par
 admin.participant_import.header.registration: 'Inscription : '
 admin.participant_import.header.sheet: 'Fiche : '
 admin.participant_import.title: 'Importer les participants'
+admin.participant.export.fields.chat_sessions_call_visio: 'Participants rencontrés en call visio'
+admin.participant.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques des fiches'
 admin.participant.export.fields.day_checkin: 'Venu %date%'
 admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
 admin.participant.export.fields.happening.participate: Inscrit
@@ -649,14 +655,13 @@ admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
 admin.participant.export.fields.planning.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
 admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
+admin.participant.export.fields.requested_meetings: 'Nombre de demande de rendez-vous faites'
+admin.participant.export.fields.scheduled_meetings: 'Nombre de rendez-vous programmés'
 admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
 admin.participant.export.fields.user_id: 'ID User'
 admin.participant.export.fields.viewed_sheets: 'Nombre de fiches visitées'
-admin.participant.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques des fiches'
-admin.participant.export.fields.requested_meetings: 'Nombre de demande de rendez-vous faites'
-admin.participant.export.fields.scheduled_meetings: 'Nombre de rendez-vous programmés'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
 admin.participant.export.no: Non
@@ -746,20 +751,20 @@ admin.product.unitPrice: 'Prix unitaire'
 admin.product.updatable: Supprimable
 admin.product.update.action: Modifier
 admin.promotion_code.action.close: Fermer
+admin.promotion_code.batch.new: 'Générer codes en série'
+admin.promotion_code.batch.update: 'Modifier codes en série'
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'
 admin.promotion_code.new: 'Nouveau code'
 admin.promotion_code.notUpdatable: 'Non modifiable car un code a été utilisé dans une commande.'
-admin.promotion_code.batch.new: 'Générer codes en série'
-admin.promotion_code.batch.update: 'Modifier codes en série'
-admin.promotion_code.subtitle.code: 'Codes'
 admin.promotion_code.subtitle.batch: 'Codes en série'
+admin.promotion_code.subtitle.code: Codes
 admin.promotion_code.table.action.edit: Modifier
 admin.promotion_code.table.action.export: Exporter
 admin.promotion_code.table.action.update: Modifier
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
-admin.promotion_code.table.column.number: Nombre de codes
+admin.promotion_code.table.column.number: 'Nombre de codes'
 admin.promotion_code.table.column.prefix: Préfixe
 admin.promotion_code.table.column.stock: Stock
 admin.promotion_code.table.column.title: Titre
@@ -802,7 +807,7 @@ admin.rule.list.action.seeWhat: 'Voit quoi ?'
 admin.rule.list.add.title: 'Ajouter une règle'
 admin.rule.list.column.actions: Actions
 admin.rule.list.column.priority: Priorité
-admin.rule.list.column.restrictions: 'Restrictions sur l''export'
+admin.rule.list.column.restrictions: Restrictions
 admin.rule.list.column.see: Voit
 admin.rule.list.column.who: Qui
 admin.rule.list.content.category: Catégorie
@@ -828,7 +833,7 @@ admin.schedule.slots.generate.back: 'Retour à la liste des créneaux'
 admin.schedule.slots.generate.eventDay: 'Jours de l''évenement:'
 admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
 admin.schedule.slots.table.begin: De
-admin.schedule.slots.table.duration: Durée
+admin.schedule.slots.table.duration: 'Durée en minute'
 admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
@@ -862,31 +867,31 @@ admin.sheet.commercialStatus: 'Statut commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
-admin.sheet.dashboard.by_type.meetings: 'Planifiés'
-admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: 5
-admin.sheet.dashboard.by_type.meetings_evaluated_4_stars: 4
-admin.sheet.dashboard.by_type.meetings_evaluated_3_stars: 3
-admin.sheet.dashboard.by_type.meetings_evaluated_2_stars: 2
-admin.sheet.dashboard.by_type.meetings_evaluated_1_stars: 1
-admin.sheet.dashboard.by_type.meetings_evaluation: 'RDV noté'
-admin.sheet.dashboard.by_type.meetings_not_evaluated: 'Non noté'
+admin.sheet.dashboard.by_type.meetings: Planifiés
+admin.sheet.dashboard.by_type.meetings_evaluated_1_stars: '1'
+admin.sheet.dashboard.by_type.meetings_evaluated_2_stars: '2'
+admin.sheet.dashboard.by_type.meetings_evaluated_3_stars: '3'
+admin.sheet.dashboard.by_type.meetings_evaluated_4_stars: '4'
+admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: '5'
+admin.sheet.dashboard.by_type.meetings_evaluation: 'RDV notés'
+admin.sheet.dashboard.by_type.meetings_not_evaluated: 'Non notés'
 admin.sheet.dashboard.by_type.participants: 'Nombre participants'
 admin.sheet.dashboard.by_type.requests: 'Demandes de rdv'
 admin.sheet.dashboard.by_type.requests_accepted: 'Demandes acceptées'
 admin.sheet.dashboard.by_type.requests_refused: 'Demandes refusées'
 admin.sheet.dashboard.by_type.sheets: 'Nombre de fiches'
-admin.sheet.dashboard.by_type.total: 'Totaux'
+admin.sheet.dashboard.by_type.total: Totaux
 admin.sheet.dashboard.by_type.type: 'Type de participation'
-admin.sheet.dashboard.total_visitors: 'Visiteurs'
-admin.sheet.dashboard.total_unique_visitors: 'Visiteurs uniques'
-admin.sheet.dashboard.visitors_by_day: 'Visiteurs par jour'
 admin.sheet.dashboard.sheets_participants_meetings: 'Fiches, participants et RDV'
+admin.sheet.dashboard.total_unique_visitors: 'Visiteurs uniques'
+admin.sheet.dashboard.total_visitors: Fréquentation
 admin.sheet.dashboard.totalOrders: 'Total des commandes (HT)'
 admin.sheet.dashboard.totalPaid: 'Total soldé (TTC)'
 admin.sheet.dashboard.totalParticipants: 'Total participants'
 admin.sheet.dashboard.totalRemainingToPay: 'Total restant (TTC)'
 admin.sheet.dashboard.totalSheet: 'Total fiches'
 admin.sheet.dashboard.totalSheetType: 'Total fiches par type'
+admin.sheet.dashboard.visitors_by_day: 'Visiteurs par jour'
 admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
@@ -958,6 +963,7 @@ admin.sheet.export.button.label: Exporter
 admin.sheet.export.field.comment: '%author% le %date%: "%comment%"'
 admin.sheet.export.fields.balance: 'Balance TTC'
 admin.sheet.export.fields.category: Catégorie
+admin.sheet.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques'
 admin.sheet.export.fields.comments: Commentaires
 admin.sheet.export.fields.commercial_status: 'Statut commercial'
 admin.sheet.export.fields.event_id: 'ID événement'
@@ -975,8 +981,8 @@ admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.received_requests: 'Propositions reçues'
 admin.sheet.export.fields.registration_date: 'Date inscription'
 admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
-admin.sheet.export.fields.sent_requests: 'Demandes effectuées'
 admin.sheet.export.fields.scheduled_meetings: 'Rendez-vous positionnés'
+admin.sheet.export.fields.sent_requests: 'Demandes effectuées'
 admin.sheet.export.fields.sheet_enable: 'Fiche active'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_spot: 'Lieu attribué'
@@ -985,7 +991,6 @@ admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.fields.views: 'Nombre de visites'
-admin.sheet.export.fields.clicked_elements: 'Nombre de clics sur les contenus dynamiques'
 admin.sheet.export.help: 'L''export est fait selon les filtres sélectionnés'
 admin.sheet.export.invoice.button.label: 'Exporter factures'
 admin.sheet.export.meetings.button.label: 'Exporter RDV'
@@ -1181,6 +1186,7 @@ admin.tip.column.visible.meeting_management: 'Gestion des rendez-vous'
 admin.tip.column.visible.onAgenda: Agenda
 admin.tip.column.visible.onConfirmationPhone: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
 admin.tip.column.visible.onContacts: Contacts
+admin.tip.column.visible.onNetworking: Networking
 admin.tip.column.visible.onPackage: Forfait
 admin.tip.column.visible.onProgram: Programme
 admin.tip.column.visible.onSheet: 'Fiche de présentation'
@@ -1309,6 +1315,7 @@ admin.transactional.mail.substitution.parameter.description.%urlSheet%: 'Lien ve
 admin.transactional.mail.substitution.parameter.description.%urlSheetWithCTA%: 'CTA avec le lien vers la fiche de participation'
 admin.transactional.mail.substitution.parameter.list.title: 'Liste des substitutions disponibles:'
 admin.transactional.notification.link: Notifications
+admin.translations_download.link: 'Télécharger les traductions'
 admin.translations.update: 'Mettre à jour les traductions'
 admin.type_content_define_terms_of_sale.link: 'Conditions générales de vente'
 admin.type_content_define_terms_of_sale.title: 'Définir les conditions générales de vente'
@@ -1349,19 +1356,19 @@ admin.type.paymentConditions.update.title: 'Définition des conditions de paieme
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
-admin.type.registrationPath.addQuestion: "Ajouter une question au parcours d'inscription"
-admin.type.registrationPath.assignNewQuestion: "Créer nouvelle question"
-admin.type.registrationPath.assignParticipationTypes: "Choisir un ou plusieurs types de participation"
-admin.type.registrationPath.link: "Parcours d'inscription"
-admin.type.registrationPath.nextStep: "Etape suivante"
-admin.type.registrationPath.nextToAnswer: "Suite à la réponse"
-admin.type.registrationPath.pathNotCompleted: "Le parcours d'inscription n'est pas complet. Un ou des types de participation sont requis."
-admin.type.registrationPath.title: "Parcours d'inscription"
-admin.type.registrationPath.updateQuestion: "Modifier la question"
-admin.type.registrationPath.removeQuestion.confirmation: "Confirmer la suppression de cette question ?"
-admin.type.registrationPath.removeQuestion.title: "Supprimer la question"
-admin.type.registrationPath.removeTypes.confirmation: "Confirmer la suppression des types assignés ?"
-admin.type.registrationPath.removeTypes.title: "Supprimer les types assignés"
+admin.type.registrationPath.addQuestion: 'Ajouter une question au parcours d''inscription'
+admin.type.registrationPath.assignNewQuestion: 'Créer nouvelle question'
+admin.type.registrationPath.assignParticipationTypes: 'Choisir un ou plusieurs types de participation'
+admin.type.registrationPath.link: 'Parcours d''inscription'
+admin.type.registrationPath.nextStep: 'Etape suivante'
+admin.type.registrationPath.nextToAnswer: 'Suite à la réponse'
+admin.type.registrationPath.pathNotCompleted: 'Le parcours d''inscription n''est pas complet. Un ou des types de participation sont requis.'
+admin.type.registrationPath.removeQuestion.confirmation: 'Confirmer la suppression de cette question ?'
+admin.type.registrationPath.removeQuestion.title: 'Supprimer la question'
+admin.type.registrationPath.removeTypes.confirmation: 'Confirmer la suppression des types assignés ?'
+admin.type.registrationPath.removeTypes.title: 'Supprimer les types assignés'
+admin.type.registrationPath.title: 'Parcours d''inscription'
+admin.type.registrationPath.updateQuestion: 'Modifier la question'
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
@@ -1406,7 +1413,7 @@ admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
 admin.user.events: Evénements
 admin.user.export.contact.evaluation: 'Exporter les stats de notes par utilisateur'
-admin.user.export.title: 'Utilisateurs'
+admin.user.export.title: Utilisateurs
 admin.user.requestedNewPasswordLink: 'Lien de réinitialisation de mot de passe : %url%'
 admin.users.batch.exportFormTemplate: 'Exporter les données de formulaire'
 admin.users.batch.sendMail: 'Envoyer un mail'

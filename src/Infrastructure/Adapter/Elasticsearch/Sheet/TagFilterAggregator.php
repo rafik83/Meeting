@@ -28,7 +28,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
         string $locale,
         array $filters,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         unset($filters['tagFilters'][$tag]);
 
@@ -39,7 +40,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
             1,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         $query = $this->getQuery($builder, $tag);

@@ -8,6 +8,7 @@ import Subscriber from './Subscriber';
 import Counter from './Counter';
 import $ from 'jquery';
 import Settings from './Settings';
+import MercureSubscriber from '../_Subscriber';
 
 import 'bootstrap/js/modal';
 
@@ -29,8 +30,12 @@ function VideoConference(
   this.apiKey = element.getAttribute('data-api-key');
   this.participantPresenceAction = element.getAttribute('data-participant-presence-action');
 
+  this.timer = element.querySelector('.timer');
+
   this.timeRemaining = element.getAttribute('data-time-remaining');
   this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+
+  this.disconnectOnTimeout = element.hasAttribute('data-disconnect-on-timeout');
 
   this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
   this.userCompleteName = element.getAttribute('data-user-complete-name');
@@ -100,7 +105,21 @@ function VideoConference(
     this.join();
   }
 
-  this.countDownBeforeEnd();
+  this.startOnVisioStarted = this.timerContainer && !!this.timerContainer.getAttribute('data-start-on-visio-started');
+  if(!this.startOnVisioStarted) {
+      this.countDownBeforeEnd();
+  }
+
+  if (element.hasAttribute('data-provider-url')) {
+      // call visio topic subscription
+      (function (element) {
+        const providerUrl = element.getAttribute('data-provider-url');
+        const callVisioTopic = element.getAttribute('data-callvisio-topic');
+        const subscriberKey = element.getAttribute('data-subscriber-key');
+        const subscriber = new MercureSubscriber(providerUrl);
+        subscriber.addSubscriber(callVisioTopic, subscriberKey, null);
+      })(element);
+  }
 }
 
 VideoConference.prototype.join = function () {
@@ -211,6 +230,11 @@ VideoConference.prototype.init = function() {
     this.subscribers.push(subscriber);
 
     this.hideElement(this.meetingHelperWaitingContainer);
+    if(this.startOnVisioStarted) {
+        this.countDownBeforeEnd();
+        this.startOnVisioStarted = false;
+        this.timer.classList.remove('hide');
+    }
     this.layout();
 
   }.bind(this));
@@ -642,6 +666,12 @@ VideoConference.prototype.countDownBeforeEnd = function() {
         this.timerContainer,
         countDownEndCallback.bind(this)
     );
+
+    if (this.disconnectOnTimeout) {
+        setTimeout(() => {
+            this.disconnect();
+        }, parseInt(this.timeRemaining, 10) * 1000 + 15000);
+    }
 };
 
 VideoConference.prototype.isScreenShareStream = function (stream) {

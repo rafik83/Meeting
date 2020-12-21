@@ -123,6 +123,13 @@ services:
         tags:
             - { name: security.voter }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
+        tags:
+            - { name: security.voter }
+
     #
     # Form extension
     #
@@ -247,6 +254,15 @@ services:
             - '@translator'
         tags:
             - { name: form.type }
+    form_type_sheet_data.video_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\VideoDataType
+        arguments:
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: 'form.type' }
     form_type_package.participant_and_planning_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
         arguments:

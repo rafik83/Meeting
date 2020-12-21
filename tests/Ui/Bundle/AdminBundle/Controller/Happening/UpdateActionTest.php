@@ -159,10 +159,14 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->happening->isSidebarAllowed()->willReturn(true);
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->happening->allowWebinarOnHLS()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
         $form->createView()->willReturn($formView->reveal());
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
         $update = new Update($this->happening->reveal());
         $this->formFactory
             ->create(
@@ -237,8 +241,12 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->happening->isSidebarAllowed()->willReturn(true);
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
+        $this->happening->allowWebinarOnHLS()->willReturn(true);
 
         $form = $this->prophesize(Form::class);
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
         $update = new Update($this->happening->reveal());
         $this->formFactory
             ->create(

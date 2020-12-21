@@ -51,6 +51,14 @@ Proximum\Vimeet\Domain\Model\Happening:
         webinarRecordZipFileUrl:
             type: text
             nullable: true
+        allowHls:
+            type: boolean
+            options:
+                default: false
+        isStreamOpenToPublic:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

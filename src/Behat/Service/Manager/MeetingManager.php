@@ -185,7 +185,7 @@ class MeetingManager
 
         $meetingRequest = $this->createMeetingRequest($event);
 
-        $spot = $this->spotManager->create($event, 'MyRef', 1, 1, 2);
+        $spot = $this->spotManager->create($event, 'MyRef', 1, 2, 2, true);
 
         return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
@@ -271,5 +271,29 @@ class MeetingManager
         $meeting = $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
 
         return $meeting;
+    }
+
+    public function createVideoMeetingForParticipant(Event $event, Participant $participant)
+    {
+        $sheet = $participant->getSheet();
+        $this->slotManager->create($event, 1);
+        $slots = $this->slotManager->findByEvent($event);
+        $slot = reset($slots);
+
+        if (false === $slot) {
+            throw new \Exception('Meeting Slot not found');
+        }
+
+        $meetingRequest = $this->createMeetingRequest($event, $sheet, [$participant]);
+
+        $spotReference = 'Visio1';
+        $this->spotManager->create($event, $spotReference, 1, 10, true, true, true);
+        $spot = $this->spotManager->getByReference($event, $spotReference);
+
+        if (null === $spot || !$spot->isVisio()) {
+            throw new \Exception('Spot not found');
+        }
+
+        return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
 }

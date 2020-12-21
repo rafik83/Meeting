@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog\Export;
 
 use Elastica\Result;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\View\Catalog\Export\SheetListView;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -39,25 +32,23 @@ class SheetsViewQueryHandler
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @param TranslatorInterface         $translator
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     * @param NomenclatureItemsGetter     $nomenclatureItemsGetter
-     * @param SheetRepositoryInterface    $sheetRepository
-     * @param SheetViewQueryHandler       $sheetViewQueryHandler
-     */
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         TranslatorInterface $translator,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         NomenclatureItemsGetter $nomenclatureItemsGetter,
         SheetRepositoryInterface $sheetRepository,
-        SheetViewQueryHandler $sheetViewQueryHandler
+        SheetViewQueryHandler $sheetViewQueryHandler,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
         $this->translator = $translator;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
         $this->sheetRepository = $sheetRepository;
         $this->sheetViewQueryHandler = $sheetViewQueryHandler;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
     /**
@@ -77,7 +68,8 @@ class SheetsViewQueryHandler
                 $query->locale
             ),
             $query->availableSlotIds,
-            $query->sheetsToExclude
+            $query->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getFilteredByVisitSheetIds($query->filters, $query->user, $query->sheet)
         );
 
         $sheetIds = array_map(function (Result $result) {
@@ -94,7 +86,7 @@ class SheetsViewQueryHandler
                     $sheet,
                     $query->sheet,
                     $query->locale,
-                    $query->event->getFallback(),
+                    $query->event->getLocaleFallback(),
                     $query->isTypeColumn
                 )
             );

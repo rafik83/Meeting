@@ -14,6 +14,7 @@ interface HappeningRepositoryInterface
 
     public function getById(int $id): ?Happening;
 
+
     /**
      * @param Event  $event
      * @param string $locale
@@ -50,6 +51,11 @@ interface HappeningRepositoryInterface
         \DateTimeInterface $day,
         Happening\Category $category = null
     );
+
+    /**
+     * @return Happening[]
+     */
+    public function findByEventAndTypes(Event $event, ?array $participantTypes): array;
 
     /**
      * @param Speaker $speaker
