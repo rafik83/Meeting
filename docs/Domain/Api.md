@@ -1,4 +1,4 @@
-Vimeet est interconnecté avec certains prestataires via leurs apis. Vimeet n'expose pas d'API vers l'extérieur pour le moment.
+Vimeet est interconnecté avec certains prestataires via leurs apis.
 
 La liste des différents prestataires peut être trouvée dans le code du projet dans la rubrique:
 [src/Application/ThirdParty](../../src/Application/ThirdParty)
