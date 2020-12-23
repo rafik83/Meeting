@@ -225,9 +225,11 @@ class RegisterController extends Controller
             'locale' => $locale,
             'locales' => $event->getLocales(),
             'country' => $event->getCountry(),
+            'askLocaleFirst' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $locale = $form->get('locale')->getData();
             $data = $this->handleData(
                 $user,
                 null,

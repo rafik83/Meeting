@@ -121,6 +121,7 @@ class ParticipateHandler
             true,
             $this->dateTime
         );
+        $participant->setLocale($participate->locale);
         $this->participantRepository->add($participant);
 
         $sheet->addParticipant($participant);
