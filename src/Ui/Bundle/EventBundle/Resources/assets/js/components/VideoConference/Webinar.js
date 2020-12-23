@@ -2,20 +2,18 @@
 
 import {CHROME_EXTENSION_URL, TokboxInstance} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
-import Publisher from './Publisher';
+import Publisher, {STREAM_TYPE_CUSTOM, STREAM_TYPE_SCREENSHARE} from './Publisher';
 import VideoSubscriber from './Subscriber';
 import $ from 'jquery';
 import Settings from './Settings';
 import HlsPlayer from './HlsPlayer';
 
-import 'bootstrap/js/tooltip';
-import 'bootstrap/js/popover'; // popover require tooltip
 import Chat from '../_Chat.js';
 import Question from '../_Question.js';
 import NotificationSubscriber from '../_Subscriber';
-import DesktopNotification from './DesktopNotification';
 import Modal from '../Modal';
 import WebinarStatus from './WebinarStatus';
+import SharingManager from './Sharing/Manager';
 
 /**
  * @param {Element} element
@@ -124,7 +122,23 @@ function Webinar(element, isSpeaker) {
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
     this.shareVideoElement = null;
+    // Incoming screen or video sharing
     this.hasMediaSharing = false;
+
+    this.layoutContainer.addEventListener('refresh', () => this.layout());
+    this.layoutContainer.addEventListener('maximize', (event) => this.layoutFocus(event.detail.target));
+    this.layoutContainer.addEventListener('maximizeAll', () => {
+        this.maximizeAllSubscribers();
+        this.layout();
+    });
+
+    if (this.isSpeaker) {
+        this.sharingManager = new SharingManager(this.element, () => this.session, this.layoutContainer, () => this.publisher.getCameraVideo());
+        this.sharingManager.onSharingStarted(this.handleStartStream.bind(this));
+        this.sharingManager.onSharingStopped(this.handleStopStream.bind(this));
+        this.sharingManager.onSharingError((error) => this.showError(error));
+    }
+
     this.latestMediaSharingStreamId = null;
     this.latestMediaSharingType = null;
 
@@ -196,23 +210,8 @@ function Webinar(element, isSpeaker) {
         return;
     }
 
-    this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
-
-    this.mediaStartSharingButtonSelector = '#media-start-sharing';
-    this.sharePopover = $(this.mediaStartSharingButtonSelector, this.element);
-    this.mediaStartSharingButton = this.element.querySelector(this.mediaStartSharingButtonSelector, this.element);
-
-    this.mediaShareUrlVideoMessage = element.getAttribute('data-media-share-url-video-message');
-    this.mediaShareUrlVideoSecurityErrorMessage = element.getAttribute('data-media-share-url-video-security-error-message');
-    this.mediaShareUrlVideoLoadingErrorMessage = element.getAttribute('data-media-share-url-video-loading-error-message');
-    this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
-    this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
-    this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
     this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
     this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
-
-    this.endSharingButton = element.querySelector('#media-stop-sharing');
-    this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
 
     this.toggleAudioElement = element.querySelector('#toggle-audio');
     this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
@@ -235,9 +234,6 @@ function Webinar(element, isSpeaker) {
         true
     );
 
-    this.desktopNotificationTitle = element.getAttribute('data-desktop-notification-title');
-    this.desktopNotificationBody = element.getAttribute('data-desktop-notification-body');
-    this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle,this.desktopNotificationBody);
     this.settings.init(true);
 
     // open to public management
@@ -359,6 +355,7 @@ Webinar.prototype.initWebRTCStack = function() {
 
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
+    // incoming streams
     this.session.on('streamCreated', function (event) {
         if (this.webinarWaitingPlayer) {
             this.webinarWaitingPlayer.remove();
@@ -376,8 +373,7 @@ Webinar.prototype.initWebRTCStack = function() {
             this.hasMediaSharing = true;
             this.latestMediaSharingStreamId = event.stream.streamId;
             this.latestMediaSharingType = subscriber.stream.videoType;
-            this.minimizeAllSubscribers();
-            this.maximize(subscriber.element);
+            this.layoutFocus(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
         }
@@ -557,28 +553,7 @@ Webinar.prototype.initShareMedia = function () {
         return;
     }
 
-    this.showElement(this.mediaStartSharingButton);
-
-    this.sharePopover.popover({
-        animation: false,
-        html: true,
-        placement: 'top',
-        trigger: 'click',
-        content: () => {
-            return `<div class="text-center">
-                <span class="btn btn-share-screen">${this.mediaShareButtonScreenShareMessage}</span><br />
-                <span class="btn btn-share-video">${this.mediaShareButtonVideoShareMessage}</span>
-              </div>`;
-        }
-    });
-
-    this.sharePopover.on('shown.bs.popover', () => {
-        const shareScreenButton = this.element.querySelector('.btn-share-screen');
-        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
-
-        const shareVideoButton = this.element.querySelector('.btn-share-video');
-        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
-    });
+    this.sharingManager.init();
 };
 
 Webinar.prototype.prepareRecordButtons = function () {
@@ -740,7 +715,7 @@ Webinar.prototype.publishStream = function () {
 
     publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
     publisher.on('streamCreated', (event) => {
-        this.handleStream(event.stream, 'video');
+        this.handleStartStream(event.stream, 'video');
     });
     publisher.on('streamDestroyed', (event) => {
         this.handleStopStream(event.stream, 'video');
@@ -805,108 +780,7 @@ Webinar.prototype.showError = function (error) {
     }
 };
 
-Webinar.prototype.askUrlVideo = function (previousUrl) {
-    const url = window.prompt(this.mediaShareUrlVideoMessage, previousUrl);
-
-    if (!url) {
-        return;
-    }
-
-    if ('https://' !== url.substr(0, 8)) {
-        alert(this.mediaShareUrlVideoSecurityErrorMessage);
-
-        return this.askUrlVideo(url);
-    }
-
-    return url;
-};
-
-Webinar.prototype.shareVideo = function () {
-    this.sharePopover.popover('hide');
-
-    if (this.hasMediaSharing) {
-        alert(this.thereIsAlreadyAScreenShareInProgressMessage);
-        return;
-    }
-
-    const videoElement = document.createElement('video');
-    videoElement.setAttribute('crossOrigin', 'anonymous');
-    videoElement.setAttribute('controls', '');
-    videoElement.setAttribute('preload', 'auto');
-    videoElement.setAttribute('controlslist', 'disablePictureInPicture nodownload nofullscreen noremoteplayback');
-    videoElement.setAttribute('disablePictureInPicture', '');
-    this.layoutContainer.appendChild(videoElement);
-    this.shareVideoElement = videoElement;
-
-    if (!videoElement.captureStream) {
-        alert(this.notCompatibleBrowserMessage);
-        this.handleStopSharing();
-        return;
-    }
-
-    const url = this.askUrlVideo();
-
-    if (!url) {
-        this.handleStopSharing();
-        return;
-    }
-
-    this.hideElement(this.mediaStartSharingButton);
-
-    videoElement.addEventListener('error', () => {
-        this.handleStopSharing();
-        alert(this.mediaShareUrlVideoLoadingErrorMessage);
-    }, true);
-
-    videoElement.src = url;
-    videoElement.play();
-
-    const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
-
-    let publisher;
-
-    const publishVideo = () => {
-        const videoTracks = stream.getVideoTracks();
-        const audioTracks = stream.getAudioTracks();
-
-        if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
-            stream.removeEventListener('addtrack', publishVideo);
-
-            this.publisherScreen = new Publisher(null);
-            publisher = this.publisherScreen.create({
-                videoSource: videoTracks[0],
-                audioSource: audioTracks[0],
-                fitMode: 'contain',
-                insertDefaultUI: false,
-            });
-
-            publisher.on('destroyed', () => {
-                this.handleStopSharing();
-            });
-
-            this.showElement(this.endSharingButton);
-            this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
-            this.layout();
-
-            publisher.on('streamCreated', (event) => {
-                this.handleStream(event.stream, this.typeCustomShare);
-            });
-
-            publisher.on('streamDestroyed', (event) => {
-                this.handleStopStream(event.stream, this.typeCustomShare);
-            });
-        }
-    };
-
-    stream.addEventListener('addtrack', publishVideo);
-    publishVideo();
-
-    this.minimizeAllSubscribers();
-    this.maximize(videoElement);
-    this.layout();
-};
-
-Webinar.prototype.handleStream = function (
+Webinar.prototype.handleStartStream = function (
     stream,
     type
 ) {
@@ -927,18 +801,20 @@ Webinar.prototype.handleStopStream = function (
     stream,
     type
 ) {
+    if (!stream) {
+        return;
+    }
     const streamId = stream.streamId;
 
     $.post(this.streamEndpoint, {
-        streamId: streamId,
-        type: type,
-        action: 'stop'
-    }, (response) => {
+        streamId,
+        type,
+        action: 'stop',
     })
-        .fail((error) => {
-            this.showError('Stream stop failed');
-            console.error(error);
-        });
+    .fail((error) => {
+        this.showError('Stream stop failed');
+        console.error(error);
+    });
 };
 
 Webinar.prototype.liveVideo = function () {
@@ -949,130 +825,7 @@ Webinar.prototype.liveVideo = function () {
     liveElement.setAttribute('allowfullscreen', '1');
     this.layoutContainer.appendChild(liveElement);
 
-    this.minimizeAllSubscribers();
-    this.maximize(liveElement);
-    this.layout();
-};
-
-/**
- * Start screensharing
- */
-Webinar.prototype.screenshare = function () {
-    if (!this.isSpeaker) {
-        return;
-    }
-
-    if (this.session === null) {
-        alert('You cannot start screensharing outside of a session');
-        return;
-    }
-
-    if (this.hasMediaSharing) {
-        alert(this.thereIsAlreadyAScreenShareInProgressMessage);
-        return;
-    }
-
-    this.hideElement(this.mediaStartSharingButton);
-    this.sharePopover.popover('hide');
-
-    TokboxInstance.checkScreenSharingCapability(function (response) {
-        if (!response.supported || response.extensionRegistered === false) {
-            alert(this.notCompatibleBrowserMessage);
-            return;
-        }
-
-        if (response.extensionRegistered && response.extensionInstalled === false) {
-            this.installChromeExtension();
-            return;
-        }
-
-        this.publisherScreen = new Publisher(null);
-        const publisherScreen = this.publisherScreen.create({
-            videoSource: this.typeScreenShare,
-            publishAudio: true,
-            name: this.currentUserId,
-            insertDefaultUI: false,
-            maxResolution: { width: 1280, height: 720 },
-        });
-
-        const endSharingButton = document.createElement('button');
-        endSharingButton.textContent = this.endSharingButton.textContent;
-        endSharingButton.classList.add('btn');
-        endSharingButton.classList.add('btn-primary');
-        endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
-
-        this.screenElement = document.createElement('div');
-        this.screenElement.classList.add('screen-share-in-progress');
-        const screenCenteredElement = document.createElement('div');
-        screenCenteredElement.textContent = this.mediaShareScreenShareStatusMessage;
-        screenCenteredElement.appendChild(document.createElement('hr'));
-        screenCenteredElement.appendChild(endSharingButton);
-
-        this.screenElement.appendChild(screenCenteredElement);
-        this.layoutContainer.appendChild(this.screenElement);
-        this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
-
-        this.hasMediaSharing = true;
-        this.minimizeAllSubscribers();
-        this.maximize(this.screenElement);
-        this.layout();
-
-        publisherScreen.on('streamCreated', (event) => {
-            this.handleStream(event.stream, this.typeScreenShare);
-            this.desktopNotification.showPresent();
-        });
-        publisherScreen.on('streamDestroyed', (event) => {
-            this.handleStopStream(event.stream, this.typeScreenShare);
-            this.desktopNotification.closePresent();
-        });
-
-        publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
-    }.bind(this));
-};
-
-/**
- * Callback after screensharing started
- *
- * @param {Object} error
- */
-Webinar.prototype.handlePublishMediaSharing = function (error) {
-    if (error) {
-        console.error(error);
-        this.showError(error);
-        this.handleStopSharing();
-
-        return;
-    }
-
-    this.hasMediaSharing = true;
-    this.layout();
-};
-
-/**
- * Handle stop screen sharing
- */
-Webinar.prototype.handleStopSharing = function () {
-    if (this.publisherScreen) {
-        this.publisherScreen.destroy();
-    }
-
-    if (this.screenElement) {
-        this.screenElement.remove();
-        this.screenElement = null;
-    }
-
-    if (this.shareVideoElement) {
-        this.shareVideoElement.remove();
-        this.shareVideoElement = null;
-    }
-
-    this.hasMediaSharing = false;
-
-    this.maximizeAllSubscribers();
-    this.layout();
-
-    this.showElement(this.mediaStartSharingButton);
-    this.hideElement(this.endSharingButton);
+    this.layoutFocus(liveElement);
 };
 
 Webinar.prototype.createToggleSidebarButton = function () {
@@ -1446,7 +1199,14 @@ Webinar.prototype.installChromeExtension = function () {
 };
 
 Webinar.prototype.isScreenShareStream = function (stream) {
-    return [this.typeScreenShare, this.typeCustomShare].includes(stream.videoType);
+    return [STREAM_TYPE_SCREENSHARE, STREAM_TYPE_CUSTOM].includes(stream.videoType);
+};
+
+/** Focus one element in layout */
+Webinar.prototype.layoutFocus = function (element) {
+    this.minimizeAllSubscribers();
+    this.maximize(element);
+    this.layout();
 };
 
 Webinar.prototype.maximize = function (element) {
@@ -1488,9 +1248,7 @@ Webinar.prototype.autoMaximize = function (subscriber) {
             } else if (now - activity.timestamp > 1000) {
                 // detected audio activity for more than 1s for the first time.
                 activity.talking = true;
-                this.minimizeAllSubscribers();
-                this.maximize(subscriber.element);
-                this.layout();
+                this.layoutFocus(subscriber.element);
             }
         } else if (activity && now - activity.timestamp > 2000) {
             // detected low audio activity for more than 2s
