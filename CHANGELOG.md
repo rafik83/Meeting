@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.75.0] - 2020-12-24
 ### Updated
 - Upgrade NODE version 14.x (LTS)
 
@@ -12,12 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-291 - Exception simultaneous openings meetings
 
 ### Added
-- VIMEET-2284 - Delete question webinar
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
 - VIMEET-2253 - Increment unread message counters synchronously
-- Add health check route
 - VIMEET-2275 - Close notification private chat
+- VIMEET-2284 - Delete question webinar
+- Add health check route
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
