@@ -13,6 +13,9 @@ Encore
     // empty the outputPath dir before each build
     .cleanupOutputBeforeBuild()
 
+    // allow sass/scss files to be processed
+    .enableSassLoader()
+
     // will output as web/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
     .addEntry('js/visio', './src/Ui/Bundle/EventBundle/Resources/assets/js/visio.js')
@@ -35,9 +38,6 @@ Encore
     .addStyleEntry('tinymce/tinymceStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/tinymce.scss')
     // css tokbox chat (legacy)
     .addStyleEntry('css/videoConferenceChatTokbox', './src/Ui/Bundle/EventBundle/Resources/assets/sass/objects/_videoConferenceChatTokbox.scss')
-
-    // allow sass/scss files to be processed
-    .enableSassLoader()
 
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()

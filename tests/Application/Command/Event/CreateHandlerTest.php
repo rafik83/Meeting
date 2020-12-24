@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
@@ -93,7 +85,7 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
-        }))->shouldBeCalled();
+        }))->shouldBeCalled()->willReturn('/path/to/assets/for/event/123');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -200,7 +192,7 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
-        }))->shouldBeCalled();
+        }))->shouldBeCalled()->willReturn('/path/to/assets/for/event/123');
 
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
@@ -302,7 +294,7 @@ class CreateHandlerTest extends TestCase
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
-        }))->shouldNotBeCalled();
+        }))->shouldNotBeCalled()->willReturn('/path/to/assets/for/event/123');
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
@@ -371,7 +363,7 @@ class CreateHandlerTest extends TestCase
 
         $guidelineGenerator->generate(Argument::that(function (Event $expectedEvent) use ($event) {
             return $expectedEvent->getTitle() === $event->getTitle();
-        }))->shouldBeCalled();
+        }))->shouldBeCalled()->willReturn('/path/to/assets/for/event/123');
 
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
             return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();

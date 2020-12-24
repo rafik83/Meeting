@@ -55,6 +55,10 @@ Proximum\Vimeet\Domain\Model\Happening:
             type: boolean
             options:
                 default: false
+        isStreamOpenToPublic:
+            type: boolean
+            options:
+                default: false
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

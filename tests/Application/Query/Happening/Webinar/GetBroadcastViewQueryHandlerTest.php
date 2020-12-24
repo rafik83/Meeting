@@ -25,10 +25,19 @@ class GetBroadcastViewQueryHandlerTest extends TestCase
     protected function setUp()
     {
         $this->happening = $this->prophesize(Happening::class);
+        $this->happening->isStreamOpenToPublic()->willReturn(true);
 
         $this->happeningBroadcastRepository = $this->prophesize(HappeningBroadcastRepositoryInterface::class);
 
         $this->getBroadcastViewQueryHandler = new GetBroadcastViewQueryHandler($this->happeningBroadcastRepository->reveal());
+    }
+
+    public function testWhenStreamIsClosed(): void
+    {
+        $this->happening->isStreamOpenToPublic()->willReturn(false);
+
+        $query = new GetBroadcastViewQuery($this->happening->reveal());
+        self::assertNull($this->getBroadcastViewQueryHandler->handle($query));
     }
 
     public function testHandleWithBroadcast()

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
@@ -85,8 +77,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return RedirectResponse|Response
      */
     public function createAction(Request $request): Response
@@ -122,12 +112,9 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, Event $event)
+    public function updateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -137,6 +124,7 @@ class EventController extends Controller
             'locales'       => $event->getLocales(),
             'currentLocale' => $event->getAvailableLocale($request->getLocale()),
             'event'         => $event,
+            'api_key'       => $event->getApiKey(),
             'submit'        => true,
             'action'        => $this->generateUrl('admin_event_update', ['event' => $event->getId()]),
         ]);
@@ -163,8 +151,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response|RedirectResponse
      */
     public function duplicateAction(Request $request): Response
@@ -217,12 +203,10 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
-    public function practicalInfoAction(Request $request, Event $event)
+    public function practicalInfoAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
