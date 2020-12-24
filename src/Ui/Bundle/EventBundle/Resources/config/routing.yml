@@ -1025,6 +1025,14 @@ event_sheet_happening_webinar_question_add:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
 
+event_sheet_happening_webinar_question_delete:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/delete
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionAction
+
 event_happening_webinar_record:
     path: /sheet/{sheet}/happening/{happening}/webinar/record
     requirements:
@@ -1063,6 +1071,13 @@ event_happening_webinar_stream:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
+
+event_happening_webinar_open_stream_to_public:
+    path: /happening/{happening}/webinar/open/stream
+    requirements:
+        happening: \d+
+    methods: [ POST ]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\OpenStreamToPublicAction
 
 event_happening_webinar_stream_broadcast:
     path: /happening/{happening}/webinar/broadcast/stream

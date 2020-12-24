@@ -56,13 +56,12 @@ class StreamAction
         }
 
         $message = null;
-        $hlsUrl = null;
         $type = $request->request->get('type');
         $streamId = $request->request->get('streamId');
 
         switch ($request->request->get('action')) {
             case 'start':
-                $hlsUrl = $this->commandBus->handle(new StartBroadcast($happening, $type, $streamId));
+                $this->commandBus->handle(new StartBroadcast($happening, $type, $streamId));
                 $message = 'stream_started';
             break;
             case 'stop':
@@ -77,7 +76,6 @@ class StreamAction
         return new JsonResponse([
             'status' => 'ok',
             'message' => $message,
-            'hlsUrl' => $hlsUrl,
         ]);
     }
 }

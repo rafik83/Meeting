@@ -1,6 +1,7 @@
 'use strict';
 
 import $ from "jquery";
+import Modal from "./Modal";
 
 function Question(element) {
     this.questionsContainer = element.querySelector('[data-questions-container]');
@@ -15,6 +16,18 @@ function Question(element) {
     this.chatUnVoteMessage = element.getAttribute('data-chat-unvote-message');
     this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
 
+    this.questionCanDelete = element.hasAttribute('data-question-can-delete');
+
+    if (this.questionCanDelete){
+        this.questionDeleteConfirmModalElement = element.querySelector('[data-modal-delete-question-message]');
+        this.questionButtonConfirm = this.questionDeleteConfirmModalElement.querySelector('[data-modal-confirm]')
+    }
+
+    if (this.questionDeleteConfirmModalElement){
+        this.questionDeleteConfirmModal = new Modal();
+        this.questionDeleteConfirmModal.init(this.questionDeleteConfirmModalElement);
+    }
+
     this.questionListeners = [];
     this.questionMessageCount = 0;
 }
@@ -22,6 +35,7 @@ function Question(element) {
 Question.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
     const voteHref = this.questionsContainer.getAttribute('data-vote-href');
+    const questionMessageDelete = this.questionsContainer.getAttribute('data-question-message-delete');
 
     const $questionsList = $(this.questionsList);
 
@@ -37,8 +51,14 @@ Question.prototype.initQuestions = function () {
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
 
+            const divIcon = rowEl.appendChild(document.createElement('div'));
+            divIcon.classList.add('question-div-icon');
+
             const questionAside = document.createElement('small');
-            questionAside.classList.add('pull-right', 'question-aside');
+            questionAside.classList.add('pull-right', 'question-vote');
+
+            const questionIcon = document.createElement('small');
+            questionIcon.classList.add('pull-right', 'question-icon');
 
             const likeBlock = document.createElement('div');
             const voteCount = document.createElement('span');
@@ -88,8 +108,10 @@ Question.prototype.initQuestions = function () {
 
             const questionCreatedAt = document.createElement('div');
             questionCreatedAt.textContent = item.createdAt;
-            questionAside.appendChild(questionCreatedAt);
-            contentEl.appendChild(questionAside);
+            questionIcon.appendChild(questionCreatedAt);
+            divIcon.appendChild(questionIcon);
+            divIcon.appendChild(questionAside);
+            contentEl.appendChild(divIcon);
             contentEl.appendChild(document.createTextNode(item.questionContent));
 
             const authorEl = rowEl.appendChild(document.createElement('div'));
@@ -114,6 +136,35 @@ Question.prototype.initQuestions = function () {
             }
 
             $questionsList[0].appendChild(rowEl);
+
+
+            const onConfirmDelete = function() {
+                this.questionDeleteConfirmModal.show();
+                /* Delete previous listener */
+                const clonedButton = this.questionButtonConfirm.cloneNode(true);
+                this.questionButtonConfirm.parentNode.replaceChild(clonedButton, this.questionButtonConfirm);
+                this.questionButtonConfirm = clonedButton;
+
+                const payload = { messageId: item.questionId };
+                this.questionButtonConfirm.addEventListener('click', ()=> {
+                    $.post(questionMessageDelete, JSON.stringify(payload), (response) => {
+                        if (response.status !== 'ok') {
+                            this.showError('Message delete failed');
+                        }
+                    }).fail((response)=> {
+                        this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+                    });
+                    this.questionDeleteConfirmModal.hide();
+                });
+            }.bind(this);
+
+            if (this.questionCanDelete) {
+                const questionDeleteMessage = document.createElement('i');
+                questionDeleteMessage.classList.add('glyphicon', 'glyphicon-trash');
+                questionIcon.appendChild(questionDeleteMessage);
+                questionDeleteMessage.addEventListener('click', onConfirmDelete);
+            }
+
         });
         this.questionMessageCount = questionMessageCount;
     }.bind(this))

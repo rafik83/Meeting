@@ -9,6 +9,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer;
+use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
@@ -67,6 +69,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $questionRepository;
 
+    /** @var ObjectProphecy|StartViewerHandler */
+    private $startViewQueryHandler;
+
     private const ALL_NOTIFICATIONS = [AbstractNotification::TYPE_CHAT, AbstractNotification::TYPE_QUESTIONS, AbstractNotification::TYPE_STREAM];
 
     protected function setUp(): void
@@ -80,6 +85,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->isRecordingAllowed = $this->prophesize(IsRecordingAllowed::class);
         $this->dateTime = new \DateTime('2020-03-30 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
+        $this->startViewQueryHandler = $this->prophesize(StartViewerHandler::class);
 
         $this->getWebinarViewQueryHandler = new GetWebinarViewQueryHandler(
             $this->getUserParticipantInfosHandler->reveal(),
@@ -90,7 +96,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $this->questionRepository->reveal(),
-            $this->dateTime
+            $this->dateTime,
+            $this->startViewQueryHandler->reveal()
         );
     }
 
@@ -126,6 +133,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
@@ -146,6 +155,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
+        $happening->isStreamOpenToPublic()->willReturn(true);
 
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
 
@@ -191,6 +201,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
 
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
+
         $this->assertEquals(
             new SpeakerWebinarView(
                 137,
@@ -217,9 +229,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                true,
                 21,
                 false,
                 0,
+                true,
                 true
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -233,6 +247,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $date = new \DateTime('2020-03-30 11:50:00');
         $user = $this->prophesize(User::class);
         $user->getFirstname()->willReturn('Michel');
@@ -280,6 +296,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
+        $happening->isStreamOpenToPublic()->willReturn(true);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $session = $this->prophesize(Session::class);
@@ -323,7 +340,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             $this->happeningBroadcastRepository->reveal(),
             $this->isRecordingAllowed->reveal(),
             $this->questionRepository->reveal(),
-            $date
+            $date,
+            $this->startViewQueryHandler->reveal()
         );
 
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
@@ -335,6 +353,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             )
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
 
         $this->assertEquals(
             new SpeakerWebinarView(
@@ -362,9 +382,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                true,
                 21,
                 false,
                 0,
+                true,
                 true
             ),
             $getWebinarViewQueryHandler->handle(
@@ -403,6 +425,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getId()->shouldBeCalled()->willReturn(1);
         $happening->getTitle('en')->shouldBeCalled()->willReturn(
@@ -424,6 +448,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
+        $happening->isStreamOpenToPublic()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -467,6 +492,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->recordArchiveRepository->hasStartedRecordArchiveForHappening($happening->reveal())
             ->shouldBeCalled()
             ->willReturn(true);
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(0);
 
         $this->assertEquals(
             new SpeakerWebinarView(
@@ -517,9 +544,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 true,
                 false,
+                true,
                 21,
                 false,
                 0,
+                false,
                 false
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -535,6 +564,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->willReturn($event->reveal());
         $happening->getId()->shouldBeCalled()->willReturn(1);
@@ -556,10 +587,13 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
+        $happening->isStreamOpenToPublic()->willReturn(true);
 
         $this->videoConferenceAdapter->getSession(Argument::any())->shouldNotBeCalled();
         $this->videoConferenceAdapter->getApiKey()->shouldNotBeCalled();
         $this->videoConferenceAdapter->generateAccessToken(Argument::any())->shouldNotBeCalled();
+
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
 
         $happening->getParticipations()->shouldNotBeCalled();
         $this->getUserParticipantInfosHandler->handle(Argument::any())->shouldNotBeCalled();
@@ -568,6 +602,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->notificationSubscriber->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
             ->shouldBeCalled()
             ->willReturn('xxxxyyy');
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount(1)->shouldBeCalled()->willReturn(41);
 
         $this->assertEquals(
             new ViewerWebinarView(
@@ -592,7 +628,9 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 true,
                 21,
                 false,
-                null
+                null,
+                42,
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
@@ -630,6 +668,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getAutoArchiveWebinar()->shouldBeCalled()->willReturn(false);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happeningId = 1;
@@ -650,6 +690,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
+        $happening->isStreamOpenToPublic()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -721,9 +762,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                true,
                 21,
                 true,
                 42,
+                true,
                 true
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -732,13 +775,15 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         );
     }
 
-    public function testHandleVideoWebinarBroadcastViewer(): void
+    public function testHandleVideoWebinarBroadcastViewerWithOpenStreamToPublic(): void
     {
         $user = $this->prophesize(User::class);
         $user->getId()->shouldBeCalled()->willReturn(111);
 
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+
         $happening = $this->prophesize(Happening::class);
         $happening->getEvent()->willReturn($event->reveal());
         $happeningId = 1558;
@@ -759,6 +804,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
+        $happening->isStreamOpenToPublic()->willReturn(true);
 
         $session = $this->prophesize(Session::class);
         $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
@@ -775,6 +821,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             false
         )->shouldBeCalled()->willReturn('User token');
 
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
+
         $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
         $this->notificationSubscriber
             ->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
@@ -790,6 +838,8 @@ class GetWebinarViewQueryHandlerTest extends TestCase
             'http://some-video-provider.com/stream.hls'
         );
         $this->happeningBroadcastRepository->getByHappening($happening->reveal())->shouldBeCalled()->willReturn($happeningBroadcast);
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount($happeningId)->shouldBeCalled()->willReturn(41);
 
         $this->assertEquals(
             new ViewerWebinarView(
@@ -814,7 +864,106 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 21,
                 true,
-                'http://some-video-provider.com/stream.hls'
+                'http://some-video-provider.com/stream.hls',
+                42,
+                0
+            ),
+            $this->getWebinarViewQueryHandler->handle(
+                new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')
+            )
+        );
+    }
+
+    public function testHandleVideoWebinarBroadcastViewerWithClosedStreamToPublic(): void
+    {
+        $user = $this->prophesize(User::class);
+        $user->getId()->shouldBeCalled()->willReturn(111);
+
+        $event = $this->prophesize(Event::class);
+        $event->getId()->shouldBeCalled()->willReturn(137);
+        $event->getTimeZone()->willReturn('Europe/Paris');
+        $happening = $this->prophesize(Happening::class);
+        $happening->getEvent()->willReturn($event->reveal());
+        $happeningId = 1558;
+        $happening->getId()->shouldBeCalled()->willReturn($happeningId);
+        $happening->getTitle('en')->shouldBeCalled()->willReturn('Lorem ipsum dolor sit');
+        $happening->hasWebinarSessionId()->shouldBeCalled()->willReturn(true);
+        $happening->getWebinarSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
+        $happening->isInteractiveWebinar()->shouldBeCalled()->willReturn(false);
+        $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
+        $happening->getSpeakers()->shouldBeCalled()->willReturn([]);
+        $happening->getBegin()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 11:55:00'));
+        $happening->getEnd()->shouldBeCalled()->willReturn(new \DateTime('2020-03-30 12:15:00'));
+        $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
+        $happening->getWebinarWaitingMediaFile('en')->shouldBeCalled()->willReturn('/path/to/video.mp4');
+        $happening->getWebinarWaitingMediaType('en')->shouldBeCalled()->willReturn(MimeType::FORMAT_VIDEO);
+        $happening->getLiveUrl()->willReturn(null);
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
+        $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
+        $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
+        $happening->isStreamOpenToPublic()->willReturn(false);
+
+        $session = $this->prophesize(Session::class);
+        $session->getSessionId()->shouldBeCalled()->willReturn('webinar-session-id');
+
+        $this->videoConferenceAdapter->getSession('webinar-session-id')->shouldBeCalled()->willReturn(
+            $session->reveal()
+        );
+        $this->videoConferenceAdapter->getApiKey()->shouldBeCalled()->willReturn('api key');
+
+        $this->videoConferenceAdapter->generateAccessToken(
+            $session->reveal(),
+            new \DateTime('2020-03-30 12:15:00'),
+            [],
+            false
+        )->shouldBeCalled()->willReturn('User token');
+
+        $this->startViewQueryHandler->handle(new StartViewer($happening->reveal()))->shouldBeCalled();
+
+        $this->notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://notification-hub.dev/entrypoint');
+        $this->notificationSubscriber
+            ->getHappeningSubscriberKey($happening->reveal(), $user->reveal(), self::ALL_NOTIFICATIONS)
+            ->shouldBeCalled()
+            ->willReturn('xxxxyyy');
+
+        $happeningBroadcast = new HappeningBroadcast(
+            $happening->reveal(),
+            '12345',
+            false,
+            new \DateTimeImmutable('2020-10-27 10:30:00'),
+            new \DateTimeImmutable('2020-10-27 12:30:00'),
+            'http://some-video-provider.com/stream.hls'
+        );
+
+        $this->notificationSubscriptions->getStreamSubscriptionsCount($happeningId)->shouldBeCalled()->willReturn(1);
+
+        $this->assertEquals(
+            new ViewerWebinarView(
+                137,
+                $happeningId,
+                111,
+                'Lorem ipsum dolor sit',
+                false,
+                'User token',
+                null,
+                'api key',
+                new NotificationView('http://notification-hub.dev/entrypoint', 'xxxxyyy'),
+                [],
+                [],
+                new TimeRangeView(new \DateTime('2020-03-30 11:55:00'), new \DateTime('2020-03-30 12:15:00')),
+                $this->dateTime,
+                900,
+                '/path/image.jpg',
+                new WaitingMediaView('/path/to/video.mp4', MimeType::FORMAT_VIDEO),
+                null,
+                true,
+                false,
+                21,
+                true,
+                null,
+                2,
+                0
             ),
             $this->getWebinarViewQueryHandler->handle(
                 new GetWebinarViewQuery($happening->reveal(), $user->reveal(), 'en')

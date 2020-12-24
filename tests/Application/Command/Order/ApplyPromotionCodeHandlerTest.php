@@ -61,7 +61,7 @@ class ApplyPromotionCodeHandlerTest extends TestCase
 
         $this->event = $this->prophesize(Event::class);
         $this->event->getCurrency()->willReturn('EUR');
-        $this->event->getVat()->willReturn(Event::VAT_MODE_ET);
+        $this->event->getVat()->willReturn(0.2);
 
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getEvent()->willReturn($this->event->reveal());

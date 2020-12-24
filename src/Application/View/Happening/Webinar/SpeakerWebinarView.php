@@ -31,17 +31,17 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $isWebinarRecordAutoStart;
 
-    /** @var int */
-    public $timeRemainingBeforeStartInSeconds;
-
     /** @var bool */
     public $allowWebinarOnHLS;
 
-    /** @var int $viewersCount, used only for broadcast mode */
-    public $viewersCount;
+    /** @var bool */
+    public $isStreamOpenToPublic;
 
     /** @var bool */
     public $canDeleteChatMessage;
+
+    /** @var bool */
+    public $canDeleteQuestionMessage;
 
     /**
      * @param WebinarSpeakerView[]     $speakers
@@ -72,10 +72,12 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
         bool $isWebinarRecordAutoStart,
+        bool $isStreamOpenToPublic,
         int $questionsCount = 0,
         bool $allowWebinarOnHLS = false,
         int $viewersCount = 0,
-        bool $canDeleteChatMessage = false
+        bool $canDeleteChatMessage = false,
+        bool $canDeleteQuestionMessage = false
     ) {
         parent::__construct(
             $eventId,
@@ -95,18 +97,21 @@ class SpeakerWebinarView extends AbstractWebinarView
             $liveUrl,
             $sidebarAllowed,
             $questionsCount,
-            $isVideoWebinarAndHappeningIsEnded
+            $isVideoWebinarAndHappeningIsEnded,
+            $viewersCount,
+            $timeRemainingBeforeStartInSeconds
         );
 
         $this->timeRemainingInSeconds = $timeRemainingInSeconds;
-        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
         $this->stopTimestamp = $stopTimestamp;
         $this->warningTimeRemainingInSeconds = $warningTimeRemainingInSeconds;
         $this->isWebinarRecorded = $isWebinarRecorded;
         $this->isWebinarRecording = $isWebinarRecording;
         $this->isWebinarRecordAutoStart = $isWebinarRecordAutoStart;
         $this->allowWebinarOnHLS = $allowWebinarOnHLS;
+        $this->isStreamOpenToPublic = $isStreamOpenToPublic;
         $this->viewersCount = $viewersCount;
         $this->canDeleteChatMessage = $canDeleteChatMessage;
+        $this->canDeleteQuestionMessage = $canDeleteQuestionMessage;
     }
 }

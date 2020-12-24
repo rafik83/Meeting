@@ -89,7 +89,11 @@
                     <hr>
                     {% block action %}
                     <button class="btn btn-primary" id="visio-settings-validate">
-                        {{ 'event.visio.settings.start'|trans }}
+                        {% if needPreparation|default(false) %}
+                            {{ 'event.visio.settings.start_preparation'|trans }}
+                        {% else %}
+                            {{ 'event.visio.settings.start'|trans }}
+                        {% endif %}
                     </button>
                     {% endblock %}
                 </div>
