@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -110,7 +111,9 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => 1])->shouldBeCalled()
             ->willReturn('navigation.category.meeting.link');
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets, $requestRepository->reveal());
         $menuButtonViews = $handler->handle($query);
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
@@ -182,7 +185,8 @@ class SubmenuViewQueryHandlerTest extends TestCase
             ->willReturn('navigation.category.meeting.link')
         ;
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets);
+        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets, $requestRepository->reveal());
         $menuButtonViews = $handler->handle(
             new CatalogSubmenuViewQuery(
                 $user,

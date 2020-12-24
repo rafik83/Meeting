@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2285 - Delete message chat webinar
 - VIMEET-2249 - Notification page redirection
 
+### Added
+- VIMEET-2261 - Add pending request counter
+
 ## [2.72.1] - 2020-12-02
 ### Fixed
 - MV-286 - Fix disconnection when alert is not closed
