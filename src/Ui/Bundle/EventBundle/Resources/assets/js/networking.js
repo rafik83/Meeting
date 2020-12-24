@@ -2,10 +2,26 @@ import Chat from './components/_Chat';
 import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
 import ParticipantListFilter from './components/_ParticipantListFilter';
-import NetworkingNewMessageCounter from './components/_NetworkingNewMessageCounter';
+import { NetworkingBadgeManager, BADGE_TYPE } from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
+
+const { PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM } = BADGE_TYPE;
+
+const CHAT_TAB = {
+    PRIVATE: "private",
+    GENERAL: "general",
+}
+
+let activeChatTab = CHAT_TAB.GENERAL;
+
+const doesChatItemExistsFromAuthor = (authorId) => {
+    const elements = document.querySelectorAll('[chat-item-for-user-id]');
+    return Array.from(elements).findIndex((item) => {
+        return item.getAttribute('chat-item-for-user-id') == authorId;
+    }) !== -1
+}
 
 export default function initNetworking(target, userConnection, notificationCallVisio) {
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
@@ -23,6 +39,42 @@ export default function initNetworking(target, userConnection, notificationCallV
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
 
+    const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
+
+    const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
+    const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
+    const unreadGeneralChatMessageCountNodes = document.querySelectorAll(`[${GENERALCHAT}]`);
+    const chatItems = document.querySelectorAll(`[${SINGLE_DISCUSSION_ITEM}]`);
+
+    const networkingBadgeManager = new NetworkingBadgeManager();
+
+    const privateChatStartingCount = networkingBadgeManager.getUnreadChatMessageStartingCount(
+        unreadPrivateChatMessageCountNodes[0],
+        PRIVATECHAT
+    );
+
+    const generalChatStartingCount = networkingBadgeManager.getUnreadChatMessageStartingCount(
+        unreadGeneralChatMessageCountNodes[0],
+        GENERALCHAT
+    );
+
+    networkingBadgeManager.createChatMessageCountBadge(unreadPrivateChatMessageCountNodes[0], PRIVATECHAT, privateChatStartingCount);
+    networkingBadgeManager.createChatMessageCountBadge(unreadGeneralChatMessageCountNodes[0], GENERALCHAT, generalChatStartingCount);
+    networkingBadgeManager.createDiscussionItemCounterBadge(chatItems);
+    networkingBadgeManager.createMenuBadgeCounters(headerSubmenuNetworkingBadgeNodes, privateChatStartingCount + generalChatStartingCount)
+
+    const callback = (notification) => {
+        const payload = JSON.parse(notification.data);
+
+        if (payload.action === "add_chat_message" && doesChatItemExistsFromAuthor(payload.authorId)) {
+            networkingBadgeManager.updateBadgeCounterValue(PRIVATECHAT, 1);
+            networkingBadgeManager.incrementMenuBadgesCounter()
+            networkingBadgeManager.incrementChatItemBadgeCounter(payload.authorId)
+        }
+    };
+
+    userConnection.addListener(callback);
+
     function showChatPrivate() {
         chatGeneralContainer.classList.add('hide');
         chatPrivateContainer.classList.remove('hide');
@@ -30,6 +82,8 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatPrivateButton.classList.remove('btn-gray');
         chatGeneralButton.classList.add('btn-gray');
         chatGeneralButton.classList.remove('btn-primary');
+
+        activeChatTab = CHAT_TAB.PRIVATE
     }
 
     function showChatGeneral() {
@@ -39,6 +93,8 @@ export default function initNetworking(target, userConnection, notificationCallV
         chatPrivateButton.classList.add('btn-gray');
         chatGeneralButton.classList.remove('btn-gray');
         chatGeneralButton.classList.add('btn-primary');
+
+        activeChatTab = CHAT_TAB.GENERAL
     }
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
@@ -79,6 +135,11 @@ export default function initNetworking(target, userConnection, notificationCallV
             }
 
             if (payload.action === 'add_chat_message') {
+                if (activeChatTab !== CHAT_TAB.GENERAL) {
+                    networkingBadgeManager.updateBadgeCounterValue(GENERALCHAT, 1);
+                    networkingBadgeManager.incrementMenuBadgesCounter();
+                }
+
                 targetChat.reload();
                 return;
             }
@@ -145,6 +206,21 @@ export default function initNetworking(target, userConnection, notificationCallV
             this.currentModal = null;
         },
         open: function (participantNode) {
+
+            const authorId = participantNode.getAttribute("data-participant-user-id");
+
+            if (doesChatItemExistsFromAuthor(authorId)) {
+                const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
+                networkingBadgeManager.updateBadgeCounterValue(
+                    PRIVATECHAT, -deltaToRemove
+                );
+
+                networkingBadgeManager.decreaseChatItemMessageCounter(
+                    authorId
+                );
+                networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
+            }
+
             const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
             const privateChatModalId = 'private-chat-' + toUserId;
             let modal = document.getElementById(privateChatModalId);
@@ -196,7 +272,7 @@ export default function initNetworking(target, userConnection, notificationCallV
     modalManager.close.bind(modalManager);
     participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
 
-    $('.networking_container').on('click', '[data-close-modal]', ()=> {
+    $('.networking_container').on('click', '[data-close-modal]', () => {
         modalManager.close();
     });
 
@@ -210,10 +286,4 @@ export default function initNetworking(target, userConnection, notificationCallV
             modalManager.open(toUserParticipantNode);
         }
     }
-    const newMessageItems = document.querySelectorAll("[data-new-messages-count");
-    const networkingPageDataNodeElements = document.querySelectorAll("[data-submenu='networking']");
-
-    const networkingMessageCounter = new NetworkingNewMessageCounter(newMessageItems);
-
-    networkingMessageCounter.appendNewMessageBadge(networkingPageDataNodeElements);
 }
