@@ -6,6 +6,7 @@ fos_elastica:
             index_name: "app_%kernel.environment%"
             settings:
                 index:
+                    max_result_window: 100000
                     analysis:
                         analyzer:
                             lowercaseAnalyzer:
@@ -28,17 +29,19 @@ fos_elastica:
                                 max_gram: 20
             types:
                 sheet:
-                    mappings:
+                    properties:
                         id:
                             type: integer
                             index: "not_analyzed"
                         sheetName:
-                            type: string
+                            type: text
                             analyzer: "sheetAnalyzer"
+                            fielddata: true
                             fields:
                                 raw:
                                     type: string
                                     analyzer: "lowercaseAnalyzer"
+                                    fielddata: true
                                 autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
@@ -90,9 +93,9 @@ fos_elastica:
                                             type: string
                                         value:
                                             type: string
+                                            fielddata: true
                         filledFilter:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 key:
                                     type: string
@@ -104,7 +107,6 @@ fos_elastica:
                             type: integer
                         followUp:
                             type: integer
-                            nullable: true
                             null_value: 0
                         commercialStatus:
                             type: string
@@ -157,14 +159,13 @@ fos_elastica:
                         hasSpot:
                             type: boolean
                         spotReference:
-                            type: String
+                            type: string
                         attend:
                             type: boolean
                         hasGroup:
                             type: boolean
                         reminderDate:
                             type: date
-                            nullable: true
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
@@ -195,45 +196,45 @@ fos_elastica:
                             type: string
                             index: "not_analyzed"
                         city:
-                            type: multi_field
+                            type: string
                             fields:
-                                city:
-                                    type: string
-                                    analyzer: "lowercaseAnalyzer"
                                 city_autocomplete:
-                                    type: string
                                     analyzer: "autocomplete"
+                                    type: text
+                                    index: true
+                            analyzer: "lowercaseAnalyzer"
+                            fielddata: true
                         country:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 label:
                                     type: string
                                     analyzer: "lowercaseAnalyzer"
+                                    fielddata: true
                                 label_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
                                 locale:
-                                    type: string
+                                    type: keyword
                                     index: "not_analyzed"
                         keywords:
                             type: nested
-                            index: "not_analyzed"
                             properties:
                                 label:
                                     type: string
                                     analyzer: "lowercaseAnalyzer"
+                                    fielddata: true
                                 label_autocomplete:
                                     type: string
                                     analyzer: "autocomplete"
                                 locale:
-                                    type: string
-                                    index: "not_analyzed"
+                                    type: keyword
+                                    index: true
                         availableSlotIds:
                             type: nested
                             properties:
                                 id:
-                                    type: integer
+                                    type: long
                     persistence:
                         elastica_to_model_transformer:
                             ignore_missing: true

@@ -86,7 +86,7 @@ class ElasticaPersisterTest extends TestCase
             $index,
             $serializer->reveal()
         );
-        $elasticaPersister->persist('id', [$userEventView]);
+        $elasticaPersister->persist('uid', [$userEventView]);
     }
 
     public function testDeleteIds()

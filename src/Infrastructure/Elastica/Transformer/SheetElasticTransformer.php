@@ -417,6 +417,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
             if (isset($items['items'])) {
                 foreach ($items['items'] as $item) {
+                    if (is_array($item)) {
+                        foreach ($item as $element) {
+                            $nomenclatureItems[]['key'] = mb_strtolower($element);
+                        }
+
+                        continue;
+                    }
+
                     $nomenclatureItems[]['key'] = mb_strtolower($item);
                 }
             }

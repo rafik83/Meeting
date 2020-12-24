@@ -44,6 +44,6 @@ class UpdateHandler
             return;
         }
 
-        $this->elasticSearchPersister->persist('id', $userEventViews);
+        $this->elasticSearchPersister->persist('uid', $userEventViews);
     }
 }
