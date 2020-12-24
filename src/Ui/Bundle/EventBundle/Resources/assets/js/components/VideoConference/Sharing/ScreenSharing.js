@@ -23,7 +23,7 @@ export default class ScreenSharing {
         this.desktopNotification = new DesktopNotification(this.desktopNotificationTitle, this.desktopNotificationBody);
 
         this.sharingActive = false;
-        this.pipSupported = false;
+        this.pipVideoElement = null;
     }
 
     startSharing() {
@@ -87,23 +87,22 @@ export default class ScreenSharing {
             if (videoElement && document.pictureInPictureEnabled && !videoElement.disablePictureInPicture) {
                 try {
                     await videoElement.requestPictureInPicture();
-                    window.onfocus = () => document.pictureInPictureElement && document.exitPictureInPicture();
-                    window.onblur = () => {
-                        if (!document.pictureInPictureElement) {
-                            videoElement.requestPictureInPicture();
-                        }
-                    };
-                    this.pipSupported = true;
+                    this.pipVideoElement = videoElement;
+                    window.addEventListener('blur', this.onWindowBlurred.bind(this));
                 } catch (err) {
                     console.error(err);
                 }
+            } else {
+                this.pipVideoElement = null;
             }
 
             publisherScreen.on("streamCreated", (event) => {
                 this.onSharingStartedCallback(event.stream, STREAM_TYPE_SCREENSHARE);
                 this.currentStream = event.stream;
-                if (!this.pipSupported) {
+                if (!this.pipVideoElement) {
                     this.desktopNotification.showPresent();
+                } else {
+                    window.addEventListener('click', this.onWindowFocused.bind(this));
                 }
             });
             publisherScreen.on("streamDestroyed", () => {
@@ -118,6 +117,18 @@ export default class ScreenSharing {
                 this.currentStream = null;
             });
         });
+    }
+
+    onWindowFocused() {
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture();
+        }
+    }
+
+    onWindowBlurred() {
+        if (!document.pictureInPictureElement && this.pipVideoElement) {
+            this.pipVideoElement.requestPictureInPicture();
+        }
     }
 
     /**
@@ -149,11 +160,11 @@ export default class ScreenSharing {
         if (document.pictureInPictureElement) {
             await document.exitPictureInPicture();
         }
-        if (window.onfocus) {
-            window.onfocus = null;
-        }
-        if (window.onblur) {
-            window.onblur = null;
+        if (this.pipVideoElement) {
+            this.onWindowFocused();
+            window.removeEventListener('click', this.onWindowFocused);
+            window.removeEventListener('blur', this.onWindowBlurred);
+            this.pipVideoElement = null;
         }
 
         if (this.desktopNotification.isOpened()) {

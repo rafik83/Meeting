@@ -41,14 +41,6 @@ Publisher.prototype.create = function(options) {
   return this.publisher;
 };
 
-/**
- * Disable video stream and hide publisher element
- */
-Publisher.prototype.disableVideo = function (publisherStream) {
-  publisherStream.publishVideo(false);
-  publisherStream.element.style.display = 'none';
-};
-
 Publisher.prototype.destroy = function() {
   this.publisher.destroy();
 };
@@ -68,7 +60,8 @@ Publisher.prototype.isScreensharing = function() {
  * return DOM element of user's webcam, if active, else null
  */
 Publisher.prototype.getCameraVideo = function() {
-    if (this.publisher && this.publisher.stream && this.publisher.stream.videoType === STREAM_TYPE_CAMERA) {
+    if (this.publisher && this.publisher.stream
+        && this.publisher.stream.hasVideo && this.publisher.stream.videoType === STREAM_TYPE_CAMERA) {
         return this.publisher.element;
     }
 
