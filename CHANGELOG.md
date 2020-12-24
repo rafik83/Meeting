@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade NODE version 14.x (LTS)
 
 ### Fixed
-- MV289 - Error management chat
+- MV-289 - Error management chat
+- MV-291 - Exception simultaneous openings meetings
 
 ### Added
 - VIMEET-2184 - Speakers can prepare before their webinar
@@ -17,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
-MV-292 - Restrict sendgrid http client to version 3.7
+- MV-292 - Restrict sendgrid http client to version 3.7
 
 ## [2.74.0] - 2020-12-12
 ### Updated
@@ -28,14 +29,14 @@ MV-292 - Restrict sendgrid http client to version 3.7
 - fix overlay problem with opentok
 - MV-284 - Fix race conditions on sessionId creation for call visio
 - MV-284 - Generate tokbox token on each meeting start
-- MV290 - Internet Explorer doesn't support forEach method on NodeList
+- MV-290 - Internet Explorer doesn't support forEach method on NodeList
 
 ### Updated
 - VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
 
 ## [2.72.2] - 2020-12-07
 ### Fixed
-- MV285 - Custom button display on mobile
+- MV-285 - Custom button display on mobile
 
 ### Added
 - VIMEET-2252 - Reactivate account
