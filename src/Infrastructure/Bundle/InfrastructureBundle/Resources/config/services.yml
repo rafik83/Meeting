@@ -4135,6 +4135,8 @@ services:
             - '@query.happening.happening_participation_query_handler'
             - '@repository.unavailability.mass_repository'
             - '@query.happening.full_happening_query_handler'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
     query.happening.full_happening_query_handler:

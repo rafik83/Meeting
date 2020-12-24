@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
+- VIMEET-2278 - Participant's program displayed according his timezone
 - VIMEET-2253 - Increment unread message counters synchronously
 - VIMEET-2275 - Close notification private chat
 - VIMEET-2284 - Delete question webinar
