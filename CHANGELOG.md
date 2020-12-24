@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
 - Add health check route
+- VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
