@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateData;
 
 use Proximum\Vimeet\Application\Command\Command;
@@ -19,13 +11,13 @@ class MailToAdmin implements Command
 {
     /** @var Admin */
     public $admin;
-    
+
     /** @var File */
     public $file;
-    
+
     /** @var Event */
     public $event;
-    
+
     /** @var string */
     public $locale;
 

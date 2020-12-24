@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
 use PHPUnit\Framework\TestCase;
@@ -80,7 +72,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->event->getLocales()->willReturn(['fr', 'en']);
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $this->event->getAvailableLocale('en')->willReturn('en');
-        
+
         $this->type1 = $this->prophesize(Type::class);
         $this->type1->getId()->willReturn(11);
 

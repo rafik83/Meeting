@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution;
 
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;
