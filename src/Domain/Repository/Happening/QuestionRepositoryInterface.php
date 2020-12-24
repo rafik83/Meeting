@@ -21,6 +21,7 @@ interface QuestionRepositoryInterface
      * @param Question $question
      */
     public function add(Question $question);
+    public function delete(Question $question): void;
 
     /**
      * @return Question[]

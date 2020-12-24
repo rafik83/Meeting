@@ -59,6 +59,3 @@ ansible.cfg
 # IDE
 /.idea/
 /.vscode/
-
-#nvm
-.nvmrc

@@ -4595,6 +4595,7 @@ services:
             - '@navigation.navigation_builder'
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 
@@ -7113,6 +7114,10 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@datetime'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
 
     #
     # QRCode

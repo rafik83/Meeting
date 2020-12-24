@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Domain\Cart;
 
 use PHPUnit\Framework\TestCase;
@@ -32,7 +24,6 @@ use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToPar
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class ConverterTest extends TestCase
@@ -42,6 +33,8 @@ class ConverterTest extends TestCase
         $datetime = new \DateTime();
 
         $event = $this->prophesize(Event::class);
+        $event->getCurrency()->willReturn('EUR');
+        $event->getVat()->willReturn(0.2);
 
         $package = $this->prophesize(Package::class);
         $package->serializeData()->shouldBeCalled()->willReturn('Package serialized data');

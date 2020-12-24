@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Components\Transactional\Mail\Substitution;
 
 use PHPUnit\Framework\TestCase;
@@ -24,6 +16,7 @@ class OrderDateSubstitutionTest extends TestCase
     public function testSubstituteWithoutSheet()
     {
         $event = $this->prophesize(Event::class);
+        $event->getTimeZone()->willReturn('Europe/Paris');
         $user = $this->prophesize(User::class);
 
         $mail = new PrepareUserRegisteredMailView(
@@ -41,6 +34,7 @@ class OrderDateSubstitutionTest extends TestCase
     public function testSubstituteWithOrder()
     {
         $event = $this->prophesize(Event::class);
+        $event->getTimeZone()->willReturn('Europe/Paris');
         $user = $this->prophesize(User::class);
         $sheet = $this->prophesize(Sheet::class);
         $order = $this->prophesize(Order::class);

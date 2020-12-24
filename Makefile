@@ -102,7 +102,7 @@ composer-install:
 	php bin/composer.phar install --no-progress --no-interaction
 
 install-app@test:
-	SYMFONY_ENV=test php bin/composer.phar --no-progress --no-interaction install
+	SYMFONY_ENV=test php bin/composer.phar install --no-progress --no-interaction
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
@@ -122,7 +122,7 @@ install-db-fixtures@test:
 	#bin/console doctrine:fixtures:load -n --env=test
 
 install-dep:
-	yarn install
+	yarn install --force
 
 clearcache:
 	bin/console cache:clear --env=dev

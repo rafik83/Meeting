@@ -25,7 +25,7 @@ abstract class AbstractWebinarView
     /** @var string */
     public $token;
 
-    /** @var string */
+    /** @var string|null */
     public $sessionId;
 
     /** @var string */
@@ -76,6 +76,12 @@ abstract class AbstractWebinarView
     /** @var int */
     public $questionsCount;
 
+    /** @var int $viewersCount */
+    public $viewersCount;
+
+    /** @var int */
+    public $timeRemainingBeforeStartInSeconds;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -87,7 +93,7 @@ abstract class AbstractWebinarView
         string $happeningTitle,
         bool $isVideoWebinarAndHasLiveUrl,
         string $token,
-        string $sessionId,
+        ?string $sessionId,
         string $apiKey,
         NotificationView $notification,
         array $speakers,
@@ -98,7 +104,9 @@ abstract class AbstractWebinarView
         ?string $liveUrl,
         bool $sidebarAllowed,
         int $questionsCount,
-        bool $isVideoWebinarAndHappeningIsEnded
+        bool $isVideoWebinarAndHappeningIsEnded,
+        int $viewersCount,
+        int $timeRemainingBeforeStartInSeconds
     ) {
         $this->eventId = $eventId;
         $this->happeningId = $happeningId;
@@ -118,6 +126,8 @@ abstract class AbstractWebinarView
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->questionsCount = $questionsCount;
+        $this->viewersCount = $viewersCount;
+        $this->timeRemainingBeforeStartInSeconds = $timeRemainingBeforeStartInSeconds;
     }
 
     public function getSpeakerInfosByUserId(): string
