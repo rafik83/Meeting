@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2234 - API endpoint to access list of happenings
 - VIMEET-2253 - Increment unread message counters synchronously
 - Add health check route
+- VIMEET-2275 - Close notification private chat
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
