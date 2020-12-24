@@ -16,8 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
-use Proximum\Vimeet\Domain\Time\DaysHelper;
-use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeViewTransformer;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -53,7 +52,7 @@ class CreateType extends AbstractType
         $locale = $options['locale'];
         $timezone = $options['timezone'];
 
-        $days = $this->prepareDays($event->getDays(), $timezone);
+        $days = TimeRangeViewTransformer::fromEventDays($event->getDays(), $timezone);
 
         if (count($days) > 1) {
             $builder
@@ -136,25 +135,5 @@ class CreateType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'create_unavailability';
-    }
-
-    /**
-     * @param Event\Day[] $days
-     * @param string $timeZone
-     *
-     * @return array
-     */
-    private function prepareDays(array $days, string $timeZone): array
-    {
-        $timezonedTimeRangeViews = [];
-
-        foreach ($days as $day) {
-            $timezonedTimeRangeViews[] = new TimeRangeView(
-                DaysHelper::cloneDateTime($day->getBegin(), $timeZone),
-                DaysHelper::cloneDateTime($day->getEnd(), $timeZone)
-            );
-        }
-
-        return DaysHelper::splitDays($timezonedTimeRangeViews);
     }
 }

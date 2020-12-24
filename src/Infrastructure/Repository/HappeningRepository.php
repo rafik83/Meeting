@@ -8,6 +8,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\DaysHelper;
 
 class HappeningRepository implements HappeningRepositoryInterface
 {
@@ -126,7 +127,10 @@ class HappeningRepository implements HappeningRepositoryInterface
         \DateTimeInterface $day,
         Happening\Category $category = null
     ) {
-        $date = clone $day;
+        $startDay = $this->getBeginningOfDaySeenByDefaultTZ($day);
+
+        $endDay = clone $startDay;
+        $endDay->modify('+1 day');
 
         $queryBuilder = $this
             ->entityManager
@@ -143,8 +147,8 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->orderBy('happening.begin')
             ->setParameter('event', $event)
             ->setParameter('type', $type)
-            ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
-            ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
+            ->setParameter('startDay', $startDay)
+            ->setParameter('endDay', $endDay);
 
         if (null !== $category) {
             $queryBuilder
@@ -254,5 +258,14 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    private function getBeginningOfDaySeenByDefaultTZ(\DateTimeInterface $day): \DateTime
+    {
+        $startDay = DaysHelper::cloneDateTime($day);
+        $startDay->setTime(0, 0);
+        $startDay->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+        return $startDay;
     }
 }
