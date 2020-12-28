@@ -5,7 +5,7 @@ Feature: Manage templates
 
   Scenario: See list of templates
     Given the database is purged
-    And there is a nomenclature
+    And there is a turnover nomenclature
     And there is a registration template
     And there is a sheet template
     And I am logged as admin

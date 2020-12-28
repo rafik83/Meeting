@@ -56,7 +56,11 @@ class SheetManager
         }
 
         $sheet = SheetFactory::create($event, $user, new \DateTime($createdAt), $type);
-        $sheet->setData(['dcc42d3d' => ['text' => ['fr' => $title, 'en' => $title]]]);
+        $sheet->setData([
+            'dcc42d3d' => ['text' => ['fr' => $title, 'en' => $title]],
+            '03b394ac' => ['items' => []],
+            '63ccc105' => ['items' => []],
+        ]);
         $sheet->setRegistrationData([]);
         $sheet->setTitle($title);
 

@@ -36,7 +36,6 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\TypeManager
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
-            - '@behat_manager.user'
             - '@behat_manager.sheet_template'
             - '@behat_manager.registration_template'
             - '@behat_manager.nomenclature'
@@ -97,6 +96,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\NomenclatureManager
         arguments:
             - '@repository.nomenclature_repository'
+            - '@repository.filter.tagged_nomenclature_filter_repository'
 
     behat_manager.slot:
         class: Proximum\Vimeet\Behat\Service\Manager\SlotManager

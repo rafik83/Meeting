@@ -192,7 +192,7 @@ test-phpunit@test:
 test-behat:
 	bin/console ca:cl --env=test --no-warmup
 	bin/console fos:elastica:reset --env=test --no-debug
-	bin/behat --format progress --no-interaction
+	php -d date.timezone=UTC bin/behat --format progress --no-interaction
 
 test-behat@test:
 	rm -rf var/cache/test/*

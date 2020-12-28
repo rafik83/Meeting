@@ -19,7 +19,7 @@ class RegistrationTemplateManager
         $this->registrationTemplateRepository = $registrationTemplateRepository;
     }
 
-    public function create(?Event $event): RegistrationTemplate
+    public function create(?Event $event, ?array $nomenclatures): RegistrationTemplate
     {
         $registrationTemplate = new RegistrationTemplate(
             'RegistrationTemplate',
@@ -74,8 +74,19 @@ class RegistrationTemplateManager
                                     'placeholder' => ['fr' => 'Votre Chiffre d\'affaires'],
                                     'help' => ['fr' => 'Ici le Chiffre d\'affaires'],
                                     'mode' => 'singles',
-                                    'nomenclature' => 1,
+                                    'nomenclature' => $nomenclatures['turnover'] ?? 1,
                                     'tags'=> ['sheet_organization_turnover', 'sheet_data'],
+                                ],
+                            ],
+                            '6c4a3a4f' => [
+                                'component' => 'object',
+                                'type' => 'nomenclature',
+                                'config' => [
+                                    'label' => ['fr' => 'Fonction'],
+                                    'placeholder' => ['fr' => 'Position'],
+                                    'mode' => 'singles',
+                                    'nomenclature' => $nomenclatures['position'] ?? 1,
+                                    'tags'=> ['participant_position', 'participant_data'],
                                 ],
                             ],
                             '3ad4b72f' => [
@@ -92,7 +103,20 @@ class RegistrationTemplateManager
                                     'tags'=> ['sheet_organization', 'sheet_title', 'sheet_data'],
                                 ],
                             ],
-
+                            'd224f0e7' => [
+                                'component' => 'object',
+                                'type' => 'editable-text',
+                                'config' => [
+                                    'type' => 'text',
+                                    'label' => ['fr' => 'Ville'],
+                                    'placeholder' => ['fr' => 'Ville'],
+                                    'help' => ['fr' => ''],
+                                    'length' => 250,
+                                    'required' => false,
+                                    'translatable' => false,
+                                    'tags'=> ['sheet_city', 'sheet_data'],
+                                ],
+                            ],
                         ],
                     ],
                 ],

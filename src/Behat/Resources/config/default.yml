@@ -101,5 +101,8 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\Template\SheetTemplateContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\NomenclatureContext:
                     - '@Proximum\Vimeet\Behat\Proxy\NomenclatureContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\SearchFacetContext:
+                    - '@behat_storage'
+                    - '@vimeet_infrastructure.repository.search_facet'
                 - behatch:context:json
                 - behatch:context:rest

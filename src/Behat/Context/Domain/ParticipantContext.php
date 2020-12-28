@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\ParticipantContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Participant;
 
 class ParticipantContext implements Context
 {
@@ -113,7 +114,6 @@ class ParticipantContext implements Context
     public function thisSheetHasVisioOptionActivated()
     {
         $participant = $this->participantContextProxy->getStorage()->get('participant');
-        $user = $this->participantContextProxy->getStorage()->get('user');
 
         if (null === $participant) {
             throw new \InvalidArgumentException('Missing Participant');
@@ -121,5 +121,15 @@ class ParticipantContext implements Context
         $this->participantContextProxy->getParticipantManager()->setVisioEnabled($participant);
     }
 
-
+    /**
+     * @Given this participant has :position position
+     */
+    public function thisParticipantHasPosition(string $position)
+    {
+        /** @var Participant */
+        $participant = $this->participantContextProxy->getStorage()->get('participant');
+        $data = $participant->getData();
+        $data['6c4a3a4f']['items'][] = $position;
+        $participant->setData($data);
+    }
 }

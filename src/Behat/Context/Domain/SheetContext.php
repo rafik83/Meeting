@@ -162,6 +162,68 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given this sheet has :city as city
+     */
+    public function thisSheetHasCity(string $city)
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getRegistrationData();
+        $data['d224f0e7']['text'] = $city;
+        $sheet->setRegistrationData($data);
+    }
+
+    /**
+     * @Given this sheet has supply services
+     */
+    public function thisSheetHasSupplyService()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['03b394ac']['items'][] = 'ab93de01';
+        $data['03b394ac']['items'][] = 'ab93de02';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet has needs
+     */
+    public function thisSheetHasNeeds()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['63ccc105']['items'][] = 'ab93de02';
+        $data['63ccc105']['items'][] = 'ab93de05';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet supply computing
+     */
+    public function thisSheetSupplyComputing()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['03b394ac']['items'][] = 'ab93de05';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet needs prototyping
+     */
+    public function thisSheetNeedsPrototyping()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['63ccc105']['items'][] = 'ab93de06';
+        $sheet->setData($data);
+    }
+
+    /**
      * @throws \LogicException
      *
      * @return Event

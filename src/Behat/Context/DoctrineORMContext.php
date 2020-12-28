@@ -65,7 +65,7 @@ class DoctrineORMContext implements Context, KernelAwareContext
         $connection = $entityManager->getConnection();
 
         foreach (self::NotMappedTables as $tableName) {
-            $connection->executeUpdate($platform->getTruncateTableSQL($tableName, true));
+            $connection->executeQuery($platform->getTruncateTableSQL($tableName, true));
         }
     }
 

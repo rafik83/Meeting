@@ -20,6 +20,8 @@ class RegistrationTemplateContext implements Context
      */
     public function thereIsARegistrationTemplate()
     {
-        $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create(null);
+        $nomenclatures = $this->registrationTemplateContextProxy->getStorage()->get('nomenclatures');
+
+        $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create(null, $nomenclatures);
     }
 }

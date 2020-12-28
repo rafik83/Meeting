@@ -32,7 +32,7 @@ Feature: See and update search facet
     And I press "search_facet_update_submit"
     Then I should see "flash.admin.event.filter_facet.update.success"
 
-# move this test in event fetaure ?
+# move this test in event feature ?
   # Scenario: I can see search type in catalog
   #   When I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
   #   And I go to this page "/fr"

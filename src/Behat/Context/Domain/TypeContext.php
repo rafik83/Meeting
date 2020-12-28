@@ -84,4 +84,35 @@ class TypeContext implements Context
 
         $this->typeContextProxy->getTypeManager()->set($type);
     }
+
+    /**
+     * @Given this type can view display analytics on catalog
+     */
+    public function thisTypeCanViewDisplayAnalyticsOnCatalog()
+    {
+        /** @var Type */
+        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type->update(
+            $type->getPosition(),
+            $type->isHidden(),
+            $type->getAvailabilityType(),
+            $type->getNumberOfMeetingsPerPlanning(),
+            $type->canMoveMeeting(),
+            $type->canRemoveMeeting(),
+            $type->areAllSheetParticipantsAssignedToMeeting(),
+            $type->canScanParticipant(),
+            $type->isPackageRequired(),
+            $type->isPaymentRequired(),
+            $type->getPriorityMeetingRequestsNumber(),
+            $type->getNumberMaxOfHappeningsPerUser(),
+            $type->getNumberMaxOfMeetingsPerSheet(),
+            $type->canEvaluateMeeting(),
+            $type->mustEvaluateMeeting(),
+            $type->canSubmitValidation(),
+            $type->canDisplayAnalyticsOnSheet(),
+            true
+        );
+
+        $this->typeContextProxy->getTypeManager()->set($type);
+    }
 }
