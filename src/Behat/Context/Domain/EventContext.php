@@ -138,6 +138,18 @@ class EventContext implements Context
     }
 
     /**
+     * @Given the happenings are open
+     */
+    public function thehappeningsAreOpen()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getAccessManager()->setHappeningsOpenDate(
+            new \DateTime('yesterday'), $event
+        );
+    }
+
+    /**
      * @Given the locale for this event is :locale
      */
     public function theLocaleForThisEventIs($locale)

@@ -18,7 +18,7 @@ class HappeningContext implements Context
     }
 
     /**
-     * @Given /^there is a webinar in this event$/
+     * @Given there is a webinar in this event
      */
     public function thereIsAWebinar()
     {
@@ -37,7 +37,7 @@ class HappeningContext implements Context
     }
 
     /**
-     * @Given /^this user participate to this happening$/
+     * @Given this user participate to this happening
      */
     public function thisUserParticipateToThisHappening()
     {
