@@ -105,15 +105,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->campaignRepository = $campaignRepository;
     }
 
-    /**
-     * @param Sheet $sheet
-     * @param array $fields
-     *
-     * @return Document
-     */
-    public function transform($sheet, array $fields)
+    public function transform($sheet, array $fields): Document
     {
-        $fallbackLocale = $sheet->getEvent()->getFallback();
+        $fallbackLocale = $sheet->getEvent()->getLocaleFallback();
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
         $sheetContentView = $this->getSheetContentView($sheet);

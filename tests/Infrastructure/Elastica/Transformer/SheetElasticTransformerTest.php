@@ -86,7 +86,7 @@ class SheetElasticTransformerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $event->getId()->willReturn(66);
         $event->getLocales()->willReturn(['fr', 'en']);
-        $event->getFallback()->willReturn('fr');
+        $event->getLocaleFallback()->willReturn('fr');
 
         $meetingSlot1 = $this->prophesize(MeetingSlot::class);
         $meetingSlot1->getId()->willReturn(11);
