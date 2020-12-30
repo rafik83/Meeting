@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener;
+namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
