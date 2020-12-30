@@ -1,13 +1,5 @@
 <?php
 
-$header = <<<EOF
-This file is part of the Proximum Vimeet project.
-
-Copyright (C) Proximum
-
-@author Elao <contact@elao.com>
-EOF;
-
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__ . '/src', __DIR__ . '/tests'])
     ->exclude(['fixtures', 'DataFixtures', 'expected'])

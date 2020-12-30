@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the vimeet project.
- *
- * Copyright (C) vimeet
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Template\Form\ExportFormTemplateData;
 
 use Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData\FormTemplateDataForUser;

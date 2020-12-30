@@ -1,26 +1,18 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Rooming\ExportList;
 
 class UserSheetView
 {
     /** @var int */
     public $userId;
-    
+
     /** @var string|null */
     public $gender;
-    
+
     /** @var string|null */
     public $firstName;
-    
+
     /** @var string|null */
     public $lastName;
 
@@ -29,10 +21,10 @@ class UserSheetView
 
     /** @var string|null */
     public $mobile;
-    
+
     /** @var string */
     public $sheetIds;
-    
+
     /** @var string|null */
     public $sheetTitles;
 
@@ -41,16 +33,16 @@ class UserSheetView
 
     /** @var string|null */
     public $sheetPlans;
-    
+
     /** @var string|null */
     public $typeTitles;
-    
+
     /** @var string|null */
     public $spotReferences;
-    
+
     /** @var string|null */
     public $comment;
-    
+
     /** @var string|null */
     public $tasting;
 
