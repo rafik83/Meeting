@@ -73,6 +73,7 @@ class SMSNotificationCommandHandlerTest extends TestCase
         $this->user->getLocale()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $this->sheet->getId()->willReturn(3);
+        $this->sheet->getUserLocale($this->user->reveal())->willReturn('fr');
 
         // Expected
         $this->userEventPhoneRepository

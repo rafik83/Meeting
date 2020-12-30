@@ -144,7 +144,7 @@ class SendEmailingByTypeHandler
         $user = $sheet->getOwner();
         $userEmail = $user->getEmail();
         $sheetId = $sheet->getId();
-        $locale = $event->getAvailableLocale($user->getLocale());
+        $locale = $sheet->getUserLocale($user);
 
         $substitutionResult = $this->substitutionHandler->handle(
             new PrepareBatchSheetMailView($event, $user, $message->getName(), $locale, $sheet),

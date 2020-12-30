@@ -605,6 +605,13 @@ class Sheet implements TraceableInterface
         return null;
     }
 
+    public function getUserLocale(User $user): string
+    {
+        $participant = $this->getUserParticipant($user);
+
+        return $participant ? $participant->getLocale() : $user->getLocale();
+    }
+
     /**
      * @param User $user
      *

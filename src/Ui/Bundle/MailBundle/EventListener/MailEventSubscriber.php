@@ -90,7 +90,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = $this->prepareHandler->handle(new PrepareTransactionConfirmMailView(
             $event->getTransaction()->getSheet()->getEvent(),
             $event->getUser(),
-            $event->getUser()->getLocale(),
+            $event->getTransaction()->getSheet()->getUserLocale($event->getUser()),
             $event->getTransaction()->getSheet(),
             $event->getTransaction()
         ));
@@ -166,7 +166,7 @@ class MailEventSubscriber implements EventSubscriberInterface
         $mail = $this->prepareHandler->handle(new PrepareParticipantAddedMailView(
             $event->getSheet()->getEvent(),
             $event->getUser(),
-            $event->getUser()->getLocale(),
+            $event->getSheet()->getUserLocale($event->getUser()),
             $event->getSheet(),
             $event->getGuest()
         ));

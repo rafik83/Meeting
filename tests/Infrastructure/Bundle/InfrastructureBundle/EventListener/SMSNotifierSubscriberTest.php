@@ -40,6 +40,7 @@ class SMSNotifierSubscriberTest extends TestCase
         $datetime                         = new \DateTime();
 
         $participant->getUser()->willReturn($user->reveal());
+        $participant->getLocale()->willReturn('fr');
         $participantAlreadyNotified->getUser()->willReturn($userAlreadyNotified->reveal());
         $participantWithoutPhoneValidated->getUser()->willReturn($userWithoutPhoneValidated->reveal());
 

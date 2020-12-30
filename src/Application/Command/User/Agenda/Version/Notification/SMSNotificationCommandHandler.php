@@ -46,11 +46,13 @@ class SMSNotificationCommandHandler
             return;
         }
 
+        $locale = $command->sheet->getUserLocale($command->user);
+
         $startingSentence = $this->translator->trans(
             DiffVerbalizer::TRANSLATION_AGENDA_MODIFIED,
             [],
             DiffVerbalizer::TRANSLATION_DOMAIN,
-            $command->user->getLocale()
+            $locale
         );
 
         $agendaUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
@@ -58,7 +60,7 @@ class SMSNotificationCommandHandler
             Route::AGENDA_DEFAULT,
             [
                 'sheet' => $command->sheet->getId(),
-                '_locale' => $command->event->getAvailableLocale($command->user->getLocale()),
+                '_locale' => $command->event->getAvailableLocale($locale),
             ]
         );
 
