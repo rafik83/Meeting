@@ -154,13 +154,29 @@ class EventContext implements Context
      */
     public function theLocaleForThisEventIs($locale)
     {
-        $event = $this->eventContextProxy->getStorage()->get('event');
-
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
+        $event = $this->getEvent();
 
         $this->eventContextProxy->getEventManager()->setLocale($event, $locale);
+    }
+
+    /**
+     * @Given the organiser name of this event is :organiserName
+     */
+    public function theOrganiserNameOfThisEventIs($organiserName)
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setOrganiserName($event, $organiserName);
+    }
+
+    /**
+     * @Given the organiser email of this event is :organiserEmail
+     */
+    public function theOrganiserEmailOfThisEventIs($organiserEmail)
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setOrganiserEmail($event, $organiserEmail);
     }
 
     /**

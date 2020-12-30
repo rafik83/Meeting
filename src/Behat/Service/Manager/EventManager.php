@@ -59,4 +59,16 @@ class EventManager
     {
         $event->setLocales([$locale], $locale);
     }
+
+    public function setOrganiserName(Event $event, string $organiserName): void
+    {
+        $event->setOrganiserName($organiserName);
+        $this->eventRepository->set($event);
+    }
+
+    public function setOrganiserEmail(Event $event, string $organiserEmail): void
+    {
+        $event->setOrganiserEmail($organiserEmail);
+        $this->eventRepository->set($event);
+    }
 }

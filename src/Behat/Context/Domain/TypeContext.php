@@ -115,4 +115,18 @@ class TypeContext implements Context
 
         $this->typeContextProxy->getTypeManager()->set($type);
     }
+
+    /**
+     * @Given the :locale translation of this type is :translation
+     */
+    public function theTranslationOfThisTypeIs(string $locale, string $translation)
+    {
+        $type = $this->typeContextProxy->getStorage()->get('type');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing Type');
+        }
+
+        $this->typeContextProxy->getTypeManager()->setTypeTranslation($type, $locale, $translation);
+    }
 }

@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeManager
@@ -79,6 +80,12 @@ class TypeManager
     {
         $type->setPackage($package);
 
+        $this->typeRepository->set($type);
+    }
+
+    public function setTypeTranslation(Type $type, string $locale, string $translation): void
+    {
+        $type->getTranslations()->add(new TypeTranslation($type, $locale, $translation));
         $this->typeRepository->set($type);
     }
 }
