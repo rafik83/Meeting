@@ -84,4 +84,22 @@ class RequestContext implements Context
 
         $this->meetingContextProxy->getStorage()->set('request', $request);
     }
+
+    /**
+     * @Given this request has been approved
+     */
+    public function thisRequestHasBeenApproved()
+    {
+        $request = $this->meetingContextProxy->getStorage()->get('request');
+        $this->meetingContextProxy->getMeetingManager()->approveMeetingRequest($request);
+    }
+
+    /**
+     * @Given this request has been refused
+     */
+    public function thisRequestHasBeenRefused()
+    {
+        $request = $this->meetingContextProxy->getStorage()->get('request');
+        $this->meetingContextProxy->getMeetingManager()->refuseMeetingRequest($request);
+    }
 }
