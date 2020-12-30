@@ -66,6 +66,42 @@ class RegistrationTemplateManager
                                     'tags'=> ['participant_lastname', 'participant_data'],
                                 ],
                             ],
+                            '4b674gba' => [
+                                'component' => 'object',
+                                'type' => 'gender',
+                                'config' => [
+                                    'label' => ['fr' => 'Genre'],
+                                    'placeholder' => ['fr' => 'Genre'],
+                                    'help' => ['fr' => ''],
+                                    'required' => false,
+                                    'translatable' => false,
+                                    'tags'=> ['participant_gender', 'participant_data'],
+                                ],
+                            ],
+                            'cb66008e' => [
+                                'component' => 'object',
+                                'type' => 'image',
+                                'config' => [
+                                    'label' => ['fr' => 'Photo'],
+                                    'placeholder' => ['fr' => 'Photo'],
+                                    'help' => ['fr' => ''],
+                                    'required' => false,
+                                    'tags'=> ['participant_avatar', 'participant_data'],
+                                ],
+                            ],
+                            'dd66008e' => [
+                                'component' => 'object',
+                                'type' => 'upload',
+                                'config' => [
+                                    'label' => ['fr' => 'Upload de fichier'],
+                                    'placeholder' => ['fr' => 'Upload de fichier'],
+                                    'help' => ['fr' => ''],
+                                    'required' => false,
+                                    'crypted' => false,
+                                    'formats' => ['csv', 'image'],
+                                    'tags'=> ['participant_data', 'sheet_data'],
+                                ],
+                            ],
                             'adc97e8d' => [
                                 'component' => 'object',
                                 'type' => 'nomenclature',
