@@ -8,16 +8,17 @@ Feature: Search sheet in catalog
     And the domain for this event is "asddays-2016.vimeet.proximum"
     And the catalog visibility is configured
     And the catalog is open since "2016-10-10 10:00:00"
-
-    And there is a type "Fournisseur" in this event
-    And there is a rule for this type and this event
-    And this type is visible in catalog
-    And this type can view display analytics on catalog
+    And there is a position nomenclature
+    And there is a registration template
     And there is a "position" search facet
     And there is a "localization" search facet
     And there is a "keywords" search facet
-    And there is a position nomenclature
-    And there is a registration template
+
+    And there is a type "Fournisseur" in this event
+    And this type has this registration template
+    And there is a rule for this type and this event
+    And this type is visible in catalog
+    And this type can view display analytics on catalog
 
     And the user "user_asddays_1@proximum.com" is created
     And there is a sheet for this type with the title "Aanera"
@@ -126,6 +127,7 @@ Feature: Search sheet in catalog
     And I am logged with "user_asddays_1@proximum.com" on front
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
+    Then I go to this page "/fr/sheet/1/catalog/display/2"
 
     # filter on sheet saw
     When I go to this page "/fr/sheet/1/catalog?sheetVisit[]=sheetSaw"

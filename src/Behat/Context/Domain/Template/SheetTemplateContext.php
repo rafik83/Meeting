@@ -23,6 +23,7 @@ class SheetTemplateContext implements Context
      */
     public function thereIsASheetTemplate()
     {
-        $this->sheetTemplateContextProxy->getSheetTemplateManager()->create(null, null);
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $this->sheetTemplateContextProxy->getSheetTemplateManager()->create($event, null);
     }
 }
