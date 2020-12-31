@@ -8,6 +8,8 @@ use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 
 class SheetTemplateManager
 {
+    use TemplateCreateBlockTrait;
+
     /** @var SheetTemplateRepositoryInterface */
     private $sheetTemplateRepository;
 
@@ -19,52 +21,7 @@ class SheetTemplateManager
     public function create(?Event $event, ?array $nomenclatures): SheetTemplate
     {
         $data = [
-            '69b3cde3' => [
-                'component' => 'block',
-                'type' => '8-4',
-                'config' => ['style' => 'style-1'],
-                'children' => [
-                    [
-                        'dcc42d3d' => [
-                            'component' => 'object',
-                            'type' => 'editable-text',
-                            'config' => [
-                                'style' => 'style-1',
-                                'label' => ['fr' => 'Titre de votre fiche', 'en' => 'Title of your sheet'],
-                                'placeholder' => ['fr' => 'Société en une phrase', 'en' => 'Your company in a sentence'],
-                                'help' => ['fr' => '', 'en' => ''],
-                                'length' => '200',
-                                'type' => 'title',
-                                'required' => 'true',
-                            ],
-                        ],
-                        '03b394ac' => [
-                            'component' => 'object',
-                            'type' => 'nomenclature',
-                            'config' => [
-                                'mode' => 'checkboxes',
-                                'label' => ['fr' => 'Offres'],
-                                'placeholder' => ['fr' => 'Vos offres'],
-                                'help' => ['fr' => 'Vos offres'],
-                                'nomenclature' => $nomenclatures['services'] ?? 1,
-                                'objective' => 'supply',
-                            ],
-                        ],
-                        '63ccc105' => [
-                            'component' => 'object',
-                            'type' => 'nomenclature',
-                            'config' => [
-                                'mode' => 'checkboxes',
-                                'label' => ['fr' => 'Besoins'],
-                                'placeholder' => ['fr' => 'Vos besoins'],
-                                'help' => ['fr' => 'Vos besoins'],
-                                'nomenclature' => $nomenclatures['services'] ?? 1,
-                                'objective' => 'need',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+            '69b3cde3' => $this->block(),
             'bef61d39' => [
                 'component' => 'object',
                 'type' => 'participant',
@@ -89,5 +46,50 @@ class SheetTemplateManager
         $this->sheetTemplateRepository->add($sheetTemplate);
 
         return $sheetTemplate;
+    }
+
+    private function block()
+    {
+        $children = [
+            'dcc42d3d' => [
+                'component' => 'object',
+                'type' => 'editable-text',
+                'config' => [
+                    'style' => 'style-1',
+                    'label' => ['fr' => 'Titre de votre fiche', 'en' => 'Title of your sheet'],
+                    'placeholder' => ['fr' => 'Société en une phrase', 'en' => 'Your company in a sentence'],
+                    'help' => ['fr' => '', 'en' => ''],
+                    'length' => '200',
+                    'type' => 'title',
+                    'required' => 'true',
+                ],
+            ],
+            '03b394ac' => [
+                'component' => 'object',
+                'type' => 'nomenclature',
+                'config' => [
+                    'mode' => 'checkboxes',
+                    'label' => ['fr' => 'Offres'],
+                    'placeholder' => ['fr' => 'Vos offres'],
+                    'help' => ['fr' => 'Vos offres'],
+                    'nomenclature' => $nomenclatures['services'] ?? 1,
+                    'objective' => 'supply',
+                ],
+            ],
+            '63ccc105' => [
+                'component' => 'object',
+                'type' => 'nomenclature',
+                'config' => [
+                    'mode' => 'checkboxes',
+                    'label' => ['fr' => 'Besoins'],
+                    'placeholder' => ['fr' => 'Vos besoins'],
+                    'help' => ['fr' => 'Vos besoins'],
+                    'nomenclature' => $nomenclatures['services'] ?? 1,
+                    'objective' => 'need',
+                ],
+            ],
+        ];
+
+        return $this->createBlock($children);
     }
 }
