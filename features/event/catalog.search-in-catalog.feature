@@ -8,6 +8,7 @@ Feature: Search sheet in catalog
     And the domain for this event is "asddays-2016.vimeet.proximum"
     And the catalog visibility is configured
     And the catalog is open since "2016-10-10 10:00:00"
+
     And there is a type "Fournisseur" in this event
     And there is a rule for this type and this event
     And this type is visible in catalog
@@ -17,6 +18,7 @@ Feature: Search sheet in catalog
     And there is a "keywords" search facet
     And there is a position nomenclature
     And there is a registration template
+
     And the user "user_asddays_1@proximum.com" is created
     And there is a sheet for this type with the title "Aanera"
     And there is a participant for this sheet and this user
@@ -26,6 +28,7 @@ Feature: Search sheet in catalog
     And this sheet has needs
     And this sheet is validated
     And this sheet is in catalog
+
     And the user "user_asddays_2@proximum.com" is created
     And there is a sheet for this type with the title "World Company Inc"
     And there is a participant for this sheet and this user
@@ -35,6 +38,7 @@ Feature: Search sheet in catalog
     And this sheet needs prototyping
     And this sheet is validated
     And this sheet is in catalog
+
     And the user "user_asddays_3@proximum.com" is created
     And there is a sheet for this type with the title "Hello World Company"
     And there is a participant for this sheet and this user
@@ -46,6 +50,7 @@ Feature: Search sheet in catalog
     When I am logged with "user_asddays_2@proximum.com" on front
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
+
     When I follow "navigation.links.catalog.available_date"
     Then I should see "Aanera"
     And I should see "World Company Inc"
@@ -61,10 +66,12 @@ Feature: Search sheet in catalog
     And I am logged with "user_asddays_2@proximum.com" on front
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
+
     When I follow "navigation.links.catalog.available_date"
     Then I should see "Aanera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
+
     When I go to this page "/fr/sheet/2/catalog?localization=lyon"
     Then I should see "1" in the title of the ".total-result" element
     And I should see "World Company Inc"
@@ -75,11 +82,13 @@ Feature: Search sheet in catalog
     Given there is an event with domain "asddays-2016.vimeet.proximum"
     Given I am logged with "user_asddays_2@proximum.com" on front
     And I go to this page "/fr"
-    And I go to this page "/fr/catalog"
+
+    When I go to this page "/fr/catalog"
     Then I should see "3" in the title of the ".total-result" element
     And I should see "Aanera"
     And I should see "World Company Inc"
     And I should see "Hello World Company"
+
     When I go to this page "/fr/sheet/2/catalog?content=Aanera"
     Then I should see "1" in the title of the ".total-result" element
     And I should see "Aanera"
@@ -91,18 +100,21 @@ Feature: Search sheet in catalog
 
   Scenario: I can search and filter sheet by supply or need
     Given there is an event with domain "asddays-2016.vimeet.proximum"
-    Given I am logged with "user_asddays_2@proximum.com" on front
+    And I am logged with "user_asddays_2@proximum.com" on front
     And I go to this page "/fr"
+
     When I go to this page "/fr/sheet/2/catalog?objective[]=supply"
     Then I should see "1" in the title of the ".total-result" element
     And I should see "Aanera"
     But I should not see "World Company Inc"
     And I should not see "Hello World Company"
+
     When I go to this page "/fr/sheet/2/catalog?objective[]=need"
     Then I should see "0" in the title of the ".total-result" element
     And I should not see "Hello World Company"
     And I should not see "Aanera"
     But I should not see "World Company Inc"
+
     When I go to this page "/fr/sheet/2/catalog?objective[]=supply&objective[]=need"
     Then I should see "1" in the title of the ".total-result" element
     And I should see "Aanera"
@@ -111,15 +123,16 @@ Feature: Search sheet in catalog
 
   Scenario: I can search and filter sheet by saw / who saw me
     Given there is an event with domain "asddays-2016.vimeet.proximum"
-    Given I am logged with "user_asddays_1@proximum.com" on front
+    And I am logged with "user_asddays_1@proximum.com" on front
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
-    When I go to this page "/fr/sheet/1/catalog/display/2"
+
     # filter on sheet saw
-    And I go to this page "/fr/sheet/1/catalog?sheetVisit[]=sheetSaw"
+    When I go to this page "/fr/sheet/1/catalog?sheetVisit[]=sheetSaw"
     Then I should see "World Company Inc"
     Then I should not see "Hello World Company"
     Then I should not see "Aanera"
+
     # filter on sheet who saw me
     When I am logged with "user_asddays_2@proximum.com" on front
     And I go to this page "/fr/sheet/2/catalog?sheetVisit[]=viewedBySheet"
