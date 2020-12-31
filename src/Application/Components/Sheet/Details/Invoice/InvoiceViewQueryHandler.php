@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Sheet\Details\Invoice;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;

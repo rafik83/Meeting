@@ -1,11 +1,4 @@
 <?php
-/*
-* This file is part of the vimeet project.
-*
-* Copyright (C) vimeet
-*
-* @author Elao <contact@elao.com>
-*/
 
 namespace Proximum\Vimeet\tests\Application\Components\Transactional\Mail\Substitution;
 
@@ -60,4 +53,3 @@ class TypeTitleSubstitutionTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 }
-
