@@ -23,13 +23,12 @@ class NomenclatureContext implements Context
         $event = $this->nomenclatureContextProxy->getStorage()->get('event');
 
         $nomenclature = $this->nomenclatureContextProxy->getNomenclatureManager()->create($event, 'Chiffre d\'Affaires', [
-            'staff1' => ['label' => ['fr' => 'NC.', 'en' => 'NC.']],
-            'staff2' => ['label' => ['fr' => '0 - 9', 'en' => '0 - 9']],
-            'staff3' => ['label' => ['fr' => '10 - 99', 'en' => '10 - 99']],
-            'staff4' => ['label' => ['fr' => '100 - 250', 'en' => '100 - 250']],
-            'staff5' => ['label' => ['fr' => '500 - 5000', 'en' => '500 - 5000']],
-            'staff6' => ['label' => ['fr' => '\> 5000', 'en' => '\> 5000']],
-            ]);
+            'turnover1' => ['label' => ['fr' => 'NC.', 'en' => 'NC.']],
+            'turnover2' => ['label' => ['fr' => '<50k€', 'en' => '<50k€']],
+            'turnover3' => ['label' => ['fr' => '50k€ - 500k€', 'en' => '50k€ - 500k€']],
+            'turnover4' => ['label' => ['fr' => '500k€ - 1M€', 'en' => '500k€ - 1M€']],
+            'turnover5' => ['label' => ['fr' => '>1M€', 'en' => '>1M€']],
+        ]);
 
         $this->addToStorage('turnover', $nomenclature->getId());
 

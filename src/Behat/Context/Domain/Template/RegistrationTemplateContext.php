@@ -17,11 +17,28 @@ class RegistrationTemplateContext implements Context
 
     /**
      * @Given there is a registration template
+     * this template has 2 goals:
+     * - provide a way to test multi-steps registration
+     * - provide a template with file upload fields (can't be on first step)
      */
     public function thereIsARegistrationTemplate()
     {
+        $event = $this->registrationTemplateContextProxy->getStorage()->get('event');
         $nomenclatures = $this->registrationTemplateContextProxy->getStorage()->get('nomenclatures');
 
-        $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create(null, $nomenclatures);
+        $template = $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create2stepsTemplate($event, $nomenclatures);
+        $this->registrationTemplateContextProxy->getStorage()->set('template', $template);
+    }
+
+    /**
+     * @Given there is a single step registration template
+     */
+    public function thereIsASingleStepRegistrationTemplate()
+    {
+        $event = $this->registrationTemplateContextProxy->getStorage()->get('event');
+        $nomenclatures = $this->registrationTemplateContextProxy->getStorage()->get('nomenclatures');
+
+        $template = $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create1stepTemplate($event, $nomenclatures);
+        $this->registrationTemplateContextProxy->getStorage()->set('template', $template);
     }
 }

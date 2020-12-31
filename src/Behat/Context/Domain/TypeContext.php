@@ -31,6 +31,7 @@ class TypeContext implements Context
         }
 
         $type = $this->typeContextProxy->getTypeManager()->create($event, $title);
+
         $this->typeContextProxy->getStorage()->set('type', $type);
     }
 
@@ -47,7 +48,7 @@ class TypeContext implements Context
      */
     public function assignPackage()
     {
-        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type = $this->getType();
         $package = $this->typeContextProxy->getStorage()->get('package');
 
         if (null === $type) {
@@ -66,8 +67,7 @@ class TypeContext implements Context
      */
     public function thisTypeIsHidden()
     {
-        /** @var Type */
-        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type = $this->getType();
         $type->setHidden(true);
 
         $this->typeContextProxy->getTypeManager()->set($type);
@@ -78,8 +78,7 @@ class TypeContext implements Context
      */
     public function thisTypeHasAvailabilityManagementEnabled()
     {
-        /** @var Type */
-        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type = $this->getType();
         $type->setAvailabilityType(Type::TYPE_MANAGEMENT_AVAILABLE);
 
         $this->typeContextProxy->getTypeManager()->set($type);
@@ -90,8 +89,8 @@ class TypeContext implements Context
      */
     public function thisTypeCanViewDisplayAnalyticsOnCatalog()
     {
-        /** @var Type */
-        $type = $this->typeContextProxy->getStorage()->get('type');
+        $type = $this->getType();
+
         $type->update(
             $type->getPosition(),
             $type->isHidden(),
@@ -121,12 +120,34 @@ class TypeContext implements Context
      */
     public function theTranslationOfThisTypeIs(string $locale, string $translation)
     {
+        $type = $this->getType();
+
+        $this->typeContextProxy->getTypeManager()->setTypeTranslation($type, $locale, $translation);
+    }
+
+    /**
+     * @Given this type has this registration template
+     */
+    public function thisTypeHasThisTemplate()
+    {
+        $type = $this->getType();
+        $template = $this->typeContextProxy->getStorage()->get('template');
+        if (null === $template) {
+            throw new \InvalidArgumentException('Missing Template');
+        }
+
+        $type->setRegistrationTemplate($template);
+        $this->typeContextProxy->getTypeManager()->set($type);
+    }
+
+    private function getType(): Type
+    {
         $type = $this->typeContextProxy->getStorage()->get('type');
 
         if (null === $type) {
             throw new \InvalidArgumentException('Missing Type');
         }
 
-        $this->typeContextProxy->getTypeManager()->setTypeTranslation($type, $locale, $translation);
+        return $type;
     }
 }

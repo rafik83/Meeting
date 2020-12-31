@@ -60,7 +60,9 @@ class TypeManager
                 'turnover5' => ['label' => [$defaultLocale => "\>50 M€"]],
             ]);
         }
-        $type->setRegistrationTemplate($this->registrationTemplateManager->create($event, ['turnover' => $nomenclatureTurnover->getId()]));
+        $template = $this->registrationTemplateManager
+            ->create2stepsTemplate($event, ['turnover' => $nomenclatureTurnover->getId()]);
+        $type->setRegistrationTemplate($template);
         $package = new Package($event, 'Forfait', new \DateTime());
         $package->enable(false, false, false);
         $type->setPackage($package);
