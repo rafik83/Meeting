@@ -1,6 +1,6 @@
 FROM gcr.io/synalabs-marketplace/github.com/synalabs/spin:bdfd5d7 AS spinnaker
 
-FROM php:7.2-apache-buster
+FROM php:7.4-apache-buster
 
 RUN set -eux \
   && mkdir -p /usr/share/man/man1 \
@@ -20,11 +20,13 @@ RUN set -eux \
   libpng-dev \
   libxml2-dev \
   libxslt-dev \
+  libzip-dev \
   libmagickwand-dev \
   unzip \
   msmtp \
   python-minimal \
   vim \
+  zip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -32,7 +34,7 @@ RUN set -x \
   && docker-php-ext-configure intl --enable-intl \
   && docker-php-ext-configure soap --enable-soap \
   && docker-php-ext-configure opcache --enable-opcache \
-  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
   && docker-php-ext-install \
   bcmath \
   bz2 \
@@ -51,7 +53,6 @@ RUN set -x \
   sysvmsg \
   sysvsem \
   sysvshm \
-  wddx \
   xmlrpc \
   xsl \
   zip
@@ -63,7 +64,7 @@ RUN pecl install redis apcu lzf timezonedb \
 
 # Install New Relic but disable it by default
 RUN \
-  curl -L https://download.newrelic.com/php_agent/archive/8.7.0.242/newrelic-php5-8.7.0.242-linux.tar.gz | tar -C /tmp -zx && \
+  curl -L https://download.newrelic.com/php_agent/archive/9.15.0.293/newrelic-php5-9.15.0.293-linux.tar.gz | tar -C /tmp -zx && \
   export NR_INSTALL_USE_CP_NOT_LN=1 && \
   export NR_INSTALL_SILENT=1 && \
   /tmp/newrelic-php5-*/newrelic-install install && \
@@ -112,8 +113,8 @@ COPY helm/spinnaker /var/www/spinnaker
 
 # NodeJS and Yarn
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs=8.17.0-1nodesource1
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install nodejs
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install yarn

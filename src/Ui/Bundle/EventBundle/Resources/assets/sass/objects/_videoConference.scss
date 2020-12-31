@@ -16,13 +16,16 @@
     max-height:unset;
   }
 
-  .viewers-container {
+  .viewers-container, .end-container {
     color: white;
     display: inline-block;
     padding: 0 10px;
+    font-size: 18px;
+    line-height: 22px;
+    font-family: OpenSans, Helvetica, sans-serif;
   }
 
-  .timer-container {
+  .timer-container, .current-container {
     padding: 0 10px;
     display: inline-block;
 
@@ -31,10 +34,10 @@
       font-size: 18px;
       line-height: 22px;
       font-family: OpenSans, Helvetica, sans-serif;
-    }
-    .warning {
-      font-weight: bold;
-      color: red;
+      &.warning {
+        font-weight: bold;
+        color: red;
+      }
     }
   }
 
@@ -140,6 +143,8 @@
     position: absolute;
     top: 0;
     width: 100%;
+    // need z-index, otherwise in some cases, opentok can be over this container
+    z-index: 1;
   }
 
   .video-helper {
@@ -210,6 +215,8 @@
     position: fixed;
     right: 0;
     top:0;
+    // need z-index, otherwise in some cases, opentok can be over this container
+    z-index: 1;
 
     .video-modal-body {
       background-color: #fff;
@@ -238,6 +245,12 @@
 }
 
 .video-conference-test {
+  .video-helper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
+  }
+
   .video-conference-preview {
     .buttons-container {
       position: relative;

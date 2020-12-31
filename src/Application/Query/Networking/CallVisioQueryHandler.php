@@ -5,11 +5,13 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\CallVisio\CallVisioNotAllowedException;
+use Proximum\Vimeet\Application\Exception\CallVisio\SessionIdAlreadyCreatedException;
 use Proximum\Vimeet\Application\Exception\Chat\ChatSessionNotFoundException;
 use Proximum\Vimeet\Application\View\Networking\CallVisioView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Visio\VisioSettingsRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class CallVisioQueryHandler
 {
@@ -28,6 +30,9 @@ class CallVisioQueryHandler
     /** @var \DateTimeImmutable */
     private $now;
 
+    /** @var LoggerInterface|null */
+    private $logger;
+
     /** @var VisioSettingsRepositoryInterface */
     private $visioSettingsRepository;
 
@@ -37,8 +42,8 @@ class CallVisioQueryHandler
         CallVisioPrivateChatAccessChecker $callVisioPrivateChatAccessChecker,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         VisioSettingsRepositoryInterface $visioSettingsRepository,
-        \DateTimeImmutable $now
-
+        \DateTimeImmutable $now,
+        ?LoggerInterface $logger = null
     ) {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->chatSessionRepository = $chatSessionRepository;
@@ -46,6 +51,7 @@ class CallVisioQueryHandler
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->visioSettingsRepository = $visioSettingsRepository;
         $this->now = $now;
+        $this->logger = $logger;
     }
 
     public function handle(CallVisioQuery $visioQuery): CallVisioView
@@ -64,17 +70,29 @@ class CallVisioQueryHandler
             throw new CallVisioNotAllowedException();
         }
 
+        $session = null;
         $visioSessionId = $chatSession->getVisioSessionId();
         if (null === $visioSessionId) {
             $session = $this->videoConferenceAdapter->createSession();
-            $chatSession->setVisioSessionId($session->getSessionId());
-            $this->chatSessionRepository->update();
             $visioSessionId = $session->getSessionId();
-        } else {
+            try {
+                $this->chatSessionRepository->addNewSessionId($chatSession, $visioSessionId);
+            } catch (SessionIdAlreadyCreatedException $e) {
+                // edge case where 2 requests have been processed simultaneously
+                $visioSessionId = $e->getExistingSessionId();
+                if ($this->logger) {
+                    $this->logger->warning(sprintf(
+                        '[CallVisioQueryHandler] ChatSession #%d has already a sessionId (likely due to race condition)',
+                        $chatSession->getId()
+                    ));
+                }
+            }
+        }
+        if (null === $session) {
             $session = $this->videoConferenceAdapter->getSession($visioSessionId);
         }
 
-        $dateTimeEnd = $this->now->add(new \DateInterval('PT1H'));
+        $dateTimeEnd = clone $this->now->add(new \DateInterval('PT1H'));
 
         $token = $this->videoConferenceAdapter->generateAccessToken(
             $session,

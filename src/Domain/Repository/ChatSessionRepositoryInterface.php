@@ -12,6 +12,8 @@ interface ChatSessionRepositoryInterface
 
     public function update():void;
 
+    public function addNewSessionId(ChatSession $chatSession, string $sessionId): void;
+
     public function findOneByEventAndUsers(Event $event, User $aUser, User $anotherUser): ?ChatSession;
 
     /**

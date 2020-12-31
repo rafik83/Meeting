@@ -1,3 +1,4 @@
+import '../../../../../../../assets/js/components/Polyfills';
 import '@babel/polyfill';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
@@ -37,7 +38,7 @@ import addSubmitEventListenerOnElementChange from './components/form/_AddSubmitE
 import { showSpinnerOnSubmit } from './components/form/_ShowSpinnerOnSubmit';
 import SheetVideo from './components/_SheetVideo';
 import UserConnectionRegister from './components/_UserConnectionRegister';
-import NotificationToast from './components/_NotificationToast';
+import NotificationToastManager from './components/Toast/NotificationToastManager';
 import NotificationCallVisio from './components/_NotificationCallVisio';
 import initNetworking from './networking'
 
@@ -293,8 +294,7 @@ function init(target) {
 
     initNetworking(document, userConnectionRegister, notificationCallVisio);
 
-    new NotificationToast(target.querySelector('[data-notification-toast]'), userConnectionRegister);
-
+    new NotificationToastManager(target.querySelector('[data-notification-toast]'), target.querySelector('[data-notification-toast-container]'), userConnectionRegister);
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

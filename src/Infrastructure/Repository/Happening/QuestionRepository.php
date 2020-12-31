@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository\Happening;
 
 use Doctrine\ORM\EntityManager;
@@ -39,6 +31,12 @@ class QuestionRepository implements QuestionRepositoryInterface
     public function add(Question $question)
     {
         $this->entityManager->persist($question);
+        $this->entityManager->flush($question);
+    }
+
+    public function delete(Question $question): void
+    {
+        $this->entityManager->remove($question);
         $this->entityManager->flush($question);
     }
 

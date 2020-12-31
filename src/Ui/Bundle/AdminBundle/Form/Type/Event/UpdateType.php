@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -107,7 +99,11 @@ class UpdateType extends AbstractEventType
                     [
                         'required' => false,
                     ]
-                );
+                )
+                ->add('apiKeyAvailable', CheckboxType::class, [
+                    'required' => false,
+                    'help' => $options['api_key']
+                ]);
         }
     }
 
@@ -132,6 +128,7 @@ class UpdateType extends AbstractEventType
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
             'data_class' => Update::class,
+            'api_key' => null,
         ]);
     }
 
