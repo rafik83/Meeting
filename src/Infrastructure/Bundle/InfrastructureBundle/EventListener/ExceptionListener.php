@@ -85,7 +85,7 @@ class ExceptionListener
         $statusCode = $this->resolveHttpStatusCode($exception);
 
         $responseForExceptionEvent->setResponse(
-            $this->buildResponseFromHttpStatusCode($statusCode, $event, $request)
+            $this->buildResponseFromHttpStatusCode($statusCode, $event, $request, $exception->getMessage())
         );
 
         $responseForExceptionEvent->stopPropagation();
@@ -111,7 +111,7 @@ class ExceptionListener
         return $statusCode;
     }
 
-    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request): Response
+    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request, string $statusText = null): Response
     {
         if (null !== $event && Response::HTTP_INTERNAL_SERVER_ERROR !== $statusCode) {
             $request->setLocale($event->getAvailableLocale($request->getLocale()));
@@ -123,7 +123,7 @@ class ExceptionListener
         }
 
         return new Response(
-            $this->templating->render(self::TEMPLATE_MAIN_ERRORS[$statusCode]),
+            $this->templating->render(self::TEMPLATE_MAIN_ERRORS[$statusCode], ['status_text' => $statusText]),
             $statusCode
         );
     }

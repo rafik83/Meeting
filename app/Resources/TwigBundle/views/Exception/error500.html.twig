@@ -17,5 +17,8 @@
                 {{ 'error.500.content'|trans }}
             </p>
         </div>
+
+        {% if app.debug %}{{ status_text }}{% endif %}
+
     </body>
 </html>
