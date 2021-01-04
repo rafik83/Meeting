@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Event\RegistrationTemplate;
 
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;

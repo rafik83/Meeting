@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the vimeet project.
- *
- * Copyright (C) vimeet
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Transactional\Mail\Customize;
 
 use Proximum\Vimeet\Domain\Intention\IntentionType;

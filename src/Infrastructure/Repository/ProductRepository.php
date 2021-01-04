@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -272,7 +264,7 @@ class ProductRepository implements ProductRepositoryInterface
                     SELECT _order.id
                     FROM Entity:Order _order
                     JOIN _order.sheet sheet WITH sheet.event = :event
-                    JOIN _order.rows row 
+                    JOIN _order.rows row
                     WHERE row.product = product
                 )
                 AND NOT EXISTS(
@@ -287,7 +279,7 @@ class ProductRepository implements ProductRepositoryInterface
                     LEFT JOIN package.participantRanks participantRank
                     LEFT JOIN package.planning planning
                     LEFT JOIN package.groups group
-                    LEFT JOIN group.optionRanks optionRank 
+                    LEFT JOIN group.optionRanks optionRank
                     LEFT JOIN package.planRanks packagePlanRank
                     WHERE participantRank.productParticipant = product
                         OR planning = product

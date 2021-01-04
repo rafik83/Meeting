@@ -377,6 +377,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Badge

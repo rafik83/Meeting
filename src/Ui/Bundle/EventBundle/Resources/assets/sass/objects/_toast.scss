@@ -1,12 +1,9 @@
-#notification-toast {
+.notification-toast {
   background-color: rgba(255, 255, 255, 0.95);
-  bottom: 1em;
   border-radius: 0.4em;
-  max-width: 300px;
-  padding: 2em;
-  position: fixed;
+  padding: 1em;
   box-shadow: -1px -1px 8px #444;
-  right: 1em;
+  margin-bottom: 5px;
 
   .message-content {
     font-size: 14px;
@@ -14,8 +11,14 @@
   }
 
   .close {
-    position: absolute;
     right: 3px;
     top: 6px;
   }
+}
+
+.notification-toast-container{
+  max-width: 300px;
+  bottom: 1em;
+  position: fixed;
+  right: 1em;
 }

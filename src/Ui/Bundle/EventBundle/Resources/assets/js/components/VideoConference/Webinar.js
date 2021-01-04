@@ -551,27 +551,26 @@ Webinar.prototype.initShareMedia = function () {
         return;
     }
 
-    this.mediaStartSharingButton.addEventListener('click', () => this.sharePopover.popover('toggle'));
     this.showElement(this.mediaStartSharingButton);
 
     this.sharePopover.popover({
         animation: false,
         html: true,
         placement: 'top',
-        trigger: 'manual',
+        trigger: 'click',
         content: () => {
             return `<div class="text-center">
-                <button data-share-screen class="btn">${this.mediaShareButtonScreenShareMessage}</button><br />
-                <button data-share-video class="btn">${this.mediaShareButtonVideoShareMessage}</button>
+                <span class="btn btn-share-screen">${this.mediaShareButtonScreenShareMessage}</span><br />
+                <span class="btn btn-share-video">${this.mediaShareButtonVideoShareMessage}</span>
               </div>`;
         }
     });
 
     this.sharePopover.on('shown.bs.popover', () => {
-        const shareScreenButton = this.element.querySelector('[data-share-screen]');
+        const shareScreenButton = this.element.querySelector('.btn-share-screen');
         shareScreenButton.addEventListener('click', this.screenshare.bind(this));
 
-        const shareVideoButton = this.element.querySelector('[data-share-video]');
+        const shareVideoButton = this.element.querySelector('.btn-share-video');
         shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
     });
 };

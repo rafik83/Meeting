@@ -35,7 +35,7 @@ class DayViewQueryHandler
         $happenings = $this->happeningRepository->findByEventAndTypeAndDayAndCategory(
             $query->event,
             $query->sheet->getType(),
-            $query->eventDay->getDay(),
+            $query->timeRange->getBegin(),
             $query->category
         );
 
@@ -49,8 +49,8 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if ($mass->getBegin() >= $query->eventDay->getStartTime()
-                && $mass->getEnd() <= $query->eventDay->getEndTime()
+            if ($mass->getBegin() >= $query->timeRange->getBegin()
+                && $mass->getBegin() <= $query->timeRange->getEnd()
             ) {
                 $massViews[] = $this->massUnavailabilityViewQueryHandler->handle(
                     new MassUnavailabilityViewQuery($mass, $query->event, $query->locale)
@@ -59,8 +59,8 @@ class DayViewQueryHandler
         }
 
         return new DayView(
-            $query->eventDay->getStartTime(),
-            $query->eventDay->getEndTime(),
+            $query->timeRange->getBegin(),
+            $query->timeRange->getEnd(),
             $query->event->getConfiguration()->getScheduleScale(),
             $happeningViews,
             $this->mergeAndSortMassViewsAndHappeningViews($happeningViews, $massViews)
