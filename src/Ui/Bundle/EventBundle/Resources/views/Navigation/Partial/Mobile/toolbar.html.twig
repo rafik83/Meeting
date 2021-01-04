@@ -1,31 +1,31 @@
 <div class="toolbar-mobile">
-	<div class="sub-header">
-		{% if submenuView and submenuView.submenuButtonViews is not empty %}
-			<ul class="sub-header__item">
-				<li>
-					<div class="navigation">
-						<ul class="sub-header__item">
-							{% for button in submenuView.submenuButtonViews %}
-								{% if button.isShowOnMobile %}
-									<li>
-										<a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
-											<span class="{{ button.icon }}"></span>
+    <div class="sub-header">
+        {% if submenuView and submenuView.submenuButtonViews is not empty %}
+            <ul class="sub-header__item">
+                <li>
+                    <div class="navigation">
+                        <ul class="sub-header__item">
+                            {% for button in submenuView.submenuButtonViews %}
+                                {% if button.isShowOnMobile %}
+                                    <li>
+                                        <a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
+                                            <span class="{{ button.icon }}"></span>
 
-											{% if button.counter is not null and button.counter > 0 %}
-												<span class="alert-notification">{{ button.counter <= 99 ? button.counter : "99+"  }}</span>
-											{% endif %}
-										</a>
-									</li>
-								{% endif %}
-							{% endfor %}
-						</ul>
-					</div>
-				</li>
-			</ul>
-		{% endif %}
+                                            {% if button.counter is not null and button.counter > 0 %}
+                                                <span class="alert-notification">{{ button.counter <= 99 ? button.counter : "99+"  }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
 
-		<button id="navigation-mobile" type="button" aria-haspopup="true" aria-expanded="false">
-			<i class="icon-Menu_12"></i>
-		</button>
-	</div>
+        <button id="navigation-mobile" type="button" aria-haspopup="true" aria-expanded="false">
+            <i class="icon-Menu_12"></i>
+        </button>
+    </div>
 </div>

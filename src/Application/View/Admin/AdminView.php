@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Admin;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -16,19 +8,19 @@ class AdminView
 {
     /** @var int */
     public $id;
-    
+
     /** @var string */
     public $lastName;
-    
+
     /** @var string */
     public $firstName;
-    
+
     /** @var string */
     public $email;
-    
+
     /** @var string */
     public $role;
-    
+
     /** @var string[] */
     public $events;
 

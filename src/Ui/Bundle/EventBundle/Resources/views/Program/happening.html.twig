@@ -1,4 +1,4 @@
-<div class="program-happening happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+<div class="program-happening happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
 
     {{ include('EventBundle:Happening:header.html.twig', {
         'leftColor': happening.category.leftColor,
@@ -8,7 +8,7 @@
         'isUserAloneParticipant': isUserAloneParticipant,
         'withHourPrefix': true,
         'isActionButtonsOnDetails': false,
-        'timezone': happening.timeZone,
+        'timezone': timeZone,
     }) }}
 
     <div class="details">
@@ -22,7 +22,7 @@
             'endHour': happening.end,
             'isUserAloneParticipant': isUserAloneParticipant,
             'isActionButtonsOnDetails': false,
-            'timezone': happening.timeZone,
+            'timezone': timeZone,
         }) }}
     </div>
 </div>

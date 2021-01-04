@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the vimeet project.
- *
- * Copyright (C) vimeet
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Rooming\Export;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;

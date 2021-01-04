@@ -17,8 +17,28 @@
       color: $color-highlighted;
     }
 
+    .question-div-icon {
+
+      .glyphicon-trash{
+        color:black;
+        margin-left:8px;
+        cursor: pointer;
+      }
+    }
+
     .question-aside {
       text-align: right;
+    }
+
+    .question-icon {
+      text-align: right;
+      display: flex;
+    }
+
+    .question-vote {
+      clear: both;
+      margin-right: -5px;
+      margin-bottom: 5px;
     }
 
     .question-vote-count {

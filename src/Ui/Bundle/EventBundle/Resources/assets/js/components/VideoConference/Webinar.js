@@ -37,6 +37,7 @@ function Webinar(element, isSpeaker) {
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
     this.canDelete = element.hasAttribute('data-chat-can-delete');
+    this.questionCanDelete = element.hasAttribute('data-question-can-delete');
 
     if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
@@ -1042,6 +1043,10 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
                 this.newMessageQuestionCountNotification.classList.add('alert-notification');
             }
 
+            if (payload.action === 'delete') {
+                this.lastSeenquestionMessageCount = Math.max(0, this.lastSeenquestionMessageCount -1);
+            }
+
         }.bind(this)
     );
 }
@@ -1090,7 +1095,7 @@ Webinar.prototype.showQuestions = function (event) {
         this.notificationSubscriberKey,
         (event) => {
             const payload = JSON.parse(event.data);
-            if (payload.action === 'update') {
+            if (payload.action === 'update' || payload.action === 'delete') {
                 this.question.initQuestions();
             }
         }
