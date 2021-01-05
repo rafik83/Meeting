@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Happening;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -44,20 +45,37 @@ class Question
      */
     private $askedDuringWebinar;
 
+    // following properties are only for webinar questions
+
+    /**
+     * @var string|null
+     */
+    private $replyContent;
+
+    /**
+     * @var User
+     */
+    private $repliedBy;
+
+    /**
+     * @var DateTimeInterface
+     */
+    private $repliedAt;
+
     /**
      * Question constructor.
      *
      * @param Happening          $happening
      * @param Sheet              $sheet
      * @param User               $createdBy
-     * @param \DateTimeInterface $createdAt
+     * @param DateTimeInterface  $createdAt
      * @param string             $content
      */
     public function __construct(
         Happening $happening,
         Sheet $sheet,
         User $createdBy,
-        \DateTimeInterface $createdAt,
+        DateTimeInterface $createdAt,
         $content,
         $askedDuringWebinar = false
     ) {
@@ -117,11 +135,37 @@ class Question
         return $this->id;
     }
 
-    /**
-     * @return bool
-     */
     public function getAskedDuringWebinar(): bool
     {
         return $this->askedDuringWebinar;
+    }
+
+    public function setReply(string $content, User $repliedBy, DateTimeInterface $repliedAt): void
+    {
+        $this->replyContent = $content;
+        $this->repliedBy = $repliedBy;
+        $this->repliedAt = $repliedAt;
+    }
+
+    public function deleteReply(): void
+    {
+        $this->replyContent = null;
+        $this->repliedBy = null;
+        $this->repliedAt = null;
+    }
+
+    public function getReplyContent(): ?string
+    {
+        return $this->replyContent;
+    }
+
+    public function getRepliedBy(): ?User
+    {
+        return $this->repliedBy;
+    }
+
+    public function getRepliedAt(): ?DateTimeInterface
+    {
+        return $this->repliedAt;
     }
 }

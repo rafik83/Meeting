@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2191 - Reply to webinar question
 
 ## [2.75.0] - 2020-12-24
 ### Updated
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-291 - Exception simultaneous openings meetings
 
 ### Added
+- VIMEET-2284 - Delete webinar question
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
 - VIMEET-2278 - Participant's program displayed according his timezone
@@ -21,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2275 - Close notification private chat
 - VIMEET-2284 - Delete question webinar
 - Add health check route
+
+### Fixed
+- MV289 - Error management chat
 
 ## [2.74.1] - 2020-12-14
 ### Fixed

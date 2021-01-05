@@ -13,19 +13,25 @@ function Question(element) {
 
     this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
-    this.chatUnVoteMessage = element.getAttribute('data-chat-unvote-message');
-    this.chatVoteDisabledMessage = element.getAttribute('data-chat-vote-disabled-message');
+    this.questionVoteMessage = element.getAttribute('data-question-vote-message');
+    this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
+    this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
 
-    this.questionCanDelete = element.hasAttribute('data-question-can-delete');
+    this.questionCanModerate = element.hasAttribute('data-question-can-moderate');
+    this.questionReplyLabel = this.questionsContainer.getAttribute('data-question-reply-label');
+    this.questionReplyWriting = this.questionsContainer.getAttribute('data-question-begin-reply-label');
 
-    if (this.questionCanDelete){
+    if (this.questionCanModerate){
         this.questionDeleteConfirmModalElement = element.querySelector('[data-modal-delete-question-message]');
-        this.questionButtonConfirm = this.questionDeleteConfirmModalElement.querySelector('[data-modal-confirm]')
-    }
-
-    if (this.questionDeleteConfirmModalElement){
         this.questionDeleteConfirmModal = new Modal();
         this.questionDeleteConfirmModal.init(this.questionDeleteConfirmModalElement);
+
+        this.questionBeginReplyEndPoint = this.questionsContainer.getAttribute('data-question-begin-reply');
+        this.questionReplyEndPoint = this.questionsContainer.getAttribute('data-question-reply');
+        this.questionReplyButtonLabel = this.questionsContainer.getAttribute('data-question-reply-button-label');
+        this.questionDeleteReplyConfirmModalElement = element.querySelector('[data-modal-delete-question-reply]');
+        this.questionDeleteReplyConfirmModal = new Modal();
+        this.questionDeleteReplyConfirmModal.init(this.questionDeleteReplyConfirmModalElement);
     }
 
     this.questionListeners = [];
@@ -35,7 +41,7 @@ function Question(element) {
 Question.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
     const voteHref = this.questionsContainer.getAttribute('data-vote-href');
-    const questionMessageDelete = this.questionsContainer.getAttribute('data-question-message-delete');
+    const urlQuestionDelete = this.questionsContainer.getAttribute('data-question-message-delete');
 
     const $questionsList = $(this.questionsList);
 
@@ -47,18 +53,19 @@ Question.prototype.initQuestions = function () {
         response.forEach((item) => {
             const rowEl = document.createElement('div');
             rowEl.classList.add('question-row');
+            rowEl.id = 'question-' + item.questionId;
 
             const contentEl = rowEl.appendChild(document.createElement('div'));
             contentEl.classList.add('question-content');
 
             const divIcon = rowEl.appendChild(document.createElement('div'));
-            divIcon.classList.add('question-div-icon');
+            divIcon.classList.add('question-div-icon', 'pull-right');
 
             const questionAside = document.createElement('small');
-            questionAside.classList.add('pull-right', 'question-vote');
+            questionAside.classList.add('question-vote');
 
             const questionIcon = document.createElement('small');
-            questionIcon.classList.add('pull-right', 'question-icon');
+            questionIcon.classList.add('question-icon');
 
             const likeBlock = document.createElement('div');
             const voteCount = document.createElement('span');
@@ -137,32 +144,33 @@ Question.prototype.initQuestions = function () {
 
             $questionsList[0].appendChild(rowEl);
 
-
-            const onConfirmDelete = function() {
-                this.questionDeleteConfirmModal.show();
-                /* Delete previous listener */
-                const clonedButton = this.questionButtonConfirm.cloneNode(true);
-                this.questionButtonConfirm.parentNode.replaceChild(clonedButton, this.questionButtonConfirm);
-                this.questionButtonConfirm = clonedButton;
-
-                const payload = { messageId: item.questionId };
-                this.questionButtonConfirm.addEventListener('click', ()=> {
-                    $.post(questionMessageDelete, JSON.stringify(payload), (response) => {
+            const payload = { messageId: item.questionId };
+            const onConfirmDelete = () => {
+                this.showConfirmAnd(this.questionDeleteConfirmModal, () => {
+                    $.post(urlQuestionDelete, JSON.stringify(payload), (response) => {
                         if (response.status !== 'ok') {
-                            this.showError('Message delete failed');
+                            this.showError('Question delete failed');
                         }
                     }).fail((response)=> {
                         this.showError(response.responseJSON ? response.responseJSON.message : response.status);
                     });
-                    this.questionDeleteConfirmModal.hide();
                 });
-            }.bind(this);
+            };
 
-            if (this.questionCanDelete) {
+            if (item.reply) {
+                this.addReply(item.questionId, item.reply, rowEl);
+                questionMessageCount++;
+            }
+
+            if (this.questionCanModerate) {
                 const questionDeleteMessage = document.createElement('i');
                 questionDeleteMessage.classList.add('glyphicon', 'glyphicon-trash');
                 questionIcon.appendChild(questionDeleteMessage);
-                questionDeleteMessage.addEventListener('click', onConfirmDelete);
+                questionDeleteMessage.addEventListener('click', onConfirmDelete.bind(this));
+
+                if (!item.reply) {
+                    this.addReplyButton(rowEl, item.questionId);
+                }
             }
 
         });
@@ -171,6 +179,81 @@ Question.prototype.initQuestions = function () {
         .fail(function () {
             console.error('Failed to load webinar questions');
         }.bind(this));
+}
+
+/**
+ * Show confirm dialog and call callback if confirm button is clicked
+ */
+Question.prototype.showConfirmAnd = function (confirmModal, callback) {
+    confirmModal.show();
+    const confirmButton = confirmModal.element.querySelector('[data-modal-confirm]');
+    /* Delete previous listener */
+    const clonedButton = confirmButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(clonedButton, confirmButton);
+
+    clonedButton.addEventListener('click', ()=> {
+        callback();
+        confirmModal.hide();
+    });
+}
+
+Question.prototype.addReply = function (questionId, reply, container) {
+    const questionReplyContainer = document.createElement('div');
+    questionReplyContainer.classList.add('question-reply');
+
+    if (this.questionCanModerate) {
+        const questionReplyActions = document.createElement('div');
+        questionReplyActions.classList.add('question-reply-actions', 'pull-right');
+        const deleteButton = document.createElement('i');
+        deleteButton.classList.add('glyphicon', 'glyphicon-trash');
+        questionReplyActions.appendChild(deleteButton);
+        deleteButton.addEventListener('click', () => this.onDeleteReply(questionId));
+
+        if (reply.canUpdate) {
+            const updateButton = document.createElement('i');
+            updateButton.classList.add('glyphicon', 'glyphicon-edit');
+            questionReplyActions.appendChild(updateButton);
+            updateButton.addEventListener('click', () => this.openUpdateReply(questionReplyContainer, questionId, reply.replyContent));
+        }
+
+        questionReplyContainer.appendChild(questionReplyActions);
+    }
+
+    const questionRepliedAt = document.createElement('small');
+    questionRepliedAt.textContent = reply.repliedAt;
+    questionReplyContainer.appendChild(questionRepliedAt);
+
+    const questionReplyIcon = document.createElement('i');
+    questionReplyIcon.classList.add('icon-Commentaire');
+    const questionRepliedBy = document.createElement('div');
+    questionRepliedBy.classList.add('replied-by')
+    questionRepliedBy.appendChild(questionReplyIcon);
+    questionRepliedBy.appendChild(document.createTextNode(this.questionReplyLabel.replace('%name%', reply.repliedBy)));
+    questionReplyContainer.appendChild(questionRepliedBy);
+
+    const questionReplyContent = document.createElement('p');
+    questionReplyContent.classList.add('reply-content');
+
+    questionReplyContent.appendChild(document.createTextNode(reply.replyContent));
+    questionReplyContainer.appendChild(questionReplyContent);
+    container.appendChild(questionReplyContainer);
+}
+
+Question.prototype.addReplyButton = function (targetElement, questionId) {
+    const questionReplyContainer = document.createElement('div');
+    questionReplyContainer.classList.add('question-reply', 'text-right');
+
+    const questionReplyButton = document.createElement('button');
+    questionReplyButton.classList.add('btn', 'btn-primary', 'btn-xs', 'btn-reply')
+    const questionReplyIcon = document.createElement('i');
+    questionReplyIcon.classList.add('icon-Commentaire');
+    questionReplyButton.appendChild(questionReplyIcon);
+    questionReplyButton.appendChild(document.createTextNode(this.questionReplyButtonLabel));
+
+    questionReplyContainer.append(questionReplyButton);
+
+    targetElement.appendChild(questionReplyContainer);
+    questionReplyButton.addEventListener('click', () => this.openReply(questionReplyContainer, questionId));
 }
 
 Question.prototype.submitQuestion = function (event) {
@@ -203,15 +286,96 @@ Question.prototype.submitQuestion = function (event) {
         });
 }
 
-Question.prototype.sendUpdateQuestionsSignal = function () {
-    this.session.signal({
-            type: 'QuestionsUpdate'
-        },
-        (error) => {
-            if (error) {
-                console.error('QuestionsUpdate signal error', error);
-            }
+Question.prototype.showWritingRepy = function (questionId, author) {
+    const questionRow = this.questionsContainer.querySelector('#question-'+questionId);
+    if (!questionRow) {
+        return;
+    }
+
+    const questionReplyContainer = document.createElement('div');
+    questionReplyContainer.classList.add('question-reply');
+    const writingReply = document.createElement('div');
+    writingReply.classList.add('replied-by');
+    writingReply.textContent = this.questionReplyWriting.replace('%name%', author);
+    questionReplyContainer.appendChild(writingReply);
+    questionRow.appendChild(questionReplyContainer);
+}
+
+Question.prototype.openReply = function (targetElement, questionId, defaultContent) {
+    // clone add question form
+    const questionFormSource = this.questionsContainer.querySelector('[data-questions-form]');
+    const questionForm = questionFormSource.cloneNode(true);
+    questionForm.removeAttribute('data-questions-form');
+
+    const questionFormInput = questionForm.querySelector('input[name="content"]');
+    questionFormInput.removeAttribute('placeholder');
+    if (defaultContent) {
+        questionFormInput.value = defaultContent;
+    }
+
+    removeAllChildren(targetElement);
+    targetElement.appendChild(questionForm);
+
+    questionFormInput.focus();
+
+    questionForm.addEventListener('submit', (event) => this.submitQuestionReply(event, questionId, questionFormInput.value));
+
+    $.post(this.questionBeginReplyEndPoint, JSON.stringify({questionId}))
+        .fail((response) => {
+            this.showError(response.responseJSON ? response.responseJSON.message : response.status);
         });
+}
+
+Question.prototype.submitQuestionReply = function (event, questionId, content) {
+    event.preventDefault();
+
+    const replyForm = event.currentTarget;
+    const questionRow = replyForm.parentNode.parentNode;
+
+    if ('' === content) {
+        replyForm.remove();
+        this.addReplyButton(questionRow, questionId);
+
+        return;
+    }
+
+    replyForm.querySelectorAll('input,button').forEach((node) => node.disabled = true);
+
+    $.post(
+        this.questionReplyEndPoint,
+        JSON.stringify({questionId, content}),
+        (payload) => {
+            if (payload.status === 'ok') {
+                replyForm.remove();
+
+                return;
+            }
+
+            replyForm.querySelector('input').value = content;
+            this.showError('Reply failed');
+        })
+    .fail((response) => {
+        this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+    });
+}
+
+Question.prototype.onDeleteReply = function (questionId) {
+    const payload = {questionId};
+    const urlQuestionReplyDelete = this.questionsContainer.getAttribute('data-question-reply-delete');
+
+    this.showConfirmAnd(this.questionDeleteReplyConfirmModal, () => {
+        $.post(urlQuestionReplyDelete, JSON.stringify(payload), (response) => {
+            if (response.status !== 'ok') {
+                this.showError('Reply delete failed');
+            }
+        }).fail((response)=> {
+            this.showError(response.responseJSON ? response.responseJSON.message : response.status);
+        });
+    });
+}
+
+Question.prototype.openUpdateReply = function (questionReplyContainer, questionId, replyContent) {
+    this.openReply(questionReplyContainer, questionId, replyContent);
 }
 
 Question.prototype.removeQuestionListeners = function () {
@@ -222,5 +386,12 @@ Question.prototype.removeQuestionListeners = function () {
 Question.prototype.showError = function (error) {
     alert('There was an error: ' + (error.name ? error.name : error) + (error.message ? (', ' + error.message) : ''));
 };
+
+// utility function to remove all children of an DOM element
+function removeAllChildren(element) {
+    while (element.firstChild) {
+        element.removeChild(element.lastChild);
+    }
+}
 
 export default Question;
