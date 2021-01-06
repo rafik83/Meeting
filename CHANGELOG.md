@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Updated
-- Update Elasticsearch to 5.6
+- Update Elasticsearch to 6.8.13
 - Upgrade NODE version 14.x (LTS)
 
 ### Fixed

@@ -90,7 +90,7 @@ The recommended way to install the dependencies on this project is to use this p
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
 
-Top avoid ES6 error, run:
+To avoid ES6 error, run:
 
     $ sudo sysctl -w vm.max_map_count=262144
 
