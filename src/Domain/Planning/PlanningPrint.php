@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Planning;
 
-use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
+use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
 
 class PlanningPrint
 {
