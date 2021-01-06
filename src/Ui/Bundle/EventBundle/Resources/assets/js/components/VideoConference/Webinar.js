@@ -36,9 +36,6 @@ function Webinar(element, isSpeaker) {
     this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
 
-    this.canDelete = element.hasAttribute('data-chat-can-delete');
-    this.questionCanDelete = element.hasAttribute('data-question-can-delete');
-
     if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
     } else {
@@ -102,10 +99,6 @@ function Webinar(element, isSpeaker) {
 
         this.chatButton = element.querySelector('[data-chat-button]');
         this.chatButton.addEventListener('click', this.showChat.bind(this));
-
-        this.questionVoteMessage = element.getAttribute('data-question-vote-message');
-        this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
-        this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
 
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
@@ -1038,13 +1031,13 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
             const payload = JSON.parse(event.data);
 
             if (payload.action === 'update') {
-                const newQuestionCount = payload.msg_count - this.lastSeenquestionMessageCount;
+                const newQuestionCount = payload.msg_count - this.lastSeenQuestionMessageCount;
                 this.newMessageQuestionCountNotification.textContent = newQuestionCount > 99 ? '99+' : newQuestionCount;
                 this.newMessageQuestionCountNotification.classList.add('alert-notification');
             }
 
             if (payload.action === 'delete') {
-                this.lastSeenquestionMessageCount = Math.max(0, this.lastSeenquestionMessageCount -1);
+                this.lastSeenQuestionMessageCount = Math.max(0, this.lastSeenQuestionMessageCount + payload.delta);
             }
 
         }.bind(this)
@@ -1054,7 +1047,7 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
     this.openTab = 'chat';
-    this.lastSeenquestionMessageCount = this.question.questionMessageCount;
+    this.lastSeenQuestionMessageCount = this.question.questionMessageCount;
     this.questionsButton.classList.remove('btn-primary');
     this.questionsButton.classList.add('btn-gray');
     this.chatButton.classList.remove('btn-gray');
@@ -1097,6 +1090,10 @@ Webinar.prototype.showQuestions = function (event) {
             const payload = JSON.parse(event.data);
             if (payload.action === 'update' || payload.action === 'delete') {
                 this.question.initQuestions();
+            }
+
+            if (payload.action === 'begin_reply' && payload.authorId != this.currentUserId) {
+                this.question.showWritingRepy(payload.questionId, payload.author);
             }
         }
     );
