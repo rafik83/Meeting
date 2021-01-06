@@ -18,6 +18,7 @@
     }
 
     .question-div-icon {
+      text-align: right;
 
       .glyphicon-trash{
         color:black;
@@ -88,6 +89,38 @@
         margin-left: 10px;
         object-fit: cover;
         width: 32px;
+      }
+    }
+
+    .question-reply {
+      margin: 0 0.3em;
+
+      .question-reply-actions i {
+        cursor: pointer;
+      }
+
+      .replied-by {
+        font-size: 12px;
+        font-style: italic;
+        i {
+          display: inline-block;
+          margin-right: 0.8em;
+        }
+      }
+
+      .reply-content {
+        font-weight: bold;
+      }
+
+      .btn-reply {
+        font-size: 12px;
+        font-weight: normal;
+        padding: 4px 8px;
+        margin: 4px 0;
+      }
+
+      form {
+        border: none;
       }
     }
   }

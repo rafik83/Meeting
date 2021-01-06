@@ -146,10 +146,10 @@ class GetWebinarViewQueryHandler
                 $this->isRecordingAllowed->isSatisfiedBy($happening),
                 $this->isWebinarRecording($happening),
                 $happening->getEvent()->getAutoArchiveWebinar(),
-                $happening->isStreamOpenToPublic(),
                 $questionsCount,
                 $happening->allowWebinarOnHLS(),
                 $viewersCount,
+                $happening->isStreamOpenToPublic(),
                 $isRegisteredSpeaker,
                 $isRegisteredSpeaker
             );
