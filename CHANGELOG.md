@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 
 ## [2.75.0] - 2020-12-24
 ### Updated
@@ -21,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2275 - Close notification private chat
 - VIMEET-2284 - Delete question webinar
 - Add health check route
-- VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
