@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2191 - Reply to webinar question
+- VIMEET-2293 - Set participant's locale by event
 
 ## [2.75.0] - 2020-12-24
 ### Updated
