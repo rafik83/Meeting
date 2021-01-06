@@ -215,7 +215,11 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         try {
             return $this->openTok->generateToken($session->getSessionId(), $options);
         } catch (InvalidArgumentException $argumentException) {
-            throw new InvalidTokenGeneratorArgumentsException();
+            throw new InvalidTokenGeneratorArgumentsException(
+                'Failed to create token for session ' . $session->getSessionId() . PHP_EOL . $argumentException->getMessage(),
+                0,
+                $argumentException
+            );
         }
     }
 
