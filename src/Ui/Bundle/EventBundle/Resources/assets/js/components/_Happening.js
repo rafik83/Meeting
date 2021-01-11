@@ -103,6 +103,7 @@ Happening.prototype.handleRequestForm = function (form)
 Happening.prototype.validateParticipation = function (response) {
     this.enableParticipateAction();
     const label = response.label;
+    const currentUserParticipate = response.currentUserParticipate;
 
     if (label == undefined) {
         return;
@@ -116,13 +117,13 @@ Happening.prototype.validateParticipation = function (response) {
 
     var buttonLabel;
 
-    if ('cancel' === label) {
+    if ('update' === label && currentUserParticipate) {
+        buttonLabel = '<i class="icon icon-Editer_1 happeningParticipateIcon"></i> ' + this.labelUpdate;
+        this.happeningParticipateIcon.classList.remove('hide');
+    } else if ('cancel' === label) {
         buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i> ' + this.labelCancel;
         this.happeningParticipateIcon.classList.remove('hide');
-    } else if ('update' === label) {
-        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i> ' + this.labelUpdate;
-        this.happeningParticipateIcon.classList.remove('hide');
-    } else if ('participate' === label) {
+    } else if ('participate' === label || ('update' === label && !currentUserParticipate)) {
         // in case webinar is started and user cancel participation, reload to hide start button
         if (this.happeningParticipateAction.getAttribute('data-webinar-open') == 1) {
             document.location.reload();
