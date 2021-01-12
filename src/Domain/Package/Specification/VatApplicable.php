@@ -44,8 +44,7 @@ class VatApplicable
             $sheet->getEvent()->getMode(),
             $sheet->getEvent()->getCountry(),
             $billingInfo->getAddress()->getCountry(),
-            $billingInfo->getVatNumber(),
-            $sheet
+            $billingInfo->getVatNumber()
         );
     }
 
@@ -57,16 +56,13 @@ class VatApplicable
      *
      * @return bool
      */
-    public function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber, $sheet): bool
+    public function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber): bool
     {
-        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
-
         if (Event::VAT_MODE_ATI === $mode) {
             return false;
         }
 
-
-        if (strtolower($billingInfo->getAddress()->getCountry()) === "mc" && strtolower($eventCountry) === "fr") {
+        if ((strtolower($billingCountry) === "mc" && strtolower($eventCountry) === "fr") || (strtolower($billingCountry) === "fr" && strtolower($eventCountry) === "mc")) {
             return true;
         }
 

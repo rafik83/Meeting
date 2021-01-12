@@ -131,8 +131,7 @@ class OrderViewQueryHandler
                     $query->event->getMode(),
                     $query->event->getCountry(),
                     $billingInfoView->countryCode,
-                    $billingInfoView->vatNumber,
-                    $sheet
+                    $billingInfoView->vatNumber
                 )
             )
         );

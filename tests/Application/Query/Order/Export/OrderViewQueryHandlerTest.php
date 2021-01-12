@@ -130,8 +130,7 @@ class OrderViewQueryHandlerTest extends TestCase
                 Event::VAT_MODE_ET,
                 'FR',
                 'FR',
-                null,
-                $sheet->reveal()
+                null
             )
             ->shouldBeCalled()
             ->willReturn(true)
