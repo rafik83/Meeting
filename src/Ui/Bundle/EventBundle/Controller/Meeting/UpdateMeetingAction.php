@@ -6,8 +6,8 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\Meeting\Event\Move;
-use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Update;
+use Proximum\Vimeet\Application\Exception\Meeting\UpdateMeetingException;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\MoveMeetingType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateMeetingType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
-class MoveMeetingAction
+class UpdateMeetingAction
 {
     /** @var CanMoveMeeting */
     private $canMoveMeeting;
@@ -88,8 +88,9 @@ class MoveMeetingAction
         $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio()));
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
-        $move = new Move($sheet, $meeting);
-        $form = $this->formFactory->create(MoveMeetingType::class, $move, [
+        $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet));
+        $form = $this->formFactory->create(UpdateMeetingType::class, $update, [
+            'participants' => $sheet->getParticipantsArray(),
             'availableSlots' => $availableSlotsView->availableSlots,
             'timezone' => $timezone,
             'locale' => $sheet->getEvent()->getAvailableLocale($request->getLocale()),
@@ -98,8 +99,8 @@ class MoveMeetingAction
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $this->commandBus->handle($move);
-            } catch (MoveMeetingException $exception) {
+                $this->commandBus->handle($update);
+            } catch (UpdateMeetingException $exception) {
                 return new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
             }
 
@@ -118,8 +119,9 @@ class MoveMeetingAction
         }
 
         return new Response(
-            $this->engine->render('@Event/Meeting/move-meeting-slot-form.html.twig', [
+            $this->engine->render('@Event/Meeting/update-meeting-form.html.twig', [
                 'form' => $form->createView(),
+                'participants' => $sheet->getParticipants(),
             ])
         );
     }

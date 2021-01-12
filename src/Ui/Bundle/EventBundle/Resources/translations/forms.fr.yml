@@ -50,12 +50,6 @@ form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.group.participant.submit: Enregistrer
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
-form.move_meeting_slot.children.content.label: 'Commentaire à destination de votre interlocuteur'
-form.move_meeting_slot.children.meetingSlot.label: 'Choisir un créneau disponible'
-form.move_meeting_slot.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
-form.move_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
-form.move_meeting.children.meetingSlot.label: 'Choisir un créneau disponible'
-form.move_meeting.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
 form.multi_upload_data.children.submit.label: Valider
 form.multi_upload_data.children.uploads.label_add: Ajouter
 form.multi_upload_data.children.uploads.label_delete: Supprimer
@@ -183,6 +177,10 @@ form.sheet_template_objects_collection_type.children.submit.label: Enregistrer
 form.sheet_video_data.children.selectedProduct.label: 'Produits liés'
 form.sheet_video_data.children.submit.label: Enregistrer
 form.sort_participants.children.submit.label: Enregistrer
+form.update_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
+form.update_meeting.children.meetingSlot.label: 'Choisir un créneau disponible'
+form.update_meeting.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
+form.update_meeting.children.participants.label: 'Participants'
 form.user_availability_confirmation.children.confirm.label: 'Accéder directement au catalogue'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer

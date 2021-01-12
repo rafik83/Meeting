@@ -356,8 +356,9 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\MoveMeetingType:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateMeetingType:
         arguments:
+             - '@template.participant_info_guesser'
              - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }

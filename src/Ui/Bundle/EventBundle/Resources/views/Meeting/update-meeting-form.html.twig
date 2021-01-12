@@ -10,6 +10,12 @@
 {{ form_start(form) }}
 <div class="modal-body">
     <div class="row">
+        <div class="col-md-4">{{ form_label(form.participants) }}</div>
+        <div class="col-md-8">
+            {{ form_widget(form.participants) }}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">{{ form_label(form.meetingSlot) }}</div>
         <div class="col-md-8">
             {{ form_widget(form.meetingSlot) }}
