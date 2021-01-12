@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
 
 ## [2.75.0] - 2020-12-24
 ### Updated
