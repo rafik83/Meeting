@@ -1658,7 +1658,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\UpdateHandler:
         arguments:
             - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -1668,7 +1668,7 @@ services:
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Update }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:

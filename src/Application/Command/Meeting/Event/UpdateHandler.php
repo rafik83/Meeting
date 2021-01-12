@@ -2,39 +2,27 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
-use Proximum\Vimeet\Application\Exception\Meeting\MoveMeetingException;
+use Proximum\Vimeet\Application\Exception\Meeting\UpdateMeetingException;
 use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class MoveHandler
+class UpdateHandler
 {
-    /** @var CommandBusInterface */
-    private $commandBus;
-
-    /** @var CanMoveMeeting */
-    private $canMoveMeeting;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var MessageRepositoryInterface */
-    private $messageRepository;
-
-    /** @var MeetingRepositoryInterface */
-    private $meetingRepository;
-
-    /** @var \DateTimeInterface */
-    private $datetime;
-
-    /**@var RequestRepositoryInterface */
-    private $requestRepository;
+    private CommandBusInterface $commandBus;
+    private CanMoveMeeting $canMoveMeeting;
+    private TranslatorInterface $translator;
+    private MessageRepositoryInterface $messageRepository;
+    private MeetingRepositoryInterface $meetingRepository;
+    private DateTimeInterface $datetime;
+    private RequestRepositoryInterface $requestRepository;
 
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
@@ -42,7 +30,7 @@ class MoveHandler
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
         MeetingRepositoryInterface $meetingRepository,
-        \DateTimeInterface $datetime,
+        DateTimeInterface $datetime,
         RequestRepositoryInterface $requestRepository
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
@@ -54,33 +42,36 @@ class MoveHandler
         $this->requestRepository = $requestRepository;
     }
 
-    public function handle(Move $move): void
+    public function handle(Update $command): void
     {
-        if (false === $this->canMoveMeeting->isSatisfiedBy($move->sheet)
-            || !$move->meeting->hasSheet($move->sheet)
+        if (false === $this->canMoveMeeting->isSatisfiedBy($command->sheet)
+            || !$command->meeting->hasSheet($command->sheet)
         ) {
             throw new AccessDeniedException();
         }
 
+        $command->meeting->setParticipants($command->sheet, $command->participants);
+
         try {
+
             $this->commandBus->handle(
                 new UpdateSlot(
-                    $move->meeting,
-                    $move->meetingSlot,
-                    $move->meeting->isVisio(),
+                    $command->meeting,
+                    $command->meetingSlot,
+                    $command->meeting->isVisio(),
                     true
                 )
             );
 
-            $move->meeting->blockSlot();
+            $command->meeting->blockSlot();
 
-            $request = $move->meeting->getRequest();
+            $request = $command->meeting->getRequest();
 
-            if ($move->content) {
+            if ($command->content) {
                 $message = new Message(
                     $request,
-                    $move->sheet,
-                    $move->content,
+                    $command->sheet,
+                    $command->content,
                     $this->datetime
                 );
 
@@ -90,10 +81,10 @@ class MoveHandler
                 $request->setUpdateOrDeleteReasonMessage(null);
             }
 
-            $this->meetingRepository->set($move->meeting);
+            $this->meetingRepository->set($command->meeting);
             $this->requestRepository->set($request);
         } catch (\Exception $exception) {
-            throw new MoveMeetingException(
+            throw new UpdateMeetingException(
                 $this->translator->trans('agenda.meeting.updateSlot.error')
             );
         }
