@@ -50,10 +50,11 @@ class UpdateHandler
             throw new AccessDeniedException();
         }
 
-        $command->meeting->setParticipants($command->sheet, $command->participants);
+        if (0 === \count($command->participants)) {
+            throw new UpdateMeetingException('At least one participant of the sheet must be in the meeting');
+        }
 
         try {
-
             $this->commandBus->handle(
                 new UpdateSlot(
                     $command->meeting,
@@ -80,6 +81,8 @@ class UpdateHandler
             } else {
                 $request->setUpdateOrDeleteReasonMessage(null);
             }
+
+            $command->meeting->setParticipants($command->sheet, $command->participants);
 
             $this->meetingRepository->set($command->meeting);
             $this->requestRepository->set($request);
