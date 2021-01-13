@@ -104,6 +104,7 @@ class UnavailabilityController extends Controller
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event' => $event,
             'participant' => $participant,
+            'myParticipant' => $sheet->getUserParticipant($user),
             'agenda' => $agenda,
             'sheet' => $sheet,
             'form_unavailability' => $createFormView->formView,
