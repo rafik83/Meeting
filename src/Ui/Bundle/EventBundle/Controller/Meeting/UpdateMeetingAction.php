@@ -85,7 +85,7 @@ class UpdateMeetingAction
         }
 
         /** @var GetAvailableSlotsView $availableSlotsView */
-        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio()));
+        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio(), $sheet));
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet));
@@ -121,7 +121,7 @@ class UpdateMeetingAction
         return new Response(
             $this->engine->render('@Event/Meeting/update-meeting-form.html.twig', [
                 'form' => $form->createView(),
-                'participants' => $sheet->getParticipants(),
+                'currentSheetAvailableSlots' => $availableSlotsView->currentSheetAvailableSlotIds,
             ])
         );
     }

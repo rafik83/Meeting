@@ -231,6 +231,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->setParameter('userIds', $userIds)
             ->setParameter('usersTypes', $usersTypes)
         ;
+        $queryBuilder->addOrderBy('slot.begin', 'ASC');
 
         return $queryBuilder->getQuery()->getResult();
     }

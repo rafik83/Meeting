@@ -4,18 +4,18 @@ namespace Proximum\Vimeet\Application\Query\MeetingSlot;
 
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class GetAvailableSlotsQuery implements Query
 {
-    /** @var Meeting */
-    public $meeting;
+    public Meeting $meeting;
+    public bool $visio;
+    public Sheet $sheet;
 
-    /** @var bool */
-    public $visio;
-
-    public function __construct(Meeting $meeting, bool $visio = false)
+    public function __construct(Meeting $meeting, bool $visio = false, Sheet $sheet)
     {
         $this->meeting = $meeting;
         $this->visio = $visio;
+        $this->sheet = $sheet;
     }
 }

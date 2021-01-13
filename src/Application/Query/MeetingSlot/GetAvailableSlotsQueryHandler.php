@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\MeetingSlot;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -25,9 +27,22 @@ class GetAvailableSlotsQueryHandler
     {
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),
-            $query->meeting->getAllParticipants(),
+            $query->meeting->getMetParticipants($query->sheet),
             false
         );
+
+        $currentSheetAvailableSlotIds = [];
+        /** @var Participant $participant */
+        foreach ($query->sheet->getParticipantsArray() as $participant) {
+            $participantSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
+                $query->meeting->getEvent(),
+                [$participant],
+                false
+            );
+            $currentSheetAvailableSlotIds[$participant->getId()] = array_map(
+                fn (MeetingSlot $meetingSlot) => $meetingSlot->getId(), $participantSlots
+            );
+        }
 
         $availableSlots = [];
 
@@ -44,6 +59,6 @@ class GetAvailableSlotsQueryHandler
             }
         }
 
-        return new GetAvailableSlotsView($availableSlots);
+        return new GetAvailableSlotsView($availableSlots, $currentSheetAvailableSlotIds);
     }
 }

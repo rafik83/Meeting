@@ -35,6 +35,7 @@ class UpdateMeetingType extends AbstractType
                 ->add('participants', ChoiceType::class, [
                     'choices' => $options['participants'],
                     'choice_label' => fn (Participant $participant) => $this->guesser->guessParticipantCompleteName($participant, $locale),
+                    'choice_attr' => fn (Participant $participant) => ['data-participant-id' => $participant->getId()],
                     'expanded' => true,
                     'multiple' => true,
                 ]);
@@ -48,12 +49,13 @@ class UpdateMeetingType extends AbstractType
                     $begin = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getBegin());
                     $end = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getEnd());
 
-                    return $this->translator->trans('form.move_meeting.children.meetingSlot.label.begin.end', [
+                    return $this->translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', [
                         '%day%' => $day,
                         '%begin%' => $begin,
                         '%end%' => $end,
                     ], 'forms');
-                }
+                },
+                'choice_attr' => fn (MeetingSlot $meetingSlot) => ['data-meeting-slot-id' => $meetingSlot->getId()],
             ])
             ->add('content', TextareaType::class, [
                 'required' => false,
