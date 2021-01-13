@@ -1,0 +1,66 @@
+{% trans_default_domain 'templates' %}
+
+{% set config = {
+    type: 'checkbox',
+    label: { (locale): 'template.object.checkbox'|trans },
+    required: false,
+    tag: null,
+    tags: []
+}|merge(config|default({})) %}
+
+<div class="object" data-object="checkbox" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    <ul class="block-buttons list-inline">
+        <li class="object-title">{{ 'template.object.checkbox'|trans }}</li>
+        <li>
+            <span class="btn btn-link move-button">
+                <i class="glyphicon glyphicon-move"></i>
+            </span>
+        </li>
+        <li>
+            <button class="btn btn-link delete-button">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </li>
+        <li>
+            <button class="btn btn-link configure-button">
+                <i class="glyphicon glyphicon-cog"></i>
+            </button>
+        </li>
+    </ul>
+    <div data-bind="label">{{ config.label[locale] }}</div>
+    <div class="modal fade configure-modal" tabindex="-1" role="dialog">
+        <form action="#" method="GET">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{ 'template.object.checkbox'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-label">{{ 'template.label.title'|trans }}</label>
+                            <input class="form-control" type="text" name="label" />
+                            {% if fallback|default(false) and locale != fallback %}
+                                <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" name="required" />
+                                {{ 'template.required.title'|trans }}
+                            </label>
+                        </div>
+                        {{ include('AdminBundle:Template/Form:tagsSelect.html.twig', {
+                            'config': config,
+                            'templateTagView': templateTagView,
+                        }, false) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
+                        <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

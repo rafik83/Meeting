@@ -117,6 +117,11 @@
                             'isFormTemplate': true,
                             'templateTagView': registrationTemplateTagView,
                         }, false) }}
+                        {{ include('AdminBundle:Template/Object:checkbox.html.twig', {
+                            'isFormTemplate': true,
+                            'locale': locale,
+                            'templateTagView': registrationTemplateTagView,
+                        }, false) }}
                     </div>
                 </div>
             </div>

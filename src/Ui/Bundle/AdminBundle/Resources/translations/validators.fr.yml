@@ -45,6 +45,7 @@ validators.field.notValid.telephone: 'Le format du champ téléphone n''est pas 
 validators.field.notValid.uploadObject: 'Format de fichier incorrect'
 validators.field.notValid.url: 'Le format du champ url n''est pas valide'
 validators.field.required: 'Ce champ est requis'
+validators.field.required_checkbox: Veuillez cocher cette case si vous désirez poursuivre
 validators.group.email_not_found: 'Aucun utilisateur trouvé pour cette addresse e-mail : %email%'
 validators.group.no_sheet_selected: 'Au moins une fiche doit être selectionnée'
 validators.group.user_not_allowed_to_manage: 'L''utilisateur suivant n''est pas autorisé à gérer une nouvelle entité: %email%'

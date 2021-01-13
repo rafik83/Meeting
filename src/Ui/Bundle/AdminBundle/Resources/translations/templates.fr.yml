@@ -33,6 +33,7 @@ template.nomenclature.objective.title: Objectif
 template.nomenclature.title: Nomenclature
 template.object.boolean: 'Champs Oui / Non'
 template.object.button-link: Lien
+template.object.checkbox: 'Case à cocher'
 template.object.collection: Collection
 template.object.country: Pays
 template.object.datetime: 'Date / heure'
