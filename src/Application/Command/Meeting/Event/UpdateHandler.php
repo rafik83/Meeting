@@ -12,6 +12,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UpdateHandler
@@ -23,6 +24,7 @@ class UpdateHandler
     private MeetingRepositoryInterface $meetingRepository;
     private DateTimeInterface $datetime;
     private RequestRepositoryInterface $requestRepository;
+    private LoggerInterface $logger;
 
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
@@ -31,7 +33,8 @@ class UpdateHandler
         MessageRepositoryInterface $messageRepository,
         MeetingRepositoryInterface $meetingRepository,
         DateTimeInterface $datetime,
-        RequestRepositoryInterface $requestRepository
+        RequestRepositoryInterface $requestRepository,
+        ?LoggerInterface $logger = null
     ) {
         $this->canMoveMeeting = $canMoveMeeting;
         $this->commandBus = $commandBus;
@@ -40,6 +43,7 @@ class UpdateHandler
         $this->meetingRepository = $meetingRepository;
         $this->datetime = $datetime;
         $this->requestRepository = $requestRepository;
+        $this->logger = $logger;
     }
 
     public function handle(Update $command): void
@@ -87,6 +91,13 @@ class UpdateHandler
             $this->meetingRepository->set($command->meeting);
             $this->requestRepository->set($request);
         } catch (\Exception $exception) {
+            if ($this->logger) {
+                $this->logger->warning(
+                    'Update meeting {id} failed: [{exc}] {message}',
+                    ['id' => $command->meeting->getId(), 'exc'=>get_class($exception), 'message' => $exception->getMessage()]
+                );
+            }
+
             throw new UpdateMeetingException(
                 $this->translator->trans('agenda.meeting.updateSlot.error')
             );

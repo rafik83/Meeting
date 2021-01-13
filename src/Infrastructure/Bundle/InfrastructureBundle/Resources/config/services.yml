@@ -1667,6 +1667,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Update }
     command.meeting_slot.unlock_handler:
