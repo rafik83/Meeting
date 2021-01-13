@@ -5,11 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Updated
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+## [2.76.0] - 2021-01-12
+### Updated
 - VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
-- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+### Fixed
+- MV-293 - Https links in emails
 
 ## [2.75.0] - 2020-12-24
 ### Updated

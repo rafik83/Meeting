@@ -3054,6 +3054,7 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
             - '@monolog.logger'
 
     adapter.sendgrid_api_adapter:
