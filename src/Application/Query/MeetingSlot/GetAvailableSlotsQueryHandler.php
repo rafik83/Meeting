@@ -25,24 +25,24 @@ class GetAvailableSlotsQueryHandler
 
     public function handle(GetAvailableSlotsQuery $query): GetAvailableSlotsView
     {
+        $sheetParticipants = $query->sheet->getParticipantsArray();
+        $isSheetMultiParticipants = \count($sheetParticipants) > 1;
+
+        if ($isSheetMultiParticipants) {
+            // only used met sheet participants, sheet participants will be selected by user
+            $participantsForAvailableSlots = $query->meeting->getMetParticipants($query->sheet);
+        } else {
+            // if there is only one participant in sheet, filter slots for all participants
+            $participantsForAvailableSlots = $query->meeting->getAllParticipants();
+        }
+
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),
-            $query->meeting->getMetParticipants($query->sheet),
-            false
+            $participantsForAvailableSlots,
+            false,
+            $isSheetMultiParticipants ? $query->meeting : null,
+            true
         );
-
-        $currentSheetAvailableSlotIds = [];
-        /** @var Participant $participant */
-        foreach ($query->sheet->getParticipantsArray() as $participant) {
-            $participantSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
-                $query->meeting->getEvent(),
-                [$participant],
-                false
-            );
-            $currentSheetAvailableSlotIds[$participant->getId()] = array_map(
-                fn (MeetingSlot $meetingSlot) => $meetingSlot->getId(), $participantSlots
-            );
-        }
 
         $availableSlots = [];
 
@@ -57,6 +57,26 @@ class GetAvailableSlotsQueryHandler
                 )) {
                 $availableSlots[] = $slot;
             }
+        }
+
+        if (!$isSheetMultiParticipants) {
+            return new GetAvailableSlotsView($availableSlots, []);
+        }
+
+        $currentSheetAvailableSlotIds = [];
+
+        /** @var Participant $participant */
+        foreach ($sheetParticipants as $participant) {
+            $participantSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
+                $query->meeting->getEvent(),
+                [$participant],
+                false,
+                $query->meeting,
+                true
+            );
+            $currentSheetAvailableSlotIds[$participant->getId()] = array_map(
+                fn (MeetingSlot $meetingSlot) => $meetingSlot->getId(), $participantSlots
+            );
         }
 
         return new GetAvailableSlotsView($availableSlots, $currentSheetAvailableSlotIds);

@@ -41,6 +41,10 @@ class UpdateMeetingType extends AbstractType
                 ]);
         }
 
+        if (\count($options['availableSlots']) === 0) {
+            return;
+        }
+
         $builder
             ->add('meetingSlot', ChoiceType::class, [
                 'choices' => $options['availableSlots'],

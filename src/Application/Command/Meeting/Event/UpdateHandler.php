@@ -24,7 +24,7 @@ class UpdateHandler
     private MeetingRepositoryInterface $meetingRepository;
     private DateTimeInterface $datetime;
     private RequestRepositoryInterface $requestRepository;
-    private LoggerInterface $logger;
+    private ?LoggerInterface $logger;
 
     public function __construct(
         CanMoveMeeting $canMoveMeeting,
@@ -59,6 +59,8 @@ class UpdateHandler
         }
 
         try {
+            $command->meeting->setParticipants($command->sheet, $command->participants);
+
             $this->commandBus->handle(
                 new UpdateSlot(
                     $command->meeting,
@@ -85,8 +87,6 @@ class UpdateHandler
             } else {
                 $request->setUpdateOrDeleteReasonMessage(null);
             }
-
-            $command->meeting->setParticipants($command->sheet, $command->participants);
 
             $this->meetingRepository->set($command->meeting);
             $this->requestRepository->set($request);

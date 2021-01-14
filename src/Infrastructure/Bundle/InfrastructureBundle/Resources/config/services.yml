@@ -139,6 +139,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@datetime'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:

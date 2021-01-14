@@ -89,6 +89,7 @@ class UpdateMeetingAction
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet));
+        $update->meetingSlot = $meeting->getSlot();
         $form = $this->formFactory->create(UpdateMeetingType::class, $update, [
             'participants' => $sheet->getParticipantsArray(),
             'availableSlots' => $availableSlotsView->availableSlots,
