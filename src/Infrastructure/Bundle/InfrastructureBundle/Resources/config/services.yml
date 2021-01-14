@@ -1661,7 +1661,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
     Proximum\Vimeet\Application\Command\Meeting\Event\UpdateHandler:
         arguments:
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
@@ -2959,7 +2959,7 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
-    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+    Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
@@ -4289,7 +4289,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@domain.event.day.dday_guesser'

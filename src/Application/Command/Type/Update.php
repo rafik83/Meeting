@@ -48,7 +48,7 @@ class Update implements Command
     public $numberOfMeetingsPerPlanning;
 
     /** @var bool */
-    public $canMoveMeeting;
+    public $canUpdateMeeting;
 
     /** @var bool */
     public $canRemoveMeeting;
@@ -103,7 +103,7 @@ class Update implements Command
         $this->availabilityType = $type->getAvailabilityType();
         $this->hidden = $type->isHidden();
         $this->numberOfMeetingsPerPlanning = $type->getNumberOfMeetingsPerPlanning();
-        $this->canMoveMeeting = $type->canMoveMeeting();
+        $this->canUpdateMeeting = $type->canUpdateMeeting();
         $this->canRemoveMeeting = $type->canRemoveMeeting();
         $this->areAllSheetParticipantsAssignedToMeeting = $type->areAllSheetParticipantsAssignedToMeeting();
         $this->canScanParticipant = $type->canScanParticipant();

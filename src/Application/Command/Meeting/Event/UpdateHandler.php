@@ -7,7 +7,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Exception\Meeting\UpdateMeetingException;
-use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class UpdateHandler
 {
     private CommandBusInterface $commandBus;
-    private CanMoveMeeting $canMoveMeeting;
+    private CanUpdateMeeting $canUpdateMeeting;
     private TranslatorInterface $translator;
     private MessageRepositoryInterface $messageRepository;
     private MeetingRepositoryInterface $meetingRepository;
@@ -27,7 +27,7 @@ class UpdateHandler
     private ?LoggerInterface $logger;
 
     public function __construct(
-        CanMoveMeeting $canMoveMeeting,
+        CanUpdateMeeting $canUpdateMeeting,
         CommandBusInterface $commandBus,
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
@@ -36,7 +36,7 @@ class UpdateHandler
         RequestRepositoryInterface $requestRepository,
         ?LoggerInterface $logger = null
     ) {
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->commandBus = $commandBus;
         $this->translator = $translator;
         $this->messageRepository = $messageRepository;
@@ -48,7 +48,7 @@ class UpdateHandler
 
     public function handle(Update $command): void
     {
-        if (false === $this->canMoveMeeting->isSatisfiedBy($command->sheet)
+        if (false === $this->canUpdateMeeting->isSatisfiedBy($command->sheet)
             || !$command->meeting->hasSheet($command->sheet)
         ) {
             throw new AccessDeniedException();

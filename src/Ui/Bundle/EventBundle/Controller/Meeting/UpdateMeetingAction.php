@@ -11,7 +11,7 @@ use Proximum\Vimeet\Application\Exception\Meeting\UpdateMeetingException;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQuery;
 use Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
-use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -26,8 +26,8 @@ use Symfony\Component\Templating\EngineInterface;
 
 class UpdateMeetingAction
 {
-    /** @var CanMoveMeeting */
-    private $canMoveMeeting;
+    /** @var CanUpdateMeeting */
+    private $canUpdateMeeting;
 
     /** @var FormFactoryInterface $formFactory */
     private $formFactory;
@@ -55,7 +55,7 @@ class UpdateMeetingAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        CanMoveMeeting $canMoveMeeting,
+        CanUpdateMeeting $canUpdateMeeting,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
         CommandBusInterface $commandBus,
@@ -65,7 +65,7 @@ class UpdateMeetingAction
         TranslatorInterface $translator
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->commandBus = $commandBus;
@@ -78,7 +78,7 @@ class UpdateMeetingAction
     public function __invoke(Request $request, Participant $participant, Sheet $sheet, Meeting $meeting): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
-            || false === $this->canMoveMeeting->isSatisfiedBy($sheet)
+            || false === $this->canUpdateMeeting->isSatisfiedBy($sheet)
             || !$meeting->hasSheet($sheet)
         ) {
             throw new AccessDeniedException();
@@ -88,8 +88,7 @@ class UpdateMeetingAction
         $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio(), $sheet));
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
-        $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet));
-        $update->meetingSlot = $meeting->getSlot();
+        $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet), $meeting->getSlot());
         $form = $this->formFactory->create(UpdateMeetingType::class, $update, [
             'participants' => $sheet->getParticipantsArray(),
             'availableSlots' => $availableSlotsView->availableSlots,
@@ -107,7 +106,7 @@ class UpdateMeetingAction
 
             $this->flashBag->set(
                 'success',
-                $this->translator->trans('agenda.meeting.move.success')
+                $this->translator->trans('agenda.meeting.update.success')
             );
 
             return new Response(null, Response::HTTP_NO_CONTENT);

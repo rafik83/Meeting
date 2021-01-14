@@ -96,7 +96,7 @@ class TypeUpdateType extends AbstractType
                     "admin.type.management.unavailable.label" => Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
             ])
-            ->add('canMoveMeeting', CheckboxType::class, [
+            ->add('canUpdateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [

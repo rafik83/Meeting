@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Domain\Meeting;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CanMoveMeeting
+class CanUpdateMeeting
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -19,6 +19,6 @@ class CanMoveMeeting
     {
         $type = $sheet->getType();
 
-        return $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN') || $type->canMoveMeeting();
+        return $this->authorizationCheckerAdapter->isGranted('ROLE_PREVIOUS_ADMIN') || $type->canUpdateMeeting();
     }
 }

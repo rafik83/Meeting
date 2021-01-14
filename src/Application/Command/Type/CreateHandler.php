@@ -49,7 +49,7 @@ class CreateHandler
             $create->hidden,
             $create->availabilityType,
             $create->numberOfMeetingsPerPlanning,
-            $create->canMoveMeeting,
+            $create->canUpdateMeeting,
             $create->canRemoveMeeting,
             $create->areAllSheetParticipantsAssignedToMeeting,
             $create->canScanParticipant,

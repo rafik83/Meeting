@@ -22,7 +22,7 @@
                 {% endfor %}
             </p>
             <div class="tools">
-                {% if canMoveMeeting %}
+                {% if canUpdateMeeting %}
                     <a class="updateMeetingAction btn btn-primary"
                         href="{{ path('event_agenda_update_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}"
                     >
