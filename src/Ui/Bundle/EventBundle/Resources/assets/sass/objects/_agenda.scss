@@ -129,6 +129,9 @@ $slotHeight: 60px;
           right: 45px;
           bottom: 16%;
         }
+        .btn-info {
+          display: none;
+        }
       }
 
       .details { display: block; }
@@ -145,6 +148,7 @@ $slotHeight: 60px;
     }
 
     > header {
+      cursor: pointer;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -185,6 +189,15 @@ $slotHeight: 60px;
           }
         }
       }
+
+      .tools {
+        display: flex;
+
+        a + a {
+          margin-left: 0.5em;
+        }
+      }
+
 
       p {
         margin-bottom: 0;
