@@ -115,13 +115,13 @@ class UpdateHandlerTest extends TestCase
     {
         $this->expectException(UpdateMeetingException::class);
 
-        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
-
-        $this->canMoveMeeting->isSatisfiedBy($this->sheet->reveal())
+        $this->canUpdateMeeting->isSatisfiedBy($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(true);
 
+        $this->meeting->hasSheet($this->sheet->reveal())->shouldBeCalled()->willReturn(true);
         $this->meeting->isVisio()->shouldBeCalled()->willReturn(false);
+        $this->meeting->setParticipants($this->sheet->reveal(), Argument::any())->shouldBeCalled();
 
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), false, true))
             ->shouldBeCalled()
