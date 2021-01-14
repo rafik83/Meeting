@@ -276,6 +276,12 @@ $slotHeight: 60px;
   }
 }
 
+#meeting-modal {
+  form select.disabled {
+    color: #CCCCCC;
+  }
+}
+
 .saveAvailabilityButton--fixed {
   position: fixed;
   z-index: 2;

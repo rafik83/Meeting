@@ -4,7 +4,7 @@
      data-duration="{{ meeting.duration.format('%H:%I') }}"
 >
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
-        <a class="content col-xs-12" href="#">
+        <div class="content col-xs-12">
             <span class="prefix"><i class="icon icon-RDV"></i></span>
             <p class="title">
                 <b>{{ meeting.spotRef }}</b>
@@ -21,7 +21,16 @@
                             {% endif %}
                 {% endfor %}
             </p>
-        </a>
+            <div class="tools">
+                {% if canMoveMeeting %}
+                    <a class="updateMeetingAction btn btn-primary"
+                        href="{{ path('event_agenda_update_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}"
+                    >
+                        <i class="icon icon-Editer_1"></i> {{ 'agenda.meeting.edit.button'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </header>
     <div class="details">
         <div class="row">
@@ -60,12 +69,6 @@
                 <i class="icon icon-Document_1"></i>
                 <span class="meeting-icon-label">{{ 'agenda.meeting.details'|trans }}</span>
             </a>
-
-            {% if canMoveMeeting %}
-                <a class="moveMeetingAction" href="{{ path('event_agenda_move_meeting_slot', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}">
-                    <i class="icon icon-Transferer"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.move.button'|trans }}</span>
-                </a>
-            {% endif %}
 
             {% if canRemoveMeeting %}
                 <a class="removeMeetingAction" href="{{ path('event_agenda_remove_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}" data-confirm-remove-meeting-message="{{ 'agenda.meeting.remove.confirm'|trans }}">

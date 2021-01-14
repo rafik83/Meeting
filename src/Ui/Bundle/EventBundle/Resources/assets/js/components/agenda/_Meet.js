@@ -14,7 +14,7 @@ function Meet(agenda, element, modal) {
     this.agenda = agenda;
     this.header = this.element.querySelector('header');
     this.details = this.element.querySelector('.details');
-    this.moveMeetingAction = this.element.querySelector('.moveMeetingAction');
+    this.updateMeetingAction = this.element.querySelector('.updateMeetingAction');
     this.removeMeetingAction = this.element.querySelector('.removeMeetingAction');
     this.open = false;
     this.layer = 0;
@@ -27,11 +27,11 @@ function Meet(agenda, element, modal) {
         this.end = this.start + this.duration;
     }
 
-    if (null !== this.moveMeetingAction) {
-        this.moveMeetingAction.addEventListener('click', function (event) {
+    if (null !== this.updateMeetingAction) {
+        this.updateMeetingAction.addEventListener('click', function (event) {
             event.stopPropagation();
             event.preventDefault();
-            this.handleRequestMoveMeetingButton();
+            this.handleRequestUpdateMeetingButton(event);
         }.bind(this), false);
     }
 
@@ -64,16 +64,105 @@ Meet.prototype.constructor = Meet;
  */
 Meet.prototype.margin = 3;
 
-Meet.prototype.handleRequestMoveMeetingButton = function () {
-    var href = this.moveMeetingAction.getAttribute('href');
+Meet.prototype.handleRequestUpdateMeetingButton = function (event) {
+    const href = event.currentTarget.getAttribute('href');
 
     $.get(href, function (response) {
-        this.showModal(response);
+        const modal = this.showModal(response);
+
+        const participants = modal.find('form #update_meeting_participants input');
+
+        if (participants.length === 0) {
+            return;
+        }
+
+        const dataElement = modal.find('[data-available-slots]')
+        const availableSlots = dataElement.data('available-slots');
+
+        const that = this;
+        participants.each(function () {
+            this.dataAvailableSlots = availableSlots[this.getAttribute('data-participant-id')] || [];
+            this.addEventListener('change', () => that.updateSlotsSelect(modal));
+        });
+
+        this.updateSlotsSelect(modal);
+
+        if (availableSlots.length === 0) {
+            return;
+        }
+
+        const slotSelect = modal.find('#update_meeting_meetingSlot')[0];
+        slotSelect.addEventListener('change',
+            (event) => this.updateParticipants(event.currentTarget, participants, modal));
+        this.updateParticipants(slotSelect, participants, modal);
+
     }.bind(this))
         .fail(function () {
             alert('Operation not allowed.')
         });
 };
+
+Meet.prototype.updateSlotsSelect = function (modal) {
+    let slotAvailableParticipantsCount = {};
+    const selectedParticipant = modal.find('form #update_meeting_participants input:checked');
+    selectedParticipant.each(function () {
+        this.dataAvailableSlots.forEach((slotId) => {
+            if (slotAvailableParticipantsCount[slotId]) {
+                slotAvailableParticipantsCount[slotId]++;
+            } else {
+                slotAvailableParticipantsCount[slotId] = 1;
+            }
+        });
+    });
+
+    const slotOptions = modal.find('#update_meeting_meetingSlot option[data-meeting-slot-id]');
+    slotOptions[0].parentElement.classList.remove('disabled');
+    slotOptions.each(function () {
+        const slotId = this.getAttribute('data-meeting-slot-id');
+        this.disabled = !slotAvailableParticipantsCount[slotId] || (slotAvailableParticipantsCount[slotId] < selectedParticipant.length);
+        if (this.disabled && this.selected) {
+            this.parentElement.classList.add('disabled');
+        }
+    });
+
+    this.updateValidateButton(modal);
+}
+
+Meet.prototype.updateParticipants = function (slotSelect, participants, modal) {
+    const selectedOption = slotSelect[slotSelect.selectedIndex];
+    const slotId = +selectedOption.getAttribute('data-meeting-slot-id');
+
+    const unavailableLabelElement = modal.find('[data-template-label-unavailable]')[0];
+
+    participants.each(function () {
+        // check if slotId is in slots list for participant
+        this.parentNode.querySelectorAll('[data-template-label-unavailable]').forEach((node) => node.remove());
+        if (this.dataAvailableSlots.indexOf(slotId) !== -1) {
+            this.classList.remove('unavailable');
+            this.disabled = false;
+        } else {
+            this.classList.add('unavailable');
+            const label = unavailableLabelElement.cloneNode(true);
+            label.classList.remove('hide');
+            this.parentNode.appendChild(label);
+            this.checked = false;
+            this.disabled = true;
+        }
+    });
+
+    slotSelect.classList.remove('disabled');
+    if (selectedOption.disabled) {
+        slotSelect.classList.add('disabled');
+    }
+
+    this.updateValidateButton(modal);
+}
+
+Meet.prototype.updateValidateButton = function (modal) {
+    const slotSelect = modal.find('#update_meeting_meetingSlot')[0];
+    const selectedOption = slotSelect[slotSelect.selectedIndex];
+    modal.find('[type="submit"]').attr('disabled', selectedOption.disabled);
+}
 
 Meet.prototype.handleRequestRemoveMeetingButton = function () {
     var href = this.removeMeetingAction.getAttribute('href');
@@ -108,6 +197,8 @@ Meet.prototype.showModal = function (html, confirmation = null) {
 
         return false;
     }.bind(this));
+
+    return modal;
 };
 
 Meet.prototype.handleRequestForm = function (form)
