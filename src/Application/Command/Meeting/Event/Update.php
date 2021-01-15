@@ -17,10 +17,11 @@ class Update implements Command
     public MeetingSlot $meetingSlot;
     public ?string $content = null;
 
-    public function __construct(Sheet $sheet, Meeting $meeting, array $participants)
+    public function __construct(Sheet $sheet, Meeting $meeting, array $participants, MeetingSlot $meetingSlot)
     {
         $this->sheet = $sheet;
         $this->meeting = $meeting;
         $this->participants = $participants;
+        $this->meetingSlot = $meetingSlot;
     }
 }
