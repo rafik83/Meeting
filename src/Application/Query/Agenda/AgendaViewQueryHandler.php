@@ -264,7 +264,7 @@ class AgendaViewQueryHandler
     {
         $happeningParticipations = $this
             ->happeningParticipationRepository
-            ->findByUser($user, $event, true);
+            ->findByUser($user, $event, true, true);
 
         foreach ($happeningParticipations as $happeningParticipation) {
             $happeningsFound[$happeningParticipation->getHappening()->getId()] = true;

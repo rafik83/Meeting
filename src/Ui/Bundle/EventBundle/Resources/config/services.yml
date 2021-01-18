@@ -827,6 +827,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler:
         arguments:
