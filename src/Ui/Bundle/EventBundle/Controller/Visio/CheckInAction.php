@@ -82,7 +82,7 @@ class CheckInAction
             );
 
             return new RedirectResponse(
-                $this->urlGenerator->generate('event', ['_locale' => $userDomain->getUser()->getLocale()])
+                $this->urlGenerator->generate('event', ['_locale' => $participant->getLocale()])
             );
         }
 

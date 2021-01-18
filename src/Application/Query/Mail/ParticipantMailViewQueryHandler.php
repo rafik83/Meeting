@@ -52,15 +52,15 @@ class ParticipantMailViewQueryHandler
 
         $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
             $participant,
-            $query->user->getLocale()
+            $participant->getLocale()
         );
 
         $lastname = $this->participantInfoGuesser->guessParticipantLastName(
             $participant,
-            $query->user->getLocale()
+            $participant->getLocale()
         );
 
-        $locale = $participant->getSheet()->getEvent()->getAvailableLocale($query->user->getLocale());
+        $locale = $participant->getSheet()->getEvent()->getAvailableLocale($participant->getLocale());
 
         return new ParticipantInfoView(
             null !== $firstname ? $firstname : $query->user->getAccount()->getFirstName(),

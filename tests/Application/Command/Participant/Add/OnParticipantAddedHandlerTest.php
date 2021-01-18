@@ -111,7 +111,7 @@ class OnParticipantAddedHandlerTest extends TestCase
 
     public function testHandleUserActive()
     {
-        $this->user->getLocale()->willReturn('fr');
+        $this->participant->getLocale()->willReturn('fr');
         $this->user->isActive()->willReturn(true);
 
         $this->eventDispatcher
@@ -157,7 +157,7 @@ class OnParticipantAddedHandlerTest extends TestCase
 
     public function testHandleUserNotActive()
     {
-        $this->user->getLocale()->willReturn('fr');
+        $this->participant->getLocale()->willReturn('fr');
         $this->user->isActive()->willReturn(false);
         $token = $this->prophesize(User\ActivateAccountToken::class);
 
@@ -206,7 +206,7 @@ class OnParticipantAddedHandlerTest extends TestCase
     public function testHandleSSO()
     {
         $extraParameter = $this->prophesize(Event\ExtraParameter::class);
-        $this->user->getLocale()->willReturn('fr');
+        $this->participant->getLocale()->willReturn('fr');
         $this->user->isActive()->willReturn(false);
 
         $this->eventDispatcher

@@ -29,7 +29,7 @@ class MailNotificationCommandHandler
             $command->event,
             $command->user,
             $command->sheet,
-            $command->user->getLocale(),
+            $command->sheet->getUserLocale($command->user),
             $command->agendaModifications
         ));
 
