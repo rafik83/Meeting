@@ -942,6 +942,14 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
+event_agenda_participant_ical:
+    path: /sheet/{sheet}/agenda/participant/{participant}/{slug}.ics
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction }
+
 event_agenda_move_meeting_slot:
     path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
     requirements:

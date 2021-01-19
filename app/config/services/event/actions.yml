@@ -368,6 +368,12 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler'
+            - '@uri_signer'
+
     #
     # Program
     #
