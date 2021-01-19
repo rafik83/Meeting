@@ -29,12 +29,8 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
     /** @var DeleteHappeningQuestionHandler */
     private $deleteHappeningQuestion;
 
-    /** @var \DateTime */
-    private $datetime;
-
     protected function setUp()
     {
-        $this->datetime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
         $this->deleteHappeningQuestion = new DeleteHappeningQuestionHandler(
@@ -56,7 +52,7 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
             $happening->reveal(),
             $sheet,
             $createdBy->reveal(),
-            $this->datetime,
+            new \DateTime('2020-06-02 12:00:00'),
             'Can you develop your point about green IT?',
             true
         );
@@ -67,7 +63,7 @@ class DeleteHappeningQuestionHandlerTest extends TestCase
             ->shouldBeCalled();
 
         $this->notificationPublisher
-            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'delete'])
+            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'delete', 'delta' => -1])
             ->shouldBeCalled();
 
         $this->deleteHappeningQuestion->handle(new DeleteHappeningQuestion(

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
@@ -611,6 +603,13 @@ class Sheet implements TraceableInterface
         }
 
         return null;
+    }
+
+    public function getUserLocale(User $user): string
+    {
+        $participant = $this->getUserParticipant($user);
+
+        return $participant ? $participant->getLocale() : $user->getLocale();
     }
 
     /**

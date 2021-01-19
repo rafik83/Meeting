@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Happening\Webinar\Question;
 
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
+use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 
 class GetHappeningQuestionsHandler
@@ -30,9 +31,20 @@ class GetHappeningQuestionsHandler
 
         $questionViews = [];
 
+        /** @var Question $question */
         foreach ($questions as [$question, $voteCount, $userVoteCount]) {
             $author = $question->getCreatedBy();
             $canVote = $query->getUser()->getId() !== $author->getId();
+
+            $reply = null;
+            if (null !== $question->getReplyContent()) {
+                $reply = new QuestionReplyView(
+                    $question->getReplyContent(),
+                    $question->getRepliedBy()->getFullname(),
+                    $mediumHourFormatter->format($question->getRepliedAt()),
+                    $question->getRepliedBy()->getId() === $query->getUser()->getId()
+                );
+            }
 
             $questionViews[] = new QuestionView(
                 $question->getId(),
@@ -45,7 +57,8 @@ class GetHappeningQuestionsHandler
                 $mediumHourFormatter->format($question->getCreatedAt()),
                 $voteCount,
                 $userVoteCount > 0,
-                $canVote
+                $canVote,
+                $reply
             );
         }
 

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -217,21 +209,6 @@ class TipRepository implements TipRepositoryInterface
             ->where('tip.event IS NULL')
             ->orderBy('tip.title', 'ASC')
         ;
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /** {@inheritdoc} */
-    public function getTipTranslationViewByLocale($locale)
-    {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('new \Proximum\Vimeet\Application\View\Tip\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content)')
-            ->from(Tip::class, 'tip')
-            ->join('tip.translations', 'tipTranslation', 'WITH', 'tipTranslation.locale = :locale')
-            ->orderBy('tip.title')
-            ->setParameter('locale', $locale);
 
         return $queryBuilder->getQuery()->getResult();
     }

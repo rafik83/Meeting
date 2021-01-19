@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Participant\Add;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
@@ -146,7 +138,7 @@ class OnParticipantAddedHandler
             $user,
             $event,
             $participant,
-            $user->getLocale()
+            $participant->getLocale()
         );
         $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $completeProfileEvent);
     }

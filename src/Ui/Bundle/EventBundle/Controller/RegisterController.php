@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
@@ -233,9 +225,13 @@ class RegisterController extends Controller
             'locale' => $locale,
             'locales' => $event->getLocales(),
             'country' => $event->getCountry(),
+            'askLocaleFirst' => true,
         ]);
 
+        $form->get('locale')->setData($locale);
+
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $locale = $form->get('locale')->getData();
             $data = $this->handleData(
                 $user,
                 null,
@@ -261,12 +257,19 @@ class RegisterController extends Controller
                 return $this->redirectToRoute('event_participant_step', [
                     'step' => $nextStep,
                     'participant' => $participate->participant->getId(),
+                    '_locale' => $participate->participant->getLocale(),
                 ]);
             }
 
             $this->container->get('session')->getFlashBag()->set('first_registration', true);
 
-            return $this->redirectToRoute('event_sheet_default', ['sheet' => $participate->sheet->getId()]);
+            return $this->redirectToRoute(
+                'event_sheet_default',
+                [
+                    'sheet' => $participate->sheet->getId(),
+                    '_locale' => $participate->participant->getLocale(),
+                ]
+            );
         }
 
         if ($preFillUserDataView->isParticipationDataPreFilled()) {
@@ -329,14 +332,21 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
+        $askLocale = $step === '1';
+
         $options = [
             'block' => $registrationTemplateStep,
             'locale' => $locale,
             'country' => $event->getCountry(),
             'locales' => $event->getLocales(),
+            'askLocaleFirst' => $askLocale,
         ];
 
         $form = $this->createForm(BlockType::class, $registrationTemplateStep, $options);
+
+        if ($askLocale) {
+            $form->get('locale')->setData($participant->getLocale());
+        }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
@@ -362,7 +372,11 @@ class RegisterController extends Controller
                 if ($nextStep) {
                     return $this->redirectToRoute(
                         'event_participant_step',
-                        ['step' => $nextStep, 'participant' => $participant->getId()]
+                        [
+                            'step' => $nextStep,
+                            'participant' => $participant->getId(),
+                            '_locale' => $askLocale ? $participant->getLocale() : $locale,
+                        ]
                     );
                 }
 
@@ -370,6 +384,7 @@ class RegisterController extends Controller
 
                 return $this->redirectToRoute('event_sheet_default', [
                     'sheet' => $participant->getSheet()->getId(),
+                    '_locale' => $askLocale ? $participant->getLocale() : $locale,
                 ]);
             }
         }

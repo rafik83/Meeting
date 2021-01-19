@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
@@ -109,7 +101,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user, $event)->shouldBeCalled()->willReturn(true);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByUser($user, $event, true)->shouldBeCalled()->willReturn([
+        $happeningParticipationRepository->findByUser($user, $event, true, true)->shouldBeCalled()->willReturn([
             $happeningParticipation,
         ]);
         $happeningParticipationRepository->findBySpeaker($user, $event)->shouldBeCalled()->willReturn([]);
@@ -255,7 +247,7 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUser($user2, $event, true)
+            ->findByUser($user2, $event, true, true)
             ->shouldBeCalled()
             ->willReturn([
                 $happeningParticipation1,

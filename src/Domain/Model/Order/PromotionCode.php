@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Order;
 
 use Proximum\Vimeet\Domain\Model;
@@ -123,12 +115,12 @@ class PromotionCode
     {
         return $this->promotionCode;
     }
-    
+
     public function getProduct(): Model\Product
     {
         return $this->product;
     }
-    
+
     /**
      * @param string      $locale
      * @param string|null $fallback

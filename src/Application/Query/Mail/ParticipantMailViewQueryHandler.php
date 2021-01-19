@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Mail;
 
 use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
@@ -60,15 +52,15 @@ class ParticipantMailViewQueryHandler
 
         $firstname = $this->participantInfoGuesser->guessParticipantFirstName(
             $participant,
-            $query->user->getLocale()
+            $participant->getLocale()
         );
 
         $lastname = $this->participantInfoGuesser->guessParticipantLastName(
             $participant,
-            $query->user->getLocale()
+            $participant->getLocale()
         );
 
-        $locale = $participant->getSheet()->getEvent()->getAvailableLocale($query->user->getLocale());
+        $locale = $participant->getSheet()->getEvent()->getAvailableLocale($participant->getLocale());
 
         return new ParticipantInfoView(
             null !== $firstname ? $firstname : $query->user->getAccount()->getFirstName(),

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\User\Agenda\Version\Notification;
 
 use PhpParser\Node\Arg;
@@ -158,6 +150,7 @@ class NotifyUserOfChangedVersionCommandHandlerTest extends TestCase
         $configuration->getSmsActivationDate()->shouldBeCalled()->willReturn($smsActivationDate);
 
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getUserLocale($this->user->reveal())->willReturn('fr');
         $version = $this->prophesize(User\Agenda\Version::class);
         $this->sheetGuesser->getUserSheet($this->user->reveal(), $this->event->reveal(), 'fr')
             ->shouldBeCalled()
@@ -230,6 +223,7 @@ class NotifyUserOfChangedVersionCommandHandlerTest extends TestCase
         $configuration->getSmsActivationDate()->shouldBeCalled()->willReturn($smsActivationDate);
 
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getUserLocale($this->user->reveal())->willReturn('fr');
         $version = $this->prophesize(User\Agenda\Version::class);
         $this->sheetGuesser->getUserSheet($this->user->reveal(), $this->event->reveal(), 'fr')
             ->shouldBeCalled()

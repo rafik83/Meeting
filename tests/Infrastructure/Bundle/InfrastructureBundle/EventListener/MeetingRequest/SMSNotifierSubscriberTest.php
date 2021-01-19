@@ -1,14 +1,6 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
-namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener;
+namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
@@ -48,6 +40,7 @@ class SMSNotifierSubscriberTest extends TestCase
         $datetime                         = new \DateTime();
 
         $participant->getUser()->willReturn($user->reveal());
+        $participant->getLocale()->willReturn('fr');
         $participantAlreadyNotified->getUser()->willReturn($userAlreadyNotified->reveal());
         $participantWithoutPhoneValidated->getUser()->willReturn($userWithoutPhoneValidated->reveal());
 

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification;
 
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
@@ -113,7 +105,7 @@ class NotifyUserOfChangedVersionCommandHandler
         $verbalizedDiff = $this->diffVerbalizer->verbalizeDiff(
             $oldVersion,
             $diff,
-            $command->user->getLocale()
+            $sheet->getUserLocale($command->user)
         );
 
         $smsActivationDate = $command->event->getConfiguration()->getSmsActivationDate();

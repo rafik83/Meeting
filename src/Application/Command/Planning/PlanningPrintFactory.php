@@ -59,7 +59,7 @@ class PlanningPrintFactory
         return new PlanningPrint(
             $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $defaultLocale),
             $this->participantInfoGuesserCache->guessParticipantCompleteName($participant, $defaultLocale),
-            $this->participantPlanningDisplayer->display($event, $user, $user->getLocale()),
+            $this->participantPlanningDisplayer->display($event, $user, $participant->getLocale()),
             $participant->getLocale(),
             $event->getConfiguration()->getLeftColor(),
             $event->getConfiguration()->getRightColor(),

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository\Happening;
 
 use Doctrine\ORM\EntityManager;
@@ -33,10 +25,7 @@ class QuestionRepository implements QuestionRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function add(Question $question)
+    public function add(Question $question): void
     {
         $this->entityManager->persist($question);
         $this->entityManager->flush($question);
@@ -45,6 +34,11 @@ class QuestionRepository implements QuestionRepositoryInterface
     public function delete(Question $question): void
     {
         $this->entityManager->remove($question);
+        $this->entityManager->flush($question);
+    }
+
+    public function update(Question $question): void
+    {
         $this->entityManager->flush($question);
     }
 
@@ -139,13 +133,13 @@ class QuestionRepository implements QuestionRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(question.id)')
+            ->select('SUM(CASE WHEN question.replyContent IS NULL THEN 1 ELSE 2 END)')
             ->from(Question::class, 'question')
             ->where('question.happening = :happening')
             ->andWhere('question.askedDuringWebinar = true')
             ->setParameter('happening', $happening)
         ;
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        return $queryBuilder->getQuery()->getSingleScalarResult() ?? 0;
     }
 }

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Event\Events;
@@ -22,10 +14,11 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
-use Proximum\Vimeet\Domain\Model\Happening\Question;
+use Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
-use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -42,6 +35,9 @@ class ParticipateHandler
 
     /** @var ParticipateToHappeningWithProductToBuyChecker */
     private $participateToHappeningWithProductToBuyChecker;
+
+    /** @var MustBeAvailableToParticipate */
+    private $mustBeAvailableToParticipate;
 
     /** @var ParticipationCount */
     private $participationCount;
@@ -66,6 +62,7 @@ class ParticipateHandler
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
+        MustBeAvailableToParticipate $mustBeAvailableToParticipate,
         ParticipationCount $participationCount,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
@@ -74,6 +71,7 @@ class ParticipateHandler
         $this->participantRepository = $participantRepository;
         $this->questionRepository = $questionRepository;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
+        $this->mustBeAvailableToParticipate = $mustBeAvailableToParticipate;
         $this->participationCount = $participationCount;
         $this->eventDispatcher = $eventDispatcher;
         $this->dateTime = $dateTime;
@@ -123,7 +121,9 @@ class ParticipateHandler
         }
 
         foreach ($participate->participants as $participant) {
-            if (!\in_array($participant, $availableParticipants, true)) {
+            if (!\in_array($participant, $availableParticipants, true)
+                && $this->mustBeAvailableToParticipate->isSatisfiedBy($participate->happening)
+            ) {
                 throw new ParticipantNotAvailableException();
             }
         }
@@ -150,13 +150,14 @@ class ParticipateHandler
                 if ($numberMaxOfHappeningsPerUser && $this->happeningParticipationRepository->countByUserAndEvent($participant->getUser(), $participate->sheet->getEvent()) >= $numberMaxOfHappeningsPerUser) {
                     throw new MaxNumberHappeningParticipationReachedException($participant);
                 }
+                $isParticipationVisible = $this->dateTime < $participate->happening->getBegin();
                 if (null !== $happeningParticipation) {
-                    $this->happeningParticipationRepository->update(
-                        $happeningParticipation->setDisabled(false)
-                    );
+                    $happeningParticipation->setDisabled(false);
+                    $happeningParticipation->setVisible($isParticipationVisible);
+                    $this->happeningParticipationRepository->update($happeningParticipation);
                 } else {
                     $this->happeningParticipationRepository->add(
-                        new HappeningParticipation($participate->happening, $participant->getUser())
+                        new HappeningParticipation($participate->happening, $participant->getUser(), false, $isParticipationVisible)
                     );
                 }
 

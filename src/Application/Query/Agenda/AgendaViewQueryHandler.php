@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
@@ -272,7 +264,7 @@ class AgendaViewQueryHandler
     {
         $happeningParticipations = $this
             ->happeningParticipationRepository
-            ->findByUser($user, $event, true);
+            ->findByUser($user, $event, true, true);
 
         foreach ($happeningParticipations as $happeningParticipation) {
             $happeningsFound[$happeningParticipation->getHappening()->getId()] = true;

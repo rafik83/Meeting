@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -30,13 +22,9 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param User  $user
-     * @param Event $event
-     * @param bool  $excludeDisabled
-     *
      * @return HappeningParticipation[]
      */
-    public function findByUser(User $user, Event $event, bool $excludeDisabled): array;
+    public function findByUser(User $user, Event $event, bool $excludeDisabled, bool $onlyVisible = false): array;
 
     /**
      * @param User  $user

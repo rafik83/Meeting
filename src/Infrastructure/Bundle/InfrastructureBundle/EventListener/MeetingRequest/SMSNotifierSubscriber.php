@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
@@ -124,7 +116,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
-                    $participant->getUser()->getLocale()
+                    $participant->getLocale()
                 ));
 
                 $this->extraDataRepository->add(

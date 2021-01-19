@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
@@ -81,6 +73,7 @@ class UpdateProfileHandler
             }
         }
 
+        $updateProfile->participant->setLocale($updateProfile->locale);
         $updateProfile->participant->setData($participantData);
 
         $this->participantRepository->set($participant);

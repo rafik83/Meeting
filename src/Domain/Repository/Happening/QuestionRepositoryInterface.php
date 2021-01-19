@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -20,8 +12,9 @@ interface QuestionRepositoryInterface
     /**
      * @param Question $question
      */
-    public function add(Question $question);
+    public function add(Question $question): void;
     public function delete(Question $question): void;
+    public function update(Question $question): void;
 
     /**
      * @return Question[]
