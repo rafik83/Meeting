@@ -60,6 +60,7 @@ class SheetManager
             'dcc42d3d' => ['text' => ['fr' => $title, 'en' => $title]],
             '03b394ac' => ['items' => []],
             '63ccc105' => ['items' => []],
+            '1b9a00b3' => [],
         ]);
         $sheet->setRegistrationData([]);
         $sheet->setTitle($title);

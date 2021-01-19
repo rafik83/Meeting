@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use LogicException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
@@ -21,7 +22,7 @@ class SheetTemplateManager
     public function create(?Event $event, ?array $nomenclatures): SheetTemplate
     {
         $data = [
-            '69b3cde3' => $this->block(),
+            '69b3cde3' => $this->block($nomenclatures),
             'bef61d39' => [
                 'component' => 'object',
                 'type' => 'participant',
@@ -46,6 +47,22 @@ class SheetTemplateManager
         $this->sheetTemplateRepository->add($sheetTemplate);
 
         return $sheetTemplate;
+    }
+
+    public function updateChild(Event $event, string $objectId, string $configAttributeId, $value)
+    {
+        $templates = $this->sheetTemplateRepository->getTemplateForGivenEvent($event);
+        if (empty($templates)) {
+            throw new LogicException('No sheet template, create a type or a sheet template first');
+        }
+
+        /** @var SheetTemplate $template */
+        foreach ($templates as $template) {
+            $data = $template->getValue();
+            $data['69b3cde3']['children'][0][$objectId]['config'][$configAttributeId] = $value;
+            $template->setValue($data);
+            $this->sheetTemplateRepository->set($template);
+        }
     }
 
     private function block()
@@ -86,6 +103,16 @@ class SheetTemplateManager
                     'help' => ['fr' => 'Vos besoins'],
                     'nomenclature' => $nomenclatures['services'] ?? 1,
                     'objective' => 'need',
+                ],
+            ],
+            '1b9a00b3' => [
+                'component' => 'object',
+                'type' => 'image',
+                'config' => [
+                    'label' => ['fr' => 'Logo'],
+                    'placeholder' => ['fr' => 'Ajouter un logo'],
+                    'help' => ['fr' => 'Télécharger un logo pour améliorer votre visibilité'],
+                    'required' => 'false',
                 ],
             ],
         ];

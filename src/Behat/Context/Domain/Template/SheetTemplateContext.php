@@ -26,4 +26,23 @@ class SheetTemplateContext implements Context
         $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
         $this->sheetTemplateContextProxy->getSheetTemplateManager()->create($event, null);
     }
+
+    /**
+     * @Given child :objectId of sheet templates has product options
+     */
+    public function childOfThisSheetTemplateHasProductOptions($objectId)
+    {
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $options = $this->sheetTemplateContextProxy->getStorage()->get('options');
+        if (null === $options) {
+            throw new \InvalidArgumentException('Missing options');
+        }
+
+        $this->sheetTemplateContextProxy->getSheetTemplateManager()->updateChild(
+            $event,
+            $objectId,
+            'products',
+            array_map(fn ($option) => $option->getId(), $options)
+        );
+    }
 }
