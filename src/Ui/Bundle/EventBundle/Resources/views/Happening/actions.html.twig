@@ -18,14 +18,22 @@
             data-label-cancel="{{ 'happening.participationCancel.action'|trans }}"
             data-webinar-open="{{ happening.webinarOpened }}"
         >
-            {% if doesCurrentUserParticipate %}
+            {% if doesCurrentUserParticipate and not isUserAloneParticipant %}
+                <i class="icon icon-Editer_1 happeningParticipateIcon"></i>
+                <span>
+                {{ 'happening.participationUpdate.action'|trans }}
+                </span>
+            {% elseif isUserAloneParticipant and doesCurrentUserParticipate %}
                 <i class="icon icon-Fermer_4 happeningParticipateIcon"></i>
-            {% elseif (isUserAloneParticipant and doesCurrentUserParticipate) or not doesCurrentUserParticipate %}
+                <span>
+                {{ 'happening.participationCancel.action'|trans }}
+                </span>
+            {% elseif not doesCurrentUserParticipate %}
                 <i class="icon icon-Valider_4 happeningParticipateIcon"></i>
+                <span>
+                {{ 'happening.participate.action'|trans }}
+                </span>
             {% endif %}
-            <span>
-                {{ (happening.hasParticipations ? (isUserAloneParticipant ? 'happening.participationCancel.action' : 'happening.participationUpdate.action') : 'happening.participate.action')|trans }}
-            </span>
         </a>
     {% elseif happening.isFull %}
         <span class="label label-default">{{ 'happening.participate.full'|trans }}</span>
