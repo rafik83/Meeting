@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2306 - Add checkbox object for registration template
 - VIMEET-2307 - Better visibility text
 - VIMEET-2304 - Picto edit
 
