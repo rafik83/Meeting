@@ -45,6 +45,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $category = $this->prophesize(Category::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->isEnabled()->willReturn(true);
+        $sheet1->getUserLocale($user->reveal())->willReturn('en');
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->isEnabled()->willReturn(true);
         $sheets = [$sheet1->reveal(), $sheet2->reveal()];
@@ -198,6 +199,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->isEnabled()->willReturn(true);
+        $sheet1->getUserLocale($user->reveal())->willReturn('en');
         $sheets = [$sheet1->reveal()];
 
         $event->getFallback()->willReturn('fr');
@@ -356,6 +358,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->isEnabled()->willReturn(true);
+        $sheet1->getUserLocale($user->reveal())->willReturn('en');
         $sheets = [$sheet1->reveal()];
 
         $event->getFallback()->willReturn('fr');

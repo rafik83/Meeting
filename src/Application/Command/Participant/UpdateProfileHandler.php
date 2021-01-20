@@ -73,6 +73,7 @@ class UpdateProfileHandler
             }
         }
 
+        $updateProfile->participant->setLocale($updateProfile->locale);
         $updateProfile->participant->setData($participantData);
 
         $this->participantRepository->set($participant);
