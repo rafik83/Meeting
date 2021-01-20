@@ -290,9 +290,19 @@ class ParticipateHandler
                 $this->participateHandler->handle($participate);
 
                 $label = 'participate';
+                $currentUserParticipate = false;
 
                 if (0 < \count($participate->participants)) {
                     $label = true === $isUserAloneParticipant ? 'cancel' : 'update';
+                    $currentParticipant = $sheet->getUserParticipant($user);
+                    if (null !== $currentParticipant) {
+                        foreach ($participate->participants as $participant) {
+                            if ($currentParticipant->getId() === $participant->getId()) {
+                                $currentUserParticipate = true;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 if ($this->canAccessToWebinar->isSatisfiableBy($happening, $user)) {
@@ -312,6 +322,7 @@ class ParticipateHandler
                     [
                         'status' => 'ok',
                         'label' => $label,
+                        'currentUserParticipate' => $currentUserParticipate,
                     ]
                 );
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
