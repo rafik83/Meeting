@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2307 - Better visibility text
+- VIMEET-2304 - Picto edit
 
 ### Updated
 - VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
