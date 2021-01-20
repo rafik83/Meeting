@@ -8,11 +8,27 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Template\AbstractBlockType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BlockType extends AbstractBlockType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        if ($options['askLocaleFirst']) {
+            $localeChoices = [];
+            foreach ($options['locales'] as $locale) {
+                $localeChoices[$locale] = Intl::getLocaleBundle()->getLocaleName($locale);
+            }
+
+            $builder->add('locale', ChoiceType::class, ['choices' => array_flip($localeChoices), 'mapped' => false]);
+        }
+
+        parent::buildForm($builder, $options);
+    }
+
     protected function getObjects(array $options): array
     {
         /** @var Block $block */
@@ -30,9 +46,11 @@ class BlockType extends AbstractBlockType
         $resolver->setDefaults([
             'data_class'        => Block::class,
             'validation_groups' => ['block', 'Default'],
+            'askLocaleFirst' => false,
         ]);
         $resolver->setRequired(['block']);
         $resolver->setAllowedTypes('block', Block::class);
+        $resolver->setAllowedTypes('askLocaleFirst', 'bool');
     }
 
     protected function addText(

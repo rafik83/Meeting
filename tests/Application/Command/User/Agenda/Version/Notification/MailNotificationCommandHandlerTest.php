@@ -27,7 +27,7 @@ class MailNotificationCommandHandlerTest extends TestCase
         $this->sheet = $this->prophesize(Sheet::class);
         $this->user = $this->prophesize(User::class);
         $this->event = $this->prophesize(Event::class);
-        $this->user->getLocale()->shouldBeCalled()->willReturn('fr');
+        $this->sheet->getUserLocale($this->user->reveal())->willReturn('fr');
     }
 
     public function testHandleWithoutMail(): void

@@ -4,12 +4,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2307 - Better visibility text
+- VIMEET-2304 - Picto edit
+
+### Updated
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+
+## [2.77.0] - 2021-01-18
+### Added
+- VIMEET-2293 - Set participant's locale by event
+
+## [2.76.0] - 2021-01-12
 ### Updated
 - VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
-- VIMEET-2304 - Picto edit
+### Fixed
+- MV-293 - Https links in emails
 
 ## [2.75.0] - 2020-12-24
 ### Updated

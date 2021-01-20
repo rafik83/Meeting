@@ -141,7 +141,7 @@ class ReminderHandler
                         $this->SMSFactory->createPendingProposition(
                             $userEventPhone->getPhone(),
                             $sheet,
-                            $currentEvent->getAvailableLocale($user->getLocale()),
+                            $participant->getLocale(),
                             $countAvailablePendingProposition
                         )
                     );

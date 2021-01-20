@@ -102,11 +102,14 @@ class ParticipantController extends Controller
             'template' => $profileTemplate,
             'country'  => $eventDomain->getEvent()->getCountry(),
         ]);
+        $form->get('locale')->setData($participant->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = array_filter($profileTemplate->getData(), function ($value) {
                 return null !== $value;
             });
+
+            $locale = $form->get('locale')->getData();
 
             $preUpdateView = $this->get('handler_user_profile.pre_update_handler')->handle(
                 new PreUpdate($user, $participant, $eventDomain->getEvent(), $data, $profileTemplate, $locale)

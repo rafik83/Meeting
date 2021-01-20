@@ -38,6 +38,8 @@ Proximum\Vimeet\Domain\Model\Participant:
         networkingChatViewedAt:
             type: datetime
             nullable: true
+        locale:
+            type: string
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
