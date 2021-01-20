@@ -116,7 +116,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
-                    $participant->getUser()->getLocale()
+                    $participant->getLocale()
                 ));
 
                 $this->extraDataRepository->add(

@@ -227,6 +227,7 @@ class UpdateProfileHandlerTest extends TestCase
             $owner = true,
             $date
         );
+        $expectedParticipant->setLocale('fr');
 
         $uploadFileHandler
             ->handle(Argument::any())
@@ -501,6 +502,7 @@ class UpdateProfileHandlerTest extends TestCase
             $owner = true,
             $date
         );
+        $expectedParticipant->setLocale('fr');
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Updated
 - VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+
+## [2.77.0] - 2021-01-18
+### Added
+- VIMEET-2293 - Set participant's locale by event
+
 ## [2.76.0] - 2021-01-12
 ### Updated
 - VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
