@@ -21,6 +21,7 @@ abstract class AbstractChild
     public const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
     public const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
     public const TEMPLATE_OBJECT_TYPE_VIDEO         = 'video';
+    public const TEMPLATE_OBJECT_TYPE_CHECKBOX      = 'checkbox';
 
     /**
      * @var string

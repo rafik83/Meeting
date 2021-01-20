@@ -220,18 +220,23 @@ class RegisterController extends Controller
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
+        // Ask for locale if there are several
+        $askLocale = count($event->getLocales()) > 1;
+
         $form = $this->createForm(BlockType::class, $registrationTemplateFirstStep, [
             'block' => $registrationTemplateFirstStep,
             'locale' => $locale,
             'locales' => $event->getLocales(),
             'country' => $event->getCountry(),
-            'askLocaleFirst' => true,
+            'askLocaleFirst' => $askLocale,
         ]);
 
-        $form->get('locale')->setData($locale);
+        if ($askLocale) {
+            $form->get('locale')->setData($locale);
+        }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $locale = $form->get('locale')->getData();
+            $locale = !$askLocale ? $event->getLocaleFallback() : $form->get('locale')->getData();
             $data = $this->handleData(
                 $user,
                 null,

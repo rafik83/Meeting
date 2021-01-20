@@ -88,6 +88,11 @@
       list-style-type: disc;
     }
   }
+
+  .registerStepHeader p a {
+    text-decoration: underline;
+    font-style: italic;
+  }
 }
 
 .profile__center {
