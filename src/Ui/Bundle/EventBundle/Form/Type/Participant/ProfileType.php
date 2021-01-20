@@ -13,12 +13,15 @@ class ProfileType extends AbstractBlockType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $localeChoices = [];
-        foreach($options['locales'] as $locale) {
-            $localeChoices[$locale] = Intl::getLocaleBundle()->getLocaleName($locale);
+        if (count($options['locales']) > 1) {
+            $localeChoices = [];
+            foreach ($options['locales'] as $locale) {
+                $localeChoices[$locale] = Intl::getLocaleBundle()->getLocaleName($locale);
+            }
+
+            $builder->add('locale', ChoiceType::class, ['choices' => array_flip($localeChoices), 'mapped' => false]);
         }
 
-        $builder->add('locale', ChoiceType::class, ['choices' => array_flip($localeChoices), 'mapped' => false]);
 
         parent::buildForm($builder, $options);
     }
