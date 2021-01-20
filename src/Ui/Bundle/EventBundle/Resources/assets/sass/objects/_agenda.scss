@@ -196,6 +196,30 @@ $slotHeight: 60px;
         a + a {
           margin-left: 0.5em;
         }
+
+        > a {
+          display: flex;
+          flex-direction: column;
+          order: 0;
+          flex: 0 1 auto;
+          align-self: auto;
+          color: #ffffff;
+
+
+
+          > i {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: center;
+            font-size: 30px;
+          }
+
+          > span {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+          }
+        }
       }
 
 

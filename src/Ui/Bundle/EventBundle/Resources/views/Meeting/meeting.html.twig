@@ -23,25 +23,19 @@
             </p>
             <div class="tools">
                 {% if canUpdateMeeting %}
-                    <a class="updateMeetingAction btn btn-gray btn-sm"
+                    <a class="updateMeetingAction"
                         href="{{ path('event_agenda_update_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}"
                     >
                         <i class="icon icon-Editer_1"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.edit.button'|trans }}</span>
                     </a>
                 {% endif %}
                 {% if canRemoveMeeting %}
-                    <a class="removeMeetingAction btn btn-gray btn-sm"
+                    <a class="removeMeetingAction"
                         href="{{ path('event_agenda_remove_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}" data-confirm-remove-meeting-message="{{ 'agenda.meeting.remove.confirm'|trans }}"
                     >
-                        <i class="icon icon-Fermer_1"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.remove.button'|trans }}</span>
+                        <i class="icon icon-Fermer_4"></i> <span class="meeting-icon-label">{{ 'agenda.meeting.remove.button'|trans }}</span>
                     </a>
                 {% endif %}
-
-                <a class="btn btn-gray btn-sm btn-info"
-                    href="{{ path('event_agenda_remove_meeting', {'sheet': sheetId, 'meeting': meeting.id, 'participant': participantId}) }}" data-confirm-remove-meeting-message="{{ 'agenda.meeting.remove.confirm'|trans }}"
-                >
-                    <i class="icon icon-Info_1"></i>
-                </a>
             </div>
         </div>
     </header>
