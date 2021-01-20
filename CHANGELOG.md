@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-295 - Badge preview from back-office
+
 ### Added
 - VIMEET-2305 - participant agenda available by an ical file (only for admins)
 - VIMEET-2306 - Add checkbox object for registration template
