@@ -62,6 +62,10 @@ class VatApplicable
             return false;
         }
 
+        if ((strtolower($billingCountry) === "mc" && strtolower($eventCountry) === "fr") || (strtolower($billingCountry) === "fr" && strtolower($eventCountry) === "mc")) {
+            return true;
+        }
+
         // Billing country and event country are the same
         if (strtoupper($billingCountry) === strtoupper($eventCountry)) {
             return true;

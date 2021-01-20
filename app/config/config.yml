@@ -134,7 +134,7 @@ services:
             - { name: twig.extension }
 
 infrastructure:
-    eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+    eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se']
     preferred_locales: ['fr', 'en', 'es', 'de', 'it', 'zh']
     default_locales: ['fr', 'en']
     supported_currencies: ['EUR', 'GBP', 'USD']
