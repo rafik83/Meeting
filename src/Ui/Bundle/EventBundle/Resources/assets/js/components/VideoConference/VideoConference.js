@@ -354,7 +354,8 @@ VideoConference.prototype.initChat = function () {
     },
     textChatContainer: '.chat-container',
     waitingMessage: this.chatWaitingMessage,
-    alwaysOpen: true
+    alwaysOpen: true,
+    appendControl: false
   });
 };
 
