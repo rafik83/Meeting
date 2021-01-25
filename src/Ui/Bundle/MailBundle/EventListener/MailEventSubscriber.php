@@ -75,7 +75,8 @@ class MailEventSubscriber implements EventSubscriberInterface
         EventSender $sender,
         ParticipantMailViewQueryHandler $participantMailViewQueryHandler,
         PrepareHandler $prepareHandler
-    ) {
+    )
+    {
         $this->mailer = $mailer;
         $this->sender = $sender;
         $this->participantMailViewQueryHandler = $participantMailViewQueryHandler;
@@ -456,8 +457,7 @@ class MailEventSubscriber implements EventSubscriberInterface
                     $event->getLocale()
                 )
             );
-        } else {
-            /*
+        } else if ($happening->isWebinarRecordSentToSpeakers()) {
             foreach ($happening->getSpeakers() as $speaker) {
                 $speakerUser = $speaker->getUser();
 
@@ -473,7 +473,6 @@ class MailEventSubscriber implements EventSubscriberInterface
                     );
                 }
             }
-            */
         }
     }
 
@@ -496,25 +495,25 @@ class MailEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::ADMIN_ACCOUNT_ACTIVATED            => 'onAdminActivateAccount',
+            Events::ADMIN_ACCOUNT_ACTIVATED => 'onAdminActivateAccount',
             Events::ADMIN_ACCOUNT_TEMPORARILY_DISABLED => 'onAdminAccountTemporarilyDisabled',
-            Events::ADMIN_PASSWORD_RESET               => 'onAdminResetPassword',
-            Events::ADMIN_MEETINGS_DELETED_ALL         => 'onAdminMeetingsDeletedAll',
+            Events::ADMIN_PASSWORD_RESET => 'onAdminResetPassword',
+            Events::ADMIN_MEETINGS_DELETED_ALL => 'onAdminMeetingsDeletedAll',
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION => 'onSheetAddParticipant',
-            Events::USER_MAIL_CHANGED                  => 'onChangeMailAddressEvent',
-            Events::USER_ACCOUNT_ACTIVATED             => 'onUserActivateAccount',
-            Events::USER_ACCOUNT_ACTIVATED_FROM_LOGIN  => 'onUserActivateAccountFromLogin',
-            Events::USER_PASSWORD_RESET                => 'onUserResetPassword',
-            Events::USER_PROFILE_COMPLETED             => 'onUserCompleteProfile',
-            Events::USER_REGISTERED                    => 'onUserRegistered',
-            Events::USER_RESET_PASSWORD_CONFIRMED      => 'onUserResetPasswordConfirm',
-            Events::USER_ACCOUNT_TEMPORARILY_DISABLED  => 'onUserAccountTemporarilyDisabled',
-            Events::EVENT_PRE_REGISTERED               => 'onUserPreRegistered',
-            Events::ORDER_CONFIRMED                    => 'onOrderConfirmed',
-            Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
-            Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
-            Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
-            Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated',
+            Events::USER_MAIL_CHANGED => 'onChangeMailAddressEvent',
+            Events::USER_ACCOUNT_ACTIVATED => 'onUserActivateAccount',
+            Events::USER_ACCOUNT_ACTIVATED_FROM_LOGIN => 'onUserActivateAccountFromLogin',
+            Events::USER_PASSWORD_RESET => 'onUserResetPassword',
+            Events::USER_PROFILE_COMPLETED => 'onUserCompleteProfile',
+            Events::USER_REGISTERED => 'onUserRegistered',
+            Events::USER_RESET_PASSWORD_CONFIRMED => 'onUserResetPasswordConfirm',
+            Events::USER_ACCOUNT_TEMPORARILY_DISABLED => 'onUserAccountTemporarilyDisabled',
+            Events::EVENT_PRE_REGISTERED => 'onUserPreRegistered',
+            Events::ORDER_CONFIRMED => 'onOrderConfirmed',
+            Events::TRANSACTION_CONFIRMED => 'onTransactionConfirmed',
+            Events::SHEET_CHANGED_TYPE => 'onSheetChangeType',
+            Events::SHEET_GROUP_CREATED => 'onSheetGroupCreated',
+            Events::SHEET_GROUP_UPDATED => 'onSheetGroupUpdated',
             Events::HAPPENING_ZIP_RECORD_ARCHIVE_PREPARED => 'onHappeningZipRecordArchivePrepared',
             Events::HAPPENING_ZIP_RECORD_ARCHIVE_NOT_PREPARED => 'onHappeningZipRecordArchiveNotPrepared',
         ];
