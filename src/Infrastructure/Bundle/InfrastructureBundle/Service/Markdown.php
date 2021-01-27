@@ -2,12 +2,15 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment;
+use League\CommonMark\Extension\Attributes\AttributesExtension;
 use Proximum\Vimeet\Application\Adapter\MarkdownAdapterInterface;
 
 class Markdown implements MarkdownAdapterInterface
 {
     /**
-     * @var \Parsedown
+     * @var CommonMarkConverter
      */
     private $parser;
 
@@ -16,7 +19,12 @@ class Markdown implements MarkdownAdapterInterface
      */
     public function __construct()
     {
-        $this->parser = new \Parsedown();
+        $environment = Environment::createCommonMarkEnvironment();
+        $environment->addExtension(new AttributesExtension());
+        $config = [
+            'allow_unsafe_links' => false
+        ];
+        $this->parser = new CommonMarkConverter($config, $environment);
     }
 
     /**
@@ -26,8 +34,9 @@ class Markdown implements MarkdownAdapterInterface
      */
     public function toHtml($text)
     {
-        $this->parser->setSafeMode(true);
-
-        return $this->parser->text($text);
+        if (null === $text) {
+            return '';
+        }
+        return $this->parser->convertToHtml($text);
     }
 }
