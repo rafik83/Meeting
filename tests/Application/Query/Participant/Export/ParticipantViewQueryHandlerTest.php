@@ -120,6 +120,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->participant->getSheet()->willReturn($this->sheet->reveal());
         $this->sheet->getType()->willReturn($this->type->reveal());
         $this->participant->getUser()->willReturn($this->user->reveal());
+        $this->participant->getLocale()->willReturn('es');
         $this->dateTime = new \DateTime('2017-10-09 13:39:34.000');
         $this->dateTime2 = new \DateTime('2017-10-10 13:39:34.000');
         $this->sheet->getCreatedAt()->willReturn($this->dateTime);
@@ -322,7 +323,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
             24,
             5,
             3,
-            7
+            7,
+            'es'
         );
 
         $this->assertEquals($expected, $result);
