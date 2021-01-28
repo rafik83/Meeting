@@ -168,6 +168,7 @@ class ImportMappingViewQueryHandlerTest extends TestCase
         $headers = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
             ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
+            ParticipantImportTag::REGISTRATION_FIELD_LOCALE => 'form.participant_import.field.locale',
             ParticipantImportTag::FIELD_GROUP_TITLE => 'form.participant_import.field.group_title',
             'key1' => 'Inscription : object1',
             'key2' => 'Inscription : object2',
