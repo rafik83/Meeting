@@ -14,6 +14,7 @@ import NotificationSubscriber from '../_Subscriber';
 import Modal from '../Modal';
 import WebinarStatus from './WebinarStatus';
 import SharingManager from './Sharing/Manager';
+import MuteStream from './MuteStream';
 
 /**
  * @param {Element} element
@@ -370,6 +371,28 @@ Webinar.prototype.initWebRTCStack = function() {
             this.layoutFocus(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
+            const selfStreamId = event.stream.streamId;
+            const selfStreamHasAudio = event.stream.hasAudio;
+            const selfStreamName = event.stream.name;
+            subscriber.on('videoElementCreated', (event)=>{
+                const muteStream = new MuteStream(event.target.element, selfStreamName, this.element.getAttribute('data-mute-stream'));
+                muteStream.init();
+
+                if (selfStreamHasAudio === false) {
+                    muteStream.disableButton();
+                }
+
+                this.session.on('streamPropertyChanged', function (streamPropertyChangedEvent) {
+                    if (streamPropertyChangedEvent.changedProperty !== 'hasAudio' || selfStreamId !== streamPropertyChangedEvent.stream.streamId){
+                        return;
+                    }
+                    if (streamPropertyChangedEvent.newValue === false) {
+                        muteStream.disableButton();
+                    } else {
+                        muteStream.enableButton();
+                    }
+                });
+            });
         }
 
         this.autoMaximize(subscriber);
@@ -481,6 +504,19 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
             this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }
+
+        if (payload.action === 'mute_stream') {
+            if(payload.userId != this.currentUserId) {
+                return;
+            }
+
+            if(!this.enableAudio) {
+                return;
+            }
+
+            this.toggleAudio();
+        }
+
     });
 };
 
@@ -728,11 +764,16 @@ Webinar.prototype.onVideoElementCreated = function (event) {
 
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
+        let iconMute = document.createElement('i');
+        iconMute.classList.add('iconMuteStream','icon-Conference','icon-center');
+
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
         publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
 
         publisherElement.appendChild(publisherName);
+        publisherElement.appendChild(iconMute);
+
     }
 };
 
