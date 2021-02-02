@@ -22,7 +22,7 @@ class IcalHandler
 
     public function handle(AgendaView $agendaView): Response
     {
-        $vCalendar = new Calendar('vimeet.events');
+        $vCalendar = new Calendar($agendaView->sheet->getEvent()->getDomain());
         $vCalendar->setName($agendaView->sheet->getEvent()->getTitle());
 
         /** @var DayView $day */
@@ -45,7 +45,7 @@ class IcalHandler
                     );
                 }
 
-                $vCalendar->addComponent($vEvent, $happening->id);
+                $vCalendar->addComponent($vEvent, 'h/'.$happening->id);
             }
 
             /** @var MeetingView $meeting */
@@ -96,7 +96,7 @@ class IcalHandler
                 $vEvent->setIsPrivate(true);
                 $vEvent->setUseTimezone(true);
 
-                $vCalendar->addComponent($vEvent, $meeting->id);
+                $vCalendar->addComponent($vEvent, 'm/'.$meeting->id);
             }
         }
 
