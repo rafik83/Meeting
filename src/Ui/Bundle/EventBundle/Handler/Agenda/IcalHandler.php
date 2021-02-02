@@ -33,8 +33,10 @@ class IcalHandler
                 $vEvent->setDtEnd($happening->getEnd());
                 $vEvent->setSummary($happening->title);
                 $vEvent->setDescription($happening->description);
+
+                $vEvent->setIsPrivate(false);
+                $vEvent->setTimeTransparency(Event::TIME_TRANSPARENCY_TRANSPARENT);
                 $vEvent->setUseTimezone(true);
-                $vEvent->setIsPrivate(true);
 
                 if ($happening->webinar) {
                     $vEvent->setUrl(
@@ -93,7 +95,8 @@ class IcalHandler
                         ['sheet' => $agendaView->sheet->getId(), 'participant' => $agendaView->participant->getId()]
                     )
                 );
-                $vEvent->setIsPrivate(true);
+                $vEvent->setIsPrivate(false);
+                $vEvent->setTimeTransparency(Event::TIME_TRANSPARENCY_TRANSPARENT);
                 $vEvent->setUseTimezone(true);
 
                 $vCalendar->addComponent($vEvent, 'm/'.$meeting->id);
