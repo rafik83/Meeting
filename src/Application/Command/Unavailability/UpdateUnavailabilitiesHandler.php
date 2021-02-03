@@ -3,29 +3,30 @@
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
-use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
+use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsWithUnavailabilityException;
+use Proximum\Vimeet\Application\Exception\Unavailability\UnavailabilityException;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultView;
+use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Psr\Log\LoggerInterface;
 
 class UpdateUnavailabilitiesHandler
 {
-    /** @var GetTimezoneHelper */
-    private $getTimezoneHelper;
-
-    /** @var CommandBusInterface */
-    private $commandBus;
-
+    private GetTimezoneHelper $getTimezoneHelper;
+    private CommandBusInterface $commandBus;
+    private CreateHandler $createHandler;
     private ?LoggerInterface $logger;
 
     public function __construct(
         GetTimezoneHelper $getTimezoneHelper,
         CommandBusInterface $commandBus,
+        CreateHandler $createHandler,
         LoggerInterface $logger = null
     ) {
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->commandBus = $commandBus;
+        $this->createHandler = $createHandler;
         $this->logger = $logger;
     }
 
@@ -85,12 +86,14 @@ class UpdateUnavailabilitiesHandler
                 $createCommand->day = $day;
 
                 try {
-                    $this->commandBus->handle($createCommand);
+                    $this->createHandler->handle($createCommand);
                     $result[] = new CreateUnavailabilitiesResultView($day, true);
-                } catch (\Exception $exception) {
+                } catch (ParticipantsWithUnavailabilityException $exception) {
+                    $result[] = new CreateUnavailabilitiesResultView($day, true);
+                } catch (UnavailabilityException $exception) {
                     $result[] = new CreateUnavailabilitiesResultView($day, false);
                     if ($this->logger) {
-                        $this->logger->error(sprintf('Error when creating unavailability [%s] %s', get_class($exception), $exception->getMessage()));
+                        $this->logger->warning(sprintf('Error when creating unavailability [%s] %s', get_class($exception), $exception->getMessage()));
                     }
                 }
             }
