@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResult
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Psr\Log\LoggerInterface;
 
 class UpdateUnavailabilitiesHandler
 {
@@ -16,12 +17,16 @@ class UpdateUnavailabilitiesHandler
     /** @var CommandBusInterface */
     private $commandBus;
 
+    private ?LoggerInterface $logger;
+
     public function __construct(
         GetTimezoneHelper $getTimezoneHelper,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        LoggerInterface $logger = null
     ) {
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->commandBus = $commandBus;
+        $this->logger = $logger;
     }
 
     public function handle(UpdateUnavailabilities $command): CreateUnavailabilitiesResultsView
@@ -84,6 +89,9 @@ class UpdateUnavailabilitiesHandler
                     $result[] = new CreateUnavailabilitiesResultView($day, true);
                 } catch (\Exception $exception) {
                     $result[] = new CreateUnavailabilitiesResultView($day, false);
+                    if ($this->logger) {
+                        $this->logger->error(sprintf('Error when creating unavailability [%s] %s', get_class($exception), $exception->getMessage()));
+                    }
                 }
             }
         }
