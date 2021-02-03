@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [2.78.3] - 2021-02-03
+### Fixed
 - MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
 
 ## [2.78.2] - 2021-02-03
