@@ -77,6 +77,9 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     private $webinarRecorded;
 
     /** @var bool */
+    private $webinarRecordSentToSpeakers;
+
+    /** @var bool */
     private $sidebarAllowed = true;
 
     /** @var null|string */
@@ -103,7 +106,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         ?string $liveUrl = null,
         bool $sidebarAllowed = true,
         bool $webinarRecorded = true,
-        bool $allowHls = false
+        bool $allowHls = false,
+        bool $webinarRecordSentToSpeakers = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -126,6 +130,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->sidebarAllowed = $sidebarAllowed;
         $this->allowHls = $allowHls;
         $this->isStreamOpenToPublic = false;
+        $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
     }
 
     public function getId(): ?int
@@ -240,6 +245,11 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         return $this->webinarRecorded;
     }
 
+    public function isWebinarRecordSentToSpeakers(): bool
+    {
+        return $this->webinarRecordSentToSpeakers;
+    }
+
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
@@ -254,7 +264,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         ?string $liveUrl = null,
         bool $sidebarAllowed,
         bool $webinarRecorded = true,
-        bool $allowHls = true
+        bool $allowHls = true,
+        bool $webinarRecordSentToSpeakers = true
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -270,6 +281,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->sidebarAllowed = $sidebarAllowed;
         $this->webinarRecorded = $webinarRecorded;
         $this->allowHls = $allowHls;
+        $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
     }
 
     public function updateTranslation(

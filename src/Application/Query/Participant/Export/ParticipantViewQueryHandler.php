@@ -131,7 +131,8 @@ class ParticipantViewQueryHandler
             $this->analytics[$query->participant->getUser()->getId()]['clickedElements']??0,
             $this->requestRepository->getParticipantRequestsCount($query->participant),
             $this->meetingRepository->getParticipantMeetingsCount($query->participant),
-            $this->chatSessionRepository->countCallVisioByEventAndUser($query->event, $query->participant->getUser())
+            $this->chatSessionRepository->countCallVisioByEventAndUser($query->event, $query->participant->getUser()),
+            $query->participant->getLocale()
         );
 
         return $view;
