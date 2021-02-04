@@ -647,6 +647,7 @@ admin.participant.export.fields.happening.participate: Inscrit
 admin.participant.export.fields.participant_created_at: 'Création Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'
+admin.participant.export.fields.participant_locale: 'Langue d''affichage Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.participation_paid: 'Etat de paiement'
 admin.participant.export.fields.participation_paid.not_paid: 'Pas payé'

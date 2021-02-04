@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2296 - Add participant locale in participants export
 - VIMEET-2295 - Can import partipant's locale
 
 ### Fixed
