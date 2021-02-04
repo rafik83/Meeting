@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-1811 - Participants can edit participants list and date of a meeting
 - VIMEET-2319 - Send webinar record to speakers
 - VIMEET-2323 - Link target blank
 - VIMEET-2296 - Add participant locale in participants export
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
+- VIMEET-1811 - User can change participants to meeting
 
 ### Fixed
 - MV-293 - Https links in emails

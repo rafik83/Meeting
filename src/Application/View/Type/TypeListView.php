@@ -40,7 +40,7 @@ class TypeListView
     public $canRemoveMeeting;
 
     /** @var bool */
-    public $canMoveMeeting;
+    public $canUpdateMeeting;
 
     public function __construct(
         int $id,
@@ -53,7 +53,7 @@ class TypeListView
         string $package,
         bool $hasSpecificPaymentConditions = false,
         bool $hasSpecificTermsOfSale = false,
-        bool $canMoveMeeting = false,
+        bool $canUpdateMeeting = false,
         bool $canRemoveMeeting = false
     ) {
         $this->id = $id;
@@ -67,6 +67,6 @@ class TypeListView
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
         $this->hasSpecificTermsOfSale = $hasSpecificTermsOfSale;
         $this->canRemoveMeeting = $canRemoveMeeting;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
     }
 }

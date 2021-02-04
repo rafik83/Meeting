@@ -2,6 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Exception\Meeting;
 
-class MoveMeetingException extends \Exception
+class UpdateMeetingException extends \Exception
 {
 }

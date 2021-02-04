@@ -3,22 +3,25 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Command\Meeting\Event\Move;
+use Proximum\Vimeet\Application\Command\Meeting\Event\Update;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MoveMeetingType extends AbstractType
+class UpdateMeetingType extends AbstractType
 {
-    /** @var TranslatorInterface */
-    private $translator;
+    private ParticipantInfoGuesser $guesser;
+    private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(ParticipantInfoGuesser $guesser, TranslatorInterface $translator)
     {
+        $this->guesser = $guesser;
         $this->translator = $translator;
     }
 
@@ -26,6 +29,21 @@ class MoveMeetingType extends AbstractType
     {
         $timezone = $options['timezone'];
         $locale = $options['locale'];
+
+        if (count($options['participants']) > 1) {
+            $builder
+                ->add('participants', ChoiceType::class, [
+                    'choices' => $options['participants'],
+                    'choice_label' => fn (Participant $participant) => $this->guesser->guessParticipantCompleteName($participant, $locale),
+                    'choice_attr' => fn (Participant $participant) => ['data-participant-id' => $participant->getId()],
+                    'expanded' => true,
+                    'multiple' => true,
+                ]);
+        }
+
+        if (\count($options['availableSlots']) === 0) {
+            return;
+        }
 
         $builder
             ->add('meetingSlot', ChoiceType::class, [
@@ -35,12 +53,13 @@ class MoveMeetingType extends AbstractType
                     $begin = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getBegin());
                     $end = DayHelper::getHourFormatter($locale, $timezone)->format($meetingSlot->getEnd());
 
-                    return $this->translator->trans('form.move_meeting.children.meetingSlot.label.begin.end', [
+                    return $this->translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', [
                         '%day%' => $day,
                         '%begin%' => $begin,
                         '%end%' => $end,
                     ], 'forms');
-                }
+                },
+                'choice_attr' => fn (MeetingSlot $meetingSlot) => ['data-meeting-slot-id' => $meetingSlot->getId()],
             ])
             ->add('content', TextareaType::class, [
                 'required' => false,
@@ -60,7 +79,8 @@ class MoveMeetingType extends AbstractType
                 'timezone',
             ])
             ->setDefaults([
-                'data_class' => Move::class,
+                'data_class' => Update::class,
+                'participants' => [],
             ])
         ;
     }

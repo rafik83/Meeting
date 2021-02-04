@@ -23,7 +23,7 @@ Proximum\Vimeet\Domain\Model\Type:
             type: boolean
             options:
                 default: false
-        canMoveMeeting:
+        canUpdateMeeting:
             type: boolean
             options:
                 default: false

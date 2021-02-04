@@ -340,7 +340,7 @@ class RequestTransformableTest extends TestCase
             $type->isHidden(),
             $type->getAvailabilityType(),
             $type->getNumberOfMeetingsPerPlanning(),
-            $type->canMoveMeeting(),
+            $type->canUpdateMeeting(),
             $type->canRemoveMeeting(),
             true
         );
