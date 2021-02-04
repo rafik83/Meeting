@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities;
 use Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilitiesHandler;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultsView;
 use Proximum\Vimeet\Application\View\Unavailability\CreateUnavailabilitiesResultView;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
@@ -103,6 +104,7 @@ class UpdateUnavailabilitiesHandlerTest extends TestCase
             ->willReturn('Europe/Paris');
 
         $commandBus = $this->prophesize(CommandBusInterface::class);
+        $createHandler = $this->prophesize(CreateHandler::class);
 
         $create1 = new Create(
             $event->reveal(),
@@ -164,11 +166,11 @@ class UpdateUnavailabilitiesHandlerTest extends TestCase
         $removeUserUnavailabilitiesQuery = new RemoveUserUnavailabilities($user->reveal(), $event->reveal(), $sheet->reveal());
 
         $commandBus->handle($removeUserUnavailabilitiesQuery)->shouldBeCalled();
-        $commandBus->handle($create1)->shouldBeCalled();
-        $commandBus->handle($create2)->shouldBeCalled();
-        $commandBus->handle($create3)->shouldBeCalled();
+        $createHandler->handle($create1)->shouldBeCalled();
+        $createHandler->handle($create2)->shouldBeCalled();
+        $createHandler->handle($create3)->shouldBeCalled();
 
-        $handler = new UpdateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $commandBus->reveal());
+        $handler = new UpdateUnavailabilitiesHandler($getTimezoneHelper->reveal(), $commandBus->reveal(), $createHandler->reveal());
         $result = $handler->handle(new UpdateUnavailabilities(
             $event->reveal(),
             $sheet->reveal(),
