@@ -64,6 +64,8 @@ class ParticipantView
     /** @var int */
     public $chatSessionsCallVisio;
 
+    public string $locale;
+
     public function __construct(
         int $sheetId,
         string $typeTitle,
@@ -84,7 +86,8 @@ class ParticipantView
         int $clickedElements,
         int $requestedMeetings,
         int $scheduledMeetings,
-        int $chatSessionsCallVisio
+        int $chatSessionsCallVisio,
+        string $locale
     ) {
         $this->sheetId = $sheetId;
         $this->typeTitle = $typeTitle;
@@ -106,5 +109,6 @@ class ParticipantView
         $this->requestedMeetings = $requestedMeetings;
         $this->scheduledMeetings = $scheduledMeetings;
         $this->chatSessionsCallVisio = $chatSessionsCallVisio;
+        $this->locale = $locale;
     }
 }
