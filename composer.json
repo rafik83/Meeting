@@ -20,6 +20,9 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
+        "ext-zip": "*",
+        "ext-soap": "*",
+        "ext-simplexml": "*",
         "symfony/symfony": "^3.4.39",
         "doctrine/orm": "^2.6.1",
         "doctrine/doctrine-bundle": "^1.12",
