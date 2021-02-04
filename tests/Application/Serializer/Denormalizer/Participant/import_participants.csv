@@ -1,8 +1,8 @@
-Nom participant;Prénom participant;Société Acheteur;Fonction Pro Acheteur;E-mail Acheteur;Mobile;Tarif;Facture - Ville;Pays Acheteur;Facture - Code postal;Facture - Adresse;"Titre de la fiche";"Description";Nomenclature
-AB;Nicolas;"Blue Consulting";CEO;nicolas@gmail.com;+33611223344;Entrepreneur Pass (2 days);;France;;;"Blue Consulting";"Ceci est une description";;
-KL;Julie;"User already exists in DB";créateur;julie@gmail.com;+33666667700;;;FR;;;;;
-CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;;"Ma petite Tribu";"Ceci est une autre description";item1
-GH;Henry;NO Email;president;;;;;FR;;;;;
-CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;;"Ma petite Tribu";"Ceci est une autre description";item1
-IJ;Martine;"Sheet already exists in DB";créateur;martine@gmail.com;+33666667799;;;FR;;;;;
-KL;Zidane;CDM98;butteur;"zinedine@example.net";+33667890987;;;FR;;;Equipe de France;Champion du monde;item5
+Nom participant;Prénom participant;Société Acheteur;Fonction Pro Acheteur;E-mail Acheteur;Mobile;Tarif;Facture - Ville;Pays Acheteur;Facture - Code postal;Facture - Adresse;"Titre de la fiche";"Description";Nomenclature;Langue affichage
+AB;Nicolas;"Blue Consulting";CEO;nicolas@gmail.com;+33611223344;Entrepreneur Pass (2 days);;France;;;"Blue Consulting";"Ceci est une description";;fr
+KL;Julie;"User already exists in DB";créateur;julie@gmail.com;+33666667700;;;FR;;;;;;en
+CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;;"Ma petite Tribu";"Ceci est une autre description";item1;en
+GH;Henry;NO Email;president;;;;;FR;;;;;;ss
+CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;;"Ma petite Tribu";"Ceci est une autre description";item1;fr
+IJ;Martine;"Sheet already exists in DB";créateur;martine@gmail.com;+33666667799;;;FR;;;;;;it
+KL;Zidane;CDM98;butteur;"zinedine@example.net";+33667890987;;;FR;;;Equipe de France;Champion du monde;item5;fr
