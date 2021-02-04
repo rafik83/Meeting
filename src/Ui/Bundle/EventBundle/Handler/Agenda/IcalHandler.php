@@ -22,7 +22,7 @@ class IcalHandler
 
     public function handle(AgendaView $agendaView): Response
     {
-        $vCalendar = new Calendar('vimeet.events');
+        $vCalendar = new Calendar($agendaView->sheet->getEvent()->getDomain());
         $vCalendar->setName($agendaView->sheet->getEvent()->getTitle());
 
         /** @var DayView $day */
@@ -33,8 +33,10 @@ class IcalHandler
                 $vEvent->setDtEnd($happening->getEnd());
                 $vEvent->setSummary($happening->title);
                 $vEvent->setDescription($happening->description);
+
+                $vEvent->setIsPrivate(false);
+                $vEvent->setTimeTransparency(Event::TIME_TRANSPARENCY_TRANSPARENT);
                 $vEvent->setUseTimezone(true);
-                $vEvent->setIsPrivate(true);
 
                 if ($happening->webinar) {
                     $vEvent->setUrl(
@@ -45,7 +47,7 @@ class IcalHandler
                     );
                 }
 
-                $vCalendar->addComponent($vEvent, $happening->id);
+                $vCalendar->addComponent($vEvent, 'h/'.$happening->id);
             }
 
             /** @var MeetingView $meeting */
@@ -93,10 +95,11 @@ class IcalHandler
                         ['sheet' => $agendaView->sheet->getId(), 'participant' => $agendaView->participant->getId()]
                     )
                 );
-                $vEvent->setIsPrivate(true);
+                $vEvent->setIsPrivate(false);
+                $vEvent->setTimeTransparency(Event::TIME_TRANSPARENCY_TRANSPARENT);
                 $vEvent->setUseTimezone(true);
 
-                $vCalendar->addComponent($vEvent, $meeting->id);
+                $vCalendar->addComponent($vEvent, 'm/'.$meeting->id);
             }
         }
 

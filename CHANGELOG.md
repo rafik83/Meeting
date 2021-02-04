@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2295 - Can import partipant's locale
 
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
+
+## [2.78.3] - 2021-02-03
+### Fixed
+- MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
+
+## [2.78.2] - 2021-02-03
+### Updated
+- MV-306 - Add log when exception is thrown when saving availabilities
+
 ## [2.78.1] - 2021-01-21
 ### Fixed
 - MV-300 - Can't close chat during visio meeting (BC break with chat lib update)
