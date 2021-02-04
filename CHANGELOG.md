@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
 
 ## [2.78.1] - 2021-01-21
 ### Fixed
