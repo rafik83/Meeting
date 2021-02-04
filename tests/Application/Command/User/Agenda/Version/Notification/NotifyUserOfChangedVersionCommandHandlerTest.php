@@ -150,6 +150,7 @@ class NotifyUserOfChangedVersionCommandHandlerTest extends TestCase
         $configuration->getSmsActivationDate()->shouldBeCalled()->willReturn($smsActivationDate);
 
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getUserLocale($this->user->reveal())->willReturn('fr');
         $version = $this->prophesize(User\Agenda\Version::class);
         $this->sheetGuesser->getUserSheet($this->user->reveal(), $this->event->reveal(), 'fr')
             ->shouldBeCalled()
@@ -222,6 +223,7 @@ class NotifyUserOfChangedVersionCommandHandlerTest extends TestCase
         $configuration->getSmsActivationDate()->shouldBeCalled()->willReturn($smsActivationDate);
 
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getUserLocale($this->user->reveal())->willReturn('fr');
         $version = $this->prophesize(User\Agenda\Version::class);
         $this->sheetGuesser->getUserSheet($this->user->reveal(), $this->event->reveal(), 'fr')
             ->shouldBeCalled()

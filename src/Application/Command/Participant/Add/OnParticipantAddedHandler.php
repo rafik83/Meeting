@@ -138,7 +138,7 @@ class OnParticipantAddedHandler
             $user,
             $event,
             $participant,
-            $user->getLocale()
+            $participant->getLocale()
         );
         $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $completeProfileEvent);
     }

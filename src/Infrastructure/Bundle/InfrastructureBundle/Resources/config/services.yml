@@ -1977,6 +1977,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@command.unavailability.create_handler'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities }
 
@@ -3056,6 +3058,7 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
             - '@monolog.logger'
 
     adapter.sendgrid_api_adapter:
@@ -3778,25 +3781,12 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
-
-    query.tip.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipListViewQuery }
     query.tip.event.paginated_tip_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler
         arguments:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery }
-    query.tip.event.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery }
     query.tip.event.type_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQueryHandler
         arguments:

@@ -45,6 +45,7 @@ class SendNotificationHandlerTest extends TestCase
         $this->user->getLocale()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $this->sheet->getId()->willReturn(3);
+        $this->sheet->getUserLocale($this->user->reveal())->willReturn('fr');
 
         $plannerJob = $this->prophesize(PlannerJob::class);
         $plannerJob->isCompleted()->willReturn(true);

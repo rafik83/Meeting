@@ -1439,6 +1439,9 @@ boolean.true: Oui
 boolean.yes: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
+checkbox.checked: Coché
+checkbox.not_checked: Non coché
+checkbox.null: Sans réponse
 event.activateAccount.password: 'Définir votre mot de passe'
 event.catalog.category.seeSheet: 'Voir la fiche'
 event.catalog.sheet.meetingRequest: 'Demander un rendez-vous'

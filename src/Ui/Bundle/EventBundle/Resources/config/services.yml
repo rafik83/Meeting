@@ -845,3 +845,7 @@ services:
         arguments:
             - '@form.factory'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler:
+        arguments:
+            - '@adapter.router'

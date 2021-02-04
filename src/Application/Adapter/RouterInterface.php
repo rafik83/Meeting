@@ -10,5 +10,7 @@ interface RouterInterface
 
     public function generateAbsoluteUrl($path, array $parameters = []): string;
 
+    public function initScheme(): void;
+
     public function getContext(): RequestContext;
 }

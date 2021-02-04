@@ -42,11 +42,12 @@ class FollowLinkAction
     ): RedirectResponse {
         $user = $userDomain ? $userDomain->getUser() : null;
         $event = $eventDomain->getEvent();
+        $locale = $user ? $sheet->getUserLocale($user) : $event->getLocaleFallback();
 
         $url = $this->queryBus->handle(new TemplateObjectUrlQuery(
             $sheet,
             $event,
-            $user ? $user->getLocale() : $event->getLocaleFallback(),
+            $locale,
             $objectId,
             $index
         ));
