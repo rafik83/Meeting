@@ -111,7 +111,7 @@ class ProductContext implements Context
 
         $product = $this->productContextProxy->getProductManager()->createPlanning($event, $title, $unitPrice);
 
-        $this->productContextProxy->getStorage()->set('planning', $product);
+        $this->productContextProxy->getStorage()->set('productPlanning', $product);
     }
 
     /**
@@ -147,11 +147,43 @@ class ProductContext implements Context
     }
 
     /**
+     * @Given /^there is an option called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)" and a max quantity of (?P<maxQuantity>\d+)$/
+     */
+    public function thereIsAnOptionWithAPriceAndAQuantityMax(string $title, float $unitPrice, int $quantityMax)
+    {
+        $this->addOption($title, $unitPrice, false, $quantityMax, false);
+    }
+
+    /**
+     * @Given /^there is an option called "(?P<title>[^"]+)" no more available$/
+     */
+    public function thereIsAnOptionNoMoreAvailable(string $title)
+    {
+        $this->addOption($title, 10, false, null, false, 10, new \DateTime('yesterday'));
+    }
+
+    /**
      * @Given /^there is an attributable option called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
      */
     public function thereIsAnAttributableOptionWithAPrice(string $title, float $unitPrice)
     {
         $this->addOption($title, $unitPrice, true);
+    }
+
+    /**
+     * @Given /^there is an option subject to validation called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
+     */
+    public function thereIsAnOptionSubjectToValidationWithAPrice(string $title, float $unitPrice)
+    {
+        $this->addOption($title, $unitPrice, false, null, true);
+    }
+
+    /**
+     * @Given there is an option called :title out of stock
+     */
+    public function thereIsAnOptionOutOfStock(string $title)
+    {
+        $this->addOption($title, 10, false, null, false, 0);
     }
 
     /**
@@ -165,8 +197,15 @@ class ProductContext implements Context
         $this->addOption($title, $unitPrice, true, $quantityMax);
     }
 
-    private function addOption(string $title, $unitPrice, bool $isAttributable = false, $quantityMax = null)
-    {
+    private function addOption(
+        string $title,
+        float $unitPrice,
+        bool $isAttributable = false,
+        int $quantityMax = null,
+        bool $isSubjectToValidation = false,
+        int $stock = null,
+        \DateTime $buyableUntil = null
+    ) {
         $event = $this->productContextProxy->getStorage()->get('event');
 
         if (!$event instanceof Event) {
@@ -183,11 +222,11 @@ class ProductContext implements Context
                 $unitPrice,
                 20,
                 $quantityMax,
+                $stock,
+                is_null($stock) ? null : $stock + 1,
                 null,
-                null,
-                null,
-                false,
-                null,
+                $isSubjectToValidation,
+                $buyableUntil,
                 $isAttributable
             )
         ;

@@ -26,7 +26,7 @@ Feature: Select payable option in sheet
     And I should not see "Ajouter un logo"
     When I follow "Ajouter un logo"
     And I should see "sheet.object.image.remove"
-    And The radio "sheet_image_data_selectedProduct_6" should be checked
+    And the radio "sheet_image_data_selectedProduct_6" should be checked
 
   Scenario: I can select "Option E" payable option for my media object
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
@@ -34,11 +34,11 @@ Feature: Select payable option in sheet
     When I follow "sheet.object.action.edit \"Médias\""
     Then the response status code should be 200
     And I should see "sheet.object.option.buyable.label"
-    And I check radio "sheet_media_collection_data_selectedProduct_9"
+    And I check radio "sheet_media_collection_data_selectedProduct_11"
     When I press "form.sheet_media_collection_data.children.submit.label"
     Then I should be on this page "/fr/sheet/1/fr"
     When I follow "sheet.object.action.edit \"Médias\""
-    Then The radio "sheet_media_collection_data_selectedProduct_9" should be checked
+    Then the radio "sheet_media_collection_data_selectedProduct_11" should be checked
 
   Scenario: I should have "Option Chaise" and "Option E" in my package
     When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"

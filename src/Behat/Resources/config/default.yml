@@ -105,5 +105,8 @@ default:
                 - Proximum\Vimeet\Behat\Context\Domain\SearchFacetContext:
                     - '@behat_storage'
                     - '@vimeet_infrastructure.repository.search_facet'
+                - Proximum\Vimeet\Behat\Context\Domain\Promotion\PromotionContext:
+                    - '@behat_storage'
+                    - '@repository.promotion_code_repository'
                 - behatch:context:json
                 - behatch:context:rest

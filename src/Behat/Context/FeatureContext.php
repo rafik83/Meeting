@@ -352,7 +352,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @When /^The radio "([^"]*)" should be checked$/
+     * @Then /^the radio "([^"]*)" should be checked$/
      */
     public function theRadioShouldBeChecked($radio)
     {
@@ -362,8 +362,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         if (null !== $element) {
             if ('input' === $element->getTagName()) {
-                // Behat return 1 instead of true for the value of a radio
-                if (true !== (bool) $element->getValue()) {
+                if (!$element->isChecked()) {
                     throw new \Exception('The radio button is not checked');
                 }
 
