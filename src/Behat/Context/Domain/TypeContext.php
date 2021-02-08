@@ -96,7 +96,7 @@ class TypeContext implements Context
             $type->isHidden(),
             $type->getAvailabilityType(),
             $type->getNumberOfMeetingsPerPlanning(),
-            $type->canMoveMeeting(),
+            $type->canUpdateMeeting(),
             $type->canRemoveMeeting(),
             $type->areAllSheetParticipantsAssignedToMeeting(),
             $type->canScanParticipant(),
