@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -13,21 +14,15 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
-    /** @var EntityManager */
-    private $entityManager;
+    private EntityManager $entityManager;
+    private TypeRepositoryInterface $typeRepository;
+    private DateTimeInterface $datetime;
 
-    /** @var TypeRepositoryInterface */
-    private $typeRepository;
-
-    /**
-     * MeetingSlotRepository constructor.
-     *
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository)
+    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository, DateTimeInterface $datetime)
     {
         $this->entityManager = $entityManager;
         $this->typeRepository = $typeRepository;
+        $this->datetime = $datetime;
     }
 
     /**
@@ -131,8 +126,9 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
     public function findAvailableSlotsByParticipants(
         Event $event,
         array $participants,
-        $ignoreMeetings = false,
-        Meeting $exceptedMeeting = null
+        bool $ignoreMeetings = false,
+        Meeting $exceptedMeeting = null,
+        bool $excludePastSlots = false
     ): array {
         $userIds = array_map(function (Participant $participant) {
             return $participant->getUser()->getId();
@@ -173,6 +169,12 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             if (null !== $exceptedMeeting) {
                 $queryBuilder->setParameter('exceptedMeeting', $exceptedMeeting);
             }
+        }
+
+        if ($excludePastSlots) {
+            $queryBuilder
+                ->andWhere('slot.end > :now')
+                ->setParameter('now', $this->datetime);
         }
 
         // Participants have not unavailability during this slot
@@ -231,6 +233,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
             ->setParameter('userIds', $userIds)
             ->setParameter('usersTypes', $usersTypes)
         ;
+        $queryBuilder->addOrderBy('slot.begin', 'ASC');
 
         return $queryBuilder->getQuery()->getResult();
     }

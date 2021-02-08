@@ -2,13 +2,24 @@
 
 <div class="modal-header">
     <h4 class="modal-title">
-        <i class="icon-Transferer"></i>
-        {{ 'agenda.meeting.move.button'|trans }}
+        <i class="icon-Editer_1"></i>
+        {{ 'agenda.meeting.edit.button'|trans }}
     </h4>
 </div>
 
 {{ form_start(form) }}
-<div class="modal-body">
+<div class="modal-body" data-available-slots="{{ currentSheetAvailableSlots | json_encode() | escape('html_attr') }}">
+    {% if form.participants is defined %}
+    <div class="row">
+        <div class="col-md-4">{{ form_label(form.participants) }}</div>
+        <div class="col-md-8">
+            {# template used in js #}
+            <span class="label label-default hide" data-template-label-unavailable>{{ 'agenda.slot.unavailable'|trans }}</span>
+
+            {{ form_widget(form.participants) }}
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-4">{{ form_label(form.meetingSlot) }}</div>
         <div class="col-md-8">
@@ -24,7 +35,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
-        <i class="icon-Retour"></i>{{ 'agenda.meeting.move.back'|trans }}
+        <i class="icon-Retour"></i>{{ 'agenda.meeting.udpate.back'|trans }}
         <button type="submit" class="btn btn-primary pull-right">
             <i class="icon-Transferer"></i> {{ 'common.validate'|trans }}
         </button>

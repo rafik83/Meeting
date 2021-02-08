@@ -5,6 +5,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.79.0] - 2021-02-04
+### Added
+- VIMEET-1811 - Participants can edit participants list and date of a meeting
+- VIMEET-2319 - Send webinar record to speakers
+- VIMEET-2323 - Link target blank
+- VIMEET-2296 - Add participant locale in participants export
+- VIMEET-2295 - Can import partipant's locale
+
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
+
+## [2.78.3] - 2021-02-03
+### Fixed
+- MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
+
+## [2.78.2] - 2021-02-03
+### Updated
+- MV-306 - Add log when exception is thrown when saving availabilities
+
+## [2.78.1] - 2021-01-21
+### Fixed
+- MV-300 - Can't close chat during visio meeting (BC break with chat lib update)
+
+## [2.78.0] - 2021-01-20
+### Fixed
+- MV-295 - Badge preview from back-office
+
+### Added
+- VIMEET-2305 - participant agenda available by an ical file (only for admins)
+- VIMEET-2306 - Add checkbox object for registration template
+- VIMEET-2307 - Better visibility text
+- VIMEET-2304 - Picto edit
+
+### Updated
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+- VIMEET-2293 - Don't ask participant's locale for one-locale events
+
 ## [2.77.0] - 2021-01-18
 ### Added
 - VIMEET-2293 - Set participant's locale by event
@@ -12,9 +49,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.76.0] - 2021-01-12
 ### Updated
 - VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
+
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
+- VIMEET-1811 - User can change participants to meeting
+
 ### Fixed
 - MV-293 - Https links in emails
 

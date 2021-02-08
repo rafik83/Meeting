@@ -75,7 +75,7 @@ class Type implements WhoInterface, TypeInterface
     private $numberOfMeetingsPerPlanning;
 
     /** @var bool */
-    private $canMoveMeeting = false;
+    private $canUpdateMeeting = false;
 
     /** @var bool */
     private $canRemoveMeeting = false;
@@ -449,7 +449,7 @@ class Type implements WhoInterface, TypeInterface
         bool $hidden,
         string $availabilityType,
         ?int $numberOfMeetingsPerPlanning,
-        bool $canMoveMeeting = false,
+        bool $canUpdateMeeting = false,
         bool $canRemoveMeeting = false,
         bool $areAllSheetParticipantsAssignedToMeeting = false,
         bool $canScanParticipant = false,
@@ -468,7 +468,7 @@ class Type implements WhoInterface, TypeInterface
         $this->hidden = $hidden;
         $this->availabilityType = $availabilityType;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->areAllSheetParticipantsAssignedToMeeting = $areAllSheetParticipantsAssignedToMeeting;
         $this->canScanParticipant = $canScanParticipant;
@@ -497,9 +497,9 @@ class Type implements WhoInterface, TypeInterface
         return $this->disableUnavailabilityManagement;
     }
 
-    public function canMoveMeeting(): bool
+    public function canUpdateMeeting(): bool
     {
-        return $this->canMoveMeeting;
+        return $this->canUpdateMeeting;
     }
 
     public function canRemoveMeeting(): bool
