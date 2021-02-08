@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
+use DateTime;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -178,6 +179,18 @@ class EventContext implements Context
 
         $this->eventContextProxy->getEventManager()->setOrganiserEmail($event, $organiserEmail);
     }
+
+    /**
+     * @Given this event happens september 1 2020
+     */
+    public function thisEventHappensSeptember1()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-01'));
+    }
+
+
 
     /**
      * @throws \InvalidArgumentException
