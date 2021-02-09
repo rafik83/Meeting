@@ -163,6 +163,14 @@ class ProductContext implements Context
     }
 
     /**
+     * @Given /^there is an option called "(?P<title>[^"]+)" not deletable$/
+     */
+    public function thereIsAnOptionNotDeletable(string $title)
+    {
+        $this->addOption($title, 10, false, null, false, 10, null, new \DateTime('yesterday'));
+    }
+
+    /**
      * @Given /^there is an attributable option called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
      */
     public function thereIsAnAttributableOptionWithAPrice(string $title, float $unitPrice)
@@ -204,7 +212,8 @@ class ProductContext implements Context
         int $quantityMax = null,
         bool $isSubjectToValidation = false,
         int $stock = null,
-        \DateTime $buyableUntil = null
+        \DateTime $buyableUntil = null,
+        \DateTime $deletableUntil = null
     ) {
         $event = $this->productContextProxy->getStorage()->get('event');
 
@@ -224,7 +233,7 @@ class ProductContext implements Context
                 $quantityMax,
                 $stock,
                 is_null($stock) ? null : $stock + 1,
-                null,
+                $deletableUntil,
                 $isSubjectToValidation,
                 $buyableUntil,
                 $isAttributable

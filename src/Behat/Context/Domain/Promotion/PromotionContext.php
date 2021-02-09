@@ -42,6 +42,28 @@ class PromotionContext implements Context
     }
 
     /**
+     * @Given there is a promotion :title with code :code for product option :optionName
+     */
+    public function thereIsAPromotionForNamedProductOptionWithCode(string $title, string $code, $optionName)
+    {
+        $event = $this->storage->get('event');
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $options = $this->storage->get('options');
+        if (null === $options) {
+            throw new \InvalidArgumentException('Missing Product (product options)');
+        }
+
+        foreach ($options as $option) {
+            if ($option->getTitle('fr') === $optionName) {
+                $this->createPromotionCode($event, $option, $title, $code);
+            }
+        }
+    }
+
+    /**
      * @Given there is a promotion :title with code :code for this product participant
      */
     public function thereIsAPromotionParticipantWithCode(string $title, string $code)

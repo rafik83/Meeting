@@ -124,6 +124,8 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\OrderManager
         arguments:
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@vimeet_infrastructure.repository.participant_repository'
             - '@behat_manager.sheet'
             - '@behat_manager.billing_info'
             - '@datetime'
