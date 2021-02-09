@@ -339,14 +339,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             return null;
         }
 
-        $zipcode = substr(str_replace(' ', '', $zipcode), 0, 5);
+        $zipcode = mb_substr(str_replace(' ', '', $zipcode), 0, 5);
 
         if (4 === mb_strlen($zipcode)) {
             return '0' . $zipcode[0];
         }
 
         if (5 === mb_strlen($zipcode)) {
-            return substr($zipcode, 0, 2);
+            return mb_substr($zipcode, 0, 2);
         }
 
         return null;
