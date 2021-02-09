@@ -55,6 +55,14 @@ class RegistrationTemplateManager
         return $registrationTemplate;
     }
 
+    public function addStepToTemplate(RegistrationTemplate $template)
+    {
+        $value = $template->getValue();
+        $value['211b2170'] = $this->step3Block();
+        $template->setValue($value);
+        $this->registrationTemplateRepository->set($template);
+    }
+
     private function step1Block($nomenclatures)
     {
         $children = [
@@ -197,6 +205,33 @@ class RegistrationTemplateManager
                     'crypted' => false,
                     'formats' => ['csv', 'image'],
                     'tags' => ['participant_data', 'sheet_data'],
+                ],
+            ],
+        ], '12');
+    }
+
+    private function step3Block()
+    {
+        return $this->createBlock([
+            '0fe9cb97' => [
+                'component' => 'object',
+                'type' => 'text',
+                'config' => [
+                    'content' => ['fr' => 'Organisme', 'en' => 'Company'],
+                    'type' => 'title',
+                ],
+            ],
+            '57da8f210fbf2' => [
+                'component' => 'object',
+                'type' => 'editable-text',
+                'config' => [
+                    'label' => ['fr' => 'Décrivez votre activité'],
+                    'placeholder' => ['fr' => 'Votre activité'],
+                    'help' => ['fr' => ''],
+                    'required' => true,
+                    'maxLength' => 300,
+                    'type' => 'textarea',
+                    'tags' => ['sheet_data'],
                 ],
             ],
         ], '12');

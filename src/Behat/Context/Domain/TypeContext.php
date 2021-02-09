@@ -30,7 +30,7 @@ class TypeContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $type = $this->typeContextProxy->getTypeManager()->create($event, $title);
+        $type = $this->typeContextProxy->getTypeManager()->create($event, $title, $this->typeContextProxy->getStorage()->get('template'));
 
         $this->typeContextProxy->getStorage()->set('type', $type);
     }

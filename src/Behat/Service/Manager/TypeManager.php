@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -34,7 +35,7 @@ class TypeManager
         $this->nomenclatureManager = $nomenclatureManager;
     }
 
-    public function create(Event $event, string $title): Type
+    public function create(Event $event, string $title, ?RegistrationTemplate $template = null): Type
     {
         $type = new Type($event);
 
@@ -60,8 +61,10 @@ class TypeManager
                 'turnover5' => ['label' => [$defaultLocale => "\>50 M€"]],
             ]);
         }
-        $template = $this->registrationTemplateManager
-            ->create2stepsTemplate($event, ['turnover' => $nomenclatureTurnover->getId()]);
+        if (null === $template) {
+            $template = $this->registrationTemplateManager
+                ->create2stepsTemplate($event, ['turnover' => $nomenclatureTurnover->getId()]);
+        }
         $type->setRegistrationTemplate($template);
         $package = new Package($event, 'Forfait', new \DateTime());
         $package->enable(false, false, false);

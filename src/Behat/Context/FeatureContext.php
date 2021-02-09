@@ -200,7 +200,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                     if ($messageId == $type) {
                         if ($sender != $senderEmail) {
                             throw new \Exception(
-                                sprintf('The "%s" was not sent from "%s"', $type, $senderEmail)
+                                sprintf('The "%s" was not sent from "%s", instead sender was "%s"', $type, $senderEmail, $sender)
                             );
                         }
 
