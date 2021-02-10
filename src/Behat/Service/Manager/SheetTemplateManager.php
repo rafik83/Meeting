@@ -79,6 +79,7 @@ class SheetTemplateManager
                     'length' => '200',
                     'type' => 'title',
                     'required' => 'true',
+                    'tag' => 'sheet_organization',
                 ],
             ],
             '03b394ac' => [
