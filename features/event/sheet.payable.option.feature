@@ -92,7 +92,6 @@ Feature: Select payable option in sheet
     # Assume plan is paid
     And there is an order with the amount of 100 for this sheet
     And there is this plan for this order
-    # And there is the option "Grand logo" 1 times for this order
 
     When I go to this page "/fr/sheet/1"
     And I go to this page "/fr/sheet/1/package/step/2"
