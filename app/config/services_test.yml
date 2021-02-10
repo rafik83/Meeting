@@ -60,6 +60,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\SheetManager
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@repository.sheet.completeness_repository'
             - '@template.sheet.sheet_info_setter'
             - '@behat_manager.user'
             - '@behat_manager.type'

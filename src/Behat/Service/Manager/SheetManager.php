@@ -4,8 +4,10 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\SheetCompleteness;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Sheet\SheetCompletenessRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\SheetInfoSetter;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -14,6 +16,8 @@ class SheetManager
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
+    private SheetCompletenessRepositoryInterface $sheetCompletenessRepository;
 
     /** @var UserManager */
     private $userManager;
@@ -26,11 +30,13 @@ class SheetManager
 
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        SheetCompletenessRepositoryInterface $sheetCompletenessRepository,
         SheetInfoSetter $sheetInfoSetter,
         UserManager $userManager,
         TypeManager $typeManager
     ) {
         $this->sheetRepository = $sheetRepository;
+        $this->sheetCompletenessRepository = $sheetCompletenessRepository;
         $this->userManager = $userManager;
         $this->typeManager = $typeManager;
         $this->sheetInfoSetter = $sheetInfoSetter;
@@ -111,5 +117,6 @@ class SheetManager
         $sheet->setCompleteness($completeness);
 
         $this->sheetRepository->set($sheet);
+        $this->sheetCompletenessRepository->add(new SheetCompleteness($sheet, 'fr', $completeness));
     }
 }
