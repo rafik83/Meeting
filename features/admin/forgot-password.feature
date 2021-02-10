@@ -7,14 +7,15 @@ Feature: Forgot Password Admin
     Given the database is purged
     And the super admin "test@test.com" is created
 
-  Scenario: I can not request a token for a non-existent account
+  Scenario: I can request a token for a non-existent account but I ignore if it succeeded for security reason
     When I go to this page "/fr/login"
     And I follow "login.forgotPassword"
     And I should be on this page "/fr/forgot-password"
     And I fill in "form.forgotten_password.children.email.label" with "test-impossible@test.com"
     And I press "form.forgotten_password.children.submit.label"
     Then the response status code should be 200
-    And I should see "validators.emailDoesNotExist"
+    And I should be on this page "/fr/login"
+    And I should see "flash.admin.reset_password_token.success"
 
   Scenario: I can request a token for an existent account and change the password
     When I go to this page "/fr/login"
