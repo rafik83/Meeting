@@ -31,7 +31,7 @@ class RegistrationTemplateContext implements Context
         $nomenclatures = $this->registrationTemplateContextProxy->getStorage()->get('nomenclatures');
 
         $template = $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create2stepsTemplate($event, $nomenclatures);
-        $this->registrationTemplateContextProxy->getStorage()->set('template', $template);
+        $this->registrationTemplateContextProxy->getStorage()->set('registrationTemplate', $template);
     }
 
     /**
@@ -40,10 +40,10 @@ class RegistrationTemplateContext implements Context
     public function thereIsAThirdStepOnThisTemplate()
     {
         /** @var RegistrationTemplate */
-        $template = $this->registrationTemplateContextProxy->getStorage()->get('template');
+        $template = $this->registrationTemplateContextProxy->getStorage()->get('registrationTemplate');
 
         $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->addStepToTemplate($template);
-        $this->registrationTemplateContextProxy->getStorage()->set('template', $template);
+        $this->registrationTemplateContextProxy->getStorage()->set('registrationTemplate', $template);
     }
 
     /**
@@ -55,6 +55,6 @@ class RegistrationTemplateContext implements Context
         $nomenclatures = $this->registrationTemplateContextProxy->getStorage()->get('nomenclatures');
 
         $template = $this->registrationTemplateContextProxy->getRegistrationTemplateManager()->create1stepTemplate($event, $nomenclatures);
-        $this->registrationTemplateContextProxy->getStorage()->set('template', $template);
+        $this->registrationTemplateContextProxy->getStorage()->set('registrationTemplate', $template);
     }
 }

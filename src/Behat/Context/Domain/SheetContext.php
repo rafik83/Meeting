@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
+use InvalidArgumentException;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\SheetContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -72,6 +73,20 @@ class SheetContext implements Context
     {
         $event = $this->getEvent();
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given there is an existing sheet with the title :title in this event
+     */
+    public function thereIsAnExisitngSheetWithTheTitle(string $title)
+    {
+        $event = $this->getEvent();
+        $sheet = $this->sheetContextProxy->getSheetManager()->getSheetByEventAndTitle($event, $title);
+        if (null === $sheet) {
+            throw new InvalidArgumentException('Sheet not found');
+        }
+
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 

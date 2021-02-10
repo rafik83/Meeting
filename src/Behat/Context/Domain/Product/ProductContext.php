@@ -87,12 +87,23 @@ class ProductContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $product =$this->productContextProxy
+        $product = $this->productContextProxy
             ->getProductManager()
             ->createPlan($event, $title, $unitPrice)
         ;
 
         $this->productContextProxy->getStorage()->set('plan', $product);
+    }
+
+    /**
+     * @Given there is an existing plan called :title
+     */
+    public function thereIsAnExistingPlanCalled($title)
+    {
+        $event = $this->productContextProxy->getStorage()->get('event');
+
+        $plan = $this->productContextProxy->getProductManager()->getPlan($event, $title);
+        $this->productContextProxy->getStorage()->set('plan', $plan);
     }
 
     /**
@@ -136,6 +147,30 @@ class ProductContext implements Context
             ->getProductManager()
             ->assignProductParticipantToPlan($plan, $productParticipant, $quantity)
         ;
+    }
+
+    /**
+     * @Given this plan includes these options
+     */
+    public function assignOptionsToPlan()
+    {
+        $plan = $this->productContextProxy->getStorage()->get('plan');
+        $options = $this->productContextProxy->getStorage()->get('options');
+
+        if (null === $plan) {
+            throw new \InvalidArgumentException('Missing Plan');
+        }
+
+        if (null === $options) {
+            throw new \InvalidArgumentException('Missing Product Participant');
+        }
+
+        foreach ($options as $option) {
+            $this->productContextProxy
+                ->getProductManager()
+                ->assignProductOptionToPlan($plan, $option)
+            ;
+        }
     }
 
     /**

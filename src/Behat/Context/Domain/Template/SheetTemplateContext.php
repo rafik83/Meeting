@@ -24,7 +24,9 @@ class SheetTemplateContext implements Context
     public function thereIsASheetTemplate()
     {
         $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
-        $this->sheetTemplateContextProxy->getSheetTemplateManager()->create($event, null);
+        $template = $this->sheetTemplateContextProxy->getSheetTemplateManager()->create($event, null);
+
+        $this->sheetTemplateContextProxy->getStorage()->set('sheetTemplate', $template);
     }
 
     /**
@@ -41,6 +43,22 @@ class SheetTemplateContext implements Context
         $this->sheetTemplateContextProxy->getSheetTemplateManager()->updateChild(
             $event,
             $objectId,
+            'products',
+            array_map(fn ($option) => $option->getId(), $options)
+        );
+    }
+
+    /**
+     * @Given these options are added to logo in sheet template
+     */
+    public function theseOptionsAreAddedToLogoInSheetTemplate()
+    {
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $options = $this->sheetTemplateContextProxy->getStorage()->get('options');
+
+        $this->sheetTemplateContextProxy->getSheetTemplateManager()->updateChild(
+            $event,
+            '1b9a00b3',
             'products',
             array_map(fn ($option) => $option->getId(), $options)
         );

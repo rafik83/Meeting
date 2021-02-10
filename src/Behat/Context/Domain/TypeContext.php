@@ -30,7 +30,7 @@ class TypeContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $type = $this->typeContextProxy->getTypeManager()->create($event, $title, $this->typeContextProxy->getStorage()->get('template'));
+        $type = $this->typeContextProxy->getTypeManager()->create($event, $title, $this->typeContextProxy->getStorage()->get('registrationTemplate'));
 
         $this->typeContextProxy->getStorage()->set('type', $type);
     }
@@ -131,7 +131,7 @@ class TypeContext implements Context
     public function thisTypeHasThisTemplate()
     {
         $type = $this->getType();
-        $template = $this->typeContextProxy->getStorage()->get('template');
+        $template = $this->typeContextProxy->getStorage()->get('registrationTemplate');
         if (null === $template) {
             throw new \InvalidArgumentException('Missing Template');
         }
