@@ -85,6 +85,17 @@ class TypeContext implements Context
     }
 
     /**
+     * @Given this type has unavailability management enabled
+     */
+    public function thisTypeHasUnavailabilityManagementEnabled()
+    {
+        $type = $this->getType();
+        $type->setAvailabilityType(Type::TYPE_MANAGEMENT_UNAVAILABLE);
+
+        $this->typeContextProxy->getTypeManager()->set($type);
+    }
+
+    /**
      * @Given this type can view display analytics on catalog
      */
     public function thisTypeCanViewDisplayAnalyticsOnCatalog()

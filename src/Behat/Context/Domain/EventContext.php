@@ -190,7 +190,16 @@ class EventContext implements Context
         $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-01'));
     }
 
+    /**
+     * @Given this event happens from september 1 to september 2 2020
+     */
+    public function thisEventHappensFromSeptember1ToSeptember22020()
+    {
+        $event = $this->getEvent();
 
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-01'));
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-02'));
+    }
 
     /**
      * @throws \InvalidArgumentException

@@ -65,6 +65,16 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given this sheet has confirmed attendance
+     */
+    public function thisSheetHasConfirmedAttendance()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $sheet->setAttendance(true);
+        $this->sheetContextProxy->getSheetManager()->setAttendance($sheet);
+    }
+
+    /**
      * @Given /^there is a sheet with the title "(?P<title>[^"]+)"$/
      *
      * @param string|null $title

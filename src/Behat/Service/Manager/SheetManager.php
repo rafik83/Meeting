@@ -119,4 +119,10 @@ class SheetManager
         $this->sheetRepository->set($sheet);
         $this->sheetCompletenessRepository->add(new SheetCompleteness($sheet, 'fr', $completeness));
     }
+
+    public function setAttendance(Sheet $sheet): void
+    {
+        $sheet->setAttendance(true);
+        $this->sheetRepository->set($sheet);
+    }
 }
