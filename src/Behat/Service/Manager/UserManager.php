@@ -2,12 +2,14 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
+use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
@@ -18,15 +20,18 @@ class UserManager
     private UserRepositoryInterface $userRepository;
     private UserEventRepositoryInterface $userEventRepository;
     private ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository;
+    private ChangeMailTokenRepositoryInterface $changeMailTokenRepository;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
         UserEventRepositoryInterface $userEventRepository,
-        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository)
-    {
+        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository,
+        ChangeMailTokenRepositoryInterface $changeMailTokenRepository
+    ) {
         $this->userRepository = $userRepository;
         $this->userEventRepository = $userEventRepository;
         $this->activateAccountTokenRepository = $activateAccountTokenRepository;
+        $this->changeMailTokenRepository = $changeMailTokenRepository;
     }
 
     public function create(?string $email = null): User
@@ -79,9 +84,15 @@ class UserManager
         $this->userRepository->set($user);
     }
 
-    public function addUserToken(User $user, Sheet $sheet, string $token)
+    public function addUserActivateToken(User $user, Sheet $sheet, string $token)
     {
         $activateAccountToken = new ActivateAccountToken($user, $token, $sheet, new \DateTime('tomorrow'));
         $this->activateAccountTokenRepository->create($activateAccountToken);
+    }
+
+    public function addUserEmailToken(User $user, string $email, string $token)
+    {
+        $changeMailToken = new ChangeMailToken($user, $email, $token, new \DateTime('tomorrow'));
+        $this->changeMailTokenRepository->create($changeMailToken);
     }
 }

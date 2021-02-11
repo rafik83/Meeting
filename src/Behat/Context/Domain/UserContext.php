@@ -143,8 +143,16 @@ class UserContext implements Context
         $user = $this->userContextProxy->getStorage()->get('user');
         /** @var Sheet */
         $sheet = $this->userContextProxy->getStorage()->get('sheet');
-        $this->userContextProxy->getUserManager()->addUserToken($user, $sheet, $token);
-
+        $this->userContextProxy->getUserManager()->addUserActivateToken($user, $sheet, $token);
     }
 
+    /**
+     * @Given this user has a token :token to change his email to :email
+     */
+    public function thisUserHasATokenToChangeHisEmail(string $token, string $email)
+    {
+        /** @var User */
+        $user = $this->userContextProxy->getStorage()->get('user');
+        $this->userContextProxy->getUserManager()->addUserEmailToken($user, $email, $token);
+    }
 }
