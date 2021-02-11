@@ -79,6 +79,8 @@ class MeetingRequestController extends Controller
      */
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $messages = $this->get('vimeet_infrastructure.repository.meeting.message_repository')
