@@ -12,6 +12,36 @@
     max-height:3.3em;
   }
 
+  .padding-left {
+    padding-left: 30px;
+  }
+
+  .visio-user-rollover {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: relative;
+    height: 100%;
+    text-align: center;
+    z-index: 2;
+
+    .btn-off {
+      cursor: not-allowed;
+    }
+  }
+
+  .OT_subscriber:hover .visio-user-rollover {
+    display: flex;
+  }
+
+  .visio-user-muteSpeaker {
+    margin: auto;
+    padding: 6px 12px;
+  }
+
+  .OT_root .visio-user-muteSpeaker i {
+    color:#000;
+  }
+
   .visio-user-name:hover{
     max-height:unset;
   }
@@ -49,35 +79,36 @@
     bottom: 1px;
     right: 1px;
     padding: 5px;
+  }
 
-    .btn {
-      position: relative;
-      font-size: 15px;
-      line-height: 22px;
-      font-family: OpenSans, Helvetica, sans-serif;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 18px;
-      transition: background .2s ease-in-out;
-      display: inline-block;
-      background-color: #fff;
+  .btn {
+    position: relative;
+    font-size: 15px;
+    line-height: 22px;
+    font-family: OpenSans, Helvetica, sans-serif;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 18px;
+    transition: background .2s ease-in-out;
+    display: inline-block;
+    background-color: #fff;
 
-      &.btn-off, &.btn-off:hover, &.btn-off:focus {
-        background-color: $bg-fail-color;
+    i {
+      &.glyphicon {
+        color: #000;
+        font-family: 'Glyphicons Halflings' !important;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
       }
-      i {
-        &.glyphicon {
-          color: #000;
-          font-family: 'Glyphicons Halflings' !important;
-          font-style: normal;
-          font-weight: normal;
-          line-height: 1;
-        }
-        &.icon-center {
-          margin: auto !important;
-        }
+      &.icon-center {
+        margin: auto !important;
       }
     }
+  }
+
+  .btn.btn-off, .btn.btn-off:hover, .btn.btn-off:focus {
+    background-color: $bg-fail-color;
   }
 
   .btn-group > .btn:first-child {
@@ -216,7 +247,7 @@
     right: 0;
     top:0;
     // need z-index, otherwise in some cases, opentok can be over this container
-    z-index: 1;
+    z-index: 3;
 
     .video-modal-body {
       background-color: #fff;
@@ -233,6 +264,23 @@
         margin-top: 1em;
         text-align: center;
       }
+    }
+  }
+
+  .iconMuteStream  {
+    display: none;
+  }
+
+  .muted {
+    .iconMuteStream {
+      bottom: 2px;
+      position: absolute;
+      padding: 5px;
+      background-color: #FF4902;
+      border-radius:30px;
+      z-index:5;
+      color: black;
+      display: inline-block;
     }
   }
 }

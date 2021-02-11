@@ -34,6 +34,12 @@
 
          {% if webinarView.canDeleteChatMessage %}data-chat-can-delete{% endif %}
          {% if webinarView.canModerateQuestion %}data-question-can-moderate{% endif %}
+         {% if webinarView.canMuteStream %}data-chat-can-mute-stream{% endif %}
+
+         data-mute-stream="{{ path('event_happening_webinar_mute', {
+             'sheet': sheet.id,
+             'happening': webinarView.happeningId
+         }) }}"
 
          data-questions-count="{{ webinarView.questionsCount }}"
 
@@ -231,5 +237,6 @@
         {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-chat-message', content:'happening.webinar.messageChatConfirm'} %}
         {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-question-message', content:'happening.webinar.messageQuestionConfirm'} %}
         {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-delete-question-reply', content:'happening.webinar.confirmDeleteReply'} %}
+        {% include 'EventBundle:Happening:webinar-speaker-modal.html.twig' with {attribute:'data-modal-mute-stream', content:'happening.webinar.muteStreamConfirm'} %}
     </div>
 {% endblock body %}
