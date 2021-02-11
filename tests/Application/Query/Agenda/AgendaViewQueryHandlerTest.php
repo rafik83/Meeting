@@ -19,7 +19,7 @@ use Proximum\Vimeet\Application\View\Agenda\SheetMetView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
-use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
@@ -156,8 +156,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant)->shouldBeCalled()->willReturn('Europe/Paris');
         $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
-        $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
-        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
+        $canUpdateMeeting = $this->prophesize(CanUpdateMeeting::class);
+        $canUpdateMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
 
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
@@ -182,7 +182,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $this->extraDataRepository->reveal(),
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
-            $canMoveMeeting->reveal(),
+            $canUpdateMeeting->reveal(),
             $canRemoveMeeting->reveal(),
             $this->isParticipantVisio->reveal(),
             $this->dDayGuesser->reveal()
@@ -316,8 +316,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->shouldBeCalled()->willReturn('Europe/Paris');
         $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
-        $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
-        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
+        $canUpdateMeeting = $this->prophesize(CanUpdateMeeting::class);
+        $canUpdateMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
 
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
@@ -342,7 +342,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $this->extraDataRepository->reveal(),
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
-            $canMoveMeeting->reveal(),
+            $canUpdateMeeting->reveal(),
             $canRemoveMeeting->reveal(),
             $this->isParticipantVisio->reveal(),
             $this->dDayGuesser->reveal()
@@ -528,8 +528,8 @@ class AgendaViewQueryHandlerTest extends TestCase
         $getTimezoneHelper->getTimezoneByEventAndParticipant($event, $participant2)->shouldBeCalled()->willReturn('Europe/Paris');
         $getTimezoneHelper->getTimezoneTranslated('Europe/Paris')->shouldBeCalled()->willReturn('Paris');
 
-        $canMoveMeeting = $this->prophesize(CanMoveMeeting::class);
-        $canMoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
+        $canUpdateMeeting = $this->prophesize(CanUpdateMeeting::class);
+        $canUpdateMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(true);
 
         $canRemoveMeeting = $this->prophesize(CanRemoveMeeting::class);
         $canRemoveMeeting->isSatisfiedBy($sheet)->shouldBeCalled()->willReturn(false);
@@ -553,7 +553,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $this->extraDataRepository->reveal(),
             $getTimezoneHelper->reveal(),
             $getParticipantTypes->reveal(),
-            $canMoveMeeting->reveal(),
+            $canUpdateMeeting->reveal(),
             $canRemoveMeeting->reveal(),
             $this->isParticipantVisio->reveal(),
             $this->dDayGuesser->reveal()

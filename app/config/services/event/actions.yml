@@ -240,10 +240,10 @@ services:
     #
     # Meeting
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\UpdateMeetingAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@form.factory'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

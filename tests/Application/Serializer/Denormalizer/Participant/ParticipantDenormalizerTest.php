@@ -76,9 +76,14 @@ class ParticipantDenormalizerTest extends TestCase
         $type = $this->prophesize(Type::class);
         $locale = 'fr';
         $filename = __DIR__ . '/import_participants.csv';
+        $event->getAvailableLocale('fr')->willReturn('fr');
+        $event->getAvailableLocale('en')->willReturn('fr');
+        $event->getAvailableLocale('ss')->willReturn('fr');
+        $event->getAvailableLocale('it')->willReturn('fr');
 
         $userAlreadyExists = $this->prophesize(User::class);
         $userAlreadyExists->getEmail()->shouldBeCalled()->willReturn('julie@gmail.com');
+        $userAlreadyExists->getLocale()->willReturn('en');
 
         $this->userRepository->findByEmail('julie@gmail.com')->shouldBeCalled()->willReturn($userAlreadyExists->reveal());
         $this->userRepository->findByEmail('jean@gmail.com')->shouldBeCalled()->willReturn(null);
@@ -187,6 +192,7 @@ class ParticipantDenormalizerTest extends TestCase
             'Titre de la fiche' => 'sheetTitle',
             'Description' => 'description',
             'Nomenclature' => 'nomenclature',
+            'Langue affichage' => 'participant_import.field.locale'
         ];
 
         $this->emailValidator->validate('')->willReturn(false);
@@ -283,7 +289,8 @@ class ParticipantDenormalizerTest extends TestCase
             static function (Participant $participant) {
                 return 'User already exists in DB' === $participant->getSheet()->getTitle()
                     && 'julie@gmail.com' === $participant->getUser()->getEmail()
-                    && $participant->isImported();
+                    && $participant->isImported()
+                    && 'fr' === $participant->getLocale();
             }
         );
         $this->participantOfSheetWithPackageParticipantAndPlanningDisabled
@@ -294,7 +301,8 @@ class ParticipantDenormalizerTest extends TestCase
             static function (Participant $participant) {
                 return 'Ma Petite Tribu' === $participant->getSheet()->getTitle()
                     && 'jean@gmail.com' === $participant->getUser()->getEmail()
-                    && $participant->isImported();
+                    && $participant->isImported()
+                    && 'fr' === $participant->getLocale();
             }
         );
 
@@ -390,15 +398,19 @@ class ParticipantDenormalizerTest extends TestCase
     public function testDenormalizeMultiSheet(): void
     {
         $event = $this->prophesize(Event::class);
+        $event->getAvailableLocale('')->willReturn('fr');
+        $event->getAvailableLocale('fr')->willReturn('fr');
         $type = $this->prophesize(Type::class);
         $locale = 'fr';
         $filename = __DIR__ . '/import_participants_multi_sheet.csv';
 
         $existingUserWithoutGroup = $this->prophesize(User::class);
         $existingUserWithoutGroup->getEmail()->shouldBeCalled()->willReturn('existing-user-without-group@example.net');
+        $existingUserWithoutGroup->getLocale()->willReturn('fr');
 
         $existingUserWithGroup = $this->prophesize(User::class);
         $existingUserWithGroup->getEmail()->shouldBeCalled()->willReturn('existing-user-with-group@example.net');
+        $existingUserWithGroup->getLocale()->willReturn('fr');
 
 
         $this->userRepository

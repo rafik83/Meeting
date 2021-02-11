@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening;
 
-use DateTime;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchive;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliation;
@@ -30,16 +29,21 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     /** @var PlanDownloadRecordArchiveHandler */
     private $planDownloadRecordArchiveHandler;
 
+    /** @var \DateTimeImmutable */
+    private $dateTime;
+
     public function __construct(
         DisableEnableParticipation $disableEnableParticipation,
         UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator,
         PrepareReconciliationHandler $prepareReconciliationHandler,
-        PlanDownloadRecordArchiveHandler $planDownloadRecordArchiveHandler
+        PlanDownloadRecordArchiveHandler $planDownloadRecordArchiveHandler,
+        \DateTimeImmutable $dateTime
     ) {
         $this->disableEnableParticipation = $disableEnableParticipation;
         $this->participantAvailabilityReAggregator = $participantAvailabilityReAggregator;
         $this->prepareReconciliationHandler = $prepareReconciliationHandler;
         $this->planDownloadRecordArchiveHandler = $planDownloadRecordArchiveHandler;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -78,8 +82,8 @@ class HappeningEventSubscriber implements EventSubscriberInterface
 
     public function onHappeningRecording(RecordingEvent $event): void
     {
-        $dueDate = new DateTime();
-        $dueDate->setTimestamp($event->happening->getEnd()->getTimestamp());
+        $dueDate = new \DateTime(null, $this->dateTime->getTimezone());
+        $dueDate->setTimestamp($this->dateTime->getTimestamp());
         $dueDate->modify('+15 minutes');
 
         $this->planDownloadRecordArchiveHandler->handle(

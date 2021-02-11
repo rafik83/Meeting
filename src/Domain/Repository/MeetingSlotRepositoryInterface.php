@@ -55,19 +55,17 @@ interface MeetingSlotRepositoryInterface
     public function countByEvent(Event $event);
 
     /**
-     * @param Event         $event
      * @param Participant[] $participants
-     * @param bool          $ignoreMeetings
-     * @param Meeting       $exceptedMeeting
      *
      * @return MeetingSlot[]
      */
     public function findAvailableSlotsByParticipants(
         Event $event,
         array $participants,
-        $ignoreMeetings = false,
-        Meeting $exceptedMeeting = null
-    );
+        bool $ignoreMeetings = false,
+        Meeting $exceptedMeeting = null,
+        bool $excludePastSlots = false
+    ): array;
 
     /**
      * @param Event $event

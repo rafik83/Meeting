@@ -139,6 +139,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@datetime'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -1658,17 +1659,18 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\UpdateHandler:
         arguments:
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@logger'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Update }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
@@ -1975,6 +1977,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@command.unavailability.create_handler'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities }
 
@@ -2957,7 +2961,7 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
-    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+    Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
@@ -4275,7 +4279,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@domain.event.day.dday_guesser'

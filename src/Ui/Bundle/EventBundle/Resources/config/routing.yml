@@ -950,14 +950,14 @@ event_agenda_participant_ical:
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction }
 
-event_agenda_move_meeting_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
+event_agenda_update_meeting:
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/update-meeting
     requirements:
         participant: \d+
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\UpdateMeetingAction
 
 event_agenda_remove_meeting:
     path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/remove

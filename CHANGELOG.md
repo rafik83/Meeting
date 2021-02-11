@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2189 - Mute speakers
 
+## [2.79.1] - 2021-02-05
+### Fixed
+- Redis query cache namespace
+
+## [2.79.0] - 2021-02-04
+### Added
+- VIMEET-1811 - Participants can edit participants list and date of a meeting
+- VIMEET-2319 - Send webinar record to speakers
+- VIMEET-2323 - Link target blank
+- VIMEET-2296 - Add participant locale in participants export
+- VIMEET-2295 - Can import participant's locale
+
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
+
+## [2.78.3] - 2021-02-03
+### Fixed
+- MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
+
+## [2.78.2] - 2021-02-03
+### Updated
+- MV-306 - Add log when exception is thrown when saving availabilities
+
 ## [2.78.1] - 2021-01-21
 ### Fixed
 - MV-300 - Can't close chat during visio meeting (BC break with chat lib update)
@@ -36,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
 - VIMEET-2191 - Reply to webinar question
+- VIMEET-1811 - User can change participants to meeting
 
 ### Fixed
 - MV-293 - Https links in emails

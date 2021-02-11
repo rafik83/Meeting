@@ -32,7 +32,7 @@ class AgendaView
     public $timezone;
 
     /** @var bool */
-    public $canMoveMeeting;
+    public $canUpdateMeeting;
 
     /** @var bool */
     public $canRemoveMeeting;
@@ -56,7 +56,7 @@ class AgendaView
         bool $isUserParticipantMultipleSheet,
         array $participants,
         bool $isPhoneValidationRequired,
-        bool $canMoveMeeting,
+        bool $canUpdateMeeting,
         bool $canRemoveMeeting,
         bool $isParticipantVisio,
         bool $isItDDay
@@ -70,7 +70,7 @@ class AgendaView
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->timezone = $timezone;
         $this->timezoneTranslated = $timezoneTranslated;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->isParticipantVisio = $isParticipantVisio;
         $this->isItDDay = $isItDDay;

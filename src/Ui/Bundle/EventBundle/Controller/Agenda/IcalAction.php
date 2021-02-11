@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
-use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler;

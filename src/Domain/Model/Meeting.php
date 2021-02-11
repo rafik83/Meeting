@@ -454,6 +454,20 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
     }
 
     /**
+     * @param $participants Participant[]
+     */
+    public function setParticipants(Sheet $sheet, array $participants): void
+    {
+        if ($sheet === $this->fromSheet) {
+            $this->fromParticipants->clear();
+            $this->fromParticipants = new ArrayCollection($participants);
+        } elseif ($sheet === $this->toSheet) {
+            $this->toParticipants->clear();
+            $this->toParticipants = new ArrayCollection($participants);
+        }
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Participant[]
