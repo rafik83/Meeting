@@ -122,22 +122,6 @@ class MeetingRequestController extends Controller
 
     /**
      * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function slotsAction(Request $request)
-    {
-        $participants = $request->query->get('participants', []);
-
-        $slots = $this
-            ->get('vimeet_infrastructure.repository.meeting_slot_repository')
-            ->findAvailableSlotIdByParticipantsIds($participants);
-
-        return new JsonResponse($slots);
-    }
-
-    /**
-     * @param Request $request
      * @param Event   $event
      *
      * @return RedirectResponse|Response
