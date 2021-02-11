@@ -779,7 +779,7 @@ Webinar.prototype.onVideoElementCreated = function (event) {
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
         let iconMute = document.createElement('i');
-        iconMute.classList.add('iconMuteStream','icon-Conference','icon-center');
+        iconMute.classList.add('iconMuteStream','icon-Conference-off','icon-center');
 
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');

@@ -15,6 +15,7 @@ export default class MuteStream {
         this.muteButton.classList.add('visio-user-rollover');
         this.muteButton.innerHTML = '<button class="visio-user-muteSpeaker btn"><i class="icon-Conference icon-center"></i></button>';
         this.streamElement.appendChild(this.muteButton);
+        this.pictoAudio =  this.muteButton.querySelector('i');
         this.muteSpeaker = this.muteButton.querySelector('.visio-user-muteSpeaker');
         this.nameSpeaker = this.streamElement.querySelector('.visio-user-name');
 
@@ -34,6 +35,7 @@ export default class MuteStream {
         this.muteSpeaker.classList.add('btn-off');
         this.streamElement.classList.add('muted');
         this.isMute = true;
+        this.pictoAudio.classList.add('icon-Conference-off');
         this.nameSpeaker.classList.add('padding-left');
     }
 
@@ -41,6 +43,7 @@ export default class MuteStream {
         this.muteSpeaker.classList.remove('btn-off');
         this.streamElement.classList.remove('muted');
         this.isMute = false;
+        this.pictoAudio.classList.remove('icon-Conference-off');
         this.nameSpeaker.classList.remove('padding-left');
     }
 
