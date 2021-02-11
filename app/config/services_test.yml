@@ -26,6 +26,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@repository.user_activate_account_token_repository'
 
     behat_manager.event:
         class: Proximum\Vimeet\Behat\Service\Manager\EventManager

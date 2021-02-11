@@ -3,25 +3,30 @@
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\ActivateAccountTokenRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class UserManager
 {
-    /** @var UserRepositoryInterface */
-    private $userRepository;
+    private UserRepositoryInterface $userRepository;
+    private UserEventRepositoryInterface $userEventRepository;
+    private ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository;
 
-    /** @var UserEventRepositoryInterface */
-    private $userEventRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository, UserEventRepositoryInterface $userEventRepository)
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        UserEventRepositoryInterface $userEventRepository,
+        ActivateAccountTokenRepositoryInterface $activateAccountTokenRepository)
     {
         $this->userRepository = $userRepository;
         $this->userEventRepository = $userEventRepository;
+        $this->activateAccountTokenRepository = $activateAccountTokenRepository;
     }
 
     public function create(?string $email = null): User
@@ -72,5 +77,11 @@ class UserManager
         $user->setAccount($account);
 
         $this->userRepository->set($user);
+    }
+
+    public function addUserToken(User $user, Sheet $sheet, string $token)
+    {
+        $activateAccountToken = new ActivateAccountToken($user, $token, $sheet, new \DateTime('tomorrow'));
+        $this->activateAccountTokenRepository->create($activateAccountToken);
     }
 }
