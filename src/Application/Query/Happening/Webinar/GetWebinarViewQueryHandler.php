@@ -151,6 +151,7 @@ class GetWebinarViewQueryHandler
                 $viewersCount,
                 $happening->isStreamOpenToPublic(),
                 $isRegisteredSpeaker,
+                $isRegisteredSpeaker,
                 $isRegisteredSpeaker
             );
         }
