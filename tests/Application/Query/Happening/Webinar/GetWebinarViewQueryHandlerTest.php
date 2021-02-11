@@ -234,6 +234,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 0,
                 true,
                 true,
+                true,
                 true
             ),
             $this->getWebinarViewQueryHandler->handle(
@@ -385,6 +386,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 false,
                 0,
+                true,
                 true,
                 true,
                 true
@@ -548,6 +550,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 0,
                 true,
+                false,
                 false,
                 false
             ),
@@ -765,6 +768,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 21,
                 true,
                 42,
+                true,
                 true,
                 true,
                 true

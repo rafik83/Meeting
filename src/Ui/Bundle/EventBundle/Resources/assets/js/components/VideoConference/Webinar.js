@@ -199,11 +199,15 @@ function Webinar(element, isSpeaker) {
 
     this.subscribeToStreamNotifications();
 
+    this.canMuteStream = false;
+
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
         return;
     }
+
+    this.canMuteStream = element.hasAttribute('data-chat-can-mute-stream');
 
     this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
     this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
@@ -371,28 +375,7 @@ Webinar.prototype.initWebRTCStack = function() {
             this.layoutFocus(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
-            const selfStreamId = event.stream.streamId;
-            const selfStreamHasAudio = event.stream.hasAudio;
-            const selfStreamName = event.stream.name;
-            subscriber.on('videoElementCreated', (event)=>{
-                const muteStream = new MuteStream(event.target.element, selfStreamName, this.element.getAttribute('data-mute-stream'));
-                muteStream.init();
-
-                if (selfStreamHasAudio === false) {
-                    muteStream.disableButton();
-                }
-
-                this.session.on('streamPropertyChanged', function (streamPropertyChangedEvent) {
-                    if (streamPropertyChangedEvent.changedProperty !== 'hasAudio' || selfStreamId !== streamPropertyChangedEvent.stream.streamId){
-                        return;
-                    }
-                    if (streamPropertyChangedEvent.newValue === false) {
-                        muteStream.disableButton();
-                    } else {
-                        muteStream.enableButton();
-                    }
-                });
-            });
+            this.prepareMuteAction(subscriber, event.stream);
         }
 
         this.autoMaximize(subscriber);
@@ -447,6 +430,35 @@ Webinar.prototype.initWebRTCStack = function() {
     }
 
     this.prepareRecordButtons();
+}
+
+Webinar.prototype.prepareMuteAction = function(subscriber, stream) {
+    if (!this.canMuteStream) {
+        return;
+    }
+
+    const selfStreamId = stream.streamId;
+    const selfStreamHasAudio = stream.hasAudio;
+    const selfStreamName = stream.name;
+    subscriber.on('videoElementCreated', (event) => {
+        const muteStream = new MuteStream(event.target.element, selfStreamName, this.element.getAttribute('data-mute-stream'));
+        muteStream.init();
+
+        if (selfStreamHasAudio === false) {
+            muteStream.disableButton();
+        }
+
+        this.session.on('streamPropertyChanged', function (streamPropertyChangedEvent) {
+            if (streamPropertyChangedEvent.changedProperty !== 'hasAudio' || selfStreamId !== streamPropertyChangedEvent.stream.streamId) {
+                return;
+            }
+            if (streamPropertyChangedEvent.newValue === false) {
+                muteStream.disableButton();
+            } else {
+                muteStream.enableButton();
+            }
+        });
+    });
 }
 
 /**
