@@ -2,7 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__ . '/src', __DIR__ . '/tests'])
-    ->exclude(['fixtures', 'DataFixtures', 'expected'])
+    ->exclude(['fixtures', 'DataFixtures', 'expected', 'var'])
 ;
 
 return PhpCsFixer\Config::create()

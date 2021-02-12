@@ -1,5 +1,4 @@
-/web/bundles/
-/web/integration/dist/
+/public/integration/dist/
 /app/config/parameters.yml
 /var/participants_imports
 /var/planning-print
@@ -46,9 +45,9 @@ ansible.cfg
 
 # App
 .openl10n.yml
-/web/uploads/*
-/web/css/*
-/web/media/*
+/public/uploads/*
+/public/css/*
+/public/media/*
 
 # Sessions
 /app/sessions
@@ -59,3 +58,33 @@ ansible.cfg
 # IDE
 /.idea/
 /.vscode/
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
