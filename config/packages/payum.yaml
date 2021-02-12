@@ -1,0 +1,20 @@
+payum:
+    storages:
+        Proximum\Vimeet\Domain\Model\Payment\Payment:
+            doctrine: orm
+
+    security:
+        token_storage:
+            Proximum\Vimeet\Domain\Model\Payment\PaymentToken:
+                doctrine: orm
+
+    gateways:
+        paypal_express_checkout:
+            factory: paypal_express_checkout
+            username: "%paypal_username%"
+            password: "%paypal_password%"
+            signature: "%paypal_signature%"
+            sandbox: "%paypal_sandbox%"
+            payum.action.store_notification: "@vimeet.payum.paypal.action.store_notification"
+        offline:
+            factory: offline

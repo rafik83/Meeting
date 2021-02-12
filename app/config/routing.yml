@@ -47,11 +47,11 @@ vimeet_admin:
     defaults:
         _locale: '%locale%'
 
-JMSJobQueueBundle:
-    resource: "@JMSJobQueueBundle/Controller/"
-    prefix: /{_locale}/jobs
-    host: '%admin_domain%'
-    type: annotation
+# JMSJobQueueBundle:
+#     resource: "@JMSJobQueueBundle/Controller/"
+#     prefix: /{_locale}/jobs
+#     host: '%admin_domain%'
+#     type: annotation
 
 #
 # Event

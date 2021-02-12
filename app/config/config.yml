@@ -19,9 +19,9 @@ framework:
         fallbacks: ["%locale%"]
         logging: false
     secret:          "%secret%"
-    router:
-        resource: "%kernel.project_dir%/app/config/routing.yml"
-        strict_requirements: ~
+    # router:
+    #     resource: "%kernel.project_dir%/app/config/routing.yml"
+    #     strict_requirements: ~
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: false }
@@ -222,28 +222,28 @@ liip_imagine:
                 thumbnail:  { size: [250, 100], mode: inset }
 
 # Doctrine migrations configuration
-doctrine_migrations:
-    dir_name: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
-    namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
-    table_name: migration_versions
-    name: Application Migrations
+# doctrine_migrations:
+#     dir_name: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
+#     namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
+#     table_name: migration_versions
+#     name: Application Migrations
 
-payum:
-    security:
-        token_storage:
-            Proximum\Vimeet\Domain\Model\Payment\PaymentToken: { doctrine: orm }
-    storages:
-        Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
-    gateways:
-        paypal_express_checkout:
-            factory: paypal_express_checkout
-            username:  "%paypal_username%"
-            password:  "%paypal_password%"
-            signature: "%paypal_signature%"
-            sandbox:   "%paypal_sandbox%"
-            payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
-        offline:
-            factory: offline
+# payum:
+#     security:
+#         token_storage:
+#             Proximum\Vimeet\Domain\Model\Payment\PaymentToken: { doctrine: orm }
+#     storages:
+#         Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
+#     gateways:
+#         paypal_express_checkout:
+#             factory: paypal_express_checkout
+#             username:  "%paypal_username%"
+#             password:  "%paypal_password%"
+#             signature: "%paypal_signature%"
+#             sandbox:   "%paypal_sandbox%"
+#             payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
+#         offline:
+#             factory: offline
 
 # Sentry configuration (Data source name)
 sentry:

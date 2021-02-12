@@ -16,10 +16,10 @@ services:
     #
     # Twig extension
     #
-    twig.extension.intl:
-        class: Twig_Extensions_Extension_Intl
-        tags:
-            - { name: twig.extension }
+    # twig.extension.intl:
+    #     class: Twig_Extensions_Extension_Intl
+    #     tags:
+    #         - { name: twig.extension }
 
     #
     # Session handler
@@ -64,4 +64,3 @@ imports:
     - { resource: services/infrastructure/listeners.yml }
     - { resource: services/infrastructure/validators.yml }
     - { resource: services/third_party/services_tech_event.yml }
-

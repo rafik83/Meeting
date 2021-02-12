@@ -27,9 +27,9 @@ services:
 
     Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter: ~
 
-    Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
-        arguments:
-            - '@fos_elastica.index.app.sheet'
+    # Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
+    #     arguments:
+    #         - '@fos_elastica.index.app.sheet'
 
     Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter:
         arguments:

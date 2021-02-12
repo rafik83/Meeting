@@ -29,12 +29,12 @@ snc_redis:
             alias: doctrine
             dsn: '%redis_dsn%/2'
             logging: '%kernel.debug%'
-    doctrine:
-        metadata_cache:
-            client: doctrine
-            entity_manager: default
-            document_manager: default
-            namespace: '%app_version%:'
-        query_cache:
-            client: doctrine
-            entity_manager: default
+    # doctrine:
+    #     metadata_cache:
+    #         client: doctrine
+    #         entity_manager: default
+    #         document_manager: default
+    #         namespace: '%app_version%:'
+    #     query_cache:
+    #         client: doctrine
+    #         entity_manager: default

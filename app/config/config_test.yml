@@ -25,10 +25,10 @@ doctrine:
     dbal:
         dbname: "%database_name%_test"
         driver_class: Proximum\Vimeet\Behat\DBAL\Driver\PDOMySql\Driver
-    orm:
-        metadata_cache_driver: array
-        result_cache_driver: array
-        query_cache_driver: array
+    # orm:
+    #     metadata_cache_driver: array
+    #     result_cache_driver: array
+    #     query_cache_driver: array
 
 hautelook_alice:
     db_drivers:
