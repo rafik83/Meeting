@@ -7,7 +7,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -45,10 +45,10 @@ class ExceptionListener
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $responseForExceptionEvent)
+    public function onKernelException(ExceptionEvent $responseForExceptionEvent)
     {
         $request   = $responseForExceptionEvent->getRequest();
-        $exception = $responseForExceptionEvent->getException();
+        $exception = $responseForExceptionEvent->getThrowable();
 
         /*
          * Symfony throw a redirect when User is not logged

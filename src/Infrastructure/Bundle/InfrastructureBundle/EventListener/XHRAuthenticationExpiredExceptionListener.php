@@ -4,18 +4,18 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class XHRAuthenticationExpiredExceptionListener
 {
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $request = $event->getRequest();
 
         $format = $request->getRequestFormat();
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$request->isXmlHttpRequest()) {
             return;
@@ -28,13 +28,11 @@ class XHRAuthenticationExpiredExceptionListener
         if ('json' === $format) {
             $response = new JsonResponse(['message' => 'Login expired'], 403);
             $event->setResponse($response);
-            $event->stopPropagation();
 
             return;
         }
 
         $response = new Response('Login expired', 403);
         $event->setResponse($response);
-        $event->stopPropagation();
     }
 }

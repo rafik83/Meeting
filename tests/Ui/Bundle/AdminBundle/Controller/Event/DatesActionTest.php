@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Command\Event\ConfigureDates;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\DatesAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ConfigureDatesType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class DatesActionTest extends TestCase
 {
@@ -58,7 +58,7 @@ class DatesActionTest extends TestCase
         $this->router = $this->prophesize(RouterInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->engine = $this->prophesize(Environment::class);
     }
 
     public function testAccessDeniedEventAccess(): void

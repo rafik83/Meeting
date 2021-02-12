@@ -11,9 +11,9 @@ use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery;
 use Proximum\Vimeet\Application\View\AvailabilityTimeRange\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\ListAction;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListActionTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ListActionTest extends TestCase
     {
         $this->event = $this->prophesize(Event::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->engine = $this->prophesize(Environment::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
     }
 
@@ -43,7 +43,7 @@ class ListActionTest extends TestCase
 
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(false);
         $this->queryBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->engine->render(Argument::any())->shouldNotBeCalled();
 
          $action = new ListAction(
             $this->authorizationChecker->reveal(),
@@ -61,7 +61,7 @@ class ListActionTest extends TestCase
         $this->queryBus->handle(new ListViewQuery($this->event->reveal()))->shouldBeCalled()->willReturn($view);
 
         $this->engine
-            ->renderResponse('AdminBundle:AvailabilityTimeRange:list.html.twig', [
+            ->render('AdminBundle:AvailabilityTimeRange:list.html.twig', [
                 'event' => $this->event->reveal(),
                 'list' => $view,
             ])

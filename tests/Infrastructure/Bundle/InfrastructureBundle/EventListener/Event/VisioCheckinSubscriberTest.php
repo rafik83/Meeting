@@ -73,7 +73,8 @@ class VisioCheckinSubscriberTest extends TestCase
             ->willReturn(false);
 
         $urlGenerator->generate('event_visio_checkin', ['sheet' => 1])
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn('/sheet/1/checkin');
 
         $responseEvent = new GetResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),

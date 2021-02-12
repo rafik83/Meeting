@@ -1,0 +1,94 @@
+{
+  "entrypoints": {
+    "js/main": {
+      "js": [
+        "/assets/js/main.95a49f63.js"
+      ]
+    },
+    "js/visio": {
+      "js": [
+        "/assets/js/visio.05fce191.js"
+      ]
+    },
+    "js/networking": {
+      "js": [
+        "/assets/js/networking.d80901c8.js"
+      ]
+    },
+    "js/badge-scan": {
+      "js": [
+        "/assets/js/badge-scan.090ffcf3.js"
+      ]
+    },
+    "js/admin": {
+      "js": [
+        "/assets/js/admin.1959fc25.js"
+      ]
+    },
+    "js/chart": {
+      "js": [
+        "/assets/js/chart.6da54706.js"
+      ]
+    },
+    "js/agenda": {
+      "js": [
+        "/assets/js/agenda.0a0534b0.js"
+      ]
+    },
+    "js/qrcode": {
+      "js": [
+        "/assets/js/qrcode.a2a9957c.js"
+      ]
+    },
+    "js/spool": {
+      "js": [
+        "/assets/js/spool.65262ad7.js"
+      ]
+    },
+    "js/checkin": {
+      "js": [
+        "/assets/js/checkin.5481efa5.js"
+      ]
+    },
+    "tinymce/tinymce": {
+      "js": [
+        "/assets/tinymce/tinymce.55fe0935.js"
+      ]
+    },
+    "tinymce/pages/messaging-message-tinymce": {
+      "js": [
+        "/assets/tinymce/pages/messaging-message-tinymce.be75ce45.js"
+      ]
+    },
+    "tinymce/tip/tip": {
+      "js": [
+        "/assets/tinymce/tip/tip.11193fec.js"
+      ]
+    },
+    "tinymce/init-tinymce": {
+      "js": [
+        "/assets/tinymce/init-tinymce.bfa018cb.js"
+      ]
+    },
+    "css/adminStyle": {
+      "css": [
+        "/assets/css/adminStyle.a2f83a92.css"
+      ]
+    },
+    "css/mainStyle": {
+      "css": [
+        "/assets/css/mainStyle.53e9be51.css"
+      ]
+    },
+    "tinymce/tinymceStyle": {
+      "css": [
+        "/assets/tinymce/tinymceStyle.19480d62.css"
+      ]
+    },
+    "css/videoConferenceChatTokbox": {
+      "css": [
+        "/assets/css/videoConferenceChatTokbox.9f540cec.css"
+      ]
+    }
+  }
+}

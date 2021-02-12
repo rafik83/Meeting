@@ -6,7 +6,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -37,16 +37,14 @@ abstract class AbstractRedirectToEventListener
 
     /**
      * Redirect to event fallback locale.
-     *
-     * @param GetResponseEvent $getResponseEvent
      */
-    protected function handleRedirect(GetResponseEvent $getResponseEvent)
+    protected function handleRedirect(RequestEvent $requestEvent)
     {
-        if (!$getResponseEvent->isMasterRequest()) {
+        if (!$requestEvent->isMasterRequest()) {
             return;
         }
 
-        $request = $getResponseEvent->getRequest();
+        $request = $requestEvent->getRequest();
         $host = $request->getHost();
 
         if ($this->adminDomain === $host) {
@@ -66,7 +64,7 @@ abstract class AbstractRedirectToEventListener
         }
 
         return $this->doRedirect(
-            $getResponseEvent,
+            $requestEvent,
             $request,
             $event,
             $request->getLocale(),
@@ -84,15 +82,12 @@ abstract class AbstractRedirectToEventListener
     abstract protected function isIgnoredRoute($route);
 
     /**
-     * Sets the redirect response for the given GetResponseEvent.
+     * Sets the redirect response for the given RequestEvent.
      *
-     * @param GetResponseEvent $getResponseEvent
-     * @param Request          $request
-     * @param Event            $event
-     * @param string|null      $locale           The current Request locale
-     * @param string           $route            The current Request route
+     * @param string|null $locale The current Request locale
+     * @param string $route The current Request route
      */
-    abstract protected function doRedirect(GetResponseEvent $getResponseEvent, Request $request, Event $event, $locale, $route);
+    abstract protected function doRedirect(RequestEvent $requestEvent, Request $request, Event $event, ?string $locale, string $route);
 
     /**
      * @param Request     $request
@@ -109,7 +104,7 @@ abstract class AbstractRedirectToEventListener
             $route,
             array_merge(
                 $request->attributes->get('_route_params', []),
-                ['_locale' => $locale ?: $event->getFallback()],
+                ['_locale' => $locale ?: $event->getLocaleFallback()],
                 $parameters
             )
         );

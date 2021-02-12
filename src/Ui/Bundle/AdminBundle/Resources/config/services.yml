@@ -381,8 +381,8 @@ services:
     #
     ui.helper.currency_formatter:
         class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
-        arguments:
-            - '@twig.extension.intl'
+        # arguments:
+        #     - '@twig.extension.intl'
 
     ui.helper.messaging_message_placeholder_helper:
         class: Proximum\Vimeet\Ui\Helper\Messaging\MessagePlaceholderHelper

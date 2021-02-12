@@ -14,7 +14,7 @@ class CurrencyFormatter
      *
      * @param \Twig_Extensions_Extension_Intl $helper
      */
-    public function __construct(\Twig_Extensions_Extension_Intl $helper)
+    public function __construct($helper)
     {
         $this->helper = $helper;
     }
@@ -28,6 +28,7 @@ class CurrencyFormatter
      */
     public function format($number, $currency = null, $locale = null)
     {
+        //TODO migrate to new version of twig intl filter
         foreach ($this->helper->getFilters() as $filter) {
             if ('localizedcurrency' === $filter->getName()) {
                 $callbable = $filter->getCallable();

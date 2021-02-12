@@ -16,8 +16,8 @@ use Proximum\Vimeet\Domain\Order\SheetOrderStatus;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
@@ -29,7 +29,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Countries;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -274,10 +274,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         $countries = [];
-        $regionBundle = Intl::getRegionBundle();
 
         foreach ($locales as $key => $locale) {
-            $countryName = $regionBundle->getCountryName($countryCode, $locale);
+            $countryName = Countries::getName($countryCode, $locale);
 
             $countries[$key]['locale'] = $locale;
             $countries[$key]['label'] = $countryName;

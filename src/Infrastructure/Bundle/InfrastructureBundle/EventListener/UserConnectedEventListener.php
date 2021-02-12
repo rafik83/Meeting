@@ -93,7 +93,7 @@ class UserConnectedEventListener implements EventSubscriberInterface
             return;
         }
 
-        // publish notiifcation after 10 min of inactivity, to reduce number of notifications
+        // publish notification after 10 min of inactivity, to reduce number of notifications
         $lastNotification = $this->session->get('connectedLastSeen');
         if ($lastNotification < ($this->datetime->getTimestamp() - 600)) {
             $this->publishNotification = true;

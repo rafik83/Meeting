@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -40,7 +41,7 @@ class CreateAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $engine,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
@@ -91,9 +92,9 @@ class CreateAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->engine->render(self::TEMPLATE, [
             'event' => $event,
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

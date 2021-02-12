@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Design\UpdateDesignAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Design\DesignType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -21,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateDesignActionTest extends TestCase
 {
@@ -58,7 +58,7 @@ class UpdateDesignActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->engine = $this->prophesize(Environment::class);
 
         $this->event = $this->prophesize(Event::class);
         $this->configuration = $this->prophesize(Event\Configuration::class);
@@ -121,7 +121,7 @@ class UpdateDesignActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine->renderResponse('AdminBundle:Event/Design:updateDesign.html.twig', [
+        $this->engine->render('AdminBundle:Event/Design:updateDesign.html.twig', [
             'event' => $this->event->reveal(),
             'form' => $formView->reveal()
         ])->shouldBeCalled()
@@ -175,7 +175,7 @@ class UpdateDesignActionTest extends TestCase
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->engine->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($command)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.event.design.update.success')->shouldBeCalled();
         $this->router->generate('admin_event_design_update', ['event' => 12])

@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Countries;
 
 class Country extends EditableObject implements ContentObjectInterface, ExportableObjectInterface
 {
@@ -39,7 +39,7 @@ class Country extends EditableObject implements ContentObjectInterface, Exportab
      */
     public function getContentLabel()
     {
-        return $this->getCountry() ? Intl::getRegionBundle()->getCountryName($this->getCountry()) : '';
+        return $this->getCountry() ? Countries::getName($this->getCountry()) : '';
     }
 
     /**

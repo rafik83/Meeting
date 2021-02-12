@@ -2649,11 +2649,11 @@ services:
         arguments:
             - '@validator'
 
-    adapter.event_url_generator:
-        class: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
-        arguments:
-            - '%scheme%'
-            - '@router'
+    # adapter.event_url_generator:
+    #     class: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
+    #     arguments:
+    #         - '%scheme%'
+    #         - '@router'
 
     adapter.file_system_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\FileSystemAdapter

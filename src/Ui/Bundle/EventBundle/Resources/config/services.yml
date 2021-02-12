@@ -42,6 +42,8 @@ services:
             - '@security.token_storage'
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
+    vimeet.user_domain_value_resolver:
+        alias: Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver
 
     #
     # Security
