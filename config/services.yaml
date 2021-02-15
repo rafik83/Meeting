@@ -22,6 +22,8 @@ services:
             - '../src/Infrastructure/Bundle/InfrastructureBundle/InfrastructureBundle.php'
             - '../src/Infrastructure/Bundle/InfrastructureBundle/DependencyInjection/'
             - '../src/Infrastructure/Bundle/InfrastructureBundle/DataFixtures/'
+            - '../src/Ui/Bundle/EventBundle/ValueResolver/UserDomain.php'
+            - '../src/Ui/Bundle/EventBundle/EventBundle.php'
             - '../src/Domain/Model'
             - '../src/Application/View'
             - '../src/Kernel.php'

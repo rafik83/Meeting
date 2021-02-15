@@ -198,7 +198,7 @@ services:
         arguments:
             - '@adapter.mailer_adapter'
             - '@query.mail.participant_mail_view_query_handler'
-            - '@event_sender'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
 
     #
     # Guard
@@ -235,11 +235,11 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler:
         arguments:
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\CreateFileHandler:
         arguments:
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@repository.file_repository'
             - '%infrastructure.export_spot_path%'
             - '@datetime'

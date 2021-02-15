@@ -13,7 +13,7 @@ services:
         arguments:
             - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
             - '@template.participant_info_guesser'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     command.third_party.vianeo.vianeo_register_sheet_handler:
         class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoRegisterSheetHandler

@@ -183,30 +183,29 @@ services:
         tags:
             - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType }
 
-    form_type_product.abstract_update_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType:
         abstract: true
         arguments:
             - '@domain.product.update_price_resolver'
             - '%feature_product_vat_enabled%'
     form_type_product.option_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.plan_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.planning_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\UpdatePlanningType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.participant_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_partner.partner_type:
@@ -457,7 +456,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@adapter.sheet_indexer'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
         tags:
             - { name: kernel.event_subscriber }
 

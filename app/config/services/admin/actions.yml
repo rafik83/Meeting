@@ -601,7 +601,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     #
     # Happening
@@ -653,7 +653,7 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar\RecordStatusChangeCallbackAction:
         arguments:
@@ -734,7 +734,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@datetime'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\SelectItemsFromNomenclaturesAction:
@@ -1354,7 +1354,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@repository.promotion_code_repository'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\UpdateAction:
         arguments:

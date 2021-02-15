@@ -70,7 +70,7 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PrepareContent }
 

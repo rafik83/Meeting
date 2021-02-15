@@ -27,7 +27,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@template.template_data_factory'
-            - '@adapter.session'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
             - '@sheet.sheet_guesser'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.type_repository'

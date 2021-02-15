@@ -77,7 +77,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@Proximum\Vimeet\Application\Command\Sheet\Upload\MultiUploadCollectionHandler'
             - '@adapter.router'
             - '@templating.engine.twig'

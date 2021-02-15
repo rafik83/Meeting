@@ -10,6 +10,7 @@ use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AvatarType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\CompanyType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
@@ -195,7 +196,7 @@ class ParticipantController extends Controller
 
             try {
                 $imagePath   = $image->getImage();
-                $fileStorage = $this->get('adapter.local_file_storage');
+                $fileStorage = $this->get(LocalFileStorageAdapter::class);
                 $newImage    = $fileStorage->upload($file);
                 $image->setImage($newImage);
 

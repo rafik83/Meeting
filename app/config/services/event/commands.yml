@@ -125,7 +125,7 @@ services:
     # Proximum\Vimeet\Application\Command\File\PersistContentHandler:
     #     arguments:
     #         - '@Proximum\Vimeet\Domain\File\FileFactory'
-    #         - '@adapter.local_file_storage'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
     #         - '%infrastructure.common_export_path%'
     #         - '@datetime'
     #     tags:

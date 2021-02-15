@@ -9,7 +9,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.validator_adapter'
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '%infrastructure.import_spot_path%'
 
     #
@@ -24,7 +24,7 @@ services:
     #
     Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator:
         arguments:
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
 
     Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator:
         arguments:
