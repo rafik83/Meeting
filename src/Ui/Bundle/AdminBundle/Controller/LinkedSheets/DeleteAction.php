@@ -40,7 +40,9 @@ class DeleteAction
 
     public function __invoke(Event $event, LinkedSheets $linkedSheets)
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $linkedSheets->getEvent()
+        ) {
             throw new AccessDeniedException('Access denied!');
         }
 
