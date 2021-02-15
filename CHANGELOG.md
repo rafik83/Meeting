@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2189 - Mute speakers
+- VIMEET-2386 - Add compagny name to api conference call
 
 ## [2.79.1] - 2021-02-05
 ### Fixed
