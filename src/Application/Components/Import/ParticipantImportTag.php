@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Components\Import;
 final class ParticipantImportTag
 {
     public const REGISTRATION_FIELD_MAIL = 'participant_import.field.mail';
+    public const REGISTRATION_FIELD_LOCALE = 'participant_import.field.locale';
     public const REGISTRATION_FIELD_IGNORE = 'participant_import.field.ignore';
     public const FIELD_GROUP_TITLE = 'participant_import.field.group_title';
 
