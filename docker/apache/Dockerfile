@@ -164,16 +164,16 @@ ENV APP_VERSION=${VCS_REF:-unkown}
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
-    rm -f web/*_dev.php && \
-    rm -f web/*_test.php && \
-    rm -rf web/uploads && \
-    rm -rf web/css && \
+    rm -f public/*_dev.php && \
+    rm -f public/*_test.php && \
+    rm -rf public/uploads && \
+    rm -rf public/css && \
     rm -rf var/logs
 
 # Symlinks
-RUN ln -sfn /share/shared/web/media web/ && \
-    ln -sfn /share/shared/web/uploads web/ && \
-    ln -sfn /share/shared/web/css web/ && \
+RUN ln -sfn /share/shared/web/media public/ && \
+    ln -sfn /share/shared/web/uploads public/ && \
+    ln -sfn /share/shared/web/css public/ && \
     ln -sfn /share/shared/var/logs var/ && \
     ln -sfn /share/shared/var/shared_uploaded_files var/ && \
     ln -sfn /share/shared/var/participants_imports var/ && \

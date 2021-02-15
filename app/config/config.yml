@@ -42,7 +42,7 @@ framework:
     fragments: { path: /_fragment }
     http_method_override: true
     assets:
-        json_manifest_path: '%kernel.project_dir%/web/assets/manifest.json'
+        json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
     php_errors:
         log: true
 
@@ -79,7 +79,7 @@ doctrine:
         schema_filter: ~^(?!sessions)~
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #     e.g. database_path: "%kernel.project_dir%/data/data.db3"
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
@@ -92,7 +92,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
+                dir: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
         dql:
@@ -143,20 +143,20 @@ infrastructure:
     bundle_guideline_path: "%kernel.project_dir%/src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
-    print_planning_path: '%kernel.project_dir%/web/uploads/print_planning'
-    print_sheet_path: '%kernel.project_dir%/web/uploads/print_sheet'
-    export_transactions_path: '%kernel.project_dir%/web/uploads/export_transactions'
-    export_order_path: '%kernel.project_dir%/web/uploads/export_orders'
-    export_products_path: '%kernel.project_dir%/web/uploads/export_products'
-    export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'
-    import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
-    import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
+    print_planning_path: '%kernel.project_dir%/public/uploads/print_planning'
+    print_sheet_path: '%kernel.project_dir%/public/uploads/print_sheet'
+    export_transactions_path: '%kernel.project_dir%/public/uploads/export_transactions'
+    export_order_path: '%kernel.project_dir%/public/uploads/export_orders'
+    export_products_path: '%kernel.project_dir%/public/uploads/export_products'
+    export_planner_path: '%kernel.project_dir%/public/uploads/export_planner'
+    import_planner_path: '%kernel.project_dir%/public/uploads/import_planner'
+    import_spot_path: '%kernel.project_dir%/public/uploads/import_spots/'
     import_authentication_token_path: '%shared_uploaded_files%/import_authentication_tokens/'
     encrypted_files_path: '%shared_uploaded_files%/encrypted_files/'
-    export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
+    export_omz_path: '%kernel.project_dir%/public/uploads/export_omz'
     common_export_path: '%shared_uploaded_files%/export/'
     export_participant_path: '%shared_uploaded_files%/export/participant/'
-    export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
+    export_spot_path: '%kernel.project_dir%/public/uploads/export_spot'
     export_form_template_user_data_path: '%shared_uploaded_files%/export/form-template/'
     export_rooming_list_path: '%shared_uploaded_files%/export/rooming-list/'
     print_invoices_path: '%shared_uploaded_files%/export/invoices'

@@ -14,7 +14,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Application\Command\Encryption\DecryptHandler'
             - '@adapter.file_system_adapter'
-            - '%kernel.project_dir%/web'
+            - '%kernel.project_dir%/public'
             - '%infrastructure.encrypted_files_path%'
 
     Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled:

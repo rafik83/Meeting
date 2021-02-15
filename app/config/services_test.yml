@@ -1,5 +1,5 @@
 parameters:
-    sms_directory: '%kernel.root_dir%/../var/sms'
+    sms_directory: '%kernel.project_dir%/var/sms'
 
 services:
     #

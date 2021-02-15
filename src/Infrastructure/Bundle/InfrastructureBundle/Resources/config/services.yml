@@ -468,7 +468,7 @@ services:
         arguments:
             - '@adapter.local_file_storage'
             - '@adapter.session'
-            - '%kernel.root_dir%/../var/participants_imports'
+            - '%kernel.project_dir%/var/participants_imports'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Import }
     command.participant.import_mapping_handler:
@@ -1082,7 +1082,7 @@ services:
             - '@adapter.file_system_adapter'
             - '%shared_uploaded_files%'
             - '%infrastructure.encrypted_files_path%'
-            - '%kernel.project_dir%/web'
+            - '%kernel.project_dir%/public'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SaveTreeToFileSystemCommand }
     command.sheet.submit_validation_handler:
@@ -2577,7 +2577,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter
         arguments:
             - '@adapter.file_system_adapter'
-            - '%kernel.root_dir%/../web'
+            - '%kernel.project_dir%/public'
             - '@datetime'
     Proximum\Vimeet\Infrastructure\Adapter\TransliteratorAdapter: ~
     Proximum\Vimeet\Infrastructure\Adapter\FinderAdapter: ~
@@ -2940,7 +2940,7 @@ services:
 
     Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
         arguments:
-            - '@components.security.video_meeting_access'
+            - '@Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess'
 
     Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
         arguments:
@@ -2972,8 +2972,7 @@ services:
         class: Proximum\Vimeet\Application\Components\Security\AdminEventAccess
     components.security.admin_sheet_access:
         class: Proximum\Vimeet\Application\Components\Security\AdminSheetAccess
-    components.security.video_meeting_access:
-        class: Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess
+    Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess:
         arguments:
           - '@datetime'
           - '%feature_video_conference_date_security_enabled%'
@@ -2987,11 +2986,10 @@ services:
     #
     # Guideline Component
     #
-    guideline.generator:
-        class: Proximum\Vimeet\Application\Components\Guideline\Generator
+    Proximum\Vimeet\Application\Components\Guideline\Generator:
         arguments:
             - '@twig'
-            - '%kernel.root_dir%/../web'
+            - '%kernel.project_dir%/public'
             - '%infrastructure.web_asset_event_guideline_path%'
             - '%infrastructure.bundle_guideline_path%'
             - '%infrastructure.font_path%'
@@ -3471,7 +3469,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery }
     Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQueryHandler:
         arguments:
-            - '@package.specification.vat_applicable'
+            - '@Proximum\Vimeet\Domain\Package\Specification\VatApplicable'
     query.order.summary.row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Summary\RowViewQueryHandler
         arguments:
@@ -3726,8 +3724,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipViewQuery }
 
-    query.tip.tip_translation_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler
+    Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler:
         arguments:
             - '@repository.tip.repository'
             - '@Proximum\Vimeet\Application\Query\Tip\IsTipOpened'
@@ -3773,7 +3770,7 @@ services:
     query.tip.tip_translation_view_by_user_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQueryHandler
         arguments:
-            - '@query.tip.tip_translation_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler'
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
@@ -3870,7 +3867,7 @@ services:
     query.order.order_vat_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler
         arguments:
-            - '@package.specification.vat_applicable'
+            - '@Proximum\Vimeet\Domain\Package\Specification\VatApplicable'
             - '@Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery }
@@ -4231,7 +4228,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\MeetingViewQueryHandler
         arguments:
             - '@query.agenda.meeting.meeting_participant_view_query_handler'
-            - '@components.security.video_meeting_access'
+            - '@Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess'
             - '@Proximum\Vimeet\Domain\Helper\LinkedSheetsTitle'
             - '@template.participant_info_guesser'
             - '@datetime'
@@ -4943,7 +4940,7 @@ services:
             - '@query.order.export.custom_row_bought_view_query_handler'
             - '@query.order.export.promotion_code_bought_view_query_handler'
             - '@Proximum\Vimeet\Application\Query\Order\OrderVat\VatListViewQueryHandler'
-            - '@package.specification.vat_applicable'
+            - '@Proximum\Vimeet\Domain\Package\Specification\VatApplicable'
 
     query.order.export.custom_row_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler
@@ -5051,7 +5048,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\BuildEventGuidelineAssetCommand
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@guideline.generator'
+            - '@Proximum\Vimeet\Application\Components\Guideline\Generator'
         tags:
             - { name: console.command }
 
@@ -5360,8 +5357,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
-    package.specification.vat_applicable:
-        class: Proximum\Vimeet\Domain\Package\Specification\VatApplicable
+    Proximum\Vimeet\Domain\Package\Specification\VatApplicable:
         arguments:
             - '@repository.billing_info_repository'
             - '%infrastructure.eu_countries%'
@@ -5498,7 +5494,7 @@ services:
         class: Proximum\Vimeet\Domain\Payment\TotalToPay
         arguments:
             - '@cart_manager'
-            - '@package.specification.vat_applicable'
+            - '@Proximum\Vimeet\Domain\Package\Specification\VatApplicable'
 
     #
     # Order
@@ -6544,7 +6540,7 @@ services:
             - '@command.planning.participant_info_guesser_cache'
             - '@planning.displayer.participant_planning_displayer'
             - '@sheet.sheet_guesser'
-            - '@query.tip.tip_translation_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler'
 
     #
     # Order export
