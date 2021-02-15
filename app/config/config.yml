@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.yml }
+    # - { resource: security.yml }
+    # - { resource: services.yml }
     - { resource: elasticsearch.yml }
     - { resource: packages/knpu_oauth2_client.yml }
 
@@ -12,6 +12,7 @@ parameters:
     # should be set to deployed version hash on k8s environments
     app_version: '%env(APP_VERSION)%'
     env(APP_VERSION): dev
+    mailer_sender: '%env(MAILER_SENDER)%'
 
 framework:
     esi: { enabled: true }

@@ -986,8 +986,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
 
-    command.sheet.batch_pdf_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
+    Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -1051,7 +1050,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@adapter_batch_job_queue.batch_catalog_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchCatalog }
     command.sheet.batch_draft_handler:
@@ -2036,8 +2035,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Campaign\Send }
 
-    command.messaging.campaign.process_handler:
-        class: Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler
+    Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler:
         arguments:
             - '@repository.messaging.campaign_repository'
             - '@adapter.sendgrid_api_adapter'
@@ -2068,8 +2066,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Messaging\Batch\SendEmailingByType }
 
-    command.planner.import_handler:
-        class: Proximum\Vimeet\Application\Command\Planner\ImportHandler
+    Proximum\Vimeet\Application\Command\Planner\ImportHandler:
         arguments:
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.repository.meeting_repository'
@@ -2619,8 +2616,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDuplicateSheetsJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_catalog_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_enable_disable_job_queue:
@@ -5073,7 +5069,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendCampaignCommand
         arguments:
             - '@repository.messaging.campaign_repository'
-            - '@command.messaging.campaign.process_handler'
+            - '@Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler'
         tags:
             - { name: console.command }
 
@@ -5089,7 +5085,7 @@ services:
     command.send_sms_reminder_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendSMSReminderCommand
         arguments:
-            - '@command.meeting_request.reminder_handler'
+            - '@Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler'
             - '%feature_dday_enabled%'
         tags:
             - { name: console.command }
@@ -5097,7 +5093,7 @@ services:
     command_planning.generate_planning_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand
         arguments:
-            - '@command.planning.export_planning_handler'
+            - '@Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler'
             - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
         tags:
             - { name: console.command }
@@ -5105,14 +5101,14 @@ services:
     command_planning.print_sheets_pdf:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand
         arguments:
-            - '@command.sheet.batch_pdf_handler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler'
         tags:
             - { name: console.command }
 
     command.order.export_order_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
         arguments:
-            - '@command.order.export.export_orders_handler'
+            - '@Proximum\Vimeet\Application\Command\Order\Export\ExportOrdersHandler'
         tags:
             - { name: console.command }
 
@@ -5126,14 +5122,14 @@ services:
     command.planner.export_planner_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand
         arguments:
-            - '@command.planner.export_handler'
+            - '@Proximum\Vimeet\Application\Command\Planner\ExportHandler'
         tags:
             - { name: console.command }
 
     command.planner.import_planner_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand
         arguments:
-            - '@command.planner.import_handler'
+            - '@Proximum\Vimeet\Application\Command\Planner\ImportHandler'
             - '@adapter.mailer_adapter'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.file_repository'
@@ -5322,7 +5318,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Session\DeleteExpiredSessionsCommand:
         arguments:
-            - '@session.handler.pdo'
+            - '@session'
         tags:
             - { name: console.command }
 
@@ -6168,8 +6164,7 @@ services:
     #
     # Planner
     #
-    command.planner.export_handler:
-        class: Proximum\Vimeet\Application\Command\Planner\ExportHandler
+    Proximum\Vimeet\Application\Command\Planner\ExportHandler:
         arguments:
             - '@command.meeting_request.admin.lock_meeting_request_update_handler'
             - '@command.unavailability.mass.dispatcher_handler'
@@ -6517,8 +6512,7 @@ services:
             - '@markdown'
 
     ###### Exporter
-    command.planning.export_planning_handler:
-        class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler
+    Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler:
         arguments:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@command.planning.participant_info_guesser_cache'
@@ -6561,8 +6555,7 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreator }
-    command.order.export.export_orders_handler:
-        class: Proximum\Vimeet\Application\Command\Order\Export\ExportOrdersHandler
+    Proximum\Vimeet\Application\Command\Order\Export\ExportOrdersHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@adapter.serializer_adapter'
@@ -6671,11 +6664,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator:
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter.sheet_indexer'
 
     Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator:
         decorates: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
@@ -6739,7 +6727,7 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.aggregate.sheets_available_slot_aggregator_handler'
-            - '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator'
         tags:
             - { name: console.command }
 

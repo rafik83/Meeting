@@ -45,8 +45,16 @@ services:
         arguments:
             $pathToOmzExport: '%infrastructure.export_omz_path%'
 
+    # explicit aliases for interfaces
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface:
+        alias: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator
+    Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface:
+        alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue
+
     # for compatibility with sf3 legacy (to be migrated)
     Doctrine\ORM\EntityManager:
         alias: Doctrine\ORM\EntityManagerInterface
     adapter.event_url_generator:
         alias: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
+    Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface:
+        alias: adapter.event_url_generator

@@ -20,13 +20,14 @@ return [
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle::class => ['all' => true],
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\AdminBundle::class => ['all' => true],
-    Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle::class => ['all' => true],
     Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle::class => ['dev' => true, 'test' => true],
     Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle::class => ['dev' => true, 'test' => true],
     Hautelook\AliceBundle\HautelookAliceBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\InfrastructureBundle::class => ['all' => true],
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\AdminBundle::class => ['all' => true],
+    Proximum\Vimeet\Ui\Bundle\EventBundle\EventBundle::class => ['all' => true],
 ];

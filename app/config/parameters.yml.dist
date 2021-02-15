@@ -15,7 +15,8 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
-    mailer_sender:     "vimeet@proximum.com"
+    # use MAILER_SENDER env variable
+    # mailer_sender:     "vimeet@proximum.com"
     mailer_encryption: ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1

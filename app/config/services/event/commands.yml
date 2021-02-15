@@ -1,6 +1,5 @@
 services:
-    command.meeting_request.reminder_handler:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler
+    Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.user.event.extra_data_repository'

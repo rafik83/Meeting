@@ -3,12 +3,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregatorHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator'
             - '@adapter.sheet_indexer'
-    command.sheet.aggregate.available_slot_aggregator_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
-        arguments:
-            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
     command.analytic.meeting_solution.create_handler:
         class: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\CreateHandler
         arguments:

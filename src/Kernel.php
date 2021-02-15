@@ -43,8 +43,11 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
 
         // load legacy sf3 services
-        $confDirLegacy = $this->getProjectDir().'/src/';
-        $loader->load($confDirLegacy.'/{services}'.self::CONFIG_EXTS, 'glob');
+        $confDirLegacy = $this->getProjectDir().'/app/config/';
+        $loader->load($confDirLegacy.'/{services}/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($confDirLegacy.'/{services}/*/*'.self::CONFIG_EXTS, 'glob');
+        $confInfrastructureLegacy = $this->getProjectDir().'/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/services.yml';
+        $loader->load($confInfrastructureLegacy);
         $confAdminLegacy = $this->getProjectDir().'/src/Ui/Bundle/AdminBundle/Resources/config/services.yml';
         $loader->load($confAdminLegacy);
         $confEventLegacy = $this->getProjectDir().'/src/Ui/Bundle/EventBundle/Resources/config/services.yml';
