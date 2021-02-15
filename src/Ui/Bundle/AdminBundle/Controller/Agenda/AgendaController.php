@@ -99,6 +99,10 @@ class AgendaController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($spot->getEvent() !== $event) {
+            return $this->createNotFoundException('Event inconsistency');
+        }
+
         $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
             new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
         );
