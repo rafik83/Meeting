@@ -16,20 +16,20 @@ class PostBatchValidationValidateHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * PostBatchValidationValidateHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->dateTime        = $dateTime;
     }
 
     /**
@@ -43,7 +43,7 @@ class PostBatchValidationValidateHandler
                 new SheetValidationValidateEvent(
                     $sheet,
                     $command->admin,
-                    $this->datetime
+                    $this->dateTime
                 )
             );
         }

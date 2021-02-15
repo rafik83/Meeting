@@ -39,7 +39,7 @@ class HappeningWebinarAction
     private $queryBus;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -47,14 +47,14 @@ class HappeningWebinarAction
         CommandBusInterface $commandBus,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
         $this->commandBus = $commandBus;
         $this->engine = $engine;
         $this->queryBus = $queryBus;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function __invoke(
@@ -80,7 +80,7 @@ class HappeningWebinarAction
 
         $this->commandBus->handle(new StartWebinarSessionCommand($happening));
 
-        $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->datetime));
+        $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->dateTime));
 
         /** @var AbstractWebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));

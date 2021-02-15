@@ -63,7 +63,7 @@ class HappeningWebinarActionTest extends TestCase
     private $userDomain;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var ObjectProphecy|Happening */
     private $happening;
@@ -75,7 +75,7 @@ class HappeningWebinarActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
         $this->event = $this->prophesize(Event::class);
         $this->eventDomain = new EventDomain($this->event->reveal());
         $this->request = $this->prophesize(Request::class);
@@ -283,7 +283,7 @@ class HappeningWebinarActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->engine->reveal(),
             $this->queryBus->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $action(

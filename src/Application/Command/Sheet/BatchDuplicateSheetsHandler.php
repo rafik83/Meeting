@@ -20,18 +20,18 @@ class BatchDuplicateSheetsHandler
     private $jobQueue;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
         BatchJobQueueInterface $jobQueue,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->jobQueue = $jobQueue;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(BatchDuplicateSheets $batchDuplicateSheets): BatchResult
@@ -43,7 +43,7 @@ class BatchDuplicateSheetsHandler
                 $batchDuplicateSheets->type->getEvent(),
                 Type::ADMIN_SHEET_BATCH_IDS,
                 implode(', ', $batchDuplicateSheets->ids),
-                $this->datetime
+                $this->dateTime
             );
 
             $this->extraDataRepository->add($extraData);

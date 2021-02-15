@@ -18,16 +18,16 @@ class UpdateVisioHandler
     private $delayedEventDispatcher;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
         DelayedEventDispatcherInterface $delayedEventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->extraDataRepository = $extraDataRepository;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(UpdateVisio $updateVisio): void
@@ -48,7 +48,7 @@ class UpdateVisioHandler
                     $event,
                     Type::IS_PARTICIPANT_VISIO,
                     true,
-                    $this->datetime
+                    $this->dateTime
                 )
             );
         }

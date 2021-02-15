@@ -27,8 +27,8 @@ class AskCallVisioPrivateChatAccessChecker extends AccessChecker
             return false;
         }
 
-        if ($this->datetime <= $event->getConfiguration()->getCallVisioOpenDate()
-            || $this->datetime >= $event->getConfiguration()->getCallVisioCloseDate()) {
+        if ($this->dateTime <= $event->getConfiguration()->getCallVisioOpenDate()
+            || $this->dateTime >= $event->getConfiguration()->getCallVisioCloseDate()) {
             return false;
         }
 

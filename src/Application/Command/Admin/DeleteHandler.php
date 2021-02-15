@@ -10,19 +10,19 @@ class DeleteHandler
     private $adminRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         AdminRepositoryInterface $adminRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->adminRepository = $adminRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(Delete $delete): void
     {
-        $delete->admin->setDeletedAt($this->datetime);
+        $delete->admin->setDeletedAt($this->dateTime);
         $this->adminRepository->set($delete->admin);
     }
 }

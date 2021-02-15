@@ -17,16 +17,16 @@ class ConfirmAuthenticationTokenImportHandler
     private $userRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         AuthenticationTokenRepositoryInterface $authenticationTokenRepository,
         UserRepositoryInterface $userRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->authenticationTokenRepository = $authenticationTokenRepository;
         $this->userRepository = $userRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(ConfirmAuthenticationTokenImport $confirmAuthenticationTokenImport): void
@@ -68,7 +68,7 @@ class ConfirmAuthenticationTokenImportHandler
                     $user,
                     $authenticationTokenImportView->event,
                     $authenticationTokenImportView->token,
-                    $this->datetime,
+                    $this->dateTime,
                     $authenticationTokenImportView->expirationDate
                 )
             );

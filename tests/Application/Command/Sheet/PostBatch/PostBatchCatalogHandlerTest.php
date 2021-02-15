@@ -34,7 +34,7 @@ class PostBatchCatalogHandlerTest extends TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
-        $datetime             = new \DateTime();
+        $dateTime             = new \DateTime();
 
         $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
@@ -51,7 +51,7 @@ class PostBatchCatalogHandlerTest extends TestCase
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),
-            $datetime,
+            $dateTime,
             $sheetIndexer->reveal()
         );
 
@@ -76,7 +76,7 @@ class PostBatchCatalogHandlerTest extends TestCase
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer         = $this->prophesize(SheetIndexerInterface::class);
-        $datetime             = new \DateTime();
+        $dateTime             = new \DateTime();
 
         $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
@@ -93,7 +93,7 @@ class PostBatchCatalogHandlerTest extends TestCase
         $handler = new PostBatchCatalogHandler(
             $eventDispatcher->reveal(),
             $enableDisableManager->reveal(),
-            $datetime,
+            $dateTime,
             $sheetIndexer->reveal()
         );
 

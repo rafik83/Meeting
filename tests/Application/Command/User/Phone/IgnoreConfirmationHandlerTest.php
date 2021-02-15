@@ -29,7 +29,7 @@ class IgnoreConfirmationHandlerTest extends TestCase
     private $participant;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var IgnoreConfirmationHandler */
     private $handler;
@@ -46,10 +46,10 @@ class IgnoreConfirmationHandlerTest extends TestCase
         $this->event = EventFactory::createEvent();
         $this->name  = Type::PHONE_CONFIRMATION_IGNORED;
         $this->participant  = ParticipantFactory::create(SheetFactory::create());
-        $this->datetime = new \DateTime();
-        $this->handler = new IgnoreConfirmationHandler($this->extraDataRepository->reveal(), $this->datetime);
+        $this->dateTime = new \DateTime();
+        $this->handler = new IgnoreConfirmationHandler($this->extraDataRepository->reveal(), $this->dateTime);
         $this->command = new IgnoreConfirmation($this->event, $this->participant);
-        $this->extraData = new ExtraData($this->participant->getUser(), $this->event, $this->name, '', $this->datetime);
+        $this->extraData = new ExtraData($this->participant->getUser(), $this->event, $this->name, '', $this->dateTime);
     }
 
     public function testHandleAddExtra()

@@ -20,7 +20,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type = new Type($event);
 
@@ -29,10 +29,10 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
             $type,
             [],
             new User('email@email.com', 'salt', 'password', 'fr'),
-            $datetime
+            $dateTime
         );
 
-        $package = new Package($event, 'Package', $datetime);
+        $package = new Package($event, 'Package', $dateTime);
         $package->enable(true, true, true);
         $type->setPackage($package);
 
@@ -70,7 +70,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 
     public function testHandleWithStaticFormulation()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type = new Type($event);
 
@@ -79,13 +79,13 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
             $type,
             [],
             new User('email@email.com', 'salt', 'password', 'fr'),
-            $datetime
+            $dateTime
         );
 
         $staticFormulation = $this->prophesize(StaticFormulation::class);
         $staticFormulation->getTitle('fr')->shouldBeCalled()->willReturn('My Package');
 
-        $package = new Package($event, 'Package', $datetime);
+        $package = new Package($event, 'Package', $dateTime);
         $package->enable(true, true, true);
         $type->setPackage($package);
 
@@ -128,7 +128,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 
     public function testHandleWithProductInCart()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type = new Type($event);
 
@@ -137,12 +137,12 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
             $type,
             [],
             new User('email@email.com', 'salt', 'password', 'fr'),
-            $datetime
+            $dateTime
         );
         $order       = new Order($sheet, '', new \DateTime());
         $sheet->addOrder($order);
 
-        $package = new Package($event, 'Package', $datetime);
+        $package = new Package($event, 'Package', $dateTime);
         $package->enable(true, true, true);
         $type->setPackage($package);
 
@@ -180,7 +180,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 
     public function testHandleNoEnabledPackage()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type = new Type($event);
 
@@ -189,7 +189,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
             $type,
             [],
             new User('email@email.com', 'salt', 'password', 'fr'),
-            $datetime
+            $dateTime
         );
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);

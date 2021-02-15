@@ -17,7 +17,7 @@ class PostBatchDraftHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var SheetIndexerInterface
@@ -28,16 +28,16 @@ class PostBatchDraftHandler
      * PostBatchValidationDraftHandler constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      * @param SheetIndexerInterface    $sheetIndexer
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         SheetIndexerInterface $sheetIndexer
     ) {
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->dateTime        = $dateTime;
         $this->sheetIndexer    = $sheetIndexer;
     }
 
@@ -53,7 +53,7 @@ class PostBatchDraftHandler
                     new SheetDraftEvent(
                         $sheet,
                         $command->admin,
-                        $this->datetime
+                        $this->dateTime
                     )
                 );
             }

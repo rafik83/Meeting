@@ -14,11 +14,11 @@ class CartTest extends TestCase
 {
     public function testAdd()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $user     = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
+        $sheet    = new Sheet($event, $type, [], $user, $dateTime);
 
         $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 20, 3, 3, 3, true);
         $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 20, 3, 3, 3, true);

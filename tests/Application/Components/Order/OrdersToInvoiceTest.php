@@ -25,30 +25,30 @@ class OrdersToInvoiceTest extends TestCase
 {
     public function testGetInvoiceViewForSheet()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent('My event', 'fr');
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet = new Sheet($event, $type, [], $owner, $dateTime);
 
         $plan = Product::createPlan($event, 'plan', '', 99, 20, 20, 100);
         $participant = Product::createParticipant($event, 'participant', 1789, 20, 20);
         $option = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
-        $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, '[]', $dateTime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, 20, $plan));
         $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
         $orderOne->addRow(new Order\Row($orderOne, 1, 20, $option));
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, '[]', $dateTime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
 
-        $mergedOrder = new Order($sheet, '[]', $datetime->modify('-5 day'));
+        $mergedOrder = new Order($sheet, '[]', $dateTime->modify('-5 day'));
         $mergedOrder->addRow(new Order\Row($mergedOrder, 1, 20, $plan));
         $mergedOrder->addRow(new Order\Row($mergedOrder, 1, 20, $participant));
         $mergedOrder->addRow(new Order\Row($mergedOrder, 4, 20, $option));
@@ -125,13 +125,13 @@ class OrdersToInvoiceTest extends TestCase
 
     public function testGetInvoiceViewForSheetWithNoOrder()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet = new Sheet($event, $type, [], $owner, $dateTime);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([]);
@@ -154,17 +154,17 @@ class OrdersToInvoiceTest extends TestCase
 
     public function testGetInvoiceViewForSheetWithNegativeOrder()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $event->setVatModeToExclusiveOfTaxes();
 
         $type = new Type($event);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet = new Sheet($event, $type, [], $owner, $dateTime);
 
         $option = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
-        $orderNegative = new Order($sheet, '[]', $datetime->modify('-5 day'));
+        $orderNegative = new Order($sheet, '[]', $dateTime->modify('-5 day'));
         $orderNegative->addRow(new Order\Row($orderNegative, -1, 20, $option));
         $sheet->addOrder($orderNegative);
 

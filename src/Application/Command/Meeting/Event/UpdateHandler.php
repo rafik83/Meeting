@@ -22,7 +22,7 @@ class UpdateHandler
     private TranslatorInterface $translator;
     private MessageRepositoryInterface $messageRepository;
     private MeetingRepositoryInterface $meetingRepository;
-    private DateTimeInterface $datetime;
+    private DateTimeInterface $dateTime;
     private RequestRepositoryInterface $requestRepository;
     private ?LoggerInterface $logger;
 
@@ -32,7 +32,7 @@ class UpdateHandler
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
         MeetingRepositoryInterface $meetingRepository,
-        DateTimeInterface $datetime,
+        DateTimeInterface $dateTime,
         RequestRepositoryInterface $requestRepository,
         ?LoggerInterface $logger = null
     ) {
@@ -41,7 +41,7 @@ class UpdateHandler
         $this->translator = $translator;
         $this->messageRepository = $messageRepository;
         $this->meetingRepository = $meetingRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->requestRepository = $requestRepository;
         $this->logger = $logger;
     }
@@ -79,7 +79,7 @@ class UpdateHandler
                     $request,
                     $command->sheet,
                     $command->content,
-                    $this->datetime
+                    $this->dateTime
                 );
 
                 $request->setUpdateOrDeleteReasonMessage($message);

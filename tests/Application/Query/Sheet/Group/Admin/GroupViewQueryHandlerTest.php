@@ -20,7 +20,7 @@ class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $admin = AdminFactory::create();
         $event = EventFactory::createEvent();
 
@@ -32,7 +32,7 @@ class GroupViewQueryHandlerTest extends TestCase
         $propertyGroupId = $reflectionGroup->getProperty('id');
         $propertyGroupId->setAccessible(true);
 
-        $group = new Group($event, $user->reveal(), 'My entity', false, $datetime);
+        $group = new Group($event, $user->reveal(), 'My entity', false, $dateTime);
         $propertyGroupId->setValue($group, 1);
 
         $reflectionSheet = new \ReflectionClass(Sheet::class);
@@ -59,7 +59,7 @@ class GroupViewQueryHandlerTest extends TestCase
                 new SheetView(1, 'Sheet title 1'),
                 new SheetView(2, 'Sheet title 2'),
             ],
-            $datetime
+            $dateTime
         );
 
         $sheetRepository->getByGroup($group)->shouldBeCalled()->willReturn([$sheet1, $sheet2]);

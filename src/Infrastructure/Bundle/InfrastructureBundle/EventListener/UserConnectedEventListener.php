@@ -32,7 +32,7 @@ class UserConnectedEventListener implements EventSubscriberInterface
     private $notificationPublisher;
 
     /** @var DatetimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var Sheet */
     private $sheet;
@@ -49,14 +49,14 @@ class UserConnectedEventListener implements EventSubscriberInterface
         UserDomainValueResolver $userResolver,
         SessionInterface $session,
         NotificationPublisherInterface $notificationPublisher,
-        DateTimeInterface $datetime
+        DateTimeInterface $dateTime
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->networkingAccessChecker = $networkingAccessChecker;
         $this->userResolver = $userResolver;
         $this->session = $session;
         $this->notificationPublisher = $notificationPublisher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public static function getSubscribedEvents()
@@ -95,11 +95,11 @@ class UserConnectedEventListener implements EventSubscriberInterface
 
         // publish notification after 10 min of inactivity, to reduce number of notifications
         $lastNotification = $this->session->get('connectedLastSeen');
-        if ($lastNotification < ($this->datetime->getTimestamp() - 600)) {
+        if ($lastNotification < ($this->dateTime->getTimestamp() - 600)) {
             $this->publishNotification = true;
         }
 
-        $this->session->set('connectedLastSeen', $this->datetime->getTimestamp());
+        $this->session->set('connectedLastSeen', $this->dateTime->getTimestamp());
     }
 
     public function onTerminate(KernelEvent $event): void

@@ -22,7 +22,7 @@ class CreateHandler
     private $participantRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var SheetInfoSetter */
     private $sheetInfoSetter;
@@ -35,13 +35,13 @@ class CreateHandler
         SheetInfoSetter $sheetInfoSetter,
         ParticipantRepositoryInterface $participantRepository,
         DelayedEventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->sheetInfoSetter       = $sheetInfoSetter;
         $this->participantRepository = $participantRepository;
         $this->eventDispatcher       = $eventDispatcher;
-        $this->datetime              = $datetime;
+        $this->dateTime              = $dateTime;
     }
 
     public function handle(Create $command): void
@@ -54,7 +54,7 @@ class CreateHandler
             $originalSheet->getType(),
             $originalSheet->getData(),
             $originalSheet->getOwner(),
-            $this->datetime,
+            $this->dateTime,
             $originalSheet->getGroup()
         );
         $newSheet->setTitle($command->title);
@@ -83,7 +83,7 @@ class CreateHandler
                 $participant->getUser(),
                 $participant->getData(),
                 true,
-                $this->datetime
+                $this->dateTime
             );
             $newParticipant->setRegistrationComplete($participant->isRegistrationComplete());
             $newParticipant->setRegistrationStep($participant->getRegistrationStep());
@@ -101,7 +101,7 @@ class CreateHandler
 
         $this->eventDispatcher->dispatch(
             Events::SHEET_CREATE_BY_GROUP_MANAGER,
-            new SheetCreatedByManagerEvent($newSheet, $this->datetime)
+            new SheetCreatedByManagerEvent($newSheet, $this->dateTime)
         );
     }
 }

@@ -7,15 +7,15 @@ class AccessChecker
     /**
      * @var \DateTimeInterface
      */
-    protected $datetime;
+    protected $dateTime;
 
     /**
      * AccessChecker constructor.
      *
-     * @param \DatetimeInterface $datetime
+     * @param \DatetimeInterface $dateTime
      */
-    public function __construct(\DateTimeInterface $datetime)
+    public function __construct(\DateTimeInterface $dateTime)
     {
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 }

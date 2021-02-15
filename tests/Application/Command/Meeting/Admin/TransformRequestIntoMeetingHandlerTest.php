@@ -37,7 +37,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
         $requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $availableSpots              = $this->prophesize(AvailableSpots::class);
-        $datetime                    = new \DateTime();
+        $dateTime                    = new \DateTime();
         $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
         $meetParticipants = $this->prophesize(MeetingParticipants::class);
 
@@ -76,7 +76,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [],
             $toSheet,
             [],
-            $datetime,
+            $dateTime,
             $spot,
             $event,
             false,
@@ -101,7 +101,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $requestSlotViewQueryHandler->reveal(),
             $availableSpots->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal(),
             $meetParticipants->reveal()
         );

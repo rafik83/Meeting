@@ -45,7 +45,7 @@ class AddHandlerTest extends TestCase
     /**
      * @var \DateTimeImmutable
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var Sheet
@@ -62,15 +62,15 @@ class AddHandlerTest extends TestCase
         $this->event    = EventFactory::createEvent();
         $this->type     = new Type($this->event);
         $this->user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $this->datetime = new \DateTimeImmutable();
-        $this->sheet    = new Sheet($this->event, $this->type, [], $this->user, $this->datetime);
+        $this->dateTime = new \DateTimeImmutable();
+        $this->sheet    = new Sheet($this->event, $this->type, [], $this->user, $this->dateTime);
         $this->product  = Product::createOption($this->event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
     }
 
     public function testHandle()
     {
         $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
-            $this->datetime->modify('+1 month'));
+            $this->dateTime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
         $planRow          = new CartRow($this->sheet, $this->product, 5);
@@ -99,7 +99,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal()
         );
         $handler->handle($add);
@@ -132,7 +132,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal());
 
         $handler->handle($add);
@@ -141,7 +141,7 @@ class AddHandlerTest extends TestCase
     public function testHandleOutdatedCode()
     {
         $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
-            $this->datetime->modify('-1 month'));
+            $this->dateTime->modify('-1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
         $this->expectException(PromotionCodeOutDatedException::class);
@@ -170,7 +170,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal());
 
         $handler->handle($add);
@@ -181,7 +181,7 @@ class AddHandlerTest extends TestCase
         $this->expectException(PromotionCodeAlreadyExistException::class);
 
         $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
-            $this->datetime->modify('+1 month'));
+            $this->dateTime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
         $planRow          = new CartRow($this->sheet, $this->product, 5);
@@ -209,7 +209,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal());
 
         $handler->handle($add);
@@ -220,7 +220,7 @@ class AddHandlerTest extends TestCase
         $this->expectException(PromotionCodeNotUsedException::class);
 
         $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
-            $this->datetime->modify('+1 month'));
+            $this->dateTime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
         $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 20, 2, 4, 3, false);
@@ -249,7 +249,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal());
 
         $handler->handle($add);
@@ -260,11 +260,11 @@ class AddHandlerTest extends TestCase
         $this->expectException(PromotionCodeConflictException::class);
 
         $promotionCode = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE50', 10,
-            $this->datetime->modify('+1 month'));
+            $this->dateTime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
         $promotionCodeTwo = new PromotionCode($this->event, 'Promotion Code Test', 'PROMOCODE10', 10,
-            $this->datetime->modify('+1 month'));
+            $this->dateTime->modify('+1 month'));
         $promotionCodeTwo->setPromotion($this->product, Promotion::TYPE_VALUE_OFF, 10);
 
         $planRow          = new CartRow($this->sheet, $this->product, 5);
@@ -292,7 +292,7 @@ class AddHandlerTest extends TestCase
         $handler = new AddHandler(
             $cartManager->reveal(),
             $promotionCodeRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $orderMerger->reveal());
 
         $handler->handle($add);

@@ -19,7 +19,7 @@ class PostBatchCatalogHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var EnableDisableManager
@@ -36,17 +36,17 @@ class PostBatchCatalogHandler
      *
      * @param EventDispatcherInterface $eventDispatcher
      * @param EnableDisableManager     $enableDisableManager
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      * @param SheetIndexerInterface    $sheetIndexer
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         EnableDisableManager $enableDisableManager,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         SheetIndexerInterface $sheetIndexer
     ) {
         $this->eventDispatcher      = $eventDispatcher;
-        $this->datetime             = $datetime;
+        $this->dateTime             = $dateTime;
         $this->enableDisableManager = $enableDisableManager;
         $this->sheetIndexer         = $sheetIndexer;
     }
@@ -72,7 +72,7 @@ class PostBatchCatalogHandler
                     new SheetCatalogEvent(
                         $sheet,
                         $command->admin,
-                        $this->datetime,
+                        $this->dateTime,
                         $state
                     )
                 );

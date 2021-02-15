@@ -11,16 +11,16 @@ class UpdateNetworkingChatViewedAtHandler
     private $participantRepository;
 
     /** @var DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
-    public function __construct(ParticipantRepositoryInterface $participantRepository, DateTimeInterface $datetime)
+    public function __construct(ParticipantRepositoryInterface $participantRepository, DateTimeInterface $dateTime)
     {
         $this->participantRepository = $participantRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(UpdateNetworkingChatViewedAt $command): void
     {
-        $this->participantRepository->updateAllNetworkingChatViewedAt($command->user, $command->sheet->getEvent(), $this->datetime);
+        $this->participantRepository->updateAllNetworkingChatViewedAt($command->user, $command->sheet->getEvent(), $this->dateTime);
     }
 }

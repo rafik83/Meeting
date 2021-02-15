@@ -30,7 +30,7 @@ class ConverterTest extends TestCase
 {
     public function testToOrder()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $event = $this->prophesize(Event::class);
         $event->getCurrency()->willReturn('EUR');
@@ -94,7 +94,7 @@ class ConverterTest extends TestCase
         $package->getGroupOfProduct($attributableOptionRow->getProduct())->shouldBeCalled()->willReturn(null);
 
         // Expected Order
-        $expectedOrder = new Order($sheet->reveal(), 'Package serialized data', $datetime);
+        $expectedOrder = new Order($sheet->reveal(), 'Package serialized data', $dateTime);
         $expectedOrder->addRow(new Order\Row($expectedOrder, 1, 20, $plan->reveal()));
         $expectedOrder->addRow(new Order\Row($expectedOrder, 1, 20, $participantProduct->reveal()));
         $expectedOrder->addRow(new Order\Row($expectedOrder, 2, 20, $chair->reveal()));
@@ -166,7 +166,7 @@ class ConverterTest extends TestCase
             $participantProductSetter->reveal(),
             $productAttributedToParticipantSetter->reveal(),
             $decrementStockHandler->reveal(),
-            $datetime
+            $dateTime
         );
 
         $converter->toOrder(

@@ -691,9 +691,9 @@ class Event implements EventInterface, TraceableInterface, ChatMessageLinkableIn
     /**
      * @throws DayNotDefinedException
      */
-    public function isFinished(\DateTimeInterface $datetime): bool
+    public function isFinished(\DateTimeInterface $dateTime): bool
     {
-        return $this->getLastDay()->getEndTime() < $datetime;
+        return $this->getLastDay()->getEndTime() < $dateTime;
     }
 
     public function getLocalizedLogo(string $locale): ?string

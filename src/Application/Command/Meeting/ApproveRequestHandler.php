@@ -29,7 +29,7 @@ class ApproveRequestHandler
     private $requestRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var MessageRepositoryInterface */
     private $messageRepository;
@@ -67,14 +67,14 @@ class ApproveRequestHandler
         TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
         DDayGuesser $ddayGuesser,
         MeetingDDayViewQueryHandler $meetingDDayViewQueryHandler,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->allowTransformAutomaticallyRequestIntoMeeting = $allowTransformAutomaticallyRequestIntoMeeting;
         $this->requestRepository = $requestRepository;
         $this->permissionManager = $permissionManager;
         $this->messageRepository = $messageRepository;
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
         $this->ddayGuesser = $ddayGuesser;
@@ -121,12 +121,12 @@ class ApproveRequestHandler
                 $approveRequest->request,
                 $approveRequest->request->getToSheet(),
                 $approveRequest->description,
-                $this->datetime
+                $this->dateTime
             ));
             $approveRequest->request->setHasMessage(true);
         }
 
-        $this->requestRepository->set($approveRequest->request->approve($this->datetime));
+        $this->requestRepository->set($approveRequest->request->approve($this->dateTime));
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_REQUEST_APPROVED,

@@ -86,13 +86,13 @@ class DateTime extends EditableObject implements ContentObjectInterface, Exporta
 
     public function getOptionDateFormattedForDatepicker(string $date): ?string
     {
-        $datetime = $this->getOptionDate($date);
+        $dateTime = $this->getOptionDate($date);
 
-        if (!$datetime) {
+        if (!$dateTime) {
             return null;
         }
 
-        return $datetime->format('Y-m-d H:i');
+        return $dateTime->format('Y-m-d H:i');
     }
 
     public function getTimezone(): string

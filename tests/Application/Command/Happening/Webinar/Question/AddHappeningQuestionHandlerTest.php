@@ -26,17 +26,17 @@ class AddHappeningQuestionHandlerTest extends TestCase
     private $addHappeningQuestionHandler;
 
     /** @var \DateTime */
-    private $datetime;
+    private $dateTime;
 
     public function setUp(): void
     {
-        $this->datetime = new \DateTime('2020-06-02 12:00:00');
+        $this->dateTime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
         $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler(
             $this->questionRepository->reveal(),
             $this->notificationPublisher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
     }
 
@@ -66,7 +66,7 @@ class AddHappeningQuestionHandlerTest extends TestCase
             $happening->reveal(),
             $sheet,
             $createdBy->reveal(),
-            $this->datetime,
+            $this->dateTime,
             'Can you develop your point about green IT?',
             true
         );

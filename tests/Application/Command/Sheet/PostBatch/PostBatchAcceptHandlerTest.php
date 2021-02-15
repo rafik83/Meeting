@@ -26,7 +26,7 @@ class PostBatchAcceptHandlerTest extends TestCase
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
-        $datetime        = new \DateTime();
+        $dateTime        = new \DateTime();
 
         $eventDispatcher->dispatch(
             Events::SHEET_ACCEPTED,
@@ -38,7 +38,7 @@ class PostBatchAcceptHandlerTest extends TestCase
         $query   = new PostBatchAccept([$sheet1, $sheet2, $sheet3], $admin);
         $handler = new PostBatchAcceptHandler(
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $sheetIndexer->reveal()
         );
 
