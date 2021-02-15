@@ -1065,6 +1065,14 @@ event_sheet_happening_webinar_question_reply_delete:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction
 
+event_happening_webinar_mute:
+    path: /sheet/{sheet}/happening/{happening}/webinar/mute
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\MuteAction
+
 event_happening_webinar_record:
     path: /sheet/{sheet}/happening/{happening}/webinar/record
     requirements:

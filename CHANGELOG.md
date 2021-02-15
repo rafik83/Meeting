@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Removed
 - VIMEET-1811 - Remove can_move_meeting column from db
+
+### Added
+- VIMEET-2189 - Mute speakers
+
 ## [2.79.1] - 2021-02-05
 ### Fixed
 - Redis query cache namespace
@@ -16,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2319 - Send webinar record to speakers
 - VIMEET-2323 - Link target blank
 - VIMEET-2296 - Add participant locale in participants export
-- VIMEET-2295 - Can import partipant's locale
+- VIMEET-2295 - Can import participant's locale
 
 ### Fixed
 - VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
