@@ -48,6 +48,13 @@ event_register:
         typeView: \d+
     defaults: { _controller: EventBundle:Register:register }
 
+event_prefill_register:
+    path: /prefill-register/{typeView}
+    methods:  [GET]
+    requirements:
+        typeView: \d+
+    defaults: { _controller: EventBundle:Register:prefillRegister }
+
 event_register_new_user:
     path: /register/{typeView}/new
     methods:  [GET, POST]
