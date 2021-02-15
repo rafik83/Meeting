@@ -103,6 +103,10 @@ class MessageController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($event !== $message->getEvent()) {
+            return $this->createAccessDeniedException();
+        }
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $messageView = $this->get('tactician.commandbus')->handle(new PreviewQuery($message, $locale));
