@@ -6,34 +6,18 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class LocalizationViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $filter;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $defaultFilters;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * LocalizationViewQuery constructor.
-     *
-     * @param Event  $event
-     * @param string $filter
-     * @param array  $defaultFilters
-     * @param string $locale
-     */
     public function __construct(Event $event, string $filter, array $defaultFilters, string $locale)
     {
         $this->event = $event;
