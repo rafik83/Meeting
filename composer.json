@@ -56,7 +56,7 @@
         "tilleuls/ovh-bundle": "^1.0.1",
         "league/iso3166": "^2.1",
         "defuse/php-encryption": "^2.2",
-        "ruflin/elastica": "^6.1.1",
+        "ruflin/elastica": "^6.0",
         "endroid/qr-code": "^3.4",
         "behat/transliterator": "^1.2",
         "snc/redis-bundle": "^3.2.3",

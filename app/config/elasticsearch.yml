@@ -2,8 +2,8 @@ fos_elastica:
     clients:
         default: { host: "%elastic_host%", port: "%elastic_port%", retryOnConflict: 2 }
     indexes:
-        app:
-            index_name: "app_%kernel.environment%"
+        sheet:
+            index_name: "app_%kernel.environment%_sheet"
             settings:
                 index:
                     max_result_window: 100000
@@ -32,42 +32,37 @@ fos_elastica:
                     properties:
                         id:
                             type: integer
-                            index: "not_analyzed"
+                            index: false
                         sheetName:
                             type: text
                             analyzer: "sheetAnalyzer"
                             fielddata: true
                             fields:
                                 raw:
-                                    type: string
+                                    type: text
                                     analyzer: "lowercaseAnalyzer"
                                     fielddata: true
                                 autocomplete:
-                                    type: string
+                                    type: text
                                     analyzer: "autocomplete"
                         content:
-                            type: string
+                            type: text
                         content_en:
-                            type: string
+                            type: text
                             analyzer: "english"
                         content_fr:
-                            type: string
+                            type: text
                             analyzer: "french"
                         state:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         validationState:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         agendaConfirmedStatus:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         phoneValidationStatus:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         availabilityConfirmationStatus:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         enabled:
                             type: boolean
                         completed:
@@ -80,56 +75,53 @@ fos_elastica:
                             type: nested
                             properties:
                                 key:
-                                    type: string
+                                    type: text
                         nestedTaggedData:
                             type: nested
                             properties:
                                 tag:
-                                    type: string
+                                    type: text
                                 values:
                                     type: nested
                                     properties:
                                         tag:
-                                            type: string
+                                            type: text
                                         value:
-                                            type: string
+                                            type: text
                                             fielddata: true
                         filledFilter:
                             type: nested
                             properties:
                                 key:
-                                    type: string
-                                    index: "not_analyzed"
+                                    type: keyword
                                 status:
-                                    type: string
-                                    index: "not_analyzed"
+                                    type: keyword
                         type:
                             type: integer
                         followUp:
                             type: integer
                             null_value: 0
                         commercialStatus:
-                            type: string
+                            type: text
                         participantNumber:
                             type: integer
                         participants:
                             type: nested
                             properties:
                                 lastname:
-                                    type: string
+                                    type: text
                                     analyzer: "sheetAnalyzer"
                                 email:
-                                    type: string
+                                    type: text
                                     analyzer: "emailAnalyzer"
                                 position:
-                                    type: string
-                                    index: "not_analyzed"
+                                    type: keyword
                         event:
                             type: integer
                         owner:
                             type: integer
                         ownerEmail:
-                            type: string
+                            type: text
                         lastLoginAt:
                             type: date
                         imported:
@@ -143,7 +135,7 @@ fos_elastica:
                         inCatalogAt:
                             type: date
                         orderStatus:
-                            type: string
+                            type: text
                         hasCart:
                             type: boolean
                         hasHappeningParticipation:
@@ -159,7 +151,7 @@ fos_elastica:
                         hasSpot:
                             type: boolean
                         spotReference:
-                            type: string
+                            type: text
                         attend:
                             type: boolean
                         hasGroup:
@@ -167,13 +159,12 @@ fos_elastica:
                         reminderDate:
                             type: date
                         organizationCategory:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         nomenclatureItems:
                             type: nested
                             properties:
                                 key:
-                                    type: string
+                                    type: text
                         messagesReceived:
                             type: nested
                             properties:
@@ -183,20 +174,19 @@ fos_elastica:
                             type: nested
                             properties:
                                 key:
-                                    type: string
+                                    type: text
                         nomenclatureItemsNeeds:
                             type: nested
                             properties:
                                 key:
-                                    type: string
+                                    type: text
                         zipcode:
-                            type: string
-                            index: "not_analyzed"
+                            type: keyword
                         countryCode:
-                            type: string
-                            index: "not_analyzed"
+                            type: text
+                            fielddata: true
                         city:
-                            type: string
+                            type: text
                             fields:
                                 city_autocomplete:
                                     analyzer: "autocomplete"
@@ -208,24 +198,24 @@ fos_elastica:
                             type: nested
                             properties:
                                 label:
-                                    type: string
+                                    type: text
                                     analyzer: "lowercaseAnalyzer"
                                     fielddata: true
                                 label_autocomplete:
-                                    type: string
+                                    type: text
                                     analyzer: "autocomplete"
                                 locale:
                                     type: keyword
-                                    index: "not_analyzed"
+                                    index: true
                         keywords:
                             type: nested
                             properties:
                                 label:
-                                    type: string
+                                    type: text
                                     analyzer: "lowercaseAnalyzer"
                                     fielddata: true
                                 label_autocomplete:
-                                    type: string
+                                    type: text
                                     analyzer: "autocomplete"
                                 locale:
                                     type: keyword
@@ -242,6 +232,36 @@ fos_elastica:
                             service: transformer.elastic.sheet_elastic_transformer
                         driver: orm
                         model: Proximum\Vimeet\Domain\Model\Sheet
+                        provider: ~
+                        listener: ~
+                        finder: ~
+
+        user_event:
+            index_name: "app_%kernel.environment%_user_event"
+            settings:
+                index:
+                    max_result_window: 100000
+                    analysis:
+                        analyzer:
+                            lowercaseAnalyzer:
+                                tokenizer: "keyword"
+                                filter: "lowercase"
+                            emailAnalyzer:
+                                tokenizer: "uax_url_email"
+                            autocomplete:
+                                type: custom
+                                tokenizer: "standard"
+                                filter: ["standard", "lowercase", "autocomplete_filter", "asciifolding"]
+                        filter:
+                            autocomplete_filter:
+                                type: edge_ngram
+                                side: front
+                                min_gram: 3
+                                max_gram: 20
+            types:
+                user_event:
+                    persistence:
+                        model: Proximum\Vimeet\Domain\UserEventView\UserEventView
                         provider: ~
                         listener: ~
                         finder: ~

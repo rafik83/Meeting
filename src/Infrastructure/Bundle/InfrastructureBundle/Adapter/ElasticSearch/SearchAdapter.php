@@ -9,22 +9,20 @@ use Elastica\Search;
 
 class SearchAdapter
 {
-    /** @var Client */
-    private $client;
+    private Client $client;
 
-    /** @var string */
-    private $index;
+    private string $indexPrefix;
 
-    public function __construct(Client $client, string $index)
+    public function __construct(Client $client, string $indexPrefix)
     {
         $this->client = $client;
-        $this->index = $index;
+        $this->indexPrefix = $indexPrefix;
     }
 
     public function handleQuery(string $type, Query $query): ResultSet
     {
         $search = new Search($this->client);
-        $search->addIndex($this->index);
+        $search->addIndex($this->indexPrefix.'_'.$type);
         $search->addType($type);
         $search->setQuery($query);
 

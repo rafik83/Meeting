@@ -29,7 +29,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
         arguments:
-            - '@fos_elastica.index.app.sheet'
+            - '@fos_elastica.index.sheet.sheet'
 
     Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter:
         arguments:
