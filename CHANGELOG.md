@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Removed
 - VIMEET-1811 - Remove can_move_meeting column from db
+- VIMEET-2361 - Add link to prefill user mail on registration
 
 ## [2.80.0] - 2021-02-15
 ### Added
