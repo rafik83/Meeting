@@ -4,9 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- VIMEET-1811 - Remove can_move_meeting column from db
+- VIMEET-2361 - Add link to prefill user mail on registration
+
+## [2.80.0] - 2021-02-15
 ### Added
 - VIMEET-2189 - Mute speakers
-- VIMEET-2361 - Add link to prefill user mail on registration
+- VIMEET-2386 - Add compagny name to api conference call
 
 ## [2.79.1] - 2021-02-05
 ### Fixed

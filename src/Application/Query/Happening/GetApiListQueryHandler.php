@@ -43,7 +43,8 @@ class GetApiListQueryHandler
                         $speaker->getPosition($query->locale),
                         // todo: use imagine to provide resized versions of pictures
                         $query->baseUrl.$speaker->getPhoto(),
-                        $query->baseUrl.$speaker->getLogo()
+                        $query->baseUrl.$speaker->getLogo(),
+                        $speaker->getOrganization()
                     );
                 },
                 $happening->getSpeakers()
