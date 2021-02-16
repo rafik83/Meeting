@@ -22,18 +22,18 @@ class AddChatMessageHandler
     private $notificationPublisher;
 
     /** @var DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         ChatMessageRepositoryInterface $messageRepository,
         CheckAccessToChatMessages $checkAccessToChatMessages,
         NotificationPublisherInterface $notificationPublisher,
-        DateTimeInterface $now
+        DateTimeInterface $dateTime
     ) {
         $this->messageRepository = $messageRepository;
         $this->checkAccessToChatMessages = $checkAccessToChatMessages;
         $this->notificationPublisher = $notificationPublisher;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -48,7 +48,7 @@ class AddChatMessageHandler
         $message = $this->messageRepository->add(new ChatMessage(
             $command->object,
             $command->user,
-            $this->now,
+            $this->dateTime,
             $command->content,
             $command->user->getFullname(),
             $command->sheet->getTitle()

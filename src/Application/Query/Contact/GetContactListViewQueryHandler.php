@@ -29,7 +29,7 @@ class GetContactListViewQueryHandler
     private $scanRepository;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         DDayGuesser $dDayGuesser,
@@ -37,14 +37,14 @@ class GetContactListViewQueryHandler
         ParticipantInfoGuesser $participantInfoGuesser,
         GetContactListUsersViewQueryHandler $getContactListUsersViewQueryHandler,
         ScanRepositoryInterface $scanRepository,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->dDayGuesser = $dDayGuesser;
         $this->sheetRepository = $sheetRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->getContactListUsersViewQueryHandler = $getContactListUsersViewQueryHandler;
         $this->scanRepository = $scanRepository;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -103,7 +103,7 @@ class GetContactListViewQueryHandler
                 \in_array($contact, $usersView->requestsUsers, true),
                 !\in_array($contact, $usersView->inContactsUsers, true),
                 $getCheckinStatus
-                    ? $this->scanRepository->isUserCheckinTodayByEvent($contact, $query->event, $this->now)
+                    ? $this->scanRepository->isUserCheckinTodayByEvent($contact, $query->event, $this->dateTime)
                     : false
             );
         }
