@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Register;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class PreFillUserData
+class PreFillUserData implements Query
 {
     /**
      * @var User

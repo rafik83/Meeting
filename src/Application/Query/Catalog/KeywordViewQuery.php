@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class KeywordViewQuery
+class KeywordViewQuery implements Query
 {
     /**
      * @var Event

@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class AssignSpotResult
+use Proximum\Vimeet\Application\Command\Command;
+
+class AssignSpotResult implements Command
 {
     /**
      * @var int
