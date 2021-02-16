@@ -779,7 +779,7 @@ services:
             - '@session.flash_bag'
             - '@templating'
             - '@adapter.router'
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\RemoveCommentAction:
         arguments:
@@ -1037,22 +1037,22 @@ services:
     #
     # Crisp
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Crisp\ChatAction:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating.engine.twig'
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Crisp\ChatAction:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    #         - '@templating.engine.twig'
 
     #
     # Event
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\ExtraHeaderAction:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\ExtraHeaderAction:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction:
-        arguments:
-            - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction:
+    #     arguments:
+    #         - '@templating'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Visio
@@ -1382,5 +1382,5 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@adapter.csrf_token'
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@adapter.event_url_generator'

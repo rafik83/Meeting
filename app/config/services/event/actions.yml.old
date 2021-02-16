@@ -2,16 +2,16 @@ services:
     #
     # Home
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction:
-        arguments:
-            - '@adapter.authorization_checker'
-            - '@templating'
-            - '@form.factory'
-            - '@infrastructure.route.home_dispatch.home_user_dispatcher'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.router'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@vimeet_infrastructure.repository.type_repository'
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\HomeAction:
+    #     arguments:
+    #         - '@adapter.authorization_checker'
+    #         - '@templating'
+    #         - '@form.factory'
+    #         - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    #         - '@adapter.router'
+    #         - '@vimeet_infrastructure.adapter.translator_adapter'
+    #         - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Sheet
@@ -73,7 +73,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@template.template_data_factory'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler'
@@ -312,7 +312,7 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\CreateTestNetworkSessionAction:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@adapter.router'
             - '@adapter.authorization_checker'
 
@@ -460,14 +460,14 @@ services:
     #
     # Navigation
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Navigation\MenuAction:
-        arguments:
-            - '@request_stack'
-            - '@templating'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
-            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
-            - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Navigation\MenuAction:
+    #     arguments:
+    #         - '@request_stack'
+    #         - '@templating'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    #         - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+    #         - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+    #         - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
 
     #
     # Notification
