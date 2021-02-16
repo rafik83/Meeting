@@ -3,13 +3,14 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -18,12 +19,10 @@ class UserConnectedEventListener implements EventSubscriberInterface
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
+    private UserDomainProvider $userDomainProvider;
 
     /** @var NetworkingAccessChecker */
     private $networkingAccessChecker;
-
-    /** @var UserDomainValueResolver */
-    private $userResolver;
 
     /** @var SessionInterface */
     private $session;
@@ -34,26 +33,25 @@ class UserConnectedEventListener implements EventSubscriberInterface
     /** @var DatetimeInterface */
     private $dateTime;
 
-    /** @var Sheet */
+    /** @var Sheet|null */
     private $sheet;
 
-    /** @var UserDomain */
-    private $userDomain;
+    private ?User $currentUser;
 
     /** @var bool */
     private $publishNotification = false;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        UserDomainProvider $userDomainProvider,
         NetworkingAccessChecker $networkingAccessChecker,
-        UserDomainValueResolver $userResolver,
         SessionInterface $session,
         NotificationPublisherInterface $notificationPublisher,
         DateTimeInterface $dateTime
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->userDomainProvider = $userDomainProvider;
         $this->networkingAccessChecker = $networkingAccessChecker;
-        $this->userResolver = $userResolver;
         $this->session = $session;
         $this->notificationPublisher = $notificationPublisher;
         $this->dateTime = $dateTime;
@@ -73,8 +71,8 @@ class UserConnectedEventListener implements EventSubscriberInterface
             return;
         }
 
-        $this->userDomain = $this->userResolver->getUserDomain();
-        if (null === $this->userDomain) {
+        $this->currentUser = $this->userDomainProvider->getUserDomain();
+        if (null === $this->currentUser) {
             $this->session->remove('connectedLastSeen');
             return;
         }
@@ -105,7 +103,7 @@ class UserConnectedEventListener implements EventSubscriberInterface
     public function onTerminate(KernelEvent $event): void
     {
         if ($this->publishNotification) {
-            $this->notificationPublisher->publishUserConnectionNotification($this->sheet, $this->userDomain->getUser());
+            $this->notificationPublisher->publishUserConnectionNotification($this->sheet, $this->currentUser);
         }
     }
 }
