@@ -67,47 +67,32 @@ class SheetMeetingsListViewFactory
      */
     public function findAll(Event $event, $locale)
     {
+        trigger_deprecation('vimeet', '1.80.0', 'This method has been marked as deprecated because it was calling MeetingSlotRepositoryInterface::findAvailableSlotIdByParticipantsIds that is not defined');
+
         $sheets = $this->sheetRepository->getSheets($event, $locale);
 
         $sheetMeetingsListViews = array_map(function (Sheet $sheet) use ($locale) {
-            $participantIds = array_map(function (Participant $participant) {
-                return $participant->getId();
-            }, $sheet->getParticipants()->toArray());
-
             return $this->createFromSheet(
                 $sheet,
                 $locale,
                 $this->meetingRepository->countMeetingsFromSheet($sheet),
                 $this->meetingRepository->countMeetingsToSheet($sheet),
                 $this->requestRepository->countApprovedRequestSentBySheet($sheet),
-                $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet),
-                count($this->meetingSlotRepository->findAvailableSlotIdByParticipantsIds($participantIds, true))
+                $this->requestRepository->countApprovedPropositionReceivedBySheet($sheet)
             );
         }, $sheets);
 
         return $sheetMeetingsListViews;
     }
 
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param int    $meetingsRequestsNumber
-     * @param int    $meetingsPropositionsNumber
-     * @param int    $requestsNumber
-     * @param int    $propositionsNumber
-     * @param int    $availableSlots
-     *
-     * @return SheetMeetingsListView
-     */
     public function createFromSheet(
         Sheet $sheet,
-        $locale,
-        $meetingsRequestsNumber,
-        $meetingsPropositionsNumber,
-        $requestsNumber,
-        $propositionsNumber,
-        $availableSlots
-    ) {
+        string $locale,
+        int $meetingsRequestsNumber,
+        int $meetingsPropositionsNumber,
+        int $requestsNumber,
+        int $propositionsNumber
+    ): SheetMeetingsListView {
         $requestsTransformation = 0 === $meetingsRequestsNumber
             ? 0
             : 100 * $meetingsRequestsNumber / $requestsNumber;
@@ -124,10 +109,6 @@ class SheetMeetingsListViewFactory
             ? 0
             : 100 * $meetingsRequestsNumber / ($requestsNumber + $propositionsNumber);
 
-        $filling = 0 === $availableSlots
-            ? 0
-            : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / $availableSlots;
-
         return new SheetMeetingsListView(
             $sheet->getId(),
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
@@ -139,9 +120,7 @@ class SheetMeetingsListViewFactory
             $requestsTransformation,
             $propositionsTransformation,
             $transformationTotal,
-            $requestsPropositionsTransformation,
-            $availableSlots,
-            $filling
+            $requestsPropositionsTransformation
         );
     }
 }
