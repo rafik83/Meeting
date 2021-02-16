@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
@@ -83,32 +75,7 @@ class RegisterController extends Controller
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
-
-            if ($this->get(CanPasswordBeDefinedWithActivationEmail::class)->isSatisfiedBy($event, $command->email)) {
-                $this->addFlash('login_email', $command->email);
-
-                return $this->redirectToRoute('event_login_send_activation_mail');
-            }
-
-            $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
-
-            if ($user) {
-                if ($this->hasSheets($user, $event)) {
-                    $this->addFlash('success', 'flash.event.register.already_known.login');
-                } else {
-                    $this->setFlashRegisterType($typeView->id);
-                    $this->addFlash('success', 'flash.event.register.already_known.message');
-                }
-
-                $this->setFlashLoginEmail($command->email);
-
-                return $this->redirectToRoute('event_login_second_step');
-            }
-
-            $this->setFlashRegisterEmail($command->email);
-
-            return $this->redirectToRoute('event_register_new_user', ['typeView' => $typeView->id]);
+            return $this->handleRegistration($command, $event, $typeView);
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
@@ -117,6 +84,36 @@ class RegisterController extends Controller
             'typeView' => $typeView,
             'typeDescription' => $this->get('markdown')->toHtml($typeView->description),
         ]);
+    }
+
+    /**
+     * Register an account with email parameter
+     */
+    public function prefillRegisterAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
+    {
+        $event = $eventDomain->getEvent();
+
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if ($this->hasSheets($this->getUser(), $eventDomain->getEvent())) {
+                return $this->redirectToRoute('event');
+            } else {
+                return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            }
+        }
+
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($eventDomain->getEvent(), $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
+        $this->setFlashRegisterType($typeView->id);
+        $command = new Email();
+        $command->email = $request->query->get('email');
+        return $this->handleRegistration($command, $event, $typeView);
+
     }
 
     /**
@@ -228,14 +225,23 @@ class RegisterController extends Controller
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
 
+        // Ask for locale if there are several
+        $askLocale = count($event->getLocales()) > 1;
+
         $form = $this->createForm(BlockType::class, $registrationTemplateFirstStep, [
             'block' => $registrationTemplateFirstStep,
             'locale' => $locale,
             'locales' => $event->getLocales(),
             'country' => $event->getCountry(),
+            'askLocaleFirst' => $askLocale,
         ]);
 
+        if ($askLocale) {
+            $form->get('locale')->setData($locale);
+        }
+
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $locale = !$askLocale ? $event->getLocaleFallback() : $form->get('locale')->getData();
             $data = $this->handleData(
                 $user,
                 null,
@@ -261,12 +267,19 @@ class RegisterController extends Controller
                 return $this->redirectToRoute('event_participant_step', [
                     'step' => $nextStep,
                     'participant' => $participate->participant->getId(),
+                    '_locale' => $participate->participant->getLocale(),
                 ]);
             }
 
             $this->container->get('session')->getFlashBag()->set('first_registration', true);
 
-            return $this->redirectToRoute('event_sheet_default', ['sheet' => $participate->sheet->getId()]);
+            return $this->redirectToRoute(
+                'event_sheet_default',
+                [
+                    'sheet' => $participate->sheet->getId(),
+                    '_locale' => $participate->participant->getLocale(),
+                ]
+            );
         }
 
         if ($preFillUserDataView->isParticipationDataPreFilled()) {
@@ -329,14 +342,21 @@ class RegisterController extends Controller
             throw $this->createNotFoundException('Unknown step');
         }
 
+        $askLocale = $step === '1';
+
         $options = [
             'block' => $registrationTemplateStep,
             'locale' => $locale,
             'country' => $event->getCountry(),
             'locales' => $event->getLocales(),
+            'askLocaleFirst' => $askLocale,
         ];
 
         $form = $this->createForm(BlockType::class, $registrationTemplateStep, $options);
+
+        if ($askLocale) {
+            $form->get('locale')->setData($participant->getLocale());
+        }
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
@@ -362,7 +382,11 @@ class RegisterController extends Controller
                 if ($nextStep) {
                     return $this->redirectToRoute(
                         'event_participant_step',
-                        ['step' => $nextStep, 'participant' => $participant->getId()]
+                        [
+                            'step' => $nextStep,
+                            'participant' => $participant->getId(),
+                            '_locale' => $askLocale ? $participant->getLocale() : $locale,
+                        ]
                     );
                 }
 
@@ -370,6 +394,7 @@ class RegisterController extends Controller
 
                 return $this->redirectToRoute('event_sheet_default', [
                     'sheet' => $participant->getSheet()->getId(),
+                    '_locale' => $askLocale ? $participant->getLocale() : $locale,
                 ]);
             }
         }
@@ -588,5 +613,35 @@ class RegisterController extends Controller
         if ($participant->getUser() !== $userDomain->getUser()) {
             throw $this->createAccessDeniedException('The user does not match the particpant.');
         }
+    }
+
+    public function handleRegistration(Email $command, Event $event, TypeView $typeView): RedirectResponse
+    {
+        $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
+
+        if ($this->get(CanPasswordBeDefinedWithActivationEmail::class)->isSatisfiedBy($event, $command->email)) {
+            $this->addFlash('login_email', $command->email);
+
+            return $this->redirectToRoute('event_login_send_activation_mail');
+        }
+
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
+
+        if ($user) {
+            if ($this->hasSheets($user, $event)) {
+                $this->addFlash('success', 'flash.event.register.already_known.login');
+            } else {
+                $this->setFlashRegisterType($typeView->id);
+                $this->addFlash('success', 'flash.event.register.already_known.message');
+            }
+
+            $this->setFlashLoginEmail($command->email);
+
+            return $this->redirectToRoute('event_login_second_step');
+        }
+
+        $this->setFlashRegisterEmail($command->email);
+
+        return $this->redirectToRoute('event_register_new_user', ['typeView' => $typeView->id]);
     }
 }

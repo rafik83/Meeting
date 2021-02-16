@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
 use Proximum\Vimeet\Application\Adapter\EmailingSenderInterface;
@@ -152,7 +144,7 @@ class SendEmailingByTypeHandler
         $user = $sheet->getOwner();
         $userEmail = $user->getEmail();
         $sheetId = $sheet->getId();
-        $locale = $event->getAvailableLocale($user->getLocale());
+        $locale = $sheet->getUserLocale($user);
 
         $substitutionResult = $this->substitutionHandler->handle(
             new PrepareBatchSheetMailView($event, $user, $message->getName(), $locale, $sheet),

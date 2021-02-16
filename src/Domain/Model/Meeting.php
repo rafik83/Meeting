@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -459,6 +451,20 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
         }
 
         return [];
+    }
+
+    /**
+     * @param $participants Participant[]
+     */
+    public function setParticipants(Sheet $sheet, array $participants): void
+    {
+        if ($sheet === $this->fromSheet) {
+            $this->fromParticipants->clear();
+            $this->fromParticipants = new ArrayCollection($participants);
+        } elseif ($sheet === $this->toSheet) {
+            $this->toParticipants->clear();
+            $this->toParticipants = new ArrayCollection($participants);
+        }
     }
 
     /**

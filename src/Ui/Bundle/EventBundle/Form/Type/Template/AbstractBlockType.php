@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Template;
 
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CheckboxDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\DatetimeDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
@@ -82,6 +75,10 @@ abstract class AbstractBlockType extends AbstractType
             if ($object instanceof TemplateObject\Image) {
                 $this->addImage($key, $builder, $object, $options['locale']);
                 continue;
+            }
+
+            if ($object instanceof TemplateObject\CheckboxObject) {
+                $this->addCheckbox($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -168,6 +165,19 @@ abstract class AbstractBlockType extends AbstractType
         string $locale
     ): void {
         $builder->add($key, BooleanDataType::class, [
+            'object' => $object,
+            'locale' => $locale,
+            'label' => false,
+        ]);
+    }
+
+    protected function addCheckbox(
+        string $key,
+        FormBuilderInterface $builder,
+        TemplateObject\CheckboxObject $object,
+        string $locale
+    ): void {
+        $builder->add($key, CheckboxDataType::class, [
             'object' => $object,
             'locale' => $locale,
             'label' => false,

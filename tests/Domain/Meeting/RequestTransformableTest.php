@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Meeting;
 
 use PHPUnit\Framework\TestCase;
@@ -348,7 +340,7 @@ class RequestTransformableTest extends TestCase
             $type->isHidden(),
             $type->getAvailabilityType(),
             $type->getNumberOfMeetingsPerPlanning(),
-            $type->canMoveMeeting(),
+            $type->canUpdateMeeting(),
             $type->canRemoveMeeting(),
             true
         );

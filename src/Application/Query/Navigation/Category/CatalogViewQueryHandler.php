@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 
 use DateTimeInterface;
@@ -30,7 +22,7 @@ class CatalogViewQueryHandler
 
     /** @var CanSeeOtherSheets */
     private $canSeeOtherSheets;
-    
+
     /**
      * @param DateTimeInterface          $dateTime
      * @param NavigationBuilderInterface $navigationBuilder
@@ -56,7 +48,7 @@ class CatalogViewQueryHandler
         if (false === $this->canSeeOtherSheets->isSatisfiedBy($catalogViewQuery->sheet)) {
             return null;
         }
-        
+
         $catalogOnlineDate = $catalogViewQuery
             ->sheet
             ->getEvent()

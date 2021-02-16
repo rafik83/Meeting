@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView;
@@ -80,13 +72,6 @@ interface TipRepositoryInterface
      * @return PaginatedResult
      */
     public function paginateByEvent(Event $event, $page, $limit);
-
-    /**
-     * @param string $locale
-     *
-     * @return TipTranslationView[]
-     */
-    public function getTipTranslationViewByLocale($locale);
 
     /**
      * @return Tip[]

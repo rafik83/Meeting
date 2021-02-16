@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
@@ -111,7 +103,7 @@ class LeniUserViewQueryHandler
             throw new SheetNotFoundException('User must have at least one sheet');
         }
 
-        $userLocale = $query->event->getAvailableLocale($query->user->getLocale());
+        $userLocale = $query->event->getAvailableLocale($firstSheet->getUserLocale($query->user));
 
         $planning = $this->participantPlanningFormatter->formatPlanningByDayFromUserAndEventWithUnallocated(
             $query->user,
@@ -159,7 +151,7 @@ class LeniUserViewQueryHandler
             $userInfo['phone'],
             $userInfo['mobile'],
             $country,
-            $query->user->getLocale(),
+            $firstSheet->getUserLocale($query->user),
             $leaderView,
             $leniPlanning,
             $this->getPreviousLeniUserId($query),

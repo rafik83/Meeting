@@ -9,12 +9,20 @@ Proximum\Vimeet\Domain\Model\Happening\Question:
     fields:
         content:
             type: string
+            length: 300
         createdAt:
             type: datetime
         askedDuringWebinar:
             type: boolean
             options:
                 default: false
+        replyContent:
+            type: string
+            length: 300
+            nullable: true
+        repliedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening
@@ -29,3 +37,8 @@ Proximum\Vimeet\Domain\Model\Happening\Question:
             targetEntity: Proximum\Vimeet\Domain\Model\User
             joinColumn:
                 onDelete: CASCADE
+        repliedBy:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+                nullable: true

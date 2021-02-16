@@ -22,7 +22,7 @@
         {% if event is defined %}
             {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Event\\ExtraHeaderAction', {'event': event})) }}
         {% endif %}
-        {% if sheet is defined %}
+        {% if sheet is defined and sheet is not null %}
             {{ networking_template_snippet.generate(sheet, app.user) | raw }}
         {% endif %}
     </head>
@@ -56,12 +56,11 @@
             {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
         {% endif %}
 
-        {% if sheet is defined %}
+        {% if sheet is defined and sheet is not null %}
             {# notification toast #}
-            <div id="notification-toast"
-                class="hide"
-                data-notification-toast
-                data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}"
+            <div class="notification-toast-template notification-toast hide"
+                 data-notification-toast
+                 data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}"
             >
                 <button class="close">&times;</button>
                 <p><em class="message-author"></em></p>
@@ -69,6 +68,11 @@
                 <p>
                     <a class="message-link btn btn-sm btn-primary" href="#">{{ 'networking.chat.notification.open'|trans }}</a>
                 </p>
+            </div>
+
+            <div class="notification-toast-container hide"
+                 data-notification-toast-container
+            >
             </div>
 
             <div class="modal fade notificationCallVisio hide" id="notificationCallVisio" data-notification-call-visio tabindex="-1" role="dialog" data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}">

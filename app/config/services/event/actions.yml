@@ -157,6 +157,30 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\BeginReplyHappeningQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\ReplyHappeningQuestionAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\RecordAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -178,6 +202,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\MuteAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
@@ -210,10 +240,10 @@ services:
     #
     # Meeting
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\UpdateMeetingAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@form.factory'
             - '@templating.engine.twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -344,6 +374,12 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler'
+            - '@uri_signer'
+
     #
     # Program
     #
@@ -353,6 +389,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
             - '@templating.engine.twig'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
     #
     # Badge

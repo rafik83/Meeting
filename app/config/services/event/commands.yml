@@ -66,6 +66,35 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion }
 
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestion }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\BeginReplyHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\BeginReplyHappeningQuestion }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\ReplyHappeningQuestionHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\ReplyHappeningQuestion }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestionReplyHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\DeleteHappeningQuestionReply }
+
     Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
@@ -366,3 +395,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\MuteCommandHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\MuteCommand }

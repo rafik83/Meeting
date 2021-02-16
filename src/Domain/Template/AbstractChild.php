@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Template;
 
 abstract class AbstractChild
@@ -29,6 +21,7 @@ abstract class AbstractChild
     public const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
     public const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
     public const TEMPLATE_OBJECT_TYPE_VIDEO         = 'video';
+    public const TEMPLATE_OBJECT_TYPE_CHECKBOX      = 'checkbox';
 
     /**
      * @var string

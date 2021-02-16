@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -90,7 +82,7 @@ class CheckInAction
             );
 
             return new RedirectResponse(
-                $this->urlGenerator->generate('event', ['_locale' => $userDomain->getUser()->getLocale()])
+                $this->urlGenerator->generate('event', ['_locale' => $participant->getLocale()])
             );
         }
 

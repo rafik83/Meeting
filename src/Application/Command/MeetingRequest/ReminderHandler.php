@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
@@ -149,7 +141,7 @@ class ReminderHandler
                         $this->SMSFactory->createPendingProposition(
                             $userEventPhone->getPhone(),
                             $sheet,
-                            $currentEvent->getAvailableLocale($user->getLocale()),
+                            $participant->getLocale(),
                             $countAvailablePendingProposition
                         )
                     );

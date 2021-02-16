@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AgendaController extends Controller
 {
@@ -139,7 +140,11 @@ class AgendaController extends Controller
 
         $myParticipant = $sheet->getUserParticipant($user);
 
-
+        $icalUrl = $this->generateUrl(
+            'event_agenda_participant_ical',
+            ['sheet' => $sheet->getId(), 'participant' => $myParticipant->getId(), 'slug' => $sheet->getEvent()->getTitle()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         return $this->render(
             '@Event/Agenda/participant_agenda.html.twig',
@@ -155,6 +160,7 @@ class AgendaController extends Controller
                 'participant' => $participant,
                 'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
                 'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
+                'icalUrl' => $this->get('uri_signer')->sign($icalUrl),
             ]
         );
     }

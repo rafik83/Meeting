@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -63,19 +55,17 @@ interface MeetingSlotRepositoryInterface
     public function countByEvent(Event $event);
 
     /**
-     * @param Event         $event
      * @param Participant[] $participants
-     * @param bool          $ignoreMeetings
-     * @param Meeting       $exceptedMeeting
      *
      * @return MeetingSlot[]
      */
     public function findAvailableSlotsByParticipants(
         Event $event,
         array $participants,
-        $ignoreMeetings = false,
-        Meeting $exceptedMeeting = null
-    );
+        bool $ignoreMeetings = false,
+        Meeting $exceptedMeeting = null,
+        bool $excludePastSlots = false
+    ): array;
 
     /**
      * @param Event $event

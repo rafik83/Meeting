@@ -21,6 +21,7 @@ class Update extends AbstractHappeningCommand
         $this->liveUrl = $happening->getLiveUrl();
         $this->sidebarAllowed = $happening->isSidebarAllowed();
         $this->webinarRecorded = $happening->isWebinarRecorded();
+        $this->webinarRecordSentToSpeakers = $happening->isWebinarRecordSentToSpeakers();
         $this->allowHls = $happening->allowWebinarOnHLS();
 
         if ($happening->isWebinar()) {

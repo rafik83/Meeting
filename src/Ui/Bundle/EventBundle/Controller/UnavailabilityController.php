@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
@@ -112,6 +104,7 @@ class UnavailabilityController extends Controller
         return $this->render('EventBundle:Unavailability:create.html.twig', [
             'event' => $event,
             'participant' => $participant,
+            'myParticipant' => $sheet->getUserParticipant($user),
             'agenda' => $agenda,
             'sheet' => $sheet,
             'form_unavailability' => $createFormView->formView,

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Type;
 
 use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
@@ -73,7 +65,7 @@ class TypeViewQueryHandler
                 (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
                 null !== $type->getPaymentConditions(),
                 isset($contentIndexedByTypeId[$type->getId()]),
-                $type->canMoveMeeting(),
+                $type->canUpdateMeeting(),
                 $type->canRemoveMeeting()
             );
         }

@@ -4,21 +4,100 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.81.0] - 2021-02-16
+### Added
+- VIMEET-2361 - Add link to prefill user mail on registration
+
+### Removed
+- VIMEET-1811 - Remove can_move_meeting column from db
+
+## [2.80.0] - 2021-02-15
+### Added
+- VIMEET-2189 - Mute speakers
+- VIMEET-2386 - Add company name to api conference call
+
+## [2.79.1] - 2021-02-05
+### Fixed
+- Redis query cache namespace
+
+## [2.79.0] - 2021-02-04
+### Added
+- VIMEET-1811 - Participants can edit participants list and date of a meeting
+- VIMEET-2319 - Send webinar record to speakers
+- VIMEET-2323 - Link target blank
+- VIMEET-2296 - Add participant locale in participants export
+- VIMEET-2295 - Can import participant's locale
+
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
+
+## [2.78.3] - 2021-02-03
+### Fixed
+- MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
+
+## [2.78.2] - 2021-02-03
+### Updated
+- MV-306 - Add log when exception is thrown when saving availabilities
+
+## [2.78.1] - 2021-01-21
+### Fixed
+- MV-300 - Can't close chat during visio meeting (BC break with chat lib update)
+
+## [2.78.0] - 2021-01-20
+### Fixed
+- MV-295 - Badge preview from back-office
+
+### Added
+- VIMEET-2305 - participant agenda available by an ical file (only for admins)
+- VIMEET-2306 - Add checkbox object for registration template
+- VIMEET-2307 - Better visibility text
+- VIMEET-2304 - Picto edit
+
+### Updated
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+- VIMEET-2293 - Don't ask participant's locale for one-locale events
+
+## [2.77.0] - 2021-01-18
+### Added
+- VIMEET-2293 - Set participant's locale by event
+
+## [2.76.0] - 2021-01-12
+### Updated
+- VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
+
+### Added
+- VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
+- VIMEET-2191 - Reply to webinar question
+- VIMEET-1811 - User can change participants to meeting
+
+### Fixed
+- MV-293 - Https links in emails
+
+## [2.75.0] - 2020-12-24
 ### Updated
 - Update Elasticsearch to 6.8.13
 - Upgrade NODE version 14.x (LTS)
 
 ### Fixed
-- MV289 - Error management chat
+- MV-289 - Error management chat
+- MV-291 - Exception simultaneous openings meetings
 
 ### Added
+- VIMEET-2284 - Delete webinar question
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
+- VIMEET-2278 - Participant's program displayed according his timezone
+- VIMEET-2253 - Increment unread message counters synchronously
+- VIMEET-2275 - Close notification private chat
+- VIMEET-2284 - Delete question webinar
 - Add health check route
+
+### Fixed
+- MV289 - Error management chat
 
 ## [2.74.1] - 2020-12-14
 ### Fixed
-MV-292 - Restrict sendgrid http client to version 3.7
+- MV-292 - Restrict sendgrid http client to version 3.7
 
 ## [2.74.0] - 2020-12-12
 ### Updated
@@ -29,19 +108,22 @@ MV-292 - Restrict sendgrid http client to version 3.7
 - fix overlay problem with opentok
 - MV-284 - Fix race conditions on sessionId creation for call visio
 - MV-284 - Generate tokbox token on each meeting start
-- MV290 - Internet Explorer doesn't support forEach method on NodeList
+- MV-290 - Internet Explorer doesn't support forEach method on NodeList
 
 ### Updated
 - VIMEET-2121 - Improve visio settings UI, fix css for video-helper container
 
 ## [2.72.2] - 2020-12-07
 ### Fixed
-- MV285 - Custom button display on mobile
+- MV-285 - Custom button display on mobile
 
 ### Added
 - VIMEET-2252 - Reactivate account
 - VIMEET-2285 - Delete message chat webinar
 - VIMEET-2249 - Notification page redirection
+
+### Added
+- VIMEET-2261 - Add pending request counter
 
 ## [2.72.1] - 2020-12-02
 ### Fixed

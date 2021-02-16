@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Happening;
 
 class ProgramView
@@ -27,12 +19,27 @@ class ProgramView
      */
     public $categoryPicto;
 
+    /** @var bool */
+    public $displayTimeZone;
+
+    /** @var string */
+    public $translatedTimeZone;
+
+    /** @var string */
+    public $timeZone;
+
     /**
-     * @param array $days
-     * @param string|null categoryTitle
+     * @param bool        $displayTimeZone
+     * @param string      $translatedTimeZone
+     * @param string      $timeZone
+     * @param DayView[]   $days
+     * @param string|null $categoryTitle
      * @param string|null $categoryPicto
      */
     public function __construct(
+        bool $displayTimeZone,
+        string $translatedTimeZone,
+        string $timeZone,
         array $days = [],
         $categoryTitle = null,
         $categoryPicto = null
@@ -40,6 +47,9 @@ class ProgramView
         $this->days          = $days;
         $this->categoryTitle = $categoryTitle;
         $this->categoryPicto = $categoryPicto;
+        $this->displayTimeZone = $displayTimeZone;
+        $this->translatedTimeZone = $translatedTimeZone;
+        $this->timeZone = $timeZone;
     }
 
     /**
