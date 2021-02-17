@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting;
 use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsException;
@@ -12,22 +14,31 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\View\Normalizer\EventMeetingsNormalizerView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class MeetingController extends Controller
+class MeetingController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return Response
-     */
-    public function detailsAction(Request $request, Event $event, Meeting $meeting)
+    private SerializerInterface $serializer;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SerializerInterface $serializer,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->serializer = $serializer;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function detailsAction(Request $request, Event $event, Meeting $meeting): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -37,7 +48,7 @@ class MeetingController extends Controller
             );
         }
 
-        $meetingView = $this->get('tactician.commandbus.query')->handle(
+        $meetingView = $this->queryBus->handle(
             new MeetingViewQuery($meeting, $event->getAvailableLocale($request->getLocale()))
         );
 
@@ -47,13 +58,7 @@ class MeetingController extends Controller
         ]);
     }
 
-    /**
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return RedirectResponse
-     */
-    public function deleteMeetingAction(Event $event, Meeting $meeting)
+    public function deleteMeetingAction(Event $event, Meeting $meeting): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -63,7 +68,7 @@ class MeetingController extends Controller
             );
         }
 
-        $this->get('tactician.commandbus')->handle(new DeleteMeeting($meeting));
+        $this->commandBus->handle(new DeleteMeeting($meeting));
 
         return $this->redirectToRoute('admin_meeting_list', ['event' => $event->getId()]);
     }
@@ -84,7 +89,7 @@ class MeetingController extends Controller
         }
 
         try {
-            $this->get('tactician.commandbus')->handle(new DeleteAll($event, $adminDomain->getAdmin()));
+            $this->commandBus->handle(new DeleteAll($event, $adminDomain->getAdmin()));
         } catch (NotAllowedToDeleteAllMeetingsException $exception) {
             $this->addFlash('error', 'flash.admin.meeting.notAllowedToDeleteAllMeetingsException');
         }
@@ -92,13 +97,7 @@ class MeetingController extends Controller
         return $this->redirectToRoute('admin_meeting_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function exportAction(Request $request, Event $event)
+    public function exportAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -106,8 +105,7 @@ class MeetingController extends Controller
         $charset        = Charset::WINDOWS_1252;
         $normaliserView = new EventMeetingsNormalizerView($event);
 
-        $serializer    = $this->get('serializer');
-        $exportContent = $serializer->serialize($normaliserView, 'csv', [
+        $exportContent = $this->serializer->serialize($normaliserView, 'csv', [
             'locale'        => $event->getAvailableLocale($request->getLocale()),
             'charset'       => $charset,
             'csv_delimiter' => ';',

@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Create as CreateCategory;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Update as UpdateCategory;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create as CreateMass;
@@ -11,30 +12,41 @@ use Proximum\Vimeet\Application\Command\Unavailability\Mass\Update as UpdateMass
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Repository\Unavailability\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\CreateType as CreateCategoryType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Category\UpdateType as UpdateCategoryType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass\CreateType as CreateMassType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\Mass\UpdateType as UpdateMassType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnavailabilityController extends Controller
+class UnavailabilityController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function massListAction(Request $request, Event $event)
+    private MassRepositoryInterface $massUnavailabilityRepository;
+    private CategoryRepositoryInterface $unavailabilityCategoryRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        MassRepositoryInterface $massUnavailabilityRepository,
+        CategoryRepositoryInterface $unavailabilityCategoryRepository,
+        CommandBusInterface $commandBus
+    ) {
+        $this->massUnavailabilityRepository = $massUnavailabilityRepository;
+        $this->unavailabilityCategoryRepository = $unavailabilityCategoryRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function massListAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $massList = $this->get('repository.unavailability.mass_repository')->findByEvent(
+        $massList = $this->massUnavailabilityRepository->findByEvent(
             $event,
             $event->getAvailableLocale($request->getLocale())
         );
@@ -45,18 +57,13 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return RedirectResponse
-     */
-    public function dispatchAction(Event $event)
+    public function dispatchAction(Event $event): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         try {
-            $this->get('tactician.commandbus')->handle(new Dispatcher($event));
+            $this->commandBus->handle(new Dispatcher($event));
             $this->addFlash('success', 'flash.admin.unavailability.mass.dispatch.success');
         } catch (UnableToDispatchException $exception) {
             $this->addFlash('error', $exception->indication);
@@ -85,7 +92,7 @@ class UnavailabilityController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.admin.unavailability.mass.create.success');
 
             return $this->redirectToRoute('admin_unavailability_mass_list', [
@@ -116,7 +123,7 @@ class UnavailabilityController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
             $this->addFlash('success', 'flash.admin.unavailability.mass.update.success');
 
             return $this->redirectToRoute('admin_unavailability_mass_list', [
@@ -130,32 +137,21 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     * @param Mass  $mass
-     *
-     * @return RedirectResponse
-     */
-    public function deleteMassAction(Event $event, Mass $mass)
+    public function deleteMassAction(Event $event, Mass $mass): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $this->get('tactician.commandbus')->handle(new Delete($mass));
+        $this->commandBus->handle(new Delete($mass));
         $this->addFlash('success', 'flash.admin.unavailability.mass.delete.success');
 
         return $this->redirectToRoute('admin_unavailability_mass_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function categoryListAction(Event $event)
+    public function categoryListAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $categories = $this->get('repository.unavailability.category_repository')->findByEvent($event);
+        $categories = $this->unavailabilityCategoryRepository->findByEvent($event);
 
         return $this->render('AdminBundle:Unavailability/Category:list.html.twig', [
             'event'      => $event,
@@ -163,13 +159,7 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response|RedirectResponse
-     */
-    public function createCategoryAction(Request $request, Event $event)
+    public function createCategoryAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -179,7 +169,7 @@ class UnavailabilityController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.admin.unavailability.category.create.success');
 
             return $this->redirectToRoute('admin_unavailability_category_list', [
@@ -193,14 +183,7 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param Request  $request
-     * @param Event    $event
-     * @param Category $category
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateCategoryAction(Request $request, Event $event, Category $category)
+    public function updateCategoryAction(Request $request, Event $event, Category $category): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -214,7 +197,7 @@ class UnavailabilityController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
             $this->addFlash('success', 'flash.admin.unavailability.category.update.success');
 
             return $this->redirectToRoute('admin_unavailability_category_list', [

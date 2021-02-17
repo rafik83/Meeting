@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdate;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -9,7 +10,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\View\Meeting\AdminShowDetailsView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
@@ -18,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,23 +28,26 @@ class MeetingRequestController extends AbstractController
     private FilterSummary $filterSummary;
     private RequestRepositoryInterface $meetingRequestRepository;
     private MessageRepositoryInterface $meetingMessageRepository;
-    private MeetingSlotRepositoryInterface $meetingSlotRepository;
+    private ParticipantInfoGuesser $participantInfoGuesser;
     private SheetInfoGuesser $sheetInfoGuesser;
+    private CommandBusInterface $commandBus;
 
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterSummary $filterSummary,
         RequestRepositoryInterface $meetingRequestRepository,
         MessageRepositoryInterface $meetingMessageRepository,
-        MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SheetInfoGuesser $sheetInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        SheetInfoGuesser $sheetInfoGuesser,
+        CommandBusInterface $commandBus
     ) {
         $this->formFactory = $formFactory;
         $this->filterSummary = $filterSummary;
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->meetingMessageRepository = $meetingMessageRepository;
-        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->participantInfoGuesser = $participantInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->commandBus = $commandBus;
     }
 
     private function createFilterForm(string $type, array $data, array $options = []): FormInterface
@@ -52,13 +55,7 @@ class MeetingRequestController extends AbstractController
         return $this->formFactory->createNamed('', $type, $data, $options);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -92,14 +89,7 @@ class MeetingRequestController extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return Response
-     */
-    public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
+    public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest): Response
     {
         $locale = $event->getAvailableLocale($request->getLocale());
 
@@ -113,14 +103,14 @@ class MeetingRequestController extends AbstractController
             $this->sheetInfoGuesser->guessSheetTitle($meetingRequest->getToSheet(), $locale),
             array_map(
                 function (Participant $participant) use ($locale) {
-                    return $this->get('template.participant_info_guesser')
+                    return $this->participantInfoGuesser
                         ->guessParticipantCompleteName($participant, $locale);
                 },
                 $meetingRequest->getFromParticipants()->toArray()
             ),
             array_map(
                 function (Participant $participant) use ($locale) {
-                    return $this->get('template.participant_info_guesser')
+                    return $this->participantInfoGuesser
                         ->guessParticipantCompleteName($participant, $locale);
                 },
                 $meetingRequest->getToParticipants()->toArray()
@@ -146,13 +136,7 @@ class MeetingRequestController extends AbstractController
         return new JsonResponse([]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function lockMeetingRequestAction(Request $request, Event $event)
+    public function lockMeetingRequestAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -169,7 +153,7 @@ class MeetingRequestController extends AbstractController
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($lockMeetingRequest);
+            $this->commandBus->handle($lockMeetingRequest);
             $this->addFlash('success', 'flash.admin.meeting_request.lock.update.success');
 
             return $this->redirectToRoute('admin_meeting_request_lock_update', ['event' => $event->getId()]);

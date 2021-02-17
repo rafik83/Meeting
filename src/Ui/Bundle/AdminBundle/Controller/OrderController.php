@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode;
@@ -17,22 +19,39 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\UpdateRowType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\ApplyPromotionCodeType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OrderController extends Controller
+class OrderController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function listAction(Request $request, Event $event)
+    private FlashBagInterface $flashBag;
+    private TranslatorInterface $translator;
+    private FormFactoryInterface $formFactory;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator,
+        FormFactoryInterface $formFactory,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->flashBag = $flashBag;
+        $this->translator = $translator;
+        $this->formFactory = $formFactory;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -71,7 +90,7 @@ class OrderController extends Controller
             20,
             $locale
         );
-        $orders = $this->get('tactician.commandbus.query')->handle($query);
+        $orders = $this->queryBus->handle($query);
 
         return $this->render('AdminBundle:Order:list.html.twig', [
             'event'          => $event,
@@ -81,14 +100,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Order   $order
-     *
-     * @return Response
-     */
-    public function editAction(Request $request, Event $event, Order $order)
+    public function editAction(Request $request, Event $event, Order $order): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfOrderNotInEvent($event, $order);
@@ -99,7 +111,7 @@ class OrderController extends Controller
             ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
-        $summaryView = $this->get('tactician.commandbus.query')->handle(
+        $summaryView = $this->queryBus->handle(
             new SummaryQuery(
                 $order->getSheet(),
                 $order,
@@ -119,8 +131,8 @@ class OrderController extends Controller
 
         if ($promotionCodeChoiceForm->isSubmitted() && $promotionCodeChoiceForm->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($applyPromotionCode);
-                $this->get('session')->getFlashBag()->add('success', 'flash.admin.order.promotionCode.added');
+                $this->commandBus->handle($applyPromotionCode);
+                $this->flashBag->add('success', 'flash.admin.order.promotionCode.added');
 
                 return $this->redirectToRoute(
                     'admin_sheet_order_edit',
@@ -128,7 +140,7 @@ class OrderController extends Controller
                 );
             } catch (PromotionCodeException $exception) {
                 $promotionCodeChoiceForm->get('promotionCode')->addError(
-                    new FormError($this->get('translator')->trans($exception->getFlash(), [], 'flashes'))
+                    new FormError($this->translator->trans($exception->getFlash(), [], 'flashes'))
                 );
             }
         }
@@ -142,15 +154,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Order   $order
-     * @param string  $group
-     *
-     * @return RedirectResponse|Response
-     */
-    public function addRowToGroupAction(Request $request, Event $event, Order $order, $group)
+    public function addRowToGroupAction(Request $request, Event $event, Order $order, string $group): Response
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -164,7 +168,7 @@ class OrderController extends Controller
         $form   = $this->createForm(AddRowType::class, $addRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($addRow);
+            $this->commandBus->handle($addRow);
             $this->addFlash('success', 'flash.admin.order.add_row.success');
 
             return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -184,15 +188,7 @@ class OrderController extends Controller
         );
     }
 
-    /**
-     * @param Request   $request
-     * @param Event     $event
-     * @param Order     $order
-     * @param Order\Row $row
-     *
-     * @return RedirectResponse|Response
-     */
-    public function addRowToProductAction(Request $request, Event $event, Order $order, Order\Row $row)
+    public function addRowToProductAction(Request $request, Event $event, Order $order, Order\Row $row): Response
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -206,7 +202,7 @@ class OrderController extends Controller
         $form   = $this->createForm(AddRowType::class, $addRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($addRow);
+            $this->commandBus->handle($addRow);
             $this->addFlash('success', 'flash.admin.order.add_row.success');
 
             return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -228,15 +224,7 @@ class OrderController extends Controller
         );
     }
 
-    /**
-     * @param Request   $request
-     * @param Event     $event
-     * @param Order     $order
-     * @param Order\Row $row
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateRowAction(Request $request, Event $event, Order $order, Order\Row $row)
+    public function updateRowAction(Request $request, Event $event, Order $order, Order\Row $row): Response
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -249,7 +237,7 @@ class OrderController extends Controller
         $form      = $this->createForm(UpdateRowType::class, $updateRow);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($updateRow);
+            $this->commandBus->handle($updateRow);
             $this->addFlash('success', 'flash.admin.order.update_row.success');
 
             return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -269,19 +257,12 @@ class OrderController extends Controller
         );
     }
 
-    /**
-     * @param Event     $event
-     * @param Order     $order
-     * @param Order\Row $row
-     *
-     * @return RedirectResponse
-     */
-    public function removeRowAction(Event $event, Order $order, Order\Row $row)
+    public function removeRowAction(Event $event, Order $order, Order\Row $row): RedirectResponse
     {
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $this->get('tactician.commandbus')->handle(new RemoveRow($row));
+        $this->commandBus->handle(new RemoveRow($row));
         $this->addFlash('success', 'flash.admin.order.remove_row.success');
 
         return $this->redirectToRoute('admin_sheet_order_edit', [
@@ -290,27 +271,16 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     * @param Order $order
-     */
-    private function denyAccessIfOrderNotInEvent(Event $event, Order $order)
+    private function denyAccessIfOrderNotInEvent(Event $event, Order $order): void
     {
         if ($order->getSheet()->getEvent() !== $event) {
             throw $this->createAccessDeniedException();
         }
     }
 
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
+    private function createFilterForm(string $type, array $data, array $options = []): FormInterface
     {
-        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+        return $this->formFactory->createNamed('', $type, $data, array_merge($options, [
             'method'             => 'GET',
             'csrf_protection'    => false,
             'required'           => false,
@@ -318,10 +288,7 @@ class OrderController extends Controller
         ]));
     }
 
-    /**
-     * @param Order $order
-     */
-    private function denyAccessIfOrderIsInvoiced(Order $order)
+    private function denyAccessIfOrderIsInvoiced(Order $order): void
     {
         if (null !== $order->getInvoice()) {
             throw $this->createAccessDeniedException();

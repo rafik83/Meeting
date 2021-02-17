@@ -2,24 +2,30 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Schedule;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\Day\Update;
 use Proximum\Vimeet\Application\Exception\Slot\SlotOutOfDayException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DayController extends Controller
+class DayController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->commandBus = $commandBus;
+    }
+
     public function dayAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -32,7 +38,7 @@ class DayController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($update);
+                $this->commandBus->handle($update);
                 $this->addFlash('success', 'flash.schedule.days.success');
 
                 return $this->redirectToRoute('admin_schedule_slots', [
@@ -55,7 +61,7 @@ class DayController extends Controller
 
                 $form->get('days')->addError(
                     new FormError(
-                        $this->get('translator')->trans(
+                        $this->translator->trans(
                             'validators.event.day.slotOutOfDay',
                             [
                                 '%begin%' => $timeFormatter->format($exception->slot->getBegin()),

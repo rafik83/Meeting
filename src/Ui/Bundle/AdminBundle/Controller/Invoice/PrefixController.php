@@ -2,37 +2,42 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
+use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\InvoicePrefix\CreateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PrefixController extends Controller
+class PrefixController extends AbstractController
 {
-    /**
-     * @return Response
-     */
-    public function listAction()
+    private PrefixRepositoryInterface $invoicePrefixRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        PrefixRepositoryInterface $invoicePrefixRepository,
+        CommandBusInterface $commandBus
+    ) {
+        $this->invoicePrefixRepository = $invoicePrefixRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(): Response
     {
         return $this->render('AdminBundle:Invoice:list.html.twig', [
-            'list' => $this->get('repository.invoice.prefix_repository')->getAll(),
+            'list' => $this->invoicePrefixRepository->getAll(),
         ]);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         $create = new Create();
 
         $form = $this->createForm(CreateType::class, $create);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.admin.invoice.create.success');
 
             return $this->redirectToRoute('admin_invoice_globals_list');

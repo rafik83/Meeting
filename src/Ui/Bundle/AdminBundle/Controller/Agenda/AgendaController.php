@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
@@ -10,19 +11,22 @@ use Proximum\Vimeet\Application\View\Spot\Agenda\ListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AgendaController extends Controller
+class AgendaController extends AbstractController
 {
-    /**
-     * @param Event $event
-     *
-     * @return Response|JsonResponse
-     */
-    public function indexAction(Event $event)
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        QueryBusInterface $queryBus
+    ) {
+        $this->queryBus = $queryBus;
+    }
+
+    public function indexAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -32,31 +36,18 @@ class AgendaController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return JsonResponse
-     */
-    public function sheetsListAction(Request $request, Event $event)
+    public function sheetsListAction(Request $request, Event $event): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheets = $this->get('tactician.commandbus.query')->handle(
+        $sheets = $this->queryBus->handle(
             new SheetListViewQuery($event, $event->getAvailableLocale($request->getLocale()), false)
         );
 
         return new JsonResponse($sheets);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return JsonResponse
-     */
-    public function sheetAction(Request $request, Event $event, Sheet $sheet)
+    public function sheetAction(Request $request, Event $event, Sheet $sheet): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -64,42 +55,30 @@ class AgendaController extends Controller
             return new JsonResponse('Sheet are not on this event', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $agendaSheetView = $this->get('tactician.commandbus.query')->handle(
+        $agendaSheetView = $this->queryBus->handle(
             new AgendaSheetViewQuery($sheet, $event->getAvailableLocale($request->getLocale()))
         );
 
         return new JsonResponse($agendaSheetView);
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return JsonResponse
-     */
-    public function spotsListAction(Event $event)
+    public function spotsListAction(Event $event): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         /** @var ListView $spots */
-        $listView = $this->get('tactician.commandbus.query')->handle(
+        $listView = $this->queryBus->handle(
             new ListViewQuery($event)
         );
 
         return new JsonResponse($listView->spotViews);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Spot    $spot
-     *
-     * @return JsonResponse
-     */
-    public function spotDetailAction(Request $request, Event $event, Spot $spot)
+    public function spotDetailAction(Request $request, Event $event, Spot $spot): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
+        $agendaSpotView = $this->queryBus->handle(
             new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))
         );
 

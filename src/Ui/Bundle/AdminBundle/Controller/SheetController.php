@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
@@ -31,6 +33,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,6 +48,10 @@ class SheetController extends AbstractController
     private SheetFilter $sheetFilter;
     private FilterSummary $filterSummary;
     private RuleStorageInterface $ruleStorageInterface;
+    private SheetRepositoryInterface $sheetRepository;
+    private SheetFilterSubmittedDataGetter $sheetFilterSubmittedDataGetter;
+    private FormFactoryInterface $formFactory;
+    private TranslatorInterface $translator;
     private QueryBusInterface $queryBus;
     private CommandBusInterface $commandBus;
 
@@ -52,12 +59,20 @@ class SheetController extends AbstractController
         SheetFilter $sheetFilter,
         FilterSummary $filterSummary,
         RuleStorageInterface $ruleStorageInterface,
+        SheetRepositoryInterface $sheetRepository,
+        SheetFilterSubmittedDataGetter $sheetFilterSubmittedDataGetter,
+        FormFactoryInterface $formFactory,
+        TranslatorInterface $translator,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
     ) {
         $this->sheetFilter = $sheetFilter;
         $this->filterSummary = $filterSummary;
         $this->ruleStorageInterface = $ruleStorageInterface;
+        $this->sheetRepository = $sheetRepository;
+        $this->sheetFilterSubmittedDataGetter = $sheetFilterSubmittedDataGetter;
+        $this->formFactory = $formFactory;
+        $this->translator = $translator;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
     }
@@ -186,20 +201,13 @@ class SheetController extends AbstractController
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param AdminDomain $adminDomain
-     * @param Event       $event
-     *
-     * @return RedirectResponse
-     */
-    public function batchAction(Request $request, AdminDomain $adminDomain, Event $event)
+    public function batchAction(Request $request, AdminDomain $adminDomain, Event $event): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $admin = $adminDomain->getAdmin();
 
-        $filters = $this->get(SheetFilterSubmittedDataGetter::class)->handle(
+        $filters = $this->sheetFilterSubmittedDataGetter->handle(
             $event,
             $admin,
             $request->getLocale()
@@ -220,7 +228,7 @@ class SheetController extends AbstractController
         ));
 
         $batchForm = $this->createForm(BatchType::class, $batch, [
-            'ids' => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
+            'ids' => $this->sheetRepository->getIdsByEvent($event),
             'event' => $event,
             'types' => $types,
             'locale' => $event->getAvailableLocale($request->getLocale()),
@@ -289,16 +297,9 @@ class SheetController extends AbstractController
         return $this->redirectToRoute('admin_sheet', ['event' => $event->getId(), 'page' => $selectedSheetsPage]);
     }
 
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
+    private function createFilterForm(string $type, array $data, array $options = []): FormInterface
     {
-        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+        return $this->formFactory->createNamed('', $type, $data, array_merge($options, [
             'method' => 'GET',
             'csrf_protection' => false,
             'required' => false,
@@ -306,14 +307,7 @@ class SheetController extends AbstractController
         ]));
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return JsonResponse
-     */
-    public function assignSpotAction(Request $request, Event $event, Sheet $sheet)
+    public function assignSpotAction(Request $request, Event $event, Sheet $sheet): JsonResponse
     {
         $this->checkAccess($event);
 
@@ -325,21 +319,21 @@ class SheetController extends AbstractController
             $result = $this->commandBus->handle($command);
         } catch (SpotNotFoundException $exception) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound'),
+                'error' => $this->translator->trans('admin.sheet.assign.spot.notFound'),
             ], 404);
         } catch (SpotNotActiveException $exception) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.notActive'),
+                'error' => $this->translator->trans('admin.sheet.assign.spot.notActive'),
             ], 404);
         } catch (\Exception $exception) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.assign.spot.exception'),
+                'error' => $this->translator->trans('admin.sheet.assign.spot.exception'),
             ], 500);
         }
 
         if ($result->hasInfo()) {
             $infos = [
-                'info' => $this->get('translator')->trans(
+                'info' => $this->translator->trans(
                     'admin.sheet.assign.spot.numberOfSheet', ['%count%' => $result->getSheetNumber()]
                 ),
             ];
@@ -354,14 +348,7 @@ class SheetController extends AbstractController
         );
     }
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param Participant $participant
-     *
-     * @return JsonResponse
-     */
-    public function updateVisioAction(Request $request, Event $event, Participant $participant)
+    public function updateVisioAction(Request $request, Event $event, Participant $participant): JsonResponse
     {
         $this->checkAccess($event);
 
@@ -373,7 +360,7 @@ class SheetController extends AbstractController
 
         if ('true' !== $visioParam && 'false' !== $visioParam) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters'),
+                'error' => $this->translator->trans('admin.sheet.participant.invalid-parameters'),
             ], 404);
         }
 
@@ -381,16 +368,16 @@ class SheetController extends AbstractController
 
         if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.participant.not_found'),
+                'error' => $this->translator->trans('admin.sheet.participant.not_found'),
             ], 404);
         }
 
         $command = new UpdateVisio($participant, $isVisio);
 
-        $this->get('tactician.commandbus')->handle($command);
+        $this->commandBus->handle($command);
 
         return new JsonResponse([
-            'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success'),
+            'message' => $this->translator->trans('admin.sheet.participant_visio.success'),
         ], 200);
     }
 
@@ -419,13 +406,7 @@ class SheetController extends AbstractController
         return $typesByEvent;
     }
 
-    /**
-     * @param FormInterface $filterFullForm
-     * @param array         $filters
-     *
-     * @return array
-     */
-    private function getEnabledFilters(FormInterface $filterFullForm, array $filters)
+    private function getEnabledFilters(FormInterface $filterFullForm, array $filters): array
     {
         $enabledFilters = array_map(function (FormInterface $child) {
             return $child->getName();
@@ -440,9 +421,6 @@ class SheetController extends AbstractController
         return $filters;
     }
 
-    /**
-     * @param Event $event
-     */
     private function checkAccess(Event $event): void
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -451,12 +429,8 @@ class SheetController extends AbstractController
 
     /**
      * Check if request contains Sheet filters. Exclude page query parameter
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function isRequestContainFilters(Request $request)
+    private function isRequestContainFilters(Request $request): bool
     {
         if (empty($request->query->all())) {
             return false;

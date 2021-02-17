@@ -2,75 +2,77 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventTemplateController extends Controller
+class EventTemplateController extends AbstractController
 {
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function registrationTemplateAction(Event $event)
+    private RegistrationTemplateRepositoryInterface $registrationTemplateRepository;
+    private SheetTemplateRepositoryInterface $sheetTemplateRepository;
+    private PackageRepositoryInterface $packageRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
+        SheetTemplateRepositoryInterface $sheetTemplateRepository,
+        PackageRepositoryInterface $packageRepository,
+        CommandBusInterface $commandBus
+    ) {
+        $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->sheetTemplateRepository = $sheetTemplateRepository;
+        $this->packageRepository = $packageRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function registrationTemplateAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $templates = $this->get('repository.template.registration_template_repository')
-                          ->getTemplateForGivenEvent($event);
+        $templates = $this->registrationTemplateRepository->getTemplateForGivenEvent($event);
 
         return $this->render('AdminBundle:EventTemplate:registrationTemplate.html.twig', [
             'templates' => $templates,
-            'event'     => $event,
+            'event' => $event,
         ]);
     }
 
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function sheetTemplateAction(Event $event)
+    public function sheetTemplateAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $templates = $this->get('repository.template.sheet_template_repository')
+        $templates = $this->sheetTemplateRepository
             ->getTemplateForGivenEvent($event);
 
         return $this->render('AdminBundle:EventTemplate:sheetTemplate.html.twig', [
-            'templates'     => $templates,
-            'event'         => $event,
+            'templates' => $templates,
+            'event' => $event,
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param AdminDomain $adminDomain
-     *
-     * @return Response|RedirectResponse
-     */
     public function packageTemplateAction(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $templates = $this->get('repository.package_repository')->findByEvent($event);
+        $templates = $this->packageRepository->findByEvent($event);
 
         $create = new Create($event);
-        $form   = $this->createForm(CreateType::class, $create, [
+        $form = $this->createForm(CreateType::class, $create, [
             'selectEvent' => false,
-            'submit'      => true,
-            'user'        => $adminDomain->getAdmin(),
+            'submit' => true,
+            'user' => $adminDomain->getAdmin(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
 
             return $this->redirectToRoute('admin_event_template_package', [
                 'event' => $event->getId(),
@@ -78,9 +80,9 @@ class EventTemplateController extends Controller
         }
 
         return $this->render('AdminBundle:EventTemplate:packageTemplate.html.twig', [
-            'form'      => $form->createView(),
+            'form' => $form->createView(),
             'templates' => $templates,
-            'event'     => $event,
+            'event' => $event,
         ]);
     }
 }

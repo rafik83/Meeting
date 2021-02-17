@@ -2,23 +2,30 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExportController extends Controller
+class ExportController extends AbstractController
 {
-    /**
-     * @param AdminDomain $adminDomain
-     * @param Request     $request
-     *
-     * @return Response
-     */
+    private SerializerAdapterInterface $serializer;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SerializerAdapterInterface $serializer,
+        CommandBusInterface $commandBus
+    ) {
+        $this->serializer = $serializer;
+        $this->commandBus = $commandBus;
+    }
+
     public function exportAction(AdminDomain $adminDomain, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -28,9 +35,9 @@ class ExportController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
-                $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
+                $invoicesNormaliserView = $this->commandBus->handle($export);
 
-                $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
+                $exportContent = $this->serializer->serialize($invoicesNormaliserView, 'csv', [
                     'locale'        => $request->getLocale(),
                     'charset'       => Charset::WINDOWS_1252,
                     'csv_delimiter' => ';',

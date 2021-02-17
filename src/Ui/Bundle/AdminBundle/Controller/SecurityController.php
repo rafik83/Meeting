@@ -3,46 +3,50 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager;
 use Proximum\Vimeet\Infrastructure\Repository\AdminRepository;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     private \DateTimeInterface $dateTime;
     private AdminRepository $adminRepository;
     private AuthenticationManager $authenticationManager;
+    private AuthenticationUtils $authenticationUtils;
+    private TranslatorInterface $translator;
 
-    public function __construct(DateTimeInterface $dateTime, AdminRepositoryInterface $adminRepository, AuthenticationManager $authenticationManager)
-    {
+    public function __construct(
+        DateTimeInterface $dateTime,
+        AdminRepositoryInterface $adminRepository,
+        AuthenticationManager $authenticationManager,
+        AuthenticationUtils $authenticationUtils,
+        TranslatorInterface $translator
+    ) {
         $this->dateTime = $dateTime;
         $this->adminRepository = $adminRepository;
         $this->authenticationManager = $authenticationManager;
+        $this->authenticationUtils = $authenticationUtils;
+        $this->translator = $translator;
     }
 
-    /**
-     * @return RedirectResponse|Response
-     */
-    public function loginAction()
+    public function loginAction(bool $isDebugMode): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('admin_event_list');
         }
 
-        /** @var AuthenticationUtils */
-        $authenticationUtils = $this->get('security.authentication_utils');
+        $error = $this->authenticationUtils->getLastAuthenticationError();
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        $admin = ['username' => $authenticationUtils->getLastUsername()];
+        $admin = ['username' => $this->authenticationUtils->getLastUsername()];
 
         $form = $this->createForm(LoginType::class, $admin, [
             'action' => $this->generateUrl('admin_login_check'),
@@ -50,7 +54,7 @@ class SecurityController extends Controller
 
         $now = $this->dateTime;
 
-        $email = $authenticationUtils->getLastUsername();
+        $email = $this->authenticationUtils->getLastUsername();
         if ($email !== null) {
             $admin = $this->adminRepository->findByEmail($email);
         } else {
@@ -70,7 +74,7 @@ class SecurityController extends Controller
 
             $form->get('password')->addError(
                 new FormError(
-                    $this->get('translator')->transChoice(
+                    $this->translator->transChoice(
                         'authentication.remaining_attempt',
                         $remainingAuthenticationAttempt,
                         ['%remainingAttempt%' => $remainingAuthenticationAttempt]
@@ -79,9 +83,7 @@ class SecurityController extends Controller
             );
         }
 
-        $admins = 'dev' === $this->get('kernel')->getEnvironment() ?
-            $this->adminRepository->all() :
-            [];
+        $admins = $isDebugMode ? $this->adminRepository->all() : [];
 
         return $this->render('AdminBundle:Security:login.html.twig', [
             'error' => $error,

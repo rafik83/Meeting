@@ -2,69 +2,100 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
-use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\InvalidParticipantException;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSlotAvailableException;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\NoSpotAvailableException;
 use Proximum\Vimeet\Application\Exception\Slot\LockedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOnMeetingException;
 use Proximum\Vimeet\Application\Exception\Unavailability\MassAssignmentOutOfMassSlotException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MeetingController extends Controller
+class MeetingController extends AbstractController
 {
-    /**
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return JsonResponse
-     */
-    public function updateSpotAction(Event $event, Meeting $meeting)
+    private VisioGuesser $meetingVisioGuesser;
+    private MeetingUpdateSpotViewQueryHandler $meetingUpdateSpotViewQueryHandler;
+    private SpotRepositoryInterface $spotRepository;
+    private MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler;
+    private MeetingSlotRepositoryInterface $meetingSlotRepository;
+    private RequestRepositoryInterface $meetingRequestRepository;
+    private RequestSlotViewQueryHandler $requestSlotViewQueryHandler;
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        VisioGuesser $meetingVisioGuesser,
+        MeetingUpdateSpotViewQueryHandler $meetingUpdateSpotViewQueryHandler,
+        SpotRepositoryInterface $spotRepository,
+        MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        RequestRepositoryInterface $meetingRequestRepository,
+        RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->meetingVisioGuesser = $meetingVisioGuesser;
+        $this->meetingUpdateSpotViewQueryHandler = $meetingUpdateSpotViewQueryHandler;
+        $this->spotRepository = $spotRepository;
+        $this->meetingUpdateSlotViewQueryHandler = $meetingUpdateSlotViewQueryHandler;
+        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function updateSpotAction(Event $event, Meeting $meeting): JsonResponse
     {
         $this->checkAccess($event, $meeting);
 
-        $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
+        $isVisio = $this->meetingVisioGuesser->hasMeetingParticipantVisio($meeting);
 
-        $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
+        $meetingUpdateSpotView = $this->meetingUpdateSpotViewQueryHandler->handle(
             new MeetingUpdateSpotViewQuery($meeting, $isVisio)
         );
 
         return new JsonResponse($meetingUpdateSpotView);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return JsonResponse
-     */
-    public function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting)
+    public function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting): JsonResponse
     {
         $this->checkAccess($event, $meeting);
 
@@ -74,8 +105,8 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');
         }
 
-        $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
-        $spot = $this->get('vimeet_infrastructure.repository.spot_repository')->find(
+        $isVisio = $this->meetingVisioGuesser->hasMeetingParticipantVisio($meeting);
+        $spot = $this->spotRepository->find(
             $event,
             (int) $data->spotId,
             $isVisio // find visio spot if meeting visio
@@ -94,7 +125,7 @@ class MeetingController extends Controller
         );
 
         try {
-            $this->get('tactician.commandbus')->handle($updateSpot);
+            $this->commandBus->handle($updateSpot);
         } catch (SpotNotAvailableForThisMeetingException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting');
         } catch (MeetingIsBlockedSpotException $exception) {
@@ -106,17 +137,11 @@ class MeetingController extends Controller
         return new JsonResponse();
     }
 
-    /**
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return JsonResponse
-     */
-    public function updateSlotAction(Event $event, Meeting $meeting)
+    public function updateSlotAction(Event $event, Meeting $meeting): JsonResponse
     {
         $this->checkAccess($event, $meeting);
 
-        $meetingUpdateSlotView = $this->get('query.agenda.admin.meeting_update_slot_view_query_handler')->handle(
+        $meetingUpdateSlotView = $this->meetingUpdateSlotViewQueryHandler->handle(
             new MeetingUpdateSlotViewQuery(
                 $meeting,
                 $this->checkVisio($meeting->getRequest())
@@ -126,14 +151,7 @@ class MeetingController extends Controller
         return new JsonResponse($meetingUpdateSlotView);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return JsonResponse
-     */
-    public function handleUpdateSlotAction(Request $request, Event $event, Meeting $meeting)
+    public function handleUpdateSlotAction(Request $request, Event $event, Meeting $meeting): JsonResponse
     {
         $this->checkAccess($event, $meeting);
 
@@ -143,7 +161,7 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.error');
         }
 
-        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+        $slot = $this->meetingSlotRepository->find(
             $event,
             (int) $data->slotId
         );
@@ -152,15 +170,15 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSlot.selectedSlotNotExists');
         }
 
-        $visio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
+        $visio = $this->meetingVisioGuesser->hasMeetingParticipantVisio($meeting);
 
         $updateSlot = new UpdateSlot($meeting, $slot, $visio);
 
         try {
-            $this->get('tactician.commandbus')->handle($updateSlot);
+            $this->commandBus->handle($updateSlot);
 
             $meeting->getRequest()->setUpdateOrDeleteReasonMessage(null);
-            $this->get('vimeet_infrastructure.repository.meeting.request_repository')
+            $this->meetingRequestRepository
                 ->set($meeting->getRequest());
         } catch (BlockedSpotNotAvailableForThisMeetingAndSlotException $exception) {
             return $this->createErrorJsonResponse(
@@ -193,14 +211,14 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    public function transformRequestIntoMeetingAction(Event $event, Meeting\Request $meetingRequest)
+    public function transformRequestIntoMeetingAction(Event $event, Meeting\Request $meetingRequest): JsonResponse
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
         $isVisio = $this->checkVisio($meetingRequest);
 
         try {
-            $requestSlotView = $this->get('query.agenda.admin.request_slot_view_query_handler')->handle(
+            $requestSlotView = $this->requestSlotViewQueryHandler->handle(
                 new RequestSlotViewQuery($meetingRequest, $isVisio)
             );
         } catch (NoSlotAvailableException $exception) {
@@ -222,18 +240,12 @@ class MeetingController extends Controller
 
     /**
      * This method returns the participants and sheet concerned by the given meeting request
-     *
-     * @param Request         $request
-     * @param Event           $event
-     * @param Meeting\Request $meetingRequest
-     *
-     * @return JsonResponse
      */
-    public function getParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    public function getParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest): JsonResponse
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
-        $requestSheetsView = $this->get('tactician.commandbus.query')->handle(
+        $requestSheetsView = $this->queryBus->handle(
             new RequestSheetsViewQuery($meetingRequest, $event->getAvailableLocale($request->getLocale()))
         );
 
@@ -247,7 +259,7 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    public function updateParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest)
+    public function updateParticipantsOfRequestAction(Request $request, Event $event, Meeting\Request $meetingRequest): JsonResponse
     {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
@@ -258,15 +270,15 @@ class MeetingController extends Controller
         }
 
         try {
-            $this->get('tactician.commandbus')->handle(
+            $this->commandBus->handle(
                 new UpdateParticipants($meetingRequest, $data['fromParticipants'], $data['toParticipants'])
             );
         } catch (InvalidParticipantException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.request.updateParticipant.invalidArguments');
         }
 
-        $meetingRequestListFrom = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getFromSheet(), $event->getAvailableLocale($request->getLocale())));
-        $meetingRequestListTo   = $this->get('tactician.commandbus.query')->handle(new MeetingRequestListViewQuery($meetingRequest->getToSheet(), $event->getAvailableLocale($request->getLocale())));
+        $meetingRequestListFrom = $this->queryBus->handle(new MeetingRequestListViewQuery($meetingRequest->getFromSheet(), $event->getAvailableLocale($request->getLocale())));
+        $meetingRequestListTo   = $this->queryBus->handle(new MeetingRequestListViewQuery($meetingRequest->getToSheet(), $event->getAvailableLocale($request->getLocale())));
 
         return new JsonResponse([
             $meetingRequestListFrom,
@@ -274,18 +286,11 @@ class MeetingController extends Controller
         ]);
     }
 
-    /**
-     * @param Request         $request
-     * @param Event           $event
-     * @param Meeting\Request $meetingRequest
-     *
-     * @return JsonResponse
-     */
     public function handleTransformRequestIntoMeetingAction(
         Request $request,
         Event $event,
         Meeting\Request $meetingRequest
-    ) {
+    ): JsonResponse {
         $this->checkMeetingRequestAccess($event, $meetingRequest);
 
         $data = json_decode($request->getContent());
@@ -294,7 +299,7 @@ class MeetingController extends Controller
             return $this->createErrorJsonResponse('admin.agenda.request.transformIntoMeeting.error');
         }
 
-        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+        $slot = $this->meetingSlotRepository->find(
             $event,
             (int) $data->slotId
         );
@@ -308,7 +313,7 @@ class MeetingController extends Controller
         $transformRequestIntoMeeting = new TransformRequestIntoMeeting($meetingRequest, $slot, $isVisio);
 
         try {
-            $this->get('tactician.commandbus')->handle($transformRequestIntoMeeting);
+            $this->commandBus->handle($transformRequestIntoMeeting);
         } catch (NoSlotAvailableException $exception) {
             return $this->createErrorJsonResponse(
                 'admin.agenda.request.transformIntoMeeting.noSlotAvailable'
@@ -330,11 +335,7 @@ class MeetingController extends Controller
         return new JsonResponse();
     }
 
-    /**
-     * @param Event   $event
-     * @param Meeting $meeting
-     */
-    private function checkAccess(Event $event, Meeting $meeting)
+    private function checkAccess(Event $event, Meeting $meeting): void
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -349,7 +350,7 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    public function removeAction(Event $event, Meeting $meeting)
+    public function removeAction(Event $event, Meeting $meeting): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -360,7 +361,7 @@ class MeetingController extends Controller
         $response = new JsonResponse();
 
         try {
-            $this->get('tactician.commandbus.query')->handle(new RemoveMeeting($meeting, $this->getUser()));
+            $this->commandBus->handle(new RemoveMeeting($meeting, $this->getUser()));
         } catch (LockedException $lockedException) {
             $response->setData($lockedException->getMessage());
             $response->setStatusCode(Response::HTTP_LOCKED);
@@ -369,18 +370,11 @@ class MeetingController extends Controller
         return $response;
     }
 
-    /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param MassAssignment $massAssignment
-     *
-     * @return JsonResponse
-     */
-    public function massAssignmentDetailAction(Request $request, Event $event, MassAssignment $massAssignment)
+    public function massAssignmentDetailAction(Request $request, Event $event, MassAssignment $massAssignment): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $massAssignmentView = $this->get('tactician.commandbus.query')->handle(
+        $massAssignmentView = $this->queryBus->handle(
             new MassAssignmentViewQuery(
                 $massAssignment,
                 $event,
@@ -391,14 +385,7 @@ class MeetingController extends Controller
         return new JsonResponse($massAssignmentView);
     }
 
-    /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param MassAssignment $massAssignment
-     *
-     * @return JsonResponse
-     */
-    public function updateMassAssignmentAction(Request $request, Event $event, MassAssignment $massAssignment)
+    public function updateMassAssignmentAction(Request $request, Event $event, MassAssignment $massAssignment): JsonResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -420,7 +407,7 @@ class MeetingController extends Controller
         ]);
 
         try {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
         } catch (MassAssignmentOnMeetingException $exception) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot');
         } catch (MassAssignmentOutOfMassSlotException $exception) {
@@ -430,11 +417,7 @@ class MeetingController extends Controller
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @param Event           $event
-     * @param Meeting\Request $meetingRequest
-     */
-    private function checkMeetingRequestAccess(Event $event, Meeting\Request $meetingRequest)
+    private function checkMeetingRequestAccess(Event $event, Meeting\Request $meetingRequest): void
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -443,33 +426,22 @@ class MeetingController extends Controller
         }
     }
 
-    /**
-     * @param string $key
-     *
-     * @return JsonResponse
-     */
-    private function createErrorJsonResponse($key)
+    private function createErrorJsonResponse(string $key): JsonResponse
     {
-        return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
+        return new JsonResponse($this->translator->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
      * Check if meeting or meeting request has some participant in visio
      *
-     * @param Meeting\Request $meetingRequest
-     *
-     * @return bool
-     *
      * @see VisioGuesser
      */
-    private function checkVisio(Meeting\Request $meetingRequest)
+    private function checkVisio(Meeting\Request $meetingRequest): bool
     {
-        $visioGuesser = $this->get('domain.meeting.visio_guesser');
-
         if ($meetingRequest->hasMeeting()) {
-            return $visioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
+            return $this->meetingVisioGuesser->hasMeetingParticipantVisio($meetingRequest->getMeeting());
         }
 
-        return $visioGuesser->hasMeetingRequestParticipantVisio($meetingRequest);
+        return $this->meetingVisioGuesser->hasMeetingRequestParticipantVisio($meetingRequest);
     }
 }
