@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Order;
 
-abstract class AbstractAddRow
+abstract class AbstractAddRow implements Command
 {
     /** @var Order */
     public $order;

@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Attend;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetAttendanceViewQuery
+class SheetAttendanceViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

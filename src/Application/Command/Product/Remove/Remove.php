@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Remove;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Product;
 
-class Remove
+class Remove implements Command
 {
     /** @var Product */
     public $product;

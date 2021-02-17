@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class UpdateParticipants
+class UpdateParticipants implements Command
 {
     /**
      * @var Request

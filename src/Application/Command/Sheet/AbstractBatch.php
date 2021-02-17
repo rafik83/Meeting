@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-abstract class AbstractBatch
+use Proximum\Vimeet\Application\Command\Command;
+
+abstract class AbstractBatch implements Command
 {
     /**
      * @var array

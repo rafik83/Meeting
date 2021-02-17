@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Generate
+class Generate implements Command
 {
     /**
      * @var Event

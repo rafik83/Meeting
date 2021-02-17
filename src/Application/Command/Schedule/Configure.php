@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Schedule;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Configure
+class Configure implements Command
 {
     /**
      * @var Event

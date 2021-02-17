@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\Find;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Find
+class Find implements Command
 {
     const FIND_INVOICE = 'invoice';
     const FIND_ORDER   = 'order';

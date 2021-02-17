@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\MeetingRequest\Export;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class MeetingRequestListViewQuery
+class MeetingRequestListViewQuery implements Query
 {
     /** @var Event */
     public $event;

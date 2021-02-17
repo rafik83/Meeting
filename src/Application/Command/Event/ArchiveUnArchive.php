@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ArchiveUnArchive
+class ArchiveUnArchive implements Command
 {
     const ARCHIVED = 'event_archived';
     const UN_ARCHIVED = 'event_un_archived';

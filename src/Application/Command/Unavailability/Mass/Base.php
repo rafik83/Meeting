@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 
-abstract class Base
+abstract class Base implements Command
 {
     /**
      * @var Category

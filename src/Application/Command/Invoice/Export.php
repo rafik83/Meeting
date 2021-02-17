@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Export
+class Export implements Command
 {
     /**
      * @var Admin

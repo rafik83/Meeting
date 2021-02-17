@@ -40,7 +40,7 @@ class Create extends AbstractEvent
     {
         $this->title = $event->getTitle();
         $this->locales = $event->getLocales();
-        $this->fallback = $event->getFallback();
+        $this->fallback = $event->getLocaleFallback();
         $this->emailTeam = $event->getEmailTeam();
         $this->mode = $event->getMode();
         $this->visible = $event->isVisible();

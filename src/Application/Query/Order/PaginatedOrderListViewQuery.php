@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginatedOrderListViewQuery
+class PaginatedOrderListViewQuery implements Query
 {
     /**
      * @var Event
