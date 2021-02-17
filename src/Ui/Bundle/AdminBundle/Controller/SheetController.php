@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -21,14 +23,14 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,26 +38,38 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class SheetController extends Controller
+class SheetController extends AbstractController
 {
     private const SHEETS_PER_PAGE = 100;
 
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param AdminDomain $adminDomain
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event, AdminDomain $adminDomain)
+    private SheetFilter $sheetFilter;
+    private FilterSummary $filterSummary;
+    private RuleStorageInterface $ruleStorageInterface;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SheetFilter $sheetFilter,
+        FilterSummary $filterSummary,
+        RuleStorageInterface $ruleStorageInterface,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->sheetFilter = $sheetFilter;
+        $this->filterSummary = $filterSummary;
+        $this->ruleStorageInterface = $ruleStorageInterface;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
 
-        $sheetFilter = $this->get(SheetFilter::class);
-        $savedFilters = $sheetFilter->get($event);
+        $savedFilters = $this->sheetFilter->get($event);
         $admin = $adminDomain->getAdmin();
 
         // redirect to list with default filters if no parameters
@@ -74,8 +88,8 @@ class SheetController extends Controller
         }
 
         if (null !== $request->query->get('reset')) {
-            $sheetFilter->clear($event);
-            $this->get(RuleStorageInterface::class)->removeRules($event, 'sheet');
+            $this->sheetFilter->clear($event);
+            $this->ruleStorageInterface->removeRules($event, 'sheet');
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
@@ -94,21 +108,21 @@ class SheetController extends Controller
             $filters = $sheetFilterForm->getData();
 
             // save filter into session
-            $sheetFilter->add($event, $this->getEnabledFilters(
+            $this->sheetFilter->add($event, $this->getEnabledFilters(
                 $sheetFilterForm,
                 $request->query->all()
             ));
         }
 
         if ($request->query->get('rules')) {
-            $this->get(RuleStorageInterface::class)->saveRules($event, 'sheet', $request->query->get('rules'));
+            $this->ruleStorageInterface->saveRules($event, 'sheet', $request->query->get('rules'));
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
         // Pagination
         try {
-            $conditions = $this->get(RuleStorageInterface::class)->getRules($event, $locale, 'sheet');
+            $conditions = $this->ruleStorageInterface->getRules($event, $locale, 'sheet');
             $query = new PaginatedSheetListViewQuery(
                 $event,
                 $filters,
@@ -119,14 +133,14 @@ class SheetController extends Controller
                 $conditions
             );
             /** @var PaginatedResult $sheets */
-            $sheets = $this->get('tactician.commandbus.query')->handle($query);
+            $sheets = $this->queryBus->handle($query);
         } catch (UnavailableCurrentPageException $ex) {
             $this->addFlash('warning', 'flash.admin.sheet.unavailablePage.warning');
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
-        $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
+        $types = $this->queryBus->handle(new GetAllowedTypesByAdminQuery(
             $admin,
             $event
         ));
@@ -150,7 +164,7 @@ class SheetController extends Controller
         ]);
 
         $sheetFilterView = $sheetFilterForm->createView();
-        $queryBuilderFilters = $this->get(QueryBus::class)->handle(
+        $queryBuilderFilters = $this->queryBus->handle(
             new GetFiltersByTypeAndLocaleQuery($event, 'sheet', $locale)
         );
 
@@ -159,7 +173,7 @@ class SheetController extends Controller
             'event' => $event,
             'typesByEvent' => $this->getTypesByEvent($types, $request->getLocale()),
             'sheets' => $sheets,
-            'filters_summary' => $this->get('filter_summary')->getFilters(
+            'filters_summary' => $this->filterSummary->getFilters(
                 $sheetFilterView,
                 $filters,
                 $event,
@@ -167,7 +181,7 @@ class SheetController extends Controller
             ),
             'batch_form' => $batchForm->createView(),
             'filter_form' => $sheetFilterView,
-            'rules' => $this->get(RuleStorageInterface::class)->getRulesQuery($event, 'sheet'),
+            'rules' => $this->ruleStorageInterface->getRulesQuery($event, 'sheet'),
             'filters' => $queryBuilderFilters,
         ]);
     }
@@ -197,10 +211,10 @@ class SheetController extends Controller
             $admin,
             $event->getAvailableLocale($request->getLocale()),
             $filters,
-            $this->get(RuleStorageInterface::class)->getRules($event, $event->getAvailableLocale($request->getLocale()), 'sheet')
+            $this->ruleStorageInterface->getRules($event, $event->getAvailableLocale($request->getLocale()), 'sheet')
         );
 
-        $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
+        $types = $this->queryBus->handle(new GetAllowedTypesByAdminQuery(
             $admin,
             $event
         ));
@@ -256,7 +270,7 @@ class SheetController extends Controller
                 }
 
                 /** @var BatchResult $result */
-                $result = $this->get('tactician.commandbus')->handle($batch);
+                $result = $this->commandBus->handle($batch);
 
                 if (empty($result->ignoredSheetsMessage)) {
                     $this->addFlash('success', new TranschoiceMessage($result->message, $result->count, [
@@ -308,7 +322,7 @@ class SheetController extends Controller
         try {
             $command = new AssignSpot($event, $sheet, $data['value']);
             /** @var AssignSpotResult $result */
-            $result = $this->get('tactician.commandbus')->handle($command);
+            $result = $this->commandBus->handle($command);
         } catch (SpotNotFoundException $exception) {
             return new JsonResponse([
                 'error' => $this->get('translator')->trans('admin.sheet.assign.spot.notFound'),

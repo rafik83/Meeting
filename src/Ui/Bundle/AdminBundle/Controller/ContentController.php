@@ -2,25 +2,29 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\Content\Update;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Content\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ContentController extends Controller
+class ContentController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param string  $type
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, Event $event, $type)
+    private ContentRepositoryInterface $contentRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(ContentRepositoryInterface $contentRepository, CommandBusInterface $commandBus)
     {
-        $content = $this->get('repository.event.content_repository')->findByEventAndType($event, $type);
+        $this->contentRepository = $contentRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function updateAction(Request $request, Event $event, string $type): Response
+    {
+        $content = $this->contentRepository->findByEventAndType($event, $type);
 
         if (null === $content) {
             throw $this->createNotFoundException('Content not found.');
@@ -30,7 +34,7 @@ class ContentController extends Controller
         $form   = $this->createForm(UpdateType::class, $update, ['submit' => true, 'content' => $content]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
             $this->addFlash('success', 'flash.content.update_' . $type . '.success');
 
             return $this->redirectToRoute('admin_content_update', ['event' => $event->getId(), 'type' => $type]);

@@ -52,7 +52,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommandHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@vimeet_infrastructure.repository.happening_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand }
@@ -151,7 +151,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartBroadcastHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
             - '@datetime'
@@ -160,7 +160,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StopBroadcastHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\HappeningBroadcastRepository'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler'
         tags:
@@ -326,7 +326,7 @@ services:
     #
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\RecordHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
             - '@datetime'
@@ -337,7 +337,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StopRecordHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
             - '@datetime'
         tags:
@@ -346,7 +346,7 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Webinar\Record\ReconciliateHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate }
@@ -376,7 +376,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\ZipRecordArchiveStorageAdapter'
             - '@adapter.file_system_adapter'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@logger'
         tags:
@@ -390,7 +390,7 @@ services:
 
     Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommandHandler:
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StreamCommand }

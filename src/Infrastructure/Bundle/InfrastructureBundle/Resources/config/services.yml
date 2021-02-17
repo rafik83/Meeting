@@ -2421,7 +2421,7 @@ services:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
         arguments:
             - '@Proximum\Vimeet\Application\Command\Meeting\AddParticipantToMeetingHandler'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@repository.video_conference_repository'
             - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
         tags:
@@ -2430,7 +2430,7 @@ services:
     command.video_conference.request_test_access_handler:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccessHandler
         arguments:
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
             - '@datetime'
         tags:
@@ -2444,8 +2444,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\SetVisioTested }
 
-    command.event.update_event_dates_to_current_date_handler:
-        class: Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler
+    Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
@@ -2678,12 +2677,11 @@ services:
     adapter.impersonate_url_generator_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter
         arguments:
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@adapter.event_url_generator'
             - '@router'
 
-    adapter.video_conference_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter
+    Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter:
         arguments:
             - '@open_tok'
             - '%tokbox_api_key%'
@@ -3248,21 +3246,21 @@ services:
     validator.template_object.image_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\ImageValidator
         arguments:
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
     validator.template_object.media_collection_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionValidator
         arguments:
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
     validator.template_object.video_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoValidator
         arguments:
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
             - { name: validator.constraint_validator }
@@ -3538,8 +3536,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewExternalViewQuery }
 
-    query.catalog.external.catalog_visibility_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler
+    Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler:
         arguments:
             - '@repository.catalog_visibility_repository'
         tags:
@@ -3627,7 +3624,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler
         arguments:
             - '@template.template_data_factory'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery }
 
@@ -4134,7 +4131,7 @@ services:
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
             - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@adapter.event_url_generator'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
@@ -4725,8 +4722,7 @@ services:
     ##
     # Messaging\Campaign assembler
     ##
-    assembler.messaging_campaign:
-        class: Proximum\Vimeet\Application\Query\Messaging\Campaign\Assembler\CampaignAssembler
+    Proximum\Vimeet\Application\Query\Messaging\Campaign\Assembler\CampaignAssembler:
         arguments:
             - '@translator'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
@@ -5306,8 +5302,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
-    package.product.template_product_guesser:
-        class: Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser
+    Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser:
         arguments:
             - '@order.merger'
             - '@template.template_data_factory'
@@ -5355,7 +5350,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@order.merger'
     cart.converter:
         class: Proximum\Vimeet\Domain\Cart\Converter
@@ -5435,8 +5430,7 @@ services:
         class: Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker
         arguments:
             - '@repository.promotion_code_repository'
-    promotion.generator.unique_code_generator:
-        class: Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator
+    Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator:
         arguments:
             - '@promotion.faker_code_generator'
             - '@promotion.unique_code_checker'
@@ -5549,11 +5543,6 @@ services:
 
     domain.key_dates.checker.schedule_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\ScheduleAccessChecker
-        arguments:
-            - '@datetime'
-
-    domain.key_dates.checker.catalog_access_checker:
-        class: Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker
         arguments:
             - '@datetime'
 
@@ -5855,8 +5844,7 @@ services:
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
 
-    printer.sheet_pdf_printer:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter:
         arguments:
             - '@router'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\PdfPrinter'
@@ -6957,8 +6945,7 @@ services:
     #
     # HomeDispatcher
     #
-    infrastructure.route.home_dispatch.home_user_dispatcher:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\HomeUserDispatcher:
         arguments:
             - '@router'
             - '@components.home.home_dispatch'
@@ -7252,7 +7239,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
             - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
             - '@datetime'
             - '@logger'

@@ -37,11 +37,11 @@ services:
     #
     # Value Resolver
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver:
-        arguments:
-            - '@security.token_storage'
-        tags:
-            - { name: controller.argument_value_resolver, priority: 50 }
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver:
+    #     arguments:
+    #         - '@security.token_storage'
+    #     tags:
+    #         - { name: controller.argument_value_resolver, priority: 50 }
 
     #
     # Security
@@ -96,7 +96,7 @@ services:
     security_voter.catalog_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
         arguments:
-            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
         tags:
             - { name: security.voter }
     security_voter.agenda_access_voter:
@@ -184,12 +184,12 @@ services:
         tags:
             - { name: 'form.type' }
 
-    vimeet_app.form_type_participant.type_choice:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
-        arguments:
-            - '@markdown'
-        tags:
-            - { name: 'form.type' }
+    # vimeet_app.form_type_participant.type_choice:
+    #     class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
+    #     arguments:
+    #         - '@markdown'
+    #     tags:
+    #         - { name: 'form.type' }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
@@ -213,7 +213,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -222,7 +222,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\MediaCollectionDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -258,7 +258,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\VideoDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -466,7 +466,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@security.token_storage'
             - '@router.default'
@@ -590,8 +590,7 @@ services:
     #
     # Security
     #
-    security.impersonate:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate:
         arguments:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
@@ -613,7 +612,7 @@ services:
             - ~
             - '@?event_dispatcher'
             - ~
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: monolog.logger, channel: security }
@@ -672,16 +671,16 @@ services:
             - '@adapter.event_url_generator'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
-    error_factory:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
-        arguments:
-            - '@translator'
-            - '@request_stack'
+    # error_factory:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
+    #     arguments:
+    #         - '@translator'
+    #         - '@request_stack'
 
-    filter_summary:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
-        arguments:
-            - '@translator'
+    # filter_summary:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
+    #     arguments:
+    #         - '@translator'
 
     markdown:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
@@ -751,7 +750,7 @@ services:
         arguments:
             - '@package.planning.quantity_max_guesser'
             - '@Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@datetime'
             - '@order.merger'
             - '@cart_manager'
@@ -774,11 +773,6 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@form.factory'
             - '@tactician.commandbus.query'
-    handler_user_profile.pre_update_handler:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler
-        arguments:
-            - '@security.validate_mobile_process_access_checker'
-            - '@template.participant_info_guesser'
 
     handler.unavailability.create_form_handler:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler
@@ -789,8 +783,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm }
 
-    handler.catalog.availability_confirmation_checker_handler:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler:
         arguments:
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@domain.event.day.event_over'

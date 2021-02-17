@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\Command\Spot\Action\UnVisio;
 use Proximum\Vimeet\Application\Command\Spot\Action\Visio;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
@@ -23,41 +26,55 @@ use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class SpotController extends Controller
+class SpotController extends AbstractController
 {
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
-    {
-        return $this->get('form.factory')->createNamed('', $type, $data, $options);
+    private FormFactoryInterface $formFactory;
+    private FilterSummary $filterSummary;
+    private SessionInterface $session;
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        FilterSummary $filterSummary,
+        SessionInterface $session,
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->formFactory = $formFactory;
+        $this->filterSummary = $filterSummary;
+        $this->session = $session;
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
+    private function createFilterForm(string $type, array $data, array $options = []): FormInterface
+    {
+        return $this->formFactory->createNamed('', $type, $data, $options);
+    }
+
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -69,10 +86,10 @@ class SpotController extends Controller
             $filters = $filterForm->getData();
         }
 
-        $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
+        $spotsList = $this->queryBus->handle(new ListViewQuery($event, $locale, $filters));
 
         $canExport = $this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
-            && $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
+            && $this->queryBus->handle(new HasEventReferenceQuery($event));
 
         $filterFormView = $filterForm->createView();
 
@@ -81,19 +98,13 @@ class SpotController extends Controller
             'canExport'       => $canExport,
             'event'           => $event,
             'filter_form'     => $filterForm->createView(),
-            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
+            'filters_summary' => $this->filterSummary->getFilters($filterFormView, $filters, $event, $locale),
             'filtered'        => $filterForm->isSubmitted() && $filterForm->isValid(),
             'update_url'      => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse
-     */
-    public function batchAction(Request $request, Event $event)
+    public function batchAction(Request $request, Event $event): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -108,7 +119,7 @@ class SpotController extends Controller
                 $deleteBatch = new DeleteBatch($selectedSpots, $event);
 
                 /** @var DeleteBatchView $deleteBatchView */
-                $deleteBatchView = $this->get('tactician.commandbus')->handle($deleteBatch);
+                $deleteBatchView = $this->commandBus->handle($deleteBatch);
 
                 if (!empty($deleteBatchView->spotsWithMeetings)) {
                     $this->addFlash('error', new TransMessage(
@@ -132,14 +143,14 @@ class SpotController extends Controller
                 }
             } elseif ($disableButton) {
                 $disableBatch = new DisableBatch($selectedSpots, $event);
-                $this->get('tactician.commandbus')->handle($disableBatch);
+                $this->commandBus->handle($disableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.disable.success');
             } elseif ($enableButton) {
                 $enableBatch = new EnableBatch($selectedSpots, $event);
-                $this->get('tactician.commandbus')->handle($enableBatch);
+                $this->commandBus->handle($enableBatch);
                 $this->addFlash('success', 'flash.admin.spot_batch.enable.success');
             } elseif ($spotUnavailabilityButton) {
-                $this->get('session')->set('selectedSpots', $selectedSpots);
+                $this->session->set('selectedSpots', $selectedSpots);
 
                 return $this->redirectToRoute('admin_spot_batch_unavailability', ['event' => $event->getId()]);
             }
@@ -148,13 +159,7 @@ class SpotController extends Controller
         return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createAction(Request $request, Event $event)
+    public function createAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -167,13 +172,14 @@ class SpotController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($create);
+                $this->commandBus->handle($create);
                 $this->addFlash('success', 'flash.admin.spot.create.success');
 
                 return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);
             } catch (UniqueReferenceViolationException $exception) {
-                $form->get('reference')->addError(new FormError($this->get('translator')
-                    ->trans('validators.spot.reference.unique', [], 'validators')));
+                $form->get('reference')->addError(
+                    new FormError($this->translator->trans('validators.spot.reference.unique', [], 'validators'))
+                );
             }
         }
 
@@ -183,13 +189,7 @@ class SpotController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function batchCreateAction(Request $request, Event $event)
+    public function batchCreateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -198,7 +198,7 @@ class SpotController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($batchCreate);
+                $this->commandBus->handle($batchCreate);
                 $this->addFlash('success', 'flash.admin.spot.batch_create.success');
             } catch (MultipleUniqueReferenceViolationException $exception) {
                 $this->addFlash('warning', new TransMessage(
@@ -216,21 +216,14 @@ class SpotController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function batchUnavailabilityAction(Request $request, Event $event)
+    public function batchUnavailabilityAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $selectedSpots = $this->get('session')->get('selectedSpots');
+        $selectedSpots = $this->session->get('selectedSpots');
 
         /** @var SpotUnavailabilityView $spotUnavailabilityView */
-        $spotUnavailabilityView = $this->get('tactician.commandbus.query')
-            ->handle(new SpotUnavailabilityQuery($event, $selectedSpots)
+        $spotUnavailabilityView = $this->queryBus->handle(new SpotUnavailabilityQuery($event, $selectedSpots)
         );
 
         $meetingSlots = [];
@@ -250,7 +243,7 @@ class SpotController extends Controller
 
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
             /** @var UnavailabilityBatchResult $result */
-            $result = $this->get('tactician.commandbus')->handle($unavailabilityBatch);
+            $result = $this->commandBus->handle($unavailabilityBatch);
             $this->addFlash('success', 'flash.admin.spot_batch.spotUnavailability.success');
 
             if ($result->hasSpotWithMeetingWarning()) {
@@ -269,13 +262,7 @@ class SpotController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, Event $event)
+    public function updateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -283,11 +270,11 @@ class SpotController extends Controller
 
         try {
             $command = new Update($event, $data['id'], $data['property'], $data['value']);
-            $this->get('tactician.commandbus')->handle($command);
+            $this->commandBus->handle($command);
         } catch (SpotNotFoundException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], 404);
         } catch (UniqueReferenceViolationException $exception) {
-            $error = $this->get('translator')->trans('validators.spot.reference.unique', [], 'validators');
+            $error = $this->translator->trans('validators.spot.reference.unique', [], 'validators');
 
             return new JsonResponse(['error' => $error], 403);
         } catch (SpotException $exception) {
@@ -303,49 +290,26 @@ class SpotController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     * @param Spot  $spot
-     *
-     * @return RedirectResponse
-     */
-    public function visioAction(Event $event, Spot $spot)
+    public function visioAction(Event $event, Spot $spot): RedirectResponse
     {
         return $this->handleAndRedirect($event, $spot, new Visio($spot));
     }
 
-    /**
-     * @param Event $event
-     * @param Spot  $spot
-     *
-     * @return RedirectResponse
-     */
-    public function unVisioAction(Event $event, Spot $spot)
+    public function unVisioAction(Event $event, Spot $spot): RedirectResponse
     {
         return $this->handleAndRedirect($event, $spot, new UnVisio($spot));
     }
 
-    /**
-     * @param Event $event
-     * @param Spot  $spot
-     * @param mixed $command
-     *
-     * @return RedirectResponse
-     */
-    private function handleAndRedirect(Event $event, Spot $spot, $command)
+    private function handleAndRedirect(Event $event, Spot $spot, Command $command): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfWrongEvent($event, $spot);
 
-        $this->get('tactician.commandbus')->handle($command);
+        $this->commandBus->handle($command);
 
         return $this->redirectToRoute('admin_spot_list', ['event' => $spot->getEvent()->getId()]);
     }
 
-    /**
-     * @param Event $event
-     * @param Spot  $spot
-     */
     private function denyAccessIfWrongEvent(Event $event, Spot $spot)
     {
         if ($spot->getEvent() !== $event) {

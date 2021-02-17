@@ -2,7 +2,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager;
+use Proximum\Vimeet\Infrastructure\Repository\AdminRepository;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -13,6 +17,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
 {
+    private \DateTimeInterface $dateTime;
+    private AdminRepository $adminRepository;
+    private AuthenticationManager $authenticationManager;
+
+    public function __construct(DateTimeInterface $dateTime, AdminRepositoryInterface $adminRepository, AuthenticationManager $authenticationManager)
+    {
+        $this->dateTime = $dateTime;
+        $this->adminRepository = $adminRepository;
+        $this->authenticationManager = $authenticationManager;
+    }
+
     /**
      * @return RedirectResponse|Response
      */
@@ -33,11 +48,11 @@ class SecurityController extends Controller
             'action' => $this->generateUrl('admin_login_check'),
         ]);
 
-        $now = $this->get('datetime');
+        $now = $this->dateTime;
 
         $email = $authenticationUtils->getLastUsername();
         if ($email !== null) {
-            $admin = $this->get('repository.admin_repository')->findByEmail($email);
+            $admin = $this->adminRepository->findByEmail($email);
         } else {
             $admin = null;
         }
@@ -65,7 +80,7 @@ class SecurityController extends Controller
         }
 
         $admins = 'dev' === $this->get('kernel')->getEnvironment() ?
-            $this->get('repository.admin_repository')->all() :
+            $this->adminRepository->all() :
             [];
 
         return $this->render('AdminBundle:Security:login.html.twig', [
@@ -77,7 +92,7 @@ class SecurityController extends Controller
 
     public function loginUserAction(Admin $admin): RedirectResponse
     {
-        $this->get('adapter.authentication_manager')->authenticate($admin, 'admin');
+        $this->authenticationManager->authenticate($admin, 'admin');
 
         return $this->redirectToRoute('admin_event_list');
     }

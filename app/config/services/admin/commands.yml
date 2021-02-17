@@ -623,7 +623,7 @@ services:
 
     Proximum\Vimeet\Application\Command\PromotionCode\Batch\CreateHandler:
         arguments:
-            - '@promotion.generator.unique_code_generator'
+            - '@Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator'
             - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
             - '@repository.promotion_code_repository'

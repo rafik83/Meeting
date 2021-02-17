@@ -15,7 +15,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CreateUnavailabilitiesAction
@@ -32,15 +32,14 @@ class CreateUnavailabilitiesAction
     /** @var HasAvailabilityManagementEnabled */
     private $hasAvailabilityManagementEnabled;
 
-    /** @var Session */
-    private $session;
+    private SessionInterface $session;
 
     public function __construct(
         CommandBusInterface $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
         HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled,
-        Session $session
+        SessionInterface $session
     ) {
         $this->commandBus = $commandBus;
         $this->authorizationChecker = $authorizationChecker;

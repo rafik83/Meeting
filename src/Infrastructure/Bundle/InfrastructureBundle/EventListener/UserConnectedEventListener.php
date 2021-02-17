@@ -3,43 +3,28 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
 use DateTimeInterface;
-use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class UserConnectedEventListener implements EventSubscriberInterface
 {
-    /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationChecker;
+    private AuthorizationCheckerAdapterInterface $authorizationChecker;
     private UserDomainProvider $userDomainProvider;
-
-    /** @var NetworkingAccessChecker */
-    private $networkingAccessChecker;
-
-    /** @var SessionInterface */
-    private $session;
-
-    /** @var NotificationPublisherInterface */
-    private $notificationPublisher;
-
-    /** @var DatetimeInterface */
-    private $dateTime;
-
-    /** @var Sheet|null */
-    private $sheet;
-
-    private ?User $currentUser;
-
-    /** @var bool */
-    private $publishNotification = false;
+    private NetworkingAccessChecker $networkingAccessChecker;
+    private SessionInterface $session;
+    private NotificationPublisherInterface $notificationPublisher;
+    private DatetimeInterface $dateTime;
+    private ?Sheet $sheet;
+    private ?UserDomain $currentUser;
+    private bool $publishNotification = false;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,

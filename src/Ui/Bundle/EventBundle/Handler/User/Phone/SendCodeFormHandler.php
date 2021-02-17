@@ -10,27 +10,21 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\SendCodeType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class SendCodeFormHandler
 {
     /** @var UserEventPhoneRepositoryInterface */
     private $userEventPhoneRepository;
 
-    /** @var FormFactory */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /** @var CommandBus */
     private $commandBus;
 
-    /**
-     * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
-     * @param FormFactory                       $formFactory
-     * @param CommandBus                        $commandBus
-     */
     public function __construct(
         UserEventPhoneRepositoryInterface $userEventPhoneRepository,
-        FormFactory $formFactory,
+        FormFactoryInterface $formFactory,
         CommandBus $commandBus
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
