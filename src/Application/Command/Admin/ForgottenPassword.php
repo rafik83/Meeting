@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-class ForgottenPassword
+use Proximum\Vimeet\Application\Command\Command;
+
+class ForgottenPassword implements Command
 {
     /**
      * @var string
