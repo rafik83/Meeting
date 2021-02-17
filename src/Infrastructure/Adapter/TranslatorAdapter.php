@@ -3,14 +3,11 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
 class TranslatorAdapter implements TranslatorInterface
 {
-    /**
-     * @var SymfonyTranslatorInterface
-     */
-    private $translator;
+    private SymfonyTranslatorInterface $translator;
 
     /**
      * TranslatorAdapter constructor.
@@ -35,6 +32,8 @@ class TranslatorAdapter implements TranslatorInterface
      */
     public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
     {
-        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
+        $parameters['%count%'] = $number;
+
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 }
