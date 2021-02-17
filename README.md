@@ -90,6 +90,10 @@ The recommended way to install the dependencies on this project is to use this p
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
 
+To avoid ES6 error, run:
+
+    $ sudo sysctl -w vm.max_map_count=262144
+
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```

@@ -1,17 +1,17 @@
 {
   "schema": "v2",
   "application": "vimeet",
-  "name": "console fo:elastica:reset",
+  "name": "console fos:elastica:reset",
   "template": {
     "artifactAccount": "front50ArtifactCredentials",
     "reference": "spinnaker://vimeetCronTemplate",
     "type": "front50/pipelineTemplate"
   },
   "variables": {
-    "jobName": "console-fo-elastic-reset",
+    "jobName": "console-fos-elastic-reset",
     "cronEnabled": "false",
     "cronExpression": "0 0 8 ? * * *",
-    "cronCommand": "bin/console fo:elastica:reset --env=prod"
+    "cronCommand": "bin/console fos:elastica:reset --env=prod"
   },
   "exclude": [],
   "triggers": [],

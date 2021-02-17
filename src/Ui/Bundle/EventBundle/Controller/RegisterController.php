@@ -123,32 +123,7 @@ class RegisterController extends AbstractController
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
-
-            if ($this->canPasswordBeDefinedWithActivationEmail->isSatisfiedBy($event, $command->email)) {
-                $this->addFlash('login_email', $command->email);
-
-                return $this->redirectToRoute('event_login_send_activation_mail');
-            }
-
-            $user = $this->userRepository->findByEmail($command->email);
-
-            if ($user) {
-                if ($this->hasSheets($user, $event)) {
-                    $this->addFlash('success', 'flash.event.register.already_known.login');
-                } else {
-                    $this->setFlashRegisterType($typeView->id);
-                    $this->addFlash('success', 'flash.event.register.already_known.message');
-                }
-
-                $this->setFlashLoginEmail($command->email);
-
-                return $this->redirectToRoute('event_login_second_step');
-            }
-
-            $this->setFlashRegisterEmail($command->email);
-
-            return $this->redirectToRoute('event_register_new_user', ['typeView' => $typeView->id]);
+            return $this->handleRegistration($command, $event, $typeView);
         }
 
         return $this->render('EventBundle:Register:register.html.twig', [
@@ -157,6 +132,35 @@ class RegisterController extends AbstractController
             'typeView' => $typeView,
             'typeDescription' => $this->markdown->toHtml($typeView->description),
         ]);
+    }
+
+    /**
+     * Register an account with email parameter
+     */
+    public function prefillRegisterAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
+    {
+        $event = $eventDomain->getEvent();
+
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if ($this->hasSheets($this->getUser(), $eventDomain->getEvent())) {
+                return $this->redirectToRoute('event');
+            } else {
+                return $this->redirectToRoute('event_participate', ['typeView' => $typeView->id]);
+            }
+        }
+
+        $response = $this->homeUserDispatcher
+            ->attemptDispatchUser($eventDomain->getEvent(), $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
+        $this->setFlashRegisterType($typeView->id);
+        $command = new Email();
+        $command->email = $request->query->get('email');
+        return $this->handleRegistration($command, $event, $typeView);
+
     }
 
     /**
@@ -591,5 +595,35 @@ class RegisterController extends AbstractController
         if ($participant->getUser() !== $userDomain->getUser()) {
             throw $this->createAccessDeniedException('The user does not match the particpant.');
         }
+    }
+
+    public function handleRegistration(Email $command, Event $event, TypeView $typeView): RedirectResponse
+    {
+        $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
+
+        if ($this->canPasswordBeDefinedWithActivationEmail->isSatisfiedBy($event, $command->email)) {
+            $this->addFlash('login_email', $command->email);
+
+            return $this->redirectToRoute('event_login_send_activation_mail');
+        }
+
+        $user = $this->userRepository->findByEmail($command->email);
+
+        if ($user) {
+            if ($this->hasSheets($user, $event)) {
+                $this->addFlash('success', 'flash.event.register.already_known.login');
+            } else {
+                $this->setFlashRegisterType($typeView->id);
+                $this->addFlash('success', 'flash.event.register.already_known.message');
+            }
+
+            $this->setFlashLoginEmail($command->email);
+
+            return $this->redirectToRoute('event_login_second_step');
+        }
+
+        $this->setFlashRegisterEmail($command->email);
+
+        return $this->redirectToRoute('event_register_new_user', ['typeView' => $typeView->id]);
     }
 }

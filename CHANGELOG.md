@@ -4,6 +4,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.82.0] - 2021-02-16
+### Updated
+- Update Elasticsearch to 6.8.13
+## [2.81.0] - 2021-02-16
+### Added
+- VIMEET-2361 - Add link to prefill user mail on registration
+
+### Removed
+- VIMEET-1811 - Remove can_move_meeting column from db
+
+## [2.80.0] - 2021-02-15
+### Added
+- VIMEET-2189 - Mute speakers
+- VIMEET-2386 - Add company name to api conference call
+
+## [2.79.1] - 2021-02-05
+### Fixed
+- Redis query cache namespace
 
 ## [2.79.0] - 2021-02-04
 ### Added
@@ -11,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2319 - Send webinar record to speakers
 - VIMEET-2323 - Link target blank
 - VIMEET-2296 - Add participant locale in participants export
-- VIMEET-2295 - Can import partipant's locale
+- VIMEET-2295 - Can import participant's locale
 
 ### Fixed
 - VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
@@ -60,7 +78,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.75.0] - 2020-12-24
 ### Updated
-- Update Elasticsearch to 5.6
 - Upgrade NODE version 14.x (LTS)
 
 ### Fixed

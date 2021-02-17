@@ -36,7 +36,7 @@ final class TypesMapping
             'type' => 'user_event',
             'properties' => [
                 self::USER_EVENT_VIEW_ID => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
                 self::USER_EVENT_VIEW_EVENT_ID => [
                     'type' => 'integer',
@@ -53,11 +53,11 @@ final class TypesMapping
                     'fielddata' => true,
                 ],
                 self::USER_EVENT_VIEW_EMAIL => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'emailAnalyzer',
                 ],
                 self::USER_EVENT_VIEW_LOCALE => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
                 self::USER_EVENT_VIEW_IS_VISIO => [
                     'type' => 'boolean',
@@ -75,13 +75,13 @@ final class TypesMapping
                     'type' => 'nested',
                     'properties' => [
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE => [
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                     ],
                 ],

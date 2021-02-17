@@ -14,7 +14,6 @@ Feature: Partner available features
     And this user is declared in this event
     And there is a sheet
     And there is a participant for this sheet and this user
-    And elastica is populate
     And I am logged with this admin
     And I go to this page "/fr/event"
     And I should see "Les rendez-vous CARNOT 2016"
