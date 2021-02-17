@@ -15,6 +15,8 @@ class PrefixController extends Controller
      */
     public function listAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         return $this->render('AdminBundle:Invoice:list.html.twig', [
             'list' => $this->get('repository.invoice.prefix_repository')->getAll(),
         ]);
@@ -27,6 +29,8 @@ class PrefixController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $create = new Create();
 
         $form = $this->createForm(CreateType::class, $create);
