@@ -55,6 +55,10 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         $this->tokboxClient = $tokboxClient;
     }
 
+    public function checkApiKey(string $apiKey): bool {
+        return !empty($apiKey) && $apiKey === $this->tokboxApiKey;
+    }
+
     /**
      * {@inheritdoc}
      */

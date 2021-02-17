@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\StatusChangeCallback;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,18 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RecordStatusChangeCallbackAction
 {
-    /** @var CommandBusInterface */
-    private $commandBus;
-
-    /** @var string */
-    private $apiKey;
+    private CommandBusInterface $commandBus;
+    private VideoConferenceAdapterInterface $videoConferenceAdapter;
 
     public function __construct(
         CommandBusInterface $commandBus,
-        string $apiKey
+        VideoConferenceAdapterInterface $videoConferenceAdapter
     ) {
         $this->commandBus = $commandBus;
-        $this->apiKey = $apiKey;
+        $this->videoConferenceAdapter = $videoConferenceAdapter;
     }
 
     public function __invoke(Request $request): JsonResponse
@@ -33,7 +31,7 @@ class RecordStatusChangeCallbackAction
         $url = $content['url'] ?? null;
         $partnerId = $content['partnerId'] ?? null;
 
-        if ((string) $partnerId !== $this->apiKey) {
+        if (!$this->videoConferenceAdapter->checkApiKey((string) $partnerId)) {
             return new JsonResponse(
                 ['message' => 'wrong parameters'],
                 Response::HTTP_FORBIDDEN
