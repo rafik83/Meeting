@@ -148,6 +148,7 @@ flash.admin.sheet.unavailablePage.warning: 'La page que vous recherchez n''exist
 flash.admin.slot.remove.error: 'Ce créneau est déjà utilisé par des rendez-vous planifiés'
 flash.admin.speaker.create.success: 'L''intervenant a bien été créé'
 flash.admin.speaker.update.success: 'L''intervenant a bien été mis à jour'
+flash.admin.speaker.delete.success: 'L''intervenant a bien été supprimé'
 flash.admin.spot_batch.delete.failure.meetings: 'Les lieux suivants comportent des rendez-vous et ne seront pas supprimés :  %spots%'
 flash.admin.spot_batch.delete.failure.sheets: 'Les lieux suivants ont des fiches attribuées et ne seront pas supprimés : %spots%'
 flash.admin.spot_batch.delete.success: 'Les lieux sélectionnés ont bien été supprimés'
