@@ -8,14 +8,13 @@ interface AuthenticationManagerInterface
 {
     /**
      * Authenticate the user
-     *
-     * @param AbstractUser $user
-     * @param string       $providerKey
      */
-    public function authenticate(AbstractUser $user, $providerKey);
+    public function authenticate(AbstractUser $user, string $providerKey);
 
     /**
      * Disconnect the user
      */
     public function disconnect();
+
+
 }
