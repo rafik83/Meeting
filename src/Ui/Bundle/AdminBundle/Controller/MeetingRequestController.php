@@ -11,10 +11,10 @@ use Proximum\Vimeet\Domain\View\Meeting\AdminShowDetailsView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\FilterMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\LockMeetingRequestType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MeetingRequestController extends Controller
 {
@@ -80,6 +80,10 @@ class MeetingRequestController extends Controller
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $meetingRequest->getEvent()) {
+            throw new AccessDeniedException();
+        }
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
