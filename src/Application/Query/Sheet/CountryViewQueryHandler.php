@@ -34,6 +34,9 @@ class CountryViewQueryHandler
         if (!empty($countries)) {
             foreach ($countries['buckets'] as $country) {
                 $countryCode = $country['key'];
+                if (empty($countryCode)) {
+                    continue;
+                }
                 $countryName = $this->intl->getCountryName($countryCode, $query->locale);
 
                 if (null !== $countryName) {
