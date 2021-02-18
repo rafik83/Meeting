@@ -88,7 +88,7 @@ class UserConnectedEventListener implements EventSubscriberInterface
     public function onTerminate(KernelEvent $event): void
     {
         if ($this->publishNotification) {
-            $this->notificationPublisher->publishUserConnectionNotification($this->sheet, $this->currentUser);
+            $this->notificationPublisher->publishUserConnectionNotification($this->sheet, $this->currentUser->getUser());
         }
     }
 }
