@@ -617,13 +617,6 @@ services:
         tags:
             - { name: monolog.logger, channel: security }
 
-    security.authentication.switch_sheet_group_manager_to_sheet_user:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchSheetGroupManagerToSheetUser
-        arguments:
-            - '@security.token_storage'
-            - '@security.user_checker'
-            - '@security.authorization_checker'
-
     security.sheet_voter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter
         tags:
@@ -647,14 +640,7 @@ services:
             - { name: security.voter }
 
     security.app.user_checker:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
-        arguments:
-            - '@request_stack'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@components.user.type_resolver'
-            - '@session'
+        alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
 
     security.app.admin_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\AdminChecker

@@ -3,8 +3,7 @@ services:
     #
     # Spot importer component
     #
-    components.spot.spot_importer:
-        class: Proximum\Vimeet\Application\Components\Spot\SpotImporter
+    Proximum\Vimeet\Application\Components\Spot\SpotImporter:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.validator_adapter'

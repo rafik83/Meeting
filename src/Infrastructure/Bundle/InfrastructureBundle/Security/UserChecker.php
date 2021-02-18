@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security;
 
+use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -11,7 +12,6 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Exception\SheetDisabledException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\User\UserChecker as SymfonyUserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -47,23 +47,13 @@ class UserChecker extends SymfonyUserChecker
      */
     private $typeResolver;
 
-    /**
-     * UserChecker constructor.
-     *
-     * @param RequestStack             $requestStack
-     * @param EventRepositoryInterface $eventRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param TypeRepositoryInterface  $typeRepository
-     * @param TypeResolver             $typeResolver
-     * @param Session                  $session
-     */
     public function __construct(
         RequestStack $requestStack,
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
         TypeRepositoryInterface $typeRepository,
         TypeResolver $typeResolver,
-        Session $session
+        SessionInterface $session
     ) {
         $this->eventRepository     = $eventRepository;
         $this->sheetRepository     = $sheetRepository;
@@ -90,11 +80,7 @@ class UserChecker extends SymfonyUserChecker
         $this->checkUserType($user, $event);
     }
 
-    /**
-     * @param User  $user
-     * @param Event $event
-     */
-    private function checkSheetDisabled(User $user, Event $event)
+    private function checkSheetDisabled(User $user, Event $event): void
     {
         $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
 
@@ -111,11 +97,7 @@ class UserChecker extends SymfonyUserChecker
         }
     }
 
-    /**
-     * @param User  $user
-     * @param Event $event
-     */
-    private function checkUserType(User $user, Event $event)
+    private function checkUserType(User $user, Event $event): void
     {
         $typeFlashBag = $this->session->getFlashBag()->get('register_type');
         $typeId       = array_shift($typeFlashBag);

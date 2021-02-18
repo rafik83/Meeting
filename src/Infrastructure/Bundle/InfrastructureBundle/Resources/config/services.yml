@@ -582,7 +582,7 @@ services:
     command.spot.spot_import_confirm_handler:
         class: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirmHandler
         arguments:
-            - '@components.spot.spot_importer'
+            - '@Proximum\Vimeet\Application\Components\Spot\SpotImporter'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
@@ -4833,10 +4833,9 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery }
 
-    query.spot.import.spot_import_preview_query_handler:
-        class: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQueryHandler
+    Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQueryHandler:
         arguments:
-            - '@components.spot.spot_importer'
+            - '@Proximum\Vimeet\Application\Components\Spot\SpotImporter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery }
 
@@ -4854,8 +4853,7 @@ services:
             - '@repository.billing_info_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery }
-    query.transaction.list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler
+    Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
