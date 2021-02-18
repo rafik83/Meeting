@@ -270,8 +270,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $countries = [];
 
         foreach ($locales as $key => $locale) {
-            $countryName = Countries::getName($countryCode, $locale);
-
+            $countryName = $countryCode ? Countries::getName($countryCode, $locale) : '';
             $countries[$key]['locale'] = $locale;
             $countries[$key]['label'] = $countryName;
             $countries[$key]['label_autocomplete'] = $countryName;
