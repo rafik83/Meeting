@@ -94,6 +94,10 @@ To avoid ES6 error, run:
 
     $ sudo sysctl -w vm.max_map_count=262144
 
+To make it permanent, add this line to /etc/sysctl.conf:
+
+    vm.max_map_count = 262144
+
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```
