@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 
-class SpotImportConfirm
+class SpotImportConfirm implements Command
 {
     /** @var Event */
     public $event;

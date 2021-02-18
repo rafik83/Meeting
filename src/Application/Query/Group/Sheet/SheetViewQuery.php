@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Group\Sheet;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SheetViewQuery
+class SheetViewQuery implements Query
 {
     /** @var Event */
     public $event;

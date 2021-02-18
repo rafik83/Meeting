@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\External;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CatalogVisibilityMessageQuery
+class CatalogVisibilityMessageQuery implements Query
 {
     /**
      * @var Event

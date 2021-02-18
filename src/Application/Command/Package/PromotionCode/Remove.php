@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\PromotionCode;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class Remove
+class Remove implements Command
 {
     /**
      * @var Sheet

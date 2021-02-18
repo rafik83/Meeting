@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Multiple;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class MultipleViewQuery
+class MultipleViewQuery implements Query
 {
     /** @var User */
     public $user;

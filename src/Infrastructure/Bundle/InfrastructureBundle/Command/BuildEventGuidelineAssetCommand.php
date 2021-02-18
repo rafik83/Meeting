@@ -94,6 +94,8 @@ class BuildEventGuidelineAssetCommand extends Command
         }
 
         $output->writeln('End building guideline assets');
+
+        return 0;
     }
 
     /**
