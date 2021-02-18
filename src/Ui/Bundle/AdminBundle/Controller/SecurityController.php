@@ -38,7 +38,7 @@ class SecurityController extends AbstractController
         $this->translator = $translator;
     }
 
-    public function loginAction(bool $isDebugMode): Response
+    public function loginAction(bool $isDebugMode, string $appEnv): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('admin_event_list');
@@ -83,7 +83,7 @@ class SecurityController extends AbstractController
             );
         }
 
-        $admins = $isDebugMode ? $this->adminRepository->all() : [];
+        $admins = ($isDebugMode && $appEnv === 'dev') ? $this->adminRepository->all() : [];
 
         return $this->render('AdminBundle:Security:login.html.twig', [
             'error' => $error,

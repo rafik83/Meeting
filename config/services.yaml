@@ -12,6 +12,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $isDebugMode: '%kernel.debug%'
+            $appEnv: '%kernel.environment%'
             $dateTime: '@datetime'
             $scheme: '%scheme%'
             $sharedUploadedFiles: '%shared_uploaded_files%'

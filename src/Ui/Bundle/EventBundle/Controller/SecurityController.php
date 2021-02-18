@@ -94,8 +94,12 @@ class SecurityController extends AbstractController
         $this->commandBus = $commandBus;
     }
 
-    public function loginFirstStepAction(Request $request, EventDomain $eventDomain, bool $isDebugMode): Response
-    {
+    public function loginFirstStepAction(
+        Request $request,
+        EventDomain $eventDomain,
+        bool $isDebugMode,
+        string $appEnv
+    ): Response {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
@@ -123,8 +127,8 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('event_login_second_step');
         }
 
-        $users = $isDebugMode && 'true' === $request->get('oneClickLogin') ?
-            $this->userRepository->all() :
+        $users = ($isDebugMode && $appEnv === 'dev' && 'true' === $request->get('oneClickLogin')) ?
+            array_slice($this->userRepository->findWithEnabledSheetByEvent($event), 0, 50) :
             [];
 
         $hasError = 0 < count($form->getErrors(true)) || $this->flashBag->has('error');
