@@ -66,7 +66,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
         arguments:
-            $searchable: '@fos_elastica.index.app.sheet'
+            $searchable: '@fos_elastica.index.sheet.sheet'
 
     # explicit aliases for interfaces
     Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface:
