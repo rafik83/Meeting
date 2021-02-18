@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingRequest;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -10,11 +12,22 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Ev
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContactController extends Controller
+class ContactController extends AbstractController
 {
+    private SerializerAdapterInterface $serializer;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        SerializerAdapterInterface $serializer,
+        QueryBusInterface $queryBus
+    ) {
+        $this->serializer = $serializer;
+        $this->queryBus = $queryBus;
+    }
+
     public function exportContactAction(
         Request $request,
         EventDomain $eventDomain,
@@ -25,7 +38,7 @@ class ContactController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(EventOpenAccessVoter::PERMISSION_EVENT_OPEN_ACCESS, $eventDomain->getEvent());
 
-        $meetingSheetListView = $this->get('tactician.commandbus.query')->handle(
+        $meetingSheetListView = $this->queryBus->handle(
             new MeetingSheetViewQuery(
                 $eventDomain->getEvent(),
                 $userDomain->getUser(),
@@ -35,7 +48,7 @@ class ContactController extends Controller
         );
 
         $charset       = Charset::WINDOWS_1252;
-        $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [
+        $exportContent = $this->serializer->serialize($meetingSheetListView, 'csv', [
             'charset'       => $charset,
             'csv_delimiter' => ';',
         ]);

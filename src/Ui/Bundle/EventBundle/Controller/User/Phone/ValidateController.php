@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
+use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\ValidateCode;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeAlreadyValidatedException;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeNotValidException;
@@ -13,29 +16,34 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ValidateController extends Controller
+class ValidateController extends AbstractController
 {
-    /**
-     * @param Request            $request
-     * @param EventDomain        $eventDomain
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     *
-     * @return Response|RedirectResponse
-     */
+    private TranslatorInterface $translator;
+    private AuthenticationManagerInterface $authenticationManager;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        AuthenticationManagerInterface $authenticationManager,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->authenticationManager = $authenticationManager;
+        $this->commandBus = $commandBus;
+    }
+
     public function validateWithTokenAction(
         Request $request,
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
         UserInterface $user = null
-    ) {
+    ): Response {
         $event = $eventDomain->getEvent();
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
 
@@ -53,14 +61,14 @@ class ValidateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($validate);
+                $this->commandBus->handle($validate);
 
                 return $this->redirectToRoute('event_user_event_phone_validate_code_success', [
                     'token' => $userEventToken->getToken(),
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
-                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                    $this->translator->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
                 return $this->redirectToRoute('event_user_event_token_confirm_agenda', [
@@ -76,22 +84,13 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param UserInterface $user
-     * @param Sheet         $sheet
-     * @param Participant   $participant
-     *
-     * @return RedirectResponse|Response
-     */
     public function validateAction(
         Request $request,
         EventDomain $eventDomain,
         UserInterface $user = null,
         Sheet $sheet,
         Participant $participant
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
 
@@ -105,7 +104,7 @@ class ValidateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($validate);
+                $this->commandBus->handle($validate);
                 $this->addFlash('confirm', 'flash.event.user_event_phone.validate.success');
 
                 if ($redirectTo = $this->container->get('session')->getFlashBag()->get('redirectTo')) {
@@ -118,7 +117,7 @@ class ValidateController extends Controller
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
-                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                    $this->translator->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
                 return $this->redirectToRoute('event_user_phone_validate', [
@@ -136,18 +135,11 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param EventDomain        $eventDomain
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     *
-     * @return Response|RedirectResponse
-     */
     public function validateSuccessAction(
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
         UserInterface $user = null
-    ) {
+    ): Response {
         $event = $eventDomain->getEvent();
 
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
@@ -171,19 +163,14 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param Event              $event
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     */
-    private function checkUserEventTokenAccess(Event $event, UserEventToken $userEventToken, UserInterface $user = null)
+    private function checkUserEventTokenAccess(Event $event, UserEventToken $userEventToken, UserInterface $user = null): void
     {
         if ($userEventToken->getEvent() !== $event || !$userEventToken->isAgendaConfirmation()) {
             throw $this->createNotFoundException('Token invalid');
         }
 
         if ($user instanceof User && $user !== $userEventToken->getUser()) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
     }
 }

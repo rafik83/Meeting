@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
 use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
@@ -19,27 +21,45 @@ use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Availability\ConfirmationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class UnavailabilityController extends Controller
+class UnavailabilityController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Participant $participant
-     * @param Sheet       $sheet
-     * @param UserDomain  $userDomain
-     *
-     * @return RedirectResponse|Response
-     */
+    private GetTimezoneHelper $getTimezoneHelper;
+    private CreateFormHandler $unavailabilityCreateFormHandler;
+    private IsParticipantVisio $isParticipantVisio;
+    private HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled;
+    private HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        GetTimezoneHelper $getTimezoneHelper,
+        CreateFormHandler $unavailabilityCreateFormHandler,
+        IsParticipantVisio $isParticipantVisio,
+        HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
+        HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->getTimezoneHelper = $getTimezoneHelper;
+        $this->unavailabilityCreateFormHandler = $unavailabilityCreateFormHandler;
+        $this->isParticipantVisio = $isParticipantVisio;
+        $this->hasUnavailabilityManagementDisabled = $hasUnavailabilityManagementDisabled;
+        $this->hasAvailabilityManagementEnabled = $hasAvailabilityManagementEnabled;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     public function createAction(
         Request $request,
         EventDomain $eventDomain,
@@ -61,10 +81,10 @@ class UnavailabilityController extends Controller
             'sheet'       => $sheet->getId(),
         ]);
 
-        $timezone = $this->get(GetTimezoneHelper::class)->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant);
+        $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant);
 
         /** @var CreateFormView $createFormView */
-        $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
+        $createFormView = $this->unavailabilityCreateFormHandler->handle(
             new CreateForm($request, $event, $sheet, $user, $actionUrl, $timezone)
         );
 
@@ -83,7 +103,7 @@ class UnavailabilityController extends Controller
 
         /** @var AgendaView $agenda */
         $agenda = $this
-            ->get('tactician.commandbus.query')
+            ->queryBus
             ->handle(
                 new AgendaViewQuery($event, $sheet, $participant, $request->getLocale(), $user)
             );
@@ -94,10 +114,10 @@ class UnavailabilityController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_AGENDA,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         $timezone = $eventDomain->getEvent()->getTimeZone();
-        if ($this->get(IsParticipantVisio::class)->isSatisfiedBy($participant) && $participant->getTimezone()) {
+        if ($this->isParticipantVisio->isSatisfiedBy($participant) && $participant->getTimezone()) {
             $timezone = $participant->getTimezone();
         }
 
@@ -110,9 +130,9 @@ class UnavailabilityController extends Controller
             'form_unavailability' => $createFormView->formView,
             'tipTranslationViews' => $tipTranslationViews,
             'timezone' => $timezone,
-            'isVisio' => $this->get(IsParticipantVisio::class)->isSatisfiedBy($participant),
-            'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
-            'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
+            'isVisio' => $this->isParticipantVisio->isSatisfiedBy($participant),
+            'isUnavailabilityManagementDisabled' => $this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet),
+            'isAvailabilityManagementEnabled' => $this->hasAvailabilityManagementEnabled->isSatisfiedBy($sheet),
         ]);
     }
 
@@ -142,12 +162,12 @@ class UnavailabilityController extends Controller
 
         $participant = $sheet->getUserParticipant($userDomain->getUser());
         $timezone = $participant instanceof Participant
-            ? $this->get(GetTimezoneHelper::class)->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant)
+            ? $this->getTimezoneHelper->getTimezoneByEventAndParticipant($eventDomain->getEvent(), $participant)
             : $event->getTimeZone()
         ;
 
         /** @var CreateFormView $createFormView */
-        $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
+        $createFormView = $this->unavailabilityCreateFormHandler->handle(
             new CreateForm(
                 $request,
                 $event,
@@ -187,14 +207,6 @@ class UnavailabilityController extends Controller
         ]);
     }
 
-    /**
-     * @param EventDomain    $eventDomain
-     * @param Unavailability $unavailability
-     * @param Participant    $participant
-     * @param Sheet          $sheet
-     *
-     * @return RedirectResponse
-     */
     public function removeAction(
         EventDomain $eventDomain,
         Unavailability $unavailability,
@@ -209,7 +221,7 @@ class UnavailabilityController extends Controller
         $this->checkDisableUnavailabilityManagement($sheet);
 
         try {
-            $this->get('tactician.commandbus')->handle(new Remove($unavailability));
+            $this->commandBus->handle(new Remove($unavailability));
         } catch (CanNotDeleteUnavailabilityException $exception) {
             $this->addFlash('error', 'flash.unavailability.remove.error');
         }
@@ -242,7 +254,7 @@ class UnavailabilityController extends Controller
 
     private function checkDisableUnavailabilityManagement(Sheet $sheet): void
     {
-        if ($this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet)) {
+        if ($this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet)) {
             throw new AccessDeniedException();
         }
     }

@@ -2,31 +2,45 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken;
+use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
+use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken;
+use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
-class ActivateAccountController extends Controller
+class ActivateAccountController extends AbstractController
 {
-    /**
-     * @param Request              $request
-     * @param EventDomain          $eventDomain
-     * @param ActivateAccountToken $activateAccountToken
-     *
-     * @return RedirectResponse|Response
-     */
+    private AuthenticationManagerInterface $authenticationManager;
+    private StepManager $registrationStepManager;
+    private FlashBagInterface $flashBag;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        AuthenticationManagerInterface $authenticationManager,
+        StepManager $registrationStepManager,
+        FlashBagInterface $flashBag,
+        CommandBusInterface $commandBus
+    ) {
+        $this->authenticationManager = $authenticationManager;
+        $this->registrationStepManager = $registrationStepManager;
+        $this->flashBag = $flashBag;
+        $this->commandBus = $commandBus;
+    }
+
     public function passwordAction(
         Request $request,
         EventDomain $eventDomain,
         ActivateAccountToken $activateAccountToken
-    ) {
+    ): Response {
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
 
@@ -44,15 +58,15 @@ class ActivateAccountController extends Controller
         }
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
 
         $command = new ActivateAccountPassword($user, $sheet);
         $form    = $this->createForm(ActivateAccountPasswordType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
-            $this->get('adapter.authentication_manager')->authenticate($command->user, 'main');
+            $this->commandBus->handle($command);
+            $this->authenticationManager->authenticate($command->user, 'main');
 
             $participant = $sheet->getUserParticipant($user);
 
@@ -62,7 +76,7 @@ class ActivateAccountController extends Controller
                 ]);
             }
 
-            $registrationStepManager = $this->get('components.registration.step_manager');
+            $registrationStepManager = $this->registrationStepManager;
             $redirectStep = $registrationStepManager->getRedirectStep($sheet, $participant);
 
             if (true === $redirectStep['redirect']) {
@@ -81,18 +95,11 @@ class ActivateAccountController extends Controller
         ]);
     }
 
-    /**
-     * @param Request              $request
-     * @param EventDomain          $eventDomain
-     * @param ActivateAccountToken $activateAccountToken
-     *
-     * @return RedirectResponse|Response
-     */
     public function expiredTokenAction(
         Request $request,
         EventDomain $eventDomain,
         ActivateAccountToken $activateAccountToken
-    ) {
+    ): Response {
         $sheet = $activateAccountToken->getSheet();
         $user  = $activateAccountToken->getUser();
 
@@ -104,13 +111,13 @@ class ActivateAccountController extends Controller
         }
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
 
         $command = new ReSendActivateAccountToken($sheet, $user, $sheet->getOwner());
 
         if ($request->isMethod('POST')) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->commandBus->handle($command);
             $this->addFlash('reSendActivateAccountToken', 'confirm');
 
             return $this->redirectToRoute('event_actiavet_account_re_send_token_confirm');
@@ -122,15 +129,9 @@ class ActivateAccountController extends Controller
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
-    public function confirmReSendTokenAction(Request $request, EventDomain $eventDomain)
+    public function confirmReSendTokenAction(Request $request, EventDomain $eventDomain): Response
     {
-        if (empty($this->container->get('session')->getFlashBag()->get('reSendActivateAccountToken'))) {
+        if (empty($this->flashBag->get('reSendActivateAccountToken'))) {
             throw $this->createNotFoundException('Not allowed');
         }
 
@@ -139,15 +140,10 @@ class ActivateAccountController extends Controller
         ]);
     }
 
-    /**
-     * @param Participant $participant
-     *
-     * @return RedirectResponse
-     */
-    public function completeProfileAction(Participant $participant)
+    public function completeProfileAction(Participant $participant): RedirectResponse
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
 
         $this->addFlash('login_email', $participant->getUser()->getEmail());

@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\User\ChangeMail;
 use Proximum\Vimeet\Application\Command\User\ChangeMailActivation;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
@@ -12,6 +14,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\EventVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,11 +22,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AccountController extends Controller
+class AccountController extends AbstractController
 {
-    /**
-     * @return RedirectResponse|Response
-     */
+    private AuthenticationManagerInterface $authenticationManager;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        AuthenticationManagerInterface $authenticationManager,
+        CommandBusInterface $commandBus
+    ) {
+        $this->authenticationManager = $authenticationManager;
+        $this->commandBus = $commandBus;
+    }
+
     public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -38,7 +49,7 @@ class AccountController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($changeMail);
+                $this->commandBus->handle($changeMail);
                 $this->addFlash('success', 'flash.change_mail.success');
 
                 return $this->redirectToRoute('event');
@@ -56,9 +67,6 @@ class AccountController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function activateNewMailAction(EventDomain $eventDomain, ChangeMailToken $changeMailToken): RedirectResponse
     {
         if ($changeMailToken->isExpired(new \DateTime())) {
@@ -66,14 +74,14 @@ class AccountController extends Controller
         }
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
 
         $user = $changeMailToken->getUser();
         $changeMailActivation = new ChangeMailActivation($changeMailToken);
 
-        $this->get('tactician.commandbus')->handle($changeMailActivation);
-        $this->get('adapter.authentication_manager')->authenticate($user, 'main');
+        $this->commandBus->handle($changeMailActivation);
+        $this->authenticationManager->authenticate($user, 'main');
         $this->addFlash('success', 'flash.change_mail_activate.success');
 
         return $this->redirectToRoute('event');

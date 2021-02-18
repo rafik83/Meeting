@@ -2,29 +2,32 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ParticipantController extends Controller
+class ParticipantController extends AbstractController
 {
-    /**
-     * @param EventDomain $eventDomain
-     * @param Group       $sheetGroup
-     *
-     * @return Response
-     */
-    public function listAction(EventDomain $eventDomain, Group $sheetGroup)
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        QueryBusInterface $queryBus
+    ) {
+        $this->queryBus = $queryBus;
+    }
+
+    public function listAction(EventDomain $eventDomain, Group $sheetGroup): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
 
         $event = $eventDomain->getEvent();
 
-        $groupView = $this->get('tactician.commandbus.query')->handle(
+        $groupView = $this->queryBus->handle(
             new GroupViewQuery($sheetGroup, $event)
         );
 
