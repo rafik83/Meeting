@@ -44,7 +44,6 @@ Feature: Unavailability
     Given there is an event with domain "asddays.vimeet.proximum"
     And I am logged with "user_asddays_1@proximum.com" on front
     And I go to this page "/fr/sheet/1/agenda"
-    And show last response
     And I should see "unavailability.title"
     When I press "cancelUnavailability"
     Then I should be on this page "/fr/sheet/1/agenda/participant/1"
