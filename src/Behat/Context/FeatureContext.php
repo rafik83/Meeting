@@ -2,18 +2,17 @@
 
 namespace Proximum\Vimeet\Behat\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Element\NodeElement;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
 use Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
-use Symfony\Component\BrowserKit\Client;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -23,36 +22,33 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext extends MinkContext implements KernelAwareContext, SnippetAcceptingContext
+class FeatureContext extends MinkContext
 {
-    private $kernel;
-
-    /** @var string */
-    private $baseUrl;
-
-    /** @var FeatureContextProxyInterface */
-    private $featureContextProxy;
+    private ?string $baseUrl = null;
+    private FeatureContextProxyInterface $featureContextProxy;
+    private KernelInterface $kernel;
+    private UserRepositoryInterface $userRepository;
+    private AdminRepositoryInterface $adminRepository;
+    private FileSystemAdapterInterface $fileSystem;
 
     /**
      * Initializes context.
      *
      * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     *
-     * @param FeatureContextProxyInterface $featureContextProxy
      */
-    public function __construct(FeatureContextProxyInterface $featureContextProxy)
-    {
-        $this->featureContextProxy = $featureContextProxy;
-    }
-
-    /**
-     * @param KernelInterface $kernel
-     */
-    public function setKernel(KernelInterface $kernel)
+    public function __construct(
+        KernelInterface $kernel,
+        FeatureContextProxyInterface $featureContextProxy,
+        UserRepositoryInterface $userRepository,
+        AdminRepositoryInterface $adminRepository,
+        FileSystemAdapterInterface $fileSystem
+    )
     {
         $this->kernel = $kernel;
+        $this->featureContextProxy = $featureContextProxy;
+        $this->fileSystem = $fileSystem;
+        $this->userRepository = $userRepository;
+        $this->adminRepository = $adminRepository;
     }
 
     /**
@@ -550,7 +546,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $session = $client->getContainer()->get('session');
 
-        $user = $this->kernel->getContainer()->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
         $providerKey = 'main';
 
         if (null === $user) {
@@ -577,7 +573,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $session = $client->getContainer()->get('session');
 
-        $user = $this->kernel->getContainer()->get('repository.admin_repository')->findByEmail($email);
+        $user = $this->adminRepository->findByEmail($email);
         $providerKey = 'admin';
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
@@ -606,7 +602,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $session = $client->getContainer()->get('session');
 
-        $user = $this->kernel->getContainer()->get('vimeet_infrastructure.repository.user_repository')->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
         $providerKey = 'main';
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
@@ -622,8 +618,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iAmLoggedAsAdmin()
     {
-        /** @var AdminRepositoryInterface $adminRepository */
-        $adminRepository = $this->kernel->getContainer()->get('repository.admin_repository');
+        $adminRepository = $this->adminRepository;
         $admin = $adminRepository->findOneByRole('ROLE_SUPER_ADMIN');
 
         if (null !== $admin) {
@@ -760,13 +755,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function aSmsShouldBeSentTo(string $phone, string $expectedContent)
     {
-        /** @var FileSystemAdapterInterface $fileSystem */
-        $fileSystem = $this->kernel->getContainer()->get('adapter.file_system_adapter');
-
         $smsDirectory = $this->kernel->getContainer()->getParameter('sms_directory');
         $file = $smsDirectory . DIRECTORY_SEPARATOR . StorageProvider::getFileName($phone);
 
-        if (!$fileSystem->exists($file)) {
+        if (!$this->fileSystem->exists($file)) {
             throw new \LogicException('Missing SMS');
         }
 
@@ -866,7 +858,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $this->getSession()->visit($editLink->getAttribute('href'));
     }
 
-    private function getClient(): Client
+    private function getClient(): KernelBrowser
     {
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof BrowserKitDriver) {

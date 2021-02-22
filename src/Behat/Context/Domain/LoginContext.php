@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\MinkExtension\Context\RawMinkContext;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\LoginContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
@@ -13,31 +12,18 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class LoginContext extends RawMinkContext implements KernelAwareContext
+class LoginContext extends RawMinkContext
 {
-    /** @var LoginContextProxyInterface */
-    private $loginContextProxy;
-
-    /** @var KernelInterface */
-    private $kernel;
-
-    /** @var string */
-    private $baseUrl;
+    private KernelInterface $kernel;
+    private LoginContextProxyInterface $loginContextProxy;
 
     /**
      * @param LoginContextProxyInterface $loginContextProxy
      */
-    public function __construct(LoginContextProxyInterface $loginContextProxy)
-    {
-        $this->loginContextProxy = $loginContextProxy;
-    }
-
-    /**
-     * @param KernelInterface $kernel
-     */
-    public function setKernel(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, LoginContextProxyInterface $loginContextProxy)
     {
         $this->kernel = $kernel;
+        $this->loginContextProxy = $loginContextProxy;
     }
 
     /**
