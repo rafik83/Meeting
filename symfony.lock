@@ -1,4 +1,7 @@
 {
+    "alcohol/iso4217": {
+        "version": "3.1.5"
+    },
     "aws/aws-sdk-php": {
         "version": "3.173.6"
     },
@@ -10,15 +13,6 @@
     },
     "behat/gherkin": {
         "version": "v4.8.0"
-    },
-    "behat/mink": {
-        "version": "v1.8.1"
-    },
-    "behat/mink-browserkit-driver": {
-        "version": "v1.3.4"
-    },
-    "behat/mink-extension": {
-        "version": "2.3.1"
     },
     "behat/mink-selenium2-driver": {
         "version": "v1.3.1"
@@ -147,11 +141,29 @@
     "firebase/php-jwt": {
         "version": "v5.2.0"
     },
-    "friends-of-behat/context-service-extension": {
-        "version": "v1.3.0"
+    "friends-of-behat/mink": {
+        "version": "v1.9.0"
+    },
+    "friends-of-behat/mink-browserkit-driver": {
+        "version": "v1.5.0"
     },
     "friends-of-behat/mink-extension": {
         "version": "2.3.1"
+    },
+    "friends-of-behat/symfony-extension": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "3d21344765fd3440a85bdd27d4cada186ec628bd"
+        },
+        "files": [
+            "behat.yml.dist",
+            "config/services_test.yaml",
+            "features/demo.feature",
+            "tests/Behat/DemoContext.php"
+        ]
     },
     "friendsofphp/php-cs-fixer": {
         "version": "2.16",
@@ -164,9 +176,6 @@
         "files": [
             ".php_cs.dist"
         ]
-    },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.3"
     },
     "friendsofsymfony/elastica-bundle": {
         "version": "5.0",
@@ -375,6 +384,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.10.4"
+    },
+    "ocramius/proxy-manager": {
+        "version": "2.11.1"
     },
     "opentok/opentok": {
         "version": "v4.6.3"
@@ -622,7 +634,7 @@
         "version": "v4.4.19"
     },
     "symfony/browser-kit": {
-        "version": "v4.4.19"
+        "version": "v5.2.3"
     },
     "symfony/cache": {
         "version": "v5.2.3"
@@ -1024,6 +1036,9 @@
     },
     "twilio/sdk": {
         "version": "5.42.2"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.1.0"
     },
     "webmozart/assert": {
         "version": "1.9.1"

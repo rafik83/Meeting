@@ -1,26 +1,29 @@
 default:
     extensions:
-        Behat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: ~
             kernel:
-               env: test
-               bootstrap: 'vendor/autoload.php'
+                class: Proximum\Vimeet\Kernel
+                path: ~
+                environment: ~
+                debug: ~
         Behat\MinkExtension:
-            base_url: 'http://admin.vimeet.proximum'
+            base_url: 'http://admin.vimeet.proximum/'
             sessions:
                 default:
-                    symfony2: ~
-                javascript:
-                    selenium2: ~
-            files_path: %paths.base%/src/Behat/Resources/fixtures/Files
+                    symfony: ~
+                # javascript:
+                #     selenium2: ~
+            # files_path: '%paths.base%/src/Behat/Resources/fixtures/Files'
             show_cmd: firefox %s
-        Fidry\AliceBundleExtension\Extension:
-            fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
+        # Fidry\AliceBundleExtension\Extension:
+        #     fixtures_base_path: '%paths.base%/src/Behat/Resources/fixtures'
         Behatch\Extension: ~
     suites:
         default:
             contexts:
-                - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
-                    basePath: %paths.base%/src/Behat/Resources/fixtures
+                # - Fidry\AliceBundleExtension\Context\Doctrine\AliceORMContext:
+                #     basePath: '%paths.base%/src/Behat/Resources/fixtures'
                 - Proximum\Vimeet\Behat\Context\DoctrineORMContext: ~
                 - Proximum\Vimeet\Behat\Context\FeatureContext:
                     - '@behat_proxy.feature_context'
