@@ -46,24 +46,31 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction:
         arguments:
             $uploadDir: '%infrastructure.export_participant_path%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportFileAction:
         arguments:
             $exportProductsPath: '%infrastructure.export_products_path%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
         arguments:
             $featureRegistrationTemplateBuilderEnabled: '%feature_registration_template_builder_enabled%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction:
         arguments:
             $exportPath: '%infrastructure.export_rooming_list_path%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot\DownloadAction:
         arguments:
             $exportPath: '%infrastructure.export_spot_path%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction:
         arguments:
             $exportPath: '%infrastructure.export_form_template_user_data_path%'
+        tags: ['controller.service_arguments']
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction:
         arguments:
             $defaultLocales: '%infrastructure.default_locales%'
+        tags: ['controller.service_arguments']
 
     Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
         arguments:
