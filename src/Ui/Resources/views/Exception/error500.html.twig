@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="{{ _charset }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/mainStyle.css') }}">
+        <title>{{ 'error.500.title'|trans }}</title>
+    </head>
+    <body class="grey">
+        <div class="error-header">
+            <img src="{{ asset('assets/images/vimeet.png') }}">
+        </div>
+        <div class="well text-center error-content">
+            <h1 class="error-title">
+                <b>{{ 'error.500.title'|trans }}</b>
+            </h1>
+            <p>
+                {{ 'error.500.content'|trans }}
+            </p>
+        </div>
+
+        {% if app.debug %}{{ status_text }}{% endif %}
+
+    </body>
+</html>
