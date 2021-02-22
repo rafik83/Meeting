@@ -25,9 +25,9 @@ class ExceptionListener
     private $authorizationCheckerAdapter;
 
     const TEMPLATE_MAIN_ERRORS = [
-        Response::HTTP_INTERNAL_SERVER_ERROR => 'TwigBundle:Exception:error500.html.twig',
-        Response::HTTP_NOT_FOUND             => 'TwigBundle:Exception:error404.html.twig',
-        Response::HTTP_FORBIDDEN             => 'TwigBundle:Exception:error403.html.twig',
+        Response::HTTP_INTERNAL_SERVER_ERROR => '@Ui/Exception/error500.html.twig',
+        Response::HTTP_NOT_FOUND             => '@Ui/Exception/error404.html.twig',
+        Response::HTTP_FORBIDDEN             => '@Ui/Exception/error403.html.twig',
     ];
 
     const TEMPLATE_EVENT_ERRORS = [
