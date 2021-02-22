@@ -11,12 +11,12 @@ services:
     #
     # Fixture providers
     #
-    vimeet_infrastructure.data_fixtures_orm.provider:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
-        arguments:
-            - '%domain%'
-        tags:
-            - { name: hautelook_alice.faker.provider }
+    # vimeet_infrastructure.data_fixtures_orm.provider:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
+    #     arguments:
+    #         - '%domain%'
+    #     tags:
+    #         - { name: hautelook_alice.faker.provider }
 
     #
     # Managers

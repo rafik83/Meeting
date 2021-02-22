@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Ses
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DeleteExpiredSessionsCommand extends Command
 {
@@ -13,7 +14,7 @@ class DeleteExpiredSessionsCommand extends Command
     /** @var \SessionHandlerInterface */
     private $sessionHandler;
 
-    public function __construct(\SessionHandlerInterface $sessionHandler)
+    public function __construct(SessionInterface $sessionHandler)
     {
         $this->sessionHandler = $sessionHandler;
 

@@ -1,7 +1,7 @@
 imports:
-    - { resource: config.yml }
+    # - { resource: config.yml }
     - { resource: services_prod.yml }
-    - { resource: packages/snc_redis.yml }
+    # - { resource: packages/snc_redis.yml }
 
 #framework:
 #    validation:
@@ -22,13 +22,15 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
-snc_redis:
-    clients:
-        doctrine:
-            type: predis
-            alias: doctrine
-            dsn: '%redis_dsn%/2'
-            logging: '%kernel.debug%'
+
+# since sf4, doctrine cache should be stored in files
+# snc_redis:
+#     clients:
+#         doctrine:
+#             type: predis
+#             alias: doctrine
+#             dsn: '%redis_dsn%/2'
+#             logging: '%kernel.debug%'
     # doctrine:
     #     metadata_cache:
     #         client: doctrine

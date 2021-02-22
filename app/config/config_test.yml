@@ -1,5 +1,5 @@
 imports:
-    - { resource: config.yml }
+    # - { resource: config.yml }
     - { resource: services_test.yml }
     - { resource: parameters_test.yml }
 
@@ -25,15 +25,11 @@ doctrine:
     dbal:
         dbname: "%database_name%_test"
         driver_class: Proximum\Vimeet\Behat\DBAL\Driver\PDOMySql\Driver
-    # orm:
-    #     metadata_cache_driver: array
-    #     result_cache_driver: array
-    #     query_cache_driver: array
 
-hautelook_alice:
-    db_drivers:
-        orm: ~
-    locale: fr_FR
-    seed: 1
-    persist_once: false
-    loading_limit: 5
+# hautelook_alice:
+#     db_drivers:
+#         orm: ~
+#     locale: fr_FR
+#     seed: 1
+#     persist_once: false
+#     loading_limit: 5
