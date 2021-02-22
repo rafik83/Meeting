@@ -198,7 +198,7 @@ test-behat@test:
 	rm -rf var/cache/test/*
 	rm -rf var/tests/behat
 	bin/console fos:elastica:reset --env=test --no-debug
-	bin/behat --format=junit --out=var/tests/behat --no-interaction
+	php -d date.timezone=UTC bin/behat --format=junit --out=var/tests/behat --no-interaction
 
 ##########
 # Deploy #
@@ -278,7 +278,7 @@ init-db:
 init-db@test:
 	bin/console doctrine:schema:drop --force --env=test
 	bin/console doctrine:schema:create --env=test
-	bin/console doctrine:fixtures:load --no-interaction --env=test
+	# bin/console doctrine:fixtures:load --no-interaction --env=test
 	bin/console cache:clear --env=test
 	bin/console vimeet:elasticsearch:index --env=test
 
