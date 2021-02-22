@@ -13,6 +13,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -24,17 +25,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ValidateController extends AbstractController
 {
-    private TranslatorInterface $translator;
+    private UserEventPhoneRepositoryInterface $userEventPhoneRepository;
     private AuthenticationManagerInterface $authenticationManager;
+    private TranslatorInterface $translator;
     private CommandBusInterface $commandBus;
 
     public function __construct(
-        TranslatorInterface $translator,
+        UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         AuthenticationManagerInterface $authenticationManager,
+        TranslatorInterface $translator,
         CommandBusInterface $commandBus
     ) {
-        $this->translator = $translator;
+        $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->authenticationManager = $authenticationManager;
+        $this->translator = $translator;
         $this->commandBus = $commandBus;
     }
 
@@ -47,8 +51,7 @@ class ValidateController extends AbstractController
         $event = $eventDomain->getEvent();
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($userEventToken->getUser(), $userEventToken->getEvent())
         ;
 
@@ -94,8 +97,7 @@ class ValidateController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($user, $eventDomain->getEvent())
         ;
 
@@ -144,8 +146,7 @@ class ValidateController extends AbstractController
 
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($userEventToken->getUser(), $userEventToken->getEvent());
 
         if (null === $userEventPhone) {
