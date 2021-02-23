@@ -3,35 +3,41 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManager;
-use JMS\JobQueueBundle\Entity\Job;
+use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 abstract class AbstractJobQueueAdapter
 {
-    /** @var EntityManager */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+    private MessageBusInterface $bus;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, MessageBusInterface $bus)
     {
         $this->entityManager = $entityManager;
+        $this->bus = $bus;
     }
 
     protected function hasAlreadyJobPending(string $command, array $args): bool
     {
-        $pendingJob = $this->entityManager
-            ->createQuery("SELECT j FROM JMSJobQueueBundle:Job j
-                WHERE j.command = :command
-                AND j.args = :args
-                AND j.state = :state
-            ")
-            ->setParameter('command', $command)
-            ->setParameter('args', $args, Types::JSON)
-            ->setParameter('state', Job::STATE_PENDING)
-            ->setMaxResults(1)
-            ->getOneOrNullResult()
-        ;
+        // TODO: refactor to use messenger
+        return false;
 
-        return null !== $pendingJob;
+        // $pendingJob = $this->entityManager
+        //     ->createQuery("SELECT j FROM JMSJobQueueBundle:Job j
+        //         WHERE j.command = :command
+        //         AND j.args = :args
+        //         AND j.state = :state
+        //     ")
+        //     ->setParameter('command', $command)
+        //     ->setParameter('args', $args, Types::JSON)
+        //     ->setParameter('state', Job::STATE_PENDING)
+        //     ->setMaxResults(1)
+        //     ->getOneOrNullResult()
+        // ;
+
+        // return null !== $pendingJob;
     }
 
     protected function setJob(Job $job): void
@@ -44,17 +50,21 @@ abstract class AbstractJobQueueAdapter
             return;
         }
 
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
+        $this->bus->dispatch($job);
+        // $this->entityManager->persist($job);
+        // $this->entityManager->flush($job);
     }
 
     protected function updateJob(Job $job): void
     {
+        throw new LogicException('TODO: refactor to use messenger');
         $this->entityManager->flush($job);
     }
 
     protected function removeJob(string $command, array $args): void
     {
+        throw new LogicException('TODO: refactor to use messenger');
+
          $this->entityManager
              ->createQueryBuilder()
              ->delete()
