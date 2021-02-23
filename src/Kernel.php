@@ -40,7 +40,6 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
 
         // load legacy sf3 services
         $confDirLegacy = $this->getProjectDir().'/app/config/';
@@ -55,6 +54,9 @@ class Kernel extends BaseKernel
         $loader->load($confAdminLegacy);
         $confEventLegacy = $this->getProjectDir().'/src/Ui/Bundle/EventBundle/Resources/config/services.yml';
         $loader->load($confEventLegacy);
+
+        // env services will overide all others
+        $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes): void
