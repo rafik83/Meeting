@@ -75,5 +75,7 @@ class PrintPdfCommand extends Command
                 $input->getOption('orderBy')
             )
         );
+
+        return 0;
     }
 }
