@@ -974,7 +974,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchValidateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter_batch_job_queue.batch_validate_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidate }
@@ -992,7 +992,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@components.sheet.pdf.generate_html_file'
             - '@components.sheet.pdf.generate_html'
-            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '@Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface'
             - '%jenkins_phantomjs_sheet_pdf_print_build_name%'
             - '%admin_domain%'
             - '%scheme%'
@@ -1003,7 +1003,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter_batch_job_queue.batch_pending_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchPendingJobQueue'
 
     Proximum\Vimeet\Application\Command\Sheet\BatchPrintInvoicesHandler:
         arguments:
@@ -1018,7 +1018,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.batch_enable_disable_handler'
-            - '@adapter_batch_job_queue.batch_refuse_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchRefuseJobQueue'
             - '@adapter.job_queue_adapter'
 
     command.sheet.batch_enable_disable_handler:
@@ -1028,7 +1028,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@adapter_batch_job_queue.batch_enable_disable_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchEnableDisableJobQueue'
 
     Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler:
         arguments:
@@ -1057,7 +1057,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchDraftHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter_batch_job_queue.batch_draft_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDraftJobQueue'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchDraft }
@@ -1065,7 +1065,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidateHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter_batch_job_queue.batch_validation_validate_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchValidationValidate }
@@ -1182,7 +1182,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter_batch_job_queue.batch_accept_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAccept }
 
@@ -2038,7 +2038,7 @@ services:
     Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler:
         arguments:
             - '@repository.messaging.campaign_repository'
-            - '@adapter.sendgrid_api_adapter'
+            - '@Proximum\Vimeet\Application\Adapter\EmailingSenderInterface'
             - '@Proximum\Vimeet\Domain\Messaging\GetUsersReceivers'
             - '@Proximum\Vimeet\Domain\Messaging\GetSheetsReceivers'
             - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
@@ -2059,7 +2059,7 @@ services:
             - '@repository.billing_info_repository'
             - '@application.components.messaging.message_factory'
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
-            - '@adapter.sendgrid_api_adapter'
+            - '@Proximum\Vimeet\Application\Adapter\EmailingSenderInterface'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
             - '@datetime'
             - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
@@ -2590,47 +2590,47 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\EntityManagerAdapter
         arguments:
             - '@doctrine.orm.entity_manager'
-    adapter.job_queue_adapter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_accept_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_refuse_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchRefuseJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_pending_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchPendingJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_validate_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDuplicateSheetsJobQueue:
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue:
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_enable_disable_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchEnableDisableJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_draft_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDraftJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    adapter_batch_job_queue.batch_validation_validate_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter:
-        arguments:
-            - '@doctrine.orm.entity_manager'
+    # adapter.job_queue_adapter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_accept_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_refuse_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchRefuseJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_pending_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchPendingJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_validate_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDuplicateSheetsJobQueue:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_enable_disable_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchEnableDisableJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_draft_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDraftJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # adapter_batch_job_queue.batch_validation_validate_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidationValidateJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Happening\Webinar\RecordJobQueueAdapter:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter:
         arguments:
@@ -3049,8 +3049,7 @@ services:
             - '@adapter.router'
             - '@monolog.logger'
 
-    adapter.sendgrid_api_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
+    Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter:
         arguments:
             - '@domain.messaging.sendgrid_api_client'
             - '@twig'
@@ -6130,7 +6129,7 @@ services:
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
-            - '@adapter.exec_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter'
             - '@Proximum\Vimeet\Domain\File\FileFactory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Export }
@@ -7136,7 +7135,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\ScheduleUpdateTranslationsCommand:
         arguments:
-            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '@Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface'
             - '%jenkins_update_translations_build_names%'
         tags:
             - { name: console.command }

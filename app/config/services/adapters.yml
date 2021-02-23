@@ -14,16 +14,12 @@ services:
 
     Proximum\Vimeet\Application\Adapter\QueryBusInterface: '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
-    adapter.exec_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
-
-    adapter.third_party.jenkins.build_creator_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter
+    Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter:
         arguments:
-            - '@adapter.exec_adapter'
-            - '%jenkins_command%'
-            - '%jenkins_user%'
-            - '%jenkins_password%'
+            $jenkinsCommand: '%jenkins_command%'
+            $jenkinsUser: '%jenkins_user%'
+            $jenkinsPassword: '%jenkins_password%'
 
     Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter: ~
 

@@ -7,5 +7,5 @@ services:
         calls:
             - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\MonologProvider']]
 
-    adapter.third_party.jenkins.build_creator_adapter:
+    Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface:
         alias: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\FakeBuildCreatorAdapter

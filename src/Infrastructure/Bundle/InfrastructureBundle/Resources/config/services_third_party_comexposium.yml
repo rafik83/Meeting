@@ -107,9 +107,9 @@ services:
     #
     # JobQueue
     #
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue:
-        arguments:
-            - '@doctrine.orm.entity_manager'
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
 
     #
     # SSO
