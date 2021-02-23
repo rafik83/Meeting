@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event;
 
 use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -30,8 +31,7 @@ class AffectAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var CommandBus */
-    private $commandBus;
+    private CommandBusInterface $commandBus;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -39,16 +39,8 @@ class AffectAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /**
-     * @param CommandBus                           $commandBus
-     * @param RouterInterface                      $router
-     * @param FormFactoryInterface                 $formFactory
-     * @param EngineInterface                      $engine
-     * @param FlashBagInterface                    $flashBag
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     */
     public function __construct(
-        CommandBus $commandBus,
+        CommandBusInterface $commandBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,

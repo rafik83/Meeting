@@ -2,11 +2,11 @@
 
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Tip\Event;
 
-use League\Tactician\CommandBus;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -57,7 +57,7 @@ class AffectActionTest extends TestCase
         $this->request = $this->prophesize(Request::class);
         $this->event = $this->prophesize(Event::class);
         $this->admin = $this->prophesize(Admin::class);
-        $this->commandBus = $this->prophesize(CommandBus::class);
+        $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);

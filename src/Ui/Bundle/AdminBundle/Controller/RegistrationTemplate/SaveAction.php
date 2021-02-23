@@ -2,8 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
 
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Save;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
@@ -11,20 +11,16 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Ad
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SaveAction
 {
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
-
-    /** @var CommandBus */
-    private $commandBus;
+    private AuthorizationCheckerAdapterInterface $authorizationChecker;
+    private CommandBusInterface $commandBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        CommandBus $commandBus
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
