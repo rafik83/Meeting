@@ -1,0 +1,6 @@
+framework:
+    messenger:
+        routing:
+            # Route your messages to the transports
+            'Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job': sync
+            'Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\LongJob': sync
