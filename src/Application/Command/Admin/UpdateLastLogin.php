@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-class UpdateLastLogin
+use Proximum\Vimeet\Application\Command\Command;
+
+class UpdateLastLogin implements Command
 {
     /**
      * @var string

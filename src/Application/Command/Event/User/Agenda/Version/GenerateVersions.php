@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\User\Agenda\Version;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GenerateVersions
+class GenerateVersions implements Command
 {
     /** @var Event */
     public $event;

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Encryption;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Decrypt
+class Decrypt implements Command
 {
     /** @var Sheet */
     public $sheet;

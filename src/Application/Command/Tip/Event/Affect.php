@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Affect
+class Affect implements Command
 {
     /** @var Event */
     public $event;

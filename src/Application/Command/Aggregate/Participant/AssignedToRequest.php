@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Aggregate\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class AssignedToRequest
+class AssignedToRequest implements Command
 {
     /** @var Event */
     public $event;

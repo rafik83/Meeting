@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-class Unlock
+class Unlock implements Command
 {
     /**
      * @var MeetingSlot

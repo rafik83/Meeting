@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GenerateTaggedNomenclatureFilter
+class GenerateTaggedNomenclatureFilter implements Command
 {
     /** @var null|Event */
     public $event;

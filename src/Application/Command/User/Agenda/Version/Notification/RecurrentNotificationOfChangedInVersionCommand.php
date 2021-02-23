@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class RecurrentNotificationOfChangedInVersionCommand
+class RecurrentNotificationOfChangedInVersionCommand implements Command
 {
     /** @var Event[] */
     public $events;

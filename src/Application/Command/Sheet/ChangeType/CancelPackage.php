@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class CancelPackage
+class CancelPackage implements Command
 {
     /** @var Sheet */
     public $sheet;

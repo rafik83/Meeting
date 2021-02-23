@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
-class Create
+use Proximum\Vimeet\Application\Command\Command;
+
+class Create implements Command
 {
     /** @var string */
     public $title;

@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Invoice;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 
+// TODO: check if it's really a command (looks like a query)
 class Find
 {
     /** @var Admin */

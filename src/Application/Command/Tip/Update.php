@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
-class Update
+class Update implements Command
 {
     /** @var Tip */
     public $tip;

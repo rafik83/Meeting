@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Aggregate;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class AvailableSlotAggregator
+class AvailableSlotAggregator implements Command
 {
     /** @var Sheet */
     public $sheet;

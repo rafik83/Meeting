@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PostBatchEnableDisable
+class PostBatchEnableDisable implements Command
 {
     /**
      * @var Sheet[]

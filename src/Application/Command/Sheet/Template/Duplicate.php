@@ -3,10 +3,11 @@
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-class Duplicate
+class Duplicate implements Command
 {
     /**
      * @var string

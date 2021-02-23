@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class BatchPrintInvoices
+use Proximum\Vimeet\Application\Command\Command;
+
+class BatchPrintInvoices implements Command
 {
     /** @var string */
     public $emailToNotify;

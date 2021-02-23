@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Type;
 
-abstract class AbstractEventTip
+abstract class AbstractEventTip implements Command
 {
     /** @var string */
     public $title;
