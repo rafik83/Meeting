@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event;
 
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
