@@ -2,10 +2,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue;
 
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchAcceptCommand;
 
 class BatchAcceptJobQueue extends AbstractJobQueueAdapter implements BatchJobQueueInterface
@@ -20,8 +20,8 @@ class BatchAcceptJobQueue extends AbstractJobQueueAdapter implements BatchJobQue
         }
 
         $job = new Job(BatchAcceptCommand::NAME, [
-            implode(',', $ids),
-            $admin->getId(),
+            'sheetIds' => implode(',', $ids),
+            'adminId' => $admin->getId(),
         ]);
 
         $this->setJob($job);

@@ -4,25 +4,26 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Hap
 
 use DateTime;
 use DateTimeInterface;
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\Happening\Webinar\RecordJobQueueInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\ReconciliationCommand;
 
 class RecordJobQueueAdapter extends AbstractJobQueueAdapter implements RecordJobQueueInterface
 {
     public function removeReconciliation(int $happeningId): void
     {
+        // TODO: find a way to cancel a job
         $this->removeJob(
             ReconciliationCommand::NAME,
-            [$happeningId]
+            ['happening' => $happeningId]
         );
     }
 
     public function prepareReconciliation(int $happeningId, DateTimeInterface $reconciliationDate): void
     {
         $command = ReconciliationCommand::NAME;
-        $args = [$happeningId];
+        $args = ['happening' => $happeningId];
 
         $this->removeJob($command, $args);
 

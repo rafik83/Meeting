@@ -2,10 +2,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue;
 
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchValidateCommand;
 
 class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQueueInterface
@@ -19,11 +19,13 @@ class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQ
             throw new \InvalidArgumentException('Missing sheet ids parameters');
         }
 
-        $job = new Job(BatchValidateCommand::NAME, [
-            implode(',', $ids),
-            $admin->getId(),
-            isset($options['comment']) ? $options['comment'] : null,
-        ]);
+        $arguments = [
+            'sheetIds' => implode(',', $ids),
+            'adminId' => $admin->getId(),
+            'comment' => $options['comment']??null,
+        ];
+
+        $job = new Job(BatchValidateCommand::NAME, $arguments);
 
         $this->setJob($job);
     }
