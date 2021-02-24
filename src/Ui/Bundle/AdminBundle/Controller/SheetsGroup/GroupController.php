@@ -36,10 +36,12 @@ class GroupController extends AbstractController
 
     public function __construct(
         UserToGroupManagerChecker $userToGroupManagerChecker,
+        TranslatorInterface $translator,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
     ) {
         $this->userToGroupManagerChecker = $userToGroupManagerChecker;
+        $this->translator = $translator;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
     }
