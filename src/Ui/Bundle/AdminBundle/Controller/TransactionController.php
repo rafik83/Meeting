@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Transaction\Create;
 use Proximum\Vimeet\Application\Command\Transaction\Remove;
 use Proximum\Vimeet\Application\Command\Transaction\Update;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -18,9 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TransactionController extends AbstractController
 {
+    private SheetInfoGuesser $sheetInfoGuesser;
     private CommandBusInterface $commandBus;
 
     public function __construct(
+        SheetInfoGuesser $sheetInfoGuesser,
         CommandBusInterface $commandBus
     ) {
         $this->commandBus = $commandBus;
@@ -43,8 +46,7 @@ class TransactionController extends AbstractController
                 ]) . '#sheetOrders');
         }
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+        $sheetInfo = $this->sheetInfoGuesser
             ->guessSheetTitle($sheet, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Transaction:create.html.twig', [
@@ -75,9 +77,8 @@ class TransactionController extends AbstractController
                 ]) . '#sheetOrders');
         }
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
-            ->guessSheetName($sheet, $locale);
+        $sheetInfo = $this->sheetInfoGuesser
+            ->guessSheetTitle($sheet, $locale);
 
         return $this->render('AdminBundle:Transaction:update.html.twig', [
             'form'       => $form->createView(),

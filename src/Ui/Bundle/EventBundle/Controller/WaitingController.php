@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatchAnonymousUser;
+use Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationAccessChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,20 +12,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WaitingController extends AbstractController
 {
+    private RegistrationAccessChecker $registrationAccessChecker;
     private TranslatorInterface $translator;
 
     public function __construct(
+        RegistrationAccessChecker $registrationAccessChecker,
         TranslatorInterface $translator
     ) {
+        $this->registrationAccessChecker = $registrationAccessChecker;
         $this->translator = $translator;
     }
 
     public function indexAction(EventDomain $eventDomain): Response
     {
         $event = $eventDomain->getEvent();
-        $type  = $this
-            ->get('domain.key_dates.checker.registration_access_checker')
-            ->getRegistrationAccessStatus($event);
+        $type  = $this->registrationAccessChecker->getRegistrationAccessStatus($event);
 
         $isLoginActivated = false;
 

@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
 use Proximum\Vimeet\Application\Command\Order\ApplyPromotionCode;
 use Proximum\Vimeet\Application\Command\Order\RemoveRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -32,6 +33,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class OrderController extends AbstractController
 {
     private FlashBagInterface $flashBag;
+    private SheetInfoGuesser $sheetInfoGuesser;
     private TranslatorInterface $translator;
     private FormFactoryInterface $formFactory;
     private QueryBusInterface $queryBus;
@@ -39,12 +41,14 @@ class OrderController extends AbstractController
 
     public function __construct(
         FlashBagInterface $flashBag,
+        SheetInfoGuesser $sheetInfoGuesser,
         TranslatorInterface $translator,
         FormFactoryInterface $formFactory,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
     ) {
         $this->flashBag = $flashBag;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->translator = $translator;
         $this->formFactory = $formFactory;
         $this->queryBus = $queryBus;
@@ -106,8 +110,7 @@ class OrderController extends AbstractController
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessIfOrderIsInvoiced($order);
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+        $sheetInfo = $this->sheetInfoGuesser
             ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
@@ -159,8 +162,7 @@ class OrderController extends AbstractController
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+        $sheetInfo = $this->sheetInfoGuesser
             ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
@@ -193,8 +195,7 @@ class OrderController extends AbstractController
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+        $sheetInfo = $this->sheetInfoGuesser
             ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()))
         ;
 
@@ -229,8 +230,7 @@ class OrderController extends AbstractController
         $this->denyAccessIfOrderNotInEvent($event, $order);
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sheetInfo = $this
-            ->get('vimeet_infrastructure.application.components.sheet.sheet_info_guesser')
+        $sheetInfo = $this->sheetInfoGuesser
             ->guessSheetTitle($order->getSheet(), $event->getAvailableLocale($request->getLocale()));
 
         $updateRow = new UpdateRow($row);

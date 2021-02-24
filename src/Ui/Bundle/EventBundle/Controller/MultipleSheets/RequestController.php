@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Exception\MultipleSheets\Request\NoResultException;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\SheetListViewQuery;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\MultipleSheet\Request\FilterRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +18,11 @@ class RequestController extends AbstractController
 {
     const PAGINATE_REQUEST_LIMIT = 50;
 
+    private SheetRepositoryInterface $sheetRepository;
     private QueryBusInterface $queryBus;
 
     public function __construct(
+        SheetRepositoryInterface $sheetRepository,
         QueryBusInterface $queryBus
     ) {
         $this->queryBus = $queryBus;
@@ -30,9 +33,7 @@ class RequestController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $eventDomain->getEvent();
 
-        $sheets = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetsByUserAndEvent($user, $event);
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
         $filterRequestView = new FilterRequestView();
         $form = $this->createForm(FilterRequestType::class, $filterRequestView, [

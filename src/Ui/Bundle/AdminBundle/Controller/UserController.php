@@ -13,6 +13,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
@@ -28,6 +29,7 @@ class UserController extends AbstractController
 {
     private FormFactoryInterface $formFactory;
     private FilterSummary $filterSummary;
+    private TypeRepositoryInterface $typeRepository;
     private TranslatorInterface $translator;
     private EventUrlGeneratorInterface $urlGenerator;
     private QueryBusInterface $queryBus;
@@ -36,12 +38,14 @@ class UserController extends AbstractController
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterSummary $filterSummary,
+        TypeRepositoryInterface $typeRepository,
         TranslatorInterface $translator,
         EventUrlGeneratorInterface $urlGenerator,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
     ) {
         $this->formFactory = $formFactory;
+        $this->typeRepository = $typeRepository;
         $this->filterSummary = $filterSummary;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
@@ -82,8 +86,7 @@ class UserController extends AbstractController
         }
 
         if (!isset($filters['type'])) {
-            $filters['types'] = $this
-                ->get('vimeet_infrastructure.repository.type_repository')
+            $filters['types'] = $this->typeRepository
                 ->getAllowedTypesByEvent($this->getUser(), $event);
         } else {
             $filters['types'] = [$filters['type']];
@@ -151,10 +154,7 @@ class UserController extends AbstractController
         }
 
         try {
-            $view = $this
-                ->get('query.user.user_details_view_query_handler')
-                ->handle(new UserDetailsViewQuery($user, $event))
-            ;
+            $view = $this->queryBus->handle(new UserDetailsViewQuery($user, $event));
         } catch (UserEventMissingException $userEventMissingException) {
             throw $this->createNotFoundException($userEventMissingException->getMessage());
         } catch (SheetNotFoundException $sheetNotFoundException) {

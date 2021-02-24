@@ -101,10 +101,7 @@ class PaymentController extends AbstractController
             ]);
         }
 
-        $paymentConditionsView = $this
-            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
-            ->handle(new PaymentConditionsViewQuery($sheet))
-        ;
+        $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($sheet));
         $depositAllowed = DepositApplicable::isApplicable($paymentConditionsView, $now, $total);
         $deposit        = DepositApplicable::calculateDeposit($paymentConditionsView, $now, $total);
 
