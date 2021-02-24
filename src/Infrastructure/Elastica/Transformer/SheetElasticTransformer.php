@@ -29,7 +29,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Exception\MissingResourceException;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -69,6 +71,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /** @var CampaignRepositoryInterface */
     private $campaignRepository;
 
+    private ?LoggerInterface $logger;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -81,7 +85,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         MeetingRepositoryInterface $meetingRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         SheetOrderStatus $sheetOrderStatus,
-        CampaignRepositoryInterface $campaignRepository
+        CampaignRepositoryInterface $campaignRepository,
+        LoggerInterface $logger = null
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -95,6 +100,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->sheetOrderStatus = $sheetOrderStatus;
         $this->campaignRepository = $campaignRepository;
+        $this->logger = $logger;
     }
 
     public function transform($sheet, array $fields): Document
@@ -270,7 +276,17 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $countries = [];
 
         foreach ($locales as $key => $locale) {
-            $countryName = $countryCode ? Countries::getName($countryCode, $locale) : '';
+            try {
+                $countryName = $countryCode ? Countries::getName($countryCode, $locale) : '';
+            } catch (MissingResourceException $e) {
+                $countryName = '';
+                if ($this->logger) {
+                    $this->logger->warning(
+                        'Country not found for code {countryCode}, locale {locale}',
+                        ['countryCode' => $countryCode, 'locale' => $locale]
+                    );
+                }
+            }
             $countries[$key]['locale'] = $locale;
             $countries[$key]['label'] = $countryName;
             $countries[$key]['label_autocomplete'] = $countryName;
