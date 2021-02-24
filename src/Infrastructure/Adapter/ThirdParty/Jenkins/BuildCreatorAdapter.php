@@ -28,7 +28,7 @@ class BuildCreatorAdapter implements BuildCreatorInterface
         string $jenkinsCommand,
         string $jenkinsUser,
         string $jenkinsPassword,
-        LoggerInterface $logger
+        ?LoggerInterface $logger = null
     ) {
         $this->execAdapter     = $execAdapter;
         $this->jenkinsCommand  = $jenkinsCommand;
@@ -67,7 +67,9 @@ class BuildCreatorAdapter implements BuildCreatorInterface
         $this->execAdapter->exec($command . ' 2>&1', $output, $result);
 
         if ($result > 0) {
-            $this->logger->error('[BuildCreationFailed] '.$result);
+            if ($this->logger) {
+                $this->logger->error('[BuildCreationFailed] '.$result);
+            }
             throw new BuildCreationFailedException();
         }
 

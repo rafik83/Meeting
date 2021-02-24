@@ -83,7 +83,8 @@ services:
         alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue
     Proximum\Vimeet\Application\Adapter\EmailingSenderInterface:
         alias: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
-
+    Proximum\Vimeet\Application\Adapter\ExecInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
 
     # services not autowired
     Symfony\Component\Serializer\Normalizer\DataUriNormalizer: ~
