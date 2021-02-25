@@ -60,6 +60,8 @@ RUN pecl install redis apcu lzf timezonedb \
   && docker-php-ext-enable redis apcu lzf imagick timezonedb \
   && rm -rf /tmp/pear
 
+RUN echo 'memory_limit=2G' > $PHP_INI_DIR/conf.d/memory-limit-php.ini
+
 RUN a2enmod expires headers rewrite status ssl proxy proxy_http deflate
 
 # Debug options, if provided using the DEBUG arg.
