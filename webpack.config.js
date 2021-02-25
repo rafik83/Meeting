@@ -5,7 +5,7 @@ var CopyWebPackPlugin = require('copy-webpack-plugin');
 Encore
     .disableSingleRuntimeChunk()
 // directory where all compiled assets will be stored
-    .setOutputPath('web/assets')
+    .setOutputPath('public/assets')
 
     // what's the public path to this directory (relative to your project's document root dir)
     .setPublicPath('/assets/')
@@ -16,7 +16,7 @@ Encore
     // allow sass/scss files to be processed
     .enableSassLoader()
 
-    // will output as web/build/app.js
+    // will output as public/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
     .addEntry('js/visio', './src/Ui/Bundle/EventBundle/Resources/assets/js/visio.js')
     .addEntry('js/networking', './src/Ui/Bundle/EventBundle/Resources/assets/js/networking.js')
@@ -32,7 +32,7 @@ Encore
     .addEntry('tinymce/tip/tip', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tip/tip.js')
     .addEntry('tinymce/init-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce/init-tinymce.js')
 
-    // will output as web/build/global.css
+    // will output as public/build/global.css
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')
     .addStyleEntry('css/mainStyle', './src/Ui/Bundle/EventBundle/Resources/assets/sass/main.scss')
     .addStyleEntry('tinymce/tinymceStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/tinymce.scss')

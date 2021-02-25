@@ -48,6 +48,7 @@ ansible.cfg
 /public/uploads/*
 /public/css/*
 /public/media/*
+/public/assets/*
 
 # Sessions
 /app/sessions
