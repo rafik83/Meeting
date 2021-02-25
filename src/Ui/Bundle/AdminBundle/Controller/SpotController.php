@@ -241,7 +241,7 @@ class SpotController extends AbstractController
             'locale' => $request->getLocale(),
         ]);
 
-        if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             /** @var UnavailabilityBatchResult $result */
             $result = $this->commandBus->handle($unavailabilityBatch);
             $this->addFlash('success', 'flash.admin.spot_batch.spotUnavailability.success');
