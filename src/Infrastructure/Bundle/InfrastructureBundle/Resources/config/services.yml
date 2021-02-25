@@ -2568,9 +2568,9 @@ services:
 
     Proximum\Vimeet\Application\Adapter\RouterInterface: '@adapter.router'
 
-    Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter:
-        arguments:
-            - '@session'
+    # Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter:
+    #     arguments:
+    #         - '@session'
     Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter:
         arguments:
             - '@adapter.file_system_adapter'
@@ -4966,6 +4966,7 @@ services:
             - '@repository.invoice.invoice_repository'
             - '@Proximum\Vimeet\Domain\Order\SheetOrderStatus'
             - '@repository.messaging.campaign_repository'
+            - '@logger'
 
     #
     # Product Transformer
@@ -5804,13 +5805,14 @@ services:
             - '@payum'
             - '@repository.transaction'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-    vimeet.payum.paypal.action.store_notification:
-        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction
+    Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction:
         arguments:
             - '@repository.payment.notification_repository'
             - '@repository.payment.payment_repository'
             - '@domain.transaction.transaction_manager'
             - '@datetime'
+        # set public to be used in payum config
+        public: true
 
     #
     # Sheet

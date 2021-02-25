@@ -111,7 +111,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
-            - '@ui.helper.currency_formatter'
+            - '@Proximum\Vimeet\Ui\Helper\CurrencyFormatter'
         tags:
             - { name: form.type }
     form_type_package.package_choice_type:
@@ -378,8 +378,8 @@ services:
     #
     # Helper
     #
-    ui.helper.currency_formatter:
-        class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
+    # ui.helper.currency_formatter:
+    #     class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
         # arguments:
         #     - '@twig.extension.intl'
 
