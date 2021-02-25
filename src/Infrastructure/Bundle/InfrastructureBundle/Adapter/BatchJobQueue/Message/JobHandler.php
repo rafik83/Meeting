@@ -6,20 +6,26 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class JobHandler implements MessageHandlerInterface
 {
     private KernelInterface $kernel;
-    private LoggerInterface $logger;
     private bool $isDebugMode;
+    private LockFactory $jobLockFactory;
+    private ?LoggerInterface $logger;
 
-    public function __construct(KernelInterface $kernel, LoggerInterface $logger, bool $isDebugMode)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        bool $isDebugMode,
+        LockFactory $jobLockFactory,
+        LoggerInterface $logger = null
+    ) {
         $this->kernel = $kernel;
-        $this->logger = $logger;
         $this->isDebugMode = $isDebugMode;
-
+        $this->jobLockFactory = $jobLockFactory;
+        $this->logger = $logger;
     }
 
     function __invoke(Job $job)
@@ -40,5 +46,8 @@ class JobHandler implements MessageHandlerInterface
         } else {
             $this->logger->info(sprintf('Command %s ran successfully', (string) $input));
         }
+
+        $lock = $this->jobLockFactory->createLock($job->getLockKey());
+        $lock->release();
     }
 }

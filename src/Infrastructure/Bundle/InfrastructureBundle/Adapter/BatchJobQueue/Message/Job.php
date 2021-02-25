@@ -36,17 +36,10 @@ class Job
     /** State if job exceeds its configured maximum runtime. */
     const STATE_TERMINATED = 'terminated';
 
-    /**
-     * State if an error occurs in the runner command.
-     *
-     * The runner command is the command that actually launches the individual
-     * jobs. If instead an error occurs in the job command, this will result
-     * in a state of FAILED.
-     */
-    const STATE_INCOMPLETE = 'incomplete';
-
     private string $command;
     private array $args;
+    private string $lockKey;
+    private int $maxExecutionTime = 300;
     private DateTimeInterface $executeAfter;
 
     public function __construct(string $command, array $args)
@@ -65,6 +58,11 @@ class Job
         return $this->args;
     }
 
+    public function getLockKey(): string
+    {
+        return $this->lockKey ?: $this->command.';'.implode(';', $this->args);
+    }
+
     public function getExecuteAfter(): \DateTimeInterface
     {
         return $this->executeAfter;
@@ -73,5 +71,18 @@ class Job
     public function setExecuteAfter(DateTimeInterface $executeAfter): void
     {
         $this->executeAfter = $executeAfter;
+    }
+
+    public function getMaxExecutionTime(): int
+    {
+        return $this->maxExecutionTime;
+    }
+
+    /**
+     * Change default max execution time (value is in seconds)
+     */
+    public function setMaxExecutionTime(int $maxExecutionTime): void
+    {
+        $this->maxExecutionTime = $maxExecutionTime;
     }
 }
