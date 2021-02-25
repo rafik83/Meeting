@@ -15,32 +15,32 @@ parameters:
     mailer_sender: '%env(MAILER_SENDER)%'
 
 framework:
-    esi: { enabled: true }
-    translator:
-        fallbacks: ["%locale%"]
-        logging: false
-    secret:          "%secret%"
+    # esi: { enabled: true }
+    # translator:
+    #     fallbacks: ["%locale%"]
+    #     logging: false
+    # secret:          "%secret%"
     # router:
     #     resource: "%kernel.project_dir%/app/config/routing.yml"
     #     strict_requirements: ~
     form:            ~
-    csrf_protection: ~
+    # csrf_protection: ~
     validation:      { enable_annotations: false }
     serializer:      { enable_annotations: false }
     templating:
         engines: ['twig']
-    default_locale:  "%locale%"
+    # default_locale:  "%locale%"
     trusted_hosts:   ~
 #    trusted_proxies: "%trusted_proxies%"
-    session:
-        cookie_secure:   true
-        handler_id:      snc_redis.session.handler
-        name:            vimeet
-        gc_probability:  ~
-        cookie_lifetime: 86400
-        gc_maxlifetime:  86400
+    # session:
+    #     cookie_secure:   true
+    #     handler_id:      snc_redis.session.handler
+    #     name:            vimeet
+    #     gc_probability:  ~
+    #     cookie_lifetime: 86400
+    #     gc_maxlifetime:  86400
     fragments: { path: /_fragment }
-    http_method_override: true
+    # http_method_override: true
     assets:
         json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
     php_errors:
