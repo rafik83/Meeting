@@ -54,6 +54,7 @@ class ReconciliationCommand extends Command
         }
 
         if (!$happening->isWebinarRecorded()) {
+            $output->write(sprintf('Webinar %d is not set to be recorded, abort reconciliation', $happening->getId()));
             return 0;
         }
 
