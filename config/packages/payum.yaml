@@ -11,10 +11,10 @@ payum:
     gateways:
         paypal_express_checkout:
             factory: paypal_express_checkout
-            username: "%paypal_username%"
-            password: "%paypal_password%"
-            signature: "%paypal_signature%"
-            sandbox: "%paypal_sandbox%"
-            payum.action.store_notification: "@vimeet.payum.paypal.action.store_notification"
+            username: '%paypal_username%'
+            password: '%paypal_password%'
+            signature: '%paypal_signature%'
+            sandbox: '%paypal_sandbox%'
+            payum.action.store_notification: '@Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction'
         offline:
             factory: offline
