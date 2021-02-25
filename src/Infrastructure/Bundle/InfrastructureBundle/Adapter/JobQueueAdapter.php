@@ -434,33 +434,6 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $this->setJob($job);
     }
 
-    /**
-     * @param Event     $event
-     * @param \DateTime $dateTime
-     * @param Job|null  $job
-     */
-    public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null): void
-    {
-        if (null !== $job) {
-            $job->setExecuteAfter($dateTime);
-
-            $this->updateJob($job);
-
-            return;
-        }
-
-        $job = new Job(
-            GenerateVersionsCommand::NAME,
-            [
-                'eventId' => $event->getId(),
-            ]
-        );
-        // $job->addRelatedEntity($event);
-        $job->setExecuteAfter($dateTime);
-
-        $this->setJob($job);
-    }
-
     public function exportUploadedObjectsBySheets(Event $event, Admin $admin, Event\ExtraData $extraData): void
     {
         $job = new Job(ExportUploadedObjectsBySheetsCommand::NAME, [
