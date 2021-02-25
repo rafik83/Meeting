@@ -108,7 +108,7 @@ class BillingController extends AbstractController
      */
     private function getFlash(string $flash)
     {
-        $sheet = $this->container->get('session')->getFlashBag()->get($flash);
+        $sheet = $this->flashBag->get($flash);
 
         return array_shift($sheet);
     }

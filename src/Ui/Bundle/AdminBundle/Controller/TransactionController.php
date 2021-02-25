@@ -26,6 +26,7 @@ class TransactionController extends AbstractController
         SheetInfoGuesser $sheetInfoGuesser,
         CommandBusInterface $commandBus
     ) {
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->commandBus = $commandBus;
     }
 

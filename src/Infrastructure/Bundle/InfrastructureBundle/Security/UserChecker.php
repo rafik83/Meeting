@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security;
 
-use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -12,6 +11,7 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Exception\SheetDisabledException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\User\UserChecker as SymfonyUserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,15 +33,11 @@ class UserChecker extends SymfonyUserChecker
     private $requestStack;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var TypeRepositoryInterface
      */
     private $typeRepository;
 
+    private FlashBagInterface $flashBag;
     /**
      * @var TypeResolver
      */
@@ -53,14 +49,14 @@ class UserChecker extends SymfonyUserChecker
         SheetRepositoryInterface $sheetRepository,
         TypeRepositoryInterface $typeRepository,
         TypeResolver $typeResolver,
-        SessionInterface $session
+        FlashBagInterface $flashBag
     ) {
-        $this->eventRepository     = $eventRepository;
-        $this->sheetRepository     = $sheetRepository;
-        $this->requestStack        = $requestStack;
-        $this->session             = $session;
-        $this->typeRepository      = $typeRepository;
-        $this->typeResolver        = $typeResolver;
+        $this->eventRepository = $eventRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->requestStack = $requestStack;
+        $this->flashBag = $flashBag;
+        $this->typeRepository = $typeRepository;
+        $this->typeResolver = $typeResolver;
     }
 
     /**
@@ -99,8 +95,8 @@ class UserChecker extends SymfonyUserChecker
 
     private function checkUserType(User $user, Event $event): void
     {
-        $typeFlashBag = $this->session->getFlashBag()->get('register_type');
-        $typeId       = array_shift($typeFlashBag);
+        $typeFlashBag = $this->flashBag->get('register_type');
+        $typeId = array_shift($typeFlashBag);
 
         $type = $this->typeRepository->getById($typeId);
 

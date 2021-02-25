@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ValidateController extends AbstractController
@@ -28,17 +29,20 @@ class ValidateController extends AbstractController
     private UserEventPhoneRepositoryInterface $userEventPhoneRepository;
     private AuthenticationManagerInterface $authenticationManager;
     private TranslatorInterface $translator;
+    private FlashBagInterface $flashBag;
     private CommandBusInterface $commandBus;
 
     public function __construct(
         UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         AuthenticationManagerInterface $authenticationManager,
         TranslatorInterface $translator,
+        FlashBagInterface $flashBag,
         CommandBusInterface $commandBus
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->authenticationManager = $authenticationManager;
         $this->translator = $translator;
+        $this->flashBag = $flashBag;
         $this->commandBus = $commandBus;
     }
 
@@ -109,7 +113,7 @@ class ValidateController extends AbstractController
                 $this->commandBus->handle($validate);
                 $this->addFlash('confirm', 'flash.event.user_event_phone.validate.success');
 
-                if ($redirectTo = $this->container->get('session')->getFlashBag()->get('redirectTo')) {
+                if ($redirectTo = $this->flashBag->get('redirectTo')) {
                     return $this->redirect($redirectTo[0]);
                 }
 
