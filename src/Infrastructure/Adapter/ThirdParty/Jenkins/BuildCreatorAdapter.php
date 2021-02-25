@@ -21,7 +21,7 @@ class BuildCreatorAdapter implements BuildCreatorInterface
     /** @var ExecInterface */
     private $execAdapter;
 
-    private LoggerInterface $logger;
+    private ?LoggerInterface $logger;
 
     public function __construct(
         ExecInterface $execAdapter,
