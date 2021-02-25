@@ -124,16 +124,6 @@ install-db-fixtures@test:
 install-dep:
 	yarn install --force
 
-clearcache:
-	bin/console cache:clear --env=dev
-	make redis-flushdb@vm
-
-update-app@vm:
-	make composer-install
-	make build
-	bin/console doctrine:migrations:migrate --no-interaction
-	make redis-flushdb@vm
-
 #########
 # Build #
 #########
@@ -245,10 +235,6 @@ ifeq ($(HOST), web-apache-02.proximum.local)
 	IS_PROD = yes
 endif
 
-## Show current host
-show-host:
-	printf "HOST ? ${HOST} ; IS_PROD ? ${IS_PROD}\n"
-
 migration-and-redis-flushdb@prod:
 	make migration@prod
 	make redis-flushdb@prod
@@ -279,6 +265,7 @@ init-db@test:
 	bin/console doctrine:schema:drop --force --env=test
 	bin/console doctrine:schema:create --env=test
 	# bin/console doctrine:fixtures:load --no-interaction --env=test
+	bin/console messenger:setup-transports --env=test
 	bin/console cache:clear --env=test
 	bin/console vimeet:elasticsearch:index --env=test
 
@@ -338,22 +325,14 @@ post-import-db:
 	bin/console vimeet:event:build-guideline-asset
 	bin/console vimeet:elasticsearch:index --env=dev
 
+# Jobs
+
+## Run messenger consummer (to dispatch messages in dev env, you must disable sync transport)
+worker:
+	php bin/console messenger:consume -t 1800 job_async job_async_low -vv
+
 # next targets must be run in VM
 ifeq ($(HOST), vimeet)
-
-# Cache clear
-
-clear-cache@prod:
-	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console cache:clear --env=prod --no-debug"
-	ssh vimeet-prod2 "cd ${REMOTE_INSTALL_DIR} && bin/console cache:clear --env=prod --no-debug"
-
-# Elasticsearch Reindex
-
-elasticsearch-reindex@preprod:
-	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:elasticsearch:index --env=prod --no-debug"
-
-elasticsearch-reindex@prod:
-	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:elasticsearch:index --env=prod --no-debug"
 
 get-preprod-db@vm:
 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
