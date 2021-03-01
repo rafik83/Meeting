@@ -3,6 +3,9 @@
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
 class UpdateSpot
@@ -22,20 +25,33 @@ class UpdateSpot
     /** @var bool */
     public $visio;
 
+    public Sheet $sheet;
+
+    public MeetingSlot $slot;
+
+    /** @var Participant[] */
+    public $participants;
+
     /**
-     * @param Meeting $meeting
-     * @param Spot    $spot
-     * @param bool    $blockedSlot
-     * @param bool    $blockedSpot
-     * @param bool    $visio
+     * @param Meeting       $meeting
+     * @param Spot          $spot
+     * @param bool          $blockedSlot
+     * @param bool          $blockedSpot
+     * @param bool          $visio
+     * @param Sheet         $sheet
+     * @param MeetingSlot   $slot
+     * @param Participant[] $participants
      */
-    public function __construct(Meeting $meeting, Spot $spot, $blockedSlot, $blockedSpot, $visio = false)
+    public function __construct(Meeting $meeting, Spot $spot, $blockedSlot, $blockedSpot, $visio = false, Sheet $sheet, MeetingSlot $slot, Participant $participants)
     {
         $this->meeting     = $meeting;
         $this->spot        = $spot;
         $this->blockedSlot = $blockedSlot;
         $this->blockedSpot = $blockedSpot;
         $this->visio       = $visio;
+        $this->sheet = $sheet;
+        $this->slot = $slot;
+        $this->participants = $participants;
     }
 
     /**

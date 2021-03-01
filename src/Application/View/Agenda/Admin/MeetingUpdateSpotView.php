@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
 class MeetingUpdateSpotView
 {
     /** @var int */
@@ -19,19 +21,51 @@ class MeetingUpdateSpotView
     /** @var SpotView[] */
     public $availableSpots;
 
+    /** @var ParticipantView[] */
+    public $participants;
+
+    /** @var int[] */
+    public array $meetingParticipants;
+
+    /** @var MeetingSlot[] */
+    public array $meetingSlots;
+
+    /** @var int[] */
+    public array $currentSheetAvailableSlotIds;
+
+    /** @var int */
+    public $slotId;
+
     /**
-     * @param int        $meetingId
-     * @param int        $spotId
-     * @param bool       $blockedSlot
-     * @param bool       $blockedSpot
-     * @param SpotView[] $availableSpots
+     * @param int               $meetingId
+     * @param int               $spotId
+     * @param bool              $blockedSlot
+     * @param bool              $blockedSpot
+     * @param SpotView[]        $availableSpots
+     * @param ParticipantView[] $participants,
+     * @param int               $slotId
      */
-    public function __construct($meetingId, $spotId, $blockedSlot, $blockedSpot, array $availableSpots)
-    {
-        $this->meetingId      = $meetingId;
-        $this->spotId         = $spotId;
-        $this->blockedSlot    = $blockedSlot;
-        $this->blockedSpot    = $blockedSpot;
+    public function __construct(
+        $meetingId,
+        $spotId,
+        $blockedSlot,
+        $blockedSpot,
+        array $availableSpots,
+        array $participants,
+        array $meetingParticipants,
+        array $meetingSlots,
+        array $currentSheetAvailableSlotIds,
+        $slotId
+    ) {
+        $this->meetingId = $meetingId;
+        $this->spotId = $spotId;
+        $this->blockedSlot = $blockedSlot;
+        $this->blockedSpot = $blockedSpot;
         $this->availableSpots = $availableSpots;
+        $this->participants = $participants;
+        $this->meetingParticipants = $meetingParticipants;
+        $this->meetingSlots = $meetingSlots;
+        $this->currentSheetAvailableSlotIds = $currentSheetAvailableSlotIds;
+        $this->slotId = $slotId;
     }
 }
