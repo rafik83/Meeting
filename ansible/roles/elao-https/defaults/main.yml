@@ -1,3 +1,0 @@
-certificate_path: '/etc/nginx/certificates'
-certificate_domain: 'app'
-certificate_email: 'app@elao.com'
