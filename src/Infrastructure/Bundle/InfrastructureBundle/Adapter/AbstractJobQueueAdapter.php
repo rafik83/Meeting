@@ -6,6 +6,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQ
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 abstract class AbstractJobQueueAdapter
 {
@@ -39,7 +40,11 @@ abstract class AbstractJobQueueAdapter
 
             return;
         }
+        $stamps = [];
+        if ($job->isDelayed()) {
+            $stamps[] = new DelayStamp($job->getDelay());
+        }
 
-        $this->bus->dispatch($job);
+        $this->bus->dispatch($job, $stamps);
     }
 }

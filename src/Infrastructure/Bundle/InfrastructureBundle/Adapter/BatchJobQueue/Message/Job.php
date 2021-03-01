@@ -9,38 +9,11 @@ class Job
     /** State if job is inserted, but not yet ready to be started. */
     const STATE_NEW = 'new';
 
-    /**
-     * State if job is inserted, and might be started.
-     *
-     * It is important to note that this does not automatically mean that all
-     * jobs of this state can actually be started, but you have to check
-     * isStartable() to be absolutely sure.
-     *
-     * In contrast to NEW, jobs of this state at least might be started,
-     * while jobs of state NEW never are allowed to be started.
-     */
-    const STATE_PENDING = 'pending';
-
-    /** State if job was never started, and will never be started. */
-    const STATE_CANCELED = 'canceled';
-
-    /** State if job was started and has not exited, yet. */
-    const STATE_RUNNING = 'running';
-
-    /** State if job exists with a successful exit code. */
-    const STATE_FINISHED = 'finished';
-
-    /** State if job exits with a non-successful exit code. */
-    const STATE_FAILED = 'failed';
-
-    /** State if job exceeds its configured maximum runtime. */
-    const STATE_TERMINATED = 'terminated';
-
     private string $command;
     private array $args;
-    private string $lockKey;
+    private ?string $lockKey = null;
     private int $maxExecutionTime = 300;
-    private DateTimeInterface $executeAfter;
+    private ?DateTimeInterface $executeAfter = null;
 
     public function __construct(string $command, array $args)
     {
@@ -63,9 +36,17 @@ class Job
         return $this->lockKey ?: $this->command.';'.implode(';', $this->args);
     }
 
-    public function getExecuteAfter(): \DateTimeInterface
+    public function isDelayed(): bool
     {
-        return $this->executeAfter;
+        return null !== $this->executeAfter;
+    }
+
+    /**
+     * Get delay in milliseconds
+     */
+    public function getDelay(): int
+    {
+        return ($this->executeAfter->getTimestamp() - time()) * 1000;
     }
 
     public function setExecuteAfter(DateTimeInterface $executeAfter): void
