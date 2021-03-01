@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\LongJob;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\CreateZipRecordArchiveCommand;
@@ -60,7 +60,6 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function sendCampaign(Campaign $campaign): void
     {
         $job = new Job(SendCampaignCommand::NAME, ['id' => $campaign->getId()]);
-        // $job->addRelatedEntity($campaign);
         $this->setJob($job);
     }
 
@@ -386,13 +385,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexSheetsByEvent(Event $event, bool $reset = false): void
     {
-        $job = new Job(
+        $job = new LongJob(
             IndexSheetsByEventCommand::NAME,
             [
                 'eventId' => $event->getId(),
                 'reset' => $reset ? IndexSheetsByEventCommand::RESET : IndexSheetsByEventCommand::NO_RESET,
             ]
         );
+        $job->setMaxExecutionTime(7200);
         $this->setJob($job);
     }
 
@@ -414,7 +414,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexEventFromScratch(): void
     {
-        $job = new Job(IndexFromScratchCommand::NAME, []);
+        $job = new LongJob(IndexFromScratchCommand::NAME, []);
         $this->setJob($job);
     }
 
@@ -423,7 +423,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function sendEmailing(Event $event, array $sheetIds, $emailName): void
     {
-        $job = new Job(
+        $job = new LongJob(
             SendEmailingCommand::NAME,
             [
                 'eventId' => $event->getId(),
@@ -431,6 +431,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 'sheetIds' => implode(',', $sheetIds),
             ]
         );
+        $job->setMaxExecutionTime(7200);
         $this->setJob($job);
     }
 
@@ -528,10 +529,11 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 $arguments['locale'] = $locale;
             }
         }
-        $job = new Job(
+        $job = new LongJob(
             ForceZipRecordArchiveCommand::NAME,
             $arguments
         );
+        $job->setMaxExecutionTime(7200);
 
         $this->setJob($job);
     }
@@ -540,10 +542,11 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         Happening $happening,
         DateTime $dueDate
     ): void {
-        $job = new Job(
+        $job = new LongJob(
             CreateZipRecordArchiveCommand::NAME,
             ['happening' => $happening->getId()]
         );
+        $job->setMaxExecutionTime(7200);
 
         $job->setExecuteAfter($dueDate);
 

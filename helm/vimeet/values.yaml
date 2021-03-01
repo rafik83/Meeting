@@ -172,7 +172,7 @@ image:
 ## Worker
 ##
 worker:
-  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console jms-job-queue:run --no-interaction --env=dev --verbose"
+  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console messenger:consume -t 7200 job_async job_async_low -vv"
 
 ##
 ## External database configuration
