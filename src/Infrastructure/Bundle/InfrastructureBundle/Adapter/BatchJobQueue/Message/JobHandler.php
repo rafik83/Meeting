@@ -2,29 +2,29 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message;
 
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\CrossProcessLockFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class JobHandler implements MessageHandlerInterface
 {
     private KernelInterface $kernel;
+    private CrossProcessLockFactory $jobLockFactory;
     private bool $isDebugMode;
-    private LockFactory $jobLockFactory;
     private ?LoggerInterface $logger;
 
     public function __construct(
         KernelInterface $kernel,
+        CrossProcessLockFactory $jobLockFactory,
         bool $isDebugMode,
-        LockFactory $jobLockFactory,
         LoggerInterface $logger = null
     ) {
         $this->kernel = $kernel;
-        $this->isDebugMode = $isDebugMode;
         $this->jobLockFactory = $jobLockFactory;
+        $this->isDebugMode = $isDebugMode;
         $this->logger = $logger;
     }
 
@@ -47,7 +47,7 @@ class JobHandler implements MessageHandlerInterface
             $this->logger->info(sprintf('Command %s ran successfully', (string) $input));
         }
 
-        $lock = $this->jobLockFactory->createLock($job->getLockKey());
+        $lock = $lock = $this->jobLockFactory->createLockForRelease($job);
         $lock->release();
     }
 }

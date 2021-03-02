@@ -3,15 +3,13 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message;
 
 use DateTimeInterface;
+use Symfony\Component\Lock\Key;
 
 class Job
 {
-    /** State if job is inserted, but not yet ready to be started. */
-    const STATE_NEW = 'new';
-
     private string $command;
     private array $args;
-    private ?string $lockKey = null;
+    private ?Key $lockKey = null;
     private int $maxExecutionTime = 300;
     private ?DateTimeInterface $executeAfter = null;
 
@@ -31,9 +29,15 @@ class Job
         return $this->args;
     }
 
-    public function getLockKey(): string
+    public function getLockKey(): Key
     {
-        return $this->lockKey ?: $this->command.';'.implode(';', $this->args);
+        if (null !== $this->lockKey) {
+            return $this->lockKey;
+        }
+
+        $this->lockKey = new Key($this->command.';'.implode(';', $this->args));
+
+        return $this->lockKey;
     }
 
     public function isDelayed(): bool
