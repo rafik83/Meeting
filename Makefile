@@ -191,36 +191,6 @@ test-behat@test:
 	php -d date.timezone=UTC bin/behat --format=junit --out=var/tests/behat --no-interaction
 
 ##########
-# Deploy #
-##########
-
-## Deploy application (demo)
-deploy@demo:
-	ansible-playbook ansible/deploy.yml --inventory-file=ansible/hosts --limit=deploy_preprod
-
-## Deploy application (preprod)
-deploy@preprod: deploy-capifony@preprod
-
-## Deploy application (prod)
-deploy@prod: deploy-capifony@prod
-
-deploy-capifony@demo:
-	cap demo deploy
-
-deploy-capifony@preprod:
-	cap preprod deploy
-
-deploy-capifony@prod:
-	cap prod deploy
-
-prod-iso-master:
-	git checkout master
-	git pull origin master
-	git branch -D prod
-	git checkout -b prod
-	git push origin prod -f
-
-##########
 # Custom #
 ##########
 
