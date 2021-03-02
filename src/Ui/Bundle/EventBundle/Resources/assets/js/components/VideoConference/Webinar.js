@@ -288,7 +288,8 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
 
     try {
-        if (!Notification) {
+        if (!('Notification' in window)) {
+            this.showPrepareModalOrJoin();
             return;
         }
 
@@ -300,6 +301,8 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     } catch (error) {
         console.error(error);
     }
+
+    this.showPrepareModalOrJoin();
 };
 
 Webinar.prototype.showPrepareModalOrJoin = function()
