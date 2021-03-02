@@ -25,21 +25,28 @@ class HappeningListViewQueryHandler
     {
         $list = $this->happeningRepository->findListByEvent($query->event, $query->locale);
 
+
+
         $happeningDaysView = [];
         $dayIndex = -1;
         $day = null;
 
-        foreach ($list as $happening) {            
+        foreach ($list as $happening) {
             if ($day !== $happening->getBegin()->format("d/m/Y")) {
                 $dayIndex++;
                 $happeningDaysView[$dayIndex] = new HappeningDayView($happening->getBegin(), []);
             }
-            $happeningDaysView[$dayIndex]->happeningListView[] = $this->happeningHandler->handle(new HappeningViewQuery($happening, $query->locale));
-            
+
+            $happeningView = $this->happeningHandler->handle(new HappeningViewQuery($happening, $query->locale));
+
+            $happeningDaysView[$dayIndex]->happeningListView[] = $happeningView;
+
             $day = $happening->getBegin()->format("d/m/Y");
         }
 
-        
+
+
+
         return $happeningDaysView;
     }
 }
