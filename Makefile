@@ -224,160 +224,127 @@ prod-iso-master:
 # Custom #
 ##########
 
-HOST = $(shell hostname)
-IS_PROD = no
-
-ifeq ($(HOST), web-apache-01.proximum.local)
-	IS_PROD = yes
-endif
-
-ifeq ($(HOST), web-apache-02.proximum.local)
-	IS_PROD = yes
-endif
-
-migration-and-redis-flushdb@prod:
-	make migration@prod
-	make redis-flushdb@prod
-
-migration@prod:
-	bin/console doctrine:migrations:migrate --no-interaction --env=prod --no-debug
-
-redis-flushdb@prod:
-	bin/console redis:flushdb --client=doctrine --no-interaction --env=prod --no-debug
-
-redis-flushdb@vm:
-	bin/console redis:flushdb --client=doctrine --no-interaction
+redis-flushlocks@local:
+	redis-cli -n 3 flushdb
 
 # Do no allow targets in production
-ifeq ($(IS_PROD), no)
+# ifeq ($(IS_PROD), no)
 
-init-db:
-	read -p "You are about to init db, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  bin/console doctrine:schema:drop --force; \
-	  bin/console doctrine:schema:create; \
-	  bin/console doctrine:fixtures:load -n; \
-	  bin/console vimeet:elasticsearch:index; \
-	  bin/console vimeet:event:build-guideline-asset; \
-	fi
+# init-db:
+# 	read -p "You are about to init db, please confirm (y/n)?" CONFIRM; \
+# 	if [ "$$CONFIRM" = "y" ]; then \
+# 	  bin/console doctrine:schema:drop --force; \
+# 	  bin/console doctrine:schema:create; \
+# 	  bin/console doctrine:fixtures:load -n; \
+# 	  bin/console vimeet:elasticsearch:index; \
+# 	  bin/console vimeet:event:build-guideline-asset; \
+# 	fi
 
-init-db@test:
-	bin/console doctrine:schema:drop --force --env=test
-	bin/console doctrine:schema:create --env=test
-	# bin/console doctrine:fixtures:load --no-interaction --env=test
-	bin/console messenger:setup-transports --env=test
-	bin/console cache:clear --env=test
-	bin/console vimeet:elasticsearch:index --env=test
+# init-db@test:
+# 	bin/console doctrine:schema:drop --force --env=test
+# 	bin/console doctrine:schema:create --env=test
+# 	# bin/console doctrine:fixtures:load --no-interaction --env=test
+# 	bin/console messenger:setup-transports --env=test
+# 	bin/console cache:clear --env=test
+# 	bin/console vimeet:elasticsearch:index --env=test
 
-migrations:
-	bin/console doctrine:database:drop --force
-	bin/console doctrine:database:create
-	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console doctrine:migrations:diff
+# migrations:
+# 	bin/console doctrine:database:drop --force
+# 	bin/console doctrine:database:create
+# 	bin/console doctrine:migrations:migrate --no-interaction
+# 	bin/console doctrine:migrations:diff
 
-endif
+# endif
 
-##################################
-# Remote tasks on Vimeet Preprod #
-##################################
+# ##################################
+# # Remote tasks on Vimeet Preprod #
+# ##################################
 
-REMOTE_INSTALL_DIR = /var/www/proximum-vimeet.project.local/htdocs/current
+# REMOTE_INSTALL_DIR = /var/www/proximum-vimeet.project.local/htdocs/current
 
-init-db@preprod:
-	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
+# init-db@preprod:
+# 	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && make init-db"
 
-# npm in tmp
+# # npm in tmp
 
-clean-npm-tmp@preprod:
-	read -p "You are about to remove npm directories in /tmp on preprod, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  ssh vimeet-preprod "cd /tmp && rm -rf npm-*"; \
-	fi
+# clean-npm-tmp@preprod:
+# 	read -p "You are about to remove npm directories in /tmp on preprod, please confirm (y/n)?" CONFIRM; \
+# 	if [ "$$CONFIRM" = "y" ]; then \
+# 	  ssh vimeet-preprod "cd /tmp && rm -rf npm-*"; \
+# 	fi
 
-clean-npm-tmp@prod:
-	read -p "You are about to remove npm directories in /tmp on prod, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  ssh vimeet-prod1 "cd /tmp && rm -rf npm-*"; \
-	  ssh vimeet-prod2 "cd /tmp && rm -rf npm-*"; \
-	fi
+# clean-npm-tmp@prod:
+# 	read -p "You are about to remove npm directories in /tmp on prod, please confirm (y/n)?" CONFIRM; \
+# 	if [ "$$CONFIRM" = "y" ]; then \
+# 	  ssh vimeet-prod1 "cd /tmp && rm -rf npm-*"; \
+# 	  ssh vimeet-prod2 "cd /tmp && rm -rf npm-*"; \
+# 	fi
 
-# Build guideline asset
+# # Build guideline asset
 
-event-build-guideline-asset@preprod:
-	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
+# event-build-guideline-asset@preprod:
+# 	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
-event-build-guideline-asset@prod:
-	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
+# event-build-guideline-asset@prod:
+# 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
-import-preprod-db@local:
-	bin/console doctrine:database:drop --force
-	bin/console doctrine:database:create
-	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.wip')"
-	make post-import-db
+# import-preprod-db@local:
+# 	bin/console doctrine:database:drop --force
+# 	bin/console doctrine:database:create
+# 	mysql -u root proximum_vimeet < preprod.sql
+# 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.wip')"
+# 	make post-import-db
 
-post-import-db:
-	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
-	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
-	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
-	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
-	bin/console doctrine:migrations:migrate --no-interaction
-	bin/console vimeet:event:build-guideline-asset
-	bin/console vimeet:elasticsearch:index --env=dev
+# post-import-db:
+# 	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
+# 	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
+# 	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
+# 	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
+# 	bin/console doctrine:migrations:migrate --no-interaction
+# 	bin/console vimeet:event:build-guideline-asset
+# 	bin/console vimeet:elasticsearch:index --env=dev
 
-# Jobs
+# # Jobs
 
-## Run messenger consummer (to dispatch messages in dev env, you must disable sync transport)
-worker:
-	php bin/console messenger:consume -t 1800 job_async job_async_low -vv
+# ## Run messenger consummer (to dispatch messages in dev env, you must disable sync transport)
+# worker:
+# 	php bin/console messenger:consume -t 1800 job_async job_async_low -vv
 
-# next targets must be run in VM
-ifeq ($(HOST), vimeet)
+# # next targets must be run in VM
+# ifeq ($(HOST), vimeet)
 
-get-preprod-db@vm:
-	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  read -p "DB password?" DBPWD; \
-	  ssh vimeet-preprod "mysqldump --host localhost --port 3306 -u vimeet_preprod -p$$DBPWD vimeet_preprod > preprod.sql"; \
-	  scp vimeet-preprod:preprod.sql preprod.sql; \
-	  ssh vimeet-preprod "rm preprod.sql"; \
-	  make import-preprod-db@vm; \
-	fi
+# get-preprod-db@vm:
+# 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
+# 	if [ "$$CONFIRM" = "y" ]; then \
+# 	  read -p "DB password?" DBPWD; \
+# 	  ssh vimeet-preprod "mysqldump --host localhost --port 3306 -u vimeet_preprod -p$$DBPWD vimeet_preprod > preprod.sql"; \
+# 	  scp vimeet-preprod:preprod.sql preprod.sql; \
+# 	  ssh vimeet-preprod "rm preprod.sql"; \
+# 	  make import-preprod-db@vm; \
+# 	fi
 
-get-prod-db@vm:
-	read -p "You are about to dump then download prod db, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  read -p "DB password?" DBPWD; \
-	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$DBPWD vimeet_prod > prod.sql"; \
-	  scp vimeet-prod1:prod.sql prod.sql; \
-	  ssh vimeet-prod1 "rm prod.sql"; \
-	  make import-prod-db@vm; \
-	fi
+# get-prod-db@vm:
+# 	read -p "You are about to dump then download prod db, please confirm (y/n)?" CONFIRM; \
+# 	if [ "$$CONFIRM" = "y" ]; then \
+# 	  read -p "DB password?" DBPWD; \
+# 	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$DBPWD vimeet_prod > prod.sql"; \
+# 	  scp vimeet-prod1:prod.sql prod.sql; \
+# 	  ssh vimeet-prod1 "rm prod.sql"; \
+# 	  make import-prod-db@vm; \
+# 	fi
 
-import-preprod-db@vm:
-	bin/console doctrine:database:drop --force
-	bin/console doctrine:database:create
-	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
-	make post-import-db
+# import-preprod-db@vm:
+# 	bin/console doctrine:database:drop --force
+# 	bin/console doctrine:database:create
+# 	mysql -u root proximum_vimeet < preprod.sql
+# 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
+# 	make post-import-db
 
-import-prod-db@vm:
-	bin/console doctrine:database:drop --force
-	bin/console doctrine:database:create
-	mysql -u root proximum_vimeet < prod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
-	make post-import-db
+# import-prod-db@vm:
+# 	bin/console doctrine:database:drop --force
+# 	bin/console doctrine:database:create
+# 	mysql -u root proximum_vimeet < prod.sql
+# 	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
+# 	make post-import-db
 
-sync-db-from-prod@preprod:
-	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \
-	if [ "$$CONFIRM" = "y" ]; then \
-	  read -p "Prod DB password?" PRODDBPWD; \
-	  read -p "Preprod DB password?" PREPRODDBPWD; \
-	  ssh vimeet-prod1 "mysqldump --host db-master --port 3306 -u vimeet_prod -p$$PRODDBPWD vimeet_prod > prod.sql"; \
-	  scp vimeet-prod1:prod.sql prod.sql; \
-	  ssh vimeet-prod1 "rm prod.sql"; \
-	  scp prod.sql vimeet-preprod:prod.sql; \
-	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT('user-', id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:query:sql \"UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')\" && bin/console doctrine:migrations:migrate --no-interaction && bin/console vimeet:event:build-guideline-asset && bin/console vimeet:elasticsearch:index --env=prod"; \
-	fi
-
-endif
+# endif
