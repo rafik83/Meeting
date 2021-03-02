@@ -286,14 +286,19 @@ Webinar.prototype.onOpeningToPublic = function () {
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
-    if (!Notification) {
-        return;
-    }
 
-    if (Notification.permission === 'default') {
-        Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
-    } else {
-        this.showPrepareModalOrJoin();
+    try {
+        if (!Notification) {
+            return;
+        }
+
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+        } else {
+            this.showPrepareModalOrJoin();
+        }
+    } catch (error) {
+        console.error(error);
     }
 };
 
