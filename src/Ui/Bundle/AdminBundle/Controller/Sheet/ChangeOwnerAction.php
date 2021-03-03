@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ChangeOwnerAction
 {
@@ -32,8 +32,8 @@ class ChangeOwnerAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -46,13 +46,13 @@ class ChangeOwnerAction
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->router = $router;
     }
@@ -106,7 +106,7 @@ class ChangeOwnerAction
             );
         }
 
-        return new Response($this->engine->render(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'form' => $form->createView(),
             'event' => $event,
             'sheet' => $sheet,

@@ -7,10 +7,10 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathQuery;
 use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ShowAction
 {
@@ -20,17 +20,17 @@ class ShowAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -52,9 +52,9 @@ class ShowAction
         /** @var EventRegistrationPathView $eventRegistrationPathView */
         $eventRegistrationPathView = $this->queryBus->handle(new EventRegistrationPathQuery($event, $locale));
 
-        return $this->engine->renderResponse('@Admin/Type/RegistrationPath/show.html.twig', [
+        return new Response($this->twig->render('@Admin/Type/RegistrationPath/show.html.twig', [
             'event' => $event,
             'eventRegistrationPathView' => $eventRegistrationPathView,
-        ]);
+        ]));
     }
 }

@@ -23,9 +23,9 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class HappeningWebinarActionTest extends TestCase
 {
@@ -35,8 +35,8 @@ class HappeningWebinarActionTest extends TestCase
     /** @var ObjectProphecy|CanAccessToWebinar */
     private $canAccessToWebinar;
 
-    /** @var ObjectProphecy|EngineInterface */
-    private $engine;
+    /** @var ObjectProphecy */
+    private $twig;
 
     /** @var ObjectProphecy|CommandBusInterface */
     private $commandBus;
@@ -73,7 +73,7 @@ class HappeningWebinarActionTest extends TestCase
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->canAccessToWebinar = $this->prophesize(CanAccessToWebinar::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->dateTime = new \DateTime();
         $this->event = $this->prophesize(Event::class);
@@ -270,7 +270,7 @@ class HappeningWebinarActionTest extends TestCase
         $account = $this->prophesize(Account::class);
         $account->getCompleteName()->shouldBeCalled()->willReturn('John Doe');
         $this->user->getAccount()->shouldBeCalled()->willReturn($account);
-        $this->engine->render('@Event/Happening/webinar-viewer.html.twig', Argument::any())->shouldBeCalled()->willReturn('response body');
+        $this->twig->render('@Event/Happening/webinar-viewer.html.twig', Argument::any())->shouldBeCalled()->willReturn('response body');
 
         $this->invokeController();
     }
@@ -281,7 +281,7 @@ class HappeningWebinarActionTest extends TestCase
             $this->authorizationCheckerAdapter->reveal(),
             $this->canAccessToWebinar->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->queryBus->reveal(),
             $this->dateTime
         );

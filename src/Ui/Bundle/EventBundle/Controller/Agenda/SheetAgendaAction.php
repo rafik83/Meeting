@@ -16,7 +16,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SheetAgendaAction
 {
@@ -26,17 +26,17 @@ class SheetAgendaAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(
@@ -74,7 +74,7 @@ class SheetAgendaAction
         );
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Agenda/sheet_agenda.html.twig',
                 [
                     'event' => $event,

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateMeetingAction
 {
@@ -32,8 +32,8 @@ class UpdateMeetingAction
     /** @var FormFactoryInterface $formFactory */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -57,7 +57,7 @@ class UpdateMeetingAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanUpdateMeeting $canUpdateMeeting,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         GetTimezoneHelper $getTimezoneHelper,
@@ -67,7 +67,7 @@ class UpdateMeetingAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canUpdateMeeting = $canUpdateMeeting;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
         $this->getTimezoneHelper = $getTimezoneHelper;
@@ -114,12 +114,12 @@ class UpdateMeetingAction
 
         if (0 === \count($availableSlotsView->availableSlots)) {
             return new Response(
-                $this->engine->render('@Event/Meeting/no-available-slot.html.twig')
+                $this->twig->render('@Event/Meeting/no-available-slot.html.twig')
             );
         }
 
         return new Response(
-            $this->engine->render('@Event/Meeting/update-meeting-form.html.twig', [
+            $this->twig->render('@Event/Meeting/update-meeting-form.html.twig', [
                 'form' => $form->createView(),
                 'currentSheetAvailableSlots' => $availableSlotsView->currentSheetAvailableSlotIds,
             ])

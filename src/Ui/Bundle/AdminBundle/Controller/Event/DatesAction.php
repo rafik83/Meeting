@@ -33,7 +33,7 @@ class DatesAction
     /** @var RouterInterface */
     private $router;
 
-    private Environment $engine;
+    private Environment $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -41,14 +41,14 @@ class DatesAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        Environment $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -75,7 +75,7 @@ class DatesAction
         }
 
         return new Response(
-            $this->engine->render('AdminBundle:Event:dates.html.twig', [
+            $this->twig->render('AdminBundle:Event:dates.html.twig', [
                 'form'  => $form->createView(),
                 'event' => $event,
             ])

@@ -8,15 +8,15 @@ use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ShowAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -24,18 +24,13 @@ class ShowAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /**
-     * @param EngineInterface                      $engine
-     * @param QueryBusInterface                    $queryBus
-     * @param AuthorizationCheckerAdapterInterface $authorizationChecker
-     */
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker
     ) {
-        $this->engine               = $engine;
-        $this->queryBus             = $queryBus;
+        $this->twig = $twig;
+        $this->queryBus = $queryBus;
         $this->authorizationChecker = $authorizationChecker;
     }
 
@@ -65,11 +60,11 @@ class ShowAction
             )
         );
 
-        return $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
+        return new Response($this->twig->render('EventBundle:Content:terms-of-sale.html.twig',
             [
                 'sheet'   => $sheet,
                 'event'   => $eventDomain->getEvent(),
                 'content' => $termsOfSaleView->content,
-            ]);
+            ]));
     }
 }

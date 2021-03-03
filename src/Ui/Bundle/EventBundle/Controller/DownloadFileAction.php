@@ -31,7 +31,7 @@ class DownloadFileAction
     /** @var DataUriNormalizer */
     private $dataUriNormalizer;
 
-    private Environment $engine;
+    private Environment $twig;
 
     /** @var UploadObjectDownloadPathGetter */
     private $uploadObjectDownloadPathGetter;
@@ -40,13 +40,13 @@ class DownloadFileAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         TemplateDataFactory $templateDataFactory,
         DataUriNormalizer $dataUriNormalizer,
-        Environment $engine,
+        Environment $twig,
         UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->templateDataFactory = $templateDataFactory;
         $this->dataUriNormalizer = $dataUriNormalizer;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->uploadObjectDownloadPathGetter = $uploadObjectDownloadPathGetter;
     }
 
@@ -73,7 +73,7 @@ class DownloadFileAction
             );
 
             if (true === $preview) {
-                return new Response($this->engine->render('@Event/base64Image.html.twig', [
+                return new Response($this->twig->render('@Event/base64Image.html.twig', [
                     'file' => $this->dataUriNormalizer->normalize(new \SplFileInfo($downloadPath)),
                 ]));
             }

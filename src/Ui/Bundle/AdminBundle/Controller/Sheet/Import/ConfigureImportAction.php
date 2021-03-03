@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ConfigureImportAction
 {
@@ -30,21 +30,21 @@ class ConfigureImportAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         RouterInterface $router,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(
@@ -75,7 +75,7 @@ class ConfigureImportAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:Sheet:import.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Sheet:import.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
         ]));

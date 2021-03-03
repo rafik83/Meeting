@@ -16,12 +16,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class RoomingListAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -40,14 +40,14 @@ class RoomingListAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         FormFactoryInterface $formFactory,
         RoomingListFilter $roomingListFilter,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->formFactory = $formFactory;
         $this->roomingListFilter = $roomingListFilter;
@@ -99,7 +99,7 @@ class RoomingListAction
 
         $roomingListView = $this->queryBus->handle($listViewQuery);
 
-        return new Response($this->engine->render('@Admin/Rooming/RoomingList/list.html.twig', [
+        return new Response($this->twig->render('@Admin/Rooming/RoomingList/list.html.twig', [
             'event' => $event,
             'roomingListView' => $roomingListView,
             'form' => $form->createView(),

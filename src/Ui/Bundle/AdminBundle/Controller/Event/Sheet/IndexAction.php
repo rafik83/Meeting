@@ -8,13 +8,13 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Sheet\IndexType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class IndexAction
 {
@@ -26,8 +26,8 @@ class IndexAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -38,26 +38,18 @@ class IndexAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param CommandBusInterface                  $commandBus
-     * @param EngineInterface                      $engine
-     * @param FlashBagInterface                    $flashBag
-     * @param RouterInterface                      $router
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->router = $router;
     }
@@ -86,9 +78,9 @@ class IndexAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

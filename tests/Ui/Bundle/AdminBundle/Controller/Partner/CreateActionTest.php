@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class CreateActionTest extends TestCase
 {
@@ -35,7 +35,7 @@ class CreateActionTest extends TestCase
         $commandBus,
         $flashBag,
         $router,
-        $engine,
+        $twig,
         $errorFactory,
         $request,
         $admin
@@ -48,7 +48,7 @@ class CreateActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->errorFactory = $this->prophesize(ErrorFactory::class);
         $this->request = $this->prophesize(Request::class);
         $this->admin = $this->prophesize(Admin::class);
@@ -69,7 +69,7 @@ class CreateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -100,7 +100,7 @@ class CreateActionTest extends TestCase
             ->willReturn($form)
         ;
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Partner:create.html.twig', ['form' => $view, 'isSuperAdmin' => true])
             ->shouldBeCalled()
             ->willReturn('<html></html>')
@@ -113,7 +113,7 @@ class CreateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -159,7 +159,7 @@ class CreateActionTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Partner:create.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
@@ -171,7 +171,7 @@ class CreateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -230,7 +230,7 @@ class CreateActionTest extends TestCase
         $form->get('email')->shouldBeCalled()->willReturn($form);
         $form->addError($error)->shouldBeCalled();
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Partner:create.html.twig', ['form' => $view, 'isSuperAdmin' => true])
             ->shouldBeCalled()
             ->willReturn('<html></html>')
@@ -243,7 +243,7 @@ class CreateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 

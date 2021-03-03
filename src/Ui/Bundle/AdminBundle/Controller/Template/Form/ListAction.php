@@ -15,15 +15,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -43,12 +43,12 @@ class ListAction
         RouterInterface $router,
         QueryBusInterface $queryBus,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->router = $router;
     }
@@ -76,7 +76,7 @@ class ListAction
 
         $formTemplateListView = $this->queryBus->handle(new FormTemplateListViewQuery($event));
 
-        return new Response($this->engine->render('AdminBundle:Template/Form:list.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Template/Form:list.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
             'formTemplateListView' => $formTemplateListView,

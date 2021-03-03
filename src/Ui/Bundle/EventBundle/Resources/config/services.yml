@@ -783,7 +783,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@catalog.visible_participation_categories'
             - '@catalog.visible_participation_types'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler:
@@ -800,7 +800,7 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'

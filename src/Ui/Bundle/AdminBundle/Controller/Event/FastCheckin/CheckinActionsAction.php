@@ -6,13 +6,14 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CheckinActionsAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -24,12 +25,12 @@ class CheckinActionsAction
     private $dateTime;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         ScanRepositoryInterface $scanRepository,
         \DateTimeInterface $dateTime
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->scanRepository = $scanRepository;
         $this->dateTime = $dateTime;
@@ -45,14 +46,14 @@ class CheckinActionsAction
 
         $checkinDate = $this->getUserCheckinDate($event, $user);
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/Event/checkinUser.html.twig',
             [
                 'event' => $event,
                 'user' => $user,
                 'checkinDate' => $checkinDate,
             ]
-        );
+        ));
     }
 
     private function getUserCheckinDate(Event $event, User $user): ?\DateTime

@@ -29,12 +29,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class EvaluateMeetingActionTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $engine,
+    private $twig,
         $commandBus,
         $router,
         $formFactory,
@@ -51,7 +51,7 @@ class EvaluateMeetingActionTest extends TestCase
 
     public function setUp(): void
     {
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
@@ -155,7 +155,7 @@ class EvaluateMeetingActionTest extends TestCase
         $formView = $this->prophesize(FormView::class);
         $form->createView()->shouldBeCalled()->willReturn($formView->reveal());
 
-        $this->engine
+        $this->twig
             ->render('@Event/Meeting/evaluate-meeting.html.twig', [
                 'event' => $this->event->reveal(),
                 'sheet' => $this->sheet->reveal(),
@@ -170,7 +170,7 @@ class EvaluateMeetingActionTest extends TestCase
 
         $action = new EvaluateMeetingAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->queryBus->reveal(),
             $this->router->reveal(),
@@ -248,14 +248,14 @@ class EvaluateMeetingActionTest extends TestCase
             ->willReturn('/route/to/agenda')
         ;
 
-        $this->engine
+        $this->twig
             ->render('@Event/Meeting/evaluate-meeting.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
 
         $action = new EvaluateMeetingAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->queryBus->reveal(),
             $this->router->reveal(),
@@ -264,6 +264,8 @@ class EvaluateMeetingActionTest extends TestCase
 
         $eventDomain = new EventDomain($this->event->reveal());
         $userDomain = new UserDomain($this->user->reveal());
+
+        /** @var RedirectResponse */
         $result = $action(
             $this->request,
             $eventDomain,
@@ -332,14 +334,14 @@ class EvaluateMeetingActionTest extends TestCase
 
         $this->router->generate(Route::AGENDA_PARTICIPANT, Argument::any())->shouldNotBeCalled();
 
-        $this->engine
+        $this->twig
             ->render('@Event/Meeting/evaluate-meeting.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
 
         $action = new EvaluateMeetingAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->queryBus->reveal(),
             $this->router->reveal(),
@@ -348,6 +350,8 @@ class EvaluateMeetingActionTest extends TestCase
 
         $eventDomain = new EventDomain($this->event->reveal());
         $userDomain = new UserDomain($this->user->reveal());
+
+        /** @var RedirectResponse */
         $result = $action(
             $this->request,
             $eventDomain,

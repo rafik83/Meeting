@@ -15,16 +15,16 @@ class ChatAction
 {
     /** @var QueryBusInterface */
     private $queryBus;
-    private Environment $engine;
+    private Environment $twig;
     private EventByHostResolver $eventByHostResolver;
 
     public function __construct(
         QueryBusInterface $queryBus,
-        Environment $engine,
+        Environment $twig,
         EventByHostResolver $eventByHostResolver
     ) {
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->eventByHostResolver = $eventByHostResolver;
     }
 
@@ -38,7 +38,7 @@ class ChatAction
 
         if (null !== $siteId) {
             $response = new Response(
-                $this->engine->render('@Event/Crisp/chat.html.twig', [
+                $this->twig->render('@Event/Crisp/chat.html.twig', [
                     'siteId' => $siteId,
                 ])
             );

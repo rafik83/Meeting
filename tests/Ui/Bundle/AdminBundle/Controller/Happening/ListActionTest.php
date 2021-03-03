@@ -10,10 +10,10 @@ use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ListAction;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListActionTest extends TestCase
 {
@@ -27,7 +27,7 @@ class ListActionTest extends TestCase
     private $queryBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $event;
@@ -38,7 +38,7 @@ class ListActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->authorizationAccessChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
     }
 
     public function testAccessDenied()
@@ -53,7 +53,7 @@ class ListActionTest extends TestCase
         $action = new ListAction(
             $this->authorizationAccessChecker->reveal(),
             $this->queryBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal());
@@ -75,8 +75,8 @@ class ListActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($list->reveal());
 
-        $this->engine
-            ->renderResponse(ListAction::TEMPLATE, [
+        $this->twig
+            ->render(ListAction::TEMPLATE, [
                 'event' => $this->event->reveal(),
                 'list' => $list->reveal(),
             ])
@@ -86,7 +86,7 @@ class ListActionTest extends TestCase
         $action = new ListAction(
             $this->authorizationAccessChecker->reveal(),
             $this->queryBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal());

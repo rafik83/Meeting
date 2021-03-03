@@ -19,12 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class AssignAccommodationAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -44,14 +44,14 @@ class AssignAccommodationAction
     private $sheetRepository;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         RouterInterface $router,
         TranslatorInterface $translator,
         SheetRepositoryInterface $sheetRepository
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->router = $router;
@@ -127,7 +127,7 @@ class AssignAccommodationAction
             }
         }
 
-        return new Response($this->engine->render('@Admin/Rooming/Stay/assignAccommodation.html.twig', [
+        return new Response($this->twig->render('@Admin/Rooming/Stay/assignAccommodation.html.twig', [
             'userName' => $user->getFullname(),
             'event' => $event,
             'form' => $form->createView(),

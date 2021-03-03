@@ -40,7 +40,7 @@ class UpdateDesignActionTest extends TestCase
     private $router;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $event;
@@ -58,7 +58,7 @@ class UpdateDesignActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(Environment::class);
+        $this->twig = $this->prophesize(Environment::class);
 
         $this->event = $this->prophesize(Event::class);
         $this->configuration = $this->prophesize(Event\Configuration::class);
@@ -82,7 +82,7 @@ class UpdateDesignActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($this->request, $this->event->reveal());
@@ -121,7 +121,7 @@ class UpdateDesignActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine->render('AdminBundle:Event/Design:updateDesign.html.twig', [
+        $this->twig->render('AdminBundle:Event/Design:updateDesign.html.twig', [
             'event' => $this->event->reveal(),
             'form' => $formView->reveal()
         ])->shouldBeCalled()
@@ -133,7 +133,7 @@ class UpdateDesignActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request, $this->event->reveal());
@@ -175,7 +175,7 @@ class UpdateDesignActionTest extends TestCase
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);
 
-        $this->engine->render(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($command)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.event.design.update.success')->shouldBeCalled();
         $this->router->generate('admin_event_design_update', ['event' => 12])
@@ -189,7 +189,7 @@ class UpdateDesignActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request, $this->event->reveal());

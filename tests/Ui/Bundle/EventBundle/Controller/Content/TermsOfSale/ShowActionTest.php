@@ -12,10 +12,10 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ShowActionTest extends TestCase
 {
@@ -28,7 +28,7 @@ class ShowActionTest extends TestCase
     private $eventDomain;
     private $query;
     private $view;
-    private $engine;
+    private $twig;
     private $authorizationChecker;
     private $queryBus;
 
@@ -44,7 +44,7 @@ class ShowActionTest extends TestCase
         $this->eventDomain          = $this->prophesize(EventDomain::class);
         $this->query                = new TermsOfSaleViewQuery($this->event, $this->sheet, $this->eventLocale);
         $this->view                 = new TermsOfSaleView($this->content);
-        $this->engine               = $this->prophesize(EngineInterface::class);
+        $this->twig               = $this->prophesize(Environment::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->queryBus             = $this->prophesize(QueryBusInterface::class);
     }
@@ -56,17 +56,17 @@ class ShowActionTest extends TestCase
         $this->eventDomain->getEvent()->shouldBeCalled()->willReturn($this->event);
         $this->request->getLocale()->shouldBeCalled()->willReturn($this->eventLocale);
 
-        $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
+        $this->twig->render('EventBundle:Content:terms-of-sale.html.twig',
             [
                 'sheet'   => $this->sheet,
                 'event'   => $this->event,
                 'content' => 'foobar',
-            ])->shouldBeCalled()->willReturn($this->response->reveal());
+            ])->shouldBeCalled()->willReturn('Terms of sale');
 
         $this->queryBus->handle($this->query)->shouldBeCalled()->willReturn($this->view);
 
         $action   = new ShowAction(
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->queryBus->reveal(),
             $this->authorizationChecker->reveal()
         );
@@ -84,7 +84,7 @@ class ShowActionTest extends TestCase
         $this->eventDomain->getEvent()->shouldNotBeCalled();
         $this->request->getLocale()->shouldNotBeCalled();
 
-        $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
+        $this->twig->render('EventBundle:Content:terms-of-sale.html.twig',
             [
                 'sheet'   => $this->sheet,
                 'event'   => $this->event,
@@ -95,7 +95,7 @@ class ShowActionTest extends TestCase
         $this->queryBus->handle($this->query)->shouldNotBeCalled();
 
         $action = new ShowAction(
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->queryBus->reveal(),
             $this->authorizationChecker->reveal()
         );

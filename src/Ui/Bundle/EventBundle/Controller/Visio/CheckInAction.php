@@ -16,15 +16,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class CheckInAction
 {
     /** @var DDayGuesser */
     private $dayGuesser;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -43,7 +43,7 @@ class CheckInAction
 
     public function __construct(
         DDayGuesser $dayGuesser,
-        EngineInterface $engine,
+        Environment $twig,
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -51,7 +51,7 @@ class CheckInAction
         IsParticipantVisio $isParticipantVisio
     ) {
         $this->dayGuesser = $dayGuesser;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -87,7 +87,7 @@ class CheckInAction
         }
 
         return new Response(
-            $this->engine->render('@Event/Visio/checkIn.html.twig', [
+            $this->twig->render('@Event/Visio/checkIn.html.twig', [
                 'event' => $event,
             ])
         );

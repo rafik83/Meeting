@@ -5,16 +5,16 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
-    public function __construct(EngineInterface $engine)
+    public function __construct(Environment $twig)
     {
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, EventDomain $eventDomain): Response
@@ -22,7 +22,7 @@ class ShowAction
         $event = $eventDomain->getEvent();
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:StyleGuide:show.html.twig',
                 [
                     'event' => $event,

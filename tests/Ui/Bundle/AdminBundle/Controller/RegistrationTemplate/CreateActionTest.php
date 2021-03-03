@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateActionTest extends TestCase
 {
@@ -38,7 +38,7 @@ class CreateActionTest extends TestCase
     private $commandBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $template;
@@ -52,7 +52,7 @@ class CreateActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->template = $this->prophesize(RegistrationTemplate::class);
         $this->event = $this->prophesize(Event::class);
     }
@@ -68,7 +68,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();
@@ -91,7 +91,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();
@@ -123,8 +123,8 @@ class CreateActionTest extends TestCase
         $form->handleRequest($request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine
-            ->renderResponse('AdminBundle:RegistrationTemplate:create.html.twig', [
+        $this->twig
+            ->render('AdminBundle:RegistrationTemplate:create.html.twig', [
                 'form' => $view->reveal()
             ])
             ->shouldBeCalled()
@@ -136,7 +136,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();
@@ -169,8 +169,8 @@ class CreateActionTest extends TestCase
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);
 
-        $this->engine
-            ->renderResponse(Argument::any())
+        $this->twig
+            ->render(Argument::any())
             ->shouldNotBeCalled()
         ;
 
@@ -179,7 +179,7 @@ class CreateActionTest extends TestCase
         $this->commandBus->handle($command)->shouldBeCalled()->willReturn($createResult);
 
         $this->event->getId()->willReturn(12);
-        $this->event->getFallback()->willReturn('fr');
+        $this->event->getLocaleFallback()->willReturn('fr');
         $this->router->generate('admin_template_registration_build', [
                 'event' => 12,
                 'registrationTemplate' => 2,
@@ -194,7 +194,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();

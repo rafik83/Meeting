@@ -28,7 +28,7 @@ class AddFastCheckinAction
     private $commandBus;
 
     private FormFactoryInterface $formFactory;
-    private Environment $engine;
+    private Environment $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -48,7 +48,7 @@ class AddFastCheckinAction
     public function __construct(
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
-        Environment $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         RouterInterface $router,
         UserRepositoryInterface $userRepository,
@@ -57,7 +57,7 @@ class AddFastCheckinAction
     ) {
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->userRepository = $userRepository;
@@ -118,7 +118,7 @@ class AddFastCheckinAction
             }
         }
 
-        return new Response($this->engine->render(
+        return new Response($this->twig->render(
             '@Admin/Event/fastCheckinForm.html.twig',
             [
                 'form' => $form->createView(),

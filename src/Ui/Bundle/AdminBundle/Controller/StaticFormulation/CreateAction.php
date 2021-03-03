@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use function array_key_exists;
 
 class CreateAction
@@ -38,8 +38,8 @@ class CreateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var TranslatorInterface */
     private $translator;
@@ -56,7 +56,7 @@ class CreateAction
         FlashBagInterface $flashBag,
         CommandBusInterface $commandBus,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         TranslatorInterface $translator,
         TypeRepositoryInterface $typeRepository,
         StaticFormulationRepositoryInterface $staticFormulationRepository
@@ -66,7 +66,7 @@ class CreateAction
         $this->flashBag = $flashBag;
         $this->commandBus = $commandBus;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->translator = $translator;
         $this->typeRepository = $typeRepository;
         $this->staticFormulationRepository = $staticFormulationRepository;
@@ -123,7 +123,7 @@ class CreateAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:StaticFormulation:create.html.twig', [
+        return new Response($this->twig->render('AdminBundle:StaticFormulation:create.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
             'originTitle' => $titles[$locale],

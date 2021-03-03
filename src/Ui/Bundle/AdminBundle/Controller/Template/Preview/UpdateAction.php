@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -39,8 +39,8 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -49,7 +49,7 @@ class UpdateAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->templateDataFactory = $templateDataFactory;
@@ -57,7 +57,7 @@ class UpdateAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, SheetTemplate $template): Response
@@ -102,7 +102,7 @@ class UpdateAction
             }
         }
 
-        return new Response($this->engine->render('AdminBundle:SheetTemplate:preview.html.twig', [
+        return new Response($this->twig->render('AdminBundle:SheetTemplate:preview.html.twig', [
             'form' => $form->createView(),
             'event' => $template->getEvent(),
             'locale' => $locale,

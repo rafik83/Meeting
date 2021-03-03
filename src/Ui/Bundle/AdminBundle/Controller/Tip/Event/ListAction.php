@@ -6,10 +6,10 @@ use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -21,22 +21,22 @@ class ListAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /**
      * @param CommandBus                           $commandBus
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param EngineInterface                      $engine
+     * @param Environment                      $twig
      */
     public function __construct(
         CommandBus $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->commandBus = $commandBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -58,10 +58,10 @@ class ListAction
         $tipListViewQuery = new PaginatedTipViewQuery($event, $request->query->get('page', 1));
         $tipListView      = $this->commandBus->handle($tipListViewQuery);
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event'       => $event,
             'tipListView' => $tipListView,
             'locale'      => $event->getAvailableLocale($request->getLocale()),
-        ]);
+        ]));
     }
 }

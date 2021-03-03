@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeUpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -32,8 +32,8 @@ class UpdateAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -51,12 +51,12 @@ class UpdateAction
         RouterInterface $router,
         CommandBusInterface $commandBus,
         TranslatorInterface $translator,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->translator = $translator;
         $this->commandBus = $commandBus;
@@ -106,9 +106,9 @@ class UpdateAction
             }
         }
 
-        return $this->engine->renderResponse('AdminBundle:Type:update.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Type:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
+        ]));
     }
 }

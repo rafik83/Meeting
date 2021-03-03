@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Sheet\SheetsForNewLinkedSheetsQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\SheetView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\LinkedSheets\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class AddAction
 {
@@ -34,8 +34,8 @@ class AddAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -58,7 +58,7 @@ class AddAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
         FlashBagInterface $flashBag,
@@ -66,7 +66,7 @@ class AddAction
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->flashBag = $flashBag;
@@ -133,12 +133,12 @@ class AddAction
             }
         }
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/LinkedSheets/create.html.twig',
             [
                 'event' => $event,
                 'form'  => $form->createView(),
             ]
-        );
+        ));
     }
 }

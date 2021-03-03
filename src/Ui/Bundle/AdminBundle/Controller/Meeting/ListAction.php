@@ -9,19 +9,19 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Meeting\SlotChoiceType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -37,14 +37,14 @@ class ListAction
 
     public function __construct(
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         MeetingSlotRepositoryInterface $slotRepository,
         FormFactoryInterface $formFactory,
         \DateTimeInterface $dateTime
     ) {
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->slotRepository = $slotRepository;
         $this->formFactory = $formFactory;
@@ -80,7 +80,7 @@ class ListAction
             new MeetingListViewQuery($event, $locale, $currentSlot)
         );
 
-        return $this->engine->renderResponse('AdminBundle:Meeting:list.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Meeting:list.html.twig', [
             'event' => $event,
             'locale' => $locale,
             'view' => $meetingListView,
@@ -88,7 +88,7 @@ class ListAction
             'hasPrevious' => !empty($slots) && reset($slots) !== $currentSlot,
             'hasNext' => !empty($slots) && end($slots) !== $currentSlot,
             'currentSlot' => $currentSlot,
-        ]);
+        ]));
     }
 
     private function getDefaultSlot(Event $event, array $slots): ?MeetingSlot

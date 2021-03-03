@@ -17,12 +17,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ParticipantTimezoneAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -40,14 +40,14 @@ class ParticipantTimezoneAction
     private $getTimezoneHelper;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         GetTimezoneHelper $getTimezoneHelper
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
@@ -91,7 +91,7 @@ class ParticipantTimezoneAction
         }
 
         return new Response(
-            $this->engine->render('@Event/Agenda/timezone.html.twig', [
+            $this->twig->render('@Event/Agenda/timezone.html.twig', [
                 'event' => $sheet->getEvent(),
                 'sheet' => $sheet,
                 'form' => $form->createView(),

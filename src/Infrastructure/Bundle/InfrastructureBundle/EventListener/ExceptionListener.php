@@ -11,14 +11,14 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ExceptionListener
 {
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /** @var EngineInterface */
+    /** @var Environment */
     private $templating;
 
     /** @var AuthorizationCheckerAdapterInterface */
@@ -37,7 +37,7 @@ class ExceptionListener
 
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        EngineInterface $templating,
+        Environment $templating,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->eventRepository             = $eventRepository;

@@ -11,7 +11,6 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateActionTest extends TestCase
 {
@@ -36,7 +36,7 @@ class CreateActionTest extends TestCase
     private $router;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $authorizationCheckerAdapter;
@@ -50,7 +50,7 @@ class CreateActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->defaultLocales = ['fr', 'en'];
     }
@@ -67,7 +67,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
             $this->defaultLocales
         );
@@ -97,8 +97,8 @@ class CreateActionTest extends TestCase
         ;
 
         $this->router->generate(Argument::any())->shouldNotBeCalled();
-        $this->engine
-            ->renderResponse(CreateAction::TEMPLATE, ['form' => $formView->reveal()])
+        $this->twig
+            ->render(CreateAction::TEMPLATE, ['form' => $formView->reveal()])
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -108,7 +108,7 @@ class CreateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
             $this->defaultLocales
         );
@@ -140,14 +140,14 @@ class CreateActionTest extends TestCase
         ;
 
         $this->router->generate('admin_tip_list')->shouldBeCalled()->willReturn('route');
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new CreateAction(
             $this->commandBus->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
             $this->defaultLocales
         );

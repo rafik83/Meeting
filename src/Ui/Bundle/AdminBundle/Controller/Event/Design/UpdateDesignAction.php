@@ -30,7 +30,7 @@ class UpdateDesignAction
     /** @var RouterInterface */
     private $router;
 
-    private Environment $engine;
+    private Environment $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -41,14 +41,14 @@ class UpdateDesignAction
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        Environment $engine
+        Environment $twig
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, Event $event): Response
@@ -71,7 +71,7 @@ class UpdateDesignAction
             return new RedirectResponse($this->router->generate('admin_event_design_update', ['event' => $event->getId()]));
         }
 
-        return new Response($this->engine->render('AdminBundle:Event/Design:updateDesign.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Event/Design:updateDesign.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
         ]));

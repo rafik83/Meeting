@@ -4,5 +4,5 @@ services:
   #
   Proximum\Vimeet\Ui\Bundle\EventBundle\TemplateSnippet\NetworkingTemplateSnippet:
     arguments:
-      - '@templating'
+      - '@twig'
       - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\BadgeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\ConfigureAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Badge\ConfigureType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ConfigureActionTest extends TestCase
 {
@@ -43,7 +43,7 @@ class ConfigureActionTest extends TestCase
     private $flashBag;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -67,7 +67,7 @@ class ConfigureActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->translator = $this->prophesize(TranslatorInterface::class);
 
@@ -92,7 +92,7 @@ class ConfigureActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->translator->reveal()
         );
@@ -118,7 +118,7 @@ class ConfigureActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->translator->reveal()
         );
@@ -157,8 +157,8 @@ class ConfigureActionTest extends TestCase
 
         $this->event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('en');
 
-        $this->engine
-            ->renderResponse('AdminBundle:Type/Badge:configure.html.twig', [
+        $this->twig
+            ->render('AdminBundle:Type/Badge:configure.html.twig', [
                 'event' => $this->event->reveal(),
                 'badge' => null,
                 'type' => $this->type->reveal(),
@@ -174,7 +174,7 @@ class ConfigureActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->translator->reveal()
         );
@@ -221,8 +221,8 @@ class ConfigureActionTest extends TestCase
             ->willReturn('path/to/route')
         ;
 
-        $this->engine
-            ->renderResponse(Argument::any())
+        $this->twig
+            ->render(Argument::any())
             ->shouldNotBeCalled()
         ;
 
@@ -232,7 +232,7 @@ class ConfigureActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->translator->reveal()
         );

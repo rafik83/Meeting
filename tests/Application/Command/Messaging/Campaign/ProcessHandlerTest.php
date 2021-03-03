@@ -20,7 +20,6 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Helper\EntityId;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
-use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 
 class ProcessHandlerTest extends TestCase
@@ -40,7 +39,7 @@ class ProcessHandlerTest extends TestCase
         $campaign->addRecipient(Campaign::RECIPIENT_PARTICIPANTS);
         $campaign->addSheet($sheet);
 
-        $template = $this->prophesize(EngineInterface::class);
+        $template = $this->prophesize(Environment::class);
         foreach ($event->getLocales() as $locale) {
             $template->render(['mail' => new MessageContentMail($message, $event, $locale)])->willReturn('test content ' . $locale);
         }

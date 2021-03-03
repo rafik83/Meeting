@@ -12,13 +12,13 @@ use Proximum\Vimeet\Application\Query\RegistrationPath\EventRegistrationPathView
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\AddQuestionType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class AddQuestionAction
 {
@@ -34,8 +34,8 @@ class AddQuestionAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -48,7 +48,7 @@ class AddQuestionAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         RouterInterface $router
     ) {
@@ -56,7 +56,7 @@ class AddQuestionAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->router = $router;
     }
@@ -105,7 +105,7 @@ class AddQuestionAction
             );
         }
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/Type/RegistrationPath/addQuestion.html.twig',
             [
                 'event' => $event,
@@ -113,14 +113,14 @@ class AddQuestionAction
                 'answerTitle' => null !== $answer ? $answer->getTitle($locale) : null,
                 'form' => $addQuestionForm->createView(),
             ]
-        );
+        ));
     }
 
     private function checkEventHasAlreadyAFirstQuestion(Event $event): void
     {
         /** @var EventRegistrationPathView $eventRegistrationPathView */
         $eventRegistrationPathView = $this->queryBus->handle(
-            new EventRegistrationPathQuery($event, $event->getFallback())
+            new EventRegistrationPathQuery($event, $event->getLocaleFallback())
         );
 
         if ($eventRegistrationPathView->hasQuestion()) {

@@ -13,7 +13,6 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\AffectAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\AffectType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class AffectActionTest extends TestCase
 {
@@ -35,7 +35,7 @@ class AffectActionTest extends TestCase
     private $formFactory;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $flashBag;
@@ -60,7 +60,7 @@ class AffectActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
     }
@@ -73,14 +73,14 @@ class AffectActionTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
 
         $action = new AffectAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -101,14 +101,14 @@ class AffectActionTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
 
         $action = new AffectAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -148,14 +148,14 @@ class AffectActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($form->reveal())
         ;
-        $response = new Response();
-        $this->engine
-            ->renderResponse(AffectAction::TEMPLATE, [
+        $response = new Response('');
+        $this->twig
+            ->render(AffectAction::TEMPLATE, [
                 'event' => $this->event->reveal(),
                 'form' => $formView->reveal(),
             ])
             ->shouldBeCalled()
-            ->willReturn($response)
+            ->willReturn('')
         ;
 
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
@@ -166,7 +166,7 @@ class AffectActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -208,7 +208,7 @@ class AffectActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($form->reveal())
         ;
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $this->commandBus->handle($affect)->shouldBeCalled();
         $this->router->generate('admin_tip_event_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
@@ -218,11 +218,12 @@ class AffectActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
 
+        /** @var RedirectResponse */
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->admin->reveal());
 
         $this->assertInstanceOf(RedirectResponse::class, $result);

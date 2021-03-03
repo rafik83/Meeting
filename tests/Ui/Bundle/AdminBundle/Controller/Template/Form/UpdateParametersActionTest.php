@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateParametersActionTest extends TestCase
 {
@@ -31,7 +31,7 @@ class UpdateParametersActionTest extends TestCase
     private $commandBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $flashBag;
@@ -73,7 +73,7 @@ class UpdateParametersActionTest extends TestCase
         ;
 
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
@@ -81,7 +81,7 @@ class UpdateParametersActionTest extends TestCase
         $this->updateParametersAction = new UpdateParametersAction(
             $this->authorizationChecker->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->formFactory->reveal(),
             $this->router->reveal()
@@ -135,7 +135,7 @@ class UpdateParametersActionTest extends TestCase
             ->willReturn($form->reveal())
         ;
 
-        $this->engine
+        $this->twig
             ->render(
                 'AdminBundle:Template/Form:updateParameters.html.twig',
                 [

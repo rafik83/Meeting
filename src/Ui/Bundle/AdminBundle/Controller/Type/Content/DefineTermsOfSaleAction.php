@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class DefineTermsOfSaleAction
 {
@@ -33,8 +33,8 @@ class DefineTermsOfSaleAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -53,13 +53,13 @@ class DefineTermsOfSaleAction
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->contentRepository = $contentRepository;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->eventContentRepository = $eventContentRepository;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -92,7 +92,7 @@ class DefineTermsOfSaleAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:Type/Content:define_terms_of_sale.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Type/Content:define_terms_of_sale.html.twig', [
             'event' => $event,
             'type'  => $type,
             'contentDefined' => $content instanceof Type\Content,

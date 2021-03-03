@@ -11,10 +11,10 @@ use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\ListAction;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListActionTest extends TestCase
 {
@@ -25,7 +25,7 @@ class ListActionTest extends TestCase
     private $authorizationCheckerAdapter;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $event;
@@ -40,7 +40,7 @@ class ListActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->commandBus = $this->prophesize(CommandBus::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
     }
 
     public function testAccessDeniedRole()
@@ -49,12 +49,12 @@ class ListActionTest extends TestCase
         $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(false);
 
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new ListAction(
             $this->commandBus->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $action($this->request, $this->event->reveal());
     }
@@ -70,12 +70,12 @@ class ListActionTest extends TestCase
         ;
 
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new ListAction(
             $this->commandBus->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $action($this->request, $this->event->reveal());
     }
@@ -94,21 +94,21 @@ class ListActionTest extends TestCase
         $command = new PaginatedTipViewQuery($this->event->reveal(), 12);
         $tipListView = $this->prophesize(PaginatedTipView::class);
         $this->commandBus->handle($command)->shouldBeCalled()->willReturn($tipListView->reveal());
-        $response = new Response();
-        $this->engine
-            ->renderResponse(ListAction::TEMPLATE, [
+        $response = new Response('Tip list...');
+        $this->twig
+            ->render(ListAction::TEMPLATE, [
                 'event' => $this->event->reveal(),
                 'tipListView' => $tipListView->reveal(),
                 'locale' => 'de',
             ])
             ->shouldBeCalled()
-            ->willReturn($response)
+            ->willReturn('Tip list...')
         ;
 
         $action = new ListAction(
             $this->commandBus->reveal(),
             $this->authorizationCheckerAdapter->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $result = $action($this->request, $this->event->reveal());
 

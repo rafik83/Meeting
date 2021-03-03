@@ -26,15 +26,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class HomeAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -56,7 +56,7 @@ class HomeAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         HomeUserDispatcher $homeUserDispatcher,
         QueryBusInterface $queryBus,
@@ -65,7 +65,7 @@ class HomeAction
         TypeRepositoryInterface $typeRepository
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->homeUserDispatcher = $homeUserDispatcher;
         $this->queryBus = $queryBus;
@@ -104,7 +104,7 @@ class HomeAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Home:index.html.twig',
                 [
                     'event' => $event,
@@ -289,7 +289,7 @@ class HomeAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Home:index.html.twig',
                 [
                     'event' => $event,
@@ -331,7 +331,7 @@ class HomeAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Home:index.html.twig',
                 [
                     'event' => $event,

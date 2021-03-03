@@ -6471,7 +6471,7 @@ services:
             - '@command.planning.participant_info_guesser_cache'
             - '@command.planning.sheet_info_guesser_cache'
             - '@planning.displayer.participant_planning_displayer'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@adapter.mailer_adapter'
             - '%infrastructure.print_planning_path%'

@@ -31,11 +31,11 @@ class SheetLinkCTASubstitutionTest extends TestCase
         );
 
         $sheetLinkSubstitution = $this->prophesize(SheetLinkSubstitution::class);
-        $engine = $this->prophesize(TemplatingAdapterInterface::class);
+        $templating = $this->prophesize(TemplatingAdapterInterface::class);
         $sheetLinkSubstitution->substitute($mail)->shouldBeCalled()->willReturn('');
-        $engine->render(Argument::any())->shouldNotBeCalled();
+        $templating->render(Argument::any())->shouldNotBeCalled();
 
-        $substitute = new SheetLinkCTASubstitution($sheetLinkSubstitution->reveal(), $engine->reveal());
+        $substitute = new SheetLinkCTASubstitution($sheetLinkSubstitution->reveal(), $templating->reveal());
         $result = $substitute->substitute($mail);
 
         $this->assertEquals('', $result);
@@ -57,9 +57,9 @@ class SheetLinkCTASubstitutionTest extends TestCase
         );
 
         $sheetLinkSubstitution = $this->prophesize(SheetLinkSubstitution::class);
-        $engine = $this->prophesize(TemplatingAdapterInterface::class);
+        $templating = $this->prophesize(TemplatingAdapterInterface::class);
         $sheetLinkSubstitution->substitute($mail)->shouldBeCalled()->willReturn('https://super-event.vimeet.proximum/fr/sheet/123');
-        $engine
+        $templating
             ->render('MailBundle:Mail:CTA/cta.html.twig', [
                 'link' => 'https://super-event.vimeet.proximum/fr/sheet/123',
                 'label' => 'mail.participant.profile.link',
@@ -69,7 +69,7 @@ class SheetLinkCTASubstitutionTest extends TestCase
             ->willReturn('<a href="test">result</a>')
         ;
 
-        $substitute = new SheetLinkCTASubstitution($sheetLinkSubstitution->reveal(), $engine->reveal());
+        $substitute = new SheetLinkCTASubstitution($sheetLinkSubstitution->reveal(), $templating->reveal());
         $result = $substitute->substitute($mail);
 
         $this->assertEquals('<a href="test">result</a>', $result);

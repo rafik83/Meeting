@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class BuilderAction
 {
@@ -30,21 +30,21 @@ class BuilderAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         NomenclatureRepositoryInterface $nomenclatureRepository,
         CompletenessCalculator $completenessCalculator,
         FlashBagInterface $flashBag,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->nomenclatureRepository = $nomenclatureRepository;
         $this->completenessCalculator = $completenessCalculator;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, Event $event, FormTemplate $template, string $locale): Response
@@ -73,7 +73,7 @@ class BuilderAction
             $this->flashBag->add('warning', 'flash.template.incomplete_translations.warning');
         }
 
-        return new Response($this->engine->render('AdminBundle:Template/Form:builder.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Template/Form:builder.html.twig', [
             'completeness' => $completeness,
             'event' => $event,
             'locale' => $locale,

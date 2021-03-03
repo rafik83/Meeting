@@ -9,10 +9,10 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListActionTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ListActionTest extends TestCase
     private $categoryRepository;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $event;
@@ -37,7 +37,7 @@ class ListActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->authorizationAccessChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->categoryRepository = $this->prophesize(CategoryRepositoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
     }
 
     public function testAccessDenied()
@@ -53,7 +53,7 @@ class ListActionTest extends TestCase
         $action = new ListAction(
             $this->authorizationAccessChecker->reveal(),
             $this->categoryRepository->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal());
@@ -78,8 +78,8 @@ class ListActionTest extends TestCase
         ];
         $this->categoryRepository->findByEvent($this->event->reveal(), 'fr')->shouldBeCalled()->willReturn($categories);
 
-        $this->engine
-            ->renderResponse(ListAction::TEMPLATE, ['event' => $this->event->reveal(), 'categories' => $categories])
+        $this->twig
+            ->render(ListAction::TEMPLATE, ['event' => $this->event->reveal(), 'categories' => $categories])
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -87,7 +87,7 @@ class ListActionTest extends TestCase
         $action = new ListAction(
             $this->authorizationAccessChecker->reveal(),
             $this->categoryRepository->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal());

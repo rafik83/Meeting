@@ -9,26 +9,26 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var GetListViewHandler */
     private $getListViewHandler;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         GetListViewHandler $getListViewHandler
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->getListViewHandler = $getListViewHandler;
     }
 
@@ -39,7 +39,7 @@ class ListAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Admin/PromotionCode/Batch/list.html.twig',
                 [
                     'event' => $event,

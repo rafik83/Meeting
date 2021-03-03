@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\PrintPlanningMail;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;
 
 class ExportPlanningHandler
 {
@@ -35,7 +35,7 @@ class ExportPlanningHandler
     /** @var ParticipantPlanningDisplayer */
     private $participantPlanningDisplayer;
 
-    /** @var EngineInterface */
+    /** @var Environment */
     private $templating;
 
     /** @var LocalFileStorageAdapter */
@@ -67,7 +67,7 @@ class ExportPlanningHandler
         ParticipantInfoGuesserCache $participantInfoGuesserCache,
         SheetInfoGuesserCache $sheetInfoGuesserCache,
         ParticipantPlanningDisplayer $participantPlanningDisplayer,
-        EngineInterface $templating,
+        Environment $templating,
         LocalFileStorageAdapter $localFileStorageAdapter,
         MailerInterface $mailer,
         $printPlanningPath,
@@ -258,24 +258,24 @@ class ExportPlanningHandler
         if (PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME === $orderBy) {
             // Load cache for the participant last name to avoid error in the usort
             foreach ($participants as $participant) {
-                $this->participantInfoGuesserCache->guessParticipantLastName($participant, $event->getFallback());
+                $this->participantInfoGuesserCache->guessParticipantLastName($participant, $event->getLocaleFallback());
             }
 
             usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
-                $left  = $this->participantInfoGuesserCache->guessParticipantLastName($participantLeft, $event->getFallback());
-                $right = $this->participantInfoGuesserCache->guessParticipantLastName($participantRight, $event->getFallback());
+                $left  = $this->participantInfoGuesserCache->guessParticipantLastName($participantLeft, $event->getLocaleFallback());
+                $right = $this->participantInfoGuesserCache->guessParticipantLastName($participantRight, $event->getLocaleFallback());
 
                 return strcasecmp($left, $right);
             });
         } elseif (PlanningOrderedBy::ORDER_BY_SHEET_TITLE === $orderBy) {
             // Load cache for the sheet title to avoid error in the usort
             foreach ($participants as $participant) {
-                $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback());
+                $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getLocaleFallback());
             }
 
             usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
-                $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getFallback());
-                $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
+                $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getLocaleFallback());
+                $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getLocaleFallback());
 
                 return strcasecmp($left, $right);
             });
@@ -295,8 +295,8 @@ class ExportPlanningHandler
                 }
 
                 if ($spotLeftReference === $spotRightReference) {
-                    $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getFallback());
-                    $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
+                    $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getLocaleFallback());
+                    $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getLocaleFallback());
 
                     return strcasecmp($left, $right);
                 }

@@ -6,7 +6,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -23,7 +23,7 @@ services:
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
-            - '@templating'
+            - '@twig'
 
 
     #
@@ -32,7 +32,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting\ListAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@adapter.authorization_checker'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@form.factory'
@@ -55,14 +55,14 @@ services:
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
             - '@router'
             - '@Proximum\Vimeet\Application\Components\Visio\VisioSettingsRetriever'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner\PlannerAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@domain.key_dates.checker.event_open_access_checker'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@vimeet_infrastructure.repository.planner_job_repository'
@@ -75,7 +75,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction:
         arguments:
@@ -92,7 +92,7 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\UpdateAction:
         arguments:
@@ -102,7 +102,7 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@templating'
+            - '@twig'
 
 
     #
@@ -112,7 +112,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\AddQuestionAction:
         arguments:
@@ -120,7 +120,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
 
@@ -130,7 +130,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\UpdateQuestionAction:
@@ -139,7 +139,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RegistrationPath\RemoveQuestionAction:
@@ -166,14 +166,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
             - '@session.flash_bag'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             -
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\Badge\PreviewAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
@@ -187,7 +187,7 @@ services:
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\IndexAction:
         arguments:
@@ -196,14 +196,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@adapter.router'
 
@@ -214,7 +214,7 @@ services:
             - '@form.factory'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\DatesAction:
         arguments:
@@ -223,7 +223,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@router'
-            - '@templating.engine.twig'
+            - '@twig'
 
     #
     # Sheet Template
@@ -241,7 +241,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@template.print_template_resolver'
-            - '@templating.engine.twig'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\PrintTemplate\SaveAction:
         arguments:
@@ -259,7 +259,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
 
     #
     # Registration Template
@@ -268,7 +268,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@sheet.template.completeness_calculator'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@repository.nomenclature_repository'
             - '@adapter.router'
@@ -285,7 +285,7 @@ services:
             - '@form.factory'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\CreateAction:
         arguments:
@@ -293,7 +293,7 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
 
 
     #
@@ -306,7 +306,7 @@ services:
             - '@router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\BuilderAction:
         arguments:
@@ -314,7 +314,7 @@ services:
             - '@repository.nomenclature_repository'
             - '@sheet.template.completeness_calculator'
             - '@session.flash_bag'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\SaveAction:
         arguments:
@@ -325,7 +325,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
@@ -355,7 +355,7 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
         arguments:
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.authorization_checker'
 
@@ -367,7 +367,7 @@ services:
             - '@tactician.commandbus'
             - '@adapter.router'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@adapter.authorization_checker'
 
@@ -376,7 +376,7 @@ services:
             - '@tactician.commandbus'
             - '@adapter.router'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@adapter.authorization_checker'
 
@@ -399,7 +399,7 @@ services:
             - '@tactician.commandbus'
             - '@adapter.router'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@adapter.authorization_checker'
 
@@ -412,7 +412,7 @@ services:
         arguments:
             - '@tactician.commandbus.query'
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
 
     #
     # Tip Actions
@@ -421,7 +421,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@tactician.commandbus.query'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction:
         arguments:
@@ -429,7 +429,7 @@ services:
             - '@form.factory'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
             - '@adapter.authorization_checker'
             - '%infrastructure.default_locales%'
 
@@ -438,7 +438,7 @@ services:
             - '@adapter.authorization_checker'
             - '@form.factory'
             - '@session.flash_bag'
-            - '@templating'
+            - '@twig'
             - '@tactician.commandbus'
             - '@adapter.router'
 
@@ -447,12 +447,12 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\IndexAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account\UpdatePasswordAction:
         arguments:
             - '@form.factory'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
 
@@ -482,7 +482,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\UpdateAction:
@@ -492,7 +492,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
 
     #
@@ -505,7 +505,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\UpdateAction:
@@ -515,7 +515,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
 
     #
@@ -529,7 +529,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Partner\UpdateAction:
         arguments:
@@ -539,7 +539,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@error_factory'
 
     #
@@ -553,7 +553,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\ListAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
@@ -571,7 +571,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
@@ -588,13 +588,13 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Badge\ShowAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Planning\ShowAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Application\Command\Planning\PlanningPrintFactory'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction:
@@ -610,7 +610,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
@@ -620,13 +620,13 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
@@ -667,7 +667,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@vimeet_infrastructure.repository_happening.category_repository'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\CreateAction:
         arguments:
@@ -676,7 +676,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction:
         arguments:
@@ -685,7 +685,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
 
     #
     # Group
@@ -694,7 +694,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     #
     # Linked sheets
@@ -703,14 +703,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets\AddAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@router.default'
             - '@session.flash_bag'
@@ -741,14 +741,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@domain.key_dates.checker.catalog_access_checker'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal\SelectItemsFromNomenclaturesAction:
         arguments:
             - '@repository.catalog_visibility_repository'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag'
 
@@ -761,7 +761,7 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
 
     #
@@ -777,7 +777,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@session.flash_bag'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
 
@@ -813,7 +813,7 @@ services:
             - '@form.factory'
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@router'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ConfigureImportAction:
@@ -822,7 +822,7 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ImportMappingAction:
         arguments:
@@ -831,7 +831,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.router'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@session.flash_bag'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\Import\ResultAction:
@@ -840,7 +840,7 @@ services:
             - '@query.participant.import.import_result_view_query_handler'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@router.default'
             - '@session.flash_bag'
             - '@translator'
@@ -852,13 +852,13 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -867,7 +867,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\QRCodeReaderAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
             - '@form.factory'
@@ -910,7 +910,7 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
 
     #
@@ -924,13 +924,13 @@ services:
             - '@form.factory'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Participant\UpdateAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
-            - '@templating'
+            - '@twig'
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
@@ -943,7 +943,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
             - '@vimeet_infrastructure.repository.happening_repository'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction:
@@ -953,7 +953,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
             - '@vimeet_infrastructure.repository.happening_repository'
 
     #
@@ -978,7 +978,7 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ImportAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
             - '@form.factory'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -986,7 +986,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ConfirmImportAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
             - '@form.factory'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
@@ -1040,7 +1040,7 @@ services:
     # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Crisp\ChatAction:
     #     arguments:
     #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-    #         - '@templating.engine.twig'
+    #         - '@twig'
 
     #
     # Event
@@ -1051,7 +1051,7 @@ services:
 
     # Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Event\PrivacyPolicyAction:
     #     arguments:
-    #         - '@templating'
+    #         - '@twig'
     #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
@@ -1060,7 +1060,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\CheckInAction:
         arguments:
             - '@domain.event.day.dday_guesser'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
             - '@adapter.authorization_checker'
@@ -1083,12 +1083,12 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\ListAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
             - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\CustomizeAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
             - '@adapter.authorization_checker'
             - '@translator'
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
@@ -1100,7 +1100,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail\UpdateCustomizedAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@vimeet_infrastructure.repository.type_repository'
@@ -1125,11 +1125,11 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening\QrCodeAction:
         arguments:
-        - '@templating.engine.twig'
+        - '@twig'
         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         - '@adapter.authorization_checker'
         - '@datetime'
@@ -1147,7 +1147,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\DeleteAction:
         arguments:
@@ -1164,7 +1164,7 @@ services:
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
-            - '@templating'
+            - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\StaticFormulation\StaticFormulationRepository'
@@ -1179,7 +1179,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
 
     #
     # Admin
@@ -1188,14 +1188,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Operator\ListAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@form.factory'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
@@ -1204,7 +1204,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\AddAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router.default'
@@ -1214,12 +1214,12 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\RoomingListAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@form.factory'
             - '@Proximum\Vimeet\Domain\Filter\RoomingListFilter'
@@ -1228,7 +1228,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating.engine.twig'
+            - '@twig'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router.default'
@@ -1236,7 +1236,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignAccommodationAction:
         arguments:
-            - '@templating.engine.twig'
+            - '@twig'
             - '@form.factory'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@router'
@@ -1304,7 +1304,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@repository.invoice.invoice_repository'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesPdfBulkPrinter'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice\DownloadPrintAction:
@@ -1318,7 +1318,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@adapter.router'
             - '@vimeet_infrastructure.repository.user_repository'
@@ -1327,7 +1327,7 @@ services:
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\FastCheckin\CheckinActionsAction:
         arguments:
-            - '@templating'
+            - '@twig'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
             - '@datetime'
@@ -1339,7 +1339,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
@@ -1347,7 +1347,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ListAction:
         arguments:
             - '@adapter.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListViewHandler'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\PromotionCode\Batch\ExportAction:
@@ -1361,7 +1361,7 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@templating'
+            - '@twig'
             - '@session.flash_bag'
             - '@form.factory'
             - '@router'
@@ -1370,7 +1370,7 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@query.sheet.dashboard_view_query_handler'
-            - '@templating'
+            - '@twig'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction:
         arguments:

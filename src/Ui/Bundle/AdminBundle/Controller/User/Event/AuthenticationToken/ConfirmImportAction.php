@@ -11,17 +11,17 @@ use Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPrevie
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenConfirmType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ConfirmImportAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -39,14 +39,14 @@ class ConfirmImportAction
     private $queryBus;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
         RouterInterface $router,
         QueryBusInterface $queryBus
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
@@ -79,10 +79,10 @@ class ConfirmImportAction
             return new RedirectResponse($this->router->generate('admin_sheet', ['event' => $event->getId()]));
         }
 
-        return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/importPreview.html.twig', [
+        return new Response($this->twig->render('@Admin/User/Event/AuthenticationToken/importPreview.html.twig', [
             'authenticationTokenImports' => $authenticationTokenImports,
             'form' => $form->createView(),
             'event' => $event,
-        ]);
+        ]));
     }
 }

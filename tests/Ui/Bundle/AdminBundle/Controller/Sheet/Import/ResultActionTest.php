@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ResultActionTest extends TestCase
@@ -33,7 +33,7 @@ class ResultActionTest extends TestCase
     /** @var ObjectProphecy */
     private $authorizationCheckerAdapter,
         $importResultViewQueryHandler,
-        $engine,
+        $twig,
         $formFactory,
         $commandBus,
         $router,
@@ -48,7 +48,7 @@ class ResultActionTest extends TestCase
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->importResultViewQueryHandler = $this->prophesize(ImportResultViewQueryHandler::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
@@ -70,14 +70,14 @@ class ResultActionTest extends TestCase
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->render(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new ResultAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->importResultViewQueryHandler->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->translator->reveal()
@@ -126,7 +126,7 @@ class ResultActionTest extends TestCase
             ->shouldNotBeCalled()
         ;
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->render('AdminBundle:Sheet:importResult.html.twig', [
+        $this->twig->render('AdminBundle:Sheet:importResult.html.twig', [
             'event' => $this->event->reveal(),
             'view' => $participantDenormalizerView,
             'createForm' => $view->reveal(),
@@ -140,7 +140,7 @@ class ResultActionTest extends TestCase
             $this->importResultViewQueryHandler->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->translator->reveal()
@@ -203,7 +203,7 @@ class ResultActionTest extends TestCase
             ->willReturn('error');
         $form->addError(new FormError('error'))->shouldBeCalled();
 
-        $this->engine->render('AdminBundle:Sheet:importResult.html.twig', [
+        $this->twig->render('AdminBundle:Sheet:importResult.html.twig', [
             'event' => $this->event->reveal(),
             'view' => $participantDenormalizerView,
             'createForm' => $view->reveal(),
@@ -217,7 +217,7 @@ class ResultActionTest extends TestCase
             $this->importResultViewQueryHandler->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->translator->reveal()
@@ -281,14 +281,14 @@ class ResultActionTest extends TestCase
             ->willReturn('/route/to/sheet_list')
         ;
 
-        $this->engine->render('AdminBundle:Sheet:importResult.html.twig', Argument::any())->shouldNotBeCalled();
+        $this->twig->render('AdminBundle:Sheet:importResult.html.twig', Argument::any())->shouldNotBeCalled();
 
         $action = new ResultAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->importResultViewQueryHandler->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->translator->reveal()

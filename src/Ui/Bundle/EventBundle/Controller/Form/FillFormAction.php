@@ -34,15 +34,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class FillFormAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -61,7 +61,7 @@ class FillFormAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
@@ -69,7 +69,7 @@ class FillFormAction
         FlashBagInterface $flashBag
     ) {
         $this->authorizationChecker = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->router = $router;
         $this->formFactory = $formFactory;
@@ -156,7 +156,7 @@ class FillFormAction
         $breadCrumb = null;
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Form/fillForm.html.twig',
                 [
                     'event' => $event,

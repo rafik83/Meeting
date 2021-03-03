@@ -485,7 +485,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@templating'
+            - '@twig'
             - '@adapter.authorization_checker'
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: -127 }

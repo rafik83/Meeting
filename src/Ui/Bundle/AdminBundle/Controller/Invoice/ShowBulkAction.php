@@ -10,7 +10,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicesP
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowBulkAction
 {
@@ -20,8 +20,8 @@ class ShowBulkAction
     /** @var InvoiceRepositoryInterface */
     private $invoiceRepository;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var InvoicesPdfBulkPrinter */
     private $invoicesPdfBulkPrinter;
@@ -29,12 +29,12 @@ class ShowBulkAction
     public function __construct(
         QueryBusInterface $queryBus,
         InvoiceRepositoryInterface $invoiceRepository,
-        EngineInterface $engine,
+        Environment $twig,
         InvoicesPdfBulkPrinter $invoicesPdfBulkPrinter
     ) {
         $this->queryBus = $queryBus;
         $this->invoiceRepository = $invoiceRepository;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->invoicesPdfBulkPrinter = $invoicesPdfBulkPrinter;
     }
 
@@ -64,7 +64,7 @@ class ShowBulkAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Invoice:show.forBulk.html.twig',
                 [
                     'invoiceViews' => $invoiceViews,

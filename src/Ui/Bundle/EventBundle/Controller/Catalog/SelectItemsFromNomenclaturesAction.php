@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SelectItemsFromNomenclaturesAction
 {
@@ -24,8 +24,8 @@ class SelectItemsFromNomenclaturesAction
     /** @var CatalogAccessChecker */
     private $catalogAccessChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -36,13 +36,13 @@ class SelectItemsFromNomenclaturesAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CatalogAccessChecker $catalogAccessChecker,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         GetNomenclaturesByTag $getNomenclaturesByTag
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->catalogAccessChecker = $catalogAccessChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->getNomenclaturesByTag = $getNomenclaturesByTag;
     }
@@ -78,7 +78,7 @@ class SelectItemsFromNomenclaturesAction
         );
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Catalog/Partial:selectItemsFromNomenclatures.html.twig',
                 [
                     'event' => $event,

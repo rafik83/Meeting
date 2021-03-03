@@ -21,7 +21,7 @@ class ListActionTest extends TestCase
     private $event;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $queryBus;
@@ -33,7 +33,7 @@ class ListActionTest extends TestCase
     {
         $this->event = $this->prophesize(Event::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $this->engine = $this->prophesize(Environment::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
     }
 
@@ -43,12 +43,12 @@ class ListActionTest extends TestCase
 
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(false);
         $this->queryBus->handle(Argument::any())->shouldNotBeCalled();
-        $this->engine->render(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
          $action = new ListAction(
             $this->authorizationChecker->reveal(),
             $this->queryBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
          $action($this->event->reveal());
@@ -60,7 +60,7 @@ class ListActionTest extends TestCase
         $view = new ListView([]);
         $this->queryBus->handle(new ListViewQuery($this->event->reveal()))->shouldBeCalled()->willReturn($view);
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:AvailabilityTimeRange:list.html.twig', [
                 'event' => $this->event->reveal(),
                 'list' => $view,
@@ -72,7 +72,7 @@ class ListActionTest extends TestCase
         $action = new ListAction(
             $this->authorizationChecker->reveal(),
             $this->queryBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $result = $action($this->event->reveal());
 

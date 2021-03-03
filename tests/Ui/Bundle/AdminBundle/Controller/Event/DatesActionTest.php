@@ -41,7 +41,7 @@ class DatesActionTest extends TestCase
     private $commandBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $request;
@@ -58,7 +58,7 @@ class DatesActionTest extends TestCase
         $this->router = $this->prophesize(RouterInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(Environment::class);
+        $this->twig = $this->prophesize(Environment::class);
     }
 
     public function testAccessDeniedEventAccess(): void
@@ -76,7 +76,7 @@ class DatesActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $action($this->request->reveal(), $this->event->reveal());
     }
@@ -134,7 +134,7 @@ class DatesActionTest extends TestCase
         $this->request->getLocale()->willReturn('de');
         $this->event->getAvailableLocale('de')->willReturn('fr');
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Event:dates.html.twig', [
                 'event' => $this->event->reveal(),
                 'form' => $formView->reveal(),
@@ -149,7 +149,7 @@ class DatesActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $result = $action($this->request->reveal(), $this->event->reveal());
 
@@ -212,7 +212,7 @@ class DatesActionTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('/route')
         ;
-        $this->engine->render(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new DatesAction(
             $this->authorizationCheckerAdapter->reveal(),
@@ -220,7 +220,7 @@ class DatesActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
         $result = $action($this->request->reveal(), $this->event->reveal());
 
