@@ -36,7 +36,7 @@ class ExportPlanningHandler
     private $participantPlanningDisplayer;
 
     /** @var Environment */
-    private $templating;
+    private $twig;
 
     /** @var LocalFileStorageAdapter */
     private $localFileStorageAdapter;
@@ -67,7 +67,7 @@ class ExportPlanningHandler
         ParticipantInfoGuesserCache $participantInfoGuesserCache,
         SheetInfoGuesserCache $sheetInfoGuesserCache,
         ParticipantPlanningDisplayer $participantPlanningDisplayer,
-        Environment $templating,
+        Environment $twig,
         LocalFileStorageAdapter $localFileStorageAdapter,
         MailerInterface $mailer,
         $printPlanningPath,
@@ -81,7 +81,7 @@ class ExportPlanningHandler
         $this->participantInfoGuesserCache = $participantInfoGuesserCache;
         $this->sheetInfoGuesserCache = $sheetInfoGuesserCache;
         $this->participantPlanningDisplayer = $participantPlanningDisplayer;
-        $this->templating = $templating;
+        $this->twig = $twig;
         $this->localFileStorageAdapter = $localFileStorageAdapter;
         $this->mailer = $mailer;
         $this->printPlanningPath = $printPlanningPath;
@@ -149,7 +149,7 @@ class ExportPlanningHandler
             $printedUsers[$user->getId()] = true;
         }
 
-        return $this->templating->render('AdminBundle:Planning/Print:plannings.html.twig', [
+        return $this->twig->render('AdminBundle:Planning/Print:plannings.html.twig', [
             'plannings' => $plannings,
         ]);
     }
@@ -177,7 +177,7 @@ class ExportPlanningHandler
             $printedUsers[$user->getId()] = true;
         }
 
-        return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
+        return $this->twig->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
             'results' => $planningsAndBadges,
         ]);
     }
@@ -205,7 +205,7 @@ class ExportPlanningHandler
             $printedUsers[$user->getId()] = true;
         }
 
-        return $this->templating->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
+        return $this->twig->render('AdminBundle:Planning/Print:planningsAndBadges.html.twig', [
             'results' => $badges,
         ]);
     }
