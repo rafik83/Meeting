@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 <label>{{ 'admin.agenda.meeting.updateSpot.participants'|trans }}</label>
-                <label v-for="participant in meetingToUpdate.form.participants">
+                <label class="fontWeight-normal" v-for="participant in meetingToUpdate.form.participants">
                     <input type="checkbox" v-bind:value="participant.id" v-model="meetingToUpdate.form.meetingParticipants"> ${ participant.fullName }
                 </label>
             </div>
