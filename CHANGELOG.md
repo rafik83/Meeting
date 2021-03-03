@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 VIMEET-2378 - Order conferences by date in admin panel
+
+## [2.82.2] - 2021-03-02
+### Fixed
+- MV-310 - fix error if desktop notifications are not available (ie on iOS)
+
 ## [2.82.1] - 2021-02-18
 ### Fixed
 - MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
