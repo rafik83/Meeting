@@ -42,7 +42,7 @@ class UpdateSpot
      * @param MeetingSlot   $slot
      * @param Participant[] $participants
      */
-    public function __construct(Meeting $meeting, Spot $spot, $blockedSlot, $blockedSpot, $visio = false, Sheet $sheet, MeetingSlot $slot, Participant $participants)
+    public function __construct(Meeting $meeting, Spot $spot, $blockedSlot, $blockedSpot, $visio = false, Sheet $sheet, MeetingSlot $slot, array $participants)
     {
         $this->meeting     = $meeting;
         $this->spot        = $spot;

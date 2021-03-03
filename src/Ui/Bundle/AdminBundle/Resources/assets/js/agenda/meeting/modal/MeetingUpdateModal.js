@@ -39,10 +39,12 @@ export default {
             this.disabled = true;
             this.$emit('meeting-updating');
 
-            this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
+            this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId, this.meetingToUpdate.sheet.id), {
                 blockedSlot: this.meetingToUpdate.form.blockedSlot,
                 blockedSpot: this.meetingToUpdate.form.blockedSpot,
-                spotId: this.meetingToUpdate.form.spotId
+                spotId: this.meetingToUpdate.form.spotId,
+                slotId: this.meetingToUpdate.form.slotId,
+                meetingParticipants: this.meetingToUpdate.form.meetingParticipants
             })
             .then(function () {
                 this.$emit('meeting-updated');
