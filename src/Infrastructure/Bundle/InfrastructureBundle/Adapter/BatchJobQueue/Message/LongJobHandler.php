@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\Bat
 
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class JobHandler implements MessageHandlerInterface
+class LongJobHandler implements MessageHandlerInterface
 {
     private RunJob $runJob;
 
@@ -13,7 +13,7 @@ class JobHandler implements MessageHandlerInterface
         $this->runJob = $runJob;
     }
 
-    function __invoke(Job $job)
+    function __invoke(LongJob $job)
     {
         $this->runJob->run($job);
     }
