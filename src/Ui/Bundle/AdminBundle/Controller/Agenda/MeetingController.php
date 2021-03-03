@@ -69,7 +69,14 @@ class MeetingController extends Controller
 
         $data = json_decode($request->getContent());
 
-        if (!isset($data->spotId) || !isset($data->slotId) || !isset($data->blockedSlot) || !isset($data->blockedSpot)) {
+        if (!isset($data->spotId)
+            || !isset($data->slotId)
+            || !isset($data->blockedSlot)
+            || !isset($data->blockedSpot)
+            || !isset($data->meetingParticipants)
+            || !is_array($data->meetingParticipants)
+            || count($data->meetingParticipants) === 0
+        ) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');
         }
 
