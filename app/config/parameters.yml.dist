@@ -2,11 +2,11 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    database_host:     127.0.0.1
-    database_port:     3306
-    database_name:     proximum_vimeet
-    database_user:     root
-    database_password: password
+    # database_host:     127.0.0.1
+    # database_port:     3306
+    # database_name:     proximum_vimeet
+    # database_user:     root
+    # database_password: password
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.project_dir%/data/data.db3"
 
@@ -30,7 +30,7 @@ parameters:
     secret:      LcTdBOetSYwmhWirRZHleWO8FJknzXLu
     adminSecret: 'y7UriWwW@LKcBM*xU3wuao5o$K9kJkw%7ZaxrH#&dqa*XoegEVQ5n5KVcFBg'
 
-    redis_dsn: 'redis://localhost'
+    # redis_dsn: 'redis://localhost'
 
     oauth_google_client_id: 'client_id_to_change'
     oauth_google_client_secret: 'client_secret_to_change'

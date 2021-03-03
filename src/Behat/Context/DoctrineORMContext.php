@@ -6,20 +6,17 @@ use Behat\Behat\Context\Context;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class DoctrineORMContext implements Context
 {
     const NotMappedTables = [
-        'jms_job_related_entities',
+        'messenger_jobs',
     ];
 
-    private KernelInterface $kernel;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(KernelInterface $kernel, EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->kernel = $kernel;
         $this->entityManager = $entityManager;
     }
 
@@ -41,8 +38,10 @@ class DoctrineORMContext implements Context
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         $purger = new ORMPurger($this->entityManager);
         $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+        $this->entityManager->getConnection()->executeQuery('SET foreign_key_checks = 0;');
         $purger->purge();
         $this->purgeNotMappedTables();
+        $this->entityManager->getConnection()->executeQuery('SET foreign_key_checks = 1;');
         $this->entityManager->clear();
     }
 

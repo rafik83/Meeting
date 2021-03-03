@@ -21,10 +21,10 @@ swiftmailer:
     spool:
         type: file
 
-doctrine:
-    dbal:
-        dbname: "%database_name%_test"
-        driver_class: Proximum\Vimeet\Behat\DBAL\Driver\PDOMySql\Driver
+# doctrine:
+#     dbal:
+#         dbname: "%database_name%_test"
+#         driver_class: Proximum\Vimeet\Behat\DBAL\Driver\PDOMySql\Driver
 
 # hautelook_alice:
 #     db_drivers:
