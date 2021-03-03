@@ -33,7 +33,7 @@
             <div class="form-group">
                 <label for="modal_slot">{{ 'admin.agenda.meeting.updateSpot.slot'|trans }}</label>
                 <select id="modal_slot" class="form-control" v-model="meetingToUpdate.form.slotId" v-bind:disabled="meetingToUpdate.form.blockedSlot == true">
-                    <option v-for="slot in meetingToUpdate.form.meetingSlots" v-bind:value="slot.id">
+                    <option v-for="slot in possibleSlots" v-bind:value="slot.id">
                         ${ slot.label }
                     </option>
                 </select>

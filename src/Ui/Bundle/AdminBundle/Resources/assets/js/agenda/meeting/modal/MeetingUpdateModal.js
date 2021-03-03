@@ -27,6 +27,23 @@ export default {
             disabled: false
         }
     },
+    computed: {
+        possibleSlots: function () {
+            if (this.meetingToUpdate.form.meetingParticipants.length === 0) {
+                return [];
+            }
+
+            let possibleSlotsIdForParticipants = this.meetingToUpdate.form.currentSheetAvailableSlotIds[this.meetingToUpdate.form.meetingParticipants[0]];
+
+            const otherSelectedParticipants = this.meetingToUpdate.form.meetingParticipants.slice(1);
+            const currentSheetAvailableSlotIds = this.meetingToUpdate.form.currentSheetAvailableSlotIds;
+            otherSelectedParticipants.forEach(function (participantId) {
+                possibleSlotsIdForParticipants = possibleSlotsIdForParticipants.filter(slotId => currentSheetAvailableSlotIds[participantId].includes(slotId));
+            });
+
+            return this.meetingToUpdate.form.meetingSlots.filter(slot => possibleSlotsIdForParticipants.includes(slot.id));
+        }
+    },
     methods: {
         reinit: function () {
             this.disabled = false;
