@@ -63,18 +63,20 @@ class HappeningListViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $locale = "fr";
 
-        $happening1BeginDate =   new DateTime('2011-01-01T15:03:01.012345Z');
+        $happening1BeginDate = DateTime::createFromFormat('!Y-m-d H:i', '2018-01-01 15:03');
         $happening1 = $this->prophesize(Happening::class);
         $happening1->getBegin()->willReturn($happening1BeginDate);
 
-
-        $happening2BeginDate =   new DateTime('2012-02-02T15:03:01.012345Z');
+        $happening2BeginDate = DateTime::createFromFormat('!Y-m-d H:i', '2018-02-02 15:03');
         $happening2 = $this->prophesize(Happening::class);
         $happening2->getBegin()->willReturn($happening2BeginDate);
 
+        $happening3BeginDate = DateTime::createFromFormat('!Y-m-d H:i', '2018-02-02 17:03');
+        $happening3 = $this->prophesize(Happening::class);
+        $happening3->getBegin()->willReturn($happening3BeginDate);
+
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $happeningRepository->findListByEvent($event->reveal(), $locale)->willReturn([$happening1->reveal(), $happening2->reveal()]);
-
 
         $happeningView1 = $this->prophesize(HappeningView::class);
         $happeningHandler = $this->prophesize(HappeningViewQueryHandler::class);
@@ -103,11 +105,11 @@ class HappeningListViewQueryHandlerTest extends TestCase
 
         $happeningDayView2 =   new HappeningDayView($happening2BeginDate, [
             $happening2->reveal(),
+            $happening3->reveal()
         ]);
 
         $happeningDayView2->happeningListView = [
             $happeningView2->reveal()
-
         ];
 
         $expectedResult = [
