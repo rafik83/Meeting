@@ -25,6 +25,6 @@ class BatchEnableDisableJobQueue extends AbstractJobQueueAdapter implements Batc
             'state' => $options['state'] ?? null,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

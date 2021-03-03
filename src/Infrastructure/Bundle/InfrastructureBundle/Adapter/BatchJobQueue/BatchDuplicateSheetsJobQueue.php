@@ -26,6 +26,6 @@ class BatchDuplicateSheetsJobQueue extends AbstractJobQueueAdapter implements Ba
             'originalEventId' => $options['originalEventId'] ?? null,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

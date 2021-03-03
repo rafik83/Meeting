@@ -27,6 +27,6 @@ class BatchValidateJobQueue extends AbstractJobQueueAdapter implements BatchJobQ
 
         $job = new Job(BatchValidateCommand::NAME, $arguments);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

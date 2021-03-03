@@ -25,6 +25,6 @@ class BatchCatalogJobQueue extends AbstractJobQueueAdapter implements BatchJobQu
             'state' => $options['state'] ?? null,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

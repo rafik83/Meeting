@@ -23,7 +23,7 @@ abstract class AbstractJobQueueAdapter
         $this->logger = $logger;
     }
 
-    protected function setJob(Job $job): void
+    protected function sendJob(Job $job): void
     {
         $lock = $this->jobLockFactory->createLock($job);
 

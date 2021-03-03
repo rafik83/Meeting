@@ -20,7 +20,7 @@ class RecordJobQueueAdapter extends AbstractJobQueueAdapter implements RecordJob
         $date->setTimestamp($reconciliationDate->getTimestamp());
         $job->setExecuteAfter($date);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     private function createJob($happeningId): Job

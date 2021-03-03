@@ -24,6 +24,6 @@ class BatchRefuseJobQueue extends AbstractJobQueueAdapter implements BatchJobQue
             'adminId' => $admin->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

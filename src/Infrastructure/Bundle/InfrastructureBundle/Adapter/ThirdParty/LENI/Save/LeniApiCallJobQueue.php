@@ -17,6 +17,6 @@ class LeniApiCallJobQueue extends AbstractJobQueueAdapter implements LeniApiCall
     {
         // create a low priority job
         $job = new LongJob(LeniApiCallCommand::NAME, [LeniApiCallCommand::EXTRA_DATA_ID=> $extraData->getId()]);
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

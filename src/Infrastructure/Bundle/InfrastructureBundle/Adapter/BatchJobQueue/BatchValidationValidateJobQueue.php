@@ -24,6 +24,6 @@ class BatchValidationValidateJobQueue extends AbstractJobQueueAdapter implements
             'adminId' => $admin->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

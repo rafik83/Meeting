@@ -28,6 +28,6 @@ class BatchPendingJobQueue extends AbstractJobQueueAdapter implements BatchJobQu
             'adminId' => $admin->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

@@ -24,7 +24,7 @@ class ComexposiumJobQueue extends AbstractJobQueueAdapter implements Comexposium
             ]
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -36,6 +36,6 @@ class ComexposiumJobQueue extends AbstractJobQueueAdapter implements Comexposium
             'event' => $event->getId(),
             'admin' => $admin->getId()
         ]);
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

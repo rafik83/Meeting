@@ -24,6 +24,6 @@ class BatchDraftJobQueue extends AbstractJobQueueAdapter implements BatchJobQueu
             'adminId' => $admin->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

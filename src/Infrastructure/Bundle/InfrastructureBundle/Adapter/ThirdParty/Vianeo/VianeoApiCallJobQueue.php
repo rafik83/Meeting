@@ -17,6 +17,6 @@ class VianeoApiCallJobQueue extends AbstractJobQueueAdapter implements VianeoApi
     {
         // create a low priority job
         $job = new LongJob(VianeoApiCallCommand::NAME, [VianeoApiCallCommand::SHEET_ID => $sheet->getId()]);
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }
