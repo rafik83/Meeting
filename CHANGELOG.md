@@ -4,9 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-## [2.82.0] - 2021-02-16
-### Updated
+## [2.82.2] - 2021-03-02
+### Fixed
+- MV-310 - fix error if desktop notifications are not available (ie on iOS)
+
+## [2.82.1] - 2021-02-18
+### Fixed
+- MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
+
+## [2.82.0] - 2021-02-16### Updated
 - Update Elasticsearch to 6.8.13
+
 ## [2.81.0] - 2021-02-16
 ### Added
 - VIMEET-2361 - Add link to prefill user mail on registration

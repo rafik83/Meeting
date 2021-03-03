@@ -953,7 +953,7 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $this->query->addMust(new Ids($sheetIds));
+        $this->query->addMust(new Ids(array_values($sheetIds)));
     }
 
     /**
@@ -965,7 +965,8 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $this->query->addMustNot(new Ids(array_map(fn($sheet) => $sheet->getId(), $sheetsToExclude)));
+        $sheetIds = array_map(fn($sheet) => $sheet->getId(), $sheetsToExclude);
+        $this->query->addMustNot(new Ids(array_values($sheetIds)));
     }
 
     /**
