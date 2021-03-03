@@ -102,7 +102,7 @@ composer-install:
 	php bin/composer.phar install --no-progress --no-interaction
 
 install-app@test:
-	SYMFONY_ENV=test php bin/composer.phar install --no-progress --no-interaction
+	APP_ENV=test php -d memory_limit=2G bin/composer.phar install --no-progress --no-interaction
 
 install-db:
 	bin/console doctrine:database:drop --force --if-exists
@@ -183,7 +183,7 @@ test-phpunit@test:
 test-behat:
 	bin/console ca:cl --env=test --no-warmup
 	bin/console fos:elastica:reset --env=test --no-debug
-	php -d date.timezone=UTC bin/behat --format progress --no-interaction
+	DATABASE_HOST=localhost php -d date.timezone=UTC bin/behat --format progress --no-interaction
 
 test-behat@test:
 	rm -rf var/cache/test/*

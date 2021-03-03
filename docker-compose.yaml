@@ -32,8 +32,9 @@ services:
     php-ci:
         build: docker/php-ci
         environment:
-            SYMFONY_ENV: "test"
+            APP_ENV: "test"
             TZ: "Europe/Paris"
+            DATABASE_HOST: "database"
         volumes:
             - .:/srv
         networks:
