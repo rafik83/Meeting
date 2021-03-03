@@ -4,11 +4,11 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Event\EventListQuery;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class PastController extends Controller
+class PastController extends AbstractController
 {
     private QueryBusInterface $queryBus;
 

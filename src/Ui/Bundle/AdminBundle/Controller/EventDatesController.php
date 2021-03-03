@@ -8,12 +8,12 @@ use Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDate;
 use Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventDatesController extends Controller
+class EventDatesController extends AbstractController
 {
     private \DateTimeInterface $dateTime;
     private TranslatorInterface $translator;
