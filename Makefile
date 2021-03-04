@@ -114,7 +114,7 @@ install-db@test:
 	bin/console doctrine:database:drop --force --if-exists --env=test
 	bin/console doctrine:database:create --if-not-exists --env=test
 	bin/console doctrine:schema:update --force --env=test
-	bin/console doctrine:query:sql "CREATE TABLE messenger_jobs (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, headers LONGTEXT CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, queue_name VARCHAR(190) CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), INDEX IDX_75EA56E0FB7336F0 (queue_name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = '';"
+	bin/console doctrine:query:sql --env=test "CREATE TABLE IF NOT EXISTS messenger_jobs (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, headers LONGTEXT CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, queue_name VARCHAR(190) CHARACTER SET utf8 NOT NULL COLLATE utf8_unicode_ci, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), INDEX IDX_75EA56E0FB7336F0 (queue_name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB COMMENT = '';"
 
 install-db-fixtures:
 	bin/console doctrine:fixtures:load -n
@@ -186,7 +186,7 @@ test-behat: redis-flushlocks@local
 	rm -rf var/sms
 	bin/console ca:cl --env=test --no-warmup
 	bin/console fos:elastica:reset --env=test --no-debug
-	DATABASE_HOST=localhost REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --stop-on-failure
+	DATABASE_HOST=127.0.0.1 REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --stop-on-failure
 
 test-behat@test:
 	rm -rf var/cache/test/*
