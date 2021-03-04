@@ -41,6 +41,7 @@ services:
             - proxy
         depends_on:
             - database
+            - redis
 
     redis:
         image: redis:5-alpine

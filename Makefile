@@ -180,10 +180,11 @@ test-phpunit@test:
 	rm -rf var/tests/junit.xml var/tests/clover.xml var/tests/coverage
 	stty cols 80; bin/phpunit --log-junit var/tests/junit.xml --coverage-clover var/tests/clover.xml --coverage-html var/tests/coverage
 
-test-behat:
+## Run tests on localhost
+test-behat: redis-flushlocks@local
 	bin/console ca:cl --env=test --no-warmup
 	bin/console fos:elastica:reset --env=test --no-debug
-	DATABASE_HOST=localhost php -d date.timezone=UTC bin/behat --format progress --no-interaction
+	DATABASE_HOST=localhost REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --format progress --no-interaction
 
 test-behat@test:
 	rm -rf var/cache/test/*
