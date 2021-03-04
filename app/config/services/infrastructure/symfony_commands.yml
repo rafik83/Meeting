@@ -149,6 +149,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@logger'
         tags:
             - { name: console.command }
 
