@@ -388,7 +388,7 @@ form.event_update.children.submit.label: Enregistrer
 form.event_update.children.textColor.label: 'Couleur du texte'
 form.event_update.children.timeZone.label: 'Fuseau horaire'
 form.event_update.children.title.label: Titre
-form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
+form.event_update.children.translations.prototype.children.description.label: 'Pied de page email'
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.visio.label: 'Evenement dématérialisé'
@@ -404,7 +404,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexp
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 form.extra_parameter_create.children.type.choices.crisp_site_id: 'Crisp site ID'
-form.extra_parameter_create.children.type.choices.custom_button: 'Bouton custom 1'
+form.extra_parameter_create.children.type.choices.custom_button: 'Bouton custom'
 form.extra_parameter_create.children.type.choices.custom_button_2: 'Bouton custom 2'
 form.extra_parameter_create.children.type.choices.leni_badge_link: 'LENI lien pour le badge'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
@@ -1263,16 +1263,17 @@ form.type_content_define_terms_of_sale.children.submit.label: Valider
 form.type_create.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_create.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_create.children.canEvaluateMeeting.label: 'Le participant peut noter son rendez-vous'
-form.type_create.children.canUpdateMeeting.label: 'Peut modifier les RDV'
+form.type_create.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_create.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_create.children.canScanParticipant.label: 'Peut scanner un autre participant'
 form.type_create.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
+form.type_create.children.canUpdateMeeting.label: 'Peut modifier les RDV'
 form.type_create.children.displayAnalyticsOnCatalog.label: 'Activer les filtres catalogue fiches que j''ai vues / qui m''ont vu'
 form.type_create.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
 form.type_create.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'
 form.type_create.children.enableUnavailabilityManagement.label: 'Peut gérer ses indisponibilités'
 form.type_create.children.formTemplates.label: Formulaires
-form.type_create.children.formTemplates.status.draft: brouillon
+form.type_create.children.formTemplates.status.draft: Brouillon
 form.type_create.children.formTemplates.status.published: publié
 form.type_create.children.hidden.label: Caché
 form.type_create.children.isPackageRequired.label: 'Forfait requis'
@@ -1326,10 +1327,11 @@ form.type_template.sheet.organizer: 'Mes templates de Participation'
 form.type_update.children.areAllSheetParticipantsAssignedToMeeting.label: 'Tous les participants sont affectés à tous les RDV d’une fiche'
 form.type_update.children.availabilityType.label: 'Gestion de disponibilité'
 form.type_update.children.canEvaluateMeeting.label: 'Le participant peut noter son rendez-vous'
-form.type_update.children.canUpdateMeeting.label: 'Peut modifier les RDV'
+form.type_update.children.canMoveMeeting.label: 'Peut déplacer les RDV'
 form.type_update.children.canRemoveMeeting.label: 'Peut supprimer les RDV'
 form.type_update.children.canScanParticipant.label: 'Peut scanner un autre participant'
 form.type_update.children.canSubmitValidation.label: 'Soumettre sa fiche à validation'
+form.type_update.children.canUpdateMeeting.label: 'Peut modifier les RDV'
 form.type_update.children.displayAnalyticsOnCatalog.label: 'Activer les filtres catalogue fiches que j''ai vues / qui m''ont vu'
 form.type_update.children.displayAnalyticsOnMeetingList.label: 'Afficher les statistiques des visites dans la gestion des rendez-vous'
 form.type_update.children.displayAnalyticsOnSheet.label: 'Afficher les statistiques sur la fiche'

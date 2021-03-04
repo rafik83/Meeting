@@ -21,19 +21,20 @@ agenda.availability.save: 'Save my availabilities'
 agenda.day.hide: 'Hide this day'
 agenda.day.see: 'Show the day'
 agenda.meeting.details: Details
-agenda.meeting.udpate.back: Back
+agenda.meeting.edit.button: Edit
+agenda.meeting.move.back: Back
 agenda.meeting.move.button: 'Move the meeting'
 agenda.meeting.move.no_available_slots: 'The meeting can''t be moved because there are no other join availabilities'
 agenda.meeting.move.success: 'The appointment has been moved'
 agenda.meeting.ownSheetParticipants: 'Take part in the meeting:'
-agenda.meeting.remove.button: 'Delete the meeting'
+agenda.meeting.remove.button: Delete
 agenda.meeting.remove.confirm: 'Confirm deletion?'
 agenda.meeting.remove.success: 'The appointment has been deleted'
-agenda.meeting.updateSlot.error: 'Impossible to move this meeting'
+agenda.meeting.updateSlot.error: 'Impossible to update this meeting'
 agenda.myAgenda.button.title: 'My calendar'
 agenda.participant.view: 'Schedule of %participant%'
 agenda.sheetAgenda.button.title: 'Global calendar'
-agenda.sheetAgenda.participantsAgenda.title: "Participant's Agenda"
+agenda.sheetAgenda.participantsAgenda.title: 'Participants schedule'
 agenda.sheetAgenda.title: 'Global calendar'
 agenda.slot.available: Available
 agenda.slot.imperative-presence: 'Your presence is mandatory'
@@ -56,6 +57,7 @@ badge.scan.loading: 'Searching the participant''s profile ...'
 badge.scan.title: 'Scan a participant''s badge'
 badge.title: 'My badge'
 billing_info.title: 'Billing information'
+call.visio.end: 'Stop the video call'
 catalog.action.meeting.proposition.approved: 'Approved proposal'
 catalog.action.meeting.proposition.show.refuse: 'Declined request'
 catalog.action.meeting.request.approve: 'Received proposal'
@@ -150,6 +152,8 @@ event.invisible.label: Invisible
 event.meeting.evaluation.label: 'Rate the relevance of your previous business meeting have it later in your  follow-up file we will provide you with at the end of the event (confidential)'
 event.meeting.evaluation.skip: Skip
 event.meeting.listRequest.contact.export: 'Download my contacts'
+event.meeting.listRequest.contact.insufficient_evaluation: 'The grade level of the appointment does not allow access to this information'
+event.meeting.listRequest.contact.unavailable: 'Your contact did not wish to share this information with you'
 event.meeting.listRequest.filter.all: All
 event.meeting.listRequest.filter.propositions: 'Requests received only'
 event.meeting.listRequest.filter.requests: 'My requests'
@@ -194,6 +198,8 @@ event.user_event_phone.validate.returnToPhone: 'Update my phone number'
 event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
 event.user_event_phone.validate.title: 'Phone number validation'
 event.visio.agenda_access: 'Click here to access your calendar'
+event.visio.close_warning_preparation: 'Close this message'
+event.visio.preparation: "The webinar is not yet open to the public, you can prepare your talk.\nA countdown timer tells you when the webinar starts. You can then click on \"Open to the public\"."
 event.visio.settings.askPermissions: 'activate your camera and microphone'
 event.visio.settings.askPermissionsDenial: 'You must validate the permissions to be able to join a video meeting. Reload the page to try again. If the problem persists, contact us.'
 event.visio.settings.askPermissionsDescription: "You're about to join a video meeting.\nIn order for the other participants to see and hear you, your browser will ask you for permission to access your camera and microphone.\nYou will be able to disable them at any time throughout the meeting."
@@ -209,7 +215,7 @@ event.visio.settings.selectAudio: 'Select your microphone'
 event.visio.settings.selectVideo: 'Select your camera :'
 event.visio.settings.selectVideoNotFound: 'No camera seems to be detected, you can make the video call in audio only or connect a camera and refresh the page.'
 event.visio.settings.start: Start
-event.visio.settings.start_preparation: 'Prepare my intervention'
+event.visio.settings.start_preparation: 'Prepare my webinar'
 event.visio.settings.startMeeting: 'Start the visio meeting'
 event.visio.settings.testAudio: 'Test your audio output'
 event.visio.settings.testAudioHelp: 'Click to hear a sound and test your audio output'
@@ -220,7 +226,7 @@ event.visio.test.edge: 'Your browser, Edge, is not compatible to perform all aud
 event.visio.test.error.network.api: 'Can not connect to the video conference server. Please check your connection or your browser configuration to allow access to your camera and audio equipment.'
 event.visio.test.loading: 'Please wait...'
 event.visio.test.network: Network
-event.visio.test.quality: 'Quality'
+event.visio.test.quality: Quality
 event.visio.test.screenSharing: 'Screen sharing'
 event.visio.test.start: 'Start the test'
 event.visio.test.testInProgress: 'Test in progress'
@@ -273,25 +279,47 @@ happening.participate.wrongInvitationCode: 'wrong invitation code'
 happening.participate.youAreNotAvailable: 'You are not available to attend'
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
+happening.webinar.beginningAt: 'Starts in'
 happening.webinar.chat.add: 'Add your message'
 happening.webinar.chat.tab: Chat
+happening.webinar.confirmDeleteReply: 'Would you like to delete the answer?'
+happening.webinar.desktopNotificationBody: 'Click here to return to the webinar'
+happening.webinar.desktopNotificationTitle: 'You present to all participants'
 happening.webinar.end: Stop
+happening.webinar.ended: 'Event ended'
 happening.webinar.endingAt: 'End in'
+happening.webinar.endingAtTime: 'End at %endTime%'
+happening.webinar.invisibleMode.button: 'Invisible mode'
+happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)'
+happening.webinar.invisibleMode.option: 'Invisible mode'
+happening.webinar.invisibleMode.optionHelp: 'Your microphone is muted and you do not appear on the screen. You can deactivate the invisible mode at any time by clicking on the button :'
+happening.webinar.invisibleMode.quitConfirmation: 'Exit invisible mode and activate your camera and microphone?'
 happening.webinar.media.share: Share
 happening.webinar.media.stopSharing: 'Stop sharing'
 happening.webinar.media.videoshare.title: 'Share a video'
 happening.webinar.media.videoshare.url: 'Url of the video'
+happening.webinar.messageChatConfirm: 'Do you want to delete the message?'
+happening.webinar.messageQuestionConfirm: 'Would you like to delete the question?'
 happening.webinar.messageWarningBeforeStart: 'The webinar is about to begin'
+happening.webinar.open: 'Open to the public'
 happening.webinar.questions.add: 'Add your question'
+happening.webinar.questions.reply: 'Response from %name% :'
+happening.webinar.questions.reply_button: Reply
+happening.webinar.questions.reply_writing: '%name% is responding...'
 happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Withdraw my vote'
+happening.webinar.questions.vote: 'Vote for this question'
 happening.webinar.questions.voteDisabled: 'You cannot vote for this question'
+happening.webinar.record.not_possible_as_webinar_ended: 'You can no longer start recording because this webinar has been over for more than 30 minutes'
 happening.webinar.recordButtonTitle: Recording
 happening.webinar.recordingButtonTitle: 'Recording in progress'
 happening.webinar.screenshare.end: 'Stop sharing my screen'
 happening.webinar.screenshare.start: 'Share my screen'
 happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'You already share your screen.'
 happening.webinar.start: Start
+happening.webinar.timeToOpen.message: 'It''s time.'
+happening.webinar.timeToOpen.notOpen.button: 'Not now'
+happening.webinar.timeToOpen.open.button: 'Open to the public'
 happening.webinar.viewers: 'Connected :'
 happening.webinar.waiting.message: 'The webinar will start in a few moments.'
 invoice.list.column.date: Date
@@ -329,6 +357,7 @@ meetingRequest.mobile.filters.availableSlot.title: 'who is available ?'
 meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
+modal.confirm: Confirm
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
 modal.submit: Submit
 multiple_sheets.modal.close: close
@@ -358,10 +387,11 @@ navigation.category.inCart: Basket
 navigation.category.leni_badge_link: 'Badges / E-invitations'
 navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Participant area'
+navigation.category.networking: Networking
 navigation.category.package: 'Registration package'
 navigation.category.planning: 'Planning & Attendance'
 navigation.category.program: Program
-navigation.category.sheet: 'Presentation Sheet'
+navigation.category.sheet: 'Profile page'
 navigation.category.visio_test: 'Test my visio'
 navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
@@ -412,10 +442,19 @@ networking.chat.messages.count: '{0} No message|{1} One message|]1,Inf[ %count% 
 networking.chat.messages.new: '{0} No new message|{1} one new message|]1,Inf[ %count% new messages'
 networking.chat.notification.open: 'Open in the chat'
 networking.chat.title: 'Private chat'
+networking.chat.visio.busy: 'Your contact is busy'
+networking.chat.visio.join: 'Access the video room'
+networking.chat.visio.no.response: 'your interlocutor does not answer'
+networking.chat.visio.pending: 'Waiting for confirmation'
+networking.chat.visio.refuse: 'Your call was refused'
+networking.chat.visio.request: 'Video call'
+networking.chat.visio.request.message: 'Do you accept this video call?'
+networking.chat.visio.request.message.author: 'You received a video call from:'
 networking.chat.with: 'Private chat with %user%'
 networking.participants.intro: 'click on a participant to start a private conversation'
 networking.participants.search: 'Search in the list'
 networking.participants.title: 'Connected participants (%count%)'
+networking.title: Networking
 new_password.confirm.title: 'Reset password'
 new_password.help.noaction: 'If you take no action, the current password remains valid'
 new_password.help.reset: 'You can reset your password'
@@ -551,7 +590,7 @@ register.connect: Submit
 register.finalize: Submit
 register.noAvailableRegistrationType: 'No available registration type'
 register.photo: "Why should you publish a photo?\n\n- Let potential business partners “put a face to a name”\n- Help contacts to identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule\n- Reinforce your professional network"
-register.privacy_policies: ''
+register.privacy_policies: "The data collected are registered by Vimeet and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
 register.register: Registration
 register.register_as: 'Register as:'
 register.step: Step
@@ -564,13 +603,14 @@ sheet.object.action.edit: Complete/Edit
 sheet.object.action.remove: Delete
 sheet.object.action.sortParticipants: 'Change participants display order'
 sheet.object.boolean.false: 'No'
-sheet.object.boolean.true: 'yes'
+sheet.object.boolean.true: 'Yes'
 sheet.object.image.label: 'Your current image'
 sheet.object.image.remove: 'Delete image'
 sheet.object.option.buyable.label: 'Chargeable option'
 sheet.object.product.included: included
 sheet.object.showLess.title: 'See more'
 sheet.object.showMore.title: 'See less'
+sheet.object.video.remove: 'Delete this video'
 sheet.participant.remove: 'Remove from the sheet'
 sheet.participant.seeLess.title: 'See less'
 sheet.participant.seeMore.title: 'See more'
@@ -610,6 +650,11 @@ template.upload.formats.image: Image
 template.upload.formats.pdf: pdf
 template.upload.formats.ppt: powerpoint
 template.upload.formats.vector_image: 'Vector image (.ai, .eps)'
+timezone.america-edmonton: 'Edmonton / Calgary'
+timezone.america-st_johns: 'Saint Johns'
+timezone.america-toronto: 'Toronto / Montréal'
+timezone.america-vancouver: Vancouver
+timezone.america-winnipeg: 'Winnipeg / Regina / Saskatoon'
 timezone.asia-colombo: 'New Dehli - Colombo'
 timezone.asia-kolkata: 'Mumbai, New Delhi, Kolkata'
 unavailability.action.remove.title: Delete
