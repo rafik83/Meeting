@@ -79,7 +79,6 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->leftJoin('happening.talkings', 'talking')
             ->leftJoin('talking.speaker', 'speaker')
             ->setParameter('locale', $locale)
-            ->orderBy('happening.begin', 'ASC')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();

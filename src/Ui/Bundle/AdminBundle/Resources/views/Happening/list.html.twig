@@ -67,13 +67,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for day in list %}
-            <tr>
-                <td class="date-happenings" colspan="9">
-                    <span class="panel-heading"><strong>{{ day.happeningDay|localizeddate('medium', 'none', app.request.locale, event.timeZone) }}</strong></span>
-                </td>
-            </tr>
-            {% for happening in day.happeningListView %}
+        {% for happening in list.happenings %}
             <tr>
                 <td>
                     {{ happening.title }}
@@ -141,7 +135,6 @@
                     {% endif %}
                 </td>
             </tr>
-            {% endfor %}
         {% endfor %}
         </tbody>
     </table>
