@@ -43,6 +43,7 @@
 .openl10n.yml
 /public/uploads/*
 /public/css/*
+!public/css/event/.gitkeep
 /public/media/*
 /public/assets/*
 
