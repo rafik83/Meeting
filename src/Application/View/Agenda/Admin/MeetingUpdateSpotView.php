@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
+use Proximum\Vimeet\Application\View\Agenda\Slot\SlotView;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class MeetingUpdateSpotView
@@ -27,10 +28,10 @@ class MeetingUpdateSpotView
     /** @var int[] */
     public array $meetingParticipants;
 
-    /** @var MeetingSlot[] */
+    /** @var SlotView[] */
     public array $meetingSlots;
 
-    /** @var int[] */
+    /** @var array<int, int[]> */
     public array $currentSheetAvailableSlotIds;
 
     /** @var int */
@@ -43,6 +44,9 @@ class MeetingUpdateSpotView
      * @param bool              $blockedSpot
      * @param SpotView[]        $availableSpots
      * @param ParticipantView[] $participants,
+     * @param int[]             $meetingParticipants
+     * @param SlotView[]        $meetingSlots
+     * @param array             $currentSheetAvailableSlotIds
      * @param int               $slotId
      */
     public function __construct(
