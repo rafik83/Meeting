@@ -29,7 +29,7 @@ parameters:
     secret:      LcTdBOetSYwmhWirRZHleWO8FJknzXLu
     adminSecret: 'y7UriWwW@LKcBM*xU3wuao5o$K9kJkw%7ZaxrH#&dqa*XoegEVQ5n5KVcFBg'
 
-    redis_dsn: 'redis://localhost'
+    # redis_dsn: 'redis://localhost'
 
     sendgrid_api_key: ~
 

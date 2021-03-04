@@ -55,6 +55,7 @@ class Kernel extends BaseKernel
         $loader->load($confEventLegacy);
 
         // env services will overide all others
+        $loader->load($confDirLegacy.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
 
