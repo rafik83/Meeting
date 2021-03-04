@@ -73,7 +73,7 @@ provision-supervisor: provision
 security:
 	security-checker security:check
 
-security@test: export SYMFONY_ENV = test
+security@test: export APP_ENV = test
 security@test: security
 
 ########
@@ -84,7 +84,7 @@ security@test: security
 lint:
 	php-cs-fixer fix --config-file=.php_cs --dry-run --diff
 
-lint@test: export SYMFONY_ENV = test
+lint@test: export APP_ENV = test
 lint@test: lint
 
 ###########
