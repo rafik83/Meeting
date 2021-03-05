@@ -145,8 +145,8 @@ RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --opt
 RUN make install@prod
 
 # Symfony
-#RUN bin/console cache:clear --env=prod && \
-#    bin/console cache:warmup --env=prod
+ARG APP_ENV
+ARG APP_SECRET
 
 # OpenL10N fetch
 ARG OPENL10N_UPDATE="false"
@@ -177,6 +177,7 @@ RUN ln -sfn /share/shared/web/media public/ && \
     ln -sfn /share/shared/var/logs var/ && \
     ln -sfn /share/shared/var/shared_uploaded_files var/ && \
     ln -sfn /share/shared/var/participants_imports var/ && \
-    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml
+    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml && \
+    ln -sfn /share/shared/.env.prod.local .env.prod.local
 
 USER root
