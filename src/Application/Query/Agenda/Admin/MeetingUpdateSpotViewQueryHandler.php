@@ -60,21 +60,41 @@ class MeetingUpdateSpotViewQueryHandler
             new GetAvailableSlotsQuery($query->meeting, $query->visio, $query->sheet, false)
         );
 
+        $metParticipantsCount = count($meeting->getMetParticipants($query->sheet));
+
+        $slotsIdBySpotId = [];
+        foreach ($slotView->availableSlots as $slot) {
+            $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
+                $slot,
+                $metParticipantsCount + 1,
+                $meeting,
+                $meeting->getFromSheet(),
+                $meeting->getToSheet(),
+                $query->visio
+            );
+
+            foreach ($spots as $spot) {
+                $slotsIdBySpotId[$spot->getId()][] = $slot->getId();
+            }
+        }
+
         return new MeetingUpdateSpotView(
             $meeting->getId(),
             $meeting->getSpot()->getId(),
             $meeting->isBlockedSlot(),
             $meeting->isBlockedSpot(),
             array_map(
-                function (Spot $spot) use ($meeting) {
+                function (Spot $spot) use ($meeting, $slotsIdBySpotId) {
                     $label = $this->getSpotLabel($spot, $meeting);
 
                     return new SpotView(
                         $spot->getId(),
-                        $label
+                        $label,
+                        $spot->getSeatCapacity(),
+                        $slotsIdBySpotId[$spot->getId()]
                     );
                 },
-                $this->spotRepository->getSpotsForMeeting($meeting, $query->visio)
+                $this->spotRepository->getActiveByEvent($query->sheet->getEvent())
             ),
             array_map(
                 function (Participant $participant) {
@@ -115,7 +135,8 @@ class MeetingUpdateSpotViewQueryHandler
             )
             ,
             $slotView->currentSheetAvailableSlotIds,
-            $meeting->getSlot()->getId()
+            $meeting->getSlot()->getId(),
+            $metParticipantsCount
         );
     }
 

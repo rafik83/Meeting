@@ -42,7 +42,17 @@ export default {
             });
 
             return this.meetingToUpdate.form.meetingSlots.filter(slot => possibleSlotsIdForParticipants.includes(slot.id));
-        }
+        },
+        possibleSpots: function() {
+            // filter by seat capacity
+            let possibleSpotsIdForSlots = this.meetingToUpdate.form.availableSpots.filter(spot => spot.seatCapacity >= this.partipantsCount);
+
+            // filter by selected slot
+            return possibleSpotsIdForSlots.filter(spot => spot.slotsId.includes(this.meetingToUpdate.form.slotId));
+        },
+        partipantsCount: function() {
+           return this.meetingToUpdate.form.metParticipantsCount + this.meetingToUpdate.form.meetingParticipants.length;
+        },
     },
     methods: {
         reinit: function () {

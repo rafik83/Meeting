@@ -22,19 +22,19 @@
             </div>
 
             <div class="form-group">
-                <label for="modal_spot">{{ 'admin.agenda.meeting.updateSpot.spot'|trans }}</label>
-                <select id="modal_spot" class="form-control" v-model="meetingToUpdate.form.spotId" v-bind:disabled="meetingToUpdate.form.blockedSpot == true">
-                    <option v-for="spot in meetingToUpdate.form.availableSpots" v-bind:value="spot.id">
-                        ${ spot.label }
+                <label for="modal_slot">{{ 'admin.agenda.meeting.updateSpot.slot'|trans }}</label>
+                <select id="modal_slot" class="form-control" v-model="meetingToUpdate.form.slotId" v-bind:disabled="meetingToUpdate.form.blockedSlot == true">
+                    <option v-for="slot in possibleSlots" v-bind:value="slot.id">
+                        ${ slot.label }
                     </option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="modal_slot">{{ 'admin.agenda.meeting.updateSpot.slot'|trans }}</label>
-                <select id="modal_slot" class="form-control" v-model="meetingToUpdate.form.slotId" v-bind:disabled="meetingToUpdate.form.blockedSlot == true">
-                    <option v-for="slot in possibleSlots" v-bind:value="slot.id">
-                        ${ slot.label }
+                <label for="modal_spot">{{ 'admin.agenda.meeting.updateSpot.spot'|trans }}</label>
+                <select id="modal_spot" class="form-control" v-model="meetingToUpdate.form.spotId" v-bind:disabled="meetingToUpdate.form.blockedSpot == true">
+                    <option v-for="spot in possibleSpots" v-bind:value="spot.id">
+                        ${ spot.label }
                     </option>
                 </select>
             </div>
