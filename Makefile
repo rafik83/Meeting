@@ -21,70 +21,15 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-###############
-# Environment #
-###############
-
-## Setup environment & Install & Build application
-setup:
-	cp -n app/config/parameters.yml.dist app/config/parameters.yml 2>/dev/null || :
-	vagrant up --no-provision
-	vagrant provision
-	vagrant ssh -- "cd /srv/app && make install build"
-
-setup@test: provision@test install@test
-
-## Update environment
-update: export ANSIBLE_TAGS = manala.update
-update:
-	vagrant provision
-
-## Update ansible
-update-ansible: export ANSIBLE_TAGS = manala.update
-update-ansible:
-	vagrant provision --provision-with ansible
-
-#############
-# Provision #
-#############
-
-## Provision environment
-provision: export ANSIBLE_EXTRA_VARS = {"manala":{"update":false}}
-provision:
-	vagrant provision --provision-with app
-
-## Provision nginx
-provision-nginx: export ANSIBLE_TAGS = manala_nginx
-provision-nginx: provision
-
-## Provision php
-provision-php: export ANSIBLE_TAGS = manala_php
-provision-php: provision
-
-## Provision supervisor
-provision-supervisor: export ANSIBLE_TAGS = manala_supervisor
-provision-supervisor: provision
-
-############
-# Security #
-############
-
-## Run security checks
-security:
-	security-checker security:check
-
-security@test: export APP_ENV = test
-security@test: security
-
 ########
 # Lint #
 ########
 
 ## Run lint tools
 lint:
-	php-cs-fixer fix --config-file=.php_cs --dry-run --diff
+	bin/php-cs-fixer fix --dry-run --diff
 
-lint@test: export APP_ENV = test
+lint@test: export APP_ENV=test
 lint@test: lint
 
 ###########
@@ -94,7 +39,7 @@ lint@test: lint
 ## Install application
 install: composer-install install-db install-db@test install-db-fixtures install-db-fixtures@test install-dep build
 
-install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
+install@test: install-app@test install-db@test install-dep build@prod
 
 install@prod: install-dep build@prod
 
@@ -104,11 +49,10 @@ composer-install:
 install-app@test:
 	APP_ENV=test php -d memory_limit=2G bin/composer.phar install --no-progress --no-interaction
 
-install-db:
+install-db@local:
 	bin/console doctrine:database:drop --force --if-exists
 	bin/console doctrine:database:create --if-not-exists
 	bin/console doctrine:schema:update --force
-	bin/console doctrine:migrations:execute 20160829173500 --up --no-interaction
 
 install-db@test:
 	bin/console doctrine:database:drop --force --if-exists --env=test
@@ -131,9 +75,6 @@ install-dep:
 
 build:
 	./node_modules/.bin/encore dev
-
-build@preprod:
-	./node_modules/.bin/encore production
 
 build@prod:
 	./node_modules/.bin/encore production
@@ -194,12 +135,18 @@ test-behat@test:
 	bin/console fos:elastica:reset --env=test --no-debug
 	php -d date.timezone=UTC bin/behat --format=junit --out=var/tests/behat --no-interaction
 
-##########
-# Custom #
-##########
+#########
+# Redis #
+#########
 
 redis-flushlocks@local:
 	redis-cli -n 3 flushdb
+
+# Jobs
+
+## Run messenger consummer (to dispatch messages in dev env, you must disable sync transport)
+worker:
+	php bin/console messenger:consume -t 1800 job_async job_async_low -vv
 
 # Do no allow targets in production
 # ifeq ($(IS_PROD), no)
@@ -277,12 +224,6 @@ redis-flushlocks@local:
 # 	bin/console doctrine:migrations:migrate --no-interaction
 # 	bin/console vimeet:event:build-guideline-asset
 # 	bin/console vimeet:elasticsearch:index --env=dev
-
-# # Jobs
-
-# ## Run messenger consummer (to dispatch messages in dev env, you must disable sync transport)
-# worker:
-# 	php bin/console messenger:consume -t 1800 job_async job_async_low -vv
 
 # # next targets must be run in VM
 # ifeq ($(HOST), vimeet)

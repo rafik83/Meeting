@@ -98,7 +98,7 @@
     "friends-of-behat/mink-browserkit-driver": "^1.5",
     "friends-of-behat/mink-extension": "^2.5",
     "friends-of-behat/symfony-extension": "^2.0",
-    "friendsofphp/php-cs-fixer": "^2.12",
+    "friendsofphp/php-cs-fixer": "^2.18",
     "hautelook/alice-bundle": "^2.8",
     "phpspec/prophecy": "^1.10.3",
     "phpstan/phpstan": "^0.12.25",
