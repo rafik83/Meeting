@@ -11,7 +11,11 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpotHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedSpotEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
+use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSlotView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -38,14 +42,15 @@ class UpdateSpotHandlerTest extends TestCase
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
         $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
-        $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
+        $slot = $this->prophesize(MeetingSlot::class);
+        $slot->getId()->shouldBeCalled()->willReturn(3);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
         $spot2 = SpotFactory::create($event, 'Spot 2');
 
         $meeting = new Meeting(
             $request,
-            $slot,
+            $slot->reveal(),
             $fromSheet,
             [$fromParticipant],
             $toSheet,
@@ -60,10 +65,16 @@ class UpdateSpotHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
+        $meetingUpdateSlotViewQueryHandler->handle(
+            new MeetingUpdateSlotViewQuery($meeting, false)
+        )->shouldBeCalled()->willReturn(
+            new MeetingUpdateSlotView([1,2,3,4,5])
+        );
 
         $expectedMeeting = new Meeting(
             $request,
-            $slot,
+            $slot->reveal(),
             $fromSheet,
             [$fromParticipant],
             $toSheet,
@@ -89,11 +100,12 @@ class UpdateSpotHandlerTest extends TestCase
         $eventDispatcher->dispatch(Events::MEETING_MOVED_SPOT, new MeetingMovedSpotEvent($meeting));
 
         // Change Spot and block slot and spot
-        $updateSpot        = new UpdateSpot($meeting, $spot2, true, true);
+        $updateSpot        = new UpdateSpot($meeting, $spot2, true, true, false, $fromSheet, $slot->reveal(), [$fromParticipant]);
         $updateSpotHandler = new UpdateSpotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $meetingUpdateSlotViewQueryHandler->reveal()
         );
         $updateSpotHandler->handle($updateSpot);
     }
@@ -110,14 +122,15 @@ class UpdateSpotHandlerTest extends TestCase
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
         $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
-        $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
+        $slot = $this->prophesize(MeetingSlot::class);
+        $slot->getId()->shouldBeCalled()->willReturn(2);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
         $spot2 = SpotFactory::create($event, 'Spot 2');
 
         $meeting = new Meeting(
             $request,
-            $slot,
+            $slot->reveal(),
             $fromSheet,
             [$fromParticipant],
             $toSheet,
@@ -132,17 +145,24 @@ class UpdateSpotHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
+        $meetingUpdateSlotViewQueryHandler->handle(
+            new MeetingUpdateSlotViewQuery($meeting, false)
+        )->shouldBeCalled()->willReturn(
+            new MeetingUpdateSlotView([1,2,3,4,5])
+        );
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();
         $spotRepository->getSpotsForSlotAndParticipantsQuantity()->shouldNotBeCalled();
 
         $this->expectException(MeetingIsBlockedSpotException::class);
 
-        $updateSpot        = new UpdateSpot($meeting, $spot2, true, true);
+        $updateSpot        = new UpdateSpot($meeting, $spot2, true, true, false, $fromSheet, $slot->reveal(), [$fromParticipant]);
         $updateSpotHandler = new UpdateSpotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $meetingUpdateSlotViewQueryHandler->reveal()
         );
         $updateSpotHandler->handle($updateSpot);
     }
@@ -159,14 +179,15 @@ class UpdateSpotHandlerTest extends TestCase
         $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
         $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
         $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
-        $slot            = new MeetingSlot($event, new \DateTime(), new \DateTime(), false);
+        $slot = $this->prophesize(MeetingSlot::class);
+        $slot->getId()->shouldBeCalled()->willReturn(3);
 
         $spot1 = SpotFactory::create($event, 'Spot 1');
         $spot2 = SpotFactory::create($event, 'Spot 2');
 
         $meeting = new Meeting(
             $request,
-            $slot,
+            $slot->reveal(),
             $fromSheet,
             [$fromParticipant],
             $toSheet,
@@ -181,6 +202,12 @@ class UpdateSpotHandlerTest extends TestCase
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
+        $meetingUpdateSlotViewQueryHandler->handle(
+            new MeetingUpdateSlotViewQuery($meeting, false)
+        )->shouldBeCalled()->willReturn(
+            new MeetingUpdateSlotView([1,2,3,4,5])
+        );
 
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $meeting->getSlot(),
@@ -196,11 +223,78 @@ class UpdateSpotHandlerTest extends TestCase
         $this->expectException(SpotNotAvailableForThisMeetingException::class);
 
         // Change Spot, select one not available
-        $updateSpot        = new UpdateSpot($meeting, $spot2, false, false);
+        $updateSpot        = new UpdateSpot($meeting, $spot2, false, false, false, $fromSheet, $slot->reveal(), [$fromParticipant]);
         $updateSpotHandler = new UpdateSpotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $meetingUpdateSlotViewQueryHandler->reveal()
+        );
+        $updateSpotHandler->handle($updateSpot);
+    }
+
+    public function testSlotNotAvailableForThisMeetingException()
+    {
+        $dateTime        = new DateTime();
+        $event           = EventFactory::createEvent();
+        $type            = new Type($event);
+        $fromUser        = UserFactory::create();
+        $fromSheet       = new Sheet($event, $type, [], $fromUser, $dateTime);
+        $fromParticipant = ParticipantFactory::create($fromSheet, $fromUser);
+        $toUser          = UserFactory::create();
+        $toSheet         = new Sheet($event, $type, [], $toUser, $dateTime);
+        $toParticipant   = ParticipantFactory::create($toSheet, $toUser);
+        $request         = new Request($fromSheet, [], $toSheet, [], $dateTime, $fromUser, $event);
+        $slot = $this->prophesize(MeetingSlot::class);
+        $slot->getId()->shouldBeCalled()->willReturn(6);
+
+        $spot1 = SpotFactory::create($event, 'Spot 1');
+        $spot2 = SpotFactory::create($event, 'Spot 2');
+
+        $meeting = new Meeting(
+            $request,
+            $slot->reveal(),
+            $fromSheet,
+            [$fromParticipant],
+            $toSheet,
+            [$toParticipant],
+            $dateTime,
+            $spot1,
+            $event,
+            false,
+            false
+        );
+
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $spotRepository = $this->prophesize(SpotRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $meetingUpdateSlotViewQueryHandler = $this->prophesize(MeetingUpdateSlotViewQueryHandler::class);
+        $meetingUpdateSlotViewQueryHandler->handle(
+            new MeetingUpdateSlotViewQuery($meeting, false)
+        )->shouldBeCalled()->willReturn(
+            new MeetingUpdateSlotView([1,2,3,4,5])
+        );
+
+        $spotRepository->getSpotsForSlotAndParticipantsQuantity(
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any(),
+            Argument::any()
+        )->shouldNotBeCalled();
+
+        $meetingRepository->set(Argument::any())->shouldNotBeCalled();
+
+        $this->expectException(SlotNotAvailableForThisMeetingException::class);
+
+        // Change Spot, select one not available
+        $updateSpot        = new UpdateSpot($meeting, $spot2, false, false, false, $fromSheet, $slot->reveal(), [$fromParticipant]);
+        $updateSpotHandler = new UpdateSpotHandler(
+            $meetingRepository->reveal(),
+            $spotRepository->reveal(),
+            $eventDispatcher->reveal(),
+            $meetingUpdateSlotViewQueryHandler->reveal()
         );
         $updateSpotHandler->handle($updateSpot);
     }

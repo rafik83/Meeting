@@ -49,7 +49,7 @@ class GetAvailableSlotsQueryHandlerTest extends TestCase
             ->willReturn(false);
 
         $handler = new GetAvailableSlotsQueryHandler($spotRepository->reveal(), $meetingSlotRepository->reveal());
-        $result = $handler->handle(new GetAvailableSlotsQuery($meeting->reveal(), false, $sheet1->reveal()));
+        $result = $handler->handle(new GetAvailableSlotsQuery($meeting->reveal(), false, $sheet1->reveal(), true));
         $expectedResult = new GetAvailableSlotsView([
             $meetingSlot1->reveal()
         ], []);
@@ -112,7 +112,7 @@ class GetAvailableSlotsQueryHandlerTest extends TestCase
             ->willReturn(false);
 
         $handler = new GetAvailableSlotsQueryHandler($spotRepository->reveal(), $meetingSlotRepository->reveal());
-        $result = $handler->handle(new GetAvailableSlotsQuery($meeting->reveal(), false, $sheet1->reveal()));
+        $result = $handler->handle(new GetAvailableSlotsQuery($meeting->reveal(), false, $sheet1->reveal(), true));
         $expectedResult = new GetAvailableSlotsView([
             $meetingSlot1->reveal()
         ], [111 => [789], 222 => [456, 789]]);
