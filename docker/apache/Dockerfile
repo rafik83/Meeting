@@ -177,7 +177,6 @@ RUN ln -sfn /share/shared/web/media public/ && \
     ln -sfn /share/shared/var/logs var/ && \
     ln -sfn /share/shared/var/shared_uploaded_files var/ && \
     ln -sfn /share/shared/var/participants_imports var/ && \
-    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml && \
-    ln -sfn /share/shared/.env.prod.local .env.prod.local
+    ln -sfn /share/shared/app/config/parameters.yml app/config/parameters.yml
 
 USER root
