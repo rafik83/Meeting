@@ -55,6 +55,7 @@ class MeetingUpdateSpotViewQueryHandler
     public function handle(MeetingUpdateSpotViewQuery $query)
     {
         $meeting = $query->meeting;
+        $locale = $query->locale;
 
         $slotView = $this->getAvailableSlotsQueryHandler->handle(
             new GetAvailableSlotsQuery($query->meeting, $query->visio, $query->sheet, false)
@@ -84,8 +85,8 @@ class MeetingUpdateSpotViewQueryHandler
             $meeting->isBlockedSlot(),
             $meeting->isBlockedSpot(),
             array_map(
-                function (Spot $spot) use ($meeting, $slotsIdBySpotId) {
-                    $label = $this->getSpotLabel($spot, $meeting);
+                function (Spot $spot) use ($meeting, $slotsIdBySpotId, $locale) {
+                    $label = $this->getSpotLabel($spot, $meeting, $locale);
 
                     return new SpotView(
                         $spot->getId(),
@@ -112,12 +113,12 @@ class MeetingUpdateSpotViewQueryHandler
                 $meeting->getParticipants($query->sheet)
             ),
             array_map(
-                function (MeetingSlot $meetingSlot) {
+                function (MeetingSlot $meetingSlot) use ($locale) {
                     $timeZone = $meetingSlot->getEvent()->getTimeZone();
 
-                    $day = DayHelper::getFormatter(null, $timeZone)->format($meetingSlot->getBegin());
-                    $begin = DayHelper::getHourFormatter(null, $timeZone)->format($meetingSlot->getBegin());
-                    $end = DayHelper::getHourFormatter(null, $timeZone)->format($meetingSlot->getEnd());
+                    $day = DayHelper::getFormatter($locale, $timeZone)->format($meetingSlot->getBegin());
+                    $begin = DayHelper::getHourFormatter($locale, $timeZone)->format($meetingSlot->getBegin());
+                    $end = DayHelper::getHourFormatter($locale, $timeZone)->format($meetingSlot->getEnd());
 
                     $slotLabel = $this->translator->trans(
                         'form.update_meeting.children.meetingSlot.label.begin.end',
@@ -126,7 +127,8 @@ class MeetingUpdateSpotViewQueryHandler
                             '%begin%' => $begin,
                             '%end%' => $end,
                         ],
-                        'forms'
+                        'forms',
+                        $locale
                     );
 
                     return new SlotView($meetingSlot->getId(), $slotLabel);
@@ -157,18 +159,12 @@ class MeetingUpdateSpotViewQueryHandler
         return null;
     }
 
-    /**
-     * @param Spot    $spot
-     * @param Meeting $meeting
-     *
-     * @return string
-     */
-    private function getSpotLabel(Spot $spot, Meeting $meeting)
+    private function getSpotLabel(Spot $spot, Meeting $meeting, string $locale): string
     {
         $assignedSheetTitle = $this->getAssignedSheetTitle($spot, $meeting);
 
         if ($spot->isVisio()) {
-            $visioLabel = $this->translator->trans('admin.agenda.meeting.updateSpot.visio');
+            $visioLabel = $this->translator->trans('admin.agenda.meeting.updateSpot.visio', [], null, $locale);
             $label = null === $assignedSheetTitle
                 ? $spot->getReference() . ' - ' . $visioLabel
                 : sprintf(

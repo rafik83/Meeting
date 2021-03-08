@@ -46,14 +46,14 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    public function updateSpotAction(Event $event, Meeting $meeting, Sheet $sheet)
+    public function updateSpotAction(Request $request, Event $event, Meeting $meeting, Sheet $sheet)
     {
         $this->checkAccess($event, $meeting);
 
         $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
 
         $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
-            new MeetingUpdateSpotViewQuery($meeting, $sheet, $isVisio)
+            new MeetingUpdateSpotViewQuery($meeting, $sheet, $isVisio, $event->getAvailableLocale($request->getLocale()))
         );
 
         return new JsonResponse($meetingUpdateSpotView);

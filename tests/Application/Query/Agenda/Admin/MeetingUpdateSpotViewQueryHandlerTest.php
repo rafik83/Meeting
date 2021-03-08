@@ -86,9 +86,9 @@ class MeetingUpdateSpotViewQueryHandlerTest extends TestCase
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
 
         $translator       = $this->prophesize(TranslatorInterface::class);
-        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:00', '%end%' => '15:15'], 'forms')->willReturn('current slot');
-        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:20', '%end%' => '15:35'], 'forms')->willReturn('other slot 1');
-        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:40', '%end%' => '15:55'], 'forms')->willReturn('other slot 2');
+        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:00', '%end%' => '15:15'], 'forms', 'fr')->willReturn('current slot');
+        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:20', '%end%' => '15:35'], 'forms', 'fr')->willReturn('other slot 1');
+        $translator->trans('form.update_meeting.children.meetingSlot.label.begin.end', ['%day%' => 'lundi 8 mars 2021', '%begin%' => '15:40', '%end%' => '15:55'], 'forms', 'fr')->willReturn('other slot 2');
 
         $getAvailableSlotsQueryHandler = $this->prophesize(GetAvailableSlotsQueryHandler::class);
         $getAvailableSlotsQueryHandler->handle(new GetAvailableSlotsQuery($meeting, false, $fromSheet, false))
@@ -109,7 +109,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends TestCase
         $toSheet->setSpot($spot2);
         $sheetInfoGuesser->guessSheetTitle($toSheet)->shouldBeCalled()->willReturn('Whatever company name');
 
-        $meetingUpdateSpotViewQuery        = new MeetingUpdateSpotViewQuery($meeting, $fromSheet, false);
+        $meetingUpdateSpotViewQuery        = new MeetingUpdateSpotViewQuery($meeting, $fromSheet, false, 'fr');
         $meetingUpdateSpotViewQueryHandler = new MeetingUpdateSpotViewQueryHandler(
             $spotRepository->reveal(),
             $sheetInfoGuesser->reveal(),
