@@ -91,7 +91,7 @@ class MeetingUpdateSpotViewQueryHandler
                         $spot->getId(),
                         $label,
                         $spot->getSeatCapacity(),
-                        $slotsIdBySpotId[$spot->getId()]
+                        $slotsIdBySpotId[$spot->getId()] ?? []
                     );
                 },
                 $this->spotRepository->getActiveByEvent($query->sheet->getEvent())
