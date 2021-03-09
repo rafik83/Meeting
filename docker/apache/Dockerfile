@@ -145,8 +145,9 @@ RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --opt
 RUN make install@prod
 
 # Symfony
-ARG APP_ENV
+ENV APP_ENV=prod
 ARG APP_SECRET
+ENV APP_SECRET=${APP_SECRET}
 
 # OpenL10N fetch
 ARG OPENL10N_UPDATE="false"
@@ -156,7 +157,7 @@ ARG OPENL10N_USERNAME
 ARG OPENL10N_PASSWORD
 RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
       envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml && \
-      php bin/console vimeet:translations:update; \
+      php bin/console vimeet:translations:update -vv; \
     fi
 
 ARG VCS_REF

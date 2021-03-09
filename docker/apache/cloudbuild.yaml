@@ -16,7 +16,6 @@ steps:
       - '--build-arg=OPENL10N_SSL=${_OPENL10N_SSL}'
       - '--build-arg=OPENL10N_USERNAME=${_OPENL10N_USERNAME}'
       - '--build-arg=OPENL10N_PASSWORD=${_OPENL10N_PASSWORD}'
-      - '--build-arg=APP_ENV=prod'
       - '--build-arg=APP_SECRET=${_APP_SECRET}'
       - '--build-arg=VCS_REF=$COMMIT_SHA'
       - '--tag=eu.gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'

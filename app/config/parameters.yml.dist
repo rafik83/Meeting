@@ -70,7 +70,7 @@ parameters:
 
     admin_menu_color: "#222"
 
-    ovh_endpoint_name:      'thisEndPointIsNotSecretYouShouldChangeIt'
+    ovh_endpoint_name:      'https://eu.api.ovh.com/1.0'
     ovh_application_key:    'thisApplicationKeyIsNotSecretYouShouldChangeIt'
     ovh_application_secret: 'thisApplicationSecretIsNotSecretYouShouldChangeIt'
     ovh_consumer_key:       'thisConsumerKeyIsNotSecretYouShouldChangeIt'
