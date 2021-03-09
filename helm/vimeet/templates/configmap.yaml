@@ -17,6 +17,7 @@ data:
     MASTER_USER: {{ .Values.mysql.mysqlUser }}
         {{- else }}
     MASTER_HOST: {{ .Values.externalDatabase.host }}
+    MASTER_PORT: {{ .Values.externalDatabase.port }}
     MASTER_DB_NAME: {{ .Values.externalDatabase.database }}
     MASTER_USER: {{ .Values.externalDatabase.user }}
         {{- end }}
