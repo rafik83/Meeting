@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningDayView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningView;
+use Proximum\Vimeet\Application\View\Happening\Admin\HappeningListView;
 
 class HappeningListViewQueryHandlerTest extends TestCase
 {
@@ -51,9 +52,9 @@ class HappeningListViewQueryHandlerTest extends TestCase
 
         ];
 
-        $expectedResult = [
+        $expectedResult = new HappeningListView([
             $happeningDayView1
-        ];
+        ]);
 
         $this->assertEquals($expectedResult, $result);
     }
@@ -112,10 +113,10 @@ class HappeningListViewQueryHandlerTest extends TestCase
             $happeningView2->reveal()
         ];
 
-        $expectedResult = [
+        $expectedResult = new HappeningListView([
             $happeningDayView1,
             $happeningDayView2
-        ];
+        ]);
 
         $this->assertEquals($expectedResult, $result);
     }

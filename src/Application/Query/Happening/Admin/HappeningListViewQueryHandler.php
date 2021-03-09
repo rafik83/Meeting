@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
 use Proximum\Vimeet\Application\View\Happening\Admin\HappeningDayView;
+use Proximum\Vimeet\Application\View\Happening\Admin\HappeningListView;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningListViewQueryHandler
@@ -21,11 +22,9 @@ class HappeningListViewQueryHandler
         $this->happeningHandler = $happeningHandler;
     }
 
-    public function handle(HappeningListViewQuery $query): array
+    public function handle(HappeningListViewQuery $query): HappeningListView
     {
         $list = $this->happeningRepository->findListByEvent($query->event, $query->locale);
-
-
 
         $happeningDaysView = [];
         $dayIndex = -1;
@@ -44,9 +43,6 @@ class HappeningListViewQueryHandler
             $day = $happening->getBegin()->format("d/m/Y");
         }
 
-
-
-
-        return $happeningDaysView;
+        return new HappeningListView($happeningDaysView);
     }
 }
