@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
 
+### Added
+- VIMEET-2346 - As admin I can check 'Participants must evaluate happening'
+
 ## [2.82.3] - 2021-03-05
 ### Fixed
 - MV-311 - fix max size upload video 300M

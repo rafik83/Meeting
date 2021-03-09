@@ -496,6 +496,9 @@ form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
 form.happening_create.children.happeningType.label: Type
 form.happening_create.children.invitationCode.label: 'Code d''invitation'
+form.happening_create.children.mustEvaluateHappening.answer.false: Non
+form.happening_create.children.mustEvaluateHappening.answer.true: Oui
+form.happening_create.children.mustEvaluateHappening.label: 'Les participants doivent voter'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex: https://www.youtube.com/embed/wwNZKfBLAsc?autoplay=1&modestbranding=1&controls=0&disablekb=1&showinfo=0&fs=0&rel=0'
@@ -529,6 +532,7 @@ form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
 form.happening_update.children.happeningType.label: Type
 form.happening_update.children.invitationCode.label: 'Code d''invitation'
+form.happening_update.children.mustEvaluateHappening.label: 'Les participants doivent voter'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
