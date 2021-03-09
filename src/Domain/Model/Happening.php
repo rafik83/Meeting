@@ -91,6 +91,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     /** @var bool */
     private $isStreamOpenToPublic;
 
+    private bool $mustEvaluateHappening = false;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -107,7 +109,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         bool $sidebarAllowed = true,
         bool $webinarRecorded = true,
         bool $allowHls = false,
-        bool $webinarRecordSentToSpeakers = true
+        bool $webinarRecordSentToSpeakers = true,
+        bool $mustEvaluateHappening = false
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -131,6 +134,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->allowHls = $allowHls;
         $this->isStreamOpenToPublic = false;
         $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
+        $this->mustEvaluateHappening = $mustEvaluateHappening;
     }
 
     public function getId(): ?int
@@ -262,10 +266,11 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         bool $videoWebinar,
         ?string $invitationCode = null,
         ?string $liveUrl = null,
-        bool $sidebarAllowed,
+        bool $sidebarAllowed = true,
         bool $webinarRecorded = true,
         bool $allowHls = true,
-        bool $webinarRecordSentToSpeakers = true
+        bool $webinarRecordSentToSpeakers = true,
+        bool $mustEvaluateHappening = null
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -282,6 +287,9 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->webinarRecorded = $webinarRecorded;
         $this->allowHls = $allowHls;
         $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
+        if (null !== $mustEvaluateHappening) {
+            $this->mustEvaluateHappening = $mustEvaluateHappening;
+        }
     }
 
     public function updateTranslation(
@@ -428,6 +436,11 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     public function isSidebarAllowed() : bool
     {
         return $this->sidebarAllowed;
+    }
+
+    public function mustEvaluateHappening() : bool
+    {
+        return $this->mustEvaluateHappening;
     }
 
     /**

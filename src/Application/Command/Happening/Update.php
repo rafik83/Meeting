@@ -23,6 +23,7 @@ class Update extends AbstractHappeningCommand
         $this->webinarRecorded = $happening->isWebinarRecorded();
         $this->webinarRecordSentToSpeakers = $happening->isWebinarRecordSentToSpeakers();
         $this->allowHls = $happening->allowWebinarOnHLS();
+        $this->mustEvaluateHappening = $happening->mustEvaluateHappening();
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;
