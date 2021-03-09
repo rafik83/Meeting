@@ -49,7 +49,11 @@ class CreateHandlerTest extends TestCase
             true,
             false,
             null,
-            true
+            true,
+            true,
+            false,
+            true,
+            false
         );
         $expectedTranslation = new Happening\HappeningTranslation(
             $expectedSubEvent,
