@@ -53,7 +53,11 @@ class RemoveCommentAction
         Sheet $sheet,
         Comment $comment
     ): RedirectResponse {
-        if (!$this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')
+            || !$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationChecker->isGranted('PERMISSION_SHEET_ACCESS', $sheet)
+            || $sheet !== $comment->getSheet()
+        ) {
             throw new AccessDeniedException();
         }
 

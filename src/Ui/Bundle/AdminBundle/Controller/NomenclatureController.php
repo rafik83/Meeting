@@ -46,7 +46,7 @@ class NomenclatureController extends Controller
      */
     public function globalsAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $command = new Create();
         $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
@@ -138,6 +138,8 @@ class NomenclatureController extends Controller
 
         if ($nomenclature->getEvent()) {
             $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        } else {
+            $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         }
 
         // Handle update
@@ -294,6 +296,12 @@ class NomenclatureController extends Controller
     public function exportAction(Request $request, Nomenclature $nomenclature)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        if ($nomenclature->getEvent()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        } else {
+            $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        }
 
         $export     = new ExportData($nomenclature);
         $exportForm = $this->createExportForm($export);
