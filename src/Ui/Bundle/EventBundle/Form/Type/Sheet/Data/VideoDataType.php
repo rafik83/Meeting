@@ -53,7 +53,7 @@ class VideoDataType extends AbstractType
             'constraints' => [
                 new File([
                     'mimeTypes' => TemplateObject\Video::supportedMimeType(),
-                    'maxSize' => '100M',
+                    'maxSize' => '300M',
                 ]),
             ],
         ]);

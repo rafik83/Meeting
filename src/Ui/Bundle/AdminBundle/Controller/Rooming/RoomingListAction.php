@@ -38,13 +38,16 @@ class RoomingListAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
+    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         FormFactoryInterface $formFactory,
         RoomingListFilter $roomingListFilter,
-        RouterInterface $router
+        RouterInterface $router,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->engine = $engine;
@@ -52,11 +55,14 @@ class RoomingListAction
         $this->formFactory = $formFactory;
         $this->roomingListFilter = $roomingListFilter;
         $this->router = $router;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
     public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
-        if (!$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+        ) {
             throw new AccessDeniedException();
         }
 

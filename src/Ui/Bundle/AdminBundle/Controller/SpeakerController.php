@@ -15,7 +15,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\Translator;
 
 class SpeakerController extends Controller
 {
@@ -81,6 +80,8 @@ class SpeakerController extends Controller
     public function updateAction(Request $request, Event $event, Speaker $speaker)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
+
         $translator = $this->get('translator');
 
         $command = new Update($speaker);
@@ -120,6 +121,7 @@ class SpeakerController extends Controller
     public function readAction(Request $request, Event $event, Speaker $speaker)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
         $happenings = $this
             ->get('happening.happening_list_view_factory')
@@ -141,10 +143,18 @@ class SpeakerController extends Controller
     public function deleteAction(Event $event, Speaker $speaker)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
         $this->get('tactician.commandbus')->handle(new Delete($speaker));
         $this->addFlash('success', 'flash.admin.speaker.delete.success');
 
         return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+    }
+
+    private function notFoundIfWrongSpeakerEvent(Event $event, Speaker $speaker)
+    {
+        if ($event !== $speaker->getEvent()) {
+            throw $this->createNotFoundException('Speaker not found.');
+        }
     }
 }

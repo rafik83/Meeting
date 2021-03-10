@@ -21,3 +21,6 @@ function init(target) {
 }
 
 init(document);
+
+// force file hash refresh
+const version=1;

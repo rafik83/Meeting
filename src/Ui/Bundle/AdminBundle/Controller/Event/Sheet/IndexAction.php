@@ -74,6 +74,10 @@ class IndexAction
             throw new AccessDeniedException('Only the super admin can access this page');
         }
 
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException('Access denied');
+        }
+
         $command = new PrepareSheetsIndex($event, true);
         $form = $this->formFactory->create(IndexType::class, $command);
 
