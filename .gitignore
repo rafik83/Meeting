@@ -12,6 +12,7 @@
 /vendor/
 /bin/*
 !/bin/composer.phar
+!/bin/dump-env.sh
 /build/
 !bin/console
 !bin/symfony_requirements
