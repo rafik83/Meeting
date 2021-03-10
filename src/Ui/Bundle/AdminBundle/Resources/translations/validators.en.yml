@@ -29,7 +29,6 @@ validators.constraint.spot_reference_recipe.range: 'The start value must be infe
 validators.currentPassword: 'Current password is not correct'
 validators.email: 'Email address is not valid'
 validators.emailAlreadyExist: 'This email address is already in use, you can not use it'
-validators.emailDoesNotExist: 'This email address does not exist'
 validators.event.archive.alreadyArchived: 'the event is already archived'
 validators.event.archive.dayNotDefined: 'The days of the vent are not defined and the event cannot be archived.'
 validators.event.configureDates.addCatalogOnlineDateButEventHasNoDate: 'You must define the dates of the event before you can set a date for bringing the catalog online'

@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2373 - various IDOR fixes
 - VIMEET-2373 - various broken access fixes
 
+### Updated
+- VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
+
 ## [2.82.3] - 2021-03-05
 ### Fixed
 - MV-311 - fix max size upload video 300M
