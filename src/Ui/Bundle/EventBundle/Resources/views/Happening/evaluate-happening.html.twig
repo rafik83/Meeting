@@ -1,0 +1,23 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block content %}
+    <div class="profile__content">
+        <div class="main__content">
+            <div class="preview">
+                <p class="text-center"><strong>{{ 'event.happening.evaluation.label'|trans }}</strong></p>
+                <p>{{ happening.title(app.request.locale) }}</p>
+                <div class="text-center">
+                    {{ form_start(ratingForm) }}
+                    {{ form_widget(ratingForm.evaluation) }}
+                    {{ form_end(ratingForm) }}
+
+                    {% if not mustEvaluateHappening %}
+                        <a class="btn btn-link" href="{{ path('happening_program', {'sheet': sheet.id}) }}">
+                            {{ 'event.happening.evaluation.skip'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

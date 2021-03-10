@@ -447,4 +447,23 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('participation.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('happening.begin < :begin')
+            ->setParameter('begin', $begin)
+            ->andWhere('happening.mustEvaluateHappening = true')
+            ->andWhere('participation.evaluation is null')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

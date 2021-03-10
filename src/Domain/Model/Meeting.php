@@ -6,8 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
-class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
+class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface, TimeRangeInterface
 {
     public const STATE_SCHEDULED = 'scheduled';
     public const STATE_CANCELED  = 'canceled';
@@ -588,5 +589,15 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
     public function isVisio(): bool
     {
         return $this->getSpot()->isVisio();
+    }
+
+    public function getBegin(): \DateTimeInterface
+    {
+        return $this->getSlot()->getBegin();
+    }
+
+    public function getEnd(): \DateTimeInterface
+    {
+        return $this->getSlot()->getEnd();
     }
 }

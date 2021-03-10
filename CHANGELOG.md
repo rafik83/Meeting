@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - VIMEET-2346 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2437 - As participant 'I must evaluate happening'
 
 ## [2.82.3] - 2021-03-05
 ### Fixed

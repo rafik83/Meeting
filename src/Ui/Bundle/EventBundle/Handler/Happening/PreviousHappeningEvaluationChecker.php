@@ -1,35 +1,28 @@
 <?php
 
-namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio;
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
-class PreviousMeetingEvaluationChecker
+class PreviousHappeningEvaluationChecker
 {
-    /** @var Event */
-    public $event;
-
-    /** @var Sheet */
-    public $sheet;
-
-    /** @var User */
-    public $user;
-
+    public Event $event;
+    public Sheet $sheet;
+    public User $user;
     public TimeRangeInterface $timeRange;
-
-    /** @var string */
-    public $origin;
+    public string $origin;
 
     public function __construct(
-        string $origin,
         Event $event,
         Sheet $sheet,
         User $user,
-        TimeRangeInterface $timeRange
-    ) {
+        TimeRangeInterface $timeRange,
+        string $origin
+    ){
         $this->event = $event;
         $this->sheet = $sheet;
         $this->user = $user;
