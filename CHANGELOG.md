@@ -4,16 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
 ### Security
+- VIMEET-2373 - fix malicious files upload
 - VIMEET-2373 - XSS fixes
+- VIMEET-2373 - various IDOR fixes
+- VIMEET-2373 - various broken access fixes
 
 ### Fixed
 - Partners are not allowed to see users (see VIMEET-2373 comments)
-
-### Security
-- VIMEET-2373 - various IDOR fixes
-- VIMEET-2373 - various broken access fixes
 
 ### Updated
 - VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
@@ -25,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.82.2] - 2021-03-02
 ### Fixed
 - MV-310 - fix error if desktop notifications are not available (ie on iOS)
+>>>>>>> origin/master
 
 ## [2.82.1] - 2021-02-18
 ### Fixed
