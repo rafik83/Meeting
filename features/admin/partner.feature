@@ -17,7 +17,7 @@ Feature: Partner available features
     And I am logged with this admin
     And I go to this page "/fr/event"
     And I should see "Les rendez-vous CARNOT 2016"
-    And I should see "admin.users.link"
+    And I should not see "admin.users.link"
     And I should see "admin.sheet.link"
     When I go to this page "/fr/event/1/sheet"
     And I should see "admin.sheet.title"
@@ -60,10 +60,5 @@ Feature: Partner available features
     Then the response status code should be 403
     When I go to "/fr/event/1/meeting"
     Then the response status code should be 403
-
-  Scenario: I can see users list
-    Given I am logged with "partner@proximumgroup.com" on admin
     When I go to "/fr/event/1/users"
-    Then I should see "admin.users.title"
-    And I should see "bob@example.com"
-    And I should not see "alice@example.com"
+    Then the response status code should be 403

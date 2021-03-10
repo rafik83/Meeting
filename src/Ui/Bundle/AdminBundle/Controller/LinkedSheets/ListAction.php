@@ -41,6 +41,7 @@ class ListAction
     public function __invoke(Event $event): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
         ) {
             throw new AccessDeniedException('Access denied!');
         }

@@ -29,7 +29,9 @@ class UpdateStatusAction
 
     public function __invoke(Request $request, Event $event, Meeting $meeting): JsonResponse
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $meeting->getEvent()
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 
