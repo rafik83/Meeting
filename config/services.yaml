@@ -42,6 +42,9 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\:
         resource: '../src/Ui/Bundle/AdminBundle/Controller/'
         tags: ['controller.service_arguments']
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Controller\:
+        resource: '../src/Infrastructure/Bundle/InfrastructureBundle/Controller/'
+        tags: ['controller.service_arguments']
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction:
         arguments:
