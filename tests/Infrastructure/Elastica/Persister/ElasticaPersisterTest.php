@@ -58,7 +58,7 @@ class ElasticaPersisterTest extends TestCase
         $elasticaType->getIndex()->willReturn($elasticaIndex->reveal());
 
         $client = $this->prophesize(Client::class);
-        $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());
+        $client->getIndex($index.'_user_event')->shouldBeCalled()->willReturn($elasticaIndex->reveal());
 
         $elasticaMapping = $this->prophesize(ElasticaMapping::class);
         $elasticaMapping
@@ -78,7 +78,7 @@ class ElasticaPersisterTest extends TestCase
             $index,
             $serializer->reveal()
         );
-        $elasticaPersister->persist('id', [$userEventView]);
+        $elasticaPersister->persist('uid', [$userEventView]);
     }
 
     public function testDeleteIds()
@@ -95,9 +95,9 @@ class ElasticaPersisterTest extends TestCase
         $elasticaIndex->getType('user_event')->shouldBeCalled()->willReturn($elasticaType->reveal());
 
         $client = $this->prophesize(Client::class);
-        $client->getIndex($index)->shouldBeCalled()->willReturn($elasticaIndex->reveal());
+        $client->getIndex($index.'_user_event')->shouldBeCalled()->willReturn($elasticaIndex->reveal());
         $client
-            ->deleteIds($identifiers, $index, $elasticaType->reveal())
+            ->deleteIds($identifiers, $elasticaIndex->reveal(), $elasticaType->reveal())
             ->shouldBeCalled()
             ->willReturn($response->reveal())
         ;

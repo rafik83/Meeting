@@ -2664,7 +2664,7 @@ services:
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
         arguments:
-            - '@fos_elastica.object_persister.app.sheet'
+            - '@fos_elastica.object_persister.sheet.sheet'
 
     adapter.authorization_checker:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
@@ -5003,14 +5003,14 @@ services:
         arguments:
             - '@order.merger'
 
-  #
+    #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
-             - '@fos_elastica.finder.app.sheet'
-             - '@fos_elastica.index.app.sheet'
+             - '@fos_elastica.finder.sheet.sheet'
+             - '@fos_elastica.index.sheet.sheet'
              - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     #

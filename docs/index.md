@@ -3,7 +3,6 @@
 - Project
   - [Workflow](Project/Workflow.md)
   - [Symfony update](Project/SymfonyUpdate.md)
-  - [Jenkins](Project/Jenkins.md)
 
 - Domain
   - [Availability Time Range (Plage de disponibilités)](Domain/AvailabilityTimeRange.md)

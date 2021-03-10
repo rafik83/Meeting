@@ -14,6 +14,7 @@ import NotificationSubscriber from '../_Subscriber';
 import Modal from '../Modal';
 import WebinarStatus from './WebinarStatus';
 import SharingManager from './Sharing/Manager';
+import MuteStream from './MuteStream';
 
 /**
  * @param {Element} element
@@ -198,11 +199,15 @@ function Webinar(element, isSpeaker) {
 
     this.subscribeToStreamNotifications();
 
+    this.canMuteStream = false;
+
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
 
         return;
     }
+
+    this.canMuteStream = element.hasAttribute('data-chat-can-mute-stream');
 
     this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
     this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
@@ -281,11 +286,23 @@ Webinar.prototype.onOpeningToPublic = function () {
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
-    if (Notification.permission === 'default') {
-        Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
-    } else {
-        this.showPrepareModalOrJoin();
+
+    try {
+        if (!('Notification' in window)) {
+            this.showPrepareModalOrJoin();
+            return;
+        }
+
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+        } else {
+            this.showPrepareModalOrJoin();
+        }
+    } catch (error) {
+        console.error(error);
     }
+
+    this.showPrepareModalOrJoin();
 };
 
 Webinar.prototype.showPrepareModalOrJoin = function()
@@ -370,6 +387,7 @@ Webinar.prototype.initWebRTCStack = function() {
             this.layoutFocus(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
+            this.prepareMuteAction(subscriber, event.stream);
         }
 
         this.autoMaximize(subscriber);
@@ -424,6 +442,35 @@ Webinar.prototype.initWebRTCStack = function() {
     }
 
     this.prepareRecordButtons();
+}
+
+Webinar.prototype.prepareMuteAction = function(subscriber, stream) {
+    if (!this.canMuteStream) {
+        return;
+    }
+
+    const selfStreamId = stream.streamId;
+    const selfStreamHasAudio = stream.hasAudio;
+    const selfStreamName = stream.name;
+    subscriber.on('videoElementCreated', (event) => {
+        const muteStream = new MuteStream(event.target.element, selfStreamName, this.element.getAttribute('data-mute-stream'));
+        muteStream.init();
+
+        if (selfStreamHasAudio === false) {
+            muteStream.disableButton();
+        }
+
+        this.session.on('streamPropertyChanged', function (streamPropertyChangedEvent) {
+            if (streamPropertyChangedEvent.changedProperty !== 'hasAudio' || selfStreamId !== streamPropertyChangedEvent.stream.streamId) {
+                return;
+            }
+            if (streamPropertyChangedEvent.newValue === false) {
+                muteStream.disableButton();
+            } else {
+                muteStream.enableButton();
+            }
+        });
+    });
 }
 
 /**
@@ -481,6 +528,19 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
             this.viewersCount = payload.connectedUsersCount;
             this.updateViewers();
         }
+
+        if (payload.action === 'mute_stream') {
+            if(payload.userId != this.currentUserId) {
+                return;
+            }
+
+            if(!this.enableAudio) {
+                return;
+            }
+
+            this.toggleAudio();
+        }
+
     });
 };
 
@@ -728,11 +788,16 @@ Webinar.prototype.onVideoElementCreated = function (event) {
 
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
+        let iconMute = document.createElement('i');
+        iconMute.classList.add('iconMuteStream','icon-Conference','icon-center');
+
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
         publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
 
         publisherElement.appendChild(publisherName);
+        publisherElement.appendChild(iconMute);
+
     }
 };
 
