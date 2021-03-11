@@ -30,11 +30,6 @@ class MeetingUpdateSpotViewQueryHandler
 
     private GetAvailableSlotsQueryHandler $getAvailableSlotsQueryHandler;
 
-    /**
-     * @param SpotRepositoryInterface $spotRepository
-     * @param SheetInfoGuesser        $sheetInfoGuesser
-     * @param TranslatorInterface     $translator
-     */
     public function __construct(
         SpotRepositoryInterface $spotRepository,
         SheetInfoGuesser $sheetInfoGuesser,
@@ -107,9 +102,7 @@ class MeetingUpdateSpotViewQueryHandler
                 $query->sheet->getParticipantsArray()
             ),
             array_map(
-                function (Participant $participant) {
-                    return $participant->getId();
-                },
+                fn (Participant $participant) => $participant->getId(),
                 $meeting->getParticipants($query->sheet)
             ),
             array_map(

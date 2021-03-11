@@ -39,30 +39,17 @@ class MeetingUpdateSpotView
 
     public int $metParticipantsCount;
 
-    /**
-     * @param int               $meetingId
-     * @param int               $spotId
-     * @param bool              $blockedSlot
-     * @param bool              $blockedSpot
-     * @param SpotView[]        $availableSpots
-     * @param ParticipantView[] $participants,
-     * @param int[]             $meetingParticipants
-     * @param SlotView[]        $meetingSlots
-     * @param array             $currentSheetAvailableSlotIds
-     * @param int               $slotId
-     * @param int               $metParticipantsCount
-     */
     public function __construct(
-        $meetingId,
-        $spotId,
-        $blockedSlot,
-        $blockedSpot,
+        int $meetingId,
+        int $spotId,
+        bool $blockedSlot,
+        bool $blockedSpot,
         array $availableSpots,
         array $participants,
         array $meetingParticipants,
         array $meetingSlots,
         array $currentSheetAvailableSlotIds,
-        $slotId,
+        int $slotId,
         int $metParticipantsCount
     ) {
         $this->meetingId = $meetingId;

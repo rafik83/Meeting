@@ -8,13 +8,7 @@ class SlotView
 
     public string $label;
 
-    /**
-     * ParticipantView constructor.
-     *
-     * @param int    $id
-     * @param string $label
-     */
-    public function __construct($id, $label)
+    public function __construct(int $id, string $label)
     {
         $this->id       = $id;
         $this->label = $label;

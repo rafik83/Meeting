@@ -17,11 +17,7 @@ class MeetingUpdateSpotViewQuery
 
     public string $locale;
 
-    /**
-     * @param Meeting $meeting
-     * @param bool    $visio
-     */
-    public function __construct(Meeting $meeting, Sheet $sheet, $visio, string $locale)
+    public function __construct(Meeting $meeting, Sheet $sheet, bool $visio, string $locale)
     {
         $this->meeting = $meeting;
         $this->sheet = $sheet;
