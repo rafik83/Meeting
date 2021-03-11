@@ -43,6 +43,7 @@ class QrCodeAction
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_HOST')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $happening->getEvent()
         ) {
             throw new AccessDeniedException('Access denied');
         }

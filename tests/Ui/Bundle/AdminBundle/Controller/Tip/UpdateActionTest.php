@@ -88,6 +88,7 @@ class UpdateActionTest extends TestCase
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
         $tip->isOnNetworking()->willReturn(false);
+        $tip->hasEvent()->willReturn(false);
         $update = new Update($tip->reveal());
         $form = $this->prophesize(Form::class);
 
@@ -143,6 +144,7 @@ class UpdateActionTest extends TestCase
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
         $tip->isOnNetworking()->willReturn(false);
+        $tip->hasEvent()->willReturn(false);
         $update = new Update($tip->reveal());
         $form = $this->prophesize(Form::class);
 

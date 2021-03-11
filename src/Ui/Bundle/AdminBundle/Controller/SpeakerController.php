@@ -82,6 +82,7 @@ class SpeakerController extends AbstractController
     public function updateAction(Request $request, Event $event, Speaker $speaker): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
         $command = new Update($speaker);
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
@@ -114,6 +115,7 @@ class SpeakerController extends AbstractController
     public function readAction(Request $request, Event $event, Speaker $speaker): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
         $happenings = $this->happeningListViewFactory
             ->getListBySpeakerAndLocale($speaker, $event->getAvailableLocale($request->getLocale()));
@@ -128,10 +130,18 @@ class SpeakerController extends AbstractController
     public function deleteAction(Event $event, Speaker $speaker): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
         $this->commandBus->handle(new Delete($speaker));
         $this->addFlash('success', 'flash.admin.speaker.delete.success');
 
         return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
+    }
+
+    private function notFoundIfWrongSpeakerEvent(Event $event, Speaker $speaker)
+    {
+        if ($event !== $speaker->getEvent()) {
+            throw $this->createNotFoundException('Speaker not found.');
+        }
     }
 }

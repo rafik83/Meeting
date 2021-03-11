@@ -8,26 +8,26 @@ use Proximum\Vimeet\Application\Command\Admin\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\Admin\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ForgottenPasswordType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\NewPasswordType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ForgottenPasswordController extends AbstractController
 {
-    private ErrorFactory $errorFactory;
     private AuthenticationManagerInterface $authenticationManager;
+    private LoggerInterface $logger;
     private CommandBusInterface $commandBus;
 
     public function __construct(
-        ErrorFactory $errorFactory,
         AuthenticationManagerInterface $authenticationManager,
+        LoggerInterface $logger,
         CommandBusInterface $commandBus
     ) {
-        $this->errorFactory = $errorFactory;
         $this->authenticationManager = $authenticationManager;
+        $this->logger = $logger;
         $this->commandBus = $commandBus;
     }
 
@@ -47,12 +47,15 @@ class ForgottenPasswordController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->commandBus->handle($forgottenPassword);
-                $this->addFlash('success', 'flash.admin.reset_password_token.success');
-
-                return $this->redirectToRoute('admin_login');
             } catch (EmailDoesNotExistException $exception) {
-                $form->get('email')->addError($this->errorFactory->create('validators.emailDoesNotExist', $request->getLocale()));
+                $this->logger->error(
+                    sprintf("forgotten password : email %s not found", $forgottenPassword->email)
+                );
             }
+
+            $this->addFlash('success', 'flash.admin.reset_password_token.success');
+
+            return $this->redirectToRoute('admin_login');
         }
 
         return $this->render('AdminBundle:ResetPassword:request_token.html.twig', [

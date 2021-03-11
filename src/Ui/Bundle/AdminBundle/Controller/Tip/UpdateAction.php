@@ -64,7 +64,8 @@ class UpdateAction
      */
     public function __invoke(Request $request, Tip $tip): Response
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')
+            || $tip->hasEvent()) {
             throw new AccessDeniedException('Access denied');
         }
 

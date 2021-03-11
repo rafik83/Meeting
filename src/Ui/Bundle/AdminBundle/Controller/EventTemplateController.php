@@ -36,6 +36,7 @@ class EventTemplateController extends AbstractController
     public function registrationTemplateAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->registrationTemplateRepository->getTemplateForGivenEvent($event);
 
@@ -48,6 +49,7 @@ class EventTemplateController extends AbstractController
     public function sheetTemplateAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->sheetTemplateRepository
             ->getTemplateForGivenEvent($event);
@@ -61,6 +63,7 @@ class EventTemplateController extends AbstractController
     public function packageTemplateAction(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->packageRepository->findByEvent($event);
 

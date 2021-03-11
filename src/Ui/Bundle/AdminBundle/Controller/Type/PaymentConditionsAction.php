@@ -66,6 +66,7 @@ class PaymentConditionsAction
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $type->getEvent() !== $event
         ) {
             throw new AccessDeniedException('Access denied');
         }

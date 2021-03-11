@@ -57,6 +57,8 @@ class ListActionTest extends TestCase
     public function testInvoke()
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
+        $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $view = new ListView([]);
         $this->queryBus->handle(new ListViewQuery($this->event->reveal()))->shouldBeCalled()->willReturn($view);
 

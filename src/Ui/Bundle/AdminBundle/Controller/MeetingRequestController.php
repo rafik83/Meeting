@@ -18,9 +18,9 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\MeetingRequest\LockMeetingRe
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MeetingRequestController extends AbstractController
 {
@@ -91,6 +91,12 @@ class MeetingRequestController extends AbstractController
 
     public function showDetailAction(Request $request, Event $event, MeetingRequest $meetingRequest): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $meetingRequest->getEvent()) {
+            throw new AccessDeniedException();
+        }
+
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $messages = $this->meetingMessageRepository->getMessagesByMeetingRequest($meetingRequest);
@@ -125,15 +131,6 @@ class MeetingRequestController extends AbstractController
             'event'              => $event,
             'meetingRequestView' => $meetingRequestView,
         ]);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function slotsAction(Request $request): JsonResponse
-    {
-        trigger_deprecation('vimeet', '1.80.0', 'This action has been marked as deprecated because it was calling MeetingSlotRepositoryInterface::findAvailableSlotIdByParticipantsIds that is not defined');
-        return new JsonResponse([]);
     }
 
     public function lockMeetingRequestAction(Request $request, Event $event): Response

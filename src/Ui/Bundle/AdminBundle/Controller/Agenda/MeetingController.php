@@ -28,16 +28,17 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHan
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSpotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Request\RequestSheetsViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,6 +54,7 @@ class MeetingController extends AbstractController
     private MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler;
     private MeetingSlotRepositoryInterface $meetingSlotRepository;
     private RequestRepositoryInterface $meetingRequestRepository;
+    private SheetRepositoryInterface $sheetRepository;
     private RequestSlotViewQueryHandler $requestSlotViewQueryHandler;
     private TranslatorInterface $translator;
     private QueryBusInterface $queryBus;
@@ -65,6 +67,7 @@ class MeetingController extends AbstractController
         MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         RequestRepositoryInterface $meetingRequestRepository,
+        SheetRepositoryInterface $sheetRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         TranslatorInterface $translator,
         QueryBusInterface $queryBus,
@@ -76,6 +79,7 @@ class MeetingController extends AbstractController
         $this->meetingUpdateSlotViewQueryHandler = $meetingUpdateSlotViewQueryHandler;
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->sheetRepository = $sheetRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->translator = $translator;
         $this->queryBus = $queryBus;
@@ -374,6 +378,14 @@ class MeetingController extends AbstractController
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $userSheetsUserCount = $this->sheetRepository
+            ->countSheetsByUserAndEvent($massAssignment->getUser(), $event)
+        ;
+
+        if ($userSheetsUserCount === 0) {
+            throw $this->createNotFoundException('Event inconsistency');
+        }
+
         $massAssignmentView = $this->queryBus->handle(
             new MassAssignmentViewQuery(
                 $massAssignment,
@@ -391,6 +403,14 @@ class MeetingController extends AbstractController
 
         if (!$request->request->has('begin') || !$request->request->has('end') || !$request->request->has('enabled')) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.missingData');
+        }
+
+        $userSheetsUserCount = $this->sheetRepository
+            ->countSheetsByUserAndEvent($massAssignment->getUser(), $event)
+        ;
+
+        if ($userSheetsUserCount === 0) {
+            throw $this->createNotFoundException('Event inconsistency');
         }
 
         $update = new Update($massAssignment);

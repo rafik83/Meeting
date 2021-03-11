@@ -2739,14 +2739,6 @@ services:
         arguments:
             - '@repository.invoice.invoice_repository'
             - '@adapter.event_url_generator'
-    sheet.sheet_meetings_list_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     sheet.meetings_metrics_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.template.completeness_calculator:

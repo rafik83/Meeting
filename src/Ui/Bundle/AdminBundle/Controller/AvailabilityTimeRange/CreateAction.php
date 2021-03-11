@@ -68,6 +68,10 @@ class CreateAction
             throw new AccessDeniedException('Only Admin and organizer can access this page');
         }
 
+        if (!$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException();
+        }
+
         if (!$event->hasDay()) {
             $this->flashBag->add('error', 'flash.admin.availabilityTimeRange.eventHasNoDay');
 

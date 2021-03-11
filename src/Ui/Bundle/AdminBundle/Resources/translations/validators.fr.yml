@@ -30,7 +30,6 @@ validators.constraint.spot_reference_recipe.range: 'La valeur de début doit êt
 validators.currentPassword: 'Le mot de passe actuel n''est pas correct'
 validators.email: 'L''adresse e-mail saisie n''est pas valide'
 validators.emailAlreadyExist: 'Cet email est déjà utilisé, vous ne pouvez pas l''utiliser'
-validators.emailDoesNotExist: 'L''email saisi n''existe pas'
 validators.event.archive.alreadyArchived: 'L''événement est déjà archivé'
 validators.event.archive.dayNotDefined: 'Les jours de l''événement ne sont pas définis et l''événement ne peut être archivé'
 validators.event.configureDates.addCatalogOnlineDateButEventHasNoDate: 'Vous devez définir les dates de l''événement avant de pouvoir définir une date de mise en ligne du catalogue'

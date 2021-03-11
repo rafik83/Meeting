@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\File;
 
 class VisioSettingsLocalizedType extends AbstractType
 {
@@ -25,6 +26,14 @@ class VisioSettingsLocalizedType extends AbstractType
                 'attr' => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('endSound', FileType::class, [
                 'required' => false,
@@ -32,11 +41,27 @@ class VisioSettingsLocalizedType extends AbstractType
                 'attr' => [
                     'accept' => implode(', ', Audio::SUPPORTED_MIME_TYPE),
                 ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Audio::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('endImage', FileType::class, [
                 'required' => false,
                 'attr' => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
                 ],
             ])
             ->add('endMessage', TextareaType::class, [

@@ -65,7 +65,7 @@ class NomenclatureController extends AbstractController
      */
     public function globalsAction(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $command = new Create();
         $form    = $this->createForm(CreateType::class, $command, ['submit' => true]);
@@ -133,6 +133,8 @@ class NomenclatureController extends AbstractController
 
         if ($nomenclature->getEvent()) {
             $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        } else {
+            $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         }
 
         // Handle update
@@ -266,6 +268,12 @@ class NomenclatureController extends AbstractController
     public function exportAction(Request $request, Nomenclature $nomenclature): BinaryFileResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        if ($nomenclature->getEvent()) {
+            $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $nomenclature->getEvent());
+        } else {
+            $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        }
 
         $export     = new ExportData($nomenclature);
         $exportForm = $this->createExportForm($export);

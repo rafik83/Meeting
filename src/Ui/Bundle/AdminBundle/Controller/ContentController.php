@@ -24,6 +24,8 @@ class ContentController extends AbstractController
 
     public function updateAction(Request $request, Event $event, string $type): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $content = $this->contentRepository->findByEventAndType($event, $type);
 
         if (null === $content) {

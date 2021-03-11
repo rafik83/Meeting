@@ -62,6 +62,8 @@ class IndexActionTest extends TestCase
     public function testInvoke(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
+        $this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -94,6 +96,8 @@ class IndexActionTest extends TestCase
     public function testInvokeHandle(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
+        $this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());

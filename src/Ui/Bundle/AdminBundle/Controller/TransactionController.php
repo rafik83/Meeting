@@ -32,6 +32,7 @@ class TransactionController extends AbstractController
 
     public function createAction(Request $request, Event $event, Sheet $sheet): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
 
         $create = new Create($sheet, null, new \DateTime());
@@ -60,6 +61,7 @@ class TransactionController extends AbstractController
 
     public function updateAction(Request $request, Event $event, Sheet $sheet, Transaction $transaction): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 
@@ -91,6 +93,7 @@ class TransactionController extends AbstractController
 
     public function removeAction(Event $event, Sheet $sheet, Transaction $transaction): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 

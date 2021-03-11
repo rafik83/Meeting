@@ -12,6 +12,7 @@ use Proximum\Vimeet\Application\Query\Product\ProductsViewQuery;
 use Proximum\Vimeet\Application\Query\Product\ProductsViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Import\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType;
@@ -73,6 +74,7 @@ class ProductController extends AbstractController
     public function updatePlanAction(Request $request, Event $event, Product $product): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongProductEvent($event, $product);
 
         $update = new UpdatePlan($product);
         $form = $this->createForm(UpdatePlanType::class, $update, [
@@ -123,6 +125,7 @@ class ProductController extends AbstractController
     public function updatePlanningAction(Request $request, Event $event, Product $product): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->notFoundIfWrongProductEvent($event, $product);
 
         $update = new UpdatePlanning($product);
         $form = $this->createForm(UpdatePlanningType::class, $update, [
@@ -171,5 +174,12 @@ class ProductController extends AbstractController
             'event' => $event,
             'form' => $form->createView(),
         ]);
+    }
+
+    private function notFoundIfWrongProductEvent(Event $event, Product $product)
+    {
+        if ($event !== $product->getEvent()) {
+            throw $this->createNotFoundException('Product not found.');
+        }
     }
 }

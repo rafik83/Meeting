@@ -43,6 +43,7 @@ class CatalogController extends AbstractController
     public function configureAction(Request $request, Event $event, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE', $event);
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
 

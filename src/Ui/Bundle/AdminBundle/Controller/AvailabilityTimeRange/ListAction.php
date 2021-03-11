@@ -46,6 +46,10 @@ class ListAction
             throw new AccessDeniedException('Only Admin and organizer can access this page');
         }
 
+        if (!$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException();
+        }
+
         $list = $this->queryBus->handle(new ListViewQuery($event));
 
         return new Response($this->twig->render(self::TEMPLATE, [

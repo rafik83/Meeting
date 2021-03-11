@@ -36,6 +36,10 @@ class RemoveController extends AbstractController
             throw $this->createAccessDeniedException('The nomenclature can only be delete by an organizer or a super admin');
         }
 
+        if (null !== $event && $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw $this->createAccessDeniedException();
+        }
+
         try {
             $this->commandBus->handle(new Remove($nomenclature));
 

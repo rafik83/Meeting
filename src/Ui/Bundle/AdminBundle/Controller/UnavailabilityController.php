@@ -141,6 +141,10 @@ class UnavailabilityController extends AbstractController
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($event !== $mass->getEvent()) {
+            throw $this->createNotFoundException('This mass is not on this event');
+        }
+
         $this->commandBus->handle(new Delete($mass));
         $this->addFlash('success', 'flash.admin.unavailability.mass.delete.success');
 
