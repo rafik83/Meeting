@@ -12,10 +12,16 @@ use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirect;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Proximum\Vimeet\Ui\Helper\RequestHelper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -41,13 +47,19 @@ class HappeningWebinarAction
     /** @var \DateTimeInterface */
     private $datetime;
 
+    private PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler;
+
+    private EndHappeningRedirectHandler $endHappeningRedirectHandler;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
         CommandBusInterface $commandBus,
         EngineInterface $engine,
         QueryBusInterface $queryBus,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $datetime,
+        PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler,
+        EndHappeningRedirectHandler $endHappeningRedirectHandler
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
@@ -55,6 +67,8 @@ class HappeningWebinarAction
         $this->engine = $engine;
         $this->queryBus = $queryBus;
         $this->datetime = $datetime;
+        $this->previousHappeningEvaluationCheckerHandler = $previousHappeningEvaluationCheckerHandler;
+        $this->endHappeningRedirectHandler = $endHappeningRedirectHandler;
     }
 
     public function __invoke(
@@ -82,8 +96,27 @@ class HappeningWebinarAction
 
         $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->datetime));
 
+        $redirectResponse = ($this->previousHappeningEvaluationCheckerHandler)(
+            new PreviousHappeningEvaluationChecker(
+                $event,
+                $sheet,
+                $user,
+                $happening,
+                RequestHelper::getRelativeUri($request)
+            )
+        );
+
+        if ($redirectResponse instanceof RedirectResponse) {
+            return $redirectResponse;
+        }
+
         /** @var AbstractWebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
+
+        $endRedirectLink = ($this->endHappeningRedirectHandler)(new EndHappeningRedirect(
+            $sheet,
+            $happening
+        ));
 
         return new Response(
             $this->engine->render(
@@ -93,6 +126,7 @@ class HappeningWebinarAction
                     'sheet' => $sheet,
                     'userCompleteName' => $user->getAccount()->getCompleteName(),
                     'webinarView' => $webinarView,
+                    'endRedirectLink' => $endRedirectLink
                 ]
             )
         );

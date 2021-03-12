@@ -144,6 +144,8 @@ services:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@datetime'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\GetHappeningQuestionsAction:
         arguments:
@@ -236,6 +238,15 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\EvaluateHappeningAction:
+        arguments:
+            - '@security.authorization_checker'
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@router'
+            - '@form.factory'
 
     #
     # Meeting

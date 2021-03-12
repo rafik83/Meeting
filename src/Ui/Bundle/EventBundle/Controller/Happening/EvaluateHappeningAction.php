@@ -7,14 +7,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\EvaluateHappening;
-use Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
-use Proximum\Vimeet\Application\Query\Contact\GetContactViewQuery;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\EvaluateMeetingType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\EvaluateHappeningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -82,7 +78,7 @@ class EvaluateHappeningAction
         $user = $userDomain->getUser();
 
         $evaluateHappening = new EvaluateHappening($event, $sheet, $happening, $user);
-        $form = $this->formFactory->create(EvaluateMeetingType::class, $evaluateHappening, []);
+        $form = $this->formFactory->create(EvaluateHappeningType::class, $evaluateHappening, []);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -105,7 +101,7 @@ class EvaluateHappeningAction
         }
 
         return new Response(
-            $this->engine->render('@Event/Meeting/evaluate-meeting.html.twig', [
+            $this->engine->render('@Event/Happening/evaluate-happening.html.twig', [
                 'event' => $eventDomain->getEvent(),
                 'sheet' => $sheet,
                 'happening' => $happening,
