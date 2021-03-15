@@ -466,4 +466,9 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function set(HappeningParticipation $happeningParticipation): void
+    {
+        $this->entityManager->flush($happeningParticipation);
+    }
 }

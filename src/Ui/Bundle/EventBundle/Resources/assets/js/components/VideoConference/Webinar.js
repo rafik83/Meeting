@@ -63,9 +63,17 @@ function Webinar(element, isSpeaker) {
         this.modalWarningBeforeStart.init(modalBeforeStartElement);
     }
 
-    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
-        const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
+    this.startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
+    this.programUrl = element.getAttribute('data-program-url');
+    this.hasToVote = false;
+    this.voteUrl = null;
+    if(!this.isSpeaker) {
+        this.hasToVote = element.hasAttribute('data-has-to-vote');
+        this.voteUrl = element.getAttribute('data-vote-url');
+    }
+
+    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
         const remainingTime = startTime.getTime() - new Date().getTime();
         setTimeout(() => {
             this.modalWarningBeforeStart.show();
@@ -812,14 +820,12 @@ Webinar.prototype.disconnect = function () {
 
     this.session = null;
 
-    if (window.opener) {
-        window.opener.location.reload(true);
-        window.close();
-
+    if (this.hasToVote && this.startTime < new Date()) {
+        document.location.href = this.voteUrl;
         return;
     }
 
-    window.history.go(-1);
+    document.location.href = this.programUrl;
 };
 
 Webinar.prototype.handlePublish = function (error) {

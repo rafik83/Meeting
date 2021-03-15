@@ -4,12 +4,14 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 
+use Doctrine\Common\Util\Debug;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\EvaluateHappening;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\EvaluateHappeningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
@@ -43,13 +45,16 @@ class EvaluateHappeningAction
     /** @var QueryBusInterface */
     private $queryBus;
 
+    private HappeningParticipationRepositoryInterface $happeningParticipationRepository;
+
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EngineInterface $engine,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         RouterInterface $router,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         $this->engine = $engine;
         $this->commandBus = $commandBus;
@@ -57,6 +62,7 @@ class EvaluateHappeningAction
         $this->formFactory = $formFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->queryBus = $queryBus;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     public function __invoke(
@@ -76,8 +82,15 @@ class EvaluateHappeningAction
 
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
+        $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser($happening, $user);
 
-        $evaluateHappening = new EvaluateHappening($event, $sheet, $happening, $user);
+        if(null === $happeningParticipation) {
+            throw new AccessDeniedException();
+        }
+
+        $evaluation = $happeningParticipation->getEvaluation();
+        $evaluateHappening = new EvaluateHappening($event, $sheet, $happening, $user, $evaluation);
+        //Debug::dump($evaluateHappening);
         $form = $this->formFactory->create(EvaluateHappeningType::class, $evaluateHappening, []);
 
         $form->handleRequest($request);

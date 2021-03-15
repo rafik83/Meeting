@@ -25,6 +25,12 @@ class ViewerWebinarView extends AbstractWebinarView
     /** @var string|null */
     public $hlsUrl;
 
+    public string $programUrl;
+
+    public string $voteUrl;
+
+    public bool $hasToVote;
+
     /**
      * @param WebinarSpeakerView[]     $speakers
      * @param WebinarParticipantView[] $participantViews
@@ -53,7 +59,10 @@ class ViewerWebinarView extends AbstractWebinarView
         bool $isWebinarHls,
         ?string $hlsUrl,
         int $viewersCount,
-        int $timeRemainingBeforeStartInSeconds
+        int $timeRemainingBeforeStartInSeconds,
+        string $programUrl,
+        string $voteUrl,
+        bool $hasToVote
     ) {
         parent::__construct(
             $eventId,
@@ -83,6 +92,9 @@ class ViewerWebinarView extends AbstractWebinarView
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isWebinarHls = $isWebinarHls;
         $this->hlsUrl = $hlsUrl;
+        $this->programUrl = $programUrl;
+        $this->voteUrl = $voteUrl;
+        $this->hasToVote = $hasToVote;
     }
 
     public function hasWaitingMedia(): bool

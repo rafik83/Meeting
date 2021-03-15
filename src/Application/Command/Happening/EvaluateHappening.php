@@ -31,12 +31,14 @@ class EvaluateHappening implements Command
         Event $event,
         Sheet $sheet,
         Happening $happening,
-        User $user
+        User $user,
+        ?int $evaluation
     ) {
         $this->happening = $happening;
         $this->sheet = $sheet;
         $this->evaluation = null;
         $this->event = $event;
         $this->user = $user;
+        $this->evaluation = $evaluation;
     }
 }

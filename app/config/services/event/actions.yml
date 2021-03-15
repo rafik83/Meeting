@@ -247,6 +247,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@router'
             - '@form.factory'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     #
     # Meeting

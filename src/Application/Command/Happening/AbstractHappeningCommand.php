@@ -61,8 +61,7 @@ class AbstractHappeningCommand implements Command
     /** @var bool */
     public $allowHls = false;
 
-    /** @var bool */
-    public $mustEvaluateHappening = false;
+    public bool $mustEvaluateHappening = false;
 
     public function isWebinar(): bool
     {

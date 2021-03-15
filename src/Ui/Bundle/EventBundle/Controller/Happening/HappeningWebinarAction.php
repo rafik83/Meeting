@@ -111,12 +111,7 @@ class HappeningWebinarAction
         }
 
         /** @var AbstractWebinarView $webinarView */
-        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
-
-        $endRedirectLink = ($this->endHappeningRedirectHandler)(new EndHappeningRedirect(
-            $sheet,
-            $happening
-        ));
+        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale(), $sheet));
 
         return new Response(
             $this->engine->render(
@@ -126,7 +121,6 @@ class HappeningWebinarAction
                     'sheet' => $sheet,
                     'userCompleteName' => $user->getAccount()->getCompleteName(),
                     'webinarView' => $webinarView,
-                    'endRedirectLink' => $endRedirectLink
                 ]
             )
         );

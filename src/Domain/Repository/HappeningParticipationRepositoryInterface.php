@@ -156,4 +156,6 @@ interface HappeningParticipationRepositoryInterface
     public function hasHappeningParticipant(Event $event): bool;
 
     public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation;
+
+    public function set(HappeningParticipation $happeningParticipation): void;
 }
