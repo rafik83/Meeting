@@ -61,7 +61,7 @@ class PreviousHappeningEvaluationCheckerHandler
                 Route::HAPPENING_EVALUATION,
                 [
                     'sheet' => $sheet->getId(),
-                    'happening' => $previousEvaluableHappeningParticipation->getHappening(),
+                    'happening' => $previousEvaluableHappeningParticipation->getHappening()->getId(),
                     'redirectTo' => $previousHappeningEvaluationChecker->origin
                 ]
             )

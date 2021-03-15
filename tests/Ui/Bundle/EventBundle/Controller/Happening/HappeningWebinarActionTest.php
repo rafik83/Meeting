@@ -19,11 +19,15 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -68,6 +72,12 @@ class HappeningWebinarActionTest extends TestCase
     /** @var ObjectProphecy|Happening */
     private $happening;
 
+    /** @var ObjectProphecy|PreviousHappeningEvaluationCheckerHandler */
+    private $previousHappeningEvaluationCheckerHandler;
+
+    /** @var ObjectProphecy|EndHappeningRedirectHandler */
+    private $endHappeningRedirectHandler;
+
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -79,12 +89,17 @@ class HappeningWebinarActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
         $this->eventDomain = new EventDomain($this->event->reveal());
         $this->request = $this->prophesize(Request::class);
+        $this->request->getQueryString()->willReturn(null);
+        $this->request->getBaseUrl()->willReturn('');
+        $this->request->getPathInfo()->willReturn('/happening/1');
         $this->user = $this->prophesize(User::class);
         $this->userDomain = new UserDomain($this->user->reveal());
         $this->sheet = $this->prophesize(Sheet::class);
         $this->happening = $this->prophesize(Happening::class);
         $this->happening->getEvent()->willReturn($this->event->reveal());
         $this->sheet->getEvent()->willReturn($this->event->reveal());
+        $this->previousHappeningEvaluationCheckerHandler = $this->prophesize(PreviousHappeningEvaluationCheckerHandler::class);
+        $this->endHappeningRedirectHandler = $this->prophesize(EndHappeningRedirectHandler::class);
     }
 
     public function testAccessDeniedWhenNotAuthenticated()
@@ -252,8 +267,7 @@ class HappeningWebinarActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->canAccessToWebinar->isSatisfiableBy($this->happening->reveal(), $this->user->reveal())->willReturn(true);
-
-
+        $this->previousHappeningEvaluationCheckerHandler->__invoke(Argument::any())->shouldBeCalled()->willReturn(null);
         $this->commandBus->handle(Argument::type(StartWebinarSessionCommand::class))->shouldBeCalled();
         $this->commandBus->handle(Argument::type(ScanHappening::class))->shouldBeCalled();
 
@@ -275,6 +289,37 @@ class HappeningWebinarActionTest extends TestCase
         $this->invokeController();
     }
 
+    public function testRedirectIfMandatoryEvaluationIsMissing()
+    {
+        $this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')->willReturn(true);
+        $this->authorizationCheckerAdapter
+            ->isGranted('PERMISSION_HAPPENING_ACCESS', $this->event->reveal())
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted(SheetVoter::EDIT, $this->sheet->reveal())
+            ->willReturn(true)
+        ;
+        $this->authorizationCheckerAdapter
+            ->isGranted(ParticipationVoter::PARTICIPATE, $this->sheet->reveal())
+            ->willReturn(true)
+        ;
+        $this->canAccessToWebinar->isSatisfiableBy($this->happening->reveal(), $this->user->reveal())->willReturn(true);
+        $redirect = $this->prophesize(RedirectResponse::class);
+        $this->previousHappeningEvaluationCheckerHandler->__invoke(new PreviousHappeningEvaluationChecker(
+            $this->event->reveal(),
+            $this->sheet->reveal(),
+            $this->user->reveal(),
+            $this->happening->reveal(),
+            '/happening/1'
+        ))->shouldBeCalled()->willReturn($redirect->reveal());
+        $this->commandBus->handle(Argument::type(StartWebinarSessionCommand::class))->shouldBeCalled();
+        $this->commandBus->handle(Argument::type(ScanHappening::class))->shouldBeCalled();
+
+        $response = $this->invokeController();
+        $this->assertEquals($redirect->reveal(), $response);
+    }
+
     private function invokeController()
     {
         $action = new HappeningWebinarAction(
@@ -283,10 +328,12 @@ class HappeningWebinarActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->engine->reveal(),
             $this->queryBus->reveal(),
-            $this->datetime
+            $this->datetime,
+            $this->previousHappeningEvaluationCheckerHandler->reveal(),
+            $this->endHappeningRedirectHandler->reveal()
         );
 
-        $action(
+        return $action(
             $this->request->reveal(),
             $this->eventDomain,
             $this->sheet->reveal(),
