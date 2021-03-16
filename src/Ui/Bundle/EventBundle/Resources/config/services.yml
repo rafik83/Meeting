@@ -861,3 +861,8 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler:
         arguments:
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationCheckerHandler:
+        arguments:
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler'
