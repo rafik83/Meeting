@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'event.meeting.request.import.title'|trans %}
+
+{% block form_title 'event.meeting.request.import.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.file) }}
+    {{ form_row(form.charset) }}
+{% endblock %}
+
+{% block goback_link path('admin_meeting_request_list', {'event': event.id}) %}
