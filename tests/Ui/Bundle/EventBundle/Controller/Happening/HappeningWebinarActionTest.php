@@ -19,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -75,9 +74,6 @@ class HappeningWebinarActionTest extends TestCase
     /** @var ObjectProphecy|PreviousHappeningEvaluationCheckerHandler */
     private $previousHappeningEvaluationCheckerHandler;
 
-    /** @var ObjectProphecy|EndHappeningRedirectHandler */
-    private $endHappeningRedirectHandler;
-
     public function setUp()
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -99,7 +95,6 @@ class HappeningWebinarActionTest extends TestCase
         $this->happening->getEvent()->willReturn($this->event->reveal());
         $this->sheet->getEvent()->willReturn($this->event->reveal());
         $this->previousHappeningEvaluationCheckerHandler = $this->prophesize(PreviousHappeningEvaluationCheckerHandler::class);
-        $this->endHappeningRedirectHandler = $this->prophesize(EndHappeningRedirectHandler::class);
     }
 
     public function testAccessDeniedWhenNotAuthenticated()
@@ -329,8 +324,7 @@ class HappeningWebinarActionTest extends TestCase
             $this->engine->reveal(),
             $this->queryBus->reveal(),
             $this->datetime,
-            $this->previousHappeningEvaluationCheckerHandler->reveal(),
-            $this->endHappeningRedirectHandler->reveal()
+            $this->previousHappeningEvaluationCheckerHandler->reveal()
         );
 
         return $action(

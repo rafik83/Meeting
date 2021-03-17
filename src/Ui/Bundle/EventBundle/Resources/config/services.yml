@@ -858,10 +858,6 @@ services:
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening'
 
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler:
-        arguments:
-            - '@adapter.router'
-
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationCheckerHandler:
         arguments:
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler'

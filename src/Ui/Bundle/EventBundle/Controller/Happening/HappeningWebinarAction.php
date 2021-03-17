@@ -12,8 +12,6 @@ use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirect;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\EndHappeningRedirectHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -49,8 +47,6 @@ class HappeningWebinarAction
 
     private PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler;
 
-    private EndHappeningRedirectHandler $endHappeningRedirectHandler;
-
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
@@ -58,8 +54,7 @@ class HappeningWebinarAction
         EngineInterface $engine,
         QueryBusInterface $queryBus,
         \DateTimeInterface $datetime,
-        PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler,
-        EndHappeningRedirectHandler $endHappeningRedirectHandler
+        PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
@@ -68,7 +63,6 @@ class HappeningWebinarAction
         $this->queryBus = $queryBus;
         $this->datetime = $datetime;
         $this->previousHappeningEvaluationCheckerHandler = $previousHappeningEvaluationCheckerHandler;
-        $this->endHappeningRedirectHandler = $endHappeningRedirectHandler;
     }
 
     public function __invoke(
