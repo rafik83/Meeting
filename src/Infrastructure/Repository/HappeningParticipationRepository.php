@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 
 class HappeningParticipationRepository implements HappeningParticipationRepositoryInterface
 {
@@ -455,11 +456,13 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->select('participation')
             ->from(HappeningParticipation::class, 'participation')
             ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->join(User\Event\Scan::class, 'scan', 'WITH', 'scan.type = :scan_type AND happening = scan.objectId AND scan.user = :user')
             ->setParameter('event', $event)
             ->andWhere('participation.user = :user')
             ->setParameter('user', $user)
             ->andWhere('happening.begin < :begin')
             ->setParameter('begin', $begin)
+            ->setParameter('scan_type', Type::TYPE_HAPPENING_ENTRANCE)
             ->andWhere('happening.mustEvaluateHappening = true')
             ->andWhere('participation.evaluation is null')
             ->setMaxResults(1)

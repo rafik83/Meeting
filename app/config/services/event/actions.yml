@@ -241,10 +241,10 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\EvaluateHappeningAction:
         arguments:
             - '@security.authorization_checker'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@router'
+            - '@adapter.router'
             - '@form.factory'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
 

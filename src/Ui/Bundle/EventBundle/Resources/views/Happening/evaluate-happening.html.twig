@@ -11,6 +11,7 @@
                     {{ form_widget(ratingForm.evaluation) }}
                     {{ form_end(ratingForm) }}
 
+                    {# In case we have the story: we can vote #}
                     {% if not mustEvaluateHappening %}
                         <a class="btn btn-link" href="{{ path('happening_program', {'sheet': sheet.id}) }}">
                             {{ 'event.happening.evaluation.skip'|trans }}

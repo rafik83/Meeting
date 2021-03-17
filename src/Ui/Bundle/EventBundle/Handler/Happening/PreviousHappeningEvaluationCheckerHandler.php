@@ -3,13 +3,14 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Routing\RouterInterface;
+
 
 class PreviousHappeningEvaluationCheckerHandler
 {

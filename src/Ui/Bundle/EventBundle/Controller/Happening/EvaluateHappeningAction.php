@@ -4,9 +4,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening;
 
 
-use Doctrine\Common\Util\Debug;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Happening\EvaluateHappening;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -20,14 +20,13 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class EvaluateHappeningAction
 {
-    /** @var EngineInterface */
+    /** @var Environment */
     private $engine;
 
     /** @var CommandBusInterface */
@@ -49,13 +48,14 @@ class EvaluateHappeningAction
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $engine,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository
-    ) {
+    )
+    {
         $this->engine = $engine;
         $this->commandBus = $commandBus;
         $this->router = $router;
@@ -71,7 +71,8 @@ class EvaluateHappeningAction
         UserDomain $userDomain,
         Sheet $sheet,
         Happening $happening
-    ): Response {
+    ): Response
+    {
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
             || !$happening->mustEvaluateHappening()
@@ -84,17 +85,16 @@ class EvaluateHappeningAction
         $user = $userDomain->getUser();
         $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser($happening, $user);
 
-        if(null === $happeningParticipation) {
+        if (null === $happeningParticipation) {
             throw new AccessDeniedException();
         }
 
         $evaluation = $happeningParticipation->getEvaluation();
         $evaluateHappening = new EvaluateHappening($event, $sheet, $happening, $user, $evaluation);
-        //Debug::dump($evaluateHappening);
+
         $form = $this->formFactory->create(EvaluateHappeningType::class, $evaluateHappening, []);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($evaluateHappening);
 
             $redirectTo = $request->query->get('redirectTo');

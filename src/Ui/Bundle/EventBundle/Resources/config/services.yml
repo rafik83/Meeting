@@ -854,7 +854,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
-            - '@router'
+            - '@adapter.router'
             - '@session.flash_bag'
             - '@Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening'
 
