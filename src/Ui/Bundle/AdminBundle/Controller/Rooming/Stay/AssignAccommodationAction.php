@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Rooming\Stay\AssignAccommodation;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 
 class AssignAccommodationAction
@@ -43,13 +45,16 @@ class AssignAccommodationAction
      */
     private $sheetRepository;
 
+    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
+
     public function __construct(
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         RouterInterface $router,
         TranslatorInterface $translator,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->engine = $engine;
         $this->formFactory = $formFactory;
@@ -57,10 +62,17 @@ class AssignAccommodationAction
         $this->router = $router;
         $this->translator = $translator;
         $this->sheetRepository = $sheetRepository;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
     public function __invoke(Request $request, Event $event, User $user): Response
     {
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+        ) {
+            throw new AccessDeniedException('Access denied');
+        }
+
         $arrival = $request->get('arrivalDate', null);
         $departure = $request->get('departureDate', null);
         $dataForm = $request->request->get('admin_assign_accommodation_type', null);

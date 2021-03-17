@@ -60,6 +60,7 @@ class RemoveActionTest extends TestCase
     public function testInvoke()
     {
         $tip = $this->prophesize(Tip::class);
+        $tip->hasEvent()->willReturn(false);
 
         $remove = new Remove($tip->reveal());
         $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);

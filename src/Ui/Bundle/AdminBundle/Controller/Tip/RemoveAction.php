@@ -52,8 +52,9 @@ class RemoveAction
      */
     public function __invoke(Tip $tip): RedirectResponse
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('Access defined');
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')
+            || $tip->hasEvent()) {
+            throw new AccessDeniedException();
         }
 
         $this->commandBus->handle(new Remove($tip));

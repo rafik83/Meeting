@@ -17,6 +17,7 @@ class EventDatesController extends Controller
     public function updateEventDatesAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         if (!$this->getParameter('feature_event_dates_to_current_date_enabled')) {
             $this->createAccessDeniedException('Change event date is not available');

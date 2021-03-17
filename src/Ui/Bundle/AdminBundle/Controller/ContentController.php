@@ -20,6 +20,8 @@ class ContentController extends Controller
      */
     public function updateAction(Request $request, Event $event, $type)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $content = $this->get('repository.event.content_repository')->findByEventAndType($event, $type);
 
         if (null === $content) {

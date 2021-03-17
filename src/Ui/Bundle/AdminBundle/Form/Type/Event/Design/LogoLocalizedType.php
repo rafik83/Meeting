@@ -6,6 +6,7 @@ use Proximum\Vimeet\Domain\Event\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 
 class LogoLocalizedType extends AbstractType
 {
@@ -20,17 +21,41 @@ class LogoLocalizedType extends AbstractType
                 'attr'     => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('mobileLogo', FileType::class, [
                 'required' => false,
                 'attr'     => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
                 ],
             ])
         ;

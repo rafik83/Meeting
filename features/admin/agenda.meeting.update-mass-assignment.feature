@@ -8,6 +8,9 @@ Feature: I can update a dispatched mass assignment unavaibility via the API
     And the event "Best of Planner" is created
     And there is a type "Fournisseur" in this event
     And the user "user_asddays_2@proximum.com" is created
+    And this user is declared in this event
+    And there is a sheet
+    And there is a participant for this sheet and this user
     And this event occurs the "2016-10-12" from "08:00" to "18:00"
     And there is a mass unavailability category called "Pause" for this event
     And there is a mass unavailability "Cocktail" for this type the 2016-10-12 from 11:00 to 12:00

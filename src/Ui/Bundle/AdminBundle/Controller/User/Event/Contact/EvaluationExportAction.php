@@ -35,7 +35,8 @@ class EvaluationExportAction
 
     public function __invoke(Request $request, Event $event)
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             throw new AccessDeniedException('Access Denied!');
         }
 
