@@ -414,6 +414,7 @@ admin.linked_sheets.no_result: 'Aucun résultat'
 admin.linked_sheets.title: 'Fiches liées'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.action.import: Importer
 admin.meeting_request.action.export: Exporter
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
@@ -1502,6 +1503,7 @@ event.meeting.request.details.title: 'Details de la demande de rendez-vous'
 event.meeting.request.details.to: 'A destination de:'
 event.meeting.request.details.toParticipant: 'Participant de la destination:'
 event.meeting.request.details.updatedAt: 'Changement de statut'
+event.meeting.request.import.title: 'Importer un fichier de demandes de rendez-vous'
 event.meeting.request.state.from.approved: Accepté
 event.meeting.request.state.from.cancelled: Annulé
 event.meeting.request.state.from.refused: Refusé
