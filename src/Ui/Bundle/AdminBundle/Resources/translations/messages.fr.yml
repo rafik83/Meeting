@@ -1504,6 +1504,7 @@ event.meeting.request.details.to: 'A destination de:'
 event.meeting.request.details.toParticipant: 'Participant de la destination:'
 event.meeting.request.details.updatedAt: 'Changement de statut'
 event.meeting.request.import.title: 'Importer un fichier de demandes de rendez-vous'
+event.meeting.request.import.exampleFile: 'Exemple de fichier'
 event.meeting.request.state.from.approved: Accepté
 event.meeting.request.state.from.cancelled: Annulé
 event.meeting.request.state.from.refused: Refusé
