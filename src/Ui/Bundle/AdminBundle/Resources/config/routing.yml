@@ -836,6 +836,13 @@ admin_meeting_request_lock_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
 
+admin_meeting_request_import:
+    path: /event/{event}/meeting-request/import
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\MeetingRequest\ImportAction }
+
 admin_meeting_request_export:
     path: /event/{event}/meeting-request/export
     methods: [GET]
