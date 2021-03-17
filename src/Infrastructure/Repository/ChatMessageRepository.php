@@ -55,12 +55,9 @@ class ChatMessageRepository implements ChatMessageRepositoryInterface
             ->join('chatMessage.createdBy', 'createdBy')
             ->where('chatMessage.objectType = :objectType AND chatMessage.objectId = :objectId')
             ->setParameters(['objectType' => $object->getObjectType(), 'objectId' => $object->getId()])
-            ->orderBy('chatMessage.createdAt', 'DESC')
-            ->setMaxResults(100)
+            ->orderBy('chatMessage.createdAt', 'ASC')
             ->getQuery()
             ->getResult();
-
-        $messages = array_reverse($messages);
 
         $votes = $this->entityManager
             ->createQueryBuilder()
