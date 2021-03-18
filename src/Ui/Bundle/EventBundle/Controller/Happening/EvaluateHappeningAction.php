@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Happening\EvaluateHappening;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
+use Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -46,6 +47,8 @@ class EvaluateHappeningAction
 
     private HappeningParticipationRepositoryInterface $happeningParticipationRepository;
 
+    private CanEvaluateHappening $canEvaluateHappening;
+
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         Environment $engine,
@@ -53,7 +56,8 @@ class EvaluateHappeningAction
         QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
-        HappeningParticipationRepositoryInterface $happeningParticipationRepository
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
+        CanEvaluateHappening $canEvaluateHappening
     )
     {
         $this->engine = $engine;
@@ -63,6 +67,7 @@ class EvaluateHappeningAction
         $this->authorizationChecker = $authorizationChecker;
         $this->queryBus = $queryBus;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
+        $this->canEvaluateHappening = $canEvaluateHappening;
     }
 
     public function __invoke(
@@ -73,16 +78,17 @@ class EvaluateHappeningAction
         Happening $happening
     ): Response
     {
+        $user = $userDomain->getUser();
+
         if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)
-            || !$happening->mustEvaluateHappening()
+            || !$this->canEvaluateHappening->isSatisfiableBy($happening, $user)
             || $eventDomain->getEvent() !== $sheet->getEvent()
         ) {
             throw new AccessDeniedException();
         }
 
         $event = $eventDomain->getEvent();
-        $user = $userDomain->getUser();
         $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser($happening, $user);
 
         if (null === $happeningParticipation) {

@@ -247,6 +247,7 @@ services:
             - '@adapter.router'
             - '@form.factory'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening'
 
     #
     # Meeting

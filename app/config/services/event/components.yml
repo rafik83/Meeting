@@ -47,3 +47,4 @@ services:
     Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
