@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Elastica\Filter\Exists;
+use Elastica\Query\AbstractQuery;
 use Elastica\Query\BoolQuery;
-use Elastica\Query\Filtered;
+use Elastica\Query\Exists;
+use Elastica\Query\Ids;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
@@ -896,12 +897,9 @@ class SheetSearchQueryBuilder
         return (new Term())->setTerm('imported', $imported);
     }
 
-    /**
-     * @return Filtered
-     */
-    private function hasConnectionFilter()
+    private function hasConnectionFilter(): AbstractQuery
     {
-        return (new Filtered())->setFilter(new Exists('lastLoginAt'));
+        return new Exists('lastLoginAt');
     }
 
     /**
@@ -951,16 +949,11 @@ class SheetSearchQueryBuilder
 
         // in case of an empty list, we want to display no result
         if (empty($sheetIds)) {
-            $sheetIds[] = 0;
+            $this->query->addMustNot(new Exists('id'));
+            return;
         }
 
-        foreach ($sheetIds as $sheetId) {
-            $restrictToSheets->addShould(
-                (new Term())->setTerm('id', $sheetId)
-            );
-        }
-
-        $this->query->addMust($restrictToSheets);
+        $this->query->addMust(new Ids(array_values($sheetIds)));
     }
 
     /**
@@ -972,15 +965,8 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $excludeSheets = new BoolQuery();
-
-        foreach ($sheetsToExclude as $sheetToExclude) {
-            $excludeSheets->addShould(
-                (new Term())->setTerm('id', $sheetToExclude->getId())
-            );
-        }
-
-        $this->query->addMustNot($excludeSheets);
+        $sheetIds = array_map(fn($sheet) => $sheet->getId(), $sheetsToExclude);
+        $this->query->addMustNot(new Ids(array_values($sheetIds)));
     }
 
     /**

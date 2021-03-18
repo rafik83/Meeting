@@ -4,9 +4,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-313 - trunck happening name if too long for tokbox
+- Code style / namespace fixes
+
+### Added
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+## [2.83.0]
+### Security
+- VIMEET-2373 - fix malicious files upload
+- VIMEET-2373 - XSS fixes
+- VIMEET-2373 - various IDOR fixes
+- VIMEET-2373 - various broken access fixes
+
+### Fixed
+- Partners are not allowed to see users (see VIMEET-2373 comments)
+- hotfix - limit chat messages and static avatar to avoid overload on webinars with 1000+ viewers
+
+### Updated
+- VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
+
+## [2.82.3] - 2021-03-05
+### Fixed
+- MV-311 - fix max size upload video 300M
+
+## [2.82.2] - 2021-03-02
+### Fixed
+- MV-310 - fix error if desktop notifications are not available (ie on iOS)
+
+## [2.82.1] - 2021-02-18
+### Fixed
+- MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
+
+## [2.82.0] - 2021-02-16### Updated
+- Update Elasticsearch to 6.8.13
+
+## [2.81.0] - 2021-02-16
+### Added
+- VIMEET-2361 - Add link to prefill user mail on registration
+
+### Removed
+- VIMEET-1811 - Remove can_move_meeting column from db
+
+## [2.80.0] - 2021-02-15
 ### Added
 - VIMEET-2359 - Micro and camera crossed out
 - VIMEET-2189 - Mute speakers
+- VIMEET-2386 - Add company name to api conference call
 
 ## [2.79.1] - 2021-02-05
 ### Fixed

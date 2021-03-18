@@ -288,11 +288,23 @@ Webinar.prototype.onOpeningToPublic = function () {
 
 Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
-    if (Notification.permission === 'default') {
-        Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
-    } else {
-        this.showPrepareModalOrJoin();
+
+    try {
+        if (!('Notification' in window)) {
+            this.showPrepareModalOrJoin();
+            return;
+        }
+
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+        } else {
+            this.showPrepareModalOrJoin();
+        }
+    } catch (error) {
+        console.error(error);
     }
+
+    this.showPrepareModalOrJoin();
 };
 
 Webinar.prototype.showPrepareModalOrJoin = function()

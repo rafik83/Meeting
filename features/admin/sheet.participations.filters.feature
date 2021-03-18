@@ -15,7 +15,6 @@ Feature: Sheet participations list filters
     And there is a type "Investisseur" in this event
     And there is a sheet for this type with the title "World Company Inc"
     And this sheet is in catalog
-    And elastica is populate
     And I am logged as admin
     And I go to "/fr/event"
     When I follow "admin.sheet.link"

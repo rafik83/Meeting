@@ -7,6 +7,7 @@ use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator as TagFilterAggregatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Adapter\SheetSearchQueryBuilder;
@@ -101,7 +102,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
                                     "nestedTaggedData_nested_values_terms": {
                                         "terms": {
                                             "field": "nestedTaggedData.values.value",
-                                            "size": 0
+                                            "size": 100000
                                         }
                                     }
                                 }
@@ -120,11 +121,11 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
 
         $terms = new Terms('nestedTaggedData_nested_values_terms');
         $terms->setField('nestedTaggedData.values.value');
-        $terms->setSize(0);
+        $terms->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
         $subAggregation->addAggregation($terms);
 
         $aggregation->addAggregation($subAggregation);
         $query->addAggregation($aggregation);
-        $query->setSize(0);
+        $query->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
     }
 }

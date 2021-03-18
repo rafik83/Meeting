@@ -303,6 +303,10 @@ class SheetController extends Controller
     {
         $this->checkAccess($event);
 
+        if ($event !== $sheet->getEvent()) {
+            throw $this->createNotFoundException('Event inconsistency');
+        }
+
         $data = json_decode($request->getContent(), true);
 
         try {

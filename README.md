@@ -90,6 +90,10 @@ The recommended way to install the dependencies on this project is to use this p
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
 
+To avoid ES6 error, run:
+
+    $ sudo sysctl -w vm.max_map_count=262144
+
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```
@@ -197,15 +201,7 @@ Sometime events use specific assets like specific css. To build those run :
     bin/console vimeet:event:build-guideline-asset
 ```
 
-**Enable/Disable php xdebug**
-
-```
-       manala_php_xdebug [on|off]
-```
-
-- _Supervisor_: http://vimeet.proximum:9001
-- _phpMyAdmin_: http://vimeet.proximum:1979
-- _ElasticSearch HEAD_: http://vimeet.proximum:9200/_plugin/head/
+- _ElasticSearch HEAD_: http://localhost:9200/_plugin/head/
 
 **Install a Node dependency:**
 
@@ -333,24 +329,9 @@ En admin, utiliser la méthode de l'event permettant de fallback, car la locale 
 $locale = $event->getAvailableLocale($request->getLocale);
 ```
 
-### Utils
-
-Récupérer la DB de prod en locale, à faire dans la VM (nécessite d'avoir le mdp mysql de la prod - voir dans 1password):
-
-    ⇒ make get-prod-db@vm
-
-Synchroniser la DB de préprod avec celle de la prod (nécessite d'avoir le mdp mysql de la prod et de la préprod - voir dans 1password)
-
-    ⇒ make sync-db-from-prod@preprod
-
-Importer un fichier prod.sql placé sur le root du projet :
-
-    ⇒ make import-preprod-db@vm
-
 ### Jobs Queue
 
-- [Interface supervisord](http://vimeet.proximum:9001/)
-- [Liste des jobs](http://admin.vimeet.proximum/app_dev.php/fr/jobs/)
+- [Liste des jobs](http://admin.vimeet.proximum.wip/app_dev.php/fr/jobs/)
 
 Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
 
@@ -362,16 +343,7 @@ Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\B
 
 ### Tester son code sur un autre terminal
 
-Pour tester le rendu ou son code sur un autre terminal (un téléphone portable par exemple), vous pouvez utiliser [ngrok](https://ngrok.com/) qui est installé dans la _VM_.
-
-Lancez la commande suivante dans la vm:
-
-    ngrok http 80
-
-Vous obtiendrez en sortie une url en https.
-
-- Si vous souhaitez tester la partie admin, vous pouvez directement utiliser cette url.
-- Si vous souhaitez tester un événement en particulier, vous devez modifier l'url de cet événement (champ `Domaine (complet)` dans l'édition d'un événement) avec l'url fourni par ngrok.
+Pour tester le rendu ou son code sur un autre terminal (un téléphone portable par exemple), vous pouvez utiliser [ngrok](https://ngrok.com/).
 
 ### More documentations
 

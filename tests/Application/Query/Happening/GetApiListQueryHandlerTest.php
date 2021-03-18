@@ -53,6 +53,7 @@ class GetApiListQueryHandlerTest extends TestCase
         $speaker->getPosition($locale)->willReturn('PDG Acme Corp.');
         $speaker->getPhoto()->willReturn('/assets/boss-picture.jpg');
         $speaker->getLogo()->willReturn('/assets/acme-corp-logo.png');
+        $speaker->getOrganization()->willReturn('Acme Corp.');
         $happening2->getSpeakers()->willReturn([$speaker->reveal()]);
         $happening2->isInteractiveWebinar()->willReturn(false);
         $happening2->isVideoWebinar()->willReturn(false);
@@ -118,7 +119,8 @@ class GetApiListQueryHandlerTest extends TestCase
                         'Doe',
                         'PDG Acme Corp.',
                         'https://static.example.net/assets/boss-picture.jpg',
-                        'https://static.example.net/assets/acme-corp-logo.png'
+                        'https://static.example.net/assets/acme-corp-logo.png',
+                        'Acme Corp.'
                     )
                 ],
                 [2]

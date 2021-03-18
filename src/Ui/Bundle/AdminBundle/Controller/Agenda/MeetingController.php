@@ -380,6 +380,14 @@ class MeetingController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $userSheetsUserCount = $this->get('vimeet_infrastructure.repository.sheet_repository')
+            ->countSheetsByUserAndEvent($massAssignment->getUser(), $event)
+        ;
+
+        if ($userSheetsUserCount === 0) {
+            throw $this->createNotFoundException('Event inconsistency');
+        }
+
         $massAssignmentView = $this->get('tactician.commandbus.query')->handle(
             new MassAssignmentViewQuery(
                 $massAssignment,
@@ -404,6 +412,14 @@ class MeetingController extends Controller
 
         if (!$request->request->has('begin') || !$request->request->has('end') || !$request->request->has('enabled')) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateMassAssignment.missingData');
+        }
+
+        $userSheetsUserCount = $this->get('vimeet_infrastructure.repository.sheet_repository')
+            ->countSheetsByUserAndEvent($massAssignment->getUser(), $event)
+        ;
+
+        if ($userSheetsUserCount === 0) {
+            throw $this->createNotFoundException('Event inconsistency');
         }
 
         $update = new Update($massAssignment);

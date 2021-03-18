@@ -82,7 +82,7 @@ class UpdateHandlerTest extends TestCase
 
         $this
             ->elasticSearchPersister
-            ->persist('id', $userEventViews)
+            ->persist('uid', $userEventViews)
             ->shouldBeCalled()
         ;
 
