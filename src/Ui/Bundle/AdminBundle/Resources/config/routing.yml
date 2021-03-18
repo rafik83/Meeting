@@ -829,20 +829,19 @@ admin_meeting_request_details:
     methods: [GET]
     defaults: { _controller: AdminBundle:MeetingRequest:showDetail }
 
-admin_meeting_request_slots:
-    path: /event/{event}/meeting-request/{meetingRequest}/slots
-    requirements:
-        event: \d+
-        meetingRequest: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:MeetingRequest:slots }
-
 admin_meeting_request_lock_update:
     path: /event/{event}/meeting-request/lock/update
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
+
+admin_meeting_request_import:
+    path: /event/{event}/meeting-request/import
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\MeetingRequest\ImportAction }
 
 admin_meeting_request_export:
     path: /event/{event}/meeting-request/export

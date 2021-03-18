@@ -140,6 +140,10 @@ class UnavailabilityController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($event !== $mass->getEvent()) {
+            throw $this->createNotFoundException('This mass is not on this event');
+        }
+
         $this->get('tactician.commandbus')->handle(new Delete($mass));
         $this->addFlash('success', 'flash.admin.unavailability.mass.delete.success');
 

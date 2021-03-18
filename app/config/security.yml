@@ -165,7 +165,6 @@ security:
             - 'ROLE_ALLOWED_TO_SWITCH'
             - 'ROLE_ALLOWED_TO_ACCOUNT'
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
-            - 'ROLE_ALLOWED_TO_MANAGE_USER'
 
         ROLE_ALLOWED_TO_HOST:
             - 'ROLE_ALLOWED_TO_ACCOUNT'

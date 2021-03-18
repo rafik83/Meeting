@@ -4,8 +4,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-313 - trunck happening name if too long for tokbox
+- Code style / namespace fixes
+
 ### Added
-VIMEET-2378 - Order conferences by date in admin panel
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+## [2.83.0]
+### Security
+- VIMEET-2373 - fix malicious files upload
+- VIMEET-2373 - XSS fixes
+- VIMEET-2373 - various IDOR fixes
+- VIMEET-2373 - various broken access fixes
+
+### Fixed
+- Partners are not allowed to see users (see VIMEET-2373 comments)
+- hotfix - limit chat messages and static avatar to avoid overload on webinars with 1000+ viewers
+
+### Updated
+- VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
 
 ## [2.82.3] - 2021-03-05
 ### Fixed

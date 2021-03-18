@@ -26,6 +26,7 @@ class TransactionController extends Controller
      */
     public function createAction(Request $request, Event $event, Sheet $sheet)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
 
         $create = new Create($sheet, null, new \DateTime());
@@ -63,6 +64,7 @@ class TransactionController extends Controller
      */
     public function updateAction(Request $request, Event $event, Sheet $sheet, Transaction $transaction)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 
@@ -102,6 +104,7 @@ class TransactionController extends Controller
      */
     public function removeAction(Event $event, Sheet $sheet, Transaction $transaction)
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessIfSheetNotInEvent($event, $sheet);
         $this->denyAccessIfTransactionNotInSheet($sheet, $transaction);
 

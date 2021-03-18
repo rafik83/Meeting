@@ -9,7 +9,6 @@ class Image
         'image/pjpeg',
         'image/png',
         'image/x-png',
-        'image/svg+xml',
         'image/gif',
     ];
 }

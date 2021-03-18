@@ -29,7 +29,9 @@ class GetParticipantPresenceAction
 
     public function __invoke(Request $request, Event $event, MeetingSlot $meetingSlot): JsonResponse
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $meetingSlot->getEvent()
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 

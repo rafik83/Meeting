@@ -67,6 +67,14 @@ h1 .label {
   margin: 20px 0 20px;
 }
 
+.page-header-tools {
+  margin-top: 20px;
+
+  form {
+    display: inline-block;
+  }
+}
+
 .updatable {
   cursor: pointer;
 }
