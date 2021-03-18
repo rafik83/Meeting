@@ -55,6 +55,7 @@ flash.admin.invoice.export.failed: 'Il y a une erreur dans le formulaire d''expo
 flash.admin.leni_user.import.success: 'Ids utilisateurs ajoutés : %countAddedUsers%; Ids utilisateurs modifiés : %countUpdatedUsers%;'
 flash.admin.linked_sheets.create.success: 'Les fiches sont liées.'
 flash.admin.linked_sheets.delete.success: 'Les fiches ont été déliées.'
+flash.admin.meeting_request.import.success: 'Import effectué avec succès'
 flash.admin.meeting_request.lock.update.success: 'La modification du changement de status du verrouillage des demandes de rendez-vous a bien été prise en compte'
 flash.admin.meeting_request.position.success: 'Le rendez-vous a bien été placé'
 flash.admin.meeting.notAllowedToDeleteAllMeetingsException: 'Vous ne pouvez pas supprimer les rendez-vous car la date de publication est passée'
