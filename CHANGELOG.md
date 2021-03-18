@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.80.0] - 2021-02-15
 ### Added
+- VIMEET-2359 - Micro and camera crossed out
 - VIMEET-2189 - Mute speakers
 - VIMEET-2386 - Add company name to api conference call
 
