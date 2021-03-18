@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2399 - Import meeting requests from CSV file
 - VIMEET-2378 - Order conferences by date in admin panel
 
+### Deprecated
+- remove "scanned" field from "contact" table
+
 ## [2.83.0]
 ### Security
 - VIMEET-2373 - fix malicious files upload
