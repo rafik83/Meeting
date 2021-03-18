@@ -4,6 +4,7 @@
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -54,7 +55,10 @@ class CanEvaluateHappening
             }
             $speakerSheets = $this->sheetRepository->getAllSheetsByUserAndEvent($speaker->getUser(), $happening->getEvent());
 
-            $result = array_intersect($userSheets, $speakerSheets);
+            $result = array_intersect(
+                array_map(static fn (Sheet $sheet) => $sheet->getId(), $userSheets),
+                array_map(static fn (Sheet $sheet) => $sheet->getId(), $speakerSheets)
+            );
 
             if (!empty ($result)) {
                 return false;
