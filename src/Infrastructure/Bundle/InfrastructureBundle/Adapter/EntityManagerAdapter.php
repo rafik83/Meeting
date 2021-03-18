@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use Doctrine\ORM\EntityManager;
@@ -58,5 +50,29 @@ class EntityManagerAdapter implements EntityManagerAdapterInterface
     public function detach($entity)
     {
         $this->entityManager->detach($entity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beginTransaction()
+    {
+        $this->entityManager->beginTransaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function commit()
+    {
+        $this->entityManager->commit();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rollback()
+    {
+        $this->entityManager->rollback();
     }
 }

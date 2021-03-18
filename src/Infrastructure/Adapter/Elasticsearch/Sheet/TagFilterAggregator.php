@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet;
 
 use Elastica\Aggregation\Filter;
@@ -15,6 +7,7 @@ use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Query;
 use Elastica\SearchableInterface;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\Sheet\TagFilterAggregator as TagFilterAggregatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Adapter\SheetSearchQueryBuilder;
@@ -35,7 +28,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
         string $locale,
         array $filters,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         unset($filters['tagFilters'][$tag]);
 
@@ -46,7 +40,8 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
             1,
             [],
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         $query = $this->getQuery($builder, $tag);
@@ -107,7 +102,7 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
                                     "nestedTaggedData_nested_values_terms": {
                                         "terms": {
                                             "field": "nestedTaggedData.values.value",
-                                            "size": 0
+                                            "size": 100000
                                         }
                                     }
                                 }
@@ -126,11 +121,11 @@ class TagFilterAggregator implements TagFilterAggregatorInterface
 
         $terms = new Terms('nestedTaggedData_nested_values_terms');
         $terms->setField('nestedTaggedData.values.value');
-        $terms->setSize(0);
+        $terms->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
         $subAggregation->addAggregation($terms);
 
         $aggregation->addAggregation($subAggregation);
         $query->addAggregation($aggregation);
-        $query->setSize(0);
+        $query->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
     }
 }

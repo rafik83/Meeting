@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Badge;
 
 use Proximum\Vimeet\Application\Command\Type\Badge\Configure;
+use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Domain\Model\Badge;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -21,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ConfigureType extends AbstractType
 {
@@ -36,6 +30,14 @@ class ConfigureType extends AbstractType
             ->add('header', FileType::class, [
                 'required' => false,
                 'help' => 'form.badge_configuration.children.header.help',
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('showHeader', CheckboxType::class, [
                 'required' => false,
@@ -44,13 +46,29 @@ class ConfigureType extends AbstractType
                 'required' => false,
             ])
             ->add('leftImage', FileType::class, [
-                'required' => false
+                'required' => false,
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('removeLeftImage', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('rightImage', FileType::class, [
-                'required' => false
+                'required' => false,
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('removeRightImage', CheckboxType::class, [
                 'required' => false,

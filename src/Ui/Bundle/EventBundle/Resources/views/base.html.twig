@@ -22,6 +22,9 @@
         {% if event is defined %}
             {{ render(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Event\\ExtraHeaderAction', {'event': event})) }}
         {% endif %}
+        {% if sheet is defined and sheet is not null %}
+            {{ networking_template_snippet.generate(sheet, app.user) | raw }}
+        {% endif %}
     </head>
     <body {% block body_attributes '' %}>
         {% block body %}
@@ -51,6 +54,43 @@
 
         {% if event is defined %}
             {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
+        {% endif %}
+
+        {% if sheet is defined and sheet is not null %}
+            {# notification toast #}
+            <div class="notification-toast-template notification-toast hide"
+                 data-notification-toast
+                 data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}"
+            >
+                <button class="close">&times;</button>
+                <p><em class="message-author"></em></p>
+                <p class="message-content"></p>
+                <p>
+                    <a class="message-link btn btn-sm btn-primary" href="#">{{ 'networking.chat.notification.open'|trans }}</a>
+                </p>
+            </div>
+
+            <div class="notification-toast-container hide"
+                 data-notification-toast-container
+            >
+            </div>
+
+            <div class="modal fade notificationCallVisio hide" id="notificationCallVisio" data-notification-call-visio tabindex="-1" role="dialog" data-private-chat-url="{{ path('event_networking_index', {sheet: sheet.id}) }}">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.close'|trans }}">
+                                <span aria-hidden="true">&times;</span></button>
+                            <h2>{{ 'networking.chat.visio.request.message.author'|trans }}</h2>
+                            <div class="author"></div>
+                            <div class="chat-message-call-visio">
+                                {% include '@Event/Networking/Partials/notificationCallVisio.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         {% endif %}
 
         {% block javascripts %}

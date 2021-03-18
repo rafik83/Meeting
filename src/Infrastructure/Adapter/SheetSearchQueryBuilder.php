@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Elastica\Filter\Exists;
+use Elastica\Query\AbstractQuery;
 use Elastica\Query\BoolQuery;
-use Elastica\Query\Filtered;
+use Elastica\Query\Exists;
+use Elastica\Query\Ids;
 use Elastica\Query\Match;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
@@ -41,19 +34,13 @@ use Proximum\Vimeet\Infrastructure\Elastica\QueryBuilder\NomenclatureQueryBuilde
 
 class SheetSearchQueryBuilder
 {
-    /**
-     * @var BoolQuery
-     */
+    /** @var BoolQuery */
     private $query;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $locale;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $initialBooster = 1;
 
     /**
@@ -67,22 +54,18 @@ class SheetSearchQueryBuilder
     private $availableSlots;
 
     /**
-     * @param Event               $event
-     * @param array               $filters
-     * @param string              $locale
-     * @param int                 $initialBooster
-     * @param array               $nomenclatureItems
      * @param AvailableSlotView[] $availableSlots
-     * @param array               $sheetsToExclude
+     * @param int[] $prefilteredSheetIds
      */
     public function __construct(
         Event $event,
         array $filters,
-        $locale,
-        $initialBooster = 1,
+        string $locale,
+        int $initialBooster = 1,
         array $nomenclatureItems = [],
         array $availableSlots = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
@@ -93,6 +76,7 @@ class SheetSearchQueryBuilder
         $this->matchEvent($event);
         $this->filter($filters);
         $this->excludeSheets($sheetsToExclude);
+        $this->restrictToSheets($prefilteredSheetIds);
     }
 
     /**
@@ -913,12 +897,9 @@ class SheetSearchQueryBuilder
         return (new Term())->setTerm('imported', $imported);
     }
 
-    /**
-     * @return Filtered
-     */
-    private function hasConnectionFilter()
+    private function hasConnectionFilter(): AbstractQuery
     {
-        return (new Filtered())->setFilter(new Exists('lastLoginAt'));
+        return new Exists('lastLoginAt');
     }
 
     /**
@@ -956,6 +937,26 @@ class SheetSearchQueryBuilder
     }
 
     /**
+     * @param int[]|null $sheets
+     */
+    private function restrictToSheets(?array $sheetIds)
+    {
+        if ($sheetIds === null) {
+            return;
+        }
+
+        $restrictToSheets = new BoolQuery();
+
+        // in case of an empty list, we want to display no result
+        if (empty($sheetIds)) {
+            $this->query->addMustNot(new Exists('id'));
+            return;
+        }
+
+        $this->query->addMust(new Ids(array_values($sheetIds)));
+    }
+
+    /**
      * @param Sheet[] $sheetsToExclude
      */
     private function excludeSheets(array $sheetsToExclude)
@@ -964,15 +965,8 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        $excludeSheets = new BoolQuery();
-
-        foreach ($sheetsToExclude as $sheetToExclude) {
-            $excludeSheets->addShould(
-                (new Term())->setTerm('id', $sheetToExclude->getId())
-            );
-        }
-
-        $this->query->addMustNot($excludeSheets);
+        $sheetIds = array_map(fn($sheet) => $sheet->getId(), $sheetsToExclude);
+        $this->query->addMustNot(new Ids(array_values($sheetIds)));
     }
 
     /**

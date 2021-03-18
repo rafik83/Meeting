@@ -75,7 +75,7 @@ class Type implements WhoInterface, TypeInterface
     private $numberOfMeetingsPerPlanning;
 
     /** @var bool */
-    private $canMoveMeeting = false;
+    private $canUpdateMeeting = false;
 
     /** @var bool */
     private $canRemoveMeeting = false;
@@ -111,10 +111,10 @@ class Type implements WhoInterface, TypeInterface
     public $canSubmitValidation = true;
 
     /** @var bool */
-    public $displayAnalyticsOnSheet = false;
+    private $displayAnalyticsOnSheet = false;
 
     /** @var bool */
-    public $displayAnalyticsOnMeetingList = false;
+    private $displayAnalyticsOnCatalog = false;
 
     public function __construct(Event $event)
     {
@@ -449,7 +449,7 @@ class Type implements WhoInterface, TypeInterface
         bool $hidden,
         string $availabilityType,
         ?int $numberOfMeetingsPerPlanning,
-        bool $canMoveMeeting = false,
+        bool $canUpdateMeeting = false,
         bool $canRemoveMeeting = false,
         bool $areAllSheetParticipantsAssignedToMeeting = false,
         bool $canScanParticipant = false,
@@ -462,13 +462,13 @@ class Type implements WhoInterface, TypeInterface
         bool $mustEvaluateMeeting = false,
         bool $canSubmitValidation = true,
         bool $displayAnalyticsOnSheet = false,
-        bool $displayAnalyticsOnMeetingList = false
+        bool $displayAnalyticsOnCatalog = false
     ) {
         $this->position = $rank;
         $this->hidden = $hidden;
         $this->availabilityType = $availabilityType;
         $this->numberOfMeetingsPerPlanning = $numberOfMeetingsPerPlanning;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->areAllSheetParticipantsAssignedToMeeting = $areAllSheetParticipantsAssignedToMeeting;
         $this->canScanParticipant = $canScanParticipant;
@@ -481,7 +481,7 @@ class Type implements WhoInterface, TypeInterface
         $this->mustEvaluateMeeting = $mustEvaluateMeeting;
         $this->canSubmitValidation = $canSubmitValidation;
         $this->displayAnalyticsOnSheet = $displayAnalyticsOnSheet;
-        $this->displayAnalyticsOnMeetingList = $displayAnalyticsOnMeetingList;
+        $this->displayAnalyticsOnCatalog = $displayAnalyticsOnCatalog;
     }
 
     public function getNumberOfMeetingsPerPlanning(): ?int
@@ -497,9 +497,9 @@ class Type implements WhoInterface, TypeInterface
         return $this->disableUnavailabilityManagement;
     }
 
-    public function canMoveMeeting(): bool
+    public function canUpdateMeeting(): bool
     {
-        return $this->canMoveMeeting;
+        return $this->canUpdateMeeting;
     }
 
     public function canRemoveMeeting(): bool
@@ -559,5 +559,15 @@ class Type implements WhoInterface, TypeInterface
     public function canSubmitValidation(): bool
     {
         return $this->canSubmitValidation;
+    }
+
+    public function canDisplayAnalyticsOnSheet(): bool
+    {
+        return $this->displayAnalyticsOnSheet;
+    }
+
+    public function canDisplayAnalyticsOnCatalog(): bool
+    {
+        return $this->displayAnalyticsOnCatalog;
     }
 }

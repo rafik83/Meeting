@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Navigation;
 
 final class Category
@@ -57,8 +49,11 @@ final class Category
     public const VISIO = 'navigation.category.visio_test';
     public const VISIO_ICON = 'icon-Video_2';
 
-    const CUSTOM_BUTTON = 'navigation.category.custom_button';
-    const CUSTOM_BUTTON_ICON = 'icon-Preferences_1';
+    const NETWORKING      = 'navigation.category.networking';
+    const NETWORKING_ICON = 'icon-Travail';
+
+    const CUSTOM_BUTTON_ICON = 'icon-DemandeRDV';
+    const CUSTOM_BUTTON_ICON_2 = 'icon-Suivant_1';
 
     public static $categories = [
         self::MEMBER_SPACE,
@@ -72,6 +67,6 @@ final class Category
         self::BADGE,
         self::FORMS,
         self::VISIO,
-        self::CUSTOM_BUTTON,
+        self::NETWORKING,
     ];
 }

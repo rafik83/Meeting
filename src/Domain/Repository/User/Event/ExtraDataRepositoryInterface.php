@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository\User\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -30,6 +22,12 @@ interface ExtraDataRepositoryInterface
     public function getExtraDataForEventIdAndNameIndexedByUserId(int $eventId, string $name): array;
 
     public function getExtraDataForEventNameAndValue(
+        Event $event,
+        string $name,
+        $value
+    ): ?ExtraData;
+
+    public function getExtraDataForEventNameAndMD5Value(
         Event $event,
         string $name,
         $value

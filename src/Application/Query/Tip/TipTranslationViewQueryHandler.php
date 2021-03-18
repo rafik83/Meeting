@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Query\Tip\Condition\ConditionInterface;
@@ -25,6 +17,7 @@ class TipTranslationViewQueryHandler
     const CONTEXT_CONTACTS = 'onContacts';
     const CONTEXT_PROGRAM = 'onProgram';
     const CONTEXT_CONFIRMATION_PHONE = 'onConfirmationPhone';
+    const CONTEXT_NETWORKING = 'onNetworking';
 
     /**
      * keys are context, value are table fields
@@ -41,6 +34,7 @@ class TipTranslationViewQueryHandler
         self::CONTEXT_CONTACTS           => 'onContacts',
         self::CONTEXT_PROGRAM            => 'onProgram',
         self::CONTEXT_CONFIRMATION_PHONE => 'onConfirmationPhone',
+        self::CONTEXT_NETWORKING         => 'onNetworking',
     ];
 
     /** @var TipRepositoryInterface */

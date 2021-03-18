@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Scan\Happening;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -50,6 +42,7 @@ class QrCodeAction
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_HOST')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $happening->getEvent()
         ) {
             throw new AccessDeniedException('Access denied');
         }

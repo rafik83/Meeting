@@ -24,6 +24,8 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     public const COL_CLICKED_ELEMENTS = 'clicked_elements';
     public const COL_REQUESTED_MEETINGS = 'requested_meetings';
     public const COL_SCHEDULED_MEETINGS = 'scheduled_meetings';
+    public const COL_CHAT_SESSIONS_CALL_VISIO = 'chat_sessions_call_visio';
+    public const COL_PARTICIPANT_LOCAL = 'participant_locale';
     public const TRANSLATION_KEY = 'admin.participant.export.fields.';
 
     public const COMMON_COL = [
@@ -41,6 +43,8 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         self::COL_CLICKED_ELEMENTS,
         self::COL_REQUESTED_MEETINGS,
         self::COL_SCHEDULED_MEETINGS,
+        self::COL_CHAT_SESSIONS_CALL_VISIO,
+        self::COL_PARTICIPANT_LOCAL,
     ];
 
     /** @var TranslatorInterface */
@@ -164,6 +168,8 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             self::COL_CLICKED_ELEMENTS => $participantView->clickedElements,
             self::COL_REQUESTED_MEETINGS => $participantView->requestedMeetings,
             self::COL_SCHEDULED_MEETINGS => $participantView->scheduledMeetings,
+            self::COL_CHAT_SESSIONS_CALL_VISIO => $participantView->chatSessionsCallVisio,
+            self::COL_PARTICIPANT_LOCAL => $participantView->locale
         ];
 
         foreach ($participantView->daysChecking as $dayKey => $checkin) {

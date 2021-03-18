@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Create as CreateCategory;
@@ -147,6 +139,10 @@ class UnavailabilityController extends Controller
     public function deleteMassAction(Event $event, Mass $mass)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $mass->getEvent()) {
+            throw $this->createNotFoundException('This mass is not on this event');
+        }
 
         $this->get('tactician.commandbus')->handle(new Delete($mass));
         $this->addFlash('success', 'flash.admin.unavailability.mass.delete.success');

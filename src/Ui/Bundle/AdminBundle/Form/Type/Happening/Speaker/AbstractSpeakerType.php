@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker;
 
+use Proximum\Vimeet\Domain\Event\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -19,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Validator\Constraints\File;
 
 abstract class AbstractSpeakerType extends AbstractType
 {
@@ -35,8 +29,36 @@ abstract class AbstractSpeakerType extends AbstractType
                 'required'   => true,
             ])
             ->add('organization', TextType::class, ['required' => true])
-            ->add('logo', FileType::class, ['required' => false])
-            ->add('photo', FileType::class, ['required' => false])
+            ->add(
+                'logo',
+                FileType::class,
+                [
+                    'required' => false,
+                    'constraints' => [
+                        new File(
+                            [
+                                'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                                'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                            ]
+                        ),
+                    ],
+                ]
+            )
+            ->add(
+                'photo',
+                FileType::class,
+                [
+                    'required' => false,
+                    'constraints' => [
+                        new File(
+                            [
+                                'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                                'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                            ]
+                        ),
+                    ],
+                ]
+            )
             ->add('email', EmailType::class, ['required' => false])
         ;
     }

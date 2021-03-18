@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
@@ -90,7 +82,7 @@ class UpdateHandlerTest extends TestCase
 
         $this
             ->elasticSearchPersister
-            ->persist('id', $userEventViews)
+            ->persist('uid', $userEventViews)
             ->shouldBeCalled()
         ;
 

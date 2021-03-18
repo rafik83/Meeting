@@ -36,14 +36,16 @@ form_template_data_export.column.userEmail: Email
 form_template_data_export.column.userFirstName: 'First name'
 form_template_data_export.column.userId: 'Id user'
 form_template_data_export.column.userLastName: 'Last name'
-gender.man: Mr
-gender.woman: Mrs
+form_template_data_export.column.userMobilePhone: Mobile
+form_template_data_export.column.userPhone: Phone
+gender.man: Mr.
+gender.woman: Ms.
 order.column.billing_info_city: City
 order.column.billing_info_company: Company
 order.column.billing_info_country: Country
 order.column.billing_info_email: Email
 order.column.billing_info_first_name: Firstname
-order.column.billing_info_gender: Gender
+order.column.billing_info_gender: Title
 order.column.billing_info_last_name: Name
 order.column.billing_info_mobile: 'Mobile phone'
 order.column.billing_info_phone: 'Phone number'
@@ -58,7 +60,11 @@ order.column.customRow.total: 'Additional line %customRowIndex% total amount (ta
 order.column.customRow.unitPrice: 'Additional line %customRowIndex% unit price (tax free)'
 order.column.invoice_date: 'Invoice date'
 order.column.invoice_number: 'Invoice number'
+order.column.order_date: 'Date of the order'
 order.column.order_id: 'order ID'
+order.column.order_total_vat: 'Total VAT'
+order.column.order_total_with_vat: 'Total including VAT'
+order.column.order_total_without_vat: 'Total Excl. VAT'
 order.column.product.quantity: '%productTitle% : quantity (excl. tax)'
 order.column.product.total: '%productTitle% : calculated price (excl. tax)'
 order.column.product.unitPrice: '%productTitle% : unit price (excl. tax)'
@@ -69,21 +75,29 @@ order.column.sheet_title: 'Sheet title'
 rooming_list_data_export.column.accommodationTitle: 'Hosting name'
 rooming_list_data_export.column.arrival: 'Date of arrival'
 rooming_list_data_export.column.departure: 'Date of departure'
+rooming_list_data_export.column.email: Email
+rooming_list_data_export.column.mobile: Mobile
+rooming_list_data_export.column.roommate.email: Email
+rooming_list_data_export.column.roommate.mobile: Mobile
+rooming_list_data_export.column.roommate.roomPlan: 'Formula of the sheet'
+rooming_list_data_export.column.roommate.sheetFollower: Collaborater
 rooming_list_data_export.column.roommate.sheetId: 'ID sheet'
 rooming_list_data_export.column.roommate.sheetTitle: 'Sheet title'
 rooming_list_data_export.column.roommate.spotReference: 'Meeting point'
 rooming_list_data_export.column.roommate.typeTitle: 'Type of participation'
 rooming_list_data_export.column.roommate.userComment: Commentary
 rooming_list_data_export.column.roommate.userFirstName: 'First name'
-rooming_list_data_export.column.roommate.userGender: Gender
+rooming_list_data_export.column.roommate.userGender: Title
 rooming_list_data_export.column.roommate.userId: 'ID user'
 rooming_list_data_export.column.roommate.userLastName: 'Last name'
 rooming_list_data_export.column.roommate.userTasting: Tasting
 rooming_list_data_export.column.roomNumber: 'Room number'
+rooming_list_data_export.column.roomPlan: 'Formula of the sheet'
 rooming_list_data_export.column.roomType: 'Room type'
 rooming_list_data_export.column.roomType.double: Double
 rooming_list_data_export.column.roomType.single: Single
 rooming_list_data_export.column.roomType.twin: Twin
+rooming_list_data_export.column.sheetFollower: Collaborater
 rooming_list_data_export.column.sheetId: 'ID sheet'
 rooming_list_data_export.column.sheetTitle: 'Sheet title'
 rooming_list_data_export.column.spotReference: 'Meeting point'

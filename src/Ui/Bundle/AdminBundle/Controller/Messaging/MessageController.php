@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
 use Proximum\Vimeet\Application\Command\Messaging\Message\Create;
@@ -83,6 +75,10 @@ class MessageController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($event !== $message->getEvent()) {
+            return $this->createAccessDeniedException();
+        }
+
         $create = new Update($message);
         $form   = $this->createForm(UpdateType::class, $create, ['submit' => true]);
 
@@ -110,6 +106,10 @@ class MessageController extends Controller
     public function previewAction(Request $request, Event $event, Message $message)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $message->getEvent()) {
+            return $this->createAccessDeniedException();
+        }
 
         $locale = $event->getAvailableLocale($request->getLocale());
 

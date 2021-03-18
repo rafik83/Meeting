@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\MinkExtension\Context\RawMinkContext;
@@ -16,6 +8,7 @@ use Proximum\Vimeet\Behat\Context\Domain\Proxy\LoginContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -92,6 +85,7 @@ class LoginContext extends RawMinkContext implements KernelAwareContext
         $client = $driver->getClient();
         $client->getCookieJar()->set(new Cookie(session_name(), true));
 
+        /** @var SessionInterface $session */
         $session = $client->getContainer()->get('session');
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
@@ -99,6 +93,7 @@ class LoginContext extends RawMinkContext implements KernelAwareContext
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->clear();
         $client->getCookieJar()->set($cookie);
     }
 }

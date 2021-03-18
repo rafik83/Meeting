@@ -67,6 +67,14 @@ h1 .label {
   margin: 20px 0 20px;
 }
 
+.page-header-tools {
+  margin-top: 20px;
+
+  form {
+    display: inline-block;
+  }
+}
+
 .updatable {
   cursor: pointer;
 }
@@ -365,4 +373,12 @@ th.vertical-divider, td.vertical-divider {
 
 .label {
   display: inline-block;
+}
+
+.media-preview {
+  max-height: 125px;
+}
+
+.date-happenings{
+  background-color: #ddd;
 }

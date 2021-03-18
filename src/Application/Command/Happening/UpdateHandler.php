@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Application\Exception\Happening\SpeakerNotUserException;
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -60,7 +61,9 @@ class UpdateHandler
             $update->invitationCode,
             $update->liveUrl,
             $update->sidebarAllowed,
-            $update->isWebinar() && $update->webinarRecorded
+            $update->isWebinar() && $update->webinarRecorded,
+            $update->isWebinar() && $update->allowHls,
+            $update->isWebinar() && $update->webinarRecorded && $update->webinarRecordSentToSpeakers
         );
 
         foreach ($update->translations as $locale => $translation) {
@@ -75,11 +78,27 @@ class UpdateHandler
                 $webinarHeaderImage = $this->fileStorage->upload($translation['webinarHeaderImage']);
             }
 
+            $currentWebinarWaitingMediaFile = $translation['currentWebinarWaitingMediaFile'];
+            $webinarWaitingMediaFile = $currentWebinarWaitingMediaFile;
+            $webinarWaitingMediaType = $translation['currentWebinarWaitingMediaType'];
+
+            if ($translation['webinarWaitingMedia'] instanceof UploadedFile) {
+                if ($currentWebinarWaitingMediaFile) {
+                    $this->fileStorage->remove($currentWebinarWaitingMediaFile);
+                }
+
+                $webinarWaitingMediaType = MimeType::getFormatByMimeType($translation['webinarWaitingMedia']->getMimeType());
+                $webinarWaitingMediaFile = $this->fileStorage->upload($translation['webinarWaitingMedia']);
+
+            }
+
             $happening->updateTranslation(
                 $locale,
                 $translation['title'],
                 $translation['description'],
-                $webinarHeaderImage
+                $webinarHeaderImage,
+                $webinarWaitingMediaFile,
+                $webinarWaitingMediaType
             );
         }
 

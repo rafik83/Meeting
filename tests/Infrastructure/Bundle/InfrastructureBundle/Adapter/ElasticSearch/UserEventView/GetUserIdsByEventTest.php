@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Adapter\ElasticSearch\UserEventView;
 
 use Elastica\Document;
 use Elastica\Query;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchConstant;
 use Proximum\Vimeet\Application\Query\User\UserEventListViews\GetUserIdsByEventQuery;
 use Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer;
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorEqual;
@@ -69,7 +62,7 @@ class GetUserIdsByEventTest extends TestCase
                     ['lastName' => 'asc'],
                     ['firstName' => 'asc'],
                 ],
-                'size' => 100000000,
+                'size' => ElasticSearchConstant::LONG_RESULTS_NUMBER,
             ]
         );
 

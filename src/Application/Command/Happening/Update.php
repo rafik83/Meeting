@@ -21,6 +21,8 @@ class Update extends AbstractHappeningCommand
         $this->liveUrl = $happening->getLiveUrl();
         $this->sidebarAllowed = $happening->isSidebarAllowed();
         $this->webinarRecorded = $happening->isWebinarRecorded();
+        $this->webinarRecordSentToSpeakers = $happening->isWebinarRecordSentToSpeakers();
+        $this->allowHls = $happening->allowWebinarOnHLS();
 
         if ($happening->isWebinar()) {
             $this->happeningType = self::TYPE_WEBINAR;
@@ -43,14 +45,20 @@ class Update extends AbstractHappeningCommand
                     'title' => $translation->getTitle(),
                     'description' => $translation->getDescription(),
                     'currentWebinarHeaderImage' => $translation->getWebinarHeaderImage(),
+                    'currentWebinarWaitingMediaFile' => $translation->getWebinarWaitingMediaFile(),
+                    'currentWebinarWaitingMediaType' => $translation->getWebinarWaitingMediaType(),
                     'webinarHeaderImage' => null,
+                    'webinarWaitingMedia' => null,
                 ];
             } else {
                 $this->translations[$locale] = [
                     'title' => '',
                     'description' => '',
                     'currentWebinarHeaderImage' => null,
+                    'currentWebinarWaitingMediaFile' => null,
+                    'currentWebinarWaitingMediaType' => null,
                     'webinarHeaderImage' => null,
+                    'webinarWaitingMedia' => null,
                 ];
             }
         }

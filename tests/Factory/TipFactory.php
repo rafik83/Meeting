@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Factory;
 
 use Proximum\Vimeet\Domain\Model\Event;
@@ -24,6 +16,7 @@ class TipFactory
     const ON_CONTACTS           = 'onContacts';
     const ON_PROGRAM            = 'onProgram';
     const ON_CONFIRMATION_PHONE = 'onConfirmationPhone';
+    const ON_NETWORKING = 'onNetworking';
 
     const LOCALES = ['fr', 'en'];
 
@@ -48,6 +41,7 @@ class TipFactory
             self::ON_SHEET              => true,
             self::ON_PROGRAM            => true,
             self::ON_CONFIRMATION_PHONE => true,
+            self::ON_NETWORKING         => true,
         ],
         array $locales = self::LOCALES
     ) {
@@ -65,6 +59,7 @@ class TipFactory
             isset($pages[self::ON_CONTACTS]) ? $pages[self::ON_CONTACTS] : false,
             isset($pages[self::ON_PROGRAM]) ? $pages[self::ON_PROGRAM] : false,
             isset($pages[self::ON_CONFIRMATION_PHONE]) ? $pages[self::ON_CONFIRMATION_PHONE] : false,
+            isset($pages[self::ON_NETWORKING]) ? $pages[self::ON_NETWORKING] : false,
             $dateTime
         );
 

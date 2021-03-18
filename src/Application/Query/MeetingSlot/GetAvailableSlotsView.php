@@ -6,11 +6,14 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class GetAvailableSlotsView
 {
-    /** @var MeetingSlot[] */
-    public $availableSlots;
+    /** @var MeetingSlot[] available slots for met sheet participants */
+    public array $availableSlots;
+    /** @var array available slots ids, for current sheet participants, indexed by participant id */
+    public array $currentSheetAvailableSlotIds;
 
-    public function __construct(array $availableSlots)
+    public function __construct(array $availableSlots, array $currentSheetAvailableSlotIds)
     {
         $this->availableSlots = $availableSlots;
+        $this->currentSheetAvailableSlotIds = $currentSheetAvailableSlotIds;
     }
 }

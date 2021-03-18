@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -45,7 +37,7 @@ class Version20170407152027 extends AbstractMigration
                 $this->connection->executeQuery(
                     sprintf(
                         "INSERT INTO messaging_message_translation (subject, content, message_id, locale, created_at)
-                          SELECT subject, content, id, '%s', created_at 
+                          SELECT subject, content, id, '%s', created_at
                           FROM messaging_message
                           WHERE messaging_message.event_id = %s",
                         $locale,

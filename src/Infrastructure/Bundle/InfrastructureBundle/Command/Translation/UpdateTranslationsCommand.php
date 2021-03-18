@@ -1,17 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation;
 
 use Proximum\Vimeet\Application\ThirdParty\Openl10n;
-use Proximum\Vimeet\Infrastructure\Adapter\CommandBus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,17 +12,21 @@ class UpdateTranslationsCommand extends Command
 {
     const NAME = 'vimeet:translations:update';
 
-    /** @var CommandBus */
-    protected $commandBus;
-
     /** @var string */
     protected $kernelCacheDir;
 
-    public function __construct(CommandBus $commandBus, string $kernelCacheDir)
+    /** @var Openl10n\PushHandler */
+    private $pushHandler;
+
+    /** @var Openl10n\PullHandler */
+    private $pullHandler;
+
+    public function __construct(Openl10n\PushHandler $pushHandler, Openl10n\PullHandler $pullHandler, string $kernelCacheDir)
     {
         parent::__construct(self::NAME);
-        $this->commandBus = $commandBus;
         $this->kernelCacheDir = $kernelCacheDir;
+        $this->pushHandler = $pushHandler;
+        $this->pullHandler = $pullHandler;
     }
 
     /**
@@ -73,8 +68,9 @@ class UpdateTranslationsCommand extends Command
     {
         $command = new Openl10n\Push();
 
-        /** @var Openl10n\PushResult $pushResult */
-        $pushResult = $this->commandBus->handle($command);
+        // no command bus to prevent MySQL connection
+        //  see tactician.middleware.doctrine_rollback_only
+        $pushResult = $this->pushHandler->handle($command);
 
         $output->writeln('<info>Added locales</info>');
 
@@ -121,8 +117,9 @@ class UpdateTranslationsCommand extends Command
     {
         $command = new Openl10n\Pull($input->getArgument('emailToNotify'), $input->getArgument('locale'));
 
-        /** @var Openl10n\PullResult $pullResult */
-        $pullResult = $this->commandBus->handle($command);
+        // no command bus to prevent MySQL connection
+        //  see tactician.middleware.doctrine_rollback_only
+        $pullResult = $this->pullHandler->handle($command);
 
         $output->writeln('<info>Skipped files</info>');
 

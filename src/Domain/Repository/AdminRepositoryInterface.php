@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -48,7 +40,7 @@ interface AdminRepositoryInterface
      *
      * @return Admin|null
      */
-    public function findByEmail($email);
+    public function findByEmail(string $email, bool $includeDeleted = false);
 
     /**
      * @param array $filters

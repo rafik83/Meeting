@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Sheet\Analytics;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
@@ -317,7 +316,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsByUsersAndEvent(array $users, Event $event)
+    public function getSheetsByUsersAndEvent(array $users, Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -1165,7 +1164,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->select('sheet.id')
             ->from(Sheet::class, 'sheet')
-            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.event = :event')
+            ->join('sheet.participants', 'participant', 'WITH', 'participant.user = :user AND sheet.enable = true AND sheet.event = :event')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
         ;

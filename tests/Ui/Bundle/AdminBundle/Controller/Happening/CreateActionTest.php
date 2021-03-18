@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Happening;
 
 use PHPUnit\Framework\TestCase;
@@ -23,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -121,6 +112,10 @@ class CreateActionTest extends TestCase
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
         $form->createView()->willReturn($formView->reveal());
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
+
         $create = new Create($this->event->reveal());
         $this->formFactory
             ->create(
@@ -187,6 +182,9 @@ class CreateActionTest extends TestCase
         ;
 
         $this->event->getId()->willReturn(12);
+        $allowHlsFormField = $this->prophesize(Form::class);
+        $allowHlsFormField->getData()->willReturn(false);
+        $form->get('allowHls')->willReturn($allowHlsFormField->reveal());
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);

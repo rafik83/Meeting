@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use League\Tactician\CommandBus;
@@ -60,8 +52,9 @@ class RemoveAction
      */
     public function __invoke(Tip $tip): RedirectResponse
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('Access defined');
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')
+            || $tip->hasEvent()) {
+            throw new AccessDeniedException();
         }
 
         $this->commandBus->handle(new Remove($tip));

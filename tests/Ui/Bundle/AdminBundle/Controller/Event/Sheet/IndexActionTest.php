@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Event\Sheet;
 
 use PHPUnit\Framework\TestCase;
@@ -70,6 +62,8 @@ class IndexActionTest extends TestCase
     public function testInvoke(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
+        $this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -102,6 +96,8 @@ class IndexActionTest extends TestCase
     public function testInvokeHandle(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
+        $this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());

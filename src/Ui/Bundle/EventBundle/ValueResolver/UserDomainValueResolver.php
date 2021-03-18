@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver;
 
 use Proximum\Vimeet\Domain\Model\User;
@@ -39,12 +31,7 @@ final class UserDomainValueResolver implements ArgumentValueResolverInterface
             return false;
         }
 
-        $token = $this->tokenStorage->getToken();
-        if (!$token instanceof TokenInterface) {
-            return false;
-        }
-
-        return $token->getUser() instanceof User;
+        return $this->isTokenSupported();
     }
 
     /**
@@ -53,5 +40,24 @@ final class UserDomainValueResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
         yield new UserDomain($this->tokenStorage->getToken()->getUser());
+    }
+
+    public function getUserDomain(): ?UserDomain
+    {
+        if (!$this->isTokenSupported()) {
+            return null;
+        }
+
+        return new UserDomain($this->tokenStorage->getToken()->getUser());
+    }
+
+    private function isTokenSupported(): bool
+    {
+        $token = $this->tokenStorage->getToken();
+        if (!$token instanceof TokenInterface) {
+            return false;
+        }
+
+        return $token->getUser() instanceof User;
     }
 }

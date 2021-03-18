@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Handler\Catalog;
 
 use PHPUnit\Framework\TestCase;
@@ -118,6 +110,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             [],
             [],
             [],
+            [],
             $response
         );
 
@@ -192,6 +185,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
 
         $expected = new CatalogFilterViewsResult(
             CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+            [],
             [],
             [$typeView1->reveal(), $typeView2->reveal()],
             [],

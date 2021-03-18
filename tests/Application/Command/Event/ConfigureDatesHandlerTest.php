@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
 use PHPUnit\Framework\TestCase;
@@ -48,6 +40,10 @@ class ConfigureDatesHandlerTest extends TestCase
         $registrationCloseDate = new \DateTime('2016-06-10 12:00:00');
         $enableBadgeForParticipantDate = new \DateTime('2016-06-10 12:00:00');
         $enableVisioTestMenuButtonDate = new \DateTime('2020-06-12 12:00:00');
+        $networkingOpenDate = new \DateTime('2020-06-10 12:00:00');
+        $networkingCloseDate = new \DateTime('2020-06-10 12:00:00');
+        $callVisioOpenDate = new \DateTime('2020-06-10 12:00:00');
+        $callVisioCloseDate = new \DateTime('2020-06-10 12:00:00');
 
         $expectedEvent = EventFactory::createEvent();
         $expectedEvent->getConfiguration()->setDates(
@@ -61,7 +57,11 @@ class ConfigureDatesHandlerTest extends TestCase
             $registrationOpenDate,
             $registrationCloseDate,
             $enableBadgeForParticipantDate,
-            $enableVisioTestMenuButtonDate
+            $enableVisioTestMenuButtonDate,
+            $networkingOpenDate,
+            $networkingCloseDate,
+            $callVisioOpenDate,
+            $callVisioCloseDate
         );
 
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();
@@ -78,6 +78,10 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->registrationCloseDate = $registrationCloseDate;
         $command->enableBadgeForParticipantDate = $enableBadgeForParticipantDate;
         $command->enableVisioTestMenuButtonDate = $enableVisioTestMenuButtonDate;
+        $command->networkingOpenDate = $networkingOpenDate;
+        $command->networkingCloseDate = $networkingCloseDate;
+        $command->callVisioOpenDate = $callVisioOpenDate;
+        $command->callVisioCloseDate = $callVisioOpenDate;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);
@@ -115,6 +119,10 @@ class ConfigureDatesHandlerTest extends TestCase
         $command->registrationCloseDate = null;
         $command->enableBadgeForParticipantDate = null;
         $command->enableVisioTestMenuButtonDate = null;
+        $command->networkingOpenDate = null;
+        $command->networkingCloseDate = null;
+        $command->callVisioOpenDate = null;
+        $command->callVisioCloseDate = null;
 
         $handler = new ConfigureDatesHandler($this->eventRepository->reveal(), $this->eventDispatcher->reveal());
         $handler->handle($command);

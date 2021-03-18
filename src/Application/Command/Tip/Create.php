@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip;
 
 class Create
@@ -41,6 +33,9 @@ class Create
 
     /** @var bool */
     public $onConfirmationPhone;
+
+    /** @var bool */
+    public $onNetworking;
 
     /** @var array */
     public $translations;

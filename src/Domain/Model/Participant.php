@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 /**
@@ -78,8 +70,13 @@ class Participant implements MailRecipientInterface
     /** @var \DateTimeInterface */
     private $registrationDate;
 
+    /** @var \DateTimeInterface */
+    private $networkingChatViewedAt;
+
     /** @var int */
     private $rank = 0;
+
+    private string $locale = '';
 
     public function __construct(
         Sheet $sheet,
@@ -120,7 +117,7 @@ class Participant implements MailRecipientInterface
      */
     public function getLocale()
     {
-        return $this->getUser()->getLocale();
+        return $this->locale ?: $this->getUser()->getLocale();
     }
 
     /**
@@ -382,6 +379,11 @@ class Participant implements MailRecipientInterface
         return $this->registrationDate;
     }
 
+    public function getNetworkingChatViewedAt(): ?\DateTimeInterface
+    {
+        return $this->networkingChatViewedAt;
+    }
+
     public function getRank(): int
     {
         return $this->rank;
@@ -390,5 +392,10 @@ class Participant implements MailRecipientInterface
     public function setRank(int $rank): void
     {
         $this->rank = $rank;
+    }
+
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
     }
 }

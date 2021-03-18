@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
@@ -57,7 +49,7 @@ class UpdateHandler
             $update->hidden,
             $update->availabilityType,
             $update->numberOfMeetingsPerPlanning,
-            $update->canMoveMeeting,
+            $update->canUpdateMeeting,
             $update->canRemoveMeeting,
             $update->areAllSheetParticipantsAssignedToMeeting,
             $update->canScanParticipant,
@@ -70,7 +62,7 @@ class UpdateHandler
             $update->canEvaluateMeeting ? $update->mustEvaluateMeeting : false,
             $update->canSubmitValidation,
             $update->displayAnalyticsOnSheet,
-            $update->displayAnalyticsOnMeetingList
+            $update->displayAnalyticsOnCatalog
         );
         $type->setHidden($update->hidden);
 

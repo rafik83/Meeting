@@ -1,60 +1,81 @@
 'use strict';
 
-import {TokboxInstance, CHROME_EXTENSION_URL} from './TokboxInstance';
+import {CHROME_EXTENSION_URL, TokboxInstance} from './TokboxInstance';
 import initLayoutContainer from 'opentok-layout-js';
-import openTokTextChat from 'opentok-text-chat';
-import Publisher from './Publisher';
-import Subscriber from './Subscriber';
-import Counter from './Counter';
+import Publisher, {STREAM_TYPE_CUSTOM, STREAM_TYPE_SCREENSHARE} from './Publisher';
+import VideoSubscriber from './Subscriber';
 import $ from 'jquery';
 import Settings from './Settings';
+import HlsPlayer from './HlsPlayer';
 
-import 'bootstrap/js/tooltip';
-import 'bootstrap/js/popover'; // popover require tooltip
+import Chat from '../_Chat.js';
+import Question from '../_Question.js';
+import NotificationSubscriber from '../_Subscriber';
+import Modal from '../Modal';
+import WebinarStatus from './WebinarStatus';
+import SharingManager from './Sharing/Manager';
+import MuteStream from './MuteStream';
 
+/**
+ * @param {Element} element
+ * @param {boolean} isSpeaker
+ * @constructor
+ */
 function Webinar(element, isSpeaker) {
     this.element = element;
     this.isSpeaker = isSpeaker;
     this.invisibleMode = false;
     this.typeScreenShare = 'screen';
     this.typeCustomShare = 'custom';
+    this.openTab = 'chat';
 
     this.startFullScreenClass = 'glyphicon-fullscreen';
     this.endFullScreenClass = 'icon-Reduire_3';
 
     this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
 
-    if(this.sidebarAllowed) {
+    this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
+    this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
+
+    if (this.sidebarAllowed) {
         this.shiftWithSidebar = 'shift-with-sidebar';
     } else {
         this.shiftWithSidebar = '';
     }
 
+    this.eventId = element.getAttribute('data-event-id');
+    this.happeningId = element.getAttribute('data-happening-id');
+
     this.token = element.getAttribute('data-token');
     this.sessionId = element.getAttribute('data-session-id');
     this.apiKey = element.getAttribute('data-api-key');
+    const notificationProviderUrl = element.getAttribute('data-notifications-provider-url');
+    this.notificationSubscriber = new NotificationSubscriber(notificationProviderUrl);
+    this.topicChat = `https://vimeet.events/happening/${this.happeningId}/webinar/chat`;
+    this.topicQuestions = `https://vimeet.events/happening/${this.happeningId}/webinar/questions`;
+    this.topicStream = `https://vimeet.events/happening/${this.happeningId}/webinar/stream`;
+    this.notificationSubscriberKey = element.getAttribute('data-notifications-subscriber-key');
 
     this.timeRemainingBeforeStart = element.getAttribute('data-time-remaining-before-start');
-    this.timeRemainingBeforeStartMessage = element.getAttribute('data-time-remaining-before-start-message');
-    this.timeRemaining = element.getAttribute('data-time-remaining');
-    this.warningRemainingTime = element.getAttribute('data-warning-time-remaining');
+    const modalBeforeStartElement = element.querySelector('[data-modal-warning-before-start]');
+    if (modalBeforeStartElement) {
+        this.modalWarningBeforeStart = new Modal();
+        this.modalWarningBeforeStart.init(modalBeforeStartElement);
+    }
 
     if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
         const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
-        const timerInterval = setInterval(() => {
-            const remainingTime = Math.round((startTime.getTime() - new Date().getTime()) / 1000);
-
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                alert(this.timeRemainingBeforeStartMessage);
-            }
-        }, 500);
+        const remainingTime = startTime.getTime() - new Date().getTime();
+        setTimeout(() => {
+            this.modalWarningBeforeStart.show();
+            this.modalWarningBeforeStart.hideAfter(30000);
+        }, remainingTime);
     }
 
     this.chatWaitingMessage = element.getAttribute('data-chat-waiting-message');
     this.userCompleteName = element.getAttribute('data-user-complete-name');
-    this.helperContainer = element.querySelector('.video-helper');
+    this.waitingContainer = element.querySelector('.video-waiting-container');
 
     this.isMobile = 768 > (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 
@@ -73,31 +94,22 @@ function Webinar(element, isSpeaker) {
     this.sideContainer = element.querySelector('.side-container');
 
     if (this.sidebarAllowed) {
-        this.chatContainer = element.querySelector('[data-chat-container]');
-        this.questionsContainer = element.querySelector('[data-questions-container]');
-        this.questionsList = this.questionsContainer.querySelector('.questions-list');
-        this.questionsForm = element.querySelector('[data-questions-form]');
-        this.questionsFormContent = this.questionsForm.querySelector('input[name="content"]');
-        this.questionsFormAction = this.questionsForm.getAttribute('action');
-        this.questionsFormSubmit = this.questionsForm.querySelector('button[type="submit"]');
+        this.chat = new Chat(element);
+        this.question = new Question(element);
 
-        this.chatInstance = null;
+
         this.chatButton = element.querySelector('[data-chat-button]');
+        this.chatButton.addEventListener('click', this.showChat.bind(this));
 
-        if (this.chatButton) {
-            this.chatButton.addEventListener('click', this.showChat.bind(this));
-        }
-
-        this.questionVoteMessage = element.getAttribute('data-question-vote-message');
-        this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
-        this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
-        this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
-        this.questionListeners = [];
+
+
     }
 
     this.webinarWaitingMessage = element.querySelector('[data-webinar-waiting-message]');
+    this.webinarWaitingMedia = element.querySelector('[data-webinar-waiting-media]');
+    this.webinarWaitingPlayer = element.querySelector('[data-webinar-waiting-player]');
 
     this.joinButton = element.querySelector('[data-webinar-join-button]');
 
@@ -105,20 +117,35 @@ function Webinar(element, isSpeaker) {
     this.layout = initLayoutContainer(this.layoutContainer).layout;
 
     this.shareVideoElement = null;
+    // Incoming screen or video sharing
     this.hasMediaSharing = false;
+
+    this.layoutContainer.addEventListener('refresh', () => this.layout());
+    this.layoutContainer.addEventListener('maximize', (event) => this.layoutFocus(event.detail.target));
+    this.layoutContainer.addEventListener('maximizeAll', () => {
+        this.maximizeAllSubscribers();
+        this.layout();
+    });
+
+    if (this.isSpeaker) {
+        this.sharingManager = new SharingManager(this.element, () => this.session, this.layoutContainer, () => this.publisher.getCameraVideo());
+        this.sharingManager.onSharingStarted(this.handleStartStream.bind(this));
+        this.sharingManager.onSharingStopped(this.handleStopStream.bind(this));
+        this.sharingManager.onSharingError((error) => this.showError(error));
+    }
+
+    this.latestMediaSharingStreamId = null;
+    this.latestMediaSharingType = null;
 
     this.liveUrl = element.getAttribute('data-live-url');
 
-    const endWebinarButton = element.querySelector('.end-webinar');
+    this.endWebinarButton = element.querySelector('.end-webinar');
 
-    if (endWebinarButton) {
-        endWebinarButton.addEventListener('click', this.disconnect.bind(this));
+    if (this.endWebinarButton) {
+        this.endWebinarButton.addEventListener('click', this.disconnect.bind(this));
     }
 
-    this.timerContainer = element.querySelector('.timer-container');
-    this.timerElement = this.timerContainer.querySelector('.timer');
-    this.countDownContainer = this.timerContainer.querySelector('.timer span.countdown');
-    this.viewersCount = 0;
+    this.viewersCount = element.getAttribute('data-webinar-initial-viewers-count');
     this.viewersContainer = element.querySelector('.viewers-container');
     this.viewersTextContainer = element.querySelector('.viewers');
 
@@ -132,6 +159,10 @@ function Webinar(element, isSpeaker) {
     this.webinarAutoStart = element.getAttribute('data-webinar-auto-start');
     this.webinarStopTimestamp = element.getAttribute('data-webinar-stop-timestamp');
     this.isRecording = false;
+    this.isHls = element.getAttribute('data-webinar-hls') === 'true';
+    if (this.isHls) {
+        this.hlsVideoElement = element.querySelector('#webinar-video');
+    }
 
     const recordStatus = element.getAttribute('data-webinar-is-recording');
     if (this.isWebinarRecorded && this.canRecordWebinar && recordStatus) {
@@ -162,7 +193,13 @@ function Webinar(element, isSpeaker) {
     document.addEventListener('fullscreenchange', this.changeFullscreenHandler.bind(this), false);
     document.addEventListener('MSFullscreenChange', this.changeFullscreenHandler.bind(this), false);
 
-    this.countDownBeforeEnd();
+    this.lastSeenquestionMessageCount = parseInt(element.getAttribute('data-questions-count'), 10);
+
+    this.webRTCStackInitialized = false;
+
+    this.subscribeToStreamNotifications();
+
+    this.canMuteStream = false;
 
     if (!this.isSpeaker) {
         this.joinButton.addEventListener('click', this.join.bind(this));
@@ -170,29 +207,18 @@ function Webinar(element, isSpeaker) {
         return;
     }
 
-    this.thereIsAlreadyAScreenShareInProgressMessage = element.getAttribute('data-screen-share-already-in-progress-message');
+    this.canMuteStream = element.hasAttribute('data-chat-can-mute-stream');
 
-    this.mediaStartSharingButtonSelector = '#media-start-sharing';
-    this.sharePopover = $(this.mediaStartSharingButtonSelector, this.element);
-    this.mediaStartSharingButton = this.element.querySelector(this.mediaStartSharingButtonSelector, this.element);
-
-    this.mediaShareUrlVideoMessage = element.getAttribute('data-media-share-url-video-message');
-    this.mediaShareUrlVideoSecurityErrorMessage = element.getAttribute('data-media-share-url-video-security-error-message');
-    this.mediaShareUrlVideoLoadingErrorMessage = element.getAttribute('data-media-share-url-video-loading-error-message');
-    this.mediaShareButtonScreenShareMessage = element.getAttribute('data-media-share-button-screenshare-message');
-    this.mediaShareButtonVideoShareMessage = element.getAttribute('data-media-share-button-videoshare-message');
-    this.mediaShareScreenShareStatusMessage = element.getAttribute('data-media-screenShareStatus-message');
     this.invisibleModeQuitConfirmationMessage = element.getAttribute('data-invisibleMode-quitConfirmation-message');
     this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
 
-    this.endSharingButton = element.querySelector('#media-stop-sharing');
-    this.endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
-
     this.toggleAudioElement = element.querySelector('#toggle-audio');
+    this.pictoAudioElement = this.toggleAudioElement.querySelector('i');
     this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
     this.enableAudio = true;
 
     this.toggleVideoElement = element.querySelector('#toggle-video');
+    this.pictoVideoElement = this.toggleVideoElement.querySelector('i');
     this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
     this.enableVideo = true;
 
@@ -204,22 +230,109 @@ function Webinar(element, isSpeaker) {
     this.publisher = new Publisher(this.layoutContainer);
 
     this.settings = new Settings(
-      this.settingsContainer.querySelector('#video-settings-section'),
-      this.join.bind(this),
-      true
+        this.settingsContainer.querySelector('#video-settings-section'),
+        this.onSettingsValidate.bind(this),
+        true
     );
+
     this.settings.init(true);
+
+    // open to public management
+    this.openToPublicButton = element.querySelector('.open-webinar');
+    this.openToPublicButton.addEventListener('click', this.onOpeningToPublic.bind(this));
+
+    this.openStreamToPublicEndpoint = element.getAttribute('data-webinar-open-stream-to-public-endpoint');
+
+    this.isStreamOpenToPublic = element.getAttribute('data-is-stream-open-to-public') === 'true';
+
+    if (!this.isStreamOpenToPublic) {
+        // "preparation" modal
+        this.prepareModal = this.element.querySelector('#visio-prepare');
+        this.closePrepareMessageButton = this.element.querySelector('#visio-prepare-validate');
+        if (this.closePrepareMessageButton) {
+            this.closePrepareMessageButton.addEventListener('click', this.onPrepareMessageClose.bind(this));
+        }
+
+        // "reminder to open to public" modal
+        this.openToPublicReminderModal = this.element.querySelector('#visio-openPublicReminder');
+        this.openToPublicReminderButton = this.element.querySelector('#visio-openPublicReminder-open');
+        this.openToPublicReminderButton.addEventListener('click', () => {
+            this.hideElement(this.waitingContainer);
+            this.hideElement(this.openToPublicReminderModal);
+            this.onOpeningToPublic();
+        });
+        this.notOpenToPublicReminderButton = this.element.querySelector('#visio-openPublicReminder-notOpen');
+        this.notOpenToPublicReminderButton.addEventListener('click', () => {
+            this.hideElement(this.waitingContainer);
+            this.hideElement(this.openToPublicReminderModal);
+        });
+
+        this.hasOpenToPublicButtonBtnPrimaryClass = false;
+
+        this.blinkOpenToPublicBtnIntervalId = null;
+    }
 }
 
-Webinar.prototype.join = function (invisibleMode) {
+Webinar.prototype.onOpeningToPublic = function () {
+    let params = {};
+    if (this.hasMediaSharing) {
+        params = {mediaSharingStream: this.latestMediaSharingStreamId, mediaSharingType: this.latestMediaSharingType};
+    }
+
+    $.post(this.openStreamToPublicEndpoint, params)
+        .fail((error) => {
+            this.showError({name: `${error.status}: ${error.statusText}`, message: 'Could not open to public'});
+            console.error(error.status, error.statusText, this.recordEndpoint);
+        });
+}
+
+Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.invisibleMode = invisibleMode;
+
+    try {
+        if (!('Notification' in window)) {
+            this.showPrepareModalOrJoin();
+            return;
+        }
+
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+        } else {
+            this.showPrepareModalOrJoin();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    this.showPrepareModalOrJoin();
+};
+
+Webinar.prototype.showPrepareModalOrJoin = function()
+{
+    if (this.isStreamOpenToPublic) {
+        this.join();
+    } else {
+        this.showElement(this.prepareModal);
+    }
+}
+
+Webinar.prototype.onPrepareMessageClose = function () {
+    this.hideElement(this.prepareModal);
+    this.join();
+};
+
+Webinar.prototype.join = function () {
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
-        this.hideElement(this.helperContainer);
+        this.hideElement(this.waitingContainer);
         this.liveVideo();
     } else {
         this.showElement(this.webinarWaitingMessage);
+        this.showElement(this.webinarWaitingMedia);
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.play();
+        }
     }
 
     this.init();
@@ -231,21 +344,38 @@ Webinar.prototype.join = function (invisibleMode) {
     }
 };
 
-/**
- * Initialize session and subscribe to new other stream
- */
-Webinar.prototype.init = function () {
-    if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
-        alert(this.notCompatibleBrowserMessage);
+Webinar.prototype.initHLSPlayer = function () {
+    this.hlsPlayer = new HlsPlayer(this.hlsVideoElement, () => {
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.remove();
+        }
+        this.hideElement(this.waitingContainer);
+        this.layout();
+    });
+    this.addShownChatSubscriber();
+    if (this.hlsVideoElement.dataset.hlsUrl) {
+        this.hlsPlayer.initHlsStreamPlayer(this.hlsVideoElement.dataset.hlsUrl);
+    }
+    this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
+}
+
+Webinar.prototype.initWebRTCStack = function() {
+    if (this.sessionId.length === 0 || this.webRTCStackInitialized) {
         return;
     }
 
+    this.webRTCStackInitialized = true;
+
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
 
+    // incoming streams
     this.session.on('streamCreated', function (event) {
-        this.hideElement(this.helperContainer);
+        if (this.webinarWaitingPlayer) {
+            this.webinarWaitingPlayer.remove();
+        }
+        this.hideElement(this.waitingContainer);
 
-        const subscriberManager = new Subscriber(
+        const subscriberManager = new VideoSubscriber(
             this.session,
             this.layoutContainer,
             this.subscribersNameMapping
@@ -254,10 +384,12 @@ Webinar.prototype.init = function () {
 
         if (this.isScreenShareStream(event.stream)) {
             this.hasMediaSharing = true;
-            this.minimizeAllSubscribers();
-            this.maximize(subscriber.element);
+            this.latestMediaSharingStreamId = event.stream.streamId;
+            this.latestMediaSharingType = subscriber.stream.videoType;
+            this.layoutFocus(subscriber.element);
         } else {
             this.subscribers.push(subscriber);
+            this.prepareMuteAction(subscriber, event.stream);
         }
 
         this.autoMaximize(subscriber);
@@ -304,17 +436,114 @@ Webinar.prototype.init = function () {
         this.layout();
     }.bind(this));
 
-    this.session.on('signal:QuestionsUpdate', function (event) {
-        this.initQuestions();
-    }.bind(this));
-
     this.connect();
 
+    if (!this.mobile) {
+        this.addShownChatSubscriber();
+        this.addHiddenQuestionSubscriber();
+    }
+
     this.prepareRecordButtons();
+}
+
+Webinar.prototype.prepareMuteAction = function(subscriber, stream) {
+    if (!this.canMuteStream) {
+        return;
+    }
+
+    const selfStreamId = stream.streamId;
+    const selfStreamHasAudio = stream.hasAudio;
+    const selfStreamName = stream.name;
+    subscriber.on('videoElementCreated', (event) => {
+        const muteStream = new MuteStream(event.target.element, selfStreamName, this.element.getAttribute('data-mute-stream'));
+        muteStream.init();
+
+        if (selfStreamHasAudio === false) {
+            muteStream.disableButton();
+        }
+
+        this.session.on('streamPropertyChanged', function (streamPropertyChangedEvent) {
+            if (streamPropertyChangedEvent.changedProperty !== 'hasAudio' || selfStreamId !== streamPropertyChangedEvent.stream.streamId) {
+                return;
+            }
+            if (streamPropertyChangedEvent.newValue === false) {
+                muteStream.disableButton();
+            } else {
+                muteStream.enableButton();
+            }
+        });
+    });
+}
+
+/**
+ * Initialize session and subscribe to new other stream
+ */
+Webinar.prototype.init = function () {
+    if (this.isNotIE() && TokboxInstance.checkSystemRequirements() !== 1) {
+        alert(this.notCompatibleBrowserMessage);
+        return;
+    }
+
+    this.updateViewers();
+    this.showViewerControls();
+
+    new WebinarStatus(this.element, this.isSpeaker);
+
+    if (this.isHls && !this.isSpeaker) {
+        this.initHLSPlayer();
+        return;
+    }
+
+    this.initWebRTCStack();
 };
 
 Webinar.prototype.updateViewers = function () {
     this.viewersTextContainer.textContent = this.viewersCount;
+};
+
+Webinar.prototype.subscribeToStreamNotifications = function () {
+    this.notificationSubscriber.addSubscriber(this.topicStream, this.notificationSubscriberKey, (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (payload.action === 'stream_started') {
+            if (this.isHls && !this.isSpeaker) {
+                const hlsUrl = payload.sessionReference;
+                this.hlsPlayer.updateHlsSource(hlsUrl);
+                console.info('Received stream_started notification, hlsUrl: ' + hlsUrl);
+            }
+
+            if (!this.isHls) {
+                this.sessionId = payload.sessionReference;
+                this.initWebRTCStack();
+            }
+
+            if (!this.isStreamOpenToPublic && this.isSpeaker) {
+                this.hideElement(this.openToPublicButton);
+                this.showElement(this.endWebinarButton);
+                this.isStreamOpenToPublic = true;
+                clearTimeout(this.openPublicReminderId);
+                clearTimeout(this.blinkOpenToPublicBtnIntervalId);
+            }
+        }
+
+        if (payload.action === 'viewer_connected') {
+            this.viewersCount = payload.connectedUsersCount;
+            this.updateViewers();
+        }
+
+        if (payload.action === 'mute_stream') {
+            if(payload.userId != this.currentUserId) {
+                return;
+            }
+
+            if(!this.enableAudio) {
+                return;
+            }
+
+            this.toggleAudio();
+        }
+
+    });
 };
 
 /**
@@ -322,6 +551,13 @@ Webinar.prototype.updateViewers = function () {
  */
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
+
+        if(this.isStreamOpenToPublic) {
+            this.showElement(this.endWebinarButton);
+        } else {
+            this.showElement(this.openToPublicButton);
+        }
+
         this.showElement(this.invisibleModeButton);
 
         if (!this.invisibleMode) {
@@ -330,20 +566,12 @@ Webinar.prototype.connect = function () {
         }
 
         this.showElement(this.mediaStartSharingButton);
-        this.showElement(this.timerContainer);
-        this.showElement(this.viewersContainer);
         this.initShareMedia();
-
-        if (!this.isMobile) {
-            this.toggleSideBar();
-        }
-
-        this.createToggleSidebarButton();
-        this.createFullscreenButton();
 
         if (!error) {
             if (this.isSpeaker) {
                 this.publishStream();
+                this.subscribeToStreamNotifications();
             }
 
             return;
@@ -353,37 +581,38 @@ Webinar.prototype.connect = function () {
     }.bind(this));
 };
 
+// declare viewer on server and get hlsUrl if not available when page loads
+Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
+    $.get(hlsConnectUrl, (response) => {
+        if (response.hlsUrl && !this.hlsPlayer.isInitialized()) {
+            this.hlsPlayer.initHlsStreamPlayer(response.hlsUrl)
+        }
+    })
+    .fail((error) => {
+        console.error(error.status, error.statusText, this.recordEndpoint);
+    });
+}
+
+Webinar.prototype.showViewerControls = function () {
+    this.showElement(this.viewersContainer);
+
+    if (!this.isMobile && !this.isSidebarOpened()) {
+        this.toggleSideBar();
+    }
+
+    this.createToggleSidebarButton();
+    this.createFullscreenButton();
+}
+
 Webinar.prototype.initShareMedia = function () {
     if (!this.isSpeaker) {
         return;
     }
 
-    this.mediaStartSharingButton.addEventListener('click', () => this.sharePopover.popover('toggle'));
-    this.showElement(this.mediaStartSharingButton);
-
-    this.sharePopover.popover({
-        animation: false,
-        html : true,
-        placement: 'top',
-        trigger: 'manual',
-        content: () => {
-            return `<div class="text-center">
-                <button data-share-screen class="btn">${this.mediaShareButtonScreenShareMessage}</button><br />
-                <button data-share-video class="btn">${this.mediaShareButtonVideoShareMessage}</button>
-              </div>`;
-        }
-    });
-
-    this.sharePopover.on('shown.bs.popover', () => {
-        const shareScreenButton = this.element.querySelector('[data-share-screen]');
-        shareScreenButton.addEventListener('click', this.screenshare.bind(this));
-
-        const shareVideoButton = this.element.querySelector('[data-share-video]');
-        shareVideoButton.addEventListener('click', this.shareVideo.bind(this));
-    });
+    this.sharingManager.init();
 };
 
-Webinar.prototype.prepareRecordButtons = function() {
+Webinar.prototype.prepareRecordButtons = function () {
     if (!this.isWebinarRecorded || !this.canRecordWebinar) {
         return;
     }
@@ -430,7 +659,7 @@ Webinar.prototype.prepareRecordButtons = function() {
     });
 };
 
-Webinar.prototype.requestRecordStart = function() {
+Webinar.prototype.requestRecordStart = function () {
     $.post(this.recordEndpoint, JSON.stringify({}), (response) => {
         this.session.signal({
                 type: 'startRecording'
@@ -442,14 +671,14 @@ Webinar.prototype.requestRecordStart = function() {
             }
         );
     })
-    .fail((error) => {
-        this.toggleRecording(false);
-        this.showError({name: `${error.status}: ${error.statusText}`, message:'Could not start recording'});
-        console.error(error.status, error.statusText, this.recordEndpoint);
-    });
+        .fail((error) => {
+            this.toggleRecording(false);
+            this.showError({name: `${error.status}: ${error.statusText}`, message: 'Could not start recording'});
+            console.error(error.status, error.statusText, this.recordEndpoint);
+        });
 }
 
-Webinar.prototype.requestRecordStop = function() {
+Webinar.prototype.requestRecordStop = function () {
     $.post(this.stopRecordEndpoint, JSON.stringify({}), (response) => {
         this.session.signal({
                 type: 'stopRecording'
@@ -461,13 +690,13 @@ Webinar.prototype.requestRecordStop = function() {
             }
         );
     })
-    .fail(() => {
-        this.toggleRecording(true);
-        this.showError('Could not stop recording');
-    });
+        .fail(() => {
+            this.toggleRecording(true);
+            this.showError('Could not stop recording');
+        });
 }
 
-Webinar.prototype.toggleRecording = function(recording) {
+Webinar.prototype.toggleRecording = function (recording) {
     this.isRecording = recording;
 
     if (recording) {
@@ -485,6 +714,9 @@ Webinar.prototype.toggleRecording = function(recording) {
     }
 };
 
+/**
+ * @param {Element} element
+ */
 Webinar.prototype.hideElement = function (element) {
     if (!element) {
         return;
@@ -501,30 +733,31 @@ Webinar.prototype.showElement = function (element) {
     element.classList.remove('hide');
 };
 
-/**
- * Open chat
- */
-Webinar.prototype.initChat = function () {
-    if (this.chatInstance) {
-        return;
+Webinar.prototype.blinkOpenToPublicBtnHandler = function() {
+    if (!this.hasOpenToPublicButtonBtnPrimaryClass) {
+        this.openToPublicButton.classList.add('btn-primary');
+    } else {
+        this.openToPublicButton.classList.remove('btn-primary');
     }
 
-    this.chatInstance = new openTokTextChat({
-        session: this.session,
-        sender: {
-            alias: this.userCompleteName,
-        },
-        textChatContainer: '[data-chat-container]',
-        waitingMessage: this.chatWaitingMessage,
-        alwaysOpen: true
-    });
-};
+    this.hasOpenToPublicButtonBtnPrimaryClass = !this.hasOpenToPublicButtonBtnPrimaryClass;
+}
 
 /**
  *  Publish your camera and microphone stream
  */
 Webinar.prototype.publishStream = function () {
-    this.hideElement(this.helperContainer);
+    this.hideElement(this.waitingContainer);
+    this.hideElement(this.webinarWaitingMessage);
+
+    if (!this.isStreamOpenToPublic) {
+        this.openPublicReminderId = setTimeout(() => {
+            this.showElement(this.waitingContainer);
+            this.showElement(this.openToPublicReminderModal);
+
+            this.blinkOpenToPublicBtnIntervalId = setInterval(this.blinkOpenToPublicBtnHandler.bind(this), 1000);
+        }, this.timeRemainingBeforeStart * 1000);
+    }
 
     if (this.invisibleMode) {
         return;
@@ -538,7 +771,7 @@ Webinar.prototype.publishStream = function () {
 
     publisher.on('videoElementCreated', this.onVideoElementCreated.bind(this));
     publisher.on('streamCreated', (event) => {
-        this.handleStream(event.stream, 'video');
+        this.handleStartStream(event.stream, 'video');
     });
     publisher.on('streamDestroyed', (event) => {
         this.handleStopStream(event.stream, 'video');
@@ -557,11 +790,16 @@ Webinar.prototype.onVideoElementCreated = function (event) {
 
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
+        let iconMute = document.createElement('i');
+        iconMute.classList.add('iconMuteStream','icon-Conference-off','icon-center');
+
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
         publisherName.textContent = this.subscribersNameMapping[this.currentUserId];
 
         publisherElement.appendChild(publisherName);
+        publisherElement.appendChild(iconMute);
+
     }
 };
 
@@ -603,108 +841,7 @@ Webinar.prototype.showError = function (error) {
     }
 };
 
-Webinar.prototype.askUrlVideo = function (previousUrl) {
-    const url = window.prompt(this.mediaShareUrlVideoMessage, previousUrl);
-
-    if (!url) {
-        return;
-    }
-
-    if ('https://' !== url.substr(0,8)) {
-        alert(this.mediaShareUrlVideoSecurityErrorMessage);
-
-        return this.askUrlVideo(url);
-    }
-
-    return url;
-};
-
-Webinar.prototype.shareVideo = function () {
-    this.sharePopover.popover('hide');
-
-    if (this.hasMediaSharing) {
-        alert(this.thereIsAlreadyAScreenShareInProgressMessage);
-        return;
-    }
-
-    const videoElement = document.createElement('video');
-    videoElement.setAttribute('crossOrigin', 'anonymous');
-    videoElement.setAttribute('controls', '');
-    videoElement.setAttribute('preload', 'auto');
-    videoElement.setAttribute('controlslist', 'disablePictureInPicture nodownload nofullscreen noremoteplayback');
-    videoElement.setAttribute('disablePictureInPicture', '');
-    this.layoutContainer.appendChild(videoElement);
-    this.shareVideoElement = videoElement;
-
-    if (!videoElement.captureStream) {
-        alert(this.notCompatibleBrowserMessage);
-        this.handleStopSharing();
-        return;
-    }
-
-    const url = this.askUrlVideo();
-
-    if (!url) {
-        this.handleStopSharing();
-        return;
-    }
-
-    this.hideElement(this.mediaStartSharingButton);
-
-    videoElement.addEventListener('error', () => {
-        this.handleStopSharing();
-        alert(this.mediaShareUrlVideoLoadingErrorMessage);
-    }, true);
-
-    videoElement.src = url;
-    videoElement.play();
-
-    const stream = videoElement.mozCaptureStream ? videoElement.mozCaptureStream() : videoElement.captureStream();
-
-    let publisher;
-
-    const publishVideo = () => {
-        const videoTracks = stream.getVideoTracks();
-        const audioTracks = stream.getAudioTracks();
-
-        if (!publisher && videoTracks.length > 0 && audioTracks.length > 0) {
-            stream.removeEventListener('addtrack', publishVideo);
-
-            this.publisherScreen = new Publisher(null);
-            publisher = this.publisherScreen.create({
-                videoSource: videoTracks[0],
-                audioSource: audioTracks[0],
-                fitMode: 'contain',
-                insertDefaultUI: false,
-            });
-
-            publisher.on('destroyed', () => {
-                this.handleStopSharing();
-            });
-
-            this.showElement(this.endSharingButton);
-            this.session.publish(publisher, this.handlePublishMediaSharing.bind(this));
-            this.layout();
-
-            publisher.on('streamCreated', (event) => {
-                this.handleStream(event.stream, this.typeCustomShare);
-            });
-
-            publisher.on('streamDestroyed', (event) => {
-                this.handleStopStream(event.stream, this.typeCustomShare);
-            });
-        }
-    };
-
-    stream.addEventListener('addtrack', publishVideo);
-    publishVideo();
-
-    this.minimizeAllSubscribers();
-    this.maximize(videoElement);
-    this.layout();
-};
-
-Webinar.prototype.handleStream = function(
+Webinar.prototype.handleStartStream = function (
     stream,
     type
 ) {
@@ -714,24 +851,29 @@ Webinar.prototype.handleStream = function(
         streamId: streamId,
         type: type,
         action: 'start'
-    }, (response) => {})
+    })
     .fail((error) => {
+        this.showError('Stream creation failed');
         console.error(error);
     });
 };
 
-Webinar.prototype.handleStopStream = function(
+Webinar.prototype.handleStopStream = function (
     stream,
     type
 ) {
+    if (!stream) {
+        return;
+    }
     const streamId = stream.streamId;
 
     $.post(this.streamEndpoint, {
-        streamId: streamId,
-        type: type,
-        action: 'stop'
-    }, (response) => {})
+        streamId,
+        type,
+        action: 'stop',
+    })
     .fail((error) => {
+        this.showError('Stream stop failed');
         console.error(error);
     });
 };
@@ -744,131 +886,11 @@ Webinar.prototype.liveVideo = function () {
     liveElement.setAttribute('allowfullscreen', '1');
     this.layoutContainer.appendChild(liveElement);
 
-    this.minimizeAllSubscribers();
-    this.maximize(liveElement);
-    this.layout();
-};
-
-/**
- * Start screensharing
- */
-Webinar.prototype.screenshare = function () {
-    if (!this.isSpeaker) {
-        return;
-    }
-
-    if (this.session === null) {
-        alert('You cannot start screensharing outside of a session');
-        return;
-    }
-
-    if (this.hasMediaSharing) {
-        alert(this.thereIsAlreadyAScreenShareInProgressMessage);
-        return;
-    }
-
-    this.hideElement(this.mediaStartSharingButton);
-    this.sharePopover.popover('hide');
-
-    TokboxInstance.checkScreenSharingCapability(function (response) {
-        if (!response.supported || response.extensionRegistered === false) {
-            alert(this.notCompatibleBrowserMessage);
-            return;
-        }
-
-        if (response.extensionRegistered && response.extensionInstalled === false) {
-            this.installChromeExtension();
-            return;
-        }
-
-        this.publisherScreen = new Publisher(null);
-        const publisherScreen = this.publisherScreen.create({
-            videoSource: this.typeScreenShare,
-            publishAudio: true,
-            name: this.currentUserId,
-            insertDefaultUI: false,
-            maxResolution: { width: 1280, height: 720 },
-        });
-
-        const endSharingButton = document.createElement('button');
-        endSharingButton.textContent = this.endSharingButton.textContent;
-        endSharingButton.classList.add('btn');
-        endSharingButton.classList.add('btn-primary');
-        endSharingButton.addEventListener('click', this.handleStopSharing.bind(this));
-
-        this.screenElement = document.createElement('div');
-        this.screenElement.classList.add('screen-share-in-progress');
-        const screenCenteredElement = document.createElement('div');
-        screenCenteredElement.textContent = this.mediaShareScreenShareStatusMessage;
-        screenCenteredElement.appendChild(document.createElement('hr'));
-        screenCenteredElement.appendChild(endSharingButton);
-
-        this.screenElement.appendChild(screenCenteredElement);
-        this.layoutContainer.appendChild(this.screenElement);
-        this.session.publish(publisherScreen, this.handlePublishMediaSharing.bind(this));
-
-        this.minimizeAllSubscribers();
-        this.maximize(this.screenElement);
-        this.layout();
-
-        publisherScreen.on('streamCreated', (event) => {
-            this.handleStream(event.stream, this.typeScreenShare);
-        });
-        publisherScreen.on('streamDestroyed', (event) => {
-            this.handleStopStream(event.stream, this.typeScreenShare);
-        });
-
-        publisherScreen.on('mediaStopped', this.handleStopSharing.bind(this));
-    }.bind(this));
-};
-
-/**
- * Callback after screensharing started
- *
- * @param {Object} error
- */
-Webinar.prototype.handlePublishMediaSharing = function (error) {
-    if (error) {
-        console.error(error);
-        this.showError(error);
-        this.handleStopSharing();
-
-        return;
-    }
-
-    this.hasMediaSharing = true;
-    this.layout();
-};
-
-/**
- * Handle stop screen sharing
- */
-Webinar.prototype.handleStopSharing = function () {
-    if (this.publisherScreen) {
-        this.publisherScreen.destroy();
-    }
-
-    if (this.screenElement) {
-        this.screenElement.remove();
-        this.screenElement = null;
-    }
-
-    if (this.shareVideoElement) {
-        this.shareVideoElement.remove();
-        this.shareVideoElement = null;
-    }
-
-    this.hasMediaSharing = false;
-
-    this.maximizeAllSubscribers();
-    this.layout();
-
-    this.showElement(this.mediaStartSharingButton);
-    this.hideElement(this.endSharingButton);
+    this.layoutFocus(liveElement);
 };
 
 Webinar.prototype.createToggleSidebarButton = function () {
-    if(!this.sidebarAllowed){
+    if (!this.sidebarAllowed) {
         return
     }
     const toggleSidebarButton = document.createElement('button');
@@ -941,9 +963,9 @@ Webinar.prototype.createFullscreenButton = function () {
 
         const element = this.layoutContainer;
         const rfs = element.requestFullscreen
-          || element.webkitRequestFullScreen
-          || element.mozRequestFullScreen
-          || element.msRequestFullscreen
+            || element.webkitRequestFullScreen
+            || element.mozRequestFullScreen
+            || element.msRequestFullscreen
         ;
         rfs.call(element);
 
@@ -1025,176 +1047,133 @@ Webinar.prototype.toggleButton = function (button, isOn) {
     button.classList.add('btn-off');
 };
 
+Webinar.prototype.addShownChatSubscriber = function () {
+    if (this.mobile) {
+        return;
+    }
+
+    this.notificationSubscriber.addSubscriber(
+        this.topicChat,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'add_chat_message' || payload.action === 'delete_chat_message') {
+                this.chat.reload();
+            }
+
+            if (payload.action === 'update_chat_message_votes') {
+                this.chat.updateVotes(payload.messageId, payload.votes);
+            }
+        }
+    );
+}
+
+Webinar.prototype.addHiddenChatSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicChat,
+        this.notificationSubscriberKey,
+        function (event) {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'delete_chat_message') {
+                this.lastSeenChatMessagesCount = Math.max(0, this.lastSeenChatMessagesCount - 1);
+            }
+
+            if (payload.action === 'add_chat_message') {
+                const newMessageCount = payload.msg_count - this.lastSeenChatMessagesCount;
+                this.newMessageChatCountNotification.textContent = newMessageCount > 99 ? '99+' : newMessageCount;
+                this.newMessageChatCountNotification.classList.add('alert-notification');
+            }
+
+        }.bind(this)
+    );
+}
+
+Webinar.prototype.addHiddenQuestionSubscriber = function () {
+    this.notificationSubscriber.addSubscriber(
+        this.topicQuestions,
+        this.notificationSubscriberKey,
+        function (event) {
+            const payload = JSON.parse(event.data);
+
+            if (payload.action === 'update') {
+                const newQuestionCount = payload.msg_count - this.lastSeenQuestionMessageCount;
+                this.newMessageQuestionCountNotification.textContent = newQuestionCount > 99 ? '99+' : newQuestionCount;
+                this.newMessageQuestionCountNotification.classList.add('alert-notification');
+            }
+
+            if (payload.action === 'delete') {
+                this.lastSeenQuestionMessageCount = Math.max(0, this.lastSeenQuestionMessageCount + payload.delta);
+            }
+
+        }.bind(this)
+    );
+}
+
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
-
+    this.openTab = 'chat';
+    this.lastSeenQuestionMessageCount = this.question.questionMessageCount;
     this.questionsButton.classList.remove('btn-primary');
     this.questionsButton.classList.add('btn-gray');
     this.chatButton.classList.remove('btn-gray');
     this.chatButton.classList.add('btn-primary');
-    this.hideElement(this.questionsContainer);
-    this.showElement(this.chatContainer);
+    this.hideElement(this.question.questionsContainer);
+    this.showElement(this.chat.chatContainer);
+    this.chat.reload();
+    this.notificationSubscriber.removeSubscriber(this.topicChat);
+    this.addShownChatSubscriber();
+    this.notificationSubscriber.removeSubscriber(this.topicQuestions);
+    this.newMessageChatCountNotification.textContent = '';
+    this.newMessageChatCountNotification.classList.remove('alert-notification');
+    this.addHiddenQuestionSubscriber();
+
 };
 
 Webinar.prototype.showQuestions = function (event) {
     event.preventDefault();
-
+    this.openTab = 'questions';
+    this.lastSeenChatMessagesCount = this.chat.getChatMessagesCount();
     this.chatButton.classList.remove('btn-primary');
     this.chatButton.classList.add('btn-gray');
     this.questionsButton.classList.remove('btn-gray');
     this.questionsButton.classList.add('btn-primary');
 
-    this.hideElement(this.chatContainer);
-    this.showElement(this.questionsContainer);
+    this.hideElement(this.chat.chatContainer);
+    this.notificationSubscriber.removeSubscriber(this.topicChat);
+    this.notificationSubscriber.removeSubscriber(this.topicQuestions);
+    this.showElement(this.question.questionsContainer);
 
-    this.initQuestions();
-};
+    this.question.initQuestions();
 
-Webinar.prototype.initQuestions = function () {
-    const href = this.questionsContainer.getAttribute('data-href');
-    const voteHref = this.questionsContainer.getAttribute('data-vote-href');
+    this.newMessageQuestionCountNotification.textContent = '';
+    this.newMessageQuestionCountNotification.classList.remove('alert-notification');
 
-    const $questionsList = $(this.questionsList);
-
-    $.get(href, function (response) {
-        // make shure there no listeners leak
-        this.removeQuestionListeners();
-        $questionsList.empty();
-
-        response.forEach((item) => {
-            const rowEl = document.createElement('div');
-            rowEl.classList.add('question-row');
-
-            const contentEl = rowEl.appendChild(document.createElement('div'));
-            contentEl.classList.add('question-content');
-
-            const questionAside = document.createElement('small');
-            questionAside.classList.add('pull-right', 'question-aside');
-
-            const likeBlock = document.createElement('div');
-            const voteCount = document.createElement('span');
-
-            if (+item.voteCount) {
-                voteCount.textContent = item.voteCount;
-                voteCount.classList.add('question-vote-count')
+    this.notificationSubscriber.addSubscriber(
+        this.topicQuestions,
+        this.notificationSubscriberKey,
+        (event) => {
+            const payload = JSON.parse(event.data);
+            if (payload.action === 'update' || payload.action === 'delete') {
+                this.question.initQuestions();
             }
 
-            likeBlock.append(voteCount);
-
-            const likeBtn = document.createElement('i');
-            likeBtn.classList.add('glyphicon', 'glyphicon-thumbs-up', 'btn', 'btn-xs');
-            likeBtn.setAttribute('data-question-id', item.questionId);
-
-            const onLikedClicked = function (event) {
-                const payload = {'questionId': event.currentTarget.getAttribute('data-question-id')};
-                $.post(voteHref, JSON.stringify(payload), (response) => {
-                    if (response.status === 'ok') {
-                        this.sendUpdateQuestionsSignal();
-                    } else {
-                        this.showError('Question vote failed');
-                    }
-                }, 'json');
-                event.currentTarget.classList.add('disabled');
-
-                // remove all listeners, they'll be added again on questions update
-                this.removeQuestionListeners();
-            }.bind(this);
-
-            if (item.canVote) {
-                likeBtn.addEventListener('click', onLikedClicked);
-                this.questionListeners.push([likeBtn, onLikedClicked]);
-
-                likeBtn.classList.add(item.isLiked ? 'btn-primary' : 'btn-gray');
-                likeBtn.title = item.isLiked ? this.questionUnvoteMessage : this.questionVoteMessage;
-            } else {
-                likeBtn.classList.add('btn-gray', 'disabled');
-                likeBtn.title = this.questionVoteDisabledMessage;
+            if (payload.action === 'begin_reply' && payload.authorId != this.currentUserId) {
+                this.question.showWritingRepy(payload.questionId, payload.author);
             }
-            likeBlock.appendChild(likeBtn);
+        }
+    );
 
-            questionAside.append(likeBlock);
-
-            const questionCreatedAt = document.createElement('div');
-            questionCreatedAt.textContent = item.createdAt;
-            questionAside.appendChild(questionCreatedAt);
-            contentEl.appendChild(questionAside);
-            contentEl.appendChild(document.createTextNode(item.questionContent));
-
-            const authorEl = rowEl.appendChild(document.createElement('div'));
-            authorEl.classList.add('question-author');
-            const authorNameEl = authorEl.appendChild(document.createElement('span'));
-            authorNameEl.classList.add('question-author-name');
-            const authorNameTextEl = authorNameEl.appendChild(document.createElement('span'));
-            authorNameTextEl.textContent = item.firstName + ' ' + item.lastName;
-
-            if (item.sheetTitle) {
-                const authorTitleEl = authorNameEl.appendChild(document.createElement('small'));
-                authorTitleEl.textContent = [item.position, item.sheetTitle].filter((item) => !!item).join(', ');
-                authorTitleEl.classList.add('question-author-title');
-            }
-
-            const avatarEl = authorEl.appendChild(document.createElement('span'));
-
-            if (item.avatar) {
-                avatarEl.classList.add('question-author-avatar');
-                const imgEl = avatarEl.appendChild(document.createElement('img'));
-                imgEl.setAttribute('src', item.avatar);
-            }
-
-            $questionsList[0].appendChild(rowEl);
-        });
-    }.bind(this))
-    .fail(function () {
-        console.error('Failed to load webinar questions');
-    }.bind(this));
-}
-
-Webinar.prototype.submitQuestion = function (event) {
-    event.preventDefault();
-    const questionContent = this.questionsFormContent.value;
-
-    if ('' === questionContent) {
-        window.setTimeout(() => this.questionsFormSubmit.disabled = false, 100);
-        return;
+    if (this.newMessageQuestionCountNotification.textContent === '') {
+        this.newMessageQuestionCountNotification.classList.remove('alert-notification');
+    } else {
+        this.newMessageQuestionCountNotification.classList.add('alert-notification');
     }
 
-    this.questionsFormContent.value = '';
+    this.addHiddenChatSubscriber();
+};
 
-    $.post(this.questionsFormAction, JSON.stringify({questionContent: questionContent}), (response) => {
-        this.questionsFormSubmit.disabled = false;
-
-        if (response.status === 'ok') {
-            this.sendUpdateQuestionsSignal();
-            this.questionsList.scrollTop = 0;
-
-            return;
-        }
-
-        this.questionsFormContent.value = questionContent;
-        this.showError('Question creation failed');
-    })
-    .fail(() => {
-        this.questionsFormSubmit.disabled = false;
-        this.questionsFormContent.value = questionContent;
-        this.showError('Question creation failed');
-    });
-}
-
-Webinar.prototype.sendUpdateQuestionsSignal = function () {
-    this.session.signal({
-        type: 'QuestionsUpdate'
-    },
-    (error) => {
-        if (error) {
-            console.error('QuestionsUpdate signal error', error);
-        }
-    });
-}
-
-Webinar.prototype.removeQuestionListeners = function () {
-    this.questionListeners.forEach((item) => item[0].removeEventListener('click', item[1]));
-    this.questionListeners = [];
-}
 
 Webinar.prototype.isSidebarOpened = function () {
     return !this.sideContainer.classList.contains('hide');
@@ -1206,9 +1185,7 @@ Webinar.prototype.toggleSideBar = function () {
     }
     if (!this.isSidebarOpened()) {
         this.showElement(this.sideContainer);
-        this.initChat();
-        this.chatInstance.showTextChat();
-        this.chatInstance.deliverUnsentMessages();
+        this.chat.initChat();
         this.element.classList.add('chat-opened');
         this.layout();
 
@@ -1217,8 +1194,7 @@ Webinar.prototype.toggleSideBar = function () {
 
     this.element.classList.remove('chat-opened');
     this.hideElement(this.sideContainer);
-    this.chatInstance.hideTextChat();
-    this.initQuestions();
+    this.question.initQuestions();
     this.layout();
 };
 
@@ -1268,6 +1244,14 @@ Webinar.prototype.toggleAudio = function () {
     publisher.publishAudio(enableAudio);
     this.enableAudio = enableAudio;
     this.toggleButton(this.toggleAudioElement, enableAudio);
+
+    if (enableAudio){
+        this.pictoAudioElement.classList.remove('icon-Conference-off')
+    }
+
+    if (!enableAudio){
+        this.pictoAudioElement.classList.add('icon-Conference-off')
+    }
 };
 
 /**
@@ -1284,6 +1268,14 @@ Webinar.prototype.toggleVideo = function () {
     publisher.publishVideo(enableVideo);
     this.enableVideo = enableVideo;
     this.toggleButton(this.toggleVideoElement, enableVideo);
+
+    if (enableVideo){
+        this.pictoVideoElement.classList.remove('icon-Video_2-off')
+    }
+
+    if (!enableVideo){
+        this.pictoVideoElement.classList.add('icon-Video_2-off')
+    }
 };
 
 Webinar.prototype.installChromeExtension = function () {
@@ -1291,41 +1283,40 @@ Webinar.prototype.installChromeExtension = function () {
     window.open(CHROME_EXTENSION_URL, '_blank');
 };
 
-Webinar.prototype.countDownBeforeEnd = function () {
-    if (!this.countDownContainer) {
-        return;
-    }
-
-    new Counter(parseInt(this.timeRemaining, 10), parseInt(this.warningRemainingTime, 10), this.countDownContainer, this.timerElement);
-};
-
 Webinar.prototype.isScreenShareStream = function (stream) {
-    return [this.typeScreenShare, this.typeCustomShare].includes(stream.videoType);
+    return [STREAM_TYPE_SCREENSHARE, STREAM_TYPE_CUSTOM].includes(stream.videoType);
 };
 
-Webinar.prototype.maximize = function(element) {
+/** Focus one element in layout */
+Webinar.prototype.layoutFocus = function (element) {
+    this.minimizeAllSubscribers();
+    this.maximize(element);
+    this.layout();
+};
+
+Webinar.prototype.maximize = function (element) {
     element.classList.add('OT_big');
 };
 
-Webinar.prototype.minimize = function(element) {
+Webinar.prototype.minimize = function (element) {
     element.classList.remove('OT_big');
 };
 
-Webinar.prototype.minimizeAllSubscribers = function() {
+Webinar.prototype.minimizeAllSubscribers = function () {
     this.subscribers.forEach((subscriber) => {
         this.minimize(subscriber.element);
     });
 };
 
-Webinar.prototype.maximizeAllSubscribers = function() {
+Webinar.prototype.maximizeAllSubscribers = function () {
     this.subscribers.forEach((subscriber) => {
         this.maximize(subscriber.element);
     });
 };
 
-Webinar.prototype.autoMaximize = function(subscriber) {
+Webinar.prototype.autoMaximize = function (subscriber) {
     var activity = null;
-    subscriber.on('audioLevelUpdated', function(event) {
+    subscriber.on('audioLevelUpdated', function (event) {
         if (this.hasMediaSharing) {
             return;
         }
@@ -1342,9 +1333,7 @@ Webinar.prototype.autoMaximize = function(subscriber) {
             } else if (now - activity.timestamp > 1000) {
                 // detected audio activity for more than 1s for the first time.
                 activity.talking = true;
-                this.minimizeAllSubscribers();
-                this.maximize(subscriber.element);
-                this.layout();
+                this.layoutFocus(subscriber.element);
             }
         } else if (activity && now - activity.timestamp > 2000) {
             // detected low audio activity for more than 2s

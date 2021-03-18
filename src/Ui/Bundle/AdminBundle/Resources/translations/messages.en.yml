@@ -55,11 +55,12 @@ admin.agenda.filters.type: 'Participation type'
 admin.agenda.indicators-caption: 'Indicators caption'
 admin.agenda.indicators-help: 'Hover the cursor on icons'
 admin.agenda.link: 'My meetings'
+admin.agenda.mass_assignment.begin.label: 'Solde restant dû > 0'
 admin.agenda.mass_assignment.enabled.label: Activated
 admin.agenda.mass_assignment.submit.label: Submit
 admin.agenda.mass_assignment.title.label: 'Update mass assignment'
 admin.agenda.meeting.mass_assignment.update: 'Update the mass meeting assignement'
-admin.agenda.meeting.move: 'Move the meeting'
+admin.agenda.meeting.move: 'Reschedule the meeting'
 admin.agenda.meeting.remove: 'Delete the meeting'
 admin.agenda.meeting.selectSlot: 'Select this slot'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'The selected slot doesn''t exist'
@@ -70,7 +71,7 @@ admin.agenda.meeting.updateMassAssignment.missingData: 'Impossible to update mas
 admin.agenda.meeting.updateMassAssignment.outOfMassSlot: 'Update mass assignment out of mass slots'
 admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot: 'This meeting has a blocked spot which is not available for the selected slot'
 admin.agenda.meeting.updateSlot.error: 'Impossible to update the meeting slot.'
-admin.agenda.meeting.updateSlot.meetingIsBlockedSlot: 'Impossible to move the meeting : blocked slot.'
+admin.agenda.meeting.updateSlot.meetingIsBlockedSlot: 'You can''t reschedule the meeting here : blocked slot.'
 admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting: 'There is no available spot for the selected slot.'
 admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting: 'The selected slot is not available any more.'
 admin.agenda.meeting.updateSpot.blockedSlot: 'Blocked slot'
@@ -150,6 +151,7 @@ admin.create_admin.title: 'Create a new backoffice user'
 admin.dashboard.link: Dashboard
 admin.elasticsearch.index.confirm: 'You are about to re-index all the events. do you confirm the action ?'
 admin.event.access_control: 'Access control'
+admin.event.access_control.back: 'Back to access control'
 admin.event.access.entrance: Entries
 admin.event.access.happening.list: Conferences
 admin.event.archive.link: Archiving
@@ -192,13 +194,16 @@ admin.event.paymentConditions.update.title: 'Update payment conditions'
 admin.event.practicalInfo.link: 'Practical informations'
 admin.event.practicalInfo.update.title: 'Update practical informations'
 admin.event.qrcode.checkin: Checkin
+admin.event.qrcode.checkinAt: 'Checkin the'
 admin.event.qrcode.date_checkin: 'Date of checkin'
+admin.event.qrcode.fastcheckin: 'Badge creation'
 admin.event.qrcode.firstName: 'First name'
 admin.event.qrcode.lastName: 'Last name'
 admin.event.qrcode.no_result: 'No result'
 admin.event.qrcode.notfound: 'Unknown participant'
 admin.event.qrcode.number_of_available_badge: 'Number of badges possible'
 admin.event.qrcode.printBadge: 'Print badge and planning'
+admin.event.qrcode.printPlanning: 'Print planning'
 admin.event.qrcode.scan_participants: 'Scan of participants'
 admin.event.qrcode.search: Search
 admin.event.qrcode.search_by_name: 'Search participant by name'
@@ -264,6 +269,8 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO event'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO event session'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium: concerned Visitor participation type id'
 admin.extraParameter.type.crisp_site_id: 'Crisp ID site'
+admin.extraParameter.type.custom_button: 'Custom button 1'
+admin.extraParameter.type.custom_button_2: 'Custom button 2'
 admin.extraParameter.type.leni_badge_link: 'LENI link for the badge'
 admin.extraParameter.type.leni_event: 'LENI event code'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
@@ -325,6 +332,7 @@ admin.happening.addTitle: 'Add a conference'
 admin.happening.button.category: 'categories set up'
 admin.happening.button.export: 'Export conferences'
 admin.happening.button.speaker: 'Speakers management'
+admin.happening.download: 'Download the video'
 admin.happening.export.fields.happening_begin_hour: 'Beginning hour'
 admin.happening.export.fields.happening_day: Day
 admin.happening.export.fields.happening_end_hour: 'Ending hour'
@@ -354,6 +362,9 @@ admin.happening.private: Private
 admin.happening.products: 'This under-event is related to the following products'
 admin.happening.products.tooltip: 'Link to products'
 admin.happening.title: Conferences
+admin.happening.type.interactiveWebinar: 'Interactive Webinar'
+admin.happening.type.videoWebinar: 'Video webinar'
+admin.happening.type.webinar: Webinar
 admin.happening.update: Modify
 admin.happening.updateTitle: 'Conference update'
 admin.invoice.column.date: 'Date of creation'
@@ -417,6 +428,7 @@ admin.meeting_request.stateUpdatedAt: 'State update'
 admin.meeting_request.title: '{0}  no meeting request|{1} meeting request |]1,Inf[ %count% meeting requests'
 admin.meeting_request.to: To
 admin.meeting.action.deleteAll.confirm: 'Are you sure you xant to delete the whole meetings ?'
+admin.meeting.action.deleteAll.meetingPublished: 'Meeting calendars have already been published.'
 admin.meeting.action.deleteAll.title: 'Delete all meetings'
 admin.meeting.action.remove.confirm: 'Are you sure you want to remove this meeting ?'
 admin.meeting.action.remove.link: remove
@@ -472,6 +484,7 @@ admin.meeting.list.status.canceled: 'No show'
 admin.meeting.list.status.confirmed: Confirmed
 admin.meeting.list.status.not_confirmed: 'Not confirmed'
 admin.meeting.list.title: 'Scheduled meetings'
+admin.meeting.visio.settings.title: 'Visio meetings settings'
 admin.menu.link: Menu
 admin.messaging_campaign.recipients.billing_contact: 'Billing contact of the sheet'
 admin.messaging_campaign.recipients.participants: 'All participants of the sheet'
@@ -508,7 +521,7 @@ admin.messaging.message.compose.links.meetingRequest: 'My Meetings'
 admin.messaging.message.compose.links.orders: 'Orders list'
 admin.messaging.message.compose.links.package: Package
 admin.messaging.message.compose.links.program: Program
-admin.messaging.message.compose.links.sheet: 'presentation sheet'
+admin.messaging.message.compose.links.sheet: 'Presentation sheet'
 admin.messaging.message.compose.links.validateMobilePhone: 'Validate your phone number'
 admin.messaging.message.compose.tags.cta.agendaConfirmation: 'CTA link agenda confirmation'
 admin.messaging.message.compose.tags.cta.ebadge: 'CTA download E-Badge link'
@@ -577,7 +590,7 @@ admin.order_edit.list_command.label: Orders
 admin.order_edit.promotionCodes: 'Promotion codes'
 admin.order_edit.total.withoutVAT: 'Total without VAT'
 admin.order_edit.total.withVAT: 'Total with VAT'
-admin.order_edit.totalByVAT: 'Total amount subject to VAT'
+admin.order_edit.totalByVAT: 'Total subjected to %vat%%'
 admin.order_edit.update_line: 'Update a line'
 admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
@@ -639,6 +652,7 @@ admin.participant.export.fields.sheet_enable: 'Active sheet'
 admin.participant.export.fields.sheet_id: 'Sheet ID'
 admin.participant.export.fields.sheet_name: 'Sheet Name'
 admin.participant.export.fields.user_id: 'User ID'
+admin.participant.export.fields.viewed_sheets: 'Number of sheets visited'
 admin.participant.export.happening.subscriber.no: 'No'
 admin.participant.export.happening.subscriber.yes: 'yes'
 admin.participant.export.no: 'No'
@@ -663,11 +677,11 @@ admin.planner.analytics.spot.table.column.shared: Pooled
 admin.planner.analytics.spot.table.column.visio: Visio
 admin.planner.analytics.spot.title: Spots
 admin.planner.analytics.table.column.date: Date
-admin.planner.analytics.table.column.details: details
-admin.planner.analytics.table.column.fillingRate: 'pooled filling rate'
-admin.planner.analytics.table.column.meetings: 'meetings number'
-admin.planner.analytics.table.column.ratio: 'requests/scheduled meetings ratio'
-admin.planner.analytics.table.column.requests: 'number of requests'
+admin.planner.analytics.table.column.details: Details
+admin.planner.analytics.table.column.fillingRate: 'Pooled filling rate'
+admin.planner.analytics.table.column.meetings: 'Meetings number'
+admin.planner.analytics.table.column.ratio: 'Requests/scheduled meetings ratio'
+admin.planner.analytics.table.column.requests: 'Number of requests'
 admin.planner.export: Export
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.export.title: 'Export of a solution for the meetings planning'
@@ -728,12 +742,21 @@ admin.product.unitPrice: 'Unit price'
 admin.product.updatable: Deletable
 admin.product.update.action: Modify
 admin.promotion_code.action.close: Close
+admin.promotion_code.batch.new: 'Generate codes in series'
+admin.promotion_code.batch.update: 'Modify codes in series'
 admin.promotion_code.error.non_unique_code: 'This code is already used'
 admin.promotion_code.link: 'Promotion codes'
 admin.promotion_code.new: 'New code'
+admin.promotion_code.notUpdatable: 'Not editable because a code was used in a command.'
+admin.promotion_code.subtitle.batch: 'Codes in serie'
+admin.promotion_code.subtitle.code: Codes
 admin.promotion_code.table.action.edit: Modify
+admin.promotion_code.table.action.export: Export
+admin.promotion_code.table.action.update: Edit
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
+admin.promotion_code.table.column.number: 'Number of codes'
+admin.promotion_code.table.column.prefix: Prefix
 admin.promotion_code.table.column.stock: Stock
 admin.promotion_code.table.column.title: Title
 admin.promotion_code.table.column.validUntil: 'valid until'
@@ -777,7 +800,7 @@ admin.rule.list.column.actions: Actions
 admin.rule.list.column.priority: Priority
 admin.rule.list.column.see: See
 admin.rule.list.column.who: who
-admin.rule.list.content.category: category
+admin.rule.list.content.category: Category
 admin.rule.list.content.type: Type
 admin.rule.list.title: 'rules list'
 admin.rule.see-what.title: 'rule of %see% over%seeable%'
@@ -800,7 +823,7 @@ admin.schedule.slots.generate.back: 'Back to the slots list'
 admin.schedule.slots.generate.eventDay: 'Days of the event'
 admin.schedule.slots.generate.title: 'Generate schedule slots'
 admin.schedule.slots.table.begin: from
-admin.schedule.slots.table.duration: For
+admin.schedule.slots.table.duration: 'Duration in minute'
 admin.schedule.slots.table.end: to
 admin.schedule.slots.title: 'schedule slots'
 admin.schedule.title: Planning
@@ -834,12 +857,31 @@ admin.sheet.commercialStatus: 'Commercial status'
 admin.sheet.created_this_week: 'registered this week'
 admin.sheet.created_today: 'Registered today'
 admin.sheet.createdAt: 'Registration date'
+admin.sheet.dashboard.by_type.meetings: Planned
+admin.sheet.dashboard.by_type.meetings_evaluated_1_stars: '1'
+admin.sheet.dashboard.by_type.meetings_evaluated_2_stars: '2'
+admin.sheet.dashboard.by_type.meetings_evaluated_3_stars: '3'
+admin.sheet.dashboard.by_type.meetings_evaluated_4_stars: '4'
+admin.sheet.dashboard.by_type.meetings_evaluated_5_stars: '5'
+admin.sheet.dashboard.by_type.meetings_evaluation: 'Rated meetings'
+admin.sheet.dashboard.by_type.meetings_not_evaluated: 'Not rated'
+admin.sheet.dashboard.by_type.participants: 'Number of participants'
+admin.sheet.dashboard.by_type.requests: 'Asked meetings'
+admin.sheet.dashboard.by_type.requests_accepted: 'Approved requests'
+admin.sheet.dashboard.by_type.requests_refused: 'Declined requests'
+admin.sheet.dashboard.by_type.sheets: 'Number of sheets'
+admin.sheet.dashboard.by_type.total: Totals
+admin.sheet.dashboard.by_type.type: 'Type of participation'
+admin.sheet.dashboard.sheets_participants_meetings: 'Sheets, participants and meetings'
+admin.sheet.dashboard.total_unique_visitors: 'Unique visitors'
+admin.sheet.dashboard.total_visitors: Attendance
 admin.sheet.dashboard.totalOrders: 'Total of orders without VAT'
 admin.sheet.dashboard.totalPaid: 'Paid total with VAT'
 admin.sheet.dashboard.totalParticipants: 'Participants total'
 admin.sheet.dashboard.totalRemainingToPay: 'Remaining total to be paid with VAT'
 admin.sheet.dashboard.totalSheet: 'sheets total'
 admin.sheet.dashboard.totalSheetType: 'Total profiles per type'
+admin.sheet.dashboard.visitors_by_day: 'Daily visitors'
 admin.sheet.details.comments.author: 'by%firstname% %lastname%, on the %date%'
 admin.sheet.details.comments.title: comments
 admin.sheet.details.company.title: 'Company name'
@@ -934,6 +976,7 @@ admin.sheet.export.fields.sheet_state: status
 admin.sheet.export.fields.status: 'Profile status'
 admin.sheet.export.fields.total_excluded_vat: 'total without VAT'
 admin.sheet.export.fields.type: Type
+admin.sheet.export.fields.views: 'Number of visits'
 admin.sheet.export.help: 'the export is done according to the selected filters'
 admin.sheet.export.invoice.button.label: 'Export Invoices'
 admin.sheet.export.meetings.button.label: 'Export meetings'
@@ -999,7 +1042,7 @@ admin.sheet.validate: Validate
 admin.sheet.validateSheets: 'Validate sheets'
 admin.sheet.validationState: 'Profile status'
 admin.sheets_group.column.created_at: 'created at'
-admin.sheets_group.column.email_manager: 'manager''s email'
+admin.sheets_group.column.email_manager: 'Manager''s email'
 admin.sheets_group.column.sheet_list: 'sheets list'
 admin.sheets_group.column.title: Title
 admin.sheets_group.create: 'new multi-sheets group'
@@ -1121,9 +1164,9 @@ admin.template.sheet.title: 'template of presentation'
 admin.template.sheet.titleBase: 'global templates'
 admin.template.sheet.titleEvent: 'assigned templates'
 admin.tip.column.content: content
-admin.tip.column.locale: language
+admin.tip.column.locale: Language
 admin.tip.column.title: 'back office title'
-admin.tip.column.translation: language(s)
+admin.tip.column.translation: Language(s)
 admin.tip.column.visible.catalog: catalog
 admin.tip.column.visible.meeting_management: 'meetings management'
 admin.tip.column.visible.onAgenda: agenda
@@ -1204,7 +1247,7 @@ admin.transactional.mail.list.key.mail_sheet_group_created: 'Multifiles entity c
 admin.transactional.mail.list.key.mail_sheet_invoiced: 'Invoiced file'
 admin.transactional.mail.list.key.mail_sheet_refused: 'Registration denied'
 admin.transactional.mail.list.key.mail_sheet_type_changed: 'Changed type of participation'
-admin.transactional.mail.list.key.mail_sheet_validated: 'Validated regisstration'
+admin.transactional.mail.list.key.mail_sheet_validated: 'Validated registration'
 admin.transactional.mail.list.key.mail_sheet_validation_draft: 'Sheet back as draft'
 admin.transactional.mail.list.key.mail_sheet_validation_validate: 'Sheet validate'
 admin.transactional.mail.list.key.mail_third_party_comexposium_participation_added_confirmation: 'Comexposium: Invitation as a participant on a sheet'
@@ -1220,6 +1263,7 @@ admin.transactional.mail.list.title: 'List of transactional emails'
 admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Link to the agenda'
 admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA with link to the agenda'
 admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'List of schedule changes'
+admin.transactional.mail.substitution.parameter.description.%currentEmail%: 'Current email'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Event title'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Participant first name'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Original participation type'
@@ -1256,6 +1300,8 @@ admin.transactional.mail.substitution.parameter.description.%urlSheet%: 'Link to
 admin.transactional.mail.substitution.parameter.description.%urlSheetWithCTA%: 'CTA with link to the participation sheet'
 admin.transactional.mail.substitution.parameter.list.title: 'List of available substitutions:'
 admin.transactional.notification.link: Notifications
+admin.translations_download.link: 'Download translations'
+admin.translations.update: 'Update translations'
 admin.type_content_define_terms_of_sale.link: 'Terms of sales'
 admin.type_content_define_terms_of_sale.title: 'Define terms of sales'
 admin.type.action.confirmDelete: 'Are you sure to delete this type?'
@@ -1268,7 +1314,8 @@ admin.type.badge.example.firstName: 'First name'
 admin.type.badge.example.lastName: 'Last name'
 admin.type.badge.example.position: 'General Manager example'
 admin.type.badge.example.sheetTitle: 'Company name example'
-admin.type.canMoveMeeting: 'Can move appointments'
+admin.type.badge.preview.link: 'e-badge preview'
+admin.type.canMoveMeeting: 'Can reschedule meetings'
 admin.type.canRemoveMeeting: 'Can delete a meeting'
 admin.type.content.specificTermsOfSale: 'Special terms of sales'
 admin.type.create.link: Add
@@ -1294,6 +1341,19 @@ admin.type.paymentConditions.update.title: 'define payment conditions as "%typeT
 admin.type.position: Position
 admin.type.register.link: 'Registration link'
 admin.type.registration.template: 'Registration template'
+admin.type.registrationPath.addQuestion: 'Add a question to the registration form'
+admin.type.registrationPath.assignNewQuestion: 'Create new question'
+admin.type.registrationPath.assignParticipationTypes: 'Choose one or more types of participation'
+admin.type.registrationPath.link: 'Registration process'
+admin.type.registrationPath.nextStep: 'Next step'
+admin.type.registrationPath.nextToAnswer: 'Following the answer'
+admin.type.registrationPath.pathNotCompleted: 'The registration process is not complete. One or more types of participation are required.'
+admin.type.registrationPath.removeQuestion.confirmation: 'Confirm the deletion of this question?'
+admin.type.registrationPath.removeQuestion.title: 'Delete the question'
+admin.type.registrationPath.removeTypes.confirmation: 'Confirm deletion of assigned types?'
+admin.type.registrationPath.removeTypes.title: 'Delete assigned types'
+admin.type.registrationPath.title: 'Registration process'
+admin.type.registrationPath.updateQuestion: 'Edit the question'
 admin.type.remove.link: remove
 admin.type.sheet.template: 'presentation template'
 admin.type.specificPaymentConditions: 'specific payment conditions'
@@ -1335,8 +1395,11 @@ admin.user.batch.cancelSelection.label: 'Cancel full selection'
 admin.user.batch.selection.label: 'The <strong>%users%</strong> users of this page are selected.'
 admin.user.batch.selectionAll.label: 'Select the <strong>%allUsers%</strong>  users matching your filters.'
 admin.user.company-information: 'Company informations'
-admin.user.contact-information: 'Contact informations'
+admin.user.contact-information: 'Contact information'
 admin.user.events: Events
+admin.user.export.contact.evaluation: 'Export user ratings stats'
+admin.user.export.title: Users
+admin.user.requestedNewPasswordLink: 'Password reset link: %url%'
 admin.users.batch.exportFormTemplate: 'Export form data'
 admin.users.batch.sendMail: 'Send an email'
 admin.users.details: 'View the account'
@@ -1405,7 +1468,7 @@ event.meeting.listRequest.show: See
 event.meeting.listRequest.state: States
 event.meeting.listRequest.switchListMode.linkedSheets.list: 'Meetings of my linked sheets'
 event.meeting.listRequest.switchListMode.linkedSheets.thumbnails: 'My meetings'
-event.meeting.listRequest.switchListMode.oneSheet.list: 'List vue'
+event.meeting.listRequest.switchListMode.oneSheet.list: 'List view'
 event.meeting.listRequest.switchListMode.oneSheet.thumbnails: 'Mosaic view'
 event.meeting.listRequest.title: 'List of your meeting requests'
 event.meeting.listRequest.to: For
@@ -1554,6 +1617,7 @@ register.email_already_exists: 'An account with this email address already exist
 reset_password.title: 'Request new password'
 user.agenda.version.agendaModified: 'Your schedule has been changed:'
 user.agenda.version.meetingAdded: 'You have a new meeting with %sheetTitle% on %day% at %hour% at %spotRef%.'
+user.agenda.version.meetingChangedWithMessage: 'Message from your contact: %message%'
 user.agenda.version.meetingDeleted: 'The meeting with %sheetTitle% has been cancelled.'
 user.agenda.version.meetingMoved: 'The meeting with %sheetTitle% was moved to %day% at %hour% at %spotRef%.'
 who.see_who_but_dont_see: '%seer% sees %seeable% and sees:'

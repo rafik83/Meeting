@@ -1,19 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\UserEventView;
 
 class UserEventListView
 {
     /** @var string */
-    public $id;
+    public $uid;
 
     /** @var int */
     public $eventId;
@@ -53,7 +45,7 @@ class UserEventListView
         bool $visioTested,
         array $userEventSheetsListViews
     ) {
-        $this->id = UserEventView::generateId($eventId, $userId);
+        $this->uid = UserEventView::generateId($eventId, $userId);
         $this->eventId = $eventId;
         $this->userId = $userId;
         $this->firstName = $firstName;

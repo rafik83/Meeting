@@ -1,7 +1,7 @@
 invoice.bankInfo.title: 'bank informations'
 invoice.date.title: Date
-invoice.gender.man: Mr
-invoice.gender.woman: Mrs
+invoice.gender.man: Mr.
+invoice.gender.woman: Ms.
 invoice.number.title: 'N° invoice'
 invoice.reference.title: 'your reference'
 invoice.summary.column.quantity: quantity

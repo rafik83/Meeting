@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature;
 
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
@@ -47,7 +39,7 @@ class CheckboxesType extends AbstractType
                 return null === $item ? null : $item->getCleanKey();
             },
             'choice_value'              => function (NomenclatureItem $item = null) {
-                return null === $item ? null : $item->getKey();
+                return null === $item ? null : mb_strtolower($item->getKey());
             },
             'choice_label'              => function (Options $options) {
                 return function (NomenclatureItem $item) use ($options) {

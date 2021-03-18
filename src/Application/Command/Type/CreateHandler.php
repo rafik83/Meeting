@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Type;
 
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
@@ -57,7 +49,7 @@ class CreateHandler
             $create->hidden,
             $create->availabilityType,
             $create->numberOfMeetingsPerPlanning,
-            $create->canMoveMeeting,
+            $create->canUpdateMeeting,
             $create->canRemoveMeeting,
             $create->areAllSheetParticipantsAssignedToMeeting,
             $create->canScanParticipant,
@@ -70,7 +62,7 @@ class CreateHandler
             $create->canEvaluateMeeting ? $create->mustEvaluateMeeting : false,
             $create->canSubmitValidation,
             $create->displayAnalyticsOnSheet,
-            $create->displayAnalyticsOnMeetingList
+            $create->displayAnalyticsOnCatalog
         );
 
         $localesTitleAlreadyExists = [];

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
 use PHPUnit\Framework\TestCase;
@@ -78,9 +70,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
     {
         $this->event = $this->prophesize(Event::class);
         $this->event->getLocales()->willReturn(['fr', 'en']);
-        $this->event->getAvailableLocale('fr')->willReturn('fr');
-        $this->event->getAvailableLocale('en')->willReturn('en');
-        
+
         $this->type1 = $this->prophesize(Type::class);
         $this->type1->getId()->willReturn(11);
 
@@ -95,6 +85,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->sheet1->getId()->willReturn(1);
         $this->sheet1->getOwner()->willReturn($this->user1->reveal());
         $this->sheet1->getType()->willReturn($this->type1->reveal());
+        $this->sheet1->getUserLocale($this->user1)->willReturn('en');
 
         $this->user2 = $this->prophesize(User::class);
         $this->user2->getEmail()->willReturn('user2@example.net');
@@ -104,6 +95,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->sheet2->getId()->willReturn(2);
         $this->sheet2->getOwner()->willReturn($this->user2->reveal());
         $this->sheet2->getType()->willReturn($this->type2->reveal());
+        $this->sheet2->getUserLocale($this->user2)->willReturn('fr');
 
         $this->user3 = $this->prophesize(User::class);
         $this->user3->getEmail()->willReturn('user3@example.net');
@@ -113,6 +105,7 @@ class SendEmailingByTypeHandlerTest extends TestCase
         $this->sheet3->getId()->willReturn(3);
         $this->sheet3->getOwner()->willReturn($this->user3->reveal());
         $this->sheet3->getType()->willReturn($this->type1->reveal());
+        $this->sheet3->getUserLocale($this->user3)->willReturn('fr');
 
         $this->billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
         $this->messageFactory = $this->prophesize(MessageFactory::class);

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\View\Type;
 
 use Proximum\Vimeet\Application\View\FormTemplate\FormTemplateView;
@@ -48,7 +40,7 @@ class TypeListView
     public $canRemoveMeeting;
 
     /** @var bool */
-    public $canMoveMeeting;
+    public $canUpdateMeeting;
 
     public function __construct(
         int $id,
@@ -61,7 +53,7 @@ class TypeListView
         string $package,
         bool $hasSpecificPaymentConditions = false,
         bool $hasSpecificTermsOfSale = false,
-        bool $canMoveMeeting = false,
+        bool $canUpdateMeeting = false,
         bool $canRemoveMeeting = false
     ) {
         $this->id = $id;
@@ -75,6 +67,6 @@ class TypeListView
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
         $this->hasSpecificTermsOfSale = $hasSpecificTermsOfSale;
         $this->canRemoveMeeting = $canRemoveMeeting;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
     }
 }

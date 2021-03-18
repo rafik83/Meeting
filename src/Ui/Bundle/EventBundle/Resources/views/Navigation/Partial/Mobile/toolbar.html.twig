@@ -8,11 +8,11 @@
                             {% for button in submenuView.submenuButtonViews %}
                                 {% if button.isShowOnMobile %}
                                     <li>
-                                        <a href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
+                                        <a {% for attribute, value in button.attributes %} {{ attribute }}="{{ value }}" {% endfor %} href="{{ button.link }}" class="btn btn-primary {{ (button.state == false) ? 'btn-inactive': '' }}">
                                             <span class="{{ button.icon }}"></span>
 
-                                            {% if button.counter is not null %}
-                                                <span class="alert-notification">{{ button.counter }}</span>
+                                            {% if button.counter is not null and button.counter > 0 %}
+                                                <span class="alert-notification">{{ button.counter <= 99 ? button.counter : "99+"  }}</span>
                                             {% endif %}
                                         </a>
                                     </li>
@@ -29,5 +29,3 @@
         </button>
     </div>
 </div>
-
-

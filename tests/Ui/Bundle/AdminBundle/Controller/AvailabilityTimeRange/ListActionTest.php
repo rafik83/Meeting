@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange;
 
 use PHPUnit\Framework\TestCase;
@@ -65,6 +57,8 @@ class ListActionTest extends TestCase
     public function testInvoke()
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
+        $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $view = new ListView([]);
         $this->queryBus->handle(new ListViewQuery($this->event->reveal()))->shouldBeCalled()->willReturn($view);
 

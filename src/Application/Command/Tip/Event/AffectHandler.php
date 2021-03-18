@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -66,6 +58,7 @@ class AffectHandler
             $globalTip->isOnContacts(),
             $globalTip->isOnProgram(),
             $globalTip->isOnConfirmationPhone(),
+            $globalTip->isOnNetworking(),
             $this->dateTime
         );
 

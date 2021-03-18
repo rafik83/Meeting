@@ -467,6 +467,14 @@ services:
             - '@adapter.authorization_checker'
             - '@session.flash_bag'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\RestoreAction:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@security.csrf.token_manager'
+            - '@router.default'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Admin\CreateAction:
         arguments:
             - '@adapter.authorization_checker'
@@ -1216,6 +1224,7 @@ services:
             - '@form.factory'
             - '@Proximum\Vimeet\Domain\Filter\RoomingListFilter'
             - '@adapter.router'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Accommodation\UpdateAction:
         arguments:
@@ -1234,12 +1243,14 @@ services:
             - '@router'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AvailabilityAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@Proximum\Vimeet\Domain\Rooming\Stay\HasStayForPeriod'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\RemoveAction:
         arguments:
@@ -1253,20 +1264,24 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\SheetsAction:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\CommentAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\TastingAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\PrepareExportAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@router'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction:
         arguments:
@@ -1277,6 +1292,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\Stay\AssignRoomNumberAction:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.authorization_checker'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportAction:
         arguments:
@@ -1376,3 +1392,14 @@ services:
             - '@adapter.csrf_token'
             - '@security.impersonate'
             - '@adapter.event_url_generator'
+
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\MeetingRequest\ImportAction:
+        arguments:
+            - '@twig'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+            - '@form.factory'
+            - '@error_factory'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

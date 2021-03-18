@@ -1,0 +1,8 @@
+services:
+  #
+  # Networking
+  #
+  Proximum\Vimeet\Ui\Bundle\EventBundle\TemplateSnippet\NetworkingTemplateSnippet:
+    arguments:
+      - '@templating'
+      - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

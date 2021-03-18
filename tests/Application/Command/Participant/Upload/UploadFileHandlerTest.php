@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\Participant\Upload;
 
 use PHPUnit\Framework\TestCase;
@@ -38,7 +30,7 @@ class UploadFileHandlerTest extends TestCase
 
         $uploadedFile
             ->expects(static::once())
-            ->method('getClientOriginalExtension')
+            ->method('guessExtension')
             ->withAnyParameters()
             ->willReturn('jpg')
         ;
@@ -124,7 +116,7 @@ class UploadFileHandlerTest extends TestCase
 
         $uploadedFile
             ->expects(static::once())
-            ->method('getClientOriginalExtension')
+            ->method('guessExtension')
             ->withAnyParameters()
             ->willReturn('jpg')
         ;

@@ -59,6 +59,20 @@ class MeetingRepository implements MeetingRepositoryInterface
         $this->entityManager->flush($meeting);
     }
 
+    public function findById(int $id): ?Meeting
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -989,5 +1003,36 @@ class MeetingRepository implements MeetingRepositoryInterface
         }
 
         return $this->scheduledMeetingsCount[$participant->getId()]??0;
+    }
+
+    public function getSheetScheduledMeetingsCount(array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('from_sheet.id, COUNT(meeting.id) as nb')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.fromSheet', 'from_sheet')
+            ->where('from_sheet.id IN(:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->groupBy('from_sheet.id')
+        ;
+        $sheetsFromMeetingsCount = array_column($queryBuilder->getQuery()->getArrayResult(), 'nb', 'id');
+
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('to_sheet.id, COUNT(meeting.id) as nb')
+            ->from(Meeting::class, 'meeting')
+            ->join('meeting.toSheet', 'to_sheet')
+            ->where('to_sheet.id IN (:sheetIds)')
+            ->setParameter('sheetIds', $sheetIds)
+            ->groupBy('to_sheet.id')
+        ;
+
+        return array_reduce($queryBuilder->getQuery()->getArrayResult(), function ($carry, $row) {
+            $carry[$row['id']] = ($carry[$row['id']] ?? 0) + $row['nb'];
+            return $carry;
+        }, $sheetsFromMeetingsCount);
     }
 }

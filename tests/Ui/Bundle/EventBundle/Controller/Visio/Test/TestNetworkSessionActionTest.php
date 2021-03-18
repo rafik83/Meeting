@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Visio\Test\TestNetworkSessionAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -25,9 +24,6 @@ class TestNetworkSessionActionTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $commandBus, $engine, $authorizationCheckerAdapter, $request, $user, $event, $sheet;
-
-    /** @var UserDomain */
-    private $userDomain;
 
     /** @var EventDomain */
     private $eventDomain;
@@ -43,7 +39,6 @@ class TestNetworkSessionActionTest extends TestCase
         $this->sheet = $this->prophesize(Sheet::class);
 
         $this->eventDomain = new EventDomain($this->event->reveal());
-        $this->userDomain = new UserDomain($this->user->reveal());
     }
 
     public function testInvokeAccessDenied(): void
@@ -72,7 +67,6 @@ class TestNetworkSessionActionTest extends TestCase
         $action(
             $this->request->reveal(),
             $this->eventDomain,
-            $this->userDomain,
             'session_id',
             $this->sheet->reveal()
         );
@@ -114,7 +108,6 @@ class TestNetworkSessionActionTest extends TestCase
         $action(
             $this->request->reveal(),
             $this->eventDomain,
-            $this->userDomain,
             'session_id',
             $this->sheet->reveal()
         );
@@ -167,7 +160,6 @@ class TestNetworkSessionActionTest extends TestCase
         $action(
             $this->request->reveal(),
             $this->eventDomain,
-            $this->userDomain,
             'session_id',
             $this->sheet->reveal()
         );

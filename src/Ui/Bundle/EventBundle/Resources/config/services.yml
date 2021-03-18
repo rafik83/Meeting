@@ -123,6 +123,13 @@ services:
         tags:
             - { name: security.voter }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
+        tags:
+            - { name: security.voter }
+
     #
     # Form extension
     #
@@ -247,6 +254,15 @@ services:
             - '@translator'
         tags:
             - { name: form.type }
+    form_type_sheet_data.video_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\VideoDataType
+        arguments:
+            - '@transformer.product.id_to_product_transformer'
+            - '@package.product.template_product_guesser'
+            - '@buyable_object_resolver'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: 'form.type' }
     form_type_package.participant_and_planning_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
         arguments:
@@ -340,8 +356,9 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\MoveMeetingType:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\UpdateMeetingType:
         arguments:
+             - '@template.participant_info_guesser'
              - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
@@ -534,6 +551,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
             - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
+            - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -811,6 +829,7 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler:
         arguments:
@@ -826,4 +845,8 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Sheet\CreateObjectFormHandler:
         arguments:
             - '@form.factory'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler:
+        arguments:
             - '@adapter.router'

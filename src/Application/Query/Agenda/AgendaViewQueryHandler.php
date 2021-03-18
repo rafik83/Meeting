@@ -1,20 +1,12 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
-use Proximum\Vimeet\Domain\Meeting\CanMoveMeeting;
+use Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting;
 use Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -29,8 +21,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Domain\Time\DaysHelper;
-use Proximum\Vimeet\Domain\Time\TimeRangeView;
+use Proximum\Vimeet\Domain\Time\TimeRangeViewTransformer;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
@@ -79,8 +70,8 @@ class AgendaViewQueryHandler
     /** @var GetParticipantTypes */
     private $getParticipantTypes;
 
-    /** @var CanMoveMeeting */
-    private $canMoveMeeting;
+    /** @var CanUpdateMeeting */
+    private $canUpdateMeeting;
 
     /** @var CanRemoveMeeting */
     private $canRemoveMeeting;
@@ -106,7 +97,7 @@ class AgendaViewQueryHandler
         ExtraDataRepository $extraDataRepository,
         GetTimezoneHelper $getTimezoneHelper,
         GetParticipantTypes $getParticipantTypes,
-        CanMoveMeeting $canMoveMeeting,
+        CanUpdateMeeting $canUpdateMeeting,
         CanRemoveMeeting $canRemoveMeeting,
         IsParticipantVisio $isParticipantVisio,
         DDayGuesser $dDayGuesser
@@ -125,7 +116,7 @@ class AgendaViewQueryHandler
         $this->extraDataRepository = $extraDataRepository;
         $this->getTimezoneHelper = $getTimezoneHelper;
         $this->getParticipantTypes = $getParticipantTypes;
-        $this->canMoveMeeting = $canMoveMeeting;
+        $this->canUpdateMeeting = $canUpdateMeeting;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->isParticipantVisio = $isParticipantVisio;
         $this->dDayGuesser = $dDayGuesser;
@@ -136,7 +127,7 @@ class AgendaViewQueryHandler
         $eventDays = $this->dayRepository->findByEvent($query->event);
         $participant = $query->participant;
         $sheet = $query->sheet;
-        $canMoveMeeting = $this->canMoveMeeting->isSatisfiedBy($sheet);
+        $canUpdateMeeting = $this->canUpdateMeeting->isSatisfiedBy($sheet);
         $canRemoveMeeting = $this->canRemoveMeeting->isSatisfiedBy($sheet);
         $user = $participant->getUser();
 
@@ -168,7 +159,7 @@ class AgendaViewQueryHandler
                 $isUserParticipantMultipleSheet,
                 $participants,
                 false,
-                $canMoveMeeting,
+                $canUpdateMeeting,
                 $canRemoveMeeting,
                 false,
                 false
@@ -205,7 +196,7 @@ class AgendaViewQueryHandler
             }
         }
 
-        $timezonedDays = $this->getTimezonedDays($eventDays, $timezone);
+        $timezonedDays = TimeRangeViewTransformer::fromEventDays($eventDays, $timezone);
         $dayViews = [];
 
         foreach ($timezonedDays as $day) {
@@ -244,7 +235,7 @@ class AgendaViewQueryHandler
             $isUserParticipantMultipleSheet,
             $participants,
             $isPhoneConfirmationRequired,
-            $canMoveMeeting,
+            $canUpdateMeeting,
             $canRemoveMeeting,
             $this->isParticipantVisio->isSatisfiedBy($participant),
             $this->dDayGuesser->isItDDay($query->event)
@@ -271,7 +262,7 @@ class AgendaViewQueryHandler
     {
         $happeningParticipations = $this
             ->happeningParticipationRepository
-            ->findByUser($user, $event, true);
+            ->findByUser($user, $event, true, true);
 
         foreach ($happeningParticipations as $happeningParticipation) {
             $happeningsFound[$happeningParticipation->getHappening()->getId()] = true;
@@ -284,25 +275,5 @@ class AgendaViewQueryHandler
         }
 
         return $happeningParticipations;
-    }
-
-    /**
-     * @param array  $eventDays
-     * @param string $timezone
-     *
-     * @return TimeRangeView[]
-     */
-    private function getTimezonedDays(array $eventDays, string $timezone): array
-    {
-        $timezonedTimeRangeViews = [];
-
-        foreach ($eventDays as $day) {
-            $timezonedTimeRangeViews[] = new TimeRangeView(
-                DaysHelper::cloneDateTime($day->getBegin(), $timezone),
-                DaysHelper::cloneDateTime($day->getEnd(), $timezone)
-            );
-        }
-
-        return DaysHelper::splitDays($timezonedTimeRangeViews);
     }
 }

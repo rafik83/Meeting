@@ -62,15 +62,20 @@
 @import "components/_modal";
 
 @import "objects/_agenda";
+@import "objects/_chat";
 @import "objects/_card";
+
 @import "objects/_program";
 @import "objects/_catalog-mobile-filters";
 @import "objects/_tip";
 @import "objects/_messages";
+@import "objects/_networking";
+@import "objects/_toast";
+@import "objects/_modal-call-visio";
 @import "objects/_select-from-nomenclature-field";
 @import "objects/_videoConference";
 @import "objects/_videoConferenceChat";
-@import "objects/_videoConferenceQuestions";
+
 
 @import "generic/_titles";
 @import "generic/_buttons";
@@ -348,5 +353,14 @@
 @keyframes blinker {
   50% {
     opacity: 0;
+  }
+}
+
+// Force the difference between an available and unavailable slot
+option {
+  color: black;
+
+  &[disabled] {
+    color: lightgray;
   }
 }

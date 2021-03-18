@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\LinkedSheets;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -85,6 +77,7 @@ class AddAction
     public function __invoke(Request $request, Event $event): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
         ) {
             throw new AccessDeniedException('Access denied!');
         }

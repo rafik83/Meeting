@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Nomenclature;
 
 use Proximum\Vimeet\Application\Command\Nomenclature\Remove;
@@ -35,6 +27,10 @@ class RemoveController extends Controller
 
         if (null !== $event && !$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             throw $this->createAccessDeniedException('The nomenclature can only be delete by an organizer or a super admin');
+        }
+
+        if (null !== $event && $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw $this->createAccessDeniedException();
         }
 
         try {

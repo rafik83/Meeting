@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Template\Form\ExportFormTemplateData;
 
 use Proximum\Vimeet\Application\Query\Query;
@@ -18,13 +10,13 @@ class FormTemplateDataUserListViewQuery implements Query
 {
     /** @var Event */
     public $event;
-    
+
     /** @var FormTemplate */
     public $formTemplate;
-    
+
     /** @var array */
     public $users;
-    
+
     /** @var string */
     public $locale;
 

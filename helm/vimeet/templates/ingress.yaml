@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "vimeet.fullname" . }}
+  labels:
+    app: "{{ template "vimeet.name" . }}"
+    chart: "{{ template "vimeet.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+  annotations:
+    {{- if .Values.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+  - host: {{ .name }}
+    http:
+      paths:
+      - path: {{ default "/" .path }}
+        backend:
+            {{- if .varnish.enabled }}
+          serviceName: "{{ template "vimeet.fullname" $ }}-varnish"
+          servicePort: {{ .varnish.port }}
+            {{- else }}
+          serviceName: "{{ template "vimeet.fullname" $ }}"
+          servicePort: http
+            {{- end }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+  {{- end }}
+  {{- range .Values.ingress.hosts }}
+  {{- if .tls }}
+  - hosts:
+    - {{ .name }}
+    secretName: {{ .tlsSecret }}
+  {{- end }}
+  {{- end }}
+{{- end }}

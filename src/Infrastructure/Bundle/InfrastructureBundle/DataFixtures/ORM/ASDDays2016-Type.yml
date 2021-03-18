@@ -6,6 +6,7 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: '@sheet_template_fournisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
         availabilityType: 'unavailable'
+        displayAnalyticsOnCatalog: true
 
     event_asddays_2016_type_investisseur:
         __construct: ["@event_asddays_2016"]
@@ -14,6 +15,7 @@ Proximum\Vimeet\Domain\Model\Type:
         sheetTemplate: '@sheet_template_investisseur_asddays'
         registrationTemplate: '@registration_template_asd_days'
         availabilityType: 'available'
+        displayAnalyticsOnSheet: true
 
     event_asddays_2016_type_donneur_ordre:
         __construct: ["@event_asddays_2016"]

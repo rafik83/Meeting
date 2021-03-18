@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Event\Participant;
 
 use Proximum\Vimeet\Domain\Model\Event as VimeetEvent;
@@ -19,7 +11,7 @@ class ParticipantVisioTestedEvent extends Event
     /** @var User */
     public $user;
 
-    /** @var Event */
+    /** @var VimeetEvent */
     public $event;
 
     public function __construct(User $user, VimeetEvent $event)

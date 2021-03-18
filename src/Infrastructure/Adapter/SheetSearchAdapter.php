@@ -1,19 +1,11 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
-use Elastica\Filter\Query as FilterQuery;
+use Elastica\Aggregation\ValueCount;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
 use Elastica\Result;
@@ -60,24 +52,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
-     * @param Event       $event
-     * @param array       $filters
-     * @param string|null $orderBy
-     * @param string      $locale
-     * @param array       $nomenclatureItems
-     * @param array       $availableSlotIds
-     * @param array       $sheetsToExclude
-     *
-     * @return Query
+     * @param Sheet[]     $sheetsToExclude
+     * @param int[]       $prefilteredSheetIds
      */
     private function getQueryToFind(
         Event $event,
         array $filters,
-        string $orderBy = null,
+        ?string $orderBy = null,
         string $locale,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): Query {
         $nomenclatureBoost = isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             ? \count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
@@ -90,7 +76,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $nomenclatureBoost,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
@@ -129,6 +116,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         } else {
             $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
+            $query->setFieldDataFields(['sheetName.raw']);
         }
 
         return $query;
@@ -156,7 +144,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $locale,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         $query = $this->getQueryToFind(
             $event,
@@ -165,7 +154,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $locale,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
         $options = ['size' => ElasticSearchConstant::LONG_RESULTS_NUMBER];
 
@@ -186,6 +176,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
         array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null,
         ?RuleInterface $condition = null
     ): PaginatedResult {
         $query = $this->getQueryToFind(
@@ -195,7 +186,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $locale,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
 
         if (true === $getAggregations) {
@@ -259,10 +251,10 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query = new Query();
         $query->setRawQuery($queryToArray);
-        $query->setFields(['id']);
+        $query->setStoredFields(['id']);
 
         return array_map(static function (Result $sheet) {
-            return $sheet->id[0];
+            return $sheet->getId();
         }, $this->searchable->search($query, ['limit' => ElasticSearchConstant::LONG_RESULTS_NUMBER])->getResults());
     }
 
@@ -278,7 +270,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         return array_map(static function (Result $result) {
-            return new SheetListView($result->id, $result->sheetName, $result->ownerEmail);
+            return new SheetListView($result->getId(), $result->sheetName, $result->ownerEmail);
         }, $results);
     }
 
@@ -290,7 +282,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $results = $this->getSearchResults($event, $filters, $locale, $condition);
 
         $sheetIds = array_map(static function (Result $result) {
-            return $result->id;
+            return $result->getId();
         }, $results);
 
         return new SheetIdsView($sheetIds);
@@ -303,8 +295,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $results = $this->getSearchResults($event, $filters, $locale);
 
-        $sheetIds = array_map(function (Result $result) {
-            return $result->id;
+        $sheetIds = array_map(static function (Result $result) {
+            return $result->getId();
         }, $results);
 
         return new ParticipantsSheetIdsView($sheetIds);
@@ -324,7 +316,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addAggregation($this->findCityQuery($event, $filter))
             ->addAggregation($this->findCountryQuery($event, $filter, $locale))
-            ->setSize(0);
+            ->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $this->searchable->search($query)->getAggregations();
     }
@@ -348,6 +340,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query->addAggregation($countryAggregations);
         $query->setSize(0);
+
         $query->setSource('countryCode');
 
         return $this->searchable->search($query)->getAggregations();
@@ -368,15 +361,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $matchKeyword = new Query\Term(['keywords.label_autocomplete' => $filter]);
         $matchLocale  = new Query\Match('keywords.locale', $locale);
 
-        $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust($matchKeyword);
-        $boolQuery->addMust($matchLocale);
+        $filterKeywordQuery = new Query\BoolQuery();
+        $filterKeywordQuery->addMust($matchKeyword);
+        $filterKeywordQuery->addMust($matchLocale);
 
-        $filterKeywordQuery = new FilterQuery();
-        $filterKeywordQuery->setQuery($boolQuery);
-
-        $filterEventQuery = new FilterQuery();
-        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+        $filterEventQuery = new Query\Match('event', $event->getId());
 
         $keywordAggregations = new Terms('keyword');
         $keywordAggregations->setField('keywords.label');
@@ -395,9 +384,35 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addAggregation($filterKeywordsEvent)
             ->addAggregation($this->findSheetNameQuery($event, $filter))
-            ->setSize(0);
+            ->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $this->searchable->search($query)->getAggregations();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCountAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        ?string $filterToRemove,
+        array $nomenclatureItems,
+        array $availableSlotIds,
+        array $sheetsToExclude,
+        array $prefilteredSheetIds
+    ): array {
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            null,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude,
+            $prefilteredSheetIds
+        );
     }
 
     /**
@@ -410,7 +425,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $filterToRemove,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         return $this->searchAggregations(
             $event,
@@ -420,7 +436,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             self::ES_FIELD_TYPE,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
@@ -434,7 +451,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $filterToRemove,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         return $this->searchAggregations(
             $event,
@@ -444,48 +462,52 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             self::ES_FIELD_CATEGORIES,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOrganizationCategoryAggregations(
         Event $event,
         string $locale,
         array $filters,
-        string $filterToRemove
+        string $filterToRemove,
+        ?array $prefilteredSheetIds
     ): array {
         return $this->searchAggregations(
             $event,
             $locale,
             $filters,
             $filterToRemove,
-            self::ES_FIELD_ORGANIZATION_CATEGORY
+            self::ES_FIELD_ORGANIZATION_CATEGORY,
+            [],
+            [],
+            [],
+            $prefilteredSheetIds
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPositionAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
-    {
+    public function getPositionAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        ?array $prefilteredSheetIds
+        ): array {
         return $this->searchAggregations(
             $event,
             $locale,
             $filters,
             $filterToRemove,
-            self::ES_FIELD_POSITION
+            self::ES_FIELD_POSITION,
+            [],
+            [],
+            [],
+            $prefilteredSheetIds
         );
     }
 
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     * @param null|RuleInterface $condition
-     *
      * @return Result[]
      */
     private function getSearchResults(Event $event, array $filters, string $locale, ?RuleInterface $condition = null): array
@@ -510,30 +532,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query, $options)->getResults();
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param string $filterToRemove
-     * @param string $elasticField
-     * @param array  $nomenclatureItems
-     * @param array  $availableSlotIds
-     * @param array  $sheetsToExclude
-     *
-     * @return array
-     */
     private function searchAggregations(
         Event $event,
         string $locale,
         array $filters,
-        string $filterToRemove,
-        string $elasticField,
+        ?string $filterToRemove,
+        ?string $elasticField,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        ?array $prefilteredSheetIds = null
     ): array {
         // remove filter
-        unset($filters[$filterToRemove]);
+        if (null !== $filterToRemove) {
+            unset($filters[$filterToRemove]);
+        }
 
         $builder = new SheetSearchQueryBuilder(
             $event,
@@ -542,16 +555,19 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             1,
             $nomenclatureItems,
             $availableSlotIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            $prefilteredSheetIds
         );
-        $query   = new Query($builder->getQuery());
+        $query = new Query($builder->getQuery());
 
         if (self::ES_FIELD_POSITION === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
         } elseif (self::ES_FIELD_CATEGORIES === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORIES));
-        } else {
+        } elseif (null !== $elasticField) {
             $query->addAggregation($this->getAggregation($elasticField));
+        } else {
+            $query->addAggregation(new ValueCount('total_count', self::ES_FIELD_IN_CATALOG));
         }
 
         $query->setSize(0);
@@ -563,26 +579,15 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $result->getAggregations();
     }
 
-    /**
-     * @param string $field
-     *
-     * @return Terms
-     */
     private function getAggregation(string $field): Terms
     {
         $aggregation = new Terms($field);
         $aggregation->setField($field);
-        $aggregation->setSize(0);
+        $aggregation->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
         return $aggregation;
     }
 
-    /**
-     * @param string $field
-     * @param string $path
-     *
-     * @return Nested
-     */
     private function getNestedAggregation(string $field, string $path): Nested
     {
         $nested = new Nested($field, $path);
@@ -601,10 +606,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $matchCity = new Query\BoolQuery();
         $matchCity->addMust(new Query\Match('event', $event->getId()));
-        $matchCity->addMust(new Query\Match('city_autocomplete', $filter));
-
-        $filterQuery = new FilterQuery();
-        $filterQuery->setQuery($matchCity);
+        $matchCity->addMust(new Query\Match('city.city_autocomplete', $filter));
 
         $citiesAggregations = new Terms('cities');
         $citiesAggregations->setField('city');
@@ -612,22 +614,14 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $cities = new Filter('cities_aggs');
         $cities->addAggregation($citiesAggregations);
-        $cities->setFilter($filterQuery);
+        $cities->setFilter($matchCity);
 
         return $cities;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     * @param string $locale
-     *
-     * @return Filter
-     */
     private function findCountryQuery(Event $event, string $filter, string $locale): Filter
     {
-        $filterEventQuery = new FilterQuery();
-        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+        $filterEventQuery = new Query\Match('event', $event->getId());
 
         // country
         $matchCountry = new Query\Match('country.label_autocomplete', $filter);
@@ -637,16 +631,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $boolQuery->addMust($matchCountry);
         $boolQuery->addMust($matchLocale);
 
-        $filterCountryQuery = new FilterQuery();
-        $filterCountryQuery->setQuery($boolQuery);
-
         $countryAggregations = new Terms('countries');
         $countryAggregations->setField('country.label');
         $countryAggregations->setSize(10);
 
         $filterCountries = new Filter('countries_filter');
         $filterCountries->addAggregation($countryAggregations);
-        $filterCountries->setFilter($filterCountryQuery);
+        $filterCountries->setFilter($boolQuery);
 
         $nestedCountryAggregations = new Nested('countries', 'country');
         $nestedCountryAggregations->addAggregation($filterCountries);
@@ -657,12 +648,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $filterCountryEvent;
     }
 
-    /**
-     * @param Event  $event
-     * @param string $filter
-     *
-     * @return Filter
-     */
     private function findSheetNameQuery(Event $event, string $filter): Filter
     {
         $boolQuery = new Query\BoolQuery();
@@ -671,9 +656,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $sheetAggregation = new Terms('sheetname');
         $sheetAggregation->setField('sheetName.raw');
+        $sheetAggregation->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
 
-        $filterQuery     = new FilterQuery($boolQuery);
-        $filterSheetName = new Filter('sheet', $filterQuery);
+        $filterSheetName = new Filter('sheet', $boolQuery);
         $filterSheetName->addAggregation($sheetAggregation);
 
         return $filterSheetName;

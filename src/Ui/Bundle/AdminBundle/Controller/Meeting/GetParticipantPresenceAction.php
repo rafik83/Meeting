@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Meeting;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -37,7 +29,9 @@ class GetParticipantPresenceAction
 
     public function __invoke(Request $request, Event $event, MeetingSlot $meetingSlot): JsonResponse
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $meetingSlot->getEvent()
+        ) {
             throw new AccessDeniedException('Access denied');
         }
 

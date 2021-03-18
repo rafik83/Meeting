@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model\Tip;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,6 +20,7 @@ class Tip
     const TRANS_VISIBLE_CONTACTS = 'admin.tip.column.visible.onContacts';
     const TRANS_VISIBLE_PROGRAM = 'admin.tip.column.visible.onProgram';
     const TRANS_VISIBLE_CONFIRMATION_PHONE = 'admin.tip.column.visible.onConfirmationPhone';
+    const TRANS_VISIBLE_NETWORKING = 'admin.tip.column.visible.onNetworking';
 
     const DISPLAY_DEFAULT = 'default';
     const DISPLAY_FIRST_TIME_OPENED = 'first_time_opened';
@@ -85,6 +78,9 @@ class Tip
     /** @var bool */
     private $onConfirmationPhone;
 
+    /** @var bool */
+    public $onNetworking;
+
     /** @var string */
     private $display;
 
@@ -121,6 +117,7 @@ class Tip
      * @param bool               $onContacts
      * @param bool               $onProgram
      * @param bool               $onConfirmationPhone
+     * @param bool               $onNetworking
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
@@ -135,6 +132,7 @@ class Tip
         $onContacts,
         $onProgram,
         $onConfirmationPhone,
+        $onNetworking,
         \DateTimeInterface $createdAt
     ) {
         $this->title               = $title;
@@ -148,6 +146,7 @@ class Tip
         $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
+        $this->onNetworking        = $onNetworking;
         $this->translations        = new ArrayCollection();
         $this->types               = new ArrayCollection();
         $this->createdAt           = $createdAt;
@@ -167,6 +166,7 @@ class Tip
      * @param bool   $onContacts
      * @param bool   $onProgram
      * @param bool   $onConfirmationPhone
+     * @param bool   $onNetworking
      *
      * @return Tip
      */
@@ -180,7 +180,8 @@ class Tip
         $onPackage,
         $onContacts,
         $onProgram,
-        $onConfirmationPhone
+        $onConfirmationPhone,
+        $onNetworking
     ) {
         $this->title               = $title;
         $this->onMeetingManagement = $onMeetingManagement;
@@ -192,6 +193,7 @@ class Tip
         $this->onContacts          = $onContacts;
         $this->onProgram           = $onProgram;
         $this->onConfirmationPhone = $onConfirmationPhone;
+        $this->onNetworking        = $onNetworking;
 
         return $this;
     }
@@ -431,6 +433,11 @@ class Tip
         return $this->onConfirmationPhone;
     }
 
+    public function isOnNetworking(): bool
+    {
+        return $this->onNetworking;
+    }
+
     /**
      * @return \DateTimeInterface
      */
@@ -480,6 +487,10 @@ class Tip
 
         if ($this->isOnConfirmationPhone()) {
             $pagesTranslations[] = self::TRANS_VISIBLE_CONFIRMATION_PHONE;
+        }
+
+        if ($this->isOnNetworking()) {
+            $pagesTranslations[] = self::TRANS_VISIBLE_NETWORKING;
         }
 
         return $pagesTranslations;

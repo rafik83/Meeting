@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\PromotionCode\Batch\PromotionCodeGroupList;
 
-use Nette\Utils\DateTime;
+use DateTime;
 use Proximum\Vimeet\Application\Query\PromotionCode\Batch\CanBeUpdatable;
 use Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListView;
 use Proximum\Vimeet\Application\Query\PromotionCode\Batch\PromotionCodeGroupList\GetListViewHandler;

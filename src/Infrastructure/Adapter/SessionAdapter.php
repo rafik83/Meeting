@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
@@ -68,5 +60,10 @@ class SessionAdapter implements SessionInterface
     public function remove($key)
     {
         $this->session->remove($key);
+    }
+
+    public function getLastUsed(): int
+    {
+        return $this->session->getMetadataBag()->getLastUsed();
     }
 }

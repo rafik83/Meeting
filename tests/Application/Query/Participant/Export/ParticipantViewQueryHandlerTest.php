@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -55,6 +56,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $meetingRepository;
+
+    /** @var ObjectProphecy */
+    private $chatSessionRepository;
 
     /** @var ObjectProphecy */
     private $scanRepository;
@@ -105,6 +109,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
 
         $this->participant = $this->prophesize(Participant::class);
         $this->event = $this->prophesize(Event::class);
@@ -115,6 +120,7 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $this->participant->getSheet()->willReturn($this->sheet->reveal());
         $this->sheet->getType()->willReturn($this->type->reveal());
         $this->participant->getUser()->willReturn($this->user->reveal());
+        $this->participant->getLocale()->willReturn('es');
         $this->dateTime = new \DateTime('2017-10-09 13:39:34.000');
         $this->dateTime2 = new \DateTime('2017-10-10 13:39:34.000');
         $this->sheet->getCreatedAt()->willReturn($this->dateTime);
@@ -265,6 +271,10 @@ class ParticipantViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(3);
 
+        $this->chatSessionRepository->countCallVisioByEventAndUser($this->event->reveal(), $this->user->reveal())
+            ->shouldBeCalled()
+            ->willReturn(7);
+
         $handler = new ParticipantViewQueryHandler(
             $this->happeningParticipationRepository->reveal(),
             $this->templateDataFactory->reveal(),
@@ -275,7 +285,8 @@ class ParticipantViewQueryHandlerTest extends TestCase
             $happeningRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->requestRepository->reveal(),
-            $this->meetingRepository->reveal()
+            $this->meetingRepository->reveal(),
+            $this->chatSessionRepository->reveal()
         );
 
         $result = $handler->handle($query);
@@ -311,7 +322,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
             42,
             24,
             5,
-            3
+            3,
+            7,
+            'es'
         );
 
         $this->assertEquals($expected, $result);

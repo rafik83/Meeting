@@ -58,7 +58,7 @@ class CreateHandlerTest extends TestCase
         $create->formTemplates = [$formTemplate1, $formTemplate2];
         $create->hidden = true;
         $create->rank = null;
-        $create->canMoveMeeting = false;
+        $create->canUpdateMeeting = false;
         $create->availabilityType = Type::TYPE_MANAGEMENT_UNAVAILABLE;
         $create->numberOfMeetingsPerPlanning = 12;
         $create->canRemoveMeeting = false;
@@ -70,7 +70,7 @@ class CreateHandlerTest extends TestCase
         $create->mustEvaluateMeeting = true;
         $create->canSubmitValidation = true;
         $create->displayAnalyticsOnSheet = true;
-        $create->displayAnalyticsOnMeetingList = true;
+        $create->displayAnalyticsOnCatalog = true;
 
         //Mock
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
@@ -89,8 +89,8 @@ class CreateHandlerTest extends TestCase
                 && $actual->canEvaluateMeeting()
                 && $actual->mustEvaluateMeeting()
                 && $actual->canSubmitValidation()
-                && $actual->displayAnalyticsOnSheet
-                && $actual->displayAnalyticsOnMeetingList
+                && $actual->canDisplayAnalyticsOnSheet()
+                && $actual->canDisplayAnalyticsOnCatalog()
             ;
         }))->shouldBeCalled();
         $typeRepository->typeExists($event, 'fr', 'Exposant')->shouldBeCalled()->willReturn(false);

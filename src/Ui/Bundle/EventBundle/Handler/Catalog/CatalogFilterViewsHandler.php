@@ -1,12 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
 
@@ -21,8 +14,11 @@ use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\Catalog\SheetVisitView;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class CatalogFilterViewsHandler
@@ -42,13 +38,6 @@ class CatalogFilterViewsHandler
     /** @var GetDisplayObjectiveFilter */
     private $getDisplayObjectiveFilter;
 
-    /**
-     * @param QueryBusInterface              $queryBus
-     * @param VisibleParticipationCategories $visibleParticipationCategories
-     * @param VisibleParticipationTypes      $visibleParticipationTypes
-     * @param EngineInterface                $engine
-     * @param GetDisplayObjectiveFilter      $getDisplayObjectiveFilter
-     */
     public function __construct(
         QueryBusInterface $queryBus,
         VisibleParticipationCategories $visibleParticipationCategories,
@@ -63,13 +52,10 @@ class CatalogFilterViewsHandler
         $this->getDisplayObjectiveFilter = $getDisplayObjectiveFilter;
     }
 
-    /**
-     * @param CatalogFilterViews $catalogFilterViews
-     *
-     * @return CatalogFilterViewsResult
-     */
     public function handle(
-        CatalogFilterViews $catalogFilterViews
+        CatalogFilterViews $catalogFilterViews,
+        bool $hasSheetVisitFilter = false,
+        User $user = null
     ): CatalogFilterViewsResult {
         $event = $catalogFilterViews->event;
         $sheet = $catalogFilterViews->sheet;
@@ -80,11 +66,17 @@ class CatalogFilterViewsHandler
             new SearchFacetViewQuery($event, $locale)
         );
 
+        $sheetVisitViews = [];
         $categoryViews = [];
         $typeViews = [];
         $organizationCategoryViews = [];
         $positionViews = [];
         $taggedNomenclatureTagViews = [];
+
+        if ($hasSheetVisitFilter) {
+            $sheetVisitViews[CatalogConstant::FILTER_SHEET_SAW] = new SheetVisitView(CatalogConstant::FILTER_SHEET_SAW, 0, $user, $sheet);
+            $sheetVisitViews[CatalogConstant::FILTER_VIEWED_BY_SHEET] = new SheetVisitView(CatalogConstant::FILTER_VIEWED_BY_SHEET, 0, null, $sheet);
+        }
 
         if ($searchFacetsView->hasCategory()) {
             $visibleCategories = $this
@@ -124,6 +116,7 @@ class CatalogFilterViewsHandler
 
         return new CatalogFilterViewsResult(
             CatalogFilterViewsResult::RESULT_CATEGORY_OR_TYPE,
+            $sheetVisitViews,
             $categoryViews,
             $typeViews,
             $organizationCategoryViews,
@@ -138,6 +131,7 @@ class CatalogFilterViewsHandler
     {
         return new CatalogFilterViewsResult(
             CatalogFilterViewsResult::EMPTY_CATEGORY_OR_TYPE,
+            [],
             [],
             [],
             [],

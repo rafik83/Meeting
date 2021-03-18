@@ -9,6 +9,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    # should be set to deployed version hash on k8s environments
+    app_version: '%env(APP_VERSION)%'
+    env(APP_VERSION): dev
 
 framework:
     esi: { enabled: true }
@@ -59,6 +62,7 @@ twig:
     globals:
         admin_menu_color: "%admin_menu_color%"
         visio_screen_sharing_chrome_extension: "%visio_screen_sharing_chrome_extension%"
+        networking_template_snippet: "@Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\TemplateSnippet\\NetworkingTemplateSnippet"
 
 # Doctrine Configuration
 doctrine:
@@ -90,6 +94,9 @@ doctrine:
                 dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
+        dql:
+            string_functions:
+                MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -127,7 +134,7 @@ services:
             - { name: twig.extension }
 
 infrastructure:
-    eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se', 'gb']
+    eu_countries: ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se']
     preferred_locales: ['fr', 'en', 'es', 'de', 'it', 'zh']
     default_locales: ['fr', 'en']
     supported_currencies: ['EUR', 'GBP', 'USD']

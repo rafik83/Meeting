@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
@@ -122,7 +114,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);
@@ -143,7 +136,8 @@ class TipManager
             $tip->isOnPackage(),
             $tip->isOnContacts(),
             $tip->isOnProgram(),
-            $tip->isOnConfirmationPhone()
+            $tip->isOnConfirmationPhone(),
+            $tip->isOnNetworking()
         );
 
         $this->tipRepository->set($tip);

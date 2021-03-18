@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -80,6 +72,10 @@ class IndexAction
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('Only the super admin can access this page');
+        }
+
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException('Access denied');
         }
 
         $command = new PrepareSheetsIndex($event, true);

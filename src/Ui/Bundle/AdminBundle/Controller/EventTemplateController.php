@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\Create;
@@ -29,6 +21,7 @@ class EventTemplateController extends Controller
     public function registrationTemplateAction(Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->get('repository.template.registration_template_repository')
                           ->getTemplateForGivenEvent($event);
@@ -47,6 +40,7 @@ class EventTemplateController extends Controller
     public function sheetTemplateAction(Event $event)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->get('repository.template.sheet_template_repository')
             ->getTemplateForGivenEvent($event);
@@ -67,6 +61,7 @@ class EventTemplateController extends Controller
     public function packageTemplateAction(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $templates = $this->get('repository.package_repository')->findByEvent($event);
 

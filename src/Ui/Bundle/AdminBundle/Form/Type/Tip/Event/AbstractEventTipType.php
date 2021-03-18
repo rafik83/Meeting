@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -62,6 +54,9 @@ abstract class AbstractEventTipType extends AbstractType
                 'required' => false,
             ])
             ->add('onConfirmationPhone', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('onNetworking', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('translations', CollectionType::class, [

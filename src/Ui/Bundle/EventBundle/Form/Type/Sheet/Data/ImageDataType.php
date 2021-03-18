@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
@@ -84,6 +76,7 @@ class ImageDataType extends AbstractType
                 'choices'     => $image->getBuyableProducts(),
                 'required'    => true,
                 'data'        => $selectedRadio,
+                'attr' => ['required' => true],
             ]);
             $builder->get('selectedProduct')->addModelTransformer($this->idToProductTransformer);
         }

@@ -109,6 +109,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
+        /** @var Event $event */
         $event = $context['event'];
         $allowMultiSheet = $context['allowMultiSheet'] ?? false;
 
@@ -134,6 +135,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
         $mappedMailCsvColumn = $mappingGuesser->getMappedInKey(ParticipantImportTag::REGISTRATION_FIELD_MAIL);
+        $mappedLocaleCsvColumn = $mappingGuesser->getMappedInKey(ParticipantImportTag::REGISTRATION_FIELD_LOCALE);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType(
             $context['type'],
@@ -147,6 +149,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
         foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row) || null === $row[$mappedMailCsvColumn]) {
                 continue;
+            }
+
+            $locale = '';
+            if (false !== $mappedLocaleCsvColumn){
+                $locale = strtolower(StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedLocaleCsvColumn]));
             }
 
             $email = strtolower(StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]));
@@ -191,7 +198,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $sheetRegistrationData,
                     $sheetData,
                     $participantData,
-                    $registrationTemplate
+                    $registrationTemplate,
+                    $locale
                 );
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
@@ -282,6 +290,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             if (false === $objectKey
                 || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $objectKey
+                || ParticipantImportTag::REGISTRATION_FIELD_LOCALE === $objectKey
             ) {
                 continue;
             }
@@ -414,6 +423,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param array        $sheetData
      * @param array        $participantData
      * @param TemplateData $registrationTemplate
+     * @param string       $locale
      */
     private function createEntities(
         array $context,
@@ -423,13 +433,16 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheetRegistrationData,
         $sheetData,
         $participantData,
-        TemplateData $registrationTemplate
+        TemplateData $registrationTemplate,
+        string $locale
     ): void {
+        /** @var Event $event */
         $event = $context['event'];
         $user = $this->getUser($email);
 
         if (!$user instanceof User) {
-            $user = $this->createUser($email, $context['locale']);
+            $userLocale = $locale !== '' ? $locale : $context['locale'];
+            $user = $this->createUser($email, $event->getAvailableLocale($userLocale));
         }
 
         $group = $this->getGroup(
@@ -460,6 +473,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             false,
             $this->dateTime
         );
+
+        if ($locale !== $event->getAvailableLocale($locale)) {
+            $locale = $event->getAvailableLocale($user->getLocale());
+        }
+
+        $participant->setLocale($locale);
         $participant->setImported(true);
         $this->participantRepository->add($participant);
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection

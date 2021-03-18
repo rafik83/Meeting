@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\MeetingRequest;
 
 use PHPUnit\Framework\TestCase;
@@ -94,6 +86,9 @@ class ReminderHandlerTest extends TestCase
         $participantOne = $this->prophesize(Participant::class);
         $participantTwo = $this->prophesize(Participant::class);
 
+        $participantOne->getLocale()->willReturn('fr');
+        $participantTwo->getLocale()->willReturn('fr');
+
         $userEventPhoneOne = $this->prophesize(User\UserEventPhone::class);
         $userEventPhoneTwo = $this->prophesize(User\UserEventPhone::class);
 
@@ -110,8 +105,6 @@ class ReminderHandlerTest extends TestCase
         $userOne->getId()->willReturn(1);
         $userTwo->getLocale()->willReturn('fr');
         $userTwo->getId()->willReturn(2);
-
-        $eventOne->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
 
         $extraDataUserOne = $this->prophesize(User\Event\ExtraData::class);
         $extraDataUserTwo = $this->prophesize(User\Event\ExtraData::class);

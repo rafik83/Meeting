@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
@@ -28,11 +20,6 @@ class DayViewQueryHandler
     /** @var MassUnavailabilityViewQueryHandler */
     private $massUnavailabilityViewQueryHandler;
 
-    /**
-     * @param HappeningRepositoryInterface       $happeningRepository
-     * @param HappeningViewQueryHandler          $happeningViewQueryHandler
-     * @param MassUnavailabilityViewQueryHandler $massUnavailabilityViewQueryHandler
-     */
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         HappeningViewQueryHandler $happeningViewQueryHandler,
@@ -43,22 +30,17 @@ class DayViewQueryHandler
         $this->massUnavailabilityViewQueryHandler = $massUnavailabilityViewQueryHandler;
     }
 
-    /**
-     * @param DayViewQuery $query
-     *
-     * @return DayView
-     */
-    public function handle(DayViewQuery $query)
+    public function handle(DayViewQuery $query): DayView
     {
         $happenings = $this->happeningRepository->findByEventAndTypeAndDayAndCategory(
             $query->event,
             $query->sheet->getType(),
-            $query->eventDay->getDay(),
+            $query->timeRange->getBegin(),
             $query->category
         );
 
         $happeningViews = [];
-        $massViews      = [];
+        $massViews = [];
 
         foreach ($happenings as $happening) {
             $happeningViews[] = $this->happeningViewQueryHandler->handle(
@@ -67,8 +49,8 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if ($mass->getBegin() >= $query->eventDay->getStartTime()
-                && $mass->getEnd() <= $query->eventDay->getEndTime()
+            if ($mass->getBegin() >= $query->timeRange->getBegin()
+                && $mass->getBegin() <= $query->timeRange->getEnd()
             ) {
                 $massViews[] = $this->massUnavailabilityViewQueryHandler->handle(
                     new MassUnavailabilityViewQuery($mass, $query->event, $query->locale)
@@ -77,8 +59,8 @@ class DayViewQueryHandler
         }
 
         return new DayView(
-            $query->eventDay->getStartTime(),
-            $query->eventDay->getEndTime(),
+            $query->timeRange->getBegin(),
+            $query->timeRange->getEnd(),
             $query->event->getConfiguration()->getScheduleScale(),
             $happeningViews,
             $this->mergeAndSortMassViewsAndHappeningViews($happeningViews, $massViews)
@@ -98,7 +80,7 @@ class DayViewQueryHandler
     {
         $programElementViews = array_merge($happeningViews, $massUnavailabilityView);
 
-        usort($programElementViews, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
+        usort($programElementViews, static function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
             if ($first->begin === $second->begin) {
                 return $first->end < $second->end ? -1 : 1;
             }

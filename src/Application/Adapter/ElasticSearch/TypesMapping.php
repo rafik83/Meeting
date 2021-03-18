@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter\ElasticSearch;
 
 use Proximum\Vimeet\Domain\ConditionRules\View\ComparisonOperator\ComparisonOperatorContains;
@@ -16,7 +8,7 @@ use Proximum\Vimeet\Domain\UserEventView\UserEventView;
 
 final class TypesMapping
 {
-    public const USER_EVENT_VIEW_ID = 'id';
+    public const USER_EVENT_VIEW_ID = 'uid';
     public const USER_EVENT_VIEW_EVENT_ID = 'eventId';
     public const USER_EVENT_VIEW_USER_ID = 'userId';
     public const USER_EVENT_VIEW_FIRSTNAME = 'firstName';
@@ -44,7 +36,7 @@ final class TypesMapping
             'type' => 'user_event',
             'properties' => [
                 self::USER_EVENT_VIEW_ID => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
                 self::USER_EVENT_VIEW_EVENT_ID => [
                     'type' => 'integer',
@@ -53,17 +45,19 @@ final class TypesMapping
                     'type' => 'integer',
                 ],
                 self::USER_EVENT_VIEW_FIRSTNAME => [
-                    'type' => 'string',
+                    'type' => 'text',
+                    'fielddata' => true,
                 ],
                 self::USER_EVENT_VIEW_LASTNAME => [
-                    'type' => 'string',
+                    'type' => 'text',
+                    'fielddata' => true,
                 ],
                 self::USER_EVENT_VIEW_EMAIL => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'emailAnalyzer',
                 ],
                 self::USER_EVENT_VIEW_LOCALE => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
                 self::USER_EVENT_VIEW_IS_VISIO => [
                     'type' => 'boolean',
@@ -81,13 +75,13 @@ final class TypesMapping
                     'type' => 'nested',
                     'properties' => [
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_KEY => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_VALUE => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         self::USER_EVENT_VIEW_TEMPLATE_OBJECT_FILTERS_TYPE => [
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                     ],
                 ],

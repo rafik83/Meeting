@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\User\Agenda\Version;
 
 use PHPUnit\Framework\TestCase;
@@ -53,6 +45,7 @@ class SendNotificationHandlerTest extends TestCase
         $this->user->getLocale()->willReturn('fr');
         $this->event->getAvailableLocale('fr')->willReturn('fr');
         $this->sheet->getId()->willReturn(3);
+        $this->sheet->getUserLocale($this->user->reveal())->willReturn('fr');
 
         $plannerJob = $this->prophesize(PlannerJob::class);
         $plannerJob->isCompleted()->willReturn(true);

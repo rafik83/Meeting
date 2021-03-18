@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange;
 
 use PHPUnit\Framework\TestCase;
@@ -89,6 +81,8 @@ class CreateActionTest extends TestCase
     public function testInvokeWithoutDays()
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
+        $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $this->event->hasDay()->willReturn(false);
         $this->event->getId()->willReturn(1);
 
@@ -120,6 +114,8 @@ class CreateActionTest extends TestCase
     public function testInvoke()
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
+        $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $this->event->hasDay()->willReturn(true);
         $this->event->getTimeZone()->willReturn('Europe/Paris');
 
@@ -173,6 +169,8 @@ class CreateActionTest extends TestCase
     public function testInvokeHandle()
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
+        $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $this->event->reveal())
+            ->shouldBeCalled()->willReturn(true);
         $this->event->hasDay()->willReturn(true);
         $this->event->getId()->willReturn(1);
         $this->event->getTimeZone()->willReturn('Europe/Paris');

@@ -1,0 +1,2 @@
+{% set trad = object.contentValue == true ? 'checked' : (object.contentValue is null ? 'null' : 'not_checked') %}
+<b>{{ object.getDefaultLabel }}:</b> {{ ('checkbox.' ~ trad)|trans}}<br>

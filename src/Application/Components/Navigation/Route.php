@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Components\Navigation;
 
 final class Route
@@ -91,6 +83,8 @@ final class Route
     public const VISIO_TEST_SHEET_CREATE_TEST = 'event_sheet_video_conference_create_network_test';
     public const VISIO_TEST_SHEET_CONFIGURATION = 'event_sheet_video_conference_network_test';
 
+    public const NETWORKING = 'event_networking_index';
+
     public static function isSheet(string $route): bool
     {
         return \in_array($route, self::SHEET, true);
@@ -164,5 +158,10 @@ final class Route
             ],
             true
         );
+    }
+
+    public static function isNetworking(string $route): bool
+    {
+        return self::NETWORKING === $route;
     }
 }

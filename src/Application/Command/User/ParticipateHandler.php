@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
@@ -129,6 +121,7 @@ class ParticipateHandler
             true,
             $this->dateTime
         );
+        $participant->setLocale($participate->locale);
         $this->participantRepository->add($participant);
 
         $sheet->addParticipant($participant);

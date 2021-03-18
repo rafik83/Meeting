@@ -21,6 +21,12 @@
 /behat.yml
 /.phpunit.result.cache
 
+## for migration
+/public
+.env.local
+/var/log
+## end for migration
+
 # Tests
 /var/tests/*
 !var/tests/.gitkeep
@@ -55,3 +61,7 @@ ansible.cfg
 
 # php-git-hooks tool.
 .guard_coverage
+
+# IDE
+/.idea/
+/.vscode/

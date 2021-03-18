@@ -12,11 +12,17 @@ Proximum\Vimeet\Application\Command\Happening\Update:
                         description: ~
                         webinarHeaderImage:
                             - Image:
-                                  maxSize: 500k
-                                  mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
-                                  minHeight: 125
-                                  maxHeight: 125
+                                maxSize: 500k
+                                mimeTypes: !php/const Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
+                                minHeight: 125
+                                maxHeight: 125
                         currentWebinarHeaderImage: ~
+                        webinarWaitingMedia:
+                            - File:
+                                maxSize: 100M
+                                mimeTypes: !php/const Proximum\Vimeet\Domain\MimeType\MimeType::MEDIA_MIME_TYPES
+                        currentWebinarWaitingMediaFile: ~
+                        currentWebinarWaitingMediaType: ~
         begin:
             - NotNull: ~
         end:

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Domain\Model;
@@ -50,15 +42,15 @@ class Update extends AbstractEvent
     /** @var bool */
     public $showCheckinStatus;
 
-    /**
-     * @param Model\Event $event
-     */
+    /** @var bool */
+    public $apiKeyAvailable;
+
     public function __construct(Model\Event $event)
     {
         $this->event = $event;
         $this->title = $event->getTitle();
         $this->locales = $event->getLocales();
-        $this->fallback = $event->getFallback();
+        $this->fallback = $event->getLocaleFallback();
         $this->translations = [];
         $this->mode = $event->getMode();
         $this->domain = $event->getDomain();
@@ -82,6 +74,7 @@ class Update extends AbstractEvent
         $this->accessControlEnabled = $event->isAccessControlEnabled();
         $this->showCheckinStatus = $event->showCheckinStatus();
         $this->autoArchiveWebinar = $event->getAutoArchiveWebinar();
+        $this->apiKeyAvailable = $event->getApiKey() !== null;
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
@@ -90,13 +83,10 @@ class Update extends AbstractEvent
         }
     }
 
-    /**
-     * @return bool
-     */
     public function isLocalesUpdated(): bool
     {
         return $this->locales !== $this->event->getLocales()
-            || $this->fallback !== $this->event->getFallback()
+            || $this->fallback !== $this->event->getLocaleFallback()
         ;
     }
 }

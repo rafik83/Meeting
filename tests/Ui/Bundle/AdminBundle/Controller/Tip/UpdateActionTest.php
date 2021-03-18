@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use League\Tactician\CommandBus;
@@ -95,6 +87,8 @@ class UpdateActionTest extends TestCase
         $tip->isOnContacts()->willReturn(false);
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
+        $tip->isOnNetworking()->willReturn(false);
+        $tip->hasEvent()->willReturn(false);
         $update = new Update($tip->reveal());
         $form = $this->prophesize(Form::class);
 
@@ -149,6 +143,8 @@ class UpdateActionTest extends TestCase
         $tip->isOnContacts()->willReturn(false);
         $tip->isOnProgram()->willReturn(false);
         $tip->isOnConfirmationPhone()->willReturn(false);
+        $tip->isOnNetworking()->willReturn(false);
+        $tip->hasEvent()->willReturn(false);
         $update = new Update($tip->reveal());
         $form = $this->prophesize(Form::class);
 

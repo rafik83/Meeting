@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDate;
@@ -25,6 +17,7 @@ class EventDatesController extends Controller
     public function updateEventDatesAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         if (!$this->getParameter('feature_event_dates_to_current_date_enabled')) {
             $this->createAccessDeniedException('Change event date is not available');

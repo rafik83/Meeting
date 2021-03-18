@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +7,7 @@ use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class Meeting implements MessageSubjectInterface
+class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
 {
     public const STATE_SCHEDULED = 'scheduled';
     public const STATE_CANCELED  = 'canceled';
@@ -156,6 +148,11 @@ class Meeting implements MessageSubjectInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_MEETING;
     }
 
     /**
@@ -457,6 +454,20 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
+     * @param $participants Participant[]
+     */
+    public function setParticipants(Sheet $sheet, array $participants): void
+    {
+        if ($sheet === $this->fromSheet) {
+            $this->fromParticipants->clear();
+            $this->fromParticipants = new ArrayCollection($participants);
+        } elseif ($sheet === $this->toSheet) {
+            $this->toParticipants->clear();
+            $this->toParticipants = new ArrayCollection($participants);
+        }
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return Participant[]
@@ -532,10 +543,7 @@ class Meeting implements MessageSubjectInterface
         return array_merge($this->getFromParticipantsArray(), $this->getToParticipantsArray());
     }
 
-    /**
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }

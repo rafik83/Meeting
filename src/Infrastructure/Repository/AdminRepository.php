@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
@@ -99,7 +91,7 @@ class AdminRepository implements AdminRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEmail($email)
+    public function findByEmail(string $email, bool $includeDeleted = false)
     {
         $queryBuilder = $this
             ->entityManager
@@ -107,9 +99,12 @@ class AdminRepository implements AdminRepositoryInterface
             ->select('admin')
             ->from('Entity:Admin', 'admin')
             ->where('admin.email = :email')
-            ->andWhere('admin.deletedAt IS NULL')
             ->setParameter('email', $email)
             ->setMaxResults(1);
+
+        if ($includeDeleted === false){
+            $queryBuilder->andWhere('admin.deletedAt IS NULL');
+        }
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

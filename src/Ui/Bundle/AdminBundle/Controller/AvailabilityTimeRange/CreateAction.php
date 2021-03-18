@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -74,6 +66,10 @@ class CreateAction
     {
         if (!$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             throw new AccessDeniedException('Only Admin and organizer can access this page');
+        }
+
+        if (!$this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+            throw new AccessDeniedException();
         }
 
         if (!$event->hasDay()) {

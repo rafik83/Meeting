@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version;
 
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification\MailNotificationCommand;
@@ -58,7 +50,7 @@ class SendNotificationHandler
         $verbalizedDiff = $this->diffVerbalizer->verbalizeDiff(
             $command->currentVersion,
             $command->diff,
-            $command->user->getLocale()
+            $command->sheet->getUserLocale($command->user)
         );
 
         $this->mailNotificationCommandHandler->handle(new MailNotificationCommand(

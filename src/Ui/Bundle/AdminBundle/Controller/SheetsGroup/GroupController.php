@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
@@ -125,6 +117,10 @@ class GroupController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($event !== $group->getEvent()) {
+            throw new AccessDeniedException();
+        }
 
         $command = new Update($group);
         $form = $this->createForm(UpdateType::class, $command);

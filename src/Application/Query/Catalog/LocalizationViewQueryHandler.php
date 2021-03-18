@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
@@ -15,16 +7,9 @@ use Proximum\Vimeet\Application\View\Catalog\LocalizationView;
 
 class LocalizationViewQueryHandler
 {
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * LocalizationViewQueryHandler constructor.
-     *
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     */
     public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
     {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
@@ -35,7 +20,7 @@ class LocalizationViewQueryHandler
      *
      * @return LocalizationView[]
      */
-    public function handle(LocalizationViewQuery $query)
+    public function handle(LocalizationViewQuery $query): array
     {
         $localizations = $this->sheetSearchAdapter->findLocalization(
             $query->event,

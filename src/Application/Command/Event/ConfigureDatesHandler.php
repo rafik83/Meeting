@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -53,7 +45,9 @@ class ConfigureDatesHandler
             $configureDates->enableBadgeForParticipantDate,
             $configureDates->enableVisioTestMenuButtonDate,
             $configureDates->networkingOpenDate,
-            $configureDates->networkingCloseDate
+            $configureDates->networkingCloseDate,
+            $configureDates->callVisioOpenDate,
+            $configureDates->callVisioCloseDate
         );
 
         $this->eventRepository->set($configureDates->event);

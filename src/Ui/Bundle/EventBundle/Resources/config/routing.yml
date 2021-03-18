@@ -48,6 +48,13 @@ event_register:
         typeView: \d+
     defaults: { _controller: EventBundle:Register:register }
 
+event_prefill_register:
+    path: /prefill-register/{typeView}
+    methods:  [GET]
+    requirements:
+        typeView: \d+
+    defaults: { _controller: EventBundle:Register:prefillRegister }
+
 event_register_new_user:
     path: /register/{typeView}/new
     methods:  [GET, POST]
@@ -650,6 +657,56 @@ event_contact_show:
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact\ShowAction }
 
 #
+# Networking
+#
+event_networking_index:
+    path: /sheet/{sheet}/networking
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\IndexAction }
+
+event_networking_chat:
+    path: /sheet/{sheet}/networking/chat/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\PrivateChatAction, toUser: null }
+
+event_networking_request_visio:
+    path: /sheet/{sheet}/networking/request-visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\RequestVisioAction }
+
+event_networking_abandon_call_visio:
+    path: /sheet/{sheet}/networking/abandon-visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [ POST ]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\AbandonCallVisioAction }
+
+event_networking_visio:
+    path: /sheet/{sheet}/networking/visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\CallVisioAction }
+
+event_networking_refuse_visio:
+    path: /sheet/{sheet}/networking/refuse-visio/{toUser}
+    requirements:
+        sheet: \d+
+        toUser: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Networking\RefuseVisioAction }
+
+#
 # Meeting Request
 #
 event_meeting_list_request:
@@ -892,14 +949,22 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
-event_agenda_move_meeting_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
+event_agenda_participant_ical:
+    path: /sheet/{sheet}/agenda/participant/{participant}/{slug}.ics
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction }
+
+event_agenda_update_meeting:
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/update-meeting
     requirements:
         participant: \d+
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\UpdateMeetingAction
 
 event_agenda_remove_meeting:
     path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/remove
@@ -931,7 +996,7 @@ happening_program:
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Program:index }
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Program\IndexAction
 
 event_agenda_program_redirect:
     path: /sheet/{sheet}/program-agenda
@@ -975,6 +1040,46 @@ event_sheet_happening_webinar_question_add:
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\AddHappeningQuestionAction
 
+event_sheet_happening_webinar_question_delete:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/delete
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionAction
+
+event_sheet_happening_webinar_question_begin_reply:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/begin-reply
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\BeginReplyHappeningQuestionAction
+
+event_sheet_happening_webinar_question_reply:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/reply
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\ReplyHappeningQuestionAction
+
+event_sheet_happening_webinar_question_reply_delete:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/reply/delete
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction
+
+event_happening_webinar_mute:
+    path: /sheet/{sheet}/happening/{happening}/webinar/mute
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\MuteAction
+
 event_happening_webinar_record:
     path: /sheet/{sheet}/happening/{happening}/webinar/record
     requirements:
@@ -1013,6 +1118,27 @@ event_happening_webinar_stream:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\StreamAction
+
+event_happening_webinar_open_stream_to_public:
+    path: /happening/{happening}/webinar/open/stream
+    requirements:
+        happening: \d+
+    methods: [ POST ]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\OpenStreamToPublicAction
+
+event_happening_webinar_stream_broadcast:
+    path: /happening/{happening}/webinar/broadcast/stream
+    requirements:
+        happening: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\StreamAction
+
+event_happening_webinar_view_broadcast:
+    path: /happening/{happening}/webinar/broadcast/view
+    requirements:
+        happening: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Broadcast\ViewAction
 
 #
 # Unavailability
@@ -1230,6 +1356,47 @@ event_meeting_evaluation:
         meeting: \d+
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\EvaluateMeetingAction
+
+#
+# Chat
+#
+event_chat_messages_list:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/list
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\ListAction
+
+event_chat_messages_add:
+    path: /sheet/{sheet}/chat/{objectType}/{objectId}/add
+    requirements:
+        sheet: \d+
+        objectType: \w+
+        objectId: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\AddAction
+
+event_chat_messages_delete:
+    path: /sheet/{sheet}/chat/delete
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\DeleteAction
+
+event_chat_avatar:
+    path: /chat/avatar
+    requirements:
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\AvatarAction
+
+event_chat_messages_vote:
+    path: /sheet/{sheet}/chat/vote
+    requirements:
+        sheet: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Chat\Api\VoteAction
 
 #
 # Custom

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\User\Event\ExtraData;
 
 final class Type
@@ -43,6 +35,7 @@ final class Type
      * User imported from the Tech event Webservice, value of the IDCONTACT
      */
     public const IMPORTED_FROM_TECH_EVENT = 'imported_from_tech_event';
+    public const TECH_EVENT_IDENTIFIER_MD5 = 'tech_event_identifier_md5';
 
     /**
      * Data to use to log the user from Tech Event.

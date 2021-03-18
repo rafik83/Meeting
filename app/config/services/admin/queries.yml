@@ -120,6 +120,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
 
     #
     # Meeting

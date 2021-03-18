@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
@@ -106,6 +98,10 @@ class AgendaController extends Controller
     public function spotDetailAction(Request $request, Event $event, Spot $spot)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        if ($spot->getEvent() !== $event) {
+            return $this->createNotFoundException('Event inconsistency');
+        }
 
         $agendaSpotView = $this->get('tactician.commandbus.query')->handle(
             new AgendaSpotViewQuery($spot, $event, $event->getAvailableLocale($request->getLocale()))

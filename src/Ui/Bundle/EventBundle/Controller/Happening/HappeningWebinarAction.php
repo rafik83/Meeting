@@ -9,7 +9,7 @@ use Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCom
 use Proximum\Vimeet\Application\Command\Scan\Happening\ScanHappening;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
-use Proximum\Vimeet\Application\View\Happening\WebinarView;
+use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -82,7 +82,7 @@ class HappeningWebinarAction
 
         $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->datetime));
 
-        /** @var WebinarView $webinarView */
+        /** @var AbstractWebinarView $webinarView */
         $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
 
         return new Response(
@@ -98,7 +98,7 @@ class HappeningWebinarAction
         );
     }
 
-    private function getTemplateNameDependingOnContext(WebinarView $webinarView): string
+    private function getTemplateNameDependingOnContext(AbstractWebinarView $webinarView): string
     {
         if ($webinarView->isVideoWebinarAndHappeningIsEnded()) {
             return '@Event/Happening/webinar-video.html.twig';

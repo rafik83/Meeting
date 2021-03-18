@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 interface EntityManagerAdapterInterface
@@ -45,4 +37,10 @@ interface EntityManagerAdapterInterface
      * @param object $entity The entity to detach.
      */
     public function detach($entity);
+
+    public function beginTransaction();
+
+    public function commit();
+
+    public function rollback();
 }

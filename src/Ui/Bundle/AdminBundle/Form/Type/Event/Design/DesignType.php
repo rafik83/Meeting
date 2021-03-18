@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Design;
 
 use Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign;
@@ -23,6 +15,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class DesignType extends AbstractType
 {
@@ -44,6 +37,14 @@ class DesignType extends AbstractType
                 'required' => false,
                 'attr'        => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
                 ],
             ])
             ->add('backgroundColor', TextType::class, [

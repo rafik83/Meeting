@@ -84,7 +84,7 @@ class TypeCreateType extends AbstractType
                     "admin.type.management.unavailable.label" => Model\Type::TYPE_MANAGEMENT_UNAVAILABLE,
                 ],
             ])
-            ->add('canMoveMeeting', CheckboxType::class, [
+            ->add('canUpdateMeeting', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('areAllSheetParticipantsAssignedToMeeting', CheckboxType::class, [
@@ -124,7 +124,7 @@ class TypeCreateType extends AbstractType
                 ->add('displayAnalyticsOnSheet', CheckboxType::class, [
                     'required' => false,
                 ])
-                ->add('displayAnalyticsOnMeetingList', CheckboxType::class, [
+                ->add('displayAnalyticsOnCatalog', CheckboxType::class, [
                     'required' => false,
                 ])
             ;

@@ -18,20 +18,11 @@ interface RequestRepositoryInterface
     const ORDER_BY_STATE_UPDATED_AT_ASC  = 'state_updated_at_asc';
     const ORDER_BY_STATE_UPDATED_AT_DESC = 'state_updated_at_desc';
 
-    /**
-     * @param Request $request
-     */
-    public function add(Request $request);
+    public function add(Request $request): void;
 
-    /**
-     * @param Request $request
-     */
-    public function set(Request $request);
+    public function set(Request $request): void;
 
-    /**
-     * @param Request $request
-     */
-    public function remove(Request $request);
+    public function remove(Request $request): void;
 
     /**
      * @param Request $request
@@ -409,4 +400,8 @@ interface RequestRepositoryInterface
     public function loadParticipantRequestsCount(array $participantIds): void;
 
     public function getParticipantRequestsCount(Participant $participant): int;
+
+    public function getSheetSentRequestsCount(array $sheetIds): array;
+
+    public function getSheetReceivedRequestsCount(array $sheetIds): array;
 }

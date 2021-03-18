@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 /**
  * Domain language: "Conférence"  (aka "Sous-événement")
  */
-class Happening implements TimeRangeInterface
+class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 {
     /** @var int */
     private $id;
@@ -77,10 +77,19 @@ class Happening implements TimeRangeInterface
     private $webinarRecorded;
 
     /** @var bool */
+    private $webinarRecordSentToSpeakers;
+
+    /** @var bool */
     private $sidebarAllowed = true;
 
     /** @var null|string */
     private $webinarRecordZipFileUrl = null;
+
+    /** @var bool */
+    private $allowHls;
+
+    /** @var bool */
+    private $isStreamOpenToPublic;
 
     public function __construct(
         Event $event,
@@ -96,7 +105,9 @@ class Happening implements TimeRangeInterface
         bool $videoWebinar = false,
         ?string $liveUrl = null,
         bool $sidebarAllowed = true,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = false,
+        bool $webinarRecordSentToSpeakers = true
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -117,12 +128,19 @@ class Happening implements TimeRangeInterface
         $this->liveUrl = $liveUrl;
         $this->webinarRecorded = $webinarRecorded;
         $this->sidebarAllowed = $sidebarAllowed;
-        $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
+        $this->isStreamOpenToPublic = false;
+        $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getObjectType(): string
+    {
+        return ChatMessage::TYPE_HAPPENING;
     }
 
     public function getEvent(): Event
@@ -188,6 +206,30 @@ class Happening implements TimeRangeInterface
         return $translation->getWebinarHeaderImage();
     }
 
+    public function getWebinarWaitingMediaFile(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaFile();
+    }
+
+    public function getWebinarWaitingMediaType(string $locale): ?string
+    {
+        /** @var null|HappeningTranslation $translation */
+        $translation = $this->translations->get($locale);
+
+        if (null === $translation) {
+            return null;
+        }
+
+        return $translation->getWebinarWaitingMediaType();
+    }
+
     public function setTranslation(HappeningTranslation $translation): void
     {
         $this->translations->set($translation->getLocale(), $translation);
@@ -203,6 +245,11 @@ class Happening implements TimeRangeInterface
         return $this->webinarRecorded;
     }
 
+    public function isWebinarRecordSentToSpeakers(): bool
+    {
+        return $this->webinarRecordSentToSpeakers;
+    }
+
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
@@ -216,7 +263,9 @@ class Happening implements TimeRangeInterface
         ?string $invitationCode = null,
         ?string $liveUrl = null,
         bool $sidebarAllowed,
-        bool $webinarRecorded = true
+        bool $webinarRecorded = true,
+        bool $allowHls = true,
+        bool $webinarRecordSentToSpeakers = true
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -226,22 +275,26 @@ class Happening implements TimeRangeInterface
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode = $invitationCode;
         $this->webinar = $webinar;
-        $this->webinarRecorded = $webinarRecorded;
         $this->interactiveWebinar = $interactiveWebinar;
         $this->videoWebinar = $videoWebinar;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->webinarRecorded = $webinarRecorded;
+        $this->allowHls = $allowHls;
+        $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
     }
 
     public function updateTranslation(
         string $locale,
         string $title,
         ?string $description,
-        ?string $webinarHeaderImage
+        ?string $webinarHeaderImage,
+        ?string $webinarWaitingMediaFile,
+        ?string $webinarWaitingMediaType
     ): void {
         /** @var HappeningTranslation $translation */
         $translation = $this->translations->get($locale);
-        $translation->update($title, $description, $webinarHeaderImage);
+        $translation->update($title, $description, $webinarHeaderImage, $webinarWaitingMediaFile, $webinarWaitingMediaType);
     }
 
     public function getTalkings(): Collection
@@ -453,5 +506,20 @@ class Happening implements TimeRangeInterface
     public function getWebinarRecordZipFileUrl(): ?string
     {
         return $this->webinarRecordZipFileUrl;
+    }
+
+    public function allowWebinarOnHLS(): bool
+    {
+        return $this->allowHls;
+    }
+
+    public function isStreamOpenToPublic(): bool
+    {
+        return $this->isStreamOpenToPublic || $this->isInteractiveWebinar();
+    }
+
+    public function openStreamToPublic(): void
+    {
+        $this->isStreamOpenToPublic = true;
     }
 }

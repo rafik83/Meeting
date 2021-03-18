@@ -1,16 +1,9 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
+use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\BillingConfiguration\TranslationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -21,6 +14,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class BillingConfigurationType extends AbstractType
 {
@@ -37,7 +31,15 @@ class BillingConfigurationType extends AbstractType
             ->add('invoiceLogo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', ['image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/svg+xml']),
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
                 ],
             ])
             ->add('legalInfo', TextType::class, [

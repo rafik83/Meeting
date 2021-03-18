@@ -51,6 +51,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\ParticipantRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@datetime'
     vimeet_infrastructure.repository.sheet_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\SheetRepository
         arguments:
@@ -138,6 +139,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@datetime'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -442,6 +444,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ParticipantTimezone }
 
+    Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAtHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateNetworkingChatViewedAt }
+
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
             - '@cart_manager'
@@ -664,6 +673,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate'
             - '@domain.happening.participation_count'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -1108,6 +1118,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Delete }
+    Proximum\Vimeet\Application\Command\Admin\RestoreHandler:
+        arguments:
+            - '@repository.admin_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\Restore }
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
@@ -1643,17 +1659,18 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\UpdateHandler:
         arguments:
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@logger'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Update }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
@@ -1960,6 +1977,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@command.unavailability.create_handler'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities }
 
@@ -2645,7 +2664,7 @@ services:
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
         arguments:
-            - '@fos_elastica.object_persister.app.sheet'
+            - '@fos_elastica.object_persister.sheet.sheet'
 
     adapter.authorization_checker:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
@@ -2677,9 +2696,15 @@ services:
             - '@open_tok'
             - '%tokbox_api_key%'
             - '%feature_video_conference_date_security_enabled%'
+            - '@Proximum\Vimeet\Infrastructure\Tokbox\Client'
 
     open_tok:
         class: OpenTok\OpenTok
+        arguments:
+            - '%tokbox_api_key%'
+            - '%tokbox_api_secret%'
+
+    Proximum\Vimeet\Infrastructure\Tokbox\Client:
         arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
@@ -2724,14 +2749,6 @@ services:
         arguments:
             - '@repository.invoice.invoice_repository'
             - '@adapter.event_url_generator'
-    sheet.sheet_meetings_list_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     sheet.meetings_metrics_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.template.completeness_calculator:
@@ -2917,6 +2934,10 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
 
+    Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting:
+        arguments:
+            - '@components.security.video_meeting_access'
+
     Proximum\Vimeet\Application\Components\Meeting\AllowTransformAutomaticallyRequestIntoMeeting:
         arguments:
             - '@repository.rule_repository'
@@ -2932,7 +2953,7 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
-    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+    Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
@@ -3029,6 +3050,7 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
             - '@monolog.logger'
 
     adapter.sendgrid_api_adapter:
@@ -3234,6 +3256,13 @@ services:
             - { name: validator.constraint_validator }
     validator.template_object.media_collection_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\MediaCollectionValidator
+        arguments:
+            - '@package.product.template_product_guesser'
+            - '@sheet.template_object.buyable_included_product_guesser'
+        tags:
+            - { name: validator.constraint_validator }
+    validator.template_object.video_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject\VideoValidator
         arguments:
             - '@package.product.template_product_guesser'
             - '@sheet.template_object.buyable_included_product_guesser'
@@ -3530,6 +3559,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3566,6 +3596,8 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
     Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat: ~
+
+    Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink: ~
 
     Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
         arguments:
@@ -3627,6 +3659,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
 
     Proximum\Vimeet\Application\Query\Dashboard\DashboardContactViewQueryHandler:
         arguments:
@@ -3642,6 +3675,7 @@ services:
         arguments:
             - '@adapter.sheet_search_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator'
+            - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery }
 
@@ -3739,25 +3773,12 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
-
-    query.tip.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipListViewQuery }
     query.tip.event.paginated_tip_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler
         arguments:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery }
-    query.tip.event.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery }
     query.tip.event.type_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQueryHandler
         arguments:
@@ -4099,6 +4120,8 @@ services:
             - '@query.happening.happening_participation_query_handler'
             - '@repository.unavailability.mass_repository'
             - '@query.happening.full_happening_query_handler'
+            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\ProgramViewQuery }
     query.happening.full_happening_query_handler:
@@ -4248,7 +4271,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@domain.event.day.dday_guesser'
@@ -4559,14 +4582,14 @@ services:
             - '@navigation.navigation_builder'
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Sheet\Catalog\CanSeeOtherSheets'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery }
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQueryHandler:
         arguments:
             - '@navigation.navigation_builder'
-            - '@domain.key_dates.checker.event_open_access_checker'
-            - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
+            - '@Proximum\Vimeet\Application\Components\Contact\CanAccessToContacts'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery }
 
@@ -4624,6 +4647,18 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\VisioSubmenuViewQuery }
+
+    query.navigation.networking_submenu_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQueryHandler
+        arguments:
+            - '@navigation.navigation_builder'
+            - '@domain.key_dates.checker.networking_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery }
+
 
     ##
     # Mass Assignment query handler
@@ -4960,14 +4995,14 @@ services:
         arguments:
             - '@order.merger'
 
-  #
+    #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
-             - '@fos_elastica.finder.app.sheet'
-             - '@fos_elastica.index.app.sheet'
+             - '@fos_elastica.finder.sheet.sheet'
+             - '@fos_elastica.index.sheet.sheet'
              - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     #
@@ -5598,6 +5633,23 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
         arguments:
             - '@datetime'
+            -
+    domain.key_dates.checker.networking_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
+        arguments:
+            - '@datetime'
+
+    domain.key_dates.checker.ask_call_visio_private_chat_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
+
+    domain.key_dates.checker.call_visio_private_chat_access_checker:
+        class: Proximum\Vimeet\Domain\KeyDates\Checker\CallVisioPrivateChatAccessChecker
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@datetime'
 
     #
     # Nomenclature
@@ -5902,6 +5954,10 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
 
+    Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate:
+        arguments:
+            - '@datetime'
+
     Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
 
     Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct:
@@ -5927,6 +5983,12 @@ services:
         arguments:
             - '@datetime'
 
+    Proximum\Vimeet\Domain\Happening\IsUserSpeaker: ~
+
+    Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast:
+        arguments:
+            - '@datetime'
+
     #
     # Serializer: normalizers and encoders
     #
@@ -5946,6 +6008,8 @@ services:
             - '@order.balance'
             - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
             - '@adapter.event_url_generator'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: serializer.normalizer }
 
@@ -6942,6 +7006,19 @@ services:
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
             - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@query.notification.notification_view_query_handler'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware'
+
+    #
+    # SheetRedirectionMiddleware
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware:
+        arguments:
+            - '@router'
+            - '@Proximum\Vimeet\Domain\Transaction\IsValidatedTransactionMissing'
+            - '@Proximum\Vimeet\Domain\Package\IsValidatedRequiredPackageMissing'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@components.registration.step_manager'
 
     #
     # Event Day service
@@ -7029,6 +7106,10 @@ services:
             - '@adapter.router'
             - '@datetime'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+
     #
     # QRCode
     #
@@ -7095,7 +7176,8 @@ services:
     #
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Translation\UpdateTranslationsCommand:
         arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PushHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Openl10n\PullHandler'
             - '%kernel.cache_dir%'
         tags:
             - { name: console.command }
@@ -7185,5 +7267,62 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    #
+    # Chat
+    #
+    Proximum\Vimeet\Application\Components\Chat\CheckAccessToChatMessages:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\CanAccessToWebinar'
+            - '@Proximum\Vimeet\Application\Components\Meeting\CheckAccessToVideoMeeting'
+            - '@domain.key_dates.checker.networking_access_checker'
+
+    Proximum\Vimeet\Domain\Chat\CanDeleteChatMessage: ~
+
+    #
+    # Networking
+    #
+
+    Proximum\Vimeet\Application\Query\Networking\CallVisioQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@domain.key_dates.checker.call_visio_private_chat_access_checker'
+            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
+            - '@datetime'
+            - '@logger'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@domain.key_dates.checker.networking_access_checker'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+
+    Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        tags:
+            - { name: tactician.handler, typehints: true }
+
+    Proximum\Vimeet\Application\Query\Networking\PrivateChatQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+            - '@domain.key_dates.checker.ask_call_visio_private_chat_access_checker'
+            - '@Proximum\Vimeet\Application\Query\Networking\IsUserInCallVisio'
         tags:
             - { name: tactician.handler, typehints: true }

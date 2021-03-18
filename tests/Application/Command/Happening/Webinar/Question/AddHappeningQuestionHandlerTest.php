@@ -1,8 +1,10 @@
 <?php
 
-namespace Application\Command\Happening\Webinar\Question;
+namespace Proximum\Vimeet\Tests\Application\Command\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestion;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -14,20 +16,31 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class AddHappeningQuestionHandlerTest extends TestCase
 {
-    /** @var ObjectProphecy|QuestionRepositoryInterface */
+    /** @var ObjectProphecy */
     private $questionRepository;
+
+    /** @var ObjectProphecy */
+    private $notificationPublisher;
 
     /** @var AddHappeningQuestionHandler */
     private $addHappeningQuestionHandler;
 
-    public function setUp()
+    /** @var \DateTime */
+    private $datetime;
+
+    public function setUp(): void
     {
         $this->datetime = new \DateTime('2020-06-02 12:00:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
-        $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler($this->questionRepository->reveal(), $this->datetime);
+        $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
+        $this->addHappeningQuestionHandler = new AddHappeningQuestionHandler(
+            $this->questionRepository->reveal(),
+            $this->notificationPublisher->reveal(),
+            $this->datetime
+        );
     }
 
-    public function test_add_happening_question()
+    public function test_add_happening_question(): void
     {
         $happening = $this->prophesize(Happening::class);
 
@@ -59,6 +72,12 @@ class AddHappeningQuestionHandlerTest extends TestCase
         );
 
         $this->questionRepository->add($expectedQuestion)
+            ->shouldBeCalled();
+
+        $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->willReturn(2020);
+
+        $this->notificationPublisher
+            ->publishHappeningNotification($happening->reveal(), 'questions', ['action' => 'update', 'msg_count' => 2020])
             ->shouldBeCalled();
 
         $this->addHappeningQuestionHandler->handle($addHappeningQuestion->reveal());

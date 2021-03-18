@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Query\Type;
 
 use PHPUnit\Framework\TestCase;
@@ -70,7 +62,7 @@ class TypeViewQueryHandlerTest extends TestCase
         $type1->getFormTemplates()->willReturn([$formTemplate1->reveal()]);
         $type1->getPackage()->willReturn($package2->reveal());
         $type1->getPaymentConditions()->willReturn(null);
-        $type1->canMoveMeeting()->willReturn(false);
+        $type1->canUpdateMeeting()->willReturn(false);
         $type1->canRemoveMeeting()->willReturn(false);
 
         $type2->getId()->willReturn(17);
@@ -83,7 +75,7 @@ class TypeViewQueryHandlerTest extends TestCase
         $type2->getPackage()->willReturn($package1->reveal());
         $type2->getPaymentConditions()->willReturn(null);
         $type2->canRemoveMeeting()->willReturn(false);
-        $type2->canMoveMeeting()->willReturn(false);
+        $type2->canUpdateMeeting()->willReturn(false);
 
         $type3->getId()->willReturn(18);
         $type3->getPosition()->willReturn(2);
@@ -95,7 +87,7 @@ class TypeViewQueryHandlerTest extends TestCase
         $type3->getPackage()->willReturn($package2->reveal());
         $type3->getPaymentConditions()->willReturn($paymentConditions->reveal());
         $type3->canRemoveMeeting()->willReturn(false);
-        $type3->canMoveMeeting()->willReturn(false);
+        $type3->canUpdateMeeting()->willReturn(false);
 
         $paginatedResult = new PaginatedResult([$type1->reveal(), $type2->reveal(), $type3->reveal()], 1, 20, 50);
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
 use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
@@ -46,6 +47,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
+    /** @var GetViewedSheetsFromFilters */
+    private $getViewedSheetsFromFilters;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -55,7 +59,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
         NomenclatureItemsGetter $nomenclatureItemsGetter,
-        RequestRepositoryInterface $meetingRequestRepository
+        RequestRepositoryInterface $meetingRequestRepository,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
@@ -66,13 +71,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
         $this->meetingRequestRepository = $meetingRequestRepository;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
     }
 
-    /**
-     * @param PaginatedCatalogSheetPreviewViewQuery $query
-     *
-     * @return PaginatedResult
-     */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query): PaginatedResult
     {
         $paginatedResult = $this->sheetSearchAdapter->paginate(
@@ -88,7 +89,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                 $query->locale
             ),
             $query->availableSlotIds,
-            $query->sheetsToExclude
+            $query->sheetsToExclude,
+            $this->getViewedSheetsFromFilters->getFilteredByVisitSheetIds($query->filters, $query->user, $query->viewer)
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);

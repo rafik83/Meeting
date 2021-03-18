@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Type;
@@ -46,6 +38,9 @@ abstract class AbstractEventTip
 
     /** @var bool */
     public $onConfirmationPhone;
+
+    /** @var bool */
+    public $onNetworking;
 
     /** @var string */
     public $display;

@@ -1,15 +1,8 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter;
 
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Exception\Event\ExtraParameter\ExtraParameterAlreadyExistForThisTypeAndEventException;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;

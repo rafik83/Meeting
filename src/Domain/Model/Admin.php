@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Domain\Model;
 
 use DateTimeInterface;
@@ -515,5 +507,15 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function isDeleted(): bool
     {
         return $this->deletedAt instanceof \DateTime;
+    }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+
+    public function restore(): void
+    {
+        $this->deletedAt = null;
     }
 }

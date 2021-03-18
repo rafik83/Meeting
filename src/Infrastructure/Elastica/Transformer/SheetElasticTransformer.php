@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Elastica\Transformer;
 
 use Elastica\Document;
@@ -105,15 +97,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->campaignRepository = $campaignRepository;
     }
 
-    /**
-     * @param Sheet $sheet
-     * @param array $fields
-     *
-     * @return Document
-     */
-    public function transform($sheet, array $fields)
+    public function transform($sheet, array $fields): Document
     {
-        $fallbackLocale = $sheet->getEvent()->getFallback();
+        $fallbackLocale = $sheet->getEvent()->getLocaleFallback();
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
         $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
         $sheetContentView = $this->getSheetContentView($sheet);
@@ -345,14 +331,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             return null;
         }
 
-        $zipcode = substr(str_replace(' ', '', $zipcode), 0, 5);
+        $zipcode = mb_substr(str_replace(' ', '', $zipcode), 0, 5);
 
         if (4 === mb_strlen($zipcode)) {
             return '0' . $zipcode[0];
         }
 
         if (5 === mb_strlen($zipcode)) {
-            return substr($zipcode, 0, 2);
+            return mb_substr($zipcode, 0, 2);
         }
 
         return null;
@@ -417,6 +403,14 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
             if (isset($items['items'])) {
                 foreach ($items['items'] as $item) {
+                    if (is_array($item)) {
+                        foreach ($item as $element) {
+                            $nomenclatureItems[]['key'] = mb_strtolower($element);
+                        }
+
+                        continue;
+                    }
+
                     $nomenclatureItems[]['key'] = mb_strtolower($item);
                 }
             }

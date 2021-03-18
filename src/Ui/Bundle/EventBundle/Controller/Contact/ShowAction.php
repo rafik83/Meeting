@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Contact;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
@@ -199,7 +191,7 @@ class ShowAction
 
     protected function getContact(User $contactUser, Event $event, Participant $participant): Contact
     {
-        $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime);
+        $contactQuery = new Contact($event, $participant->getUser(), $contactUser, $this->dateTime, Contact::ORIGIN_NONE);
 
         return $this->contactRepository->find($contactQuery);
     }

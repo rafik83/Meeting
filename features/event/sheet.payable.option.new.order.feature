@@ -59,8 +59,7 @@ Feature: Select payable option in sheet
 
   Scenario: I can't edit my image object payable option after order paid
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
     Then the response status code should be 200
     And I should not see "sheet.object.option.buyable.label"
@@ -68,8 +67,7 @@ Feature: Select payable option in sheet
 
   Scenario: I can always select a payable option in my media because I doesn't buy one in my package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""
     Then the response status code should be 200
     And I should see "sheet.object.option.buyable.label"
@@ -79,8 +77,7 @@ Feature: Select payable option in sheet
 
   Scenario: I can see my new payable option "Option E" in my package
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     When I follow "navigation.links.package.order_summary_total"
     Then I should be on this page "/fr/sheet/1/order/summary"
     When I follow "package.summary.edit"
@@ -89,8 +86,7 @@ Feature: Select payable option in sheet
 
   Scenario: I can pay my new payable option "Option E"
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     And I go to this page "/fr/sheet/1/package/step/2"
     When I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/summary"
@@ -104,8 +100,7 @@ Feature: Select payable option in sheet
 
   Scenario: I can't edit my media object payable option after order paid
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I go to this page "/fr"
-    Then I should be on this page "/fr/sheet/1"
+    When I go to this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""
     Then the response status code should be 200
     And I should not see "sheet.object.option.buyable.label"

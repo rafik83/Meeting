@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Infrastructure\Elastica\Persister;
 
 use Elastica\Client;
@@ -18,27 +10,23 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 
 class ElasticaPersister implements ElasticSearchPersisterInterface
 {
-    /** @var Client */
-    private $client;
+    private Client $client;
 
-    /** @var ElasticaMapping */
-    private $mapping;
+    private ElasticaMapping $mapping;
 
-    /** @var string */
-    private $index;
+    private string $indexPrefix;
 
-    /** @var SerializerAdapterInterface */
-    private $serializer;
+    private SerializerAdapterInterface $serializer;
 
     public function __construct(
         Client $client,
         ElasticaMapping $mapping,
-        string $index,
+        string $indexPrefix,
         SerializerAdapterInterface $serializer
     ) {
         $this->client = $client;
         $this->mapping = $mapping;
-        $this->index = $index;
+        $this->indexPrefix = $indexPrefix;
         $this->serializer = $serializer;
     }
 
@@ -80,7 +68,7 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
         }
 
         $elasticaType = $this->getType($typeName);
-        $response = $this->client->deleteIds($identifiers, $this->index, $elasticaType);
+        $response = $this->client->deleteIds($identifiers, $this->getIndex($typeName), $elasticaType);
 
         return $response->getData();
     }
@@ -98,12 +86,12 @@ class ElasticaPersister implements ElasticSearchPersisterInterface
 
     private function getType(string $typeName): \Elastica\Type
     {
-        return $this->getIndex()->getType($typeName);
+        return $this->getIndex($typeName)->getType($typeName);
     }
 
-    private function getIndex(): \Elastica\Index
+    private function getIndex(string $typeName): \Elastica\Index
     {
-        return $this->client->getIndex($this->index);
+        return $this->client->getIndex($this->indexPrefix.'_'.$typeName);
     }
 
     /**

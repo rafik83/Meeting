@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\ForgottenPassword;
@@ -44,12 +36,15 @@ class ForgottenPasswordController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($forgottenPassword);
-                $this->addFlash('success', 'flash.admin.reset_password_token.success');
-
-                return $this->redirectToRoute('admin_login');
             } catch (EmailDoesNotExistException $exception) {
-                $form->get('email')->addError($this->get('error_factory')->create('validators.emailDoesNotExist', $request->getLocale()));
+                $this->get('logger')->error(
+                    sprintf("forgotten password : email %s not found", $forgottenPassword->email)
+                );
             }
+
+            $this->addFlash('success', 'flash.admin.reset_password_token.success');
+
+            return $this->redirectToRoute('admin_login');
         }
 
         return $this->render('AdminBundle:ResetPassword:request_token.html.twig', [

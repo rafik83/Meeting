@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Adapter;
 
 interface ValidatorInterface
@@ -20,5 +12,5 @@ interface ValidatorInterface
      *
      * @return mixed
      */
-    public function validate($data, $constraintType);
+    public function validate($data, $constraintType = null);
 }

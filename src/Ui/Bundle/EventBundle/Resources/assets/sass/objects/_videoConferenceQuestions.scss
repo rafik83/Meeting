@@ -6,7 +6,7 @@
   padding-right: 5px;
 
   .question-row {
-    border: 1px solid $border-light;
+    border: 1px solid $color-highlighted;
     border-radius: 8px;
     margin-bottom: 10px;
     overflow: hidden;
@@ -14,14 +14,32 @@
     .question-content {
       font-size: 16px;
       padding: 10px;
+      color: $color-highlighted;
+    }
+
+    .question-div-icon {
+      text-align: right;
+
+      .glyphicon-trash{
+        color:black;
+        margin-left:8px;
+        cursor: pointer;
+      }
     }
 
     .question-aside {
       text-align: right;
+    }
 
-      i {
-        cursor: pointer;
-      }
+    .question-icon {
+      text-align: right;
+      display: flex;
+    }
+
+    .question-vote {
+      clear: both;
+      margin-right: -5px;
+      margin-bottom: 5px;
     }
 
     .question-vote-count {
@@ -37,7 +55,8 @@
 
     .question-author {
       align-items: flex-end;
-      background-color: $gray-lighter;
+      @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
+      color: $button-text-color;
       clear: right;
       display: flex;
       flex-wrap: nowrap;
@@ -54,7 +73,6 @@
     }
 
     .question-author-title {
-      color: $gray-light;
       display: inline-block;
       margin-left: 5px;
       font-style: italic;
@@ -73,12 +91,44 @@
         width: 32px;
       }
     }
+
+    .question-reply {
+      margin: 0 0.3em;
+
+      .question-reply-actions i {
+        cursor: pointer;
+      }
+
+      .replied-by {
+        font-size: 12px;
+        font-style: italic;
+        i {
+          display: inline-block;
+          margin-right: 0.8em;
+        }
+      }
+
+      .reply-content {
+        font-weight: bold;
+      }
+
+      .btn-reply {
+        font-size: 12px;
+        font-weight: normal;
+        padding: 4px 8px;
+        margin: 4px 0;
+      }
+
+      form {
+        border: none;
+      }
+    }
   }
 }
 
 .questions-form {
   align-items: center;
-  border: 1px solid $border-light;
+  border: 1px solid $color-highlighted;
   display: flex;
   height: 34px;
 

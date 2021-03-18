@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Happening\HappeningBroadcast:
+    type:  entity
+    table: happening_broadcast
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        isStopped:
+            type: boolean
+        broadcastId:
+            type: string
+        hlsUrl:
+            type: string
+            nullable: true
+        createdAt:
+            type: datetime
+        endAt:
+            type: datetime
+    manyToOne:
+        happening:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            joinColumn:
+                onDelete: CASCADE

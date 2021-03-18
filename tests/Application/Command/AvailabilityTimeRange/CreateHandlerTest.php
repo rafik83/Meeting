@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Tests\Application\Command\AvailabilityTimeRange;
 
 use PHPUnit\Framework\TestCase;
@@ -22,6 +14,7 @@ class CreateHandlerTest extends TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
+        $event->hasDay()->willReturn(false);
         $day = $this->prophesize(Event\Day::class);
         $begin = new \DateTime('2017-10-10 10:10:00.000');
         $end = new \DateTime('2017-10-10 18:00:00.000');

@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
- */
-
 namespace Proximum\Vimeet\Application\Command\UserEventView;
 
 use Proximum\Vimeet\Application\Adapter\ElasticSearch\ElasticSearchPersisterInterface;
@@ -44,6 +36,6 @@ class UpdateHandler
             return;
         }
 
-        $this->elasticSearchPersister->persist('id', $userEventViews);
+        $this->elasticSearchPersister->persist('uid', $userEventViews);
     }
 }
