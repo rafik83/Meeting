@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV-313 - trunck happening name if too long for tokbox
+- Code style / namespace fixes
 
 ### Added
 - VIMEET-2399 - Import meeting requests from CSV file
