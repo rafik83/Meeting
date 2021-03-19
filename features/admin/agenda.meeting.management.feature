@@ -17,7 +17,7 @@ Feature: Update meeting spot and slot in agenda via the API
     # Create another sheet not concerned by the meeting
     And there is a sheet
     And spot "A4" is assigned to this sheet
-    When I send a GET request to "/fr/event/1/agenda/meeting/1/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -27,22 +27,35 @@ Feature: Update meeting spot and slot in agenda via the API
           "blockedSlot": false,
           "blockedSpot": false,
           "availableSpots": [
-              {"id": 1, "label": "A1"},
-              {"id": 2, "label": "A2"},
-              {"id": 3, "label": "A3"}
-          ]
+              {"id": 1, "label": "A1", "seatCapacity": 2, "slotsId": []},
+              {"id": 2, "label": "A2", "seatCapacity": 2, "slotsId": []},
+              {"id": 3, "label": "A3", "seatCapacity": 2, "slotsId": []},
+              {"id": 4, "label": "A4", "seatCapacity": 2, "slotsId": []}
+          ],
+          "participants": [
+               {"id": 1, "fullName": " "}
+          ],
+          "meetingParticipants": [
+              1
+          ],
+          "meetingSlots": [],
+          "currentSheetAvailableSlotIds": [],
+          "slotId": 1,
+          "metParticipantsCount": 1
       }
       """
 
   # This Scenario depends on previous one
   Scenario: I can change the spot for a meeting
     Given I am logged as admin
-    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot" with body:
       """
       {
           "spotId": 2,
           "blockedSlot": true,
-          "blockedSpot": false
+          "blockedSpot": false,
+          "slotId": 1,
+          "meetingParticipants": [1]
       }
       """
     Then the response status code should be 200
@@ -50,7 +63,7 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can get available spots for a meeting via the API
     Given I am logged as admin
-    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot"
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot"
     Then the response status code should be 422
     And the JSON should be equal to:
       """
@@ -60,12 +73,14 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting because given spot not available
     Given I am logged as admin
-    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot" with body:
       """
       {
           "spotId": 4,
           "blockedSlot": false,
-          "blockedSpot": false
+          "blockedSpot": false,
+          "slotId": 1,
+          "meetingParticipants": [1]
       }
       """
     Then the response status code should be 422
@@ -77,21 +92,25 @@ Feature: Update meeting spot and slot in agenda via the API
   # This Scenario depends on previous one
   Scenario: I can not change the spot for a meeting when spot is blocked
     Given I am logged as admin
-    And I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
+    And I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot" with body:
       """
       {
           "spotId": 2,
           "blockedSlot": false,
-          "blockedSpot": true
+          "blockedSpot": true,
+          "slotId": 1,
+          "meetingParticipants": [1]
       }
       """
     And the response status code should be 200
-    When I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
+    When I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot" with body:
       """
       {
           "spotId": 3,
           "blockedSlot": false,
-          "blockedSpot": true
+          "blockedSpot": true,
+          "slotId": 1,
+          "meetingParticipants": [1]
       }
       """
     Then the response status code should be 422
@@ -110,7 +129,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And there is an active spot "A3" with size of 1, meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
-    When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/2/sheet/1/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -120,9 +139,18 @@ Feature: Update meeting spot and slot in agenda via the API
           "blockedSlot": false,
           "blockedSpot": false,
           "availableSpots": [
-              {"id": 2, "label": "A2"},
-              {"id": 3, "label": "A3"}
-          ]
+              {"id": 1, "label": "A1", "seatCapacity": 2, "slotsId": []},
+              {"id": 2, "label": "A2", "seatCapacity": 2, "slotsId": []},
+              {"id": 3, "label": "A3", "seatCapacity": 2, "slotsId": []}
+          ],
+          "participants": [
+               {"id": 1, "fullName": " "}
+          ],
+          "meetingParticipants": [],
+          "meetingSlots": [],
+          "currentSheetAvailableSlotIds": [],
+          "slotId": 1,
+          "metParticipantsCount": 0
       }
       """
 
@@ -135,7 +163,7 @@ Feature: Update meeting spot and slot in agenda via the API
     And there is an active spot "A2" with size of 1, meeting capacity of 1, seat capacity of 2
     And there is a meeting on spot "A1"
     And there is a meeting on spot "A2"
-    When I send a GET request to "/fr/event/1/agenda/meeting/2/update-spot"
+    When I send a GET request to "/fr/event/1/agenda/meeting/2/sheet/1/update-spot"
     Then the response should be in JSON
     And the JSON should be equal to:
       """
@@ -145,9 +173,17 @@ Feature: Update meeting spot and slot in agenda via the API
           "blockedSlot": false,
           "blockedSpot": false,
           "availableSpots": [
-              {"id": 1, "label": "A1"},
-              {"id": 2, "label": "A2"}
-          ]
+              {"id": 1, "label": "A1", "seatCapacity": 4, "slotsId": []},
+              {"id": 2, "label": "A2", "seatCapacity": 2, "slotsId": []}
+          ],
+          "participants": [
+               {"id": 1, "fullName": " "}
+          ],
+          "meetingParticipants": [],
+          "meetingSlots": [],
+          "currentSheetAvailableSlotIds": [],
+          "slotId": 1,
+          "metParticipantsCount": 0
       }
       """
 
@@ -214,12 +250,14 @@ Feature: Update meeting spot and slot in agenda via the API
     And I am logged as admin
     And there are 2 slots in this event
     And there is a meeting on slot "1"
-    And I send a POST request to "/fr/event/1/agenda/meeting/1/update-spot" with body:
+    And I send a POST request to "/fr/event/1/agenda/meeting/1/sheet/1/update-spot" with body:
       """
       {
           "spotId": 1,
           "blockedSlot": true,
-          "blockedSpot": false
+          "blockedSpot": false,
+          "slotId": 1,
+          "meetingParticipants": [1]
       }
       """
     And the response status code should be 200

@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
+use Proximum\Vimeet\Application\View\Agenda\Slot\SlotView;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+
 class MeetingUpdateSpotView
 {
     /** @var int */
@@ -19,19 +22,46 @@ class MeetingUpdateSpotView
     /** @var SpotView[] */
     public $availableSpots;
 
-    /**
-     * @param int        $meetingId
-     * @param int        $spotId
-     * @param bool       $blockedSlot
-     * @param bool       $blockedSpot
-     * @param SpotView[] $availableSpots
-     */
-    public function __construct($meetingId, $spotId, $blockedSlot, $blockedSpot, array $availableSpots)
-    {
-        $this->meetingId      = $meetingId;
-        $this->spotId         = $spotId;
-        $this->blockedSlot    = $blockedSlot;
-        $this->blockedSpot    = $blockedSpot;
+    /** @var ParticipantView[] */
+    public $participants;
+
+    /** @var int[] */
+    public array $meetingParticipants;
+
+    /** @var SlotView[] */
+    public array $meetingSlots;
+
+    /** @var array<int, int[]> */
+    public array $currentSheetAvailableSlotIds;
+
+    /** @var int */
+    public $slotId;
+
+    public int $metParticipantsCount;
+
+    public function __construct(
+        int $meetingId,
+        int $spotId,
+        bool $blockedSlot,
+        bool $blockedSpot,
+        array $availableSpots,
+        array $participants,
+        array $meetingParticipants,
+        array $meetingSlots,
+        array $currentSheetAvailableSlotIds,
+        int $slotId,
+        int $metParticipantsCount
+    ) {
+        $this->meetingId = $meetingId;
+        $this->spotId = $spotId;
+        $this->blockedSlot = $blockedSlot;
+        $this->blockedSpot = $blockedSpot;
         $this->availableSpots = $availableSpots;
+        $this->participants = $participants;
+        $this->meetingParticipants = $meetingParticipants;
+        $this->meetingSlots = $meetingSlots;
+        $this->currentSheetAvailableSlotIds = $currentSheetAvailableSlotIds;
+        $this->slotId = $slotId;
+        $this->metParticipantsCount = $metParticipantsCount;
     }
 }

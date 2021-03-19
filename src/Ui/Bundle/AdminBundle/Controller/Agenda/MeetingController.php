@@ -29,12 +29,14 @@ use Proximum\Vimeet\Application\Query\MassAssignment\MassAssignmentViewQuery;
 use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MeetingController extends Controller
 {
@@ -44,33 +46,37 @@ class MeetingController extends Controller
      *
      * @return JsonResponse
      */
-    public function updateSpotAction(Event $event, Meeting $meeting)
+    public function updateSpotAction(Request $request, Event $event, Meeting $meeting, Sheet $sheet)
     {
         $this->checkAccess($event, $meeting);
 
         $isVisio = $this->get('domain.meeting.visio_guesser')->hasMeetingParticipantVisio($meeting);
 
         $meetingUpdateSpotView = $this->get('query.agenda.admin.meeting_update_spot_view_query_handler')->handle(
-            new MeetingUpdateSpotViewQuery($meeting, $isVisio)
+            new MeetingUpdateSpotViewQuery($meeting, $sheet, $isVisio, $event->getAvailableLocale($request->getLocale()))
         );
 
         return new JsonResponse($meetingUpdateSpotView);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Meeting $meeting
-     *
-     * @return JsonResponse
-     */
-    public function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting)
+    public function handleUpdateSpotAction(Request $request, Event $event, Meeting $meeting, Sheet $sheet) : JsonResponse
     {
         $this->checkAccess($event, $meeting);
 
+        if (!$meeting->hasSheet($sheet)) {
+            throw new AccessDeniedException();
+        }
+
         $data = json_decode($request->getContent());
 
-        if (!isset($data->spotId) || !isset($data->blockedSlot) || !isset($data->blockedSpot)) {
+        if (!isset($data->spotId)
+            || !isset($data->slotId)
+            || !isset($data->blockedSlot)
+            || !isset($data->blockedSpot)
+            || !isset($data->meetingParticipants)
+            || !is_array($data->meetingParticipants)
+            || count($data->meetingParticipants) === 0
+        ) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.error');
         }
 
@@ -81,8 +87,29 @@ class MeetingController extends Controller
             $isVisio // find visio spot if meeting visio
         );
 
+        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+            $event,
+            (int) $data->slotId
+        );
+
         if (null === $spot) {
             return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.selectedSpotNotExists');
+        }
+
+        if (null === $slot) {
+            return $this->createErrorJsonResponse('admin.agenda.meeting.updateSpot.selectedSlotNotExists');
+        }
+
+        if ($slot->getEvent() !== $event) {
+            throw new AccessDeniedException();
+        }
+
+        $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
+        $participants = $participantRepository->findByIds($data->meetingParticipants);
+        foreach ($participants as $participant) {
+            if (!$sheet->hasParticipant($participant)) {
+                throw new AccessDeniedException();
+            }
         }
 
         $updateSpot = new UpdateSpot(
@@ -90,7 +117,10 @@ class MeetingController extends Controller
             $spot,
             $data->blockedSlot,
             $data->blockedSpot,
-            $isVisio
+            $isVisio,
+            $sheet,
+            $slot,
+            $participants
         );
 
         try {

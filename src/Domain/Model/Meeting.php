@@ -401,6 +401,11 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
         $this->blockedSlot = $blockedSlot;
     }
 
+    public function updateSlot(MeetingSlot $slot)
+    {
+        $this->slot = $slot;
+    }
+
     /**
      * @param MeetingSlot $slot
      * @param Spot        $spot

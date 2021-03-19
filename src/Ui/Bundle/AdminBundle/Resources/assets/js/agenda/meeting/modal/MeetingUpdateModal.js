@@ -27,6 +27,33 @@ export default {
             disabled: false
         }
     },
+    computed: {
+        possibleSlots: function () {
+            if (this.meetingToUpdate.form.meetingParticipants.length === 0) {
+                return [];
+            }
+
+            let possibleSlotsIdForParticipants = this.meetingToUpdate.form.currentSheetAvailableSlotIds[this.meetingToUpdate.form.meetingParticipants[0]];
+
+            const otherSelectedParticipants = this.meetingToUpdate.form.meetingParticipants.slice(1);
+            const currentSheetAvailableSlotIds = this.meetingToUpdate.form.currentSheetAvailableSlotIds;
+            otherSelectedParticipants.forEach(function (participantId) {
+                possibleSlotsIdForParticipants = possibleSlotsIdForParticipants.filter(slotId => currentSheetAvailableSlotIds[participantId].includes(slotId));
+            });
+
+            return this.meetingToUpdate.form.meetingSlots.filter(slot => possibleSlotsIdForParticipants.includes(slot.id));
+        },
+        possibleSpots: function() {
+            // filter by seat capacity
+            let possibleSpotsIdForSlots = this.meetingToUpdate.form.availableSpots.filter(spot => spot.seatCapacity >= this.partipantsCount);
+
+            // filter by selected slot
+            return possibleSpotsIdForSlots.filter(spot => spot.slotsId.includes(this.meetingToUpdate.form.slotId));
+        },
+        partipantsCount: function() {
+           return this.meetingToUpdate.form.metParticipantsCount + this.meetingToUpdate.form.meetingParticipants.length;
+        },
+    },
     methods: {
         reinit: function () {
             this.disabled = false;
@@ -39,10 +66,12 @@ export default {
             this.disabled = true;
             this.$emit('meeting-updating');
 
-            this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId), {
+            this.$http.post(api.getMeetingUpdateSpotEndpoint(this.meetingToUpdate.form.meetingId, this.meetingToUpdate.sheet.id), {
                 blockedSlot: this.meetingToUpdate.form.blockedSlot,
                 blockedSpot: this.meetingToUpdate.form.blockedSpot,
-                spotId: this.meetingToUpdate.form.spotId
+                spotId: this.meetingToUpdate.form.spotId,
+                slotId: this.meetingToUpdate.form.slotId,
+                meetingParticipants: this.meetingToUpdate.form.meetingParticipants
             })
             .then(function () {
                 this.$emit('meeting-updated');

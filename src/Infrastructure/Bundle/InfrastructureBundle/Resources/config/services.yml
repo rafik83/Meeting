@@ -706,6 +706,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@query.agenda.admin.meeting_update_slot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot }
     vimeet_infrastructure.vimeet.application.command.meeting.update_slot_handler:
@@ -4389,6 +4390,7 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQueryHandler'
     query.agenda.admin.meeting_update_slot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler
         arguments:
