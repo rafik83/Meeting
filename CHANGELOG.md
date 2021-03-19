@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2436 - As admin I can check 'Participants must evaluate happening'
 - VIMEET-2289 - can change participants & slot directly from admin meeting edition
 
 ### Fixed
