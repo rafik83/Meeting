@@ -30,11 +30,6 @@ class Contact
     /** @var string */
     private $origin;
 
-    /** @var bool
-     * @deprecated
-     */
-    private $scanned = false;
-
     public function __construct(
         Event $event,
         User $user,

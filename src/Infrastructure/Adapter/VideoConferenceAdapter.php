@@ -25,6 +25,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
     public const DELAY_AFTER_END_TIME = 15 * 60;
     public const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
+    public const MAX_ARCHIVE_NAME_LENGTH = 255;
 
     /** @var OpenTok */
     private $openTok;
@@ -79,7 +80,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
         return $this->openTok->startArchive(
             $sessionId,
             [
-                'name' => $name,
+                'name' => mb_substr($name, 0, self::MAX_ARCHIVE_NAME_LENGTH),
                 'hasVideo' => true,
                 'hasAudio' => true,
                 'outputMode' => OutputMode::COMPOSED,

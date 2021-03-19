@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2289 - can change participants & slot directly from admin meeting edition
 
+### Fixed
+- MV-313 - trunck happening name if too long for tokbox
+- Code style / namespace fixes
+
+### Added
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+### Deprecated
+- remove "scanned" field from "contact" table
+
 ## [2.83.0]
 ### Security
 - VIMEET-2373 - fix malicious files upload
@@ -45,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.80.0] - 2021-02-15
 ### Added
+- VIMEET-2359 - Micro and camera crossed out
 - VIMEET-2189 - Mute speakers
 - VIMEET-2386 - Add company name to api conference call
 
