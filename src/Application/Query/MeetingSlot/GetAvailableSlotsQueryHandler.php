@@ -41,7 +41,7 @@ class GetAvailableSlotsQueryHandler
             $participantsForAvailableSlots,
             false,
             $isSheetMultiParticipants ? $query->meeting : null,
-            true
+            $query->excludePastSlots
         );
 
         $availableSlots = [];
@@ -72,7 +72,7 @@ class GetAvailableSlotsQueryHandler
                 [$participant],
                 false,
                 $query->meeting,
-                true
+                $query->excludePastSlots
             );
             $currentSheetAvailableSlotIds[$participant->getId()] = array_map(
                 fn (MeetingSlot $meetingSlot) => $meetingSlot->getId(), $participantSlots

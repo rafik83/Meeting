@@ -11,7 +11,7 @@ class ParticipantVisioTestedEvent extends Event
     /** @var User */
     public $user;
 
-    /** @var Event */
+    /** @var VimeetEvent */
     public $event;
 
     public function __construct(User $user, VimeetEvent $event)

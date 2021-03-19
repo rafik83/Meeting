@@ -105,7 +105,9 @@
                 {% set label = name|humanize %}
             {% endif %}
             <label{{ macros.html_attributes(label_attr) }}>
-                {{ translation_domain is same as(false) ? label|raw : label|trans({}, translation_domain)|raw }}
+                {% set escape = escape is not defined ? true : escape %}
+                {% set translatedLabel = translation_domain is same as(false) ? label : label|trans({}, translation_domain) %}
+                {{ escape ? translatedLabel : translatedLabel|raw }}
             </label>
         {% endif %}
     {% endspaceless %}
@@ -184,7 +186,7 @@
     {% if label is same as(false) %}
         {{ form_widget(form) }}
     {% else %}
-        {{ form_label(form, form_widget(form) ~ label|trans({}, translation_domain), {label_attr: label_attr|default({})}) }}
+        {{ form_label(form, form_widget(form) ~ label|trans({}, translation_domain), {label_attr: label_attr|default({}), escape: false}) }}
     {% endif %}
 {% endblock box_widget %}
 

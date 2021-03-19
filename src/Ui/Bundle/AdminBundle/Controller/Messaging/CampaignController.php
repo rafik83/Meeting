@@ -23,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 
 class CampaignController extends Controller
@@ -121,6 +122,10 @@ class CampaignController extends Controller
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
 
+        if ($event !== $campaign->getEvent()) {
+            throw new AccessDeniedException();
+        }
+
         $form = $this->createForm(SelectRecipientsType::class, new SelectRecipients($campaign));
         $form->add('submit', SubmitType::class, [
             'label' => 'form.sheet.messaging_campaign.recipients.submit.label',
@@ -159,6 +164,10 @@ class CampaignController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        if ($event !== $campaign->getEvent()) {
+            throw new AccessDeniedException();
+        }
 
         $selectMessage = new SelectMessage($campaign);
         $form          = $this->createForm(SelectMessageType::class, $selectMessage, [
@@ -218,6 +227,10 @@ class CampaignController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ADMIN');
+
+        if ($event !== $campaign->getEvent()) {
+            throw new AccessDeniedException();
+        }
 
         $url = $this->generateUrl('admin_messaging_campaign_list', ['event' => $event->getId()]);
 

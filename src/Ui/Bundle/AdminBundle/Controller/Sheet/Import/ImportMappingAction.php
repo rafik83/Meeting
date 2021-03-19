@@ -69,8 +69,9 @@ class ImportMappingAction
         AdminDomain $adminDomain
     ): Response {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
-            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ADMIN')
+            || !$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS')
+            || $event !== $type->getEvent()
         ) {
             throw new AccessDeniedException('Access denied');
         }
