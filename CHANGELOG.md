@@ -5,7 +5,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2146 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2436 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2289 - can change participants & slot directly from admin meeting edition
+
+### Fixed
+- MV-313 - trunck happening name if too long for tokbox
+- Code style / namespace fixes
+
+### Added
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+### Deprecated
+- remove "scanned" field from "contact" table
+
+## [2.83.0]
+### Security
+- VIMEET-2373 - fix malicious files upload
+- VIMEET-2373 - XSS fixes
+- VIMEET-2373 - various IDOR fixes
+- VIMEET-2373 - various broken access fixes
+
+### Fixed
+- Partners are not allowed to see users (see VIMEET-2373 comments)
+- hotfix - limit chat messages and static avatar to avoid overload on webinars with 1000+ viewers
+
+### Updated
+- VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
 
 ## [2.82.3] - 2021-03-05
 ### Fixed
@@ -31,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.80.0] - 2021-02-15
 ### Added
+- VIMEET-2359 - Micro and camera crossed out
 - VIMEET-2189 - Mute speakers
 - VIMEET-2386 - Add company name to api conference call
 

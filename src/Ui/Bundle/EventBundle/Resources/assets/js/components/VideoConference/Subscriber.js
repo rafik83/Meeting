@@ -50,12 +50,12 @@ Subscriber.prototype.onVideoElementCreated = function (event) {
 
   if (this.subscriberId && this.subscribersNameMapping.hasOwnProperty(this.subscriberId)) {
       let iconMute = document.createElement('i');
-      iconMute.classList.add('iconMuteStream','icon-Conference','icon-center');
+      iconMute.classList.add('iconMuteStream','icon-Conference-off','icon-center');
 
       let subscriberName = document.createElement('span');
       subscriberName.classList.add('visio-user-name');
       subscriberName.textContent = this.subscribersNameMapping[this.subscriberId];
-      
+
       subscriberElement.appendChild(iconMute);
       subscriberElement.appendChild(subscriberName);
   }

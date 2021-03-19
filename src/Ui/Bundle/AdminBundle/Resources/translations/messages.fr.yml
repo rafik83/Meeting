@@ -78,8 +78,11 @@ admin.agenda.meeting.updateSpot.blockedSlot: 'Créneau bloqué'
 admin.agenda.meeting.updateSpot.blockedSpot: 'Lieu bloqué'
 admin.agenda.meeting.updateSpot.error: 'Impossible de modifier ce rendez-vous'
 admin.agenda.meeting.updateSpot.isBlockedSpot: 'Il n''est pas possible de modifier le lieu de ce rendez-vous car il est bloqué'
+admin.agenda.meeting.updateSpot.participants: Participants
 admin.agenda.meeting.updateSpot.save: Enregistrer
+admin.agenda.meeting.updateSpot.selectedSlotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
+admin.agenda.meeting.updateSpot.slot: Créneau
 admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
@@ -414,6 +417,7 @@ admin.linked_sheets.no_result: 'Aucun résultat'
 admin.linked_sheets.title: 'Fiches liées'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.action.import: Importer
 admin.meeting_request.action.export: Exporter
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
@@ -1502,6 +1506,8 @@ event.meeting.request.details.title: 'Details de la demande de rendez-vous'
 event.meeting.request.details.to: 'A destination de:'
 event.meeting.request.details.toParticipant: 'Participant de la destination:'
 event.meeting.request.details.updatedAt: 'Changement de statut'
+event.meeting.request.import.title: 'Importer un fichier de demandes de rendez-vous'
+event.meeting.request.import.exampleFile: 'Exemple de fichier'
 event.meeting.request.state.from.approved: Accepté
 event.meeting.request.state.from.cancelled: Annulé
 event.meeting.request.state.from.refused: Refusé

@@ -213,10 +213,12 @@ function Webinar(element, isSpeaker) {
     this.invisibleModeEnableConfirmationMessage = element.getAttribute('data-invisibleMode-enableConfirmation-message');
 
     this.toggleAudioElement = element.querySelector('#toggle-audio');
+    this.pictoAudioElement = this.toggleAudioElement.querySelector('i');
     this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
     this.enableAudio = true;
 
     this.toggleVideoElement = element.querySelector('#toggle-video');
+    this.pictoVideoElement = this.toggleVideoElement.querySelector('i');
     this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
     this.enableVideo = true;
 
@@ -789,7 +791,7 @@ Webinar.prototype.onVideoElementCreated = function (event) {
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
         let iconMute = document.createElement('i');
-        iconMute.classList.add('iconMuteStream','icon-Conference','icon-center');
+        iconMute.classList.add('iconMuteStream','icon-Conference-off','icon-center');
 
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
@@ -1242,6 +1244,14 @@ Webinar.prototype.toggleAudio = function () {
     publisher.publishAudio(enableAudio);
     this.enableAudio = enableAudio;
     this.toggleButton(this.toggleAudioElement, enableAudio);
+
+    if (enableAudio){
+        this.pictoAudioElement.classList.remove('icon-Conference-off')
+    }
+
+    if (!enableAudio){
+        this.pictoAudioElement.classList.add('icon-Conference-off')
+    }
 };
 
 /**
@@ -1258,6 +1268,14 @@ Webinar.prototype.toggleVideo = function () {
     publisher.publishVideo(enableVideo);
     this.enableVideo = enableVideo;
     this.toggleButton(this.toggleVideoElement, enableVideo);
+
+    if (enableVideo){
+        this.pictoVideoElement.classList.remove('icon-Video_2-off')
+    }
+
+    if (!enableVideo){
+        this.pictoVideoElement.classList.add('icon-Video_2-off')
+    }
 };
 
 Webinar.prototype.installChromeExtension = function () {

@@ -5,8 +5,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
+use Proximum\Vimeet\Application\Command\UserEventView\Update as UpdateUserEvent;
 use Proximum\Vimeet\Application\Command\User\Event\PresenceDate\Persist;
-use Proximum\Vimeet\Application\Command\UserEventView\Update;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
@@ -20,7 +20,6 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioTestedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantVisioToggledEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Proximum\Vimeet\Application\Command\UserEventView\Update as UpdateUserEvent;
 
 class ParticipantEventSubscriber implements EventSubscriberInterface
 {
@@ -85,7 +84,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
     public function onParticipantVisioToggled(ParticipantVisioToggledEvent $participantVisioToggledEvent): void
     {
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $participantVisioToggledEvent->participant->getUser(),
                 $participantVisioToggledEvent->participant->getSheet()->getEvent()
             )
@@ -95,7 +94,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
     public function onParticipantVisioTested(ParticipantVisioTestedEvent $participantVisioTestedEvent): void
     {
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $participantVisioTestedEvent->user,
                 $participantVisioTestedEvent->event
             )
@@ -106,7 +105,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
     {
         foreach ($participantImportedEvent->getSheets() as $sheet) {
             foreach ($sheet->getUsers() as $user) {
-                $this->commandBus->handle(new Update($user, $participantImportedEvent->getEvent()));
+                $this->commandBus->handle(new UpdateUserEvent($user, $participantImportedEvent->getEvent()));
             }
         }
     }
@@ -115,7 +114,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         ParticipantImportedFromApiEvent $participantImportedFromApiEvent
     ): void {
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $participantImportedFromApiEvent->participant->getUser(),
                 $participantImportedFromApiEvent->participant->getEvent()
             )
@@ -126,7 +125,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         ParticipantCreatedByGroupManagerEvent $participantCreatedByGroupManagerEvent
     ): void {
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $participantCreatedByGroupManagerEvent->participant->getUser(),
                 $participantCreatedByGroupManagerEvent->participant->getEvent()
             )
@@ -137,7 +136,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         ParticipantRemovedByGroupManagerEvent $participantRemovedByGroupManagerEvent
     ): void {
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $participantRemovedByGroupManagerEvent->user,
                 $participantRemovedByGroupManagerEvent->sheet->getEvent()
             )
@@ -149,7 +148,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         $event = $sheetCreatedByManagerEvent->sheet->getEvent();
 
         foreach ($sheetCreatedByManagerEvent->sheet->getUsers() as $user) {
-            $this->commandBus->handle(new Update($user, $event));
+            $this->commandBus->handle(new UpdateUserEvent($user, $event));
         }
     }
 
@@ -160,7 +159,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         }
 
         $this->commandBus->handle(
-            new Update(
+            new UpdateUserEvent(
                 $registrationStepEvent->getParticipant()->getUser(),
                 $registrationStepEvent->getParticipant()->getEvent()
             )
@@ -172,7 +171,7 @@ class ParticipantEventSubscriber implements EventSubscriberInterface
         $event = $participantRemovedEvent->sheet->getEvent();
 
         foreach ($participantRemovedEvent->usersRemovedFromSheet as $user) {
-            $this->commandBus->handle(new Update($user, $event));
+            $this->commandBus->handle(new UpdateUserEvent($user, $event));
         }
     }
 }

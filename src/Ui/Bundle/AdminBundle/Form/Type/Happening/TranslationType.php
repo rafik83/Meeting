@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 
 class TranslationType extends AbstractType
 {
@@ -29,11 +30,27 @@ class TranslationType extends AbstractType
                 'attr' => [
                     'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => Image::SUPPORTED_MIME_TYPE,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
+                ],
             ])
             ->add('webinarWaitingMedia', FileType::class, [
                 'required' => false,
                 'attr' => [
                     'accept' => implode(', ', MimeType::MEDIA_MIME_TYPES),
+                ],
+                'constraints' => [
+                    new File(
+                        [
+                            'mimeTypes' => MimeType::MEDIA_MIME_TYPES,
+                            'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                        ]
+                    ),
                 ],
             ])
         ;

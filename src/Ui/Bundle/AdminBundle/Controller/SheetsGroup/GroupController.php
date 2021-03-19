@@ -118,6 +118,10 @@ class GroupController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        if ($event !== $group->getEvent()) {
+            throw new AccessDeniedException();
+        }
+
         $command = new Update($group);
         $form = $this->createForm(UpdateType::class, $command);
 
