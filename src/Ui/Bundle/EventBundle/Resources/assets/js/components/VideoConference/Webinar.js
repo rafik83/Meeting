@@ -74,7 +74,7 @@ function Webinar(element, isSpeaker) {
     }
 
     if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
-        const remainingTime = startTime.getTime() - new Date().getTime();
+        const remainingTime = this.startTime.getTime() - new Date().getTime();
         setTimeout(() => {
             this.modalWarningBeforeStart.show();
             this.modalWarningBeforeStart.hideAfter(30000);
