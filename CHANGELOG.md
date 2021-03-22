@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Don't update question count when a vote is notified
+
 ## [2.84.1] - 2021-03-19
 ### Fixed
 - MV-316 - Fix to activate your camera and microphone in webinar access
