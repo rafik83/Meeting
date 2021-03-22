@@ -355,3 +355,12 @@
     opacity: 0;
   }
 }
+
+// Force the difference between an available and unavailable slot
+option {
+  color: black;
+
+  &[disabled] {
+    color: lightgray;
+  }
+}

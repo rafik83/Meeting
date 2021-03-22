@@ -10,6 +10,9 @@
     {% if form.webinarRecorded is defined %}
         {{ form_row(form.webinarRecorded) }}
     {% endif %}
+    {% if form.webinarRecordSentToSpeakers is defined %}
+        {{ form_row(form.webinarRecordSentToSpeakers) }}
+    {% endif %}
     {{ form_row(form.allowHls) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}
@@ -21,6 +24,7 @@
     {{ form_row(form.questionAllowed) }}
     {{ form_row(form.liveUrl) }}
     {{ form_row(form.sidebarAllowed) }}
+    {{ form_row(form.mustEvaluateHappening) }}
     {{ form_row(form.limitParticipant, {widget_columns: 2}) }}
     {{ form_row(form.talkings) }}
 
@@ -28,6 +32,8 @@
     <script>
         const webinarRecordedGroup = document.getElementById('happening_create_webinarRecorded-group');
         webinarRecordedGroup.classList.add('hide');
+        const webinarRecordSentToSpeakersGroup = document.getElementById('happening_create_webinarRecordSentToSpeakers-group');
+        webinarRecordSentToSpeakersGroup.classList.add('hide');
 
         let happeningTypeRadios = document.getElementsByName('happening_create[happeningType]');
 
@@ -37,8 +43,10 @@
                 function (event) {
                     if (event.target.value === 'default') {
                         webinarRecordedGroup.classList.add('hide');
+                        webinarRecordSentToSpeakersGroup.classList.add('hide');
                     } else {
                         webinarRecordedGroup.classList.remove('hide');
+                        webinarRecordSentToSpeakersGroup.classList.remove('hide');
                     }
                 }
             )

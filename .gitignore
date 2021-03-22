@@ -21,6 +21,12 @@
 /behat.yml
 /.phpunit.result.cache
 
+## for migration
+/public
+.env.local
+/var/log
+## end for migration
+
 # Tests
 /var/tests/*
 !var/tests/.gitkeep

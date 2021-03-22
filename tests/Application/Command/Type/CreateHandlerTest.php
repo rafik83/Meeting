@@ -58,7 +58,7 @@ class CreateHandlerTest extends TestCase
         $create->formTemplates = [$formTemplate1, $formTemplate2];
         $create->hidden = true;
         $create->rank = null;
-        $create->canMoveMeeting = false;
+        $create->canUpdateMeeting = false;
         $create->availabilityType = Type::TYPE_MANAGEMENT_UNAVAILABLE;
         $create->numberOfMeetingsPerPlanning = 12;
         $create->canRemoveMeeting = false;

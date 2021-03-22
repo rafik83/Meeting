@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
@@ -27,12 +28,15 @@ class MailerAdapter implements MailerInterface
         \Swift_Mailer $mailer,
         \Twig_Environment $twig,
         TranslatorAdapter $translator,
+        RouterInterface $router,
         LoggerInterface $logger
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->translator = $translator;
         $this->logger = $logger;
+        // make sure scheme is https
+        $router->initScheme();
     }
 
     /**

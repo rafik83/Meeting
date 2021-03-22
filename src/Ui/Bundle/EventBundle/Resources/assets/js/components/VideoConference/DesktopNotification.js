@@ -1,5 +1,4 @@
 export default class DesktopNotification {
-
     constructor(title, body) {
         this.title = title;
         this.body = body;
@@ -7,15 +6,20 @@ export default class DesktopNotification {
 
     showPresent() {
         this.notification = new Notification(this.title, {
-            body:this.body,
+            body: this.body,
             requireInteraction: true,
         });
-        this.notification.onclick = function() {
-            window.focus();
-        }
+        this.notification.onclick = () => window.focus();
     }
 
     closePresent() {
-        this.notification.close();
+        if (this.notification) {
+            this.notification.close();
+            this.notification = null;
+        }
+    }
+
+    isOpened() {
+        return !!this.notification;
     }
 }

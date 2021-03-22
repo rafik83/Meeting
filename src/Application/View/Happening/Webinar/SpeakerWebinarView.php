@@ -40,8 +40,13 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $canDeleteChatMessage;
 
+    /** @var bool true if speaker can reply and delete questions */
+    public $canModerateQuestion;
+
     /** @var bool */
-    public $canDeleteQuestionMessage;
+    public $canMuteStream;
+
+    public string $programUrl;
 
     /**
      * @param WebinarSpeakerView[]     $speakers
@@ -72,12 +77,14 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
         bool $isWebinarRecordAutoStart,
-        bool $isStreamOpenToPublic,
         int $questionsCount = 0,
         bool $allowWebinarOnHLS = false,
         int $viewersCount = 0,
+        bool $isStreamOpenToPublic = false,
         bool $canDeleteChatMessage = false,
-        bool $canDeleteQuestionMessage = false
+        bool $canModerateQuestion = false,
+        bool $canMuteStream = false,
+        string $programUrl
     ) {
         parent::__construct(
             $eventId,
@@ -112,6 +119,8 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->isStreamOpenToPublic = $isStreamOpenToPublic;
         $this->viewersCount = $viewersCount;
         $this->canDeleteChatMessage = $canDeleteChatMessage;
-        $this->canDeleteQuestionMessage = $canDeleteQuestionMessage;
+        $this->canModerateQuestion = $canModerateQuestion;
+        $this->canMuteStream = $canMuteStream;
+        $this->programUrl = $programUrl;
     }
 }

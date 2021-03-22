@@ -92,7 +92,7 @@ class ResultActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ADMIN')
+        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -157,7 +157,7 @@ class ResultActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ADMIN')
+        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             ->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -234,7 +234,7 @@ class ResultActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ADMIN')
+        $this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             ->shouldBeCalled()
             ->willReturn(true)
         ;

@@ -4,6 +4,124 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.84.1] - 2021-03-19
+### Fixed
+- MV-316 - Fix to activate your camera and microphone in webinar access
+
+## [2.84.0] - 2021-03-19
+### Added
+- VIMEET-2436 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2437 - As participant 'I must evaluate happening'
+- VIMEET-2289 - Can change participants & slot directly from admin meeting edition
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+### Fixed
+- MV-313 - Trunck happening name if too long for tokbox
+- Code style / namespace fixes
+- MV-314 - Fix unclickable stop sharing button
+
+### Deprecated
+- Remove "scanned" field from "contact" table
+
+## [2.83.0] - 2021-03-15
+### Security
+- VIMEET-2373 - fix malicious files upload
+- VIMEET-2373 - XSS fixes
+- VIMEET-2373 - various IDOR fixes
+- VIMEET-2373 - various broken access fixes
+
+### Fixed
+- Partners are not allowed to see users (see VIMEET-2373 comments)
+- hotfix - limit chat messages and static avatar to avoid overload on webinars with 1000+ viewers
+
+### Updated
+- VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
+
+## [2.82.3] - 2021-03-05
+### Fixed
+- MV-311 - fix max size upload video 300M
+
+## [2.82.2] - 2021-03-02
+### Fixed
+- MV-310 - fix error if desktop notifications are not available (ie on iOS)
+
+## [2.82.1] - 2021-02-18
+### Fixed
+- MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
+
+## [2.82.0] - 2021-02-16### Updated
+- Update Elasticsearch to 6.8.13
+
+## [2.81.0] - 2021-02-16
+### Added
+- VIMEET-2361 - Add link to prefill user mail on registration
+
+### Removed
+- VIMEET-1811 - Remove can_move_meeting column from db
+
+## [2.80.0] - 2021-02-15
+### Added
+- VIMEET-2359 - Micro and camera crossed out
+- VIMEET-2189 - Mute speakers
+- VIMEET-2386 - Add company name to api conference call
+
+## [2.79.1] - 2021-02-05
+### Fixed
+- Redis query cache namespace
+
+## [2.79.0] - 2021-02-04
+### Added
+- VIMEET-1811 - Participants can edit participants list and date of a meeting
+- VIMEET-2319 - Send webinar record to speakers
+- VIMEET-2323 - Link target blank
+- VIMEET-2296 - Add participant locale in participants export
+- VIMEET-2295 - Can import participant's locale
+
+### Fixed
+- VIMEET-2322 - Set events to public and transparent to enabled title display on Google calendar (else only busy is shown)
+
+## [2.78.3] - 2021-02-03
+### Fixed
+- MV-306 - Don't show error when updating availabilities if a user unavailability conflicts with existing unavailability
+
+## [2.78.2] - 2021-02-03
+### Updated
+- MV-306 - Add log when exception is thrown when saving availabilities
+
+## [2.78.1] - 2021-01-21
+### Fixed
+- MV-300 - Can't close chat during visio meeting (BC break with chat lib update)
+
+## [2.78.0] - 2021-01-20
+### Fixed
+- MV-295 - Badge preview from back-office
+
+### Added
+- VIMEET-2305 - participant agenda available by an ical file (only for admins)
+- VIMEET-2306 - Add checkbox object for registration template
+- VIMEET-2307 - Better visibility text
+- VIMEET-2304 - Picto edit
+
+### Updated
+- VIMEET-2303 - Apply TVA if event country is fr and billing info is mc and Do not appy european vat for gb
+- VIMEET-2293 - Don't ask participant's locale for one-locale events
+
+## [2.77.0] - 2021-01-18
+### Added
+- VIMEET-2293 - Set participant's locale by event
+
+## [2.76.0] - 2021-01-12
+### Updated
+- VIMEET-2287 - Participants can join webinar during running hours, even if they're not available
+
+### Added
+- VIMEET-2292 - Display speaker camera in PiP mode when sharing screen
+- VIMEET-2191 - Reply to webinar question
+- VIMEET-1811 - User can change participants to meeting
+
+### Fixed
+- MV-293 - Https links in emails
 
 ## [2.75.0] - 2020-12-24
 ### Updated
@@ -14,6 +132,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-291 - Exception simultaneous openings meetings
 
 ### Added
+- VIMEET-2284 - Delete webinar question
 - VIMEET-2184 - Speakers can prepare before their webinar
 - VIMEET-2234 - API endpoint to access list of happenings
 - VIMEET-2278 - Participant's program displayed according his timezone
@@ -21,6 +140,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2275 - Close notification private chat
 - VIMEET-2284 - Delete question webinar
 - Add health check route
+
+### Fixed
+- MV289 - Error management chat
 
 ## [2.74.1] - 2020-12-14
 ### Fixed

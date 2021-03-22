@@ -276,6 +276,7 @@ function init(target) {
 
     addSubmitEventListenerOnElementChange(target, 'evaluation', 'evaluation');
     addSubmitEventListenerOnElementChange(target, 'evaluate_meeting', 'evaluation');
+    addSubmitEventListenerOnElementChange(target, 'evaluate_happening', 'evaluation');
 
     showSpinnerOnSubmit();
 

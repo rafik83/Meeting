@@ -18,6 +18,7 @@ import UploadObject from "../templateObjects/_UploadObject";
 import DatetimeObject from "../templateObjects/_DatetimeObject";
 import MultiUploadObject from "../templateObjects/_MultiUploadObject";
 import VideoObject from "../templateObjects/_VideoObject";
+import CheckboxObject from "../templateObjects/_CheckboxObject";
 
 /**
  * Template Object
@@ -110,6 +111,9 @@ function TemplateObject(element, locale, builderType)
       break;
     case 'video':
       this.object = new VideoObject(this.element, this.locale, this.builderType);
+      break;
+  case 'checkbox':
+      this.object = new CheckboxObject(this.element, this.locale, this.builderType);
       break;
   }
 

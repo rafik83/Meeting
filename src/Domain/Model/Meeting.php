@@ -6,8 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Meeting\MessageSubjectInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
-class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
+class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface, TimeRangeInterface
 {
     public const STATE_SCHEDULED = 'scheduled';
     public const STATE_CANCELED  = 'canceled';
@@ -401,6 +402,11 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
         $this->blockedSlot = $blockedSlot;
     }
 
+    public function updateSlot(MeetingSlot $slot)
+    {
+        $this->slot = $slot;
+    }
+
     /**
      * @param MeetingSlot $slot
      * @param Spot        $spot
@@ -451,6 +457,20 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
         }
 
         return [];
+    }
+
+    /**
+     * @param $participants Participant[]
+     */
+    public function setParticipants(Sheet $sheet, array $participants): void
+    {
+        if ($sheet === $this->fromSheet) {
+            $this->fromParticipants->clear();
+            $this->fromParticipants = new ArrayCollection($participants);
+        } elseif ($sheet === $this->toSheet) {
+            $this->toParticipants->clear();
+            $this->toParticipants = new ArrayCollection($participants);
+        }
     }
 
     /**
@@ -574,5 +594,15 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface
     public function isVisio(): bool
     {
         return $this->getSpot()->isVisio();
+    }
+
+    public function getBegin(): \DateTimeInterface
+    {
+        return $this->getSlot()->getBegin();
+    }
+
+    public function getEnd(): \DateTimeInterface
+    {
+        return $this->getSlot()->getEnd();
     }
 }

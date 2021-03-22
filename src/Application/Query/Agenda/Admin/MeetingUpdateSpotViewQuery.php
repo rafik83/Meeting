@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingUpdateSpotViewQuery
 {
@@ -12,13 +13,15 @@ class MeetingUpdateSpotViewQuery
     /** @var bool */
     public $visio;
 
-    /**
-     * @param Meeting $meeting
-     * @param bool    $visio
-     */
-    public function __construct(Meeting $meeting, $visio = false)
+    public Sheet $sheet;
+
+    public string $locale;
+
+    public function __construct(Meeting $meeting, Sheet $sheet, bool $visio, string $locale)
     {
         $this->meeting = $meeting;
+        $this->sheet = $sheet;
         $this->visio   = $visio;
+        $this->locale = $locale;
     }
 }

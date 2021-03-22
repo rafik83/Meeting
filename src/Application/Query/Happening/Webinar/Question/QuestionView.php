@@ -37,6 +37,9 @@ class QuestionView
     /** @var bool */
     public $canVote;
 
+    /** @var QuestionReplyView|null */
+    public $reply;
+
     public function __construct(
         int $questionId,
         string $questionContent,
@@ -48,7 +51,8 @@ class QuestionView
         string $createdAt,
         int $voteCount,
         bool $isLiked,
-        bool $canVote
+        bool $canVote,
+        ?QuestionReplyView $reply
     ) {
         $this->questionId = $questionId;
         $this->questionContent = $questionContent;
@@ -61,5 +65,6 @@ class QuestionView
         $this->voteCount = $voteCount;
         $this->isLiked = $isLiked;
         $this->canVote = $canVote;
+        $this->reply = $reply;
     }
 }

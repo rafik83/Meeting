@@ -49,7 +49,7 @@ class UpdateHandler
             $update->hidden,
             $update->availabilityType,
             $update->numberOfMeetingsPerPlanning,
-            $update->canMoveMeeting,
+            $update->canUpdateMeeting,
             $update->canRemoveMeeting,
             $update->areAllSheetParticipantsAssignedToMeeting,
             $update->canScanParticipant,

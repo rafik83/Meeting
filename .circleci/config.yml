@@ -33,6 +33,7 @@ jobs:
       - run:
           name: "[build] install the project"
           command: |
+            sudo sysctl -w vm.max_map_count=262144
             docker network create proxy
             cp app/config/parameters_circle.yml app/config/parameters.yml
             docker-compose -p vimeet up -d

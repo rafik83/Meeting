@@ -16,6 +16,13 @@ Proximum\Vimeet\Domain\Model\HappeningParticipation:
             type: boolean
             options:
                 default: false
+        visible:
+            type: boolean
+            options:
+                default: true
+        evaluation:
+            type: integer
+            nullable: true
     manyToOne:
         happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening

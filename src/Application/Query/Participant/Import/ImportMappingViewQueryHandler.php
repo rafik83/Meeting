@@ -69,6 +69,7 @@ class ImportMappingViewQueryHandler
         $headers = [
             ParticipantImportTag::REGISTRATION_FIELD_IGNORE => 'form.participant_import.field.ignore',
             ParticipantImportTag::REGISTRATION_FIELD_MAIL => 'form.participant_import.field.mail',
+            ParticipantImportTag::REGISTRATION_FIELD_LOCALE => 'form.participant_import.field.locale',
         ];
 
         $allowMultiSheet = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_ALLOW_MULTI_SHEET) ?? false;

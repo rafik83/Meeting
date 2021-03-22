@@ -9,6 +9,8 @@ template.block.remove_confirm: 'Confirmez vous la suppression de cet élément ?
 template.boolean.filter.active: 'Activer le filtre'
 template.boolean.filter.label: 'Libellé du filtre'
 template.collection.title: 'Champs collection activés'
+template.content.text.link: 'Vous trouverez ici des éléments pour mettre en forme votre texte'
+template.content.text.blank.link: 'Pour ouvrir un lien dans un nouvel onglet, voici un exemple : [Cliquez ici pour aller chez google](https://google.com){: target="_blank"}'
 template.content.title: Contenu
 template.defaultElement.title: 'Élément par défaut'
 template.error.objectsCollectionBlockCanNotContainForbiddenObjects: 'Un bloc collection d''objets ne peut contenir que des objets texte modifiable et nomenclature'
@@ -33,6 +35,7 @@ template.nomenclature.objective.title: Objectif
 template.nomenclature.title: Nomenclature
 template.object.boolean: 'Champs Oui / Non'
 template.object.button-link: Lien
+template.object.checkbox: 'Case à cocher'
 template.object.collection: Collection
 template.object.country: Pays
 template.object.datetime: 'Date / heure'

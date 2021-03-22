@@ -48,6 +48,13 @@ event_register:
         typeView: \d+
     defaults: { _controller: EventBundle:Register:register }
 
+event_prefill_register:
+    path: /prefill-register/{typeView}
+    methods:  [GET]
+    requirements:
+        typeView: \d+
+    defaults: { _controller: EventBundle:Register:prefillRegister }
+
 event_register_new_user:
     path: /register/{typeView}/new
     methods:  [GET, POST]
@@ -942,14 +949,22 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
-event_agenda_move_meeting_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/move-meeting-slot
+event_agenda_participant_ical:
+    path: /sheet/{sheet}/agenda/participant/{participant}/{slug}.ics
+    requirements:
+        sheet: \d+
+        participant: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Agenda\IcalAction }
+
+event_agenda_update_meeting:
+    path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/update-meeting
     requirements:
         participant: \d+
         sheet: \d+
         meeting: \d+
     methods: [GET, POST]
-    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\MoveMeetingAction
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Meeting\UpdateMeetingAction
 
 event_agenda_remove_meeting:
     path: /sheet/{sheet}/agenda/participant/{participant}/meeting/{meeting}/remove
@@ -1001,6 +1016,14 @@ event_sheet_happening_participate:
     methods:  [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction }
 
+event_happening_evaluation:
+    path: /sheet/{sheet}/happening/{happening}/evaluate
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\EvaluateHappeningAction
+
 event_sheet_happening_webinar:
     path: /sheet/{sheet}/happening/{happening}/webinar
     requirements:
@@ -1032,6 +1055,38 @@ event_sheet_happening_webinar_question_delete:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionAction
+
+event_sheet_happening_webinar_question_begin_reply:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/begin-reply
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\BeginReplyHappeningQuestionAction
+
+event_sheet_happening_webinar_question_reply:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/reply
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\ReplyHappeningQuestionAction
+
+event_sheet_happening_webinar_question_reply_delete:
+    path: /sheet/{sheet}/happening/{happening}/webinar/question/reply/delete
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction
+
+event_happening_webinar_mute:
+    path: /sheet/{sheet}/happening/{happening}/webinar/mute
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Webinar\MuteAction
 
 event_happening_webinar_record:
     path: /sheet/{sheet}/happening/{happening}/webinar/record

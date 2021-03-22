@@ -20,9 +20,16 @@ class HappeningParticipation
     private $disabled = false;
 
     /**
+     * @var bool can user see this participation (eg in agenda)
+     */
+    private $visible = false;
+
+    /**
      * @var User
      */
     private $user;
+
+    private ?int $evaluation;
 
     /**
      * HappeningParticipation constructor.
@@ -31,11 +38,12 @@ class HappeningParticipation
      * @param User      $user
      * @param bool      $disabled
      */
-    public function __construct(Happening $happening, User $user, $disabled = false)
+    public function __construct(Happening $happening, User $user, $disabled = false, $visible = true)
     {
         $this->happening = $happening;
         $this->user      = $user;
         $this->disabled  = $disabled;
+        $this->visible  = $visible;
     }
 
     /**
@@ -78,6 +86,16 @@ class HappeningParticipation
         return $this;
     }
 
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): void
+    {
+        $this->visible = $visible;
+    }
+
     /**
      * @return User
      */
@@ -85,4 +103,15 @@ class HappeningParticipation
     {
         return $this->user;
     }
+
+    public function setEvaluation(?int $evaluation): void
+    {
+        $this->evaluation = $evaluation;
+    }
+
+    public function getEvaluation(): ?int
+    {
+        return $this->evaluation;
+    }
+
 }

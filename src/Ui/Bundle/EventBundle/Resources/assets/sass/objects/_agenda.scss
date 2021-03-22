@@ -129,6 +129,9 @@ $slotHeight: 60px;
           right: 45px;
           bottom: 16%;
         }
+        .btn-info {
+          display: none;
+        }
       }
 
       .details { display: block; }
@@ -145,6 +148,7 @@ $slotHeight: 60px;
     }
 
     > header {
+      cursor: pointer;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -185,6 +189,39 @@ $slotHeight: 60px;
           }
         }
       }
+
+      .tools {
+        display: flex;
+
+        a + a {
+          margin-left: 0.5em;
+        }
+
+        > a {
+          display: flex;
+          flex-direction: column;
+          order: 0;
+          flex: 0 1 auto;
+          align-self: auto;
+          color: #ffffff;
+
+
+
+          > i {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: center;
+            font-size: 30px;
+          }
+
+          > span {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+          }
+        }
+      }
+
 
       p {
         margin-bottom: 0;
@@ -273,6 +310,12 @@ $slotHeight: 60px;
     &--slot {
       margin-left: 80%;
     }
+  }
+}
+
+#meeting-modal {
+  form select.disabled {
+    color: #CCCCCC;
   }
 }
 

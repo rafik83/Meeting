@@ -48,7 +48,7 @@ class PreviousMeetingEvaluationCheckerHandler
 
         $participant = $sheet->getUserParticipant($user) ?? $sheet->getFirstParticipant();
 
-        $begin = $previousMeetingEvaluationChecker->meeting->getSlot()->getBegin();
+        $begin = $previousMeetingEvaluationChecker->timeRange->getBegin();
         $meeting = $this->meetingRepository->getPreviousVisioMeeting(
             $event,
             $sheet,

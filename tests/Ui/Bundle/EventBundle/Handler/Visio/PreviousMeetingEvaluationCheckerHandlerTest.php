@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
 class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $meetingRepository, $contactRepository, $router, $flashBag, $event, $sheet, $user, $meeting, $type;
+    private $meetingRepository, $contactRepository, $router, $flashBag, $event, $sheet, $user, $meeting, $type, $timeRange;
 
     public function setUp(): void
     {
@@ -36,6 +37,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
         $this->user = $this->prophesize(User::class);
         $this->meeting = $this->prophesize(Meeting::class);
         $this->type = $this->prophesize(Type::class);
+        $this->timeRange = $this->prophesize(TimeRangeInterface::class);
     }
 
     public function testHandleNotMandatoryToEvaluate(): void
@@ -72,10 +74,8 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             ->willReturn($participant->reveal())
         ;
 
-        $slot = $this->prophesize(MeetingSlot::class);
         $begin = new \DateTime();
-        $slot->getBegin()->shouldBeCalled()->willReturn($begin);
-        $this->meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
+        $this->timeRange->getBegin()->shouldBeCalled()->willReturn($begin);
 
         $this->meetingRepository
             ->getPreviousVisioMeeting(
@@ -119,7 +119,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            $this->meeting->reveal()
+            $this->timeRange->reveal()
         );
         $result = $handler($command);
 
@@ -138,10 +138,8 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             ->willReturn($participant->reveal())
         ;
 
-        $slot = $this->prophesize(MeetingSlot::class);
         $begin = new \DateTime();
-        $slot->getBegin()->shouldBeCalled()->willReturn($begin);
-        $this->meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
+        $this->timeRange->getBegin()->shouldBeCalled()->willReturn($begin);
 
         $previousMeeting = $this->prophesize(Meeting::class);
         $this->meetingRepository
@@ -219,7 +217,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            $this->meeting->reveal()
+            $this->timeRange->reveal()
         );
         $result = $handler($command);
 
@@ -238,10 +236,8 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             ->willReturn($participant->reveal())
         ;
 
-        $slot = $this->prophesize(MeetingSlot::class);
         $begin = new \DateTime();
-        $slot->getBegin()->shouldBeCalled()->willReturn($begin);
-        $this->meeting->getSlot()->shouldBeCalled()->willReturn($slot->reveal());
+        $this->timeRange->getBegin()->shouldBeCalled()->willReturn($begin);
 
         $previousMeeting = $this->prophesize(Meeting::class);
         $this->meetingRepository
@@ -327,7 +323,7 @@ class PreviousMeetingEvaluationCheckerHandlerTest extends TestCase
             $this->event->reveal(),
             $this->sheet->reveal(),
             $this->user->reveal(),
-            $this->meeting->reveal()
+            $this->timeRange->reveal()
         );
         $result = $handler($command);
 

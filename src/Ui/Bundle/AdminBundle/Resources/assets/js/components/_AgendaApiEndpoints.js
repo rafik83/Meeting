@@ -53,10 +53,11 @@ AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {
  * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
  *
  * @param {int} meetingId
+ * @param {int} sheetId
  * @returns {string}
  */
-AgendaApiEndpoints.prototype.getMeetingUpdateSpotEndpoint = function (meetingId) {
-    return this.getPathname() + '/meeting/' + meetingId + '/update-spot';
+AgendaApiEndpoints.prototype.getMeetingUpdateSpotEndpoint = function (meetingId, sheetId) {
+    return this.getPathname() + '/meeting/' + meetingId + '/sheet/' + sheetId + '/update-spot';
 };
 
 /**

@@ -22,13 +22,9 @@ interface HappeningParticipationRepositoryInterface
     public function remove(HappeningParticipation $happeningParticipation);
 
     /**
-     * @param User  $user
-     * @param Event $event
-     * @param bool  $excludeDisabled
-     *
      * @return HappeningParticipation[]
      */
-    public function findByUser(User $user, Event $event, bool $excludeDisabled): array;
+    public function findByUser(User $user, Event $event, bool $excludeDisabled, bool $onlyVisible = false): array;
 
     /**
      * @param User  $user
@@ -158,4 +154,8 @@ interface HappeningParticipationRepositoryInterface
     public function findBySpeaker(User $user, Event $event): array;
 
     public function hasHappeningParticipant(Event $event): bool;
+
+    public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation;
+
+    public function set(HappeningParticipation $happeningParticipation): void;
 }

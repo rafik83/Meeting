@@ -142,6 +142,8 @@ security:
         - { path: '/(fr|en)/happening/webinar/record/archive/status-change', role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' } # Tokbox Callback
         - { path: '/healthz', role: IS_AUTHENTICATED_ANONYMOUSLY } # Healthcheck
         - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
+        # calendar feed
+        - { path: '^/([a-z]{2})/sheet/\d+/agenda/participant/\d+/[^./]+.ics$', role: IS_AUTHENTICATED_ANONYMOUSLY }
         # Front
         - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
         # Print
@@ -163,7 +165,6 @@ security:
             - 'ROLE_ALLOWED_TO_SWITCH'
             - 'ROLE_ALLOWED_TO_ACCOUNT'
             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
-            - 'ROLE_ALLOWED_TO_MANAGE_USER'
 
         ROLE_ALLOWED_TO_HOST:
             - 'ROLE_ALLOWED_TO_ACCOUNT'

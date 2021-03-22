@@ -50,7 +50,7 @@ class SendNotificationHandler
         $verbalizedDiff = $this->diffVerbalizer->verbalizeDiff(
             $command->currentVersion,
             $command->diff,
-            $command->user->getLocale()
+            $command->sheet->getUserLocale($command->user)
         );
 
         $this->mailNotificationCommandHandler->handle(new MailNotificationCommand(

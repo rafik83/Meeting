@@ -53,10 +53,15 @@ class AbstractHappeningCommand implements Command
     public $webinarRecorded = true;
 
     /** @var bool */
+    public $webinarRecordSentToSpeakers = true;
+
+    /** @var bool */
     public $sidebarAllowed;
 
     /** @var bool */
     public $allowHls = false;
+
+    public bool $mustEvaluateHappening = false;
 
     public function isWebinar(): bool
     {

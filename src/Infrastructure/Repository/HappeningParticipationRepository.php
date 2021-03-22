@@ -10,6 +10,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Scan\Type;
 
 class HappeningParticipationRepository implements HappeningParticipationRepositoryInterface
 {
@@ -47,7 +48,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function findByUser(User $user, Event $event, bool $excludeDisabled): array
+    public function findByUser(User $user, Event $event, bool $excludeDisabled, bool $onlyVisible = false): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -65,6 +66,10 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         if ($excludeDisabled) {
             $queryBuilder->andWhere('participation.disabled = false');
+        }
+
+        if ($onlyVisible) {
+            $queryBuilder->andWhere('participation.visible = true');
         }
 
         return $queryBuilder->getQuery()->getResult();
@@ -442,5 +447,31 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->join(User\Event\Scan::class, 'scan', 'WITH', 'scan.type = :scan_type AND happening = scan.objectId AND scan.user = :user')
+            ->setParameter('event', $event)
+            ->andWhere('participation.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('happening.begin < :begin')
+            ->setParameter('begin', $begin)
+            ->setParameter('scan_type', Type::TYPE_HAPPENING_ENTRANCE)
+            ->andWhere('happening.mustEvaluateHappening = true')
+            ->andWhere('participation.evaluation is null')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function set(HappeningParticipation $happeningParticipation): void
+    {
+        $this->entityManager->flush($happeningParticipation);
     }
 }

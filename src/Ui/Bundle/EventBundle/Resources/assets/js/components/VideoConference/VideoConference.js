@@ -86,7 +86,7 @@ function VideoConference(
 
   this.settingsContainer = this.element.querySelector('[data-meeting-settings-container]');
   this.meetingWaitingMessage = this.element.querySelector('[data-meeting-waiting-message]');
-  this.meetingHelperWaitingContainer = this.element.querySelector('[data-meeting-waiting-helper]');
+  this.meetingHelperWaitingContainer = this.element.querySelector('.video-waiting-container');
   this.endSound = this.element.getAttribute('data-visio-meeting-end-sound');
   this.hasEndMessageOrImage = this.element.getAttribute('data-visio-meeting-end-warning');
   this.endContainer = this.element.querySelector('[data-visio-meeting-end-container]');
@@ -354,7 +354,8 @@ VideoConference.prototype.initChat = function () {
     },
     textChatContainer: '.chat-container',
     waitingMessage: this.chatWaitingMessage,
-    alwaysOpen: true
+    alwaysOpen: true,
+    appendControl: false
   });
 };
 

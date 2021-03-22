@@ -2,6 +2,12 @@
 
 {% block title 'agenda.title'|trans %}
 
+{% block head_link %}
+    {{ parent() }}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}<link href="{{ icalUrl }}" rel="alternate" type="text/calendar" />{% endif %}
+
+{% endblock %}
+
 {% block container_classes 'full-mobile-container' %}
 
 {% block content %}
@@ -151,7 +157,7 @@
                                             'participant': participant,
                                             'participantId': agenda.participant.id,
                                             'meeting': meeting,
-                                            'canMoveMeeting': agenda.canMoveMeeting,
+                                            'canUpdateMeeting': agenda.canUpdateMeeting,
                                             'canRemoveMeeting' : agenda.canRemoveMeeting
                                         }) }}
                                     {% endfor %}

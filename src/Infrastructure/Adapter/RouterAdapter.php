@@ -31,6 +31,11 @@ class RouterAdapter implements RouterInterface
         return $this->router->generate($path, $parameters, SymfonyRouterInterface::ABSOLUTE_URL);
     }
 
+    public function initScheme(): void
+    {
+        $this->router->getContext()->setScheme($this->scheme);
+    }
+
     /**
      * @return RequestContext
      */

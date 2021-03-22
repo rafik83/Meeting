@@ -105,7 +105,7 @@ class NotifyUserOfChangedVersionCommandHandler
         $verbalizedDiff = $this->diffVerbalizer->verbalizeDiff(
             $oldVersion,
             $diff,
-            $command->user->getLocale()
+            $sheet->getUserLocale($command->user)
         );
 
         $smsActivationDate = $command->event->getConfiguration()->getSmsActivationDate();

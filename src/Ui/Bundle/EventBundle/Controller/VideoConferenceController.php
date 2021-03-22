@@ -8,11 +8,15 @@ use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorA
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationCheckerHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirect;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationChecker;
@@ -27,16 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class VideoConferenceController extends Controller
 {
-    /**
-     * @param Request     $request
-     * @param UserDomain  $userDomain
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     * @param Meeting     $meeting
-     *
-     * @return Response
-     */
     public function videoMeetingAction(
         Request $request,
         UserDomain $userDomain,
@@ -64,15 +58,14 @@ class VideoConferenceController extends Controller
 
         $event = $eventDomain->getEvent();
 
-        $redirectResponse = ($this->get(PreviousMeetingEvaluationCheckerHandler::class))(
-            new PreviousMeetingEvaluationChecker(
-                $request->getUri(),
+        $redirectResponse = ($this->get(PreviousEvaluationCheckerHandler::class))(
+            new PreviousEvaluationChecker(
                 $event,
                 $sheet,
                 $user,
-                $meeting
-            )
-        );
+                $meeting,
+                $request->getUri(),
+            ));
 
         if ($redirectResponse instanceof RedirectResponse) {
             return $redirectResponse;

@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\MeetingSlot;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -23,10 +25,23 @@ class GetAvailableSlotsQueryHandler
 
     public function handle(GetAvailableSlotsQuery $query): GetAvailableSlotsView
     {
+        $sheetParticipants = $query->sheet->getParticipantsArray();
+        $isSheetMultiParticipants = \count($sheetParticipants) > 1;
+
+        if ($isSheetMultiParticipants) {
+            // only used met sheet participants, sheet participants will be selected by user
+            $participantsForAvailableSlots = $query->meeting->getMetParticipants($query->sheet);
+        } else {
+            // if there is only one participant in sheet, filter slots for all participants
+            $participantsForAvailableSlots = $query->meeting->getAllParticipants();
+        }
+
         $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->meeting->getEvent(),
-            $query->meeting->getAllParticipants(),
-            false
+            $participantsForAvailableSlots,
+            false,
+            $isSheetMultiParticipants ? $query->meeting : null,
+            $query->excludePastSlots
         );
 
         $availableSlots = [];
@@ -44,6 +59,26 @@ class GetAvailableSlotsQueryHandler
             }
         }
 
-        return new GetAvailableSlotsView($availableSlots);
+        if (!$isSheetMultiParticipants) {
+            return new GetAvailableSlotsView($availableSlots, []);
+        }
+
+        $currentSheetAvailableSlotIds = [];
+
+        /** @var Participant $participant */
+        foreach ($sheetParticipants as $participant) {
+            $participantSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
+                $query->meeting->getEvent(),
+                [$participant],
+                false,
+                $query->meeting,
+                $query->excludePastSlots
+            );
+            $currentSheetAvailableSlotIds[$participant->getId()] = array_map(
+                fn (MeetingSlot $meetingSlot) => $meetingSlot->getId(), $participantSlots
+            );
+        }
+
+        return new GetAvailableSlotsView($availableSlots, $currentSheetAvailableSlotIds);
     }
 }

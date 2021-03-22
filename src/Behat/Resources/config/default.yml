@@ -12,6 +12,7 @@ default:
                 javascript:
                     selenium2: ~
             files_path: %paths.base%/src/Behat/Resources/fixtures/Files
+            show_cmd: firefox %s
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
         Behatch\Extension: ~

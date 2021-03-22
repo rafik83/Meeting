@@ -56,7 +56,7 @@ export default {
             this.isMeetingToUpdateLoading = true;
 
             this.$http
-                .get(api.getMeetingUpdateSpotEndpoint(this.agendaSlot.meetingId))
+                .get(api.getMeetingUpdateSpotEndpoint(this.agendaSlot.meetingId, this.sheet.id))
                 .then(function (response) {
                     var meetingToUpdate = {
                         sheet: this.sheet,

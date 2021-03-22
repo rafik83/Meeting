@@ -38,3 +38,4 @@ snc_redis:
         query_cache:
             client: doctrine
             entity_manager: default
+            namespace: '%app_version%:'

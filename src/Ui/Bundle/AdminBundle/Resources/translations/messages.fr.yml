@@ -78,8 +78,11 @@ admin.agenda.meeting.updateSpot.blockedSlot: 'Créneau bloqué'
 admin.agenda.meeting.updateSpot.blockedSpot: 'Lieu bloqué'
 admin.agenda.meeting.updateSpot.error: 'Impossible de modifier ce rendez-vous'
 admin.agenda.meeting.updateSpot.isBlockedSpot: 'Il n''est pas possible de modifier le lieu de ce rendez-vous car il est bloqué'
+admin.agenda.meeting.updateSpot.participants: Participants
 admin.agenda.meeting.updateSpot.save: Enregistrer
+admin.agenda.meeting.updateSpot.selectedSlotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
+admin.agenda.meeting.updateSpot.slot: Créneau
 admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
@@ -414,6 +417,7 @@ admin.linked_sheets.no_result: 'Aucun résultat'
 admin.linked_sheets.title: 'Fiches liées'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.action.import: Importer
 admin.meeting_request.action.export: Exporter
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
@@ -647,6 +651,7 @@ admin.participant.export.fields.happening.participate: Inscrit
 admin.participant.export.fields.participant_created_at: 'Création Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'
+admin.participant.export.fields.participant_locale: 'Langue d''affichage Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
 admin.participant.export.fields.participation_paid: 'Etat de paiement'
 admin.participant.export.fields.participation_paid.not_paid: 'Pas payé'
@@ -1330,7 +1335,7 @@ admin.type.badge.example.lastName: Nom
 admin.type.badge.example.position: 'Directeur des badges '
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.badge.preview.link: 'aperçu du e-badge'
-admin.type.canMoveMeeting: 'Peut déplacer les RDV'
+admin.type.canUpdateMeeting: 'Peut modifier les RDV'
 admin.type.canRemoveMeeting: 'Peut supprimer un RDV'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
@@ -1439,6 +1444,9 @@ boolean.true: Oui
 boolean.yes: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
+checkbox.checked: Coché
+checkbox.not_checked: Non coché
+checkbox.null: Sans réponse
 event.activateAccount.password: 'Définir votre mot de passe'
 event.catalog.category.seeSheet: 'Voir la fiche'
 event.catalog.sheet.meetingRequest: 'Demander un rendez-vous'
@@ -1498,6 +1506,8 @@ event.meeting.request.details.title: 'Details de la demande de rendez-vous'
 event.meeting.request.details.to: 'A destination de:'
 event.meeting.request.details.toParticipant: 'Participant de la destination:'
 event.meeting.request.details.updatedAt: 'Changement de statut'
+event.meeting.request.import.title: 'Importer un fichier de demandes de rendez-vous'
+event.meeting.request.import.exampleFile: 'Exemple de fichier'
 event.meeting.request.state.from.approved: Accepté
 event.meeting.request.state.from.cancelled: Annulé
 event.meeting.request.state.from.refused: Refusé

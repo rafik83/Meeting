@@ -139,6 +139,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@datetime'
     vimeet_infrastructure.repository.meeting.message_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Meeting\MessageRepository
         arguments:
@@ -665,6 +666,13 @@ services:
             - '@repository.admin.forgotten_password_token_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\NewPassword }
+
+    Proximum\Vimeet\Application\Command\Happening\EvaluateHappeningHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\EvaluateHappening }
+
     vimeet_infrastructure.vimeet.application.components.happening.participate_handler:
         class: Proximum\Vimeet\Application\Command\Happening\ParticipateHandler
         arguments:
@@ -672,6 +680,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate'
             - '@domain.happening.participation_count'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -704,6 +713,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@query.agenda.admin.meeting_update_slot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot }
     vimeet_infrastructure.vimeet.application.command.meeting.update_slot_handler:
@@ -1657,17 +1667,18 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
-    Proximum\Vimeet\Application\Command\Meeting\Event\MoveHandler:
+    Proximum\Vimeet\Application\Command\Meeting\Event\UpdateHandler:
         arguments:
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.repository.meeting.message_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@datetime'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@logger'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Move }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Event\Update }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
@@ -1974,6 +1985,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@command.unavailability.create_handler'
+            - '@logger'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\UpdateUnavailabilities }
 
@@ -2659,7 +2672,7 @@ services:
     adapter.sheet_indexer:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer
         arguments:
-            - '@fos_elastica.object_persister.app.sheet'
+            - '@fos_elastica.object_persister.sheet.sheet'
 
     adapter.authorization_checker:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
@@ -2744,14 +2757,6 @@ services:
         arguments:
             - '@repository.invoice.invoice_repository'
             - '@adapter.event_url_generator'
-    sheet.sheet_meetings_list_view_factory:
-        class: Proximum\Vimeet\Application\Components\Sheet\Meetings\SheetMeetingsListViewFactory
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
     sheet.meetings_metrics_view_factory:
         class: Proximum\Vimeet\Application\Components\Sheet\Meetings\MeetingsMetricsViewFactory
     sheet.template.completeness_calculator:
@@ -2956,7 +2961,7 @@ services:
             - '@datetime'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
 
-    Proximum\Vimeet\Domain\Meeting\CanMoveMeeting:
+    Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting:
         arguments:
             - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
 
@@ -3053,6 +3058,7 @@ services:
             - '@mailer'
             - '@twig'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
             - '@monolog.logger'
 
     adapter.sendgrid_api_adapter:
@@ -3775,25 +3781,12 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery }
-
-    query.tip.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\TipListViewQuery }
     query.tip.event.paginated_tip_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQueryHandler
         arguments:
             - '@repository.tip.repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery }
-    query.tip.event.tip_list_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery }
     query.tip.event.type_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQueryHandler
         arguments:
@@ -4286,7 +4279,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
             - '@Proximum\Vimeet\Domain\Participant\GetParticipantTypes'
-            - '@Proximum\Vimeet\Domain\Meeting\CanMoveMeeting'
+            - '@Proximum\Vimeet\Domain\Meeting\CanUpdateMeeting'
             - '@Proximum\Vimeet\Domain\Meeting\CanRemoveMeeting'
             - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
             - '@domain.event.day.dday_guesser'
@@ -4404,6 +4397,7 @@ services:
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Application\Query\MeetingSlot\GetAvailableSlotsQueryHandler'
     query.agenda.admin.meeting_update_slot_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler
         arguments:
@@ -5010,14 +5004,14 @@ services:
         arguments:
             - '@order.merger'
 
-  #
+    #
     # Elastic Adapter
     #
     adapter.sheet_search_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\SheetSearchAdapter
         arguments:
-             - '@fos_elastica.finder.app.sheet'
-             - '@fos_elastica.index.app.sheet'
+             - '@fos_elastica.finder.sheet.sheet'
+             - '@fos_elastica.index.sheet.sheet'
              - '@Proximum\Vimeet\Domain\ConditionRules\Transformer\Elastic\ConditionRulesToElasticTransformer'
 
     #
@@ -5968,6 +5962,10 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
+
+    Proximum\Vimeet\Domain\Happening\Webinar\MustBeAvailableToParticipate:
+        arguments:
+            - '@datetime'
 
     Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
 
