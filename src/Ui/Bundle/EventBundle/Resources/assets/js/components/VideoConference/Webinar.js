@@ -1169,7 +1169,7 @@ Webinar.prototype.showQuestions = function (event) {
         this.notificationSubscriberKey,
         (event) => {
             const payload = JSON.parse(event.data);
-            if (payload.action === 'update' || payload.action === 'delete') {
+            if (payload.action === 'update' || payload.action === 'vote' || payload.action === 'delete') {
                 this.question.initQuestions();
             }
 
