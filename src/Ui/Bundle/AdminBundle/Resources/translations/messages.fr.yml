@@ -78,8 +78,11 @@ admin.agenda.meeting.updateSpot.blockedSlot: 'Créneau bloqué'
 admin.agenda.meeting.updateSpot.blockedSpot: 'Lieu bloqué'
 admin.agenda.meeting.updateSpot.error: 'Impossible de modifier ce rendez-vous'
 admin.agenda.meeting.updateSpot.isBlockedSpot: 'Il n''est pas possible de modifier le lieu de ce rendez-vous car il est bloqué'
+admin.agenda.meeting.updateSpot.participants: Participants
 admin.agenda.meeting.updateSpot.save: Enregistrer
+admin.agenda.meeting.updateSpot.selectedSlotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
+admin.agenda.meeting.updateSpot.slot: Créneau
 admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'

@@ -61,7 +61,7 @@
             <div class="video-helper" data-meeting-settings-container>
                 {{ include('EventBundle:Visio:settings.html.twig') }}
             </div>
-            <div class="video-helper hide" data-meeting-waiting-helper>
+            <div class="video-helper hide">
                 {% if meetingView is defined %}
                     <h1>
                         {% for sheetMetView in meetingView.sheetMetTitle %}

@@ -63,10 +63,18 @@ function Webinar(element, isSpeaker) {
         this.modalWarningBeforeStart.init(modalBeforeStartElement);
     }
 
-    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
-        const startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
+    this.startTime = new Date(new Date().getTime() + this.timeRemainingBeforeStart * 1000);
 
-        const remainingTime = startTime.getTime() - new Date().getTime();
+    this.programUrl = element.getAttribute('data-program-url');
+    this.hasToVote = false;
+    this.voteUrl = null;
+    if(!this.isSpeaker) {
+        this.hasToVote = element.hasAttribute('data-has-to-vote');
+        this.voteUrl = element.getAttribute('data-vote-url');
+    }
+
+    if (this.isSpeaker && this.timeRemainingBeforeStart > 0) {
+        const remainingTime = this.startTime.getTime() - new Date().getTime();
         setTimeout(() => {
             this.modalWarningBeforeStart.show();
             this.modalWarningBeforeStart.hideAfter(30000);
@@ -296,7 +304,8 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
         }
 
         if (Notification.permission === 'default') {
-            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+            Notification.requestPermission()
+                .then(() => this.showPrepareModalOrJoin());
         } else {
             this.showPrepareModalOrJoin();
         }
@@ -322,6 +331,11 @@ Webinar.prototype.onPrepareMessageClose = function () {
 };
 
 Webinar.prototype.join = function () {
+    // avoid function to be called twice
+    if (this.isWaitingMediaReady) {
+        return;
+    }
+
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
@@ -342,6 +356,8 @@ Webinar.prototype.join = function () {
         this.hideElement(this.toggleAudioElement);
         this.toggleButton(this.invisibleModeButton, true);
     }
+
+    this.isWaitingMediaReady = true;
 };
 
 Webinar.prototype.initHLSPlayer = function () {
@@ -814,14 +830,12 @@ Webinar.prototype.disconnect = function () {
 
     this.session = null;
 
-    if (window.opener) {
-        window.opener.location.reload(true);
-        window.close();
-
+    if (this.hasToVote && this.startTime < new Date()) {
+        document.location.href = this.voteUrl;
         return;
     }
 
-    window.history.go(-1);
+    document.location.href = this.programUrl;
 };
 
 Webinar.prototype.handlePublish = function (error) {
@@ -1155,7 +1169,7 @@ Webinar.prototype.showQuestions = function (event) {
         this.notificationSubscriberKey,
         (event) => {
             const payload = JSON.parse(event.data);
-            if (payload.action === 'update' || payload.action === 'delete') {
+            if (payload.action === 'update' || payload.action === 'vote' || payload.action === 'delete') {
                 this.question.initQuestions();
             }
 

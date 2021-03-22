@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Happening\Webinar;
 
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class GetWebinarViewQuery implements Query
@@ -17,11 +18,14 @@ class GetWebinarViewQuery implements Query
     /** @var string */
     private $locale;
 
-    public function __construct(Happening $happening, User $user, string $locale)
+    private Sheet $sheet;
+
+    public function __construct(Happening $happening, User $user, string $locale, Sheet $sheet)
     {
         $this->happening = $happening;
         $this->user = $user;
         $this->locale = $locale;
+        $this->sheet = $sheet;
     }
 
     public function getHappening(): Happening
@@ -37,5 +41,10 @@ class GetWebinarViewQuery implements Query
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function getSheet(): Sheet
+    {
+        return $this->sheet;
     }
 }

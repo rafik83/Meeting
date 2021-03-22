@@ -850,3 +850,15 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Agenda\IcalHandler:
         arguments:
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationCheckerHandler:
+        arguments:
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler'

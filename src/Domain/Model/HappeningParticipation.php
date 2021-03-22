@@ -29,6 +29,8 @@ class HappeningParticipation
      */
     private $user;
 
+    private ?int $evaluation;
+
     /**
      * HappeningParticipation constructor.
      *
@@ -101,4 +103,15 @@ class HappeningParticipation
     {
         return $this->user;
     }
+
+    public function setEvaluation(?int $evaluation): void
+    {
+        $this->evaluation = $evaluation;
+    }
+
+    public function getEvaluation(): ?int
+    {
+        return $this->evaluation;
+    }
+
 }

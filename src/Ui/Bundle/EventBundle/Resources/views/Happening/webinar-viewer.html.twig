@@ -47,6 +47,11 @@
          data-question-vote-disabled-message="{{ 'happening.webinar.questions.voteDisabled'|trans }}"
          data-webinar-hls="{{ webinarView.isWebinarHls ? 'true' : 'false' }}"
          data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
+         data-program-url="{{ webinarView.programUrl }}"
+         data-vote-url="{{ webinarView.voteUrl }}"
+         {% if webinarView.hasToVote %}
+         data-has-to-vote
+         {% endif %}
          {% if webinarView.liveUrl %}
             data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}

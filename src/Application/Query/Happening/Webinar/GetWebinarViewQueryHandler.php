@@ -6,11 +6,14 @@ use DateTimeInterface;
 use LogicException;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewer;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Broadcast\StartViewerHandler;
+use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\Exception\Participant\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\Query\Happening\CanEvaluateHappening;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfos;
 use Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler;
 use Proximum\Vimeet\Application\View\Happening\Notification\NotificationView;
@@ -61,6 +64,10 @@ class GetWebinarViewQueryHandler
     /** @var StartViewerHandler */
     private $startViewerHandler;
 
+    private RouterInterface $router;
+
+    private CanEvaluateHappening $canEvaluateHappening;
+
     public function __construct(
         GetUserParticipantInfosHandler $getUserParticipantInfosHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
@@ -71,7 +78,9 @@ class GetWebinarViewQueryHandler
         IsRecordingAllowed $isRecordingAllowed,
         QuestionRepositoryInterface $questionRepository,
         DateTimeInterface $dateTime,
-        StartViewerHandler $startViewerHandler
+        StartViewerHandler $startViewerHandler,
+        RouterInterface $router,
+        CanEvaluateHappening $canEvaluateHappening
     ) {
         $this->getUserParticipantInfosHandler = $getUserParticipantInfosHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
@@ -83,6 +92,8 @@ class GetWebinarViewQueryHandler
         $this->questionRepository = $questionRepository;
         $this->dateTime = $dateTime;
         $this->startViewerHandler = $startViewerHandler;
+        $this->router = $router;
+        $this->canEvaluateHappening = $canEvaluateHappening;
     }
 
     public function handle(GetWebinarViewQuery $query): AbstractWebinarView
@@ -118,6 +129,8 @@ class GetWebinarViewQueryHandler
 
         $viewersCount = $this->notificationSubscriptions->getStreamSubscriptionsCount($happening->getId());
 
+        $programUrl = $this->router->generate(Route::PROGRAM, ['sheet' => $query->getSheet()->getId()]);
+
         if ($isSpeaker) {
             $isRegisteredSpeaker = $happening->hasSpeaker($query->getUser());
 
@@ -152,7 +165,8 @@ class GetWebinarViewQueryHandler
                 $happening->isStreamOpenToPublic(),
                 $isRegisteredSpeaker,
                 $isRegisteredSpeaker,
-                $isRegisteredSpeaker
+                $isRegisteredSpeaker,
+                $programUrl
             );
         }
 
@@ -185,7 +199,10 @@ class GetWebinarViewQueryHandler
             $happening->allowWebinarOnHLS(),
             $this->getHLSUrl($happening),
             $viewersCount + 1,
-            $timeRemainingBeforeStartInSeconds
+            $timeRemainingBeforeStartInSeconds,
+            $programUrl,
+            $this->router->generate(Route::HAPPENING_EVALUATION, ['sheet' => $query->getSheet()->getId(), 'happening' => $happening->getId()]),
+            $this->canEvaluateHappening->isSatisfiableBy($happening, $query->getUser())
         );
     }
 

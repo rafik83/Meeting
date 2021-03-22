@@ -4,18 +4,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Fixed
-- MV-313 - trunck happening name if too long for tokbox
-- Code style / namespace fixes
 
+## [2.84.2] - 2021-03-22
+### Fixed
+- Don't update question count when a vote is notified
+- MV-317 - Fix live url iframe displayed twice in webinar
+
+## [2.84.1] - 2021-03-19
+### Fixed
+- MV-316 - Fix to activate your camera and microphone in webinar access
+
+## [2.84.0] - 2021-03-19
 ### Added
+- VIMEET-2436 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2437 - As participant 'I must evaluate happening'
+- VIMEET-2289 - Can change participants & slot directly from admin meeting edition
 - VIMEET-2399 - Import meeting requests from CSV file
 - VIMEET-2378 - Order conferences by date in admin panel
 
-### Deprecated
-- remove "scanned" field from "contact" table
+### Fixed
+- MV-313 - Trunck happening name if too long for tokbox
+- Code style / namespace fixes
+- MV-314 - Fix unclickable stop sharing button
 
-## [2.83.0]
+### Deprecated
+- Remove "scanned" field from "contact" table
+
+## [2.83.0] - 2021-03-15
 ### Security
 - VIMEET-2373 - fix malicious files upload
 - VIMEET-2373 - XSS fixes
