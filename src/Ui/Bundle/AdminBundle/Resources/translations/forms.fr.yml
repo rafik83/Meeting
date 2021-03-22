@@ -496,6 +496,9 @@ form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
 form.happening_create.children.happeningType.label: Type
 form.happening_create.children.invitationCode.label: 'Code d''invitation'
+form.happening_create.children.mustEvaluateHappening.answer.false: Non
+form.happening_create.children.mustEvaluateHappening.answer.true: Oui
+form.happening_create.children.mustEvaluateHappening.label: 'Les participants doivent noter'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex: https://www.youtube.com/embed/wwNZKfBLAsc?autoplay=1&modestbranding=1&controls=0&disablekb=1&showinfo=0&fs=0&rel=0'
@@ -529,6 +532,7 @@ form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
 form.happening_update.children.happeningType.label: Type
 form.happening_update.children.invitationCode.label: 'Code d''invitation'
+form.happening_update.children.mustEvaluateHappening.label: 'Les participants doivent noter'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
@@ -584,6 +588,13 @@ form.meeting_request_filter.children.order_by.options.created_at_desc: 'Date de 
 form.meeting_request_filter.children.order_by.options.state_updated_at_asc: 'Modification de statut croissant'
 form.meeting_request_filter.children.order_by.options.state_updated_at_desc: 'Modification de statut décroissant'
 form.meeting_request_filter.children.state.label: Statut
+form.meeting_request_import.children.file.help: 'Fichier avec une ligne d''entêtes dont les colonnes sont Email_asker et Email_asked. Séparateur: ";"'
+form.meeting_request_import.children.file.error.invalid_email: "Email invalide : %email%"
+form.meeting_request_import.children.file.error.multiple_sheets: "Plusieurs fiches possibles pour l'email %email%"
+form.meeting_request_import.children.file.error.participant_not_found: "Aucune fiche trouvée dans cet évènement pour l'email %email%"
+form.meeting_request_import.children.file.error.user_not_found: "Aucun utilisateur trouvé pour l'email %email%"
+form.meeting_request_import.children.file.error.users_of_same_sheet: "Impossible d'importer la demande entre %email_from% et %email_to% car ces 2 emails font partie de la même fiche"
+form.meeting_request_import.children.submit.label: 'Importer les demandes de rendez-vous'
 form.meeting_request_message.children.message.label: 'Expliquer pourquoi'
 form.meeting_request_message.children.submit.label: Envoyer
 form.meeting_request_refuse.children.message.label: 'Expliquer pourquoi'

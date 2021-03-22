@@ -1392,3 +1392,14 @@ services:
             - '@adapter.csrf_token'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@adapter.event_url_generator'
+
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\MeetingRequest\ImportAction:
+        arguments:
+            - '@twig'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface'
+            - '@form.factory'
+            - '@error_factory'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'

@@ -4,6 +4,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.84.2] - 2021-03-22
+### Fixed
+- Don't update question count when a vote is notified
+- MV-317 - Fix live url iframe displayed twice in webinar
+
+## [2.84.1] - 2021-03-19
+### Fixed
+- MV-316 - Fix to activate your camera and microphone in webinar access
+
+## [2.84.0] - 2021-03-19
+### Added
+- VIMEET-2436 - As admin I can check 'Participants must evaluate happening'
+- VIMEET-2437 - As participant 'I must evaluate happening'
+- VIMEET-2289 - Can change participants & slot directly from admin meeting edition
+- VIMEET-2399 - Import meeting requests from CSV file
+- VIMEET-2378 - Order conferences by date in admin panel
+
+### Fixed
+- MV-313 - Trunck happening name if too long for tokbox
+- Code style / namespace fixes
+- MV-314 - Fix unclickable stop sharing button
+
+### Deprecated
+- Remove "scanned" field from "contact" table
+
+## [2.83.0] - 2021-03-15
 ### Security
 - VIMEET-2373 - fix malicious files upload
 - VIMEET-2373 - XSS fixes
@@ -12,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Partners are not allowed to see users (see VIMEET-2373 comments)
+- hotfix - limit chat messages and static avatar to avoid overload on webinars with 1000+ viewers
 
 ### Updated
 - VIMEET-2373 - make admin's enumeration not possible (V02 intrusion test)
@@ -23,7 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.82.2] - 2021-03-02
 ### Fixed
 - MV-310 - fix error if desktop notifications are not available (ie on iOS)
->>>>>>> origin/master
 
 ## [2.82.1] - 2021-02-18
 ### Fixed
@@ -41,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.80.0] - 2021-02-15
 ### Added
+- VIMEET-2359 - Micro and camera crossed out
 - VIMEET-2189 - Mute speakers
 - VIMEET-2386 - Add company name to api conference call
 

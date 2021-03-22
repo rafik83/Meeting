@@ -75,8 +75,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
 
         $this->notificationPublisher
             ->publishHappeningNotification($happening->reveal(), AbstractNotification::TYPE_QUESTIONS, [
-            'action' => 'update',
-            'msg_count' => 2000,
+            'action' => 'vote',
         ])->shouldBeCalled();
 
         $this->questionVoteRepository->add(Argument::type(QuestionVote::class))->shouldBeCalled();
@@ -119,8 +118,7 @@ class VoteHappeningQuestionHandlerTest extends TestCase
 
         $this->notificationPublisher
             ->publishHappeningNotification($happening->reveal(), AbstractNotification::TYPE_QUESTIONS, [
-                'action' => 'update',
-                'msg_count' => 2000,
+                'action' => 'vote',
             ])->shouldBeCalled();
 
         $this->voteHappeningQuestionHandler->handle($voteHappeningQuestion->reveal());

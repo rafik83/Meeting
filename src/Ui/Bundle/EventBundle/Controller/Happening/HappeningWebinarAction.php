@@ -12,10 +12,14 @@ use Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQuery;
 use Proximum\Vimeet\Application\View\Happening\Webinar\AbstractWebinarView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
+use Proximum\Vimeet\Ui\Helper\RequestHelper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -41,13 +45,16 @@ class HappeningWebinarAction
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    private PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanAccessToWebinar $canAccessToWebinar,
         CommandBusInterface $commandBus,
         Environment $twig,
         QueryBusInterface $queryBus,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        PreviousHappeningEvaluationCheckerHandler $previousHappeningEvaluationCheckerHandler
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canAccessToWebinar = $canAccessToWebinar;
@@ -55,6 +62,7 @@ class HappeningWebinarAction
         $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->dateTime = $dateTime;
+        $this->previousHappeningEvaluationCheckerHandler = $previousHappeningEvaluationCheckerHandler;
     }
 
     public function __invoke(
@@ -82,8 +90,22 @@ class HappeningWebinarAction
 
         $this->commandBus->handle(new ScanHappening($event, $user, $happening, $this->dateTime));
 
+        $redirectResponse = ($this->previousHappeningEvaluationCheckerHandler)(
+            new PreviousHappeningEvaluationChecker(
+                $event,
+                $sheet,
+                $user,
+                $happening,
+                RequestHelper::getRelativeUri($request)
+            )
+        );
+
+        if ($redirectResponse instanceof RedirectResponse) {
+            return $redirectResponse;
+        }
+
         /** @var AbstractWebinarView $webinarView */
-        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale()));
+        $webinarView = $this->queryBus->handle(new GetWebinarViewQuery($happening, $user, $request->getLocale(), $sheet));
 
         return new Response(
             $this->twig->render(

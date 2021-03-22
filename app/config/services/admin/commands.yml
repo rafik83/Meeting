@@ -764,3 +764,16 @@ services:
             - '@query.sheet.export_handler'
             - '@Proximum\Vimeet\Application\Command\File\PersistContentHandler'
             - '@Proximum\Vimeet\Application\Command\Sheet\Export\NotifyHandler'
+
+
+    Proximum\Vimeet\Application\Command\MeetingRequest\Admin\ImportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
+            - '@adapter.validator_adapter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Admin\Import }

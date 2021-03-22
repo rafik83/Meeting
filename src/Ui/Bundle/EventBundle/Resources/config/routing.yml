@@ -1016,6 +1016,14 @@ event_sheet_happening_participate:
     methods:  [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction }
 
+event_happening_evaluation:
+    path: /sheet/{sheet}/happening/{happening}/evaluate
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\EvaluateHappeningAction
+
 event_sheet_happening_webinar:
     path: /sheet/{sheet}/happening/{happening}/webinar
     requirements:

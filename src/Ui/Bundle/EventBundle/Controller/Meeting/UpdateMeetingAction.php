@@ -85,7 +85,7 @@ class UpdateMeetingAction
         }
 
         /** @var GetAvailableSlotsView $availableSlotsView */
-        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio(), $sheet));
+        $availableSlotsView = $this->queryBus->handle(new GetAvailableSlotsQuery($meeting, $meeting->isVisio(), $sheet, true));
         $timezone = $this->getTimezoneHelper->getTimezoneByEventAndParticipant($sheet->getEvent(), $participant);
 
         $update = new Update($sheet, $meeting, $meeting->getParticipants($sheet), $meeting->getSlot());

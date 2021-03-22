@@ -68,6 +68,7 @@
          data-webinar-initial-viewers-count="{{ webinarView.viewersCount }}"
          data-desktop-notification-title="{{ 'happening.webinar.desktopNotificationTitle'|trans }}"
          data-desktop-notification-body="{{ 'happening.webinar.desktopNotificationBody'|trans }}"
+         data-program-url="{{ webinarView.programUrl }}"
          {% if webinarView.liveUrl %}
          data-live-url="{{ webinarView.liveUrl }}"
          {% endif %}
@@ -201,7 +202,7 @@
                 <i class="icon-Conference icon-center"></i>
             </button>
             <button id="toggle-video" class="btn hide">
-                <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+                <i class="icon-Video_2 icon-center"></i>
             </button>
 
             <button id="invisible-mode-button" class="btn btn-off hide" title="{{ 'happening.webinar.invisibleMode.button'|trans }}">

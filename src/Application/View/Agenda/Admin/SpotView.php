@@ -4,19 +4,19 @@ namespace Proximum\Vimeet\Application\View\Agenda\Admin;
 
 class SpotView
 {
-    /** @var int */
-    public $id;
+    public int $id;
 
-    /** @var string */
-    public $label;
+    public string $label;
 
-    /**
-     * @param int    $id
-     * @param string $label
-     */
-    public function __construct($id, $label)
+    public int $seatCapacity;
+
+    public array $slotsId;
+
+    public function __construct(int $id, string $label, int $seatCapacity, array $possibleSlotsId)
     {
-        $this->id    = $id;
+        $this->id = $id;
         $this->label = $label;
+        $this->seatCapacity = $seatCapacity;
+        $this->slotsId = $possibleSlotsId;
     }
 }

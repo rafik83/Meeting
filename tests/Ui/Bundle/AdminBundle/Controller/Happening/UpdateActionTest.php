@@ -161,6 +161,7 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->happening->allowWebinarOnHLS()->willReturn(true);
         $this->happening->isWebinarRecordSentToSpeakers()->willReturn(true);
+        $this->happening->mustEvaluateHappening()->shouldBeCalled()->willReturn(false);
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -244,6 +245,7 @@ class UpdateActionTest extends TestCase
         $this->happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->happening->allowWebinarOnHLS()->willReturn(true);
         $this->happening->isWebinarRecordSentToSpeakers()->willReturn(true);
+        $this->happening->mustEvaluateHappening()->shouldBeCalled()->willReturn(false);
 
         $form = $this->prophesize(Form::class);
         $allowHlsFormField = $this->prophesize(Form::class);

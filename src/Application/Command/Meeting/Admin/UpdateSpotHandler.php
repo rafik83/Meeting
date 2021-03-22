@@ -6,7 +6,10 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedSpotEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
+use Proximum\Vimeet\Application\Exception\Meeting\SlotNotAvailableForThisMeetingException;
 use Proximum\Vimeet\Application\Exception\Meeting\SpotNotAvailableForThisMeetingException;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\MeetingUpdateSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -21,14 +24,18 @@ class UpdateSpotHandler
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
+    private MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler;
+
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
-        DelayedEventDispatcherInterface $delayedEventDispatcher
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler
     ) {
         $this->meetingRepository = $meetingRepository;
         $this->spotRepository = $spotRepository;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->meetingUpdateSlotViewQueryHandler = $meetingUpdateSlotViewQueryHandler;
     }
 
     /**
@@ -39,6 +46,23 @@ class UpdateSpotHandler
      */
     public function handle(UpdateSpot $updateSpot)
     {
+        // Update participants
+        $updateSpot->meeting->setParticipants($updateSpot->sheet, $updateSpot->participants);
+
+        // Get available slots
+        $meetingUpdateSlotView = $this->meetingUpdateSlotViewQueryHandler->handle(
+            new MeetingUpdateSlotViewQuery($updateSpot->meeting, $updateSpot->visio)
+        );
+
+        // Check if selected slot is in available slots
+        if (false === \in_array($updateSpot->slot->getId(), $meetingUpdateSlotView->availableSlotsId, true)) {
+            throw new SlotNotAvailableForThisMeetingException();
+        }
+
+        // Update slot
+        $updateSpot->meeting->updateSlot($updateSpot->slot);
+
+        // Update spot
         $isMeetingSpotChanged     = $updateSpot->spot !== $updateSpot->meeting->getSpot();
         $isMeetingSpotStayBlocked = $updateSpot->meeting->isBlockedSpot() && $updateSpot->isBlockedSpot();
 

@@ -3,9 +3,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
 class PreviousMeetingEvaluationChecker
 {
@@ -18,8 +18,7 @@ class PreviousMeetingEvaluationChecker
     /** @var User */
     public $user;
 
-    /** @var Meeting */
-    public $meeting;
+    public TimeRangeInterface $timeRange;
 
     /** @var string */
     public $origin;
@@ -29,12 +28,12 @@ class PreviousMeetingEvaluationChecker
         Event $event,
         Sheet $sheet,
         User $user,
-        Meeting $meeting
+        TimeRangeInterface $timeRange
     ) {
         $this->event = $event;
         $this->sheet = $sheet;
         $this->user = $user;
-        $this->meeting = $meeting;
+        $this->timeRange = $timeRange;
         $this->origin = $origin;
     }
 }

@@ -550,7 +550,7 @@ admin_file_download:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\File\DownloadAction
 
 admin_agenda_meeting_update_spot:
-    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    path: /event/{event}/agenda/meeting/{meeting}/sheet/{sheet}/update-spot
     requirements:
         event: \d+
         meeting: \d+
@@ -558,7 +558,7 @@ admin_agenda_meeting_update_spot:
     defaults: { _controller: AdminBundle:Agenda/Meeting:updateSpot }
 
 admin_agenda_meeting_update_spot_handler:
-    path: /event/{event}/agenda/meeting/{meeting}/update-spot
+    path: /event/{event}/agenda/meeting/{meeting}/sheet/{sheet}/update-spot
     requirements:
         event: \d+
         meeting: \d+
@@ -835,6 +835,13 @@ admin_meeting_request_lock_update:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
+
+admin_meeting_request_import:
+    path: /event/{event}/meeting-request/import
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\MeetingRequest\ImportAction }
 
 admin_meeting_request_export:
     path: /event/{event}/meeting-request/export

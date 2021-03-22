@@ -65,8 +65,7 @@ class VoteHappeningQuestionHandler
     private function publishUpdate(Question $question)
     {
         $this->notificationPublisher->publishHappeningNotification($question->getHappening(), AbstractNotification::TYPE_QUESTIONS, [
-            'action' => 'update',
-            'msg_count' => $this->questionRepository->getMessagesCountDuringHappening($question->getHappening()),
+            'action' => 'vote',
         ]);
     }
 }
