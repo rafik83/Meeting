@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Don't update question count when a vote is notified
+- MV-317 - Fix live url iframe displayed twice in webinar
 
 ## [2.84.1] - 2021-03-19
 ### Fixed
