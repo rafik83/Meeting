@@ -339,11 +339,14 @@ admin.happening.button.export: 'Exporter les conférences'
 admin.happening.button.speaker: 'Gérer les intervenants'
 admin.happening.download: 'Télécharger la vidéo'
 admin.happening.export.fields.happening_begin_hour: 'Heure de début'
+admin.happening.export.fields.happening_connect: 'Connexion'
 admin.happening.export.fields.happening_day: Jour
 admin.happening.export.fields.happening_end_hour: 'Heure de fin'
+admin.happening.export.fields.happening_grade: 'Note'
 admin.happening.export.fields.happening_id: 'ID Conférence'
 admin.happening.export.fields.happening_name: 'Titre conférence'
 admin.happening.export.fields.participant_email: Email
+admin.happening.export.fields.participant_phone: 'Téléphone fixe'
 admin.happening.export.fields.participant_firstname: Prénom
 admin.happening.export.fields.participant_id: 'ID Participant'
 admin.happening.export.fields.participant_lastname: Nom

@@ -158,4 +158,6 @@ interface HappeningParticipationRepositoryInterface
     public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation;
 
     public function set(HappeningParticipation $happeningParticipation): void;
+
+    public function getScannedAt(HappeningParticipation $participation): ?\DateTimeInterface;
 }
