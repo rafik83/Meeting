@@ -304,7 +304,8 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
         }
 
         if (Notification.permission === 'default') {
-            Notification.requestPermission().then(permission => this.showPrepareModalOrJoin());
+            Notification.requestPermission()
+                .then(() => this.showPrepareModalOrJoin());
         } else {
             this.showPrepareModalOrJoin();
         }
@@ -330,6 +331,11 @@ Webinar.prototype.onPrepareMessageClose = function () {
 };
 
 Webinar.prototype.join = function () {
+    // avoid function to be called twice
+    if (this.isWaitingMediaReady) {
+        return;
+    }
+
     this.hideElement(this.joinButton);
 
     if (this.liveUrl) {
@@ -350,6 +356,8 @@ Webinar.prototype.join = function () {
         this.hideElement(this.toggleAudioElement);
         this.toggleButton(this.invisibleModeButton, true);
     }
+
+    this.isWaitingMediaReady = true;
 };
 
 Webinar.prototype.initHLSPlayer = function () {
