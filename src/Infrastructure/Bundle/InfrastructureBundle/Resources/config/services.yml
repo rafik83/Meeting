@@ -3125,6 +3125,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@adapter.event_url_generator'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 

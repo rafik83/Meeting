@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardUserAndTypeScanView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -219,6 +220,28 @@ class ScanRepository implements ScanRepositoryInterface
             ->getResult();
     }
 
+    public function getHappeningParticipantsCount(Event $event): array
+    {
+        $result = $this->entityManager->createQueryBuilder()
+            ->select('scan.objectId as happeningId, count(scan.id) as countParticipant')
+            ->from(Scan::class, 'scan')
+            ->where('scan.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('scan.type = :type')
+            ->setParameter('type', Type::TYPE_HAPPENING_ENTRANCE)
+            ->groupBy('scan.objectId')
+            ->getQuery()
+            ->getResult();
+
+        $happeningParticipantsCount = [];
+
+        foreach ($result as $count){
+            $happeningParticipantsCount[$count ['happeningId']] = (int) $count['countParticipant'];
+        }
+
+        return $happeningParticipantsCount;
+    }
+
     private function getDayBegin(\DateTimeInterface $dateTime): \DateTime
     {
         return (new \DateTime())
@@ -232,4 +255,5 @@ class ScanRepository implements ScanRepositoryInterface
             ->setTimestamp($dateTime->getTimestamp())
             ->setTime(23, 59, 59);
     }
+
 }

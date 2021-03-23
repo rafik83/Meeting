@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Application\Query\Dashboard\View\DashboardUserAndTypeScanView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\Scan;
@@ -44,4 +45,6 @@ interface ScanRepositoryInterface
      * @return DashboardUserAndTypeScanView[]
      */
     public function getUserCheckinByEventAndDay(Event $event, \DateTimeInterface $dateTime): array;
+
+    public function getHappeningParticipantsCount(Event $event): array;
 }

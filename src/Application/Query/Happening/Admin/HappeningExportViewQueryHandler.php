@@ -9,7 +9,9 @@ use Proximum\Vimeet\Application\View\Happening\Admin\SpeakerExportView;
 use Proximum\Vimeet\Application\View\Happening\Admin\SpeakersExportListView;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 
 class HappeningExportViewQueryHandler
 {
@@ -19,12 +21,20 @@ class HappeningExportViewQueryHandler
     /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
+    private ScanRepositoryInterface $scanRepository;
+
+    private HappeningParticipationRepositoryInterface $happeningParticipationRepository;
+
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
-        EventUrlGeneratorInterface $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator,
+        ScanRepositoryInterface $scanRepository,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->eventUrlGenerator = $eventUrlGenerator;
+        $this->scanRepository = $scanRepository;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     /**
@@ -37,6 +47,9 @@ class HappeningExportViewQueryHandler
     {
         $locale = $query->locale;
         $happenings = $this->happeningRepository->findListByEvent($query->event, $locale);
+        $evaluationCounts = $this->happeningParticipationRepository->getEvaluationsCount($query->event);
+        $evaluationAverages = $this->happeningParticipationRepository->getEvaluationsAverage($query->event);
+        $happeningParticipantCounts = $this->scanRepository->getHappeningParticipantsCount($query->event);
 
         $happeningExportViews = [];
         foreach ($happenings as $happening) {
@@ -59,7 +72,10 @@ class HappeningExportViewQueryHandler
                 $happening->getCategory()->getTitle($locale),
                 $happening->getBegin()->format('d-m-Y H:i'),
                 $happening->getEnd()->format('d-m-Y H:i'),
-                new SpeakersExportListView($speakerViews)
+                new SpeakersExportListView($speakerViews),
+                $happeningParticipantCounts[$happening->getId()] ?? 0,
+                $evaluationCounts[$happening->getId()] ?? 0,
+                $evaluationAverages[$happening->getId()] ?? null
             );
         }
 
