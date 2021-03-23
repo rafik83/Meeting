@@ -6035,6 +6035,12 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.happening_export_list_view:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Happening\HappeningExportListViewNormalizer
+        parent: 'serializer.abstract_normalizer'
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.normalizer.omz_user:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer
         parent: 'serializer.abstract_normalizer'
