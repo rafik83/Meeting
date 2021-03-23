@@ -39,6 +39,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Unavailability\MassAssignment\UpdateType;
@@ -57,6 +58,7 @@ class MeetingController extends AbstractController
     private MeetingSlotRepositoryInterface $meetingSlotRepository;
     private RequestRepositoryInterface $meetingRequestRepository;
     private SheetRepositoryInterface $sheetRepository;
+    private ParticipantRepositoryInterface $participantRepository;
     private RequestSlotViewQueryHandler $requestSlotViewQueryHandler;
     private TranslatorInterface $translator;
     private QueryBusInterface $queryBus;
@@ -70,6 +72,7 @@ class MeetingController extends AbstractController
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         RequestRepositoryInterface $meetingRequestRepository,
         SheetRepositoryInterface $sheetRepository,
+        ParticipantRepositoryInterface $participantRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         TranslatorInterface $translator,
         QueryBusInterface $queryBus,
@@ -82,6 +85,7 @@ class MeetingController extends AbstractController
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->participantRepository = $participantRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->translator = $translator;
         $this->queryBus = $queryBus;
@@ -129,7 +133,7 @@ class MeetingController extends AbstractController
             $isVisio // find visio spot if meeting visio
         );
 
-        $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
+        $slot = $this->meetingSlotRepository->find(
             $event,
             (int) $data->slotId
         );
@@ -146,8 +150,7 @@ class MeetingController extends AbstractController
             throw new AccessDeniedException();
         }
 
-        $participantRepository = $this->get('vimeet_infrastructure.repository.participant_repository');
-        $participants = $participantRepository->findByIds($data->meetingParticipants);
+        $participants = $this->participantRepository->findByIds($data->meetingParticipants);
         foreach ($participants as $participant) {
             if (!$sheet->hasParticipant($participant)) {
                 throw new AccessDeniedException();
