@@ -137,7 +137,7 @@ class ExportActionTest extends TestCase
             'csv',
             [
                 'locale'        => 'fr',
-                'charset'       => Charset::WINDOWS_1252,
+                'charset'       => Charset::UTF_8,
                 'csv_delimiter' => ';',
             ]
         )->shouldBeCalled()
