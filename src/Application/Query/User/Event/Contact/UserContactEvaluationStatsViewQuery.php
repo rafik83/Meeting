@@ -5,7 +5,7 @@ namespace Proximum\Vimeet\Application\Query\User\Event\Contact;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UserContactEvaluationViewQuery implements Query
+class UserContactEvaluationStatsViewQuery implements Query
 {
     /** @var Event */
     public $event;
