@@ -8,7 +8,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
-class UserContactEvaluationViewQueryHandler
+class UserContactEvaluationStatsViewQueryHandler
 {
     /** @var ContactRepositoryInterface */
     private $contactRepository;
@@ -35,13 +35,11 @@ class UserContactEvaluationViewQueryHandler
     }
 
     /**
-     * @param UserContactEvaluationViewQuery $query
-     *
-     * @return UserContactEvaluationView[]
+     * @return UserContactEvaluationStatsView[]
      */
-    public function handle(UserContactEvaluationViewQuery $query): array
+    public function handle(UserContactEvaluationStatsViewQuery $query): array
     {
-        $contactEvaluationsViews = $this->getContactEvaluationsViews($query->event);
+        $contactEvaluationsViews = $this->getContactEvaluationStatsViews($query->event);
 
         $meetingsNumberByUser = $this->getMeetingsNumberByUserAndByEvent($query->event);
         $typeAndCategoriesTranslatedIndexedByTypeId = $this->getTypeAndCategoriesTranslatedIndexedByTypeId(
@@ -51,8 +49,8 @@ class UserContactEvaluationViewQueryHandler
 
         $userSheetsViews = $this->userRepository->getUserSheetsViewsByEvent($query->event);
 
-        /** @var UserContactEvaluationView[] $userContactEvaluationViews */
-        $userContactEvaluationViews = [];
+        /** @var UserContactEvaluationStatsView[] $userContactEvaluationStatsViews */
+        $userContactEvaluationStatsViews = [];
 
         foreach ($userSheetsViews as $userSheetsView) {
             $userId = $userSheetsView->getUserId();
@@ -61,8 +59,8 @@ class UserContactEvaluationViewQueryHandler
                 continue;
             }
 
-            if (isset($userContactEvaluationViews[$userId])) {
-                $userContactEvaluationViews[$userId]->addSheet(
+            if (isset($userContactEvaluationStatsViews[$userId])) {
+                $userContactEvaluationStatsViews[$userId]->addSheet(
                     $userSheetsView->getSheetId(),
                     $userSheetsView->getSheetTitle()
                 );
@@ -73,7 +71,7 @@ class UserContactEvaluationViewQueryHandler
             $contactEvaluationsView = $contactEvaluationsViews[$userId] ?? new ContactEvaluationsView($userId);
             $meetingsNumber = $meetingsNumberByUser[$userId] ?? 0;
 
-            $userContactEvaluationViews[$userId] = new UserContactEvaluationView(
+            $userContactEvaluationStatsViews[$userId] = new UserContactEvaluationStatsView(
                 $userId,
                 $userSheetsView->getFirstName(),
                 $userSheetsView->getLastName(),
@@ -92,7 +90,7 @@ class UserContactEvaluationViewQueryHandler
             );
         }
 
-        return array_values($userContactEvaluationViews);
+        return array_values($userContactEvaluationStatsViews);
     }
 
     /**
@@ -100,7 +98,7 @@ class UserContactEvaluationViewQueryHandler
      *
      * @return ContactEvaluationsView[] indexed by userId
      */
-    private function getContactEvaluationsViews(Event $event): array
+    private function getContactEvaluationStatsViews(Event $event): array
     {
         $contacts = $this->contactRepository->getByEvent($event);
 

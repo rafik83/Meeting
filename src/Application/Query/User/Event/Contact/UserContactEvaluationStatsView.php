@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\User\Event\Contact;
 
-class UserContactEvaluationView
+class UserContactEvaluationStatsView
 {
     /** @var int */
     private $userId;
