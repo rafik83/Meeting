@@ -223,7 +223,7 @@ class ScanRepository implements ScanRepositoryInterface
     public function getHappeningParticipantsCount(Event $event): array
     {
         $result = $this->entityManager->createQueryBuilder()
-            ->select('scan.objectId as happeningId, count(scan.id) as countParticipant')
+            ->select('scan.objectId as happeningId, count(scan.id) as participantsCount')
             ->from(Scan::class, 'scan')
             ->where('scan.event = :event')
             ->setParameter('event', $event)
@@ -236,7 +236,7 @@ class ScanRepository implements ScanRepositoryInterface
         $happeningParticipantsCount = [];
 
         foreach ($result as $count){
-            $happeningParticipantsCount[$count ['happeningId']] = (int) $count['countParticipant'];
+            $happeningParticipantsCount[$count ['happeningId']] = (int) $count['participantsCount'];
         }
 
         return $happeningParticipantsCount;

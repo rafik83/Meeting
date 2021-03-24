@@ -491,7 +491,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
          $happeningEvaluationsCounts = [];
 
          foreach ($result as $evaluation){
-             $happeningEvaluationsCounts[$evaluation ['happeningId']] = (int) $evaluation['countEvaluation'];
+             $happeningEvaluationsCounts[$evaluation['happeningId']] = (int) $evaluation['countEvaluation'];
          }
 
         return $happeningEvaluationsCounts;
@@ -513,7 +513,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
         $happeningEvaluationsAverage = [];
 
         foreach ($result as $evaluation){
-            $happeningEvaluationsAverage[$evaluation ['happeningId']] = (int) $evaluation['averageEvaluation'];
+            $happeningEvaluationsAverage[$evaluation['happeningId']] = (float) $evaluation['averageEvaluation'];
         }
 
         return $happeningEvaluationsAverage;

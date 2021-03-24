@@ -23,9 +23,10 @@ class HappeningExportView
     public $speakersListView;
 
     private int $participantScanned;
-    private int $numberOfGrades;
-    private ?float $averageGrades;
 
+    private int $numberOfGrades;
+
+    private ?float $averageGrades;
 
     public function __construct(string $title, ?string $description, string $category, string $begin, string $end, SpeakersExportListView $speakersListView, int $participantConnected, int $numberOfGrades, ?float $averageGrades)
     {
