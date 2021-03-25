@@ -147,11 +147,10 @@ class ContactRepository implements ContactRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW ' . UserContactEvaluationRow::class . '(' .
-                "user.id, user.account.firstName, user.account.lastName, " .
-                "sheet.id, sheet.title, type.id, " .
-                "contact.evaluation, meeting.id, evaluatedUser.id, " .
-                "evaluatedUser.account.firstName, evaluatedUser.account.lastName, " .
-                "evaluatedSheet.id, evaluatedSheet.title, evaluatedType.id" .
+                'user.id, user.account.firstName, user.account.lastName, ' .
+                'sheet.id, sheet.title, type.id, contact.evaluation, meeting.id, evaluatedUser.id, ' .
+                'evaluatedUser.account.firstName, evaluatedUser.account.lastName, ' .
+                'evaluatedSheet.id, evaluatedSheet.title, evaluatedType.id' .
                 ')'
             )
             ->from(Contact::class, 'contact')
