@@ -15,14 +15,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class EvaluationExportAction
 {
-    /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationCheckerAdapter;
-
-    /** @var QueryBusInterface */
-    private $queryBus;
-
-    /** @var SerializerAdapterInterface */
-    private $serializer;
+    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
+    private QueryBusInterface $queryBus;
+    private SerializerAdapterInterface $serializer;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -53,10 +48,7 @@ class EvaluationExportAction
             ]
         );
 
-
-        // return new Response('<body><pre>'.$exportedContent.'</pre></body>');
-
-        return new CsvFileResponse(
+         return new CsvFileResponse(
             Charset::convertString($exportedContent),
             'export_user_contact_evaluation_' . date('Y_m_d_His') . '.csv'
         );
