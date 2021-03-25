@@ -10,6 +10,8 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class UserContactEvaluationStatsViewQueryHandler
 {
+    use TypeAndCategoriesTrait;
+
     /** @var ContactRepositoryInterface */
     private $contactRepository;
 
@@ -43,6 +45,7 @@ class UserContactEvaluationStatsViewQueryHandler
 
         $meetingsNumberByUser = $this->getMeetingsNumberByUserAndByEvent($query->event);
         $typeAndCategoriesTranslatedIndexedByTypeId = $this->getTypeAndCategoriesTranslatedIndexedByTypeId(
+            $this->typeRepository,
             $query->event,
             $query->locale
         );
@@ -142,26 +145,5 @@ class UserContactEvaluationStatsViewQueryHandler
         }
 
         return $meetingsNumberByUser;
-    }
-
-    /**
-     * @param Event $event
-     * @param string $locale
-     *
-     * @return TypeAndCategoriesTranslated[] indexed by typeId
-     */
-    private function getTypeAndCategoriesTranslatedIndexedByTypeId(Event $event, string $locale): array
-    {
-        $types = $this->typeRepository->getTypesAndCategoriesTranslationsByEvent($event, $locale);
-        $typeAndCategoriesTranslatedIndexedByTypeId = [];
-
-        foreach ($types as $type) {
-            $typeAndCategoriesTranslatedIndexedByTypeId[$type->getId()] = new TypeAndCategoriesTranslated(
-                $type->getTitle($locale),
-                $type->getCategoriesTitles($locale)
-            );
-        }
-
-        return $typeAndCategoriesTranslatedIndexedByTypeId;
     }
 }

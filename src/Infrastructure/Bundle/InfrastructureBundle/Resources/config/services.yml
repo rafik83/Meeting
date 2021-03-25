@@ -2879,6 +2879,13 @@ services:
             - '@Proximum\Vimeet\Application\Adapter\QueryBusInterface'
             - '@Proximum\Vimeet\Infrastructure\Repository\User\FormDataRepository'
 
+    Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery }
+
     Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationStatsViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
