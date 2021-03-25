@@ -1733,6 +1733,13 @@ admin_user_contact_evaluation_stats_export:
     requirements:
         event: \d+
 
+admin_user_contact_evaluation_export:
+    path: /event/{event}/users-contact-evaluation/export
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction
+    methods: [POST]
+    requirements:
+        event: \d+
+
 #
 # Scan
 #
