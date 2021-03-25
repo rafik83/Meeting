@@ -35,6 +35,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ 'admin.user.export.title'|trans }}</div>
                     <div class="panel-body">
+                        <form action="{{ path('admin_user_contact_evaluation_export', { 'event': event.id }) }}" method="POST">
+                            <input type="submit" value="{{ 'Exporter le détail des notes par utilisateur'|trans }}" class="btn btn-default"/>
+                        </form>
                         <form action="{{ path('admin_user_contact_evaluation_stats_export', { 'event': event.id }) }}" method="POST">
                             <input type="submit" value="{{ 'admin.user.export.contact.evaluation'|trans }}" class="btn btn-default"/>
                         </form>
