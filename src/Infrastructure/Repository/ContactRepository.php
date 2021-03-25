@@ -4,8 +4,11 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationRow;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 
@@ -136,5 +139,43 @@ class ContactRepository implements ContactRepositoryInterface
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+    }
+
+    public function getEvaluationsByEvent(Event $event, string $locale): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW ' . UserContactEvaluationRow::class . '(' .
+                "user.id, user.account.firstName, user.account.lastName, " .
+                "sheet.id, sheet.title, type.id, " .
+                "contact.evaluation, meeting.id, evaluatedUser.id, " .
+                "evaluatedUser.account.firstName, evaluatedUser.account.lastName, " .
+                "evaluatedSheet.id, evaluatedSheet.title, evaluatedType.id" .
+                ')'
+            )
+            ->from(Contact::class, 'contact')
+            ->join('contact.user', 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user=user')
+            ->join('participant.sheet', 'sheet')
+            ->join('sheet.type', 'type')
+            ->join('contact.contact', 'evaluatedUser')
+            ->join(Participant::class, 'evaluatedParticipant', 'WITH', 'evaluatedParticipant.user=evaluatedUser')
+            ->join('evaluatedParticipant.sheet', 'evaluatedSheet')
+            ->join('evaluatedSheet.type', 'evaluatedType')
+            ->join(Meeting::class, 'meeting', 'WITH', 'meeting.event=:event AND (' .
+                    '(meeting.fromSheet=sheet AND meeting.toSheet=evaluatedSheet) OR ' .
+                    '(meeting.fromSheet=evaluatedSheet AND meeting.toSheet=sheet)' .
+                ')'
+            )
+            ->andWhere('contact.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('contact.evaluation IS NOT NULL')
+            ->andWhere('contact.origin = :meeting')
+            ->addOrderBy('user.id')
+            ->addOrderBy('meeting.id')
+            ->setParameter('meeting', Contact::ORIGIN_MEETING)
+            ->getQuery()
+            ->getArrayResult();
     }
 }
