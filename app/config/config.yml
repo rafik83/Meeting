@@ -100,24 +100,24 @@ doctrine:
                 MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
 
 # Swiftmailer Configuration
-swiftmailer:
-    default_mailer: default
-    mailers:
-        default:
-            transport:  "%mailer_transport%"
-            host:       "%mailer_host%"
-            username:   "%mailer_user%"
-            password:   "%mailer_password%"
-            port:       "%mailer_port%"
-            encryption: "%mailer_encryption%"
-            spool:      { type: memory }
-        error:
-            transport:  "%mailer_error_transport%"
-            host:       "%mailer_error_host%"
-            username:   "%mailer_error_user%"
-            password:   "%mailer_error_password%"
-            port:       "%mailer_error_port%"
-            encryption: "%mailer_error_encryption%"
+# swiftmailer:
+    # default_mailer: default
+    # mailers:
+    #     default:
+    #         transport:  "%mailer_transport%"
+    #         host:       "%mailer_host%"
+    #         username:   "%mailer_user%"
+    #         password:   "%mailer_password%"
+    #         port:       "%mailer_port%"
+    #         encryption: "%mailer_encryption%"
+    #         spool:      { type: memory }
+    #     error:
+    #         transport:  "%mailer_error_transport%"
+    #         host:       "%mailer_error_host%"
+    #         username:   "%mailer_error_user%"
+    #         password:   "%mailer_error_password%"
+    #         port:       "%mailer_error_port%"
+    #         encryption: "%mailer_error_encryption%"
 
 # Sonata Intl Configuration
 sonata_intl:
