@@ -1726,6 +1726,13 @@ admin_users_details:
         event: \d+
         user: \d+
 
+admin_user_contact_evaluation_stats_export:
+    path: /event/{event}/users-contact-evaluation-stats/export
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationStatsExportAction
+    methods: [POST]
+    requirements:
+        event: \d+
+
 admin_user_contact_evaluation_export:
     path: /event/{event}/users-contact-evaluation/export
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact\EvaluationExportAction

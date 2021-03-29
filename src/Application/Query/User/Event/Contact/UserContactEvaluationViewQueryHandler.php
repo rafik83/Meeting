@@ -2,168 +2,56 @@
 
 namespace Proximum\Vimeet\Application\Query\User\Event\Contact;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class UserContactEvaluationViewQueryHandler
 {
-    /** @var ContactRepositoryInterface */
-    private $contactRepository;
+    use TypeAndCategoriesTrait;
 
-    /** @var MeetingRepositoryInterface */
-    private $meetingRepository;
-
-    /** @var TypeRepositoryInterface */
-    private $typeRepository;
-
-    /** @var UserRepositoryInterface */
-    private $userRepository;
+    private ContactRepositoryInterface $contactRepository;
+    private TypeRepositoryInterface $typeRepository;
 
     public function __construct(
         ContactRepositoryInterface $contactRepository,
-        MeetingRepositoryInterface $meetingRepository,
-        TypeRepositoryInterface $typeRepository,
-        UserRepositoryInterface $userRepository
+        TypeRepositoryInterface $typeRepository
     ) {
         $this->contactRepository = $contactRepository;
-        $this->meetingRepository = $meetingRepository;
         $this->typeRepository = $typeRepository;
-        $this->userRepository = $userRepository;
     }
 
     /**
-     * @param UserContactEvaluationViewQuery $query
-     *
      * @return UserContactEvaluationView[]
      */
     public function handle(UserContactEvaluationViewQuery $query): array
     {
-        $contactEvaluationsViews = $this->getContactEvaluationsViews($query->event);
+        $contactRows = $this->contactRepository->getEvaluationsByEvent($query->event, $query->locale);
 
-        $meetingsNumberByUser = $this->getMeetingsNumberByUserAndByEvent($query->event);
         $typeAndCategoriesTranslatedIndexedByTypeId = $this->getTypeAndCategoriesTranslatedIndexedByTypeId(
+            $this->typeRepository,
             $query->event,
             $query->locale
         );
 
-        $userSheetsViews = $this->userRepository->getUserSheetsViewsByEvent($query->event);
-
         /** @var UserContactEvaluationView[] $userContactEvaluationViews */
         $userContactEvaluationViews = [];
 
-        foreach ($userSheetsViews as $userSheetsView) {
-            $userId = $userSheetsView->getUserId();
+        /** @var UserContactEvaluationRow $contactRow */
+        foreach ($contactRows as $contactRow) {
+            $votingTypeAndCategories = $typeAndCategoriesTranslatedIndexedByTypeId[$contactRow->votingTypeId];
+            $evaluatedTypeAndCategories = $typeAndCategoriesTranslatedIndexedByTypeId[$contactRow->evaluatedTypeId];
 
-            if (!isset($meetingsNumberByUser[$userId])) {
-                continue;
-            }
-
-            if (isset($userContactEvaluationViews[$userId])) {
-                $userContactEvaluationViews[$userId]->addSheet(
-                    $userSheetsView->getSheetId(),
-                    $userSheetsView->getSheetTitle()
-                );
-
-                continue;
-            }
-
-            $contactEvaluationsView = $contactEvaluationsViews[$userId] ?? new ContactEvaluationsView($userId);
-            $meetingsNumber = $meetingsNumberByUser[$userId] ?? 0;
-
-            $userContactEvaluationViews[$userId] = new UserContactEvaluationView(
-                $userId,
-                $userSheetsView->getFirstName(),
-                $userSheetsView->getLastName(),
-                $typeAndCategoriesTranslatedIndexedByTypeId[$userSheetsView->getTypeId()]->getTypeTitle(),
-                $typeAndCategoriesTranslatedIndexedByTypeId[$userSheetsView->getTypeId()]->getCategoriesTitle(),
-                $userSheetsView->getSheetId(),
-                $userSheetsView->getSheetTitle(),
-                $meetingsNumber,
-                $contactEvaluationsView->getContactsNumber(),
-                $contactEvaluationsView->getContactsNumberByEvaluation(5),
-                $contactEvaluationsView->getContactsNumberByEvaluation(4),
-                $contactEvaluationsView->getContactsNumberByEvaluation(3),
-                $contactEvaluationsView->getContactsNumberByEvaluation(2),
-                $contactEvaluationsView->getContactsNumberByEvaluation(1),
-                $meetingsNumber + $contactEvaluationsView->getContactsNumberNotEvaluated()
+            $userContactEvaluationView = new UserContactEvaluationView(
+                $contactRow,
+                $votingTypeAndCategories->getTypeTitle(),
+                implode(', ', $votingTypeAndCategories->getCategoriesTitle()),
+                $evaluatedTypeAndCategories->getTypeTitle(),
+                implode(', ', $evaluatedTypeAndCategories->getCategoriesTitle())
             );
+
+            $userContactEvaluationViews[] = $userContactEvaluationView;
         }
 
-        return array_values($userContactEvaluationViews);
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return ContactEvaluationsView[] indexed by userId
-     */
-    private function getContactEvaluationsViews(Event $event): array
-    {
-        $contacts = $this->contactRepository->getByEvent($event);
-
-        /** @var ContactEvaluationsView[] $contactEvaluationsViews */
-        $contactEvaluationsViews = [];
-
-        foreach ($contacts as $contact) {
-            $userId = $contact->getUser()->getId();
-
-            if (!isset($contactEvaluationsViews[$userId])) {
-                $contactEvaluationsViews[$userId] = new ContactEvaluationsView($userId);
-            }
-
-            $contactEvaluationsViews[$userId]->addContact($contact->getEvaluation(), $contact->isScanned());
-        }
-
-        return $contactEvaluationsViews;
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return array of meetings number indexed by userId [$userId => $meetingsNumber]
-     */
-    private function getMeetingsNumberByUserAndByEvent(Event $event): array
-    {
-        $meetings = $this->meetingRepository->getMeetingAndParticipantsByEvent($event);
-
-        $meetingsNumberByUser = [];
-
-        foreach ($meetings as $meeting) {
-            foreach ($meeting->getAllParticipants() as $participant) {
-                $userId = $participant->getUser()->getId();
-
-                if (isset($meetingsNumberByUser[$userId])) {
-                    ++$meetingsNumberByUser[$userId];
-                } else {
-                    $meetingsNumberByUser[$userId] = 1;
-                }
-            }
-        }
-
-        return $meetingsNumberByUser;
-    }
-
-    /**
-     * @param Event $event
-     * @param string $locale
-     *
-     * @return TypeAndCategoriesTranslated[] indexed by typeId
-     */
-    private function getTypeAndCategoriesTranslatedIndexedByTypeId(Event $event, string $locale): array
-    {
-        $types = $this->typeRepository->getTypesAndCategoriesTranslationsByEvent($event, $locale);
-        $typeAndCategoriesTranslatedIndexedByTypeId = [];
-
-        foreach ($types as $type) {
-            $typeAndCategoriesTranslatedIndexedByTypeId[$type->getId()] = new TypeAndCategoriesTranslated(
-                $type->getTitle($locale),
-                $type->getCategoriesTitles($locale)
-            );
-        }
-
-        return $typeAndCategoriesTranslatedIndexedByTypeId;
+        return $userContactEvaluationViews;
     }
 }

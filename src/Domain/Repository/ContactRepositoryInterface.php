@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationRow;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -40,4 +41,9 @@ interface ContactRepositoryInterface
     public function hasEvaluateContactByEventAndUser(Event $event, User $user, User $contact): bool;
 
     public function getEvaluationContactByEventAndUser(Event $event, User $user, User $contact): ?int;
+
+    /**
+     * @return UserContactEvaluationRow[]
+     */
+    public function getEvaluationsByEvent(Event $event, string $locale): array;
 }
