@@ -12,18 +12,14 @@ use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorA
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
-use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Evaluation\PreviousEvaluationCheckerHandler;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\PreviousHappeningEvaluationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirect;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationChecker;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\PreviousMeetingEvaluationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -34,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class VideoConferenceController extends AbstractController
 {
-    private PreviousMeetingEvaluationCheckerHandler $previousMeetingEvaluationCheckerHandler;
+    private PreviousEvaluationCheckerHandler $previousEvaluationCheckerHandler;
     private EndVisioRedirectHandler $endVisioRedirectHandler;
     private VideoConferenceAdapterInterface $videoConferenceAdapter;
     private DateTimeInterface $dateTime;
@@ -42,14 +38,14 @@ class VideoConferenceController extends AbstractController
     private CommandBusInterface $commandBus;
 
     public function __construct(
-        PreviousMeetingEvaluationCheckerHandler $previousMeetingEvaluationCheckerHandler,
+        PreviousEvaluationCheckerHandler $previousEvaluationCheckerHandler,
         EndVisioRedirectHandler $endVisioRedirectHandler,
         VideoConferenceAdapterInterface $videoConferenceAdapter,
         DateTimeInterface $dateTime,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
     ) {
-        $this->previousMeetingEvaluationCheckerHandler = $previousMeetingEvaluationCheckerHandler;
+        $this->previousEvaluationCheckerHandler = $previousEvaluationCheckerHandler;
         $this->endVisioRedirectHandler = $endVisioRedirectHandler;
         $this->videoConferenceAdapter = $videoConferenceAdapter;
         $this->dateTime = $dateTime;
@@ -84,7 +80,7 @@ class VideoConferenceController extends AbstractController
 
         $event = $eventDomain->getEvent();
 
-        $redirectResponse = ($this->previousMeetingEvaluationCheckerHandler)(
+        $redirectResponse = ($this->previousEvaluationCheckerHandler)(
             new PreviousEvaluationChecker(
                 $event,
                 $sheet,
