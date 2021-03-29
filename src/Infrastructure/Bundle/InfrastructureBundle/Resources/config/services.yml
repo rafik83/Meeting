@@ -2882,11 +2882,18 @@ services:
     Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery }
+
+    Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationStatsViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.user_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationStatsViewQuery }
 
     #
     # Token component

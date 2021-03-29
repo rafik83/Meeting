@@ -5,19 +5,23 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Contact;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationViewQuery;
+use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationStatsViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class EvaluationExportAction
+class EvaluationStatsExportAction
 {
-    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
-    private QueryBusInterface $queryBus;
-    private SerializerAdapterInterface $serializer;
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
+    /** @var QueryBusInterface */
+    private $queryBus;
+
+    /** @var SerializerAdapterInterface */
+    private $serializer;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -39,7 +43,7 @@ class EvaluationExportAction
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $exportedContent = $this->serializer->serialize(
-            $this->queryBus->handle(new UserContactEvaluationViewQuery($event, $locale)),
+            $this->queryBus->handle(new UserContactEvaluationStatsViewQuery($event, $locale)),
             'csv',
             [
                 'locale' => $locale,
@@ -48,9 +52,9 @@ class EvaluationExportAction
             ]
         );
 
-         return new CsvFileResponse(
+        return new CsvFileResponse(
             Charset::convertString($exportedContent),
-            'export_user_contact_evaluation_' . date('Y_m_d_His') . '.csv'
+            'export_user_contact_evaluation_stats_' . date('Y_m_d_His') . '.csv'
         );
     }
 }
