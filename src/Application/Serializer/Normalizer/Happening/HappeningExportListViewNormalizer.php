@@ -76,7 +76,7 @@ class HappeningExportListViewNormalizer implements NormalizerInterface
             self::COL_END => $happeningExportView->getEnd(),
             self::COL_PARTICIPANT_SCANNED => $happeningExportView->getParticipantScanned(),
             self::COL_NUMBER_OF_GRADES => $happeningExportView->getNumberOfGrades(),
-            self::COL_AVERAGE_GRADES => $happeningExportView->getAverageGrades(),
+            self::COL_AVERAGE_GRADES => str_replace('.', ',', round($happeningExportView->getAverageGrades(), 2)),
         ];
 
         foreach ($happeningExportView->speakersListView->getSpeakersListView() as $i => $speakerExportView) {
