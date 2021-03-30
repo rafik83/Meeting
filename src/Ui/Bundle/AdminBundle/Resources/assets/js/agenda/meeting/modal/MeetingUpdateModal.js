@@ -35,6 +35,11 @@ export default {
 
             let possibleSlotsIdForParticipants = this.meetingToUpdate.form.currentSheetAvailableSlotIds[this.meetingToUpdate.form.meetingParticipants[0]];
 
+
+            if (!possibleSlotsIdForParticipants || possibleSlotsIdForParticipants.length === 0) {
+                return [];
+            }
+
             const otherSelectedParticipants = this.meetingToUpdate.form.meetingParticipants.slice(1);
             const currentSheetAvailableSlotIds = this.meetingToUpdate.form.currentSheetAvailableSlotIds;
             otherSelectedParticipants.forEach(function (participantId) {
