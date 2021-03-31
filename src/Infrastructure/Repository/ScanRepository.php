@@ -157,7 +157,7 @@ class ScanRepository implements ScanRepositoryInterface
                 ])
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getSingleScalarResult() > 1
+                ->getSingleScalarResult() >= 1
         ;
     }
 
