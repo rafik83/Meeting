@@ -9,8 +9,9 @@ use Proximum\Vimeet\Application\View\Happening\Admin\HappeningParticipantView;
 use Proximum\Vimeet\Domain\Happening\HappeningDateHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 
@@ -35,6 +36,8 @@ class HappeningParticipantExportViewQueryHandler
      */
     private $sheetGuesser;
 
+    private HappeningParticipationRepositoryInterface $happeningParticipationRepository;
+
     /**
      * HappeningParticipantViewQueryHandler constructor.
      *
@@ -47,12 +50,14 @@ class HappeningParticipantExportViewQueryHandler
         HappeningRepositoryInterface $happeningRepository,
         QuestionRepositoryInterface $questionRepository,
         GroupNameResolver $groupNameResolver,
-        SheetGuesser $sheetGuesser
+        SheetGuesser $sheetGuesser,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->questionRepository  = $questionRepository;
         $this->groupNameResolver   = $groupNameResolver;
         $this->sheetGuesser        = $sheetGuesser;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
     }
 
     /**
@@ -76,7 +81,7 @@ class HappeningParticipantExportViewQueryHandler
                 if (!$participation->isDisabled()) {
                     $happeningParticipantViews[] = $this->buildView(
                         $happening,
-                        $participation->getUser(),
+                        $participation,
                         $query->event,
                         $query->locale
                     );
@@ -91,16 +96,11 @@ class HappeningParticipantExportViewQueryHandler
         return new HappeningParticipantListView($happeningParticipantViews);
     }
 
-    /**
-     * @param Happening $happening
-     * @param User      $user
-     * @param Event     $event
-     * @param string    $locale
-     *
-     * @return HappeningParticipantView
-     */
-    public function buildView(Happening $happening, User $user, Event $event, $locale)
+    private function buildView(Happening $happening, HappeningParticipation $participation, Event $event, string $locale): HappeningParticipantView
     {
+        $user = $participation->getUser();
+        $scannedAt = $this->happeningParticipationRepository->getScannedAt($participation);
+
         try {
             $sheetName = $this->groupNameResolver->resolve($event, $user);
         } catch (\Exception $exception) {
@@ -132,7 +132,10 @@ class HappeningParticipantExportViewQueryHandler
             $user->getFirstName(),
             $user->getLastName(),
             $user->getPosition(),
-            $sheetName
+            $sheetName,
+            $user->getPhone(),
+            $participation->getEvaluation(),
+            $scannedAt ? HappeningDateHelper::getDateTime($scannedAt, $locale, $timezone) : ''
         );
 
         return $happeningParticipantView;

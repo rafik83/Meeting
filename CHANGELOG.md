@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-321 - webinar vote form not displayed
 
+## [2.86.0] - 2021-03-31
+### Added
+- VIMEET-2439 - Export conferences participants (phone / grade / connection date)
+- VIMEET-2438 - Export conferences (Participant connected, Number of grades, Average grade)
+
 ## [2.85.1] - 2021-03-30
 ### Fixed
 - MV-320  - check if possible slots are available

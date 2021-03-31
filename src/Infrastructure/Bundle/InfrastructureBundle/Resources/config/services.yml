@@ -3126,12 +3126,15 @@ services:
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@sheet.sheet_guesser'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantExportViewQuery }
     Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@adapter.event_url_generator'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery }
 
@@ -6037,6 +6040,12 @@ services:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.happening_export_list_view:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Happening\HappeningExportListViewNormalizer
+        parent: 'serializer.abstract_normalizer'
         tags:
             - { name: serializer.normalizer }
 
