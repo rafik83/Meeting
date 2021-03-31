@@ -71,6 +71,12 @@ class HappeningParticipantView
      */
     private $sheetName;
 
+    private ?string $phone;
+
+    private ?int $evaluation;
+
+    private ?string $connect;
+
     /**
      * HappeningParticipantView constructor.
      *
@@ -101,7 +107,10 @@ class HappeningParticipantView
         $firstname,
         $lastname,
         $position,
-        $sheetName
+        $sheetName,
+        ?string $phone,
+        ?int $evaluation,
+        ?string $connect
     ) {
         $this->sheetId            = $sheetId;
         $this->participantId      = $participantId;
@@ -116,6 +125,9 @@ class HappeningParticipantView
         $this->happeningEndHour   = $happeningEndHour;
         $this->happeningDay       = $happeningDay;
         $this->happeningTitle     = $happeningTitle;
+        $this->phone              = $phone;
+        $this->evaluation         = $evaluation;
+        $this->connect            = $connect;
     }
 
     /**
@@ -222,6 +234,21 @@ class HappeningParticipantView
         return $this->sheetName;
     }
 
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function getEvaluation(): ?int
+    {
+        return $this->evaluation;
+    }
+
+    public function getConnect(): ?string
+    {
+        return $this->connect;
+    }
+
     /**
      * @return array
      */
@@ -239,6 +266,9 @@ class HappeningParticipantView
             HappeningParticipantNormalizer::COL_PARTICIPANT_FIRSTNAME => $this->getFirstname(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_LASTNAME  => $this->getLastname(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_EMAIL     => $this->getEmail(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_PHONE     => $this->getPhone(),
+            HappeningParticipantNormalizer::COL_HAPPENING_GRADE       => $this->getEvaluation(),
+            HappeningParticipantNormalizer::COL_HAPPENING_CONNECT     => $this->getConnect(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_POSITION  => $this->getPosition(),
             HappeningParticipantNormalizer::COL_QUESTION              => $this->getQuestion(),
         ];

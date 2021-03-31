@@ -162,4 +162,6 @@ interface HappeningParticipationRepositoryInterface
     public function getEvaluationsCount(Event $event): array;
 
     public function getEvaluationsAverage(Event $event): array;
+
+    public function getScannedAt(HappeningParticipation $participation): ?\DateTimeInterface;
 }

@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2439 - Export conferences participants (phone / grade / connection date)
+
+### Added
+- VIMEET-2438 - Export conferences (Participant connected, Number of grades, Average grade)
+
 ## [2.85.1] - 2021-03-30
 ### Fixed
 - MV-320  - check if possible slots are available
@@ -15,9 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.84.3] - 2021-03-29
 ### Fixed
 - Don't return documents in ES aggregations, to optimize search engine usage
-
-### Added
-- VIMEET-2438 - Export conferences (Participant connected, Number of grades, Average grade)
 
 ## [2.84.2] - 2021-03-22
 ### Fixed
