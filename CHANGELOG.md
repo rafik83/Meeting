@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Don't return documents in ES aggregations, to optimize search engine usage
 
+### Added
+- VIMEET-2438 - Export conferences (Participant connected, Number of grades, Average grade)
+
 ## [2.84.2] - 2021-03-22
 ### Fixed
 - Don't update question count when a vote is notified

@@ -158,4 +158,8 @@ interface HappeningParticipationRepositoryInterface
     public function getPreviousMandatoryEvaluation(Event $event, User $user, \DateTimeInterface $begin): ?HappeningParticipation;
 
     public function set(HappeningParticipation $happeningParticipation): void;
+
+    public function getEvaluationsCount(Event $event): array;
+
+    public function getEvaluationsAverage(Event $event): array;
 }

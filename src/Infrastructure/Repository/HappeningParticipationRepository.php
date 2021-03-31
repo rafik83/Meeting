@@ -474,4 +474,48 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     {
         $this->entityManager->flush($happeningParticipation);
     }
+
+    public function getEvaluationsCount(Event $event): array
+    {
+         $result = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening.id as happeningId, COUNT(participation.evaluation) as countEvaluation')
+            ->from(HappeningParticipation::class, 'participation', 'participation.id')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->setParameter('event', $event)
+            ->groupBy('happening.id')
+            ->getQuery()
+            ->getResult();
+
+         $happeningEvaluationsCounts = [];
+
+         foreach ($result as $evaluation){
+             $happeningEvaluationsCounts[$evaluation['happeningId']] = (int) $evaluation['countEvaluation'];
+         }
+
+        return $happeningEvaluationsCounts;
+    }
+
+    public function getEvaluationsAverage(Event $event): array
+    {
+        $result = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening.id as happeningId, AVG(participation.evaluation) as averageEvaluation')
+            ->from(HappeningParticipation::class, 'participation', 'participation.id')
+            ->join('participation.happening', 'happening', 'WITH', 'happening.event = :event')
+            ->setParameter('event', $event)
+            ->groupBy('happening.id')
+            ->getQuery()
+            ->getResult();
+
+        $happeningEvaluationsAverage = [];
+
+        foreach ($result as $evaluation){
+            $happeningEvaluationsAverage[$evaluation['happeningId']] = (float) $evaluation['averageEvaluation'];
+        }
+
+        return $happeningEvaluationsAverage;
+    }
 }
