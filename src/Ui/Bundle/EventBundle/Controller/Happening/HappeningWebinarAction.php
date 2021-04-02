@@ -18,7 +18,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Proximum\Vimeet\Ui\Helper\RequestHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,7 +95,7 @@ class HappeningWebinarAction
                 $sheet,
                 $user,
                 $happening,
-                RequestHelper::getRelativeUri($request)
+                $request->getRequestUri(),
             )
         );
 
