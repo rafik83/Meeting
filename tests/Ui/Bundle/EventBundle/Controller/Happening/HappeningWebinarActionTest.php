@@ -267,6 +267,7 @@ class HappeningWebinarActionTest extends TestCase
         $this->commandBus->handle(Argument::type(ScanHappening::class))->shouldBeCalled();
 
         $this->request->getLocale()->shouldBeCalled()->willReturn('fr');
+        $this->request->getRequestUri()->willReturn('/happening/1');
         $webinarView = $this->prophesize(ViewerWebinarView::class);
         $webinarView->reveal()->isSpeaker = false;
         $webinarView->isVideoWebinarAndHappeningIsEnded()->shouldBeCalled()->willReturn(false);
@@ -301,6 +302,7 @@ class HappeningWebinarActionTest extends TestCase
         ;
         $this->canAccessToWebinar->isSatisfiableBy($this->happening->reveal(), $this->user->reveal())->willReturn(true);
         $redirect = $this->prophesize(RedirectResponse::class);
+        $this->request->getRequestUri()->willReturn('/happening/1');
         $this->previousHappeningEvaluationCheckerHandler->__invoke(new PreviousHappeningEvaluationChecker(
             $this->event->reveal(),
             $this->sheet->reveal(),
