@@ -64,7 +64,7 @@ class VideoConferenceController extends Controller
                 $sheet,
                 $user,
                 $meeting,
-                $request->getUri(),
+                $request->getRequestUri(),
             ));
 
         if ($redirectResponse instanceof RedirectResponse) {
