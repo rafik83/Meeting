@@ -46,9 +46,19 @@ class VideoConferenceController extends Controller
 
         if (false === $sheet->hasParticipant($participant)
             || false === $sheet->hasUser($user)
-            || ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet())
         ) {
             throw $this->createAccessDeniedException('Meeting is not accessible');
+        }
+
+        if ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet()) {
+            // In case user has access to multiple sheets, redirect to meeting using related sheet
+            $otherSheet = $meeting->getSheetOfUser($user);
+
+            return $this->redirectToRoute('event_video_video_meeting', [
+                'sheet' => $otherSheet->getId(),
+                'meeting' => $meeting->getId(),
+                'participant' => $otherSheet->getUserParticipant($user)->getId(),
+            ]);
         }
 
         $event = $eventDomain->getEvent();
