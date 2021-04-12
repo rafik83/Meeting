@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -21,34 +22,24 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 abstract class AbstractEventType extends AbstractType
 {
-    /** @var array */
-    private $supportedCurrencies;
+    private array $supportedCurrencies;
+    private PrefixRepositoryInterface $prefixRepository;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private array $preferredLocales;
+    private UniqueValuesTransformer $uniqueValuesTransformer;
 
-    /** @var PrefixRepositoryInterface */
-    private $prefixRepository;
-
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
-
-    /** @var array */
-    private $preferredLocales;
-
-    /**
-     * @param array                         $supportedCurrencies
-     * @param array                         $preferredLocales
-     * @param PrefixRepositoryInterface     $prefixRepository
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         array $supportedCurrencies,
         array $preferredLocales,
         PrefixRepositoryInterface $prefixRepository,
-        AuthorizationCheckerInterface $authorizationChecker
+        AuthorizationCheckerInterface $authorizationChecker,
+        UniqueValuesTransformer $uniqueValuesTransformer
     ) {
-        $this->supportedCurrencies  = $supportedCurrencies;
-        $this->prefixRepository     = $prefixRepository;
+        $this->supportedCurrencies = $supportedCurrencies;
+        $this->prefixRepository = $prefixRepository;
         $this->authorizationChecker = $authorizationChecker;
         $this->preferredLocales = $preferredLocales;
+        $this->uniqueValuesTransformer = $uniqueValuesTransformer;
     }
 
     /**
@@ -69,7 +60,10 @@ abstract class AbstractEventType extends AbstractType
             ->add('locales', LocaleType::class, [
                 'multiple'          => true,
                 'preferred_choices' => $this->preferredLocales,
-            ])
+            ]);
+        $builder->get('locales')->addModelTransformer($this->uniqueValuesTransformer);
+
+        $builder
             ->add('domain', TextType::class, [
                 'placeholder' => 'form.event_create.children.domain.placeholder',
                 'help' => 'form.event_create.children.domain.help',

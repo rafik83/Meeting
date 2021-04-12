@@ -129,6 +129,7 @@ services:
             - '@security.authorization_checker'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.event_url_generator'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer'
         tags:
             - { name: form.type }
     form_type_event.create_type:
@@ -138,6 +139,7 @@ services:
             - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer'
         tags:
             - { name: form.type }
     form_type_type.type_update_type:
