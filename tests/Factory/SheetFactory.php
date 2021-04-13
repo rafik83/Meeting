@@ -34,6 +34,12 @@ class SheetFactory
             $datetime
         );
 
+        // set id value, done by Doctrine in real app
+        $reflection = new \ReflectionClass($sheet);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet, 123);
+
         return $sheet;
     }
 }
