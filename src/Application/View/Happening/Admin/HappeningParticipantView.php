@@ -77,37 +77,20 @@ class HappeningParticipantView
 
     private ?string $connect;
 
-    /**
-     * HappeningParticipantView constructor.
-     *
-     * @param int    $happeningId
-     * @param string $happeningBeginHour
-     * @param string $happeningEndHour
-     * @param string $happeningDay
-     * @param string $happeningTitle
-     * @param int    $sheetId
-     * @param int    $participantId
-     * @param string $question
-     * @param string $email
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $position
-     * @param string $sheetName
-     */
     public function __construct(
-        $happeningId,
-        $happeningBeginHour,
-        $happeningEndHour,
-        $happeningDay,
-        $happeningTitle,
-        $sheetId,
-        $participantId,
-        $question,
-        $email,
-        $firstname,
-        $lastname,
-        $position,
-        $sheetName,
+        int $happeningId,
+        string $happeningBeginHour,
+        string $happeningEndHour,
+        string $happeningDay,
+        string $happeningTitle,
+        int $sheetId,
+        int $participantId,
+        ?string $question,
+        string $email,
+        string $firstname,
+        string $lastname,
+        ?string $position,
+        string $sheetName,
         ?string $phone,
         ?int $evaluation,
         ?string $connect
