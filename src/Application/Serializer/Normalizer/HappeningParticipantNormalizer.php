@@ -23,7 +23,11 @@ class HappeningParticipantNormalizer extends AbstractNormalizer implements Norma
     const COL_PARTICIPANT_FIRSTNAME = 'participant_firstname';
     const COL_PARTICIPANT_LASTNAME  = 'participant_lastname';
     const COL_PARTICIPANT_POSITION  = 'participant_position';
-    const COL_QUESTION              = 'question';
+    const COL_QUESTION_REGISTER     = 'question_register';
+    const COL_QUESTIONS_WEBINAR     = 'questions_webinar';
+    const COL_REPLIES               = 'replies';
+    const COL_VOTES                 = 'votes';
+    const COL_QUESTIONS_DATETIMES   = 'questions_datetimes';
 
     protected $normalizerType = 'happening';
 
@@ -109,7 +113,11 @@ class HappeningParticipantNormalizer extends AbstractNormalizer implements Norma
             self::COL_PARTICIPANT_FIRSTNAME,
             self::COL_PARTICIPANT_LASTNAME,
             self::COL_PARTICIPANT_POSITION,
-            self::COL_QUESTION,
+            self::COL_QUESTION_REGISTER,
+            self::COL_QUESTIONS_WEBINAR,
+            self::COL_REPLIES,
+            self::COL_VOTES,
+            self::COL_QUESTIONS_DATETIMES,
         ];
     }
 }
