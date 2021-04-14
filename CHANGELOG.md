@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2358 - Export meeting evaluations
+### Fixed
+- Don't generate ical url if user has no participant
 
 ## [2.86.2] - 2021-04-02
 ### Fixed
