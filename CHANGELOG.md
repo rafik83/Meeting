@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV-324 - fix bad viewers count for speakers when opening webinar
+- Static formulation list : orignal title was always translated with event default locale
 
 ## [2.88.3] - 2021-04-26
 ### Fixed
