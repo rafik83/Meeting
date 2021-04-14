@@ -17,6 +17,9 @@ class HappeningParticipantNormalizer extends AbstractNormalizer implements Norma
     const COL_SHEET_NAME            = 'sheet_name';
     const COL_PARTICIPANT_ID        = 'participant_id';
     const COL_PARTICIPANT_EMAIL     = 'participant_email';
+    const COL_PARTICIPANT_PHONE     = 'participant_phone';
+    const COL_HAPPENING_GRADE       = 'happening_grade';
+    const COL_HAPPENING_CONNECT     = 'happening_connect';
     const COL_PARTICIPANT_FIRSTNAME = 'participant_firstname';
     const COL_PARTICIPANT_LASTNAME  = 'participant_lastname';
     const COL_PARTICIPANT_POSITION  = 'participant_position';
@@ -100,6 +103,9 @@ class HappeningParticipantNormalizer extends AbstractNormalizer implements Norma
             self::COL_SHEET_NAME,
             self::COL_PARTICIPANT_ID,
             self::COL_PARTICIPANT_EMAIL,
+            self::COL_PARTICIPANT_PHONE,
+            self::COL_HAPPENING_GRADE,
+            self::COL_HAPPENING_CONNECT,
             self::COL_PARTICIPANT_FIRSTNAME,
             self::COL_PARTICIPANT_LASTNAME,
             self::COL_PARTICIPANT_POSITION,

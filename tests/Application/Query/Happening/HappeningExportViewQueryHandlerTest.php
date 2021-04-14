@@ -7,7 +7,9 @@ use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningException;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningExportViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -16,6 +18,7 @@ class HappeningExportViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $event     = EventFactory::createEvent();
+
         $locale    = 'fr';
 
         $begin     = new \DateTime('2018-02-03 18:23:24');
@@ -25,27 +28,36 @@ class HappeningExportViewQueryHandlerTest extends TestCase
         $categoryTranslation = new Happening\CategoryTranslation($category, $locale,'4developers');
         $category->setTranslation($categoryTranslation);
 
-        $happening = new Happening($event, $begin, $end, $category, []);
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->shouldBeCalled()->willReturn(1);
+        $happening->getBegin()->shouldBeCalled()->willReturn($begin);
+        $happening->getEnd()->shouldBeCalled()->willReturn($end);
+        $happening->getCategory()->shouldBeCalled()->willReturn($category);
+        $happening->getTitle($locale)->shouldBeCalled()->willReturn('SOLID master class');
+        $happening->getDescription($locale)->shouldBeCalled()->willReturn('perfectionnez vous dans la qualité du code');
 
         $speaker = new Happening\Speaker($event, 'Martin', 'Simon', 'Amazon', '/logo.png', '/photo.png', null);
         $speakerTranslation = new Happening\SpeakerTranslation($speaker, $locale, 'Chef');
         $speaker->setTranslation($speakerTranslation);
-
-        $happeningTranslation = new Happening\HappeningTranslation($happening, $locale, 'SOLID master class', 'perfectionnez vous dans la qualité du code');
-
-        $happening->setTranslation($happeningTranslation);
-        $happening->setSpeakers([$speaker]);
+        $happening->getSpeakers()->shouldBeCalled()->willReturn([$speaker]);
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $eventUrlGenerator = $this->prophesize(EventUrlGenerator::class);
+        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+        $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
 
-        $happeningRepository->findListByEvent($event, $locale)->shouldBeCalled()->willReturn([$happening]);
+        $happeningRepository->findListByEvent($event, $locale)->shouldBeCalled()->willReturn([$happening->reveal()]);
         $eventUrlGenerator->generateBaseEventAbsoluteUrl($event)->shouldBeCalled()->willReturn('http://test.com');
+        $happeningParticipationRepository->getEvaluationsAverage($event)->shouldBeCalled()->willReturn([1 => 3]);
+        $happeningParticipationRepository->getEvaluationsCount($event)->shouldBeCalled()->willReturn([1 => 25]);
+        $scanRepository->getHappeningParticipantsCount($event)->shouldBeCalled()->willReturn([1 => 345]);
 
         $handler = new HappeningExportViewQueryHandler(
             $happeningRepository->reveal(),
-            $eventUrlGenerator->reveal()
+            $eventUrlGenerator->reveal(),
+            $scanRepository->reveal(),
+            $happeningParticipationRepository->reveal()
         );
 
         $happeningListView = $handler->handle(
@@ -69,6 +81,9 @@ class HappeningExportViewQueryHandlerTest extends TestCase
         $this->assertEquals('Chef', $speakersView->getPosition());
         $this->assertEquals('http://test.com/logo.png', $speakersView->getUrlLogo());
         $this->assertEquals('http://test.com/photo.png', $speakersView->getUrlAvatar());
+        $this->assertEquals(345, $happeningExportView->getParticipantScanned());
+        $this->assertEquals(25, $happeningExportView->getNumberOfGrades());
+        $this->assertEquals(3, $happeningExportView->getAverageGrades());
     }
 
     public function testHandleNoHappening()
@@ -81,12 +96,18 @@ class HappeningExportViewQueryHandlerTest extends TestCase
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $eventUrlGenerator = $this->prophesize(EventUrlGenerator::class);
-
+        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+        $scanRepository = $this->prophesize(ScanRepositoryInterface::class);
+        $happeningParticipationRepository->getEvaluationsCount($event)->shouldBeCalled()->willReturn([]);
+        $happeningParticipationRepository->getEvaluationsAverage($event)->shouldBeCalled()->willReturn([]);
+        $scanRepository->getHappeningParticipantsCount($event)->shouldBeCalled()->willReturn([]);
         $happeningRepository->findListByEvent($event, $locale)->shouldBeCalled()->willReturn([]);
 
         $handler = new HappeningExportViewQueryHandler(
             $happeningRepository->reveal(),
-            $eventUrlGenerator->reveal()
+            $eventUrlGenerator->reveal(),
+            $scanRepository->reveal(),
+            $happeningParticipationRepository->reveal()
         );
 
         $this->expectException(EmptyHappeningException::class);

@@ -31,6 +31,8 @@ class HappeningParticipation
 
     private ?int $evaluation;
 
+    private ?\DateTimeInterface $connect;
+
     /**
      * HappeningParticipation constructor.
      *
@@ -112,6 +114,11 @@ class HappeningParticipation
     public function getEvaluation(): ?int
     {
         return $this->evaluation;
+    }
+
+    public function getConnect(): ?\DateTimeInterface
+    {
+        return $this->connect;
     }
 
 }

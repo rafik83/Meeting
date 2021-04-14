@@ -125,7 +125,6 @@ class ExportActionTest extends TestCase
         $this->event->getId()->willReturn(12);
 
         $view = $this->prophesize(HappeningExportListView::class);
-        $view->getHappeningExportListView()->shouldBeCalled()->willReturn([]);
         $this->queryBus
             ->handle(new HappeningExportViewQuery($this->event->reveal(), 'fr'))
             ->shouldBeCalled()
@@ -133,7 +132,7 @@ class ExportActionTest extends TestCase
         ;
 
         $this->serializer->serialize(
-            $view->reveal()->getHappeningExportListView(),
+            $view->reveal(),
             'csv',
             [
                 'locale'        => 'fr',

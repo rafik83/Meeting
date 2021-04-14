@@ -339,6 +339,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $countryAggregations->setSize(1000);
 
         $query->addAggregation($countryAggregations);
+        $query->setSize(0);
+
         $query->setSource('countryCode');
 
         return $this->searchable->search($query)->getAggregations();
@@ -568,7 +570,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query->addAggregation(new ValueCount('total_count', self::ES_FIELD_IN_CATALOG));
         }
 
-        $query->setSize(ElasticSearchConstant::LONG_RESULTS_NUMBER);
+        $query->setSize(0);
         // The aggregation does not need all the fields...
         $query->setSource('id');
 
