@@ -2,7 +2,8 @@ doctrine:
     dbal:
         url: '%env(resolve:VIMEET_DATABASE_URL)%'
         charset:  UTF8
-        schema_filter: ~^(?!messenger_jobs)~
+        # TODO : remove 'jms_' when those tables will be drop
+        schema_filter: ~^(?!messenger_jobs|jms_)~
 
 #     orm:
 #         auto_generate_proxy_classes: true
