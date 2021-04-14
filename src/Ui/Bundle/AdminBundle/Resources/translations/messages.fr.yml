@@ -153,6 +153,8 @@ admin.common.export.yes: Oui
 admin.create_admin.disabled_user: 'Cet utilisateur a été désactivé le %date%'
 admin.create_admin.reactivate_user: 'Réactiver l''utilisateur'
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
+admin.custom_links.link: 'Liens personnalisés'
+admin.custom_links.list.title: 'Liens personnalisés'
 admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.access_control: 'Contrôle d''accès'

@@ -189,6 +189,13 @@ services:
     Proximum\Vimeet\Application\Query\StaticFormulation\Customized\CustomizedStaticFormulationViewQueryHandler: ~
 
     #
+    # Custom links
+    #
+    Proximum\Vimeet\Application\Query\CustomLink\CustomLinkListViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\CustomLink\CustomLinkListViewQuery }
+
+    #
     # Form Template
     #
     Proximum\Vimeet\Application\Query\Template\Form\FormTemplateListViewQueryHandler:
