@@ -42,6 +42,11 @@ class CustomLink
         $this->buttonColor = $buttonColor;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getLabel($locale): string
     {
         return $this->staticFormulation->getTitle($locale);
@@ -58,5 +63,15 @@ class CustomLink
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getEvent(): Event
+    {
+        return $this->event;
+    }
+
+    public function getStaticFormulation(): StaticFormulation
+    {
+        return $this->staticFormulation;
     }
 }

@@ -10,4 +10,5 @@ final class IntentionType
     public const INTENTION_REMOVE_ADMIN = 'remove_admin';
     public const INTENTION_REMOVE_STAY = 'remove_stay';
     public const INTENTION_REMOVE_PROMOTION_CODE_FROM_ORDER = 'remove_promotion_code_from_order';
+    public const INTENTION_REMOVE_CUSTOM_LINK = 'remove_custom_link';
 }

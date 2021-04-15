@@ -30,6 +30,21 @@
                         {% endfor %}
                     </ul>
                 </td>
+                <td class="text-right">
+                    {{ delete_button(
+                        path('admin_event_custom_link_remove', {
+                            'event': event.id,
+                            'customLink': customLink.id
+                        }),
+                        'admin.custom_links.action.remove'|trans,
+                        {
+                            'class' : 'btn btn-danger btn-sm',
+                            'data-confirm': 'admin.custom_links.action.remove.confirm'|trans
+                        },
+                        customLink.intention
+                    )
+                    }}
+                </td>
             </tr>
         {% else %}
             <tr>

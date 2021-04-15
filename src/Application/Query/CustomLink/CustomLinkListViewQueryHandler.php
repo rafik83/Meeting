@@ -21,6 +21,7 @@ class CustomLinkListViewQueryHandler
 
         $customLinkViews = array_map(
             static fn(CustomLink $customLink) => new CustomLinkView(
+                $customLink->getId(),
                 $customLink->getLabel($query->locale),
                 $customLink->getUrl(),
                 array_map(
