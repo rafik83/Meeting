@@ -22,7 +22,13 @@ class HappeningExportView
     /** @var SpeakersExportListView */
     public $speakersListView;
 
-    public function __construct(string $title, ?string $description, string $category, string $begin, string $end, SpeakersExportListView $speakersListView)
+    private int $participantScanned;
+
+    private int $numberOfGrades;
+
+    private ?float $averageGrades;
+
+    public function __construct(string $title, ?string $description, string $category, string $begin, string $end, SpeakersExportListView $speakersListView, int $participantConnected, int $numberOfGrades, ?float $averageGrades)
     {
         $this->title = $title;
         $this->description = $description;
@@ -30,6 +36,9 @@ class HappeningExportView
         $this->begin = $begin;
         $this->end = $end;
         $this->speakersListView = $speakersListView;
+        $this->participantScanned = $participantConnected;
+        $this->numberOfGrades = $numberOfGrades;
+        $this->averageGrades = $averageGrades;
     }
 
     /**
@@ -70,5 +79,20 @@ class HappeningExportView
     public function getEnd(): string
     {
         return $this->end;
+    }
+
+    public function getParticipantScanned(): int
+    {
+        return $this->participantScanned;
+    }
+
+    public function getNumberOfGrades(): int
+    {
+        return $this->numberOfGrades;
+    }
+
+    public function getAverageGrades(): ?float
+    {
+        return $this->averageGrades;
     }
 }

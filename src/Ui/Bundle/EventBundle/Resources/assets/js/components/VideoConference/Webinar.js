@@ -380,6 +380,7 @@ Webinar.prototype.initWebRTCStack = function() {
         return;
     }
 
+    this.viewersCount = 0;
     this.webRTCStackInitialized = true;
 
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);

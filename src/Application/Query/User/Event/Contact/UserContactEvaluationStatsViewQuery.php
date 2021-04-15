@@ -5,10 +5,13 @@ namespace Proximum\Vimeet\Application\Query\User\Event\Contact;
 use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UserContactEvaluationViewQuery implements Query
+class UserContactEvaluationStatsViewQuery implements Query
 {
-    public Event $event;
-    public string $locale;
+    /** @var Event */
+    public $event;
+
+    /** @var string */
+    public $locale;
 
     public function __construct(Event $event, string $locale)
     {

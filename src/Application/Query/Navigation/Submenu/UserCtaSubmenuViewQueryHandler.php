@@ -75,6 +75,10 @@ class UserCtaSubmenuViewQueryHandler
             return null;
         }
 
+        if (empty($parameters['link'])) {
+            return null;
+        }
+
         $needParticipantId = $this->urlContainsPlaceholder(
             $parameters['link'],
             self::PLACEHOLDER_PARTICIPANT_ID

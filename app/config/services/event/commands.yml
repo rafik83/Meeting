@@ -122,14 +122,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\ScheduleExport }
 
-    # Proximum\Vimeet\Application\Command\File\PersistContentHandler:
-    #     arguments:
-    #         - '@Proximum\Vimeet\Domain\File\FileFactory'
-    #         - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
-    #         - '%infrastructure.common_export_path%'
-    #         - '@datetime'
-    #     tags:
-    #         - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\File\PersistContent }
+    Proximum\Vimeet\Application\Command\File\PersistContentHandler:
+        arguments:
+            - '@Proximum\Vimeet\Domain\File\FileFactory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
+            - '%infrastructure.common_export_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\File\PersistContent }
 
     Proximum\Vimeet\Application\Command\Happening\Export\NotifyHandler:
         arguments:

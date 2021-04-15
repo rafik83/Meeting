@@ -6,6 +6,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Display original URL on sheet in PDF format instead of redirect link
+### Added
+- VIMEET-2358 - Export meeting evaluations
+
+## [2.86.2] - 2021-04-02
+### Fixed
+- MV-322 - webinar viewer's count has to be reset on WebRTC init
+- MV-323 - Webinar note redirect fix
+
+## [2.86.1] - 2021-03-31
+### Fixed
+- MV-321 - webinar vote form not displayed
+
+## [2.86.0] - 2021-03-31
+### Added
+- VIMEET-2439 - Export conferences participants (phone / grade / connection date)
+- VIMEET-2438 - Export conferences (Participant connected, Number of grades, Average grade)
+
+## [2.85.1] - 2021-03-30
+### Fixed
+- MV-320  - check if possible slots are available
+
+## [2.85.0] - 2021-03-29
+### Added
+- VIMEET-2358 - Export meeting evaluations
+
+## [2.84.3] - 2021-03-29
+### Fixed
+- Don't return documents in ES aggregations, to optimize search engine usage
 
 ## [2.84.2] - 2021-03-22
 ### Fixed

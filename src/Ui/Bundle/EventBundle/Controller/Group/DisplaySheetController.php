@@ -8,6 +8,7 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
@@ -30,6 +31,7 @@ class DisplaySheetController extends AbstractController
     private MeetingRequestAccessChecker $meetingRequestAccessChecker;
     private AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker;
     private Applyer $ruleApplyer;
+    private RuleRepositoryInterface $ruleRepository;
 
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -39,7 +41,8 @@ class DisplaySheetController extends AbstractController
         TaggedDataFactory $taggedDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
-        Applyer $ruleApplyer
+        Applyer $ruleApplyer,
+        RuleRepositoryInterface $ruleRepository
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->canSeeSheet = $canSeeSheet;
@@ -49,6 +52,7 @@ class DisplaySheetController extends AbstractController
         $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->ruleApplyer = $ruleApplyer;
+        $this->ruleRepository = $ruleRepository;
     }
 
     public function displayForGroupManagerAction(

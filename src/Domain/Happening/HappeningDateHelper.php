@@ -44,6 +44,18 @@ class HappeningDateHelper
         return self::getStringOutOfFormat($dateFormatter, $dateTime);
     }
 
+    public static function getDateTime(\DateTimeInterface $datetime, string $locale, string $timeZone): string
+    {
+        $dateFormatter = \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
+            $timeZone
+        );
+
+        return self::getStringOutOfFormat($dateFormatter, $datetime);
+    }
+
     /**
      * @param \IntlDateFormatter $formatter
      * @param \DateTimeInterface $dateTime

@@ -11,6 +11,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -32,11 +33,13 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $user->getLastName()->willReturn('doh');
         $user->getEmail()->willReturn('johndoh@gmail.com');
         $user->getPosition()->willReturn('ceo');
+        $user->getPhone()->willReturn('0134345656');
 
         $sheet     = SheetFactory::create($event, $user->reveal());
         $happening = new Happening($event, $begin, $end, $category, []);
 
         $participation = new HappeningParticipation($happening, $user->reveal());
+        $participation->setEvaluation(4);
         $happening->setParticipations([$participation]);
 
         // Mock
@@ -44,6 +47,7 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $questionRepository  = $this->prophesize(QuestionRepositoryInterface::class);
         $groupNameResolver   = $this->prophesize(GroupNameResolver::class);
         $sheetGuesser        = $this->prophesize(SheetGuesser::class);
+        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
 
         $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening]);
 
@@ -64,7 +68,8 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
             $happeningRepository->reveal(),
             $questionRepository->reveal(),
             $groupNameResolver->reveal(),
-            $sheetGuesser->reveal()
+            $sheetGuesser->reveal(),
+            $happeningParticipationRepository->reveal()
         );
 
         $happeningParticipantListView = $handler->handle(
@@ -79,6 +84,7 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $this->assertEquals('ceo', $happeningParticipantView->getPosition());
         $this->assertEquals('johndoh@gmail.com', $happeningParticipantView->getEmail());
         $this->assertEquals("Question 1 ?\nQuestion 2 ?", $happeningParticipantView->getQuestion());
+        $this->assertEquals(4, $happeningParticipantView->getEvaluation());
     }
 
     public function testHandleEmptyParticipation()
@@ -93,6 +99,7 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $questionRepository  = $this->prophesize(QuestionRepositoryInterface::class);
         $groupNameResolver   = $this->prophesize(GroupNameResolver::class);
         $sheetGuesser        = $this->prophesize(SheetGuesser::class);
+        $happeningParticipation = $this->prophesize(HappeningParticipationRepositoryInterface::class);
 
         $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([]);
 
@@ -100,7 +107,8 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
             $happeningRepository->reveal(),
             $questionRepository->reveal(),
             $groupNameResolver->reveal(),
-            $sheetGuesser->reveal()
+            $sheetGuesser->reveal(),
+            $happeningParticipation->reveal()
         );
 
         $this->expectException(EmptyHappeningParticipationException::class);

@@ -84,7 +84,7 @@ class ExportAction
         }
 
         $exportedContent = $this->serializer->serialize(
-            $happeningExportListView->getHappeningExportListView(), 'csv', [
+            $happeningExportListView, 'csv', [
             'locale'        => $event->getAvailableLocale($request->getLocale()),
             'charset'       => Charset::WINDOWS_1252,
             'csv_delimiter' => ';',
