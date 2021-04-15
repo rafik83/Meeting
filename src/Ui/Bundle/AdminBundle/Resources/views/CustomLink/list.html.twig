@@ -1,7 +1,39 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block title 'admin.custom_links.list.title'|trans %}
 
 {% block content %}
     <h1 class="page-header">{{ 'admin.custom_links.list.title'|trans }}</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-3">{{ 'admin.custom_links.list.column.label'|trans }}</th>
+            <th class="col-md-3">{{ 'admin.custom_links.list.column.url'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.custom_links.list.column.type'|trans }}</th>
+            <th class="col-md-2"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for customLink in list.customLinkViews %}
+            <tr>
+                <td>{{ customLink.label }}</td>
+                <td>{{ customLink.url }}</td>
+                <td>
+                    <ul>
+                        {% for type in customLink.typeTitles %}
+                            <li>{{ type }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">{{ 'admin.custom_links.list.empty'|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

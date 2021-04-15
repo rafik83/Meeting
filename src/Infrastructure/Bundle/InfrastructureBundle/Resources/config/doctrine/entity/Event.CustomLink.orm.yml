@@ -1,0 +1,30 @@
+Proximum\Vimeet\Domain\Model\Event\CustomLink:
+    type:  entity
+    table: custom_link
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        url:
+            type: string
+        iconName:
+            type: string
+        iconColor:
+            type: string
+        labelColor:
+            type: string
+        buttonColor:
+            type: string
+    oneToOne:
+        staticFormulation:
+            targetEntity: Proximum\Vimeet\Domain\Model\StaticFormulation
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE

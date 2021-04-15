@@ -192,6 +192,7 @@ services:
     # Custom links
     #
     Proximum\Vimeet\Application\Query\CustomLink\CustomLinkListViewQueryHandler:
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\CustomLink\CustomLinkListViewQuery }
 
