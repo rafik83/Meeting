@@ -253,6 +253,14 @@ form.create_transaction.children.mode.label: 'Mode de paiement'
 form.create_transaction.children.reference.label: Référence
 form.create_transaction.children.state.label: Statut
 form.create_transaction.children.submit.label: Enregistrer
+form.custom_link_create.children.buttonColor.label: Couleur du bouton
+form.custom_link_create.children.iconColor.label: Couleur de l'icone
+form.custom_link_create.children.iconName.label: Icone
+form.custom_link_create.children.labelColor.label: Couleur du libellé
+form.custom_link_create.children.submit.label: Enregistrer
+form.custom_link_create.children.translatedLabels.prototype.children.title.label: 'Libellé du lien'
+form.custom_link_create.children.types.label: Types
+form.custom_link_create.children.url.label: URL
 form.delete_participant.children.submit.label: Supprimer
 form.dont_see_what.children.participant.label: Participant
 form.dont_see_what.children.sheet.label: Fiche

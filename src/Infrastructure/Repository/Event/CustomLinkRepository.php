@@ -27,4 +27,10 @@ class CustomLinkRepository implements CustomLinkRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function add(Event\CustomLink $customLink): void
+    {
+        $this->entityManager->persist($customLink);
+        $this->entityManager->flush($customLink);
+    }
 }

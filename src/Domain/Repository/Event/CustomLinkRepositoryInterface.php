@@ -12,4 +12,6 @@ interface CustomLinkRepositoryInterface
      * @return Event\CustomLink[]
      */
     public function findByEvent(Event $event): array;
+
+    public function add(Event\CustomLink $customLink): void;
 }

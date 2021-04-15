@@ -1615,6 +1615,10 @@ services:
             - '@repository.event.content_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\Update }
+    Proximum\Vimeet\Application\Command\Event\CustomLink\CreateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\CustomLink\Create }
     command.participant.remove_handler:
         class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
         arguments:

@@ -1,0 +1,91 @@
+<?php
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CustomLink;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\StaticFormulation\TranslationType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Intl;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CreateType extends AbstractType
+{
+    private TypeRepositoryInterface $typeRepository;
+
+    public function __construct(TypeRepositoryInterface $typeRepository)
+    {
+        $this->typeRepository = $typeRepository;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $types = $this->typeRepository->getTypesByEvent($options['event']);
+
+        $builder
+            ->add(
+                'translatedLabels',
+                CollectionType::class,
+                [
+                    'entry_type' => TranslationType::class,
+                    'label' => false,
+                ]
+            )
+            ->add('url', TextType::class, [
+                'required' => true,
+            ])
+            ->add(
+                'types',
+                ChoiceType::class,
+                [
+                    'choice_label' => static fn($type) => $type->getTitle($options['locale']),
+                    'choice_value' => static fn($type) => $type->getId(),
+                    'choices' => $types,
+                    'choice_translation_domain' => false,
+                    'multiple' => true,
+                    'expanded' => true,
+                    'required' => true,
+                ]
+            )
+            ->add('iconName', TextType::class, [
+                'required' => true,
+            ])
+            ->add('iconColor', TextType::class, [
+                'required' => true,
+            ])
+            ->add('labelColor', TextType::class, [
+                'required' => true,
+            ])
+            ->add('buttonColor', TextType::class, [
+                'required' => true,
+            ])
+        ;
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        foreach ($view->children['translatedLabels'] as $translation) {
+            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+        }
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setRequired(['locale', 'event']);
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('event', Event::class);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'custom_link_create';
+    }
+}
