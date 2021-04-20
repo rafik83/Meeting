@@ -27,7 +27,7 @@ class RunJob
         $this->logger = $logger;
     }
 
-    public function run(Job $job)
+    public function run(AbstractJob $job)
     {
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
@@ -46,7 +46,7 @@ class RunJob
             $this->logger->info(sprintf('Command %s ran successfully', (string) $input));
         }
 
-        $lock = $lock = $this->jobLockFactory->createLockForRelease($job);
+        $lock = $this->jobLockFactory->createLockForRelease($job);
         $lock->release();
     }
 }

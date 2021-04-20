@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\AbstractJob;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -23,7 +23,7 @@ abstract class AbstractJobQueueAdapter
         $this->logger = $logger;
     }
 
-    protected function sendJob(Job $job): void
+    protected function sendJob(AbstractJob $job): void
     {
         $lock = $this->jobLockFactory->createLock($job);
 
