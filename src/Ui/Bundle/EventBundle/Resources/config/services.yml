@@ -428,13 +428,13 @@ services:
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
-    event_listener.trace_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
-        arguments:
-            - '@repository.trace_repository'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.trace_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
+    #     arguments:
+    #         - '@repository.trace_repository'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
     event_listener.sheet_validator_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetValidatorEventSubscriber
         arguments:
