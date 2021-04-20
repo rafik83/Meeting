@@ -741,7 +741,6 @@ class MeetingRequestController extends AbstractController
      * @param Request                  $request
      * @param MeetingRequest           $meetingRequest
      * @param Sheet                    $sheet
-     * @param RequestPermissionManager $permissionManager
      * @param null                     $cancelForm
      *
      * @return null|JsonResponse
@@ -750,10 +749,9 @@ class MeetingRequestController extends AbstractController
         Request &$request,
         MeetingRequest &$meetingRequest,
         Sheet &$sheet,
-        RequestPermissionManager &$permissionManager,
         &$cancelForm
     ) {
-        if ($permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
+        if ($this->permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
             $toSheet = $meetingRequest->getToSheet();
             $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
             $cancelForm = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
@@ -793,7 +791,6 @@ class MeetingRequestController extends AbstractController
      * @param Request                  $request
      * @param MeetingRequest           $meetingRequest
      * @param Sheet                    $sheet
-     * @param RequestPermissionManager $permissionManager
      * @param null                     $unApprovedForm
      *
      * @return null|JsonResponse
@@ -802,10 +799,9 @@ class MeetingRequestController extends AbstractController
         Request &$request,
         MeetingRequest &$meetingRequest,
         Sheet &$sheet,
-        RequestPermissionManager &$permissionManager,
         &$unApprovedForm = null
     ) {
-        if ($permissionManager->isAllowedToUnApprove($meetingRequest, $sheet)) {
+        if ($this->permissionManager->isAllowedToUnApprove($meetingRequest, $sheet)) {
             $unApprovedRequest = new UnApproveMeetingRequest($this->getUser(), $meetingRequest, $sheet);
             $unApprovedForm = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
@@ -874,14 +870,12 @@ class MeetingRequestController extends AbstractController
             $request,
             $meetingRequest,
             $sheet,
-            $permissionManager,
             $cancelForm
         );
         $unapprovedResponse = $this->unApproveFormOnEdit(
             $request,
             $meetingRequest,
             $sheet,
-            $permissionManager,
             $unApprovedForm
         );
 
