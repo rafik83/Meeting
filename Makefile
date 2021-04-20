@@ -125,8 +125,8 @@ test-phpunit@test:
 test-behat: redis-flushlocks@local
 	rm -rf var/tests/behat
 	rm -rf var/sms
-	bin/console ca:cl --env=test --no-warmup
-	bin/console fos:elastica:reset --env=test --no-debug
+	DATABASE_HOST=127.0.0.1 bin/console ca:cl --env=test --no-warmup
+	DATABASE_HOST=127.0.0.1 bin/console fos:elastica:reset --env=test --no-debug
 	DATABASE_HOST=127.0.0.1 REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --stop-on-failure
 
 test-behat@test:
