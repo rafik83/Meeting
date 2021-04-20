@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.87.2] - 2021-04-20
+### Fixed
+- Fix permission service in meeting request controller
+- Failover if country code is not defined (in IntlAdapter)
+
 ## [2.87.1] - 2021-04-20
 ### Fixed
 - Don't throw exception if country not defined
