@@ -17,10 +17,10 @@ class HappeningParticipationEventSubscriber implements EventSubscriberInterface
     /** @var string */
     private $sender;
 
-    public function __construct(MailerInterface $mailer, string $sender)
+    public function __construct(MailerInterface $mailer, string $mailerSender)
     {
         $this->mailer = $mailer;
-        $this->sender = $sender;
+        $this->sender = $mailerSender;
     }
 
     public static function getSubscribedEvents(): array
