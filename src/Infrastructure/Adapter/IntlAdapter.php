@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Exception\MissingResourceException;
 use Symfony\Component\Intl\Intl;
 
 class IntlAdapter implements IntlInterface
@@ -13,11 +14,11 @@ class IntlAdapter implements IntlInterface
      */
     public function getCountryName($countryCode, $locale = null)
     {
-        if (empty($countryCode)) {
-            return '';
+        try {
+            return Countries::getName(\mb_strtoupper($countryCode), $locale);
+        } catch (MissingResourceException $exception) {
+            return $countryCode;
         }
-
-        return Countries::getName(\mb_strtoupper($countryCode), $locale);
     }
 
     /**
