@@ -14,7 +14,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 /**
  * Render the form of an object. Loaded by ajax from the sheet.
@@ -27,8 +27,8 @@ class FormAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CreateObjectFormHandler */
     private $createObjectFormHandler;
@@ -36,12 +36,12 @@ class FormAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         CreateObjectFormHandler $createObjectFormHandler
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->createObjectFormHandler = $createObjectFormHandler;
     }
 
@@ -67,7 +67,7 @@ class FormAction
             new CreateObjectForm($templateObjectView->templateObject, $locale, $key)
         );
 
-        return new Response($this->engine->render('EventBundle:Sheet:form.html.twig', [
+        return new Response($this->twig->render('EventBundle:Sheet:form.html.twig', [
             'sheet' => $sheet,
             'uid' => $key,
             'form' => $form->createView(),

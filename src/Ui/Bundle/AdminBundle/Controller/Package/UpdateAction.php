@@ -9,13 +9,13 @@ use Proximum\Vimeet\Application\Command\Package\Update;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -30,8 +30,8 @@ class UpdateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -39,27 +39,19 @@ class UpdateAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param CommandBusInterface                  $commandBus
-     * @param FlashBagInterface                    $flashBag
-     * @param EngineInterface                      $engine
-     * @param RouterInterface                      $router
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
     }
 
@@ -96,9 +88,9 @@ class UpdateAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'form'  => $form->createView(),
             'event' => $package->getEvent(),
-        ]);
+        ]));
     }
 }

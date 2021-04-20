@@ -6,8 +6,9 @@ use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListener
 {
@@ -20,9 +21,9 @@ final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListen
      *
      * @return RedirectResponse|null
      */
-    public function onKernelException(GetResponseForExceptionEvent $getResponseForExceptionEvent)
+    public function onKernelException(ExceptionEvent $getResponseForExceptionEvent)
     {
-        if (!$getResponseForExceptionEvent->getException() instanceof SheetNotFoundException) {
+        if (!$getResponseForExceptionEvent->getThrowable() instanceof SheetNotFoundException) {
             return null;
         }
 
@@ -32,7 +33,7 @@ final class SheetNotFoundExceptionListener extends AbstractRedirectToEventListen
     /**
      * {@inheritdoc}
      */
-    protected function doRedirect(GetResponseEvent $getResponseEvent, Request $request, Event $event, $locale, $route)
+    protected function doRedirect(RequestEvent $getResponseEvent, Request $request, Event $event, $locale, $route)
     {
         $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, self::TARGET_ROUTE, $locale));
     }

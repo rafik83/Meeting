@@ -11,9 +11,9 @@ class CatalogOnlineDateSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent('Proximum');
-        $event->getConfiguration()->setDates($datetime);
+        $event->getConfiguration()->setDates($dateTime);
         $sheet  = SheetFactory::create($event);
         $locale = 'fr';
 
@@ -27,6 +27,6 @@ class CatalogOnlineDateSubstitutionTest extends TestCase
         $substitution      = new CatalogOnlineDateSubstitution();
         $catalogOnlineDate = $substitution->getValue($sheet, $locale);
 
-        $this->assertEquals($dateFormatter->format($datetime), $catalogOnlineDate);
+        $this->assertEquals($dateFormatter->format($dateTime), $catalogOnlineDate);
     }
 }

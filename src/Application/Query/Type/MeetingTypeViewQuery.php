@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Type;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class MeetingTypeViewQuery
+class MeetingTypeViewQuery implements Query
 {
     /**
      * @var Sheet

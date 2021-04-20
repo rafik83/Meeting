@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CancelRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
@@ -9,6 +11,7 @@ use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Counter;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery;
@@ -23,13 +26,24 @@ use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
@@ -40,20 +54,76 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class MeetingRequestController extends Controller
+class MeetingRequestController extends AbstractController
 {
+    private AvailabilityConfirmationCheckerHandler $availabilityConfirmationCheckerHandler;
+    private DDayGuesser $dDayGuesser;
+    private MeetingSlotRepositoryInterface $meetingSlotRepository;
+    private EventOpenAccessChecker $eventOpenAccessChecker;
+    private MeetingRequestAccessChecker $meetingRequestAccessChecker;
+    private CatalogAccessChecker $catalogAccessChecker;
+    private VisibleParticipationTypes $catalogVisibleParticipationTypes;
+    private RequestRepositoryInterface $requestRepository;
+    private SheetRepositoryInterface $sheetRepository;
+    private RequestPermissionManager $permissionManager;
+    private Counter $meetingRequestCounter;
+    private MeetingPublishedAccessChecker $meetingPublishedAccessChecker;
+    private AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker;
+    private FormFactoryInterface $formFactory;
+    private ParticipantInfoGuesser $participantInfoGuesser;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        AvailabilityConfirmationCheckerHandler $availabilityConfirmationCheckerHandler,
+        DDayGuesser $dDayGuesser,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        EventOpenAccessChecker $eventOpenAccessChecker,
+        MeetingRequestAccessChecker $meetingRequestAccessChecker,
+        CatalogAccessChecker $catalogAccessChecker,
+        VisibleParticipationTypes $catalogVisibleParticipationTypes,
+        RequestRepositoryInterface $requestRepository,
+        SheetRepositoryInterface $sheetRepository,
+        RequestPermissionManager $permissionManager,
+        Counter $meetingRequestCounter,
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        FormFactoryInterface $formFactory,
+        ParticipantInfoGuesser $participantInfoGuesser,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->availabilityConfirmationCheckerHandler = $availabilityConfirmationCheckerHandler;
+        $this->dDayGuesser = $dDayGuesser;
+        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
+        $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
+        $this->catalogAccessChecker = $catalogAccessChecker;
+        $this->catalogVisibleParticipationTypes = $catalogVisibleParticipationTypes;
+        $this->requestRepository = $requestRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->permissionManager = $permissionManager;
+        $this->meetingRequestCounter = $meetingRequestCounter;
+        $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->formFactory = $formFactory;
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
     /**
      * List all meeting request of a sheet (sent and received)
      */
@@ -70,8 +140,7 @@ class MeetingRequestController extends Controller
 
         $user = $userDomain->getUser();
 
-        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
-            ->handle(new AvailabilityConfirmationChecker(
+        $availabilityConfirmation = $this->availabilityConfirmationCheckerHandler->handle(new AvailabilityConfirmationChecker(
                 $event,
                 $sheet,
                 $user,
@@ -85,24 +154,24 @@ class MeetingRequestController extends Controller
 
         $locale = $request->getLocale();
 
-        $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
+        $typeViews = $this->queryBus->handle(new MeetingTypeViewQuery(
             $sheet, $request->getLocale()
         ));
 
-        $categoryViews = $this->get('tactician.commandbus.query')->handle(new MeetingCategoryViewQuery(
+        $categoryViews = $this->queryBus->handle(new MeetingCategoryViewQuery(
             $sheet,
             $request->getLocale()
         ));
 
-        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
-        $isUserParticipant   = $sheet->hasUserParticipant($user);
+        $dDay = $this->dDayGuesser->isItDDayAndFeatureEnabled($event);
+        $isUserParticipant = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
-        $availableSlots      = [];
-        $specificSlot        = null;
+        $availableSlots = [];
+        $specificSlot = null;
 
         if (true === $filterAvailableSlot) {
             /** @var AvailableSlotView[] $availableSlots */
-            $availableSlots = $this->get('tactician.commandbus.query')->handle(
+            $availableSlots = $this->queryBus->handle(
                 new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
             );
 
@@ -111,7 +180,7 @@ class MeetingRequestController extends Controller
             $slotId = $request->query->get('slot_id');
 
             if (null !== $slotId) {
-                $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
+                $slot = $this->meetingSlotRepository->findById((int) $slotId);
 
                 if (null !== $slot) {
                     foreach ($availableSlots as $availableSlot) {
@@ -175,10 +244,10 @@ class MeetingRequestController extends Controller
         );
 
         /** @var MeetingRequestListView $meetingRequestListView */
-        $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
+        $meetingRequestListView = $this->queryBus->handle($query);
 
         /** @var StateListsView $stateListsView */
-        $stateListsView = $this->get('tactician.commandbus.query')->handle($statusQuery);
+        $stateListsView = $this->queryBus->handle($statusQuery);
 
         $template = 'EventBundle:MeetingRequest:listRequest.html.twig';
 
@@ -186,7 +255,7 @@ class MeetingRequestController extends Controller
             $template = 'EventBundle:MeetingRequest/Partials:catalog.html.twig';
         }
 
-        $isEventOpen = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
+        $isEventOpen = $this->eventOpenAccessChecker->allowedToAccess($event);
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet,
@@ -194,21 +263,21 @@ class MeetingRequestController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );
-        $tipTranslationViews     = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'                    => $event,
-            'sheet'                    => $sheet,
-            'meetingRequestView'       => $meetingRequestListView,
-            'stateListsView'           => $stateListsView,
-            'searchForm'               => $searchForm->createView(),
-            'isCatalog'                => true, // set menu link visible,
-            'isMeeting'                => true,
-            'isEventOpen'              => $isEventOpen,
+            'event' => $event,
+            'sheet' => $sheet,
+            'meetingRequestView' => $meetingRequestListView,
+            'stateListsView' => $stateListsView,
+            'searchForm' => $searchForm->createView(),
+            'isCatalog' => true, // set menu link visible,
+            'isMeeting' => true,
+            'isEventOpen' => $isEventOpen,
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
-            'resultsCount'             => \count($meetingRequestListView->getMeetingRequestsView()),
-            'tipTranslationViews'      => $tipTranslationViews,
-            'participant'              => $sheet->getUserParticipant($user),
+            'resultsCount' => \count($meetingRequestListView->getMeetingRequestsView()),
+            'tipTranslationViews' => $tipTranslationViews,
+            'participant' => $sheet->getUserParticipant($user),
         ]);
     }
 
@@ -253,25 +322,25 @@ class MeetingRequestController extends Controller
     private function authorizeToCreateRequest(Request $request, Event $event, Sheet $fromSheet, Sheet $toSheet)
     {
         // if the meeting request are closed
-        if (!$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event)) {
+        if (!$this->meetingRequestAccessChecker->allowedToAccess($event)) {
             throw $this->createNotFoundException('You can not request a meeting as the meeting request are closed');
         }
 
-        if (!$toSheet->isInCatalog()) {
+        if (!$toSheet->isInInternalCatalog()) {
             throw $this->createNotFoundException('ToSheet not in catalog');
         }
 
         // If the catalog is closed
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
+        if (!$this->catalogAccessChecker->allowedToAccess($event)) {
             throw $this->createNotFoundException();
         }
 
         // If the sheet that request the meeting is not in catalog
-        if (!$fromSheet->isInCatalog()) {
+        if (!$fromSheet->isInInternalCatalog()) {
             throw $this->createNotFoundException('Viewer Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($fromSheet);
+        $visibleTypes = $this->catalogVisibleParticipationTypes->getAllowedTypesList($fromSheet);
 
         // If there are no rules between the two sheets
         if (!in_array($toSheet->getType(), $visibleTypes)) {
@@ -288,32 +357,22 @@ class MeetingRequestController extends Controller
         }
 
         // If there is already a meeting request between the two sheets
-        if (null !== $this
-                ->get('vimeet_infrastructure.repository.meeting.request_repository')
-                ->getRequestBetweenSheets($fromSheet, $toSheet)
-        ) {
+        if (null !== $this->requestRepository->getRequestBetweenSheets($fromSheet, $toSheet)) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
         }
     }
 
     /**
      * Create a meeting request between two sheet
-     *
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
      * @param Sheet         $sheet       fromSheet
-     * @param int           $toSheet
-     * @param UserInterface $user
-     *
-     * @return Response|JsonResponse
      */
     public function createRequestAction(
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet, // fromSheet
-        $toSheet, // int to avoid collision with sheet param converter
+        int $toSheet, // int to avoid collision with sheet param converter
         UserInterface $user
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
@@ -321,11 +380,9 @@ class MeetingRequestController extends Controller
             throw $this->createAccessDeniedException('User not found');
         }
 
-        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+        $priorityNumberAvailable = $this->meetingRequestCounter->getCountSheetPriorityAvailable($sheet);
 
-        $toSheet = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetById($toSheet);
+        $toSheet = $this->sheetRepository->getSheetById($toSheet);
 
         if (null === $toSheet || $eventDomain->getEvent() !== $toSheet->getEvent()) {
             throw $this->createAccessDeniedException('ToSheet not found');
@@ -334,33 +391,33 @@ class MeetingRequestController extends Controller
         $this->authorizeToCreateRequest($request, $eventDomain->getEvent(), $sheet, $toSheet);
 
         $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user, $request->getLocale());
-        $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
+        $form = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
-                'sheet'   => $sheet->getId(),
+                'sheet' => $sheet->getId(),
                 'toSheet' => $toSheet->getId(),
             ]),
-            'sheet'  => $sheet,
+            'sheet' => $sheet,
             'locale' => $request->getLocale(),
             'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
         if ($isSubmitted && $form->isValid()) {
-            $result = $this->get('tactician.commandbus')->handle($createRequest);
+            $result = $this->commandBus->handle($createRequest);
 
             if ($result instanceof ApproveRequestResult) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $result->meetingView,
-                    'error'           => $result->hasError,
+                    'error' => $result->hasError,
                 ]);
 
                 return new JsonResponse($this->createJsonResponseData(
                     true,
                     null === $result || (null !== $result && null === $result->meetingView && !$result->hasError),
                     $this->renderView('EventBundle:MeetingRequest\Button:approvedRequest.html.twig', [
-                        'sheet'                        => $sheet,
-                        'meetingRequest'               => $result->request,
-                        'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                        'sheet' => $sheet,
+                        'meetingRequest' => $result->request,
+                        'isMeetingPublished' => $this->meetingPublishedAccessChecker
                             ->allowedToAccess($eventDomain->getEvent()),
                         'isMeetingRequestUpdateLocked' => $eventDomain
                             ->getEvent()
@@ -377,7 +434,7 @@ class MeetingRequestController extends Controller
                 true,
                 true,
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
-                    'sheet'          => $sheet,
+                    'sheet' => $sheet,
                     'meetingRequest' => $result->meetingRequest,
                     'isPhoneValidationRequired' => false,
                 ]),
@@ -402,24 +459,17 @@ class MeetingRequestController extends Controller
 
     /**
      * Approve a meeting request
-     *
-     * @param Request        $request
-     * @param EventDomain    $eventDomain
-     * @param Sheet          $sheet
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return RedirectResponse|Response
      */
     public function approveRequestAction(
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
         MeetingRequest $meetingRequest
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToApprove($meetingRequest, $sheet)) {
+        if (!$this->permissionManager->isAllowedToApprove($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to approve this meeting request.');
         }
 
@@ -427,21 +477,21 @@ class MeetingRequestController extends Controller
             throw $this->createNotFoundException('Not allowed method');
         }
 
-        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+        $priorityNumberAvailable = $this->meetingRequestCounter->getCountSheetPriorityAvailable($sheet);
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
-            ->get('tactician.commandbus.query')
+            ->queryBus
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
         $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet, $request->getLocale());
-        $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
+        $form = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
-                'sheet'          => $sheet->getId(),
+                'sheet' => $sheet->getId(),
                 'meetingRequest' => $meetingRequest->getId(),
             ]),
             'locale' => $request->getLocale(),
-            'sheet'  => $sheet,
+            'sheet' => $sheet,
             'priorityNumberAvailable' => $priorityNumberAvailable
         ]);
 
@@ -449,12 +499,12 @@ class MeetingRequestController extends Controller
 
         if ($isSubmitted && $form->isValid()) {
             /** @var ApproveRequestResult $approveRequestResult */
-            $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
+            $approveRequestResult = $this->commandBus->handle($approveRequest);
 
             if ($approveRequestResult->hasError || $approveRequestResult->meetingView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $approveRequestResult->meetingView,
-                    'error'           => $approveRequestResult->hasError,
+                    'error' => $approveRequestResult->hasError,
                 ]);
             }
 
@@ -462,9 +512,9 @@ class MeetingRequestController extends Controller
                 true,
                 null === $approveRequestResult->meetingView && !$approveRequestResult->hasError,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
-                    'sheet'                        => $sheet,
-                    'meetingRequest'               => $meetingRequest,
-                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                    'sheet' => $sheet,
+                    'meetingRequest' => $meetingRequest,
+                    'isMeetingPublished' => $this->meetingPublishedAccessChecker
                         ->allowedToAccess($eventDomain->getEvent()),
                     'isMeetingRequestUpdateLocked' => $eventDomain
                         ->getEvent()
@@ -481,7 +531,7 @@ class MeetingRequestController extends Controller
                 false,
                 $this->renderView('EventBundle:MeetingRequest:approvedRequest.html.twig', [
                     'discussion' => $discussion,
-                    'form'       => $form->createView(),
+                    'form' => $form->createView(),
                 ])
             ));
         }
@@ -496,22 +546,16 @@ class MeetingRequestController extends Controller
 
     /**
      * Refuse a meeting request
-     *
-     * @param Request        $request
-     * @param Sheet          $sheet
-     * @param MeetingRequest $meetingRequest
-     *
-     * @return JsonResponse|Response
      */
     public function refuseRequestAction(
         Request $request,
         Sheet $sheet,
         MeetingRequest $meetingRequest
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get('meeting.request_permission_manager')->isAllowedToRefuse($meetingRequest, $sheet)) {
+        if (!$this->permissionManager->isAllowedToRefuse($meetingRequest, $sheet)) {
             throw $this->createAccessDeniedException('You are not allowed to refuse this meeting request.');
         }
 
@@ -521,13 +565,13 @@ class MeetingRequestController extends Controller
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
-            ->get('tactician.commandbus.query')
+            ->queryBus
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
         $refuseRequest = new RefuseRequest($meetingRequest, $this->getUser());
-        $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
+        $form = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
             'action' => $this->generateUrl('event_meeting_request_refuse', [
-                'sheet'          => $sheet->getId(),
+                'sheet' => $sheet->getId(),
                 'meetingRequest' => $meetingRequest->getId(),
             ]),
         ]);
@@ -535,13 +579,13 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
         if ($isSubmitted && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($refuseRequest);
+            $this->commandBus->handle($refuseRequest);
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
                 true,
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
-                    'sheet'          => $sheet,
+                    'sheet' => $sheet,
                     'meetingRequest' => $meetingRequest,
                     'isPhoneValidationRequired' => false,
                 ])
@@ -552,14 +596,14 @@ class MeetingRequestController extends Controller
                 false,
                 $this->renderView('EventBundle:MeetingRequest:refusedRequest.html.twig', [
                     'discussion' => $discussion,
-                    'form'       => $form->createView(),
+                    'form' => $form->createView(),
                 ])
             ));
         }
 
         return $this->render('EventBundle:MeetingRequest:refusedRequest.html.twig', [
             'discussion' => $discussion,
-            'form'       => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -579,9 +623,7 @@ class MeetingRequestController extends Controller
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $permissionManager = $this->get('meeting.request_permission_manager');
-
-        if (!$permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($sheet, $meetingRequest)) {
+        if (!$this->permissionManager->isAllowedToSeeConversationOfRefuseMeetingRequest($sheet, $meetingRequest)) {
             throw $this->createNotFoundException('You are not allowed to see this meeting request.');
         }
 
@@ -591,16 +633,16 @@ class MeetingRequestController extends Controller
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
-            ->get('tactician.commandbus.query')
+            ->queryBus
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
         $form = null;
 
-        if ($permissionManager->isAllowedToUnRefuse($meetingRequest, $sheet)) {
+        if ($this->permissionManager->isAllowedToUnRefuse($meetingRequest, $sheet)) {
             $unRefuse = new UnRefuseMeetingRequest($this->getUser(), $meetingRequest, $sheet);
-            $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
+            $form = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
-                    'sheet'          => $sheet->getId(),
+                    'sheet' => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
@@ -608,10 +650,10 @@ class MeetingRequestController extends Controller
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
             if ($isSubmitted && $form->isValid()) {
-                $this->get('tactician.commandbus')->handle($unRefuse);
+                $this->commandBus->handle($unRefuse);
 
                 // If the meeting request are still answerable
-                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')
+                if ($this->answeringMeetingRequestAccessChecker
                     ->allowedToAccess($eventDomain->getEvent())
                 ) {
                     return new JsonResponse($this->createJsonResponseData(
@@ -619,7 +661,7 @@ class MeetingRequestController extends Controller
                         true,
                         $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
                             'meetingRequest' => $meetingRequest,
-                            'sheet'          => $meetingRequest->getToSheet(),
+                            'sheet' => $meetingRequest->getToSheet(),
                             'isPhoneValidationRequired' => false,
                         ])
                     ));
@@ -631,18 +673,18 @@ class MeetingRequestController extends Controller
                     false,
                     false,
                     $this->renderView('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
-                        'discussion'  => $discussion,
+                        'discussion' => $discussion,
                         'isItRequest' => $meetingRequest->isSender($sheet),
-                        'form'        => $form->createView(),
+                        'form' => $form->createView(),
                     ])
                 ));
             }
         }
 
         return $this->render('EventBundle:MeetingRequest:showRefusedRequest.html.twig', [
-            'discussion'  => $discussion,
+            'discussion' => $discussion,
             'isItRequest' => $meetingRequest->isSender($sheet),
-            'form'        => $form instanceof FormInterface ? $form->createView() : null,
+            'form' => $form instanceof FormInterface ? $form->createView() : null,
         ]);
     }
 
@@ -658,9 +700,9 @@ class MeetingRequestController extends Controller
     private function createJsonResponseData($ok, $close, $html, $participantsHtml = '', $flashMessage = null)
     {
         $response = [
-            'status'           => true === $ok ? 'ok' : 'error',
-            'close'            => $close,
-            'html'             => $html,
+            'status' => true === $ok ? 'ok' : 'error',
+            'close' => $close,
+            'html' => $html,
             'participantsHtml' => $participantsHtml,
         ];
 
@@ -712,27 +754,27 @@ class MeetingRequestController extends Controller
         &$cancelForm
     ) {
         if ($permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
-            $toSheet       = $meetingRequest->getToSheet();
+            $toSheet = $meetingRequest->getToSheet();
             $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
-            $cancelForm    = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
+            $cancelForm = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
-                    'sheet'          => $sheet->getId(),
+                    'sheet' => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
             if ($cancelForm->handleRequest($request)->isSubmitted() && $cancelForm->isValid()) {
-                $this->get('tactician.commandbus')->handle($cancelRequest);
+                $this->commandBus->handle($cancelRequest);
 
                 // If you are still allowed to request someone in meeting
-                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')
+                if ($this->meetingRequestAccessChecker
                     ->allowedToAccess($sheet->getEvent())
                 ) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
                         $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
-                            'sheet'   => $sheet,
+                            'sheet' => $sheet,
                             'toSheet' => $toSheet,
                             'isPhoneValidationRequired' => false,
                         ])
@@ -765,22 +807,22 @@ class MeetingRequestController extends Controller
     ) {
         if ($permissionManager->isAllowedToUnApprove($meetingRequest, $sheet)) {
             $unApprovedRequest = new UnApproveMeetingRequest($this->getUser(), $meetingRequest, $sheet);
-            $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
+            $unApprovedForm = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
-                    'sheet'          => $sheet->getId(),
+                    'sheet' => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
             if ($unApprovedForm->handleRequest($request)->isSubmitted() && $unApprovedForm->isValid()) {
-                $this->get('tactician.commandbus')->handle($unApprovedRequest);
+                $this->commandBus->handle($unApprovedRequest);
 
                 return new JsonResponse($this->createJsonResponseData(
                     true,
                     true,
                     $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
-                        'sheet'          => $sheet,
+                        'sheet' => $sheet,
                         'isPhoneValidationRequired' => false,
                     ])
                 ));
@@ -812,24 +854,23 @@ class MeetingRequestController extends Controller
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException('Not allowed method');
         }
-        $permissionManager = $this->get('meeting.request_permission_manager');
 
-        if (!$permissionManager->isAllowedToEditSentOrApproved($meetingRequest, $sheet)) {
+        if (!$this->permissionManager->isAllowedToEditSentOrApproved($meetingRequest, $sheet)) {
             throw $this->createNotFoundException('You are not allowed to edit this meeting request.');
         }
 
-        $priorityNumberAvailable = $this->get('command.meeting_request.counter')->getCountSheetPriorityAvailable($sheet);
+        $priorityNumberAvailable = $this->meetingRequestCounter->getCountSheetPriorityAvailable($sheet);
 
         /** @var DiscussionMeetingRequestView $discussion */
         $discussion = $this
-            ->get('tactician.commandbus.query')
+            ->queryBus
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $isProposition      = $meetingRequest->isReceiver($sheet);
-        $form               = null;
-        $cancelForm         = null;
-        $unApprovedForm     = null;
-        $cancelResponse     = $this->cancelFormOnEdit(
+        $isProposition = $meetingRequest->isReceiver($sheet);
+        $form = null;
+        $cancelForm = null;
+        $unApprovedForm = null;
+        $cancelResponse = $this->cancelFormOnEdit(
             $request,
             $meetingRequest,
             $sheet,
@@ -854,12 +895,12 @@ class MeetingRequestController extends Controller
 
         if ($this->displayEditForm($discussion, $sheet)) {
             $command = new UpdateMeetingRequest($meetingRequest, $sheet);
-            $form    = $this->createForm(MeetingRequestUpdateType::class, $command, [
-                'sheet'            => $sheet,
-                'locale'           => $request->getLocale(),
+            $form = $this->createForm(MeetingRequestUpdateType::class, $command, [
+                'sheet' => $sheet,
+                'locale' => $request->getLocale(),
                 'show_description' => !$discussion->hasMessageOfSheet($sheet),
-                'action'           => $this->generateUrl('event_meeting_request_edit', [
-                    'sheet'          => $sheet->getId(),
+                'action' => $this->generateUrl('event_meeting_request_edit', [
+                    'sheet' => $sheet->getId(),
                     'meetingRequest' => $meetingRequest->getId(),
                 ]),
                 'meetingRequest' => $meetingRequest,
@@ -868,7 +909,7 @@ class MeetingRequestController extends Controller
 
             $isSubmitted = $form->handleRequest($request)->isSubmitted();
             if ($isSubmitted && $form->isValid()) {
-                $this->get('tactician.commandbus')->handle($command);
+                $this->commandBus->handle($command);
 
                 if ($meetingRequest->isApproved()) {
                     if ($isProposition) {
@@ -933,18 +974,6 @@ class MeetingRequestController extends Controller
         return !$discussion->hasMessageOfSheet($sheet) || 1 < $sheet->countParticipants();
     }
 
-    /**
-     * @param Event            $event
-     * @param Sheet            $sheet
-     * @param string           $locale
-     * @param array            $filters
-     * @param array            $typeViews
-     * @param array            $categoryViews
-     * @param bool             $filterAvailableSlot
-     * @param MeetingSlot|null $specificSlot
-     *
-     * @return FormInterface
-     */
     private function createSearchForm(
         Event $event,
         Sheet $sheet,
@@ -954,32 +983,25 @@ class MeetingRequestController extends Controller
         array $categoryViews,
         bool $filterAvailableSlot = false,
         MeetingSlot $specificSlot = null
-    ) {
-        return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'action'              => $this->generateUrl('event_meeting_list_request', [
+    ): FormInterface {
+        return $this->formFactory->createNamed('', SearchType::class, $filters, [
+            'action' => $this->generateUrl('event_meeting_list_request', [
                 'sheet' => $sheet->getId(),
             ]),
-            'event'               => $event,
+            'event' => $event,
             'filterAvailableSlot' => $filterAvailableSlot,
-            'label'               => null,
-            'locale'              => $locale,
-            'specificSlot'        => $specificSlot,
-            'typeViews'           => $typeViews,
-            'categoryViews'       => $categoryViews,
+            'label' => null,
+            'locale' => $locale,
+            'specificSlot' => $specificSlot,
+            'typeViews' => $typeViews,
+            'categoryViews' => $categoryViews,
         ]);
     }
 
-    /**
-     * @param array  $participants
-     * @param string $locale
-     *
-     * @return string
-     */
-    private function getParticipantsHtml(array $participants, $locale)
+    private function getParticipantsHtml(array $participants, string $locale): string
     {
         $participants = array_map(function (Participant $participant) use ($locale) {
-            return $this
-                ->get('template.participant_info_guesser')
+            return $this->participantInfoGuesser
                 ->guessParticipantCompleteName($participant, $locale);
         },
             $participants

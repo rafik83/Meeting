@@ -16,7 +16,7 @@ class DownloadAction
     private $authorizationCheckerAdapter;
 
     /** @var string */
-    private $omzExportPath;
+    private $pathToOmzExport;
 
     /** @var FileSystemAdapterInterface */
     private $fileSystemAdapter;
@@ -24,10 +24,10 @@ class DownloadAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FileSystemAdapterInterface $fileSystemAdapter,
-        string $omzExportPath
+        string $pathToOmzExport
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->omzExportPath = $omzExportPath;
+        $this->pathToOmzExport = $pathToOmzExport;
         $this->fileSystemAdapter = $fileSystemAdapter;
     }
 
@@ -52,7 +52,7 @@ class DownloadAction
             );
         }
 
-        $path = sprintf('%s%s', $this->omzExportPath, $file->getPath());
+        $path = sprintf('%s%s', $this->pathToOmzExport, $file->getPath());
 
         if (!$this->fileSystemAdapter->exists($path)) {
             throw new NotFoundHttpException(sprintf('File %s not found', $file->getId()));

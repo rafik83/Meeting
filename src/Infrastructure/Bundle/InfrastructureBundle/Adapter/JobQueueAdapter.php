@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
 use DateTime;
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -16,6 +15,8 @@ use Proximum\Vimeet\Domain\Model\Template\FormTemplate;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\LongJob;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ExportUploadedObjectsBySheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\ExportParticipantsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Happening\Webinar\Record\CreateZipRecordArchiveCommand;
@@ -59,9 +59,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function sendCampaign(Campaign $campaign): void
     {
-        $job = new Job(SendCampaignCommand::NAME, [$campaign->getId()]);
-        $job->addRelatedEntity($campaign);
-        $this->setJob($job);
+        $job = new LongJob(SendCampaignCommand::NAME, ['id' => $campaign->getId()]);
+        $this->sendJob($job);
     }
 
     public function printPlanning(
@@ -74,15 +73,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             GeneratePlanningCommand::NAME,
             [
-                sprintf('--sheetIdsExtraData=%s', $extraData->getId()),
-                sprintf('--orderBy=%s', $orderBy),
-                sprintf('--emailToNotify=%s', $emailToNotify),
-                sprintf('--locale=%s', $locale),
-                sprintf('--printOption=%s', $printOption),
+                '--sheetIdsExtraData' => $extraData->getId(),
+                '--orderBy' => $orderBy,
+                '--emailToNotify', $emailToNotify,
+                '--locale' => $locale,
+                '--printOption' => $printOption,
             ]
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -95,13 +94,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         Event\ExtraData $extraData
     ): void {
         $job = new Job(ExportParticipantCommand::NAME, [
-            sprintf('--eventId=%s', $event->getId()),
-            sprintf('--extraDataWithParticipantIds=%s', $extraData->getId()),
-            sprintf('--adminId=%s', $admin->getId()),
-            sprintf('--locale=%s', $locale),
+            '--eventId' => $event->getId(),
+            '--extraDataWithParticipantIds' => $extraData->getId(),
+            '--adminId' => $admin->getId(),
+            '--locale' => $locale,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -115,14 +114,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         string $orderBy
     ): void {
         $job = new Job(PrintPdfCommand::NAME, [
-            sprintf('--sheetIds=%s', implode(',', $sheetIds)),
-            sprintf('--eventId=%s', $event->getId()),
-            sprintf('--emailToNotify=%s', $emailToNotify),
-            sprintf('--locale=%s', $locale),
-            sprintf('--orderBy=%s', $orderBy),
+            '--sheetIds' => implode(',', $sheetIds),
+            '--eventId' => $event->getId(),
+            '--emailToNotify' => $emailToNotify,
+            '--locale' => $locale,
+            '--orderBy' => $orderBy,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -136,7 +135,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             'sheetIds' => implode(',', $sheetIds),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -147,14 +146,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             PrintInvoicesCommand::NAME,
             [
-                sprintf('--sheetIds=%s', implode(',', $sheetIds)),
-                sprintf('--eventId=%s', $event->getId()),
-                sprintf('--emailToNotify=%s', $emailToNotify),
-                sprintf('--locale=%s', $locale),
+                '--sheetIds' => implode(',', $sheetIds),
+                '--eventId' => $event->getId(),
+                '--emailToNotify' => $emailToNotify,
+                '--locale' => $locale,
             ]
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -162,9 +161,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale): void
     {
-        $job = new Job(ExportOrderCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
+        $job = new Job(ExportOrderCommand::NAME, [
+            'event' => $event->getId(),
+            'emailToNotify' => $admin->getEmail(),
+            'locale' => $locale,
+        ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -172,9 +175,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function exportProductsForEvent(Event $event, Admin $admin, string $locale): void
     {
-        $job = new Job(ExportCommand::NAME, [$event->getId(), $admin->getEmail(), $locale]);
+        $job = new Job(ExportCommand::NAME, [
+            'event' => $event->getId(),
+            'emailToNotify' => $admin->getEmail(),
+            'locale' => $locale
+        ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -192,21 +199,21 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             ExportPlannerCommand::NAME,
             [
-                $event->getId(),
-                $admin->getEmail(),
-                $locale,
-                $solutionType,
-                true === $lockMeetingRequest
+                'eventId' => $event->getId(),
+                'admin_email' => $admin->getEmail(),
+                'locale' => $locale,
+                'solutionType' => $solutionType,
+                'lockMeetingRequest' => true === $lockMeetingRequest
                     ? ExportPlannerCommand::LOCK_MEETING_REQUEST
                     : ExportPlannerCommand::DONT_LOCK_MEETING_REQUEST,
-                true === $isModeAuto
+                'mode' => true === $isModeAuto
                     ? ExportPlannerCommand::MODE_AUTO
                     : ExportPlannerCommand::MODE_MANUAL,
-                null !== $plannerJob ? $plannerJob->getId() : null,
+                'plannerJob' => null !== $plannerJob ? $plannerJob->getId() : null,
             ]
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -220,14 +227,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         ?PlannerJob $plannerJob = null
     ): void {
         $job = new Job(ImportPlannerCommand::NAME, [
-            $file->getId(),
-            $event->getId(),
-            $admin->getEmail(),
-            $locale,
-            $plannerJob instanceof PlannerJob ? $plannerJob->getId() : null,
+            'file' => $file->getId(),
+            'event' => $event->getId(),
+            'admin_email' => $admin->getEmail(),
+            'locale' => $locale,
+            'plannerJobId' => $plannerJob instanceof PlannerJob ? $plannerJob->getId() : null,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -236,10 +243,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function indexSheetsBySheetTemplate(SheetTemplate $sheetTemplate): void
     {
         $command = IndexSheetsBySheetTemplateCommand::NAME;
-        $args = [$sheetTemplate->getId()];
+        $arguments = ['sheetTemplateId' => $sheetTemplate->getId()];
 
-        $job = new Job($command, $args);
-        $this->setJob($job);
+        $job = new Job($command, $arguments);
+        $this->sendJob($job);
     }
 
     /**
@@ -248,10 +255,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function indexSheetsByRegistrationTemplate(RegistrationTemplate $registrationTemplate): void
     {
         $command = IndexSheetsByRegistrationTemplateCommand::NAME;
-        $args = [$registrationTemplate->getId()];
+        $arguments = ['registrationTemplateId' => $registrationTemplate->getId()];
 
-        $job = new Job($command, $args);
-        $this->setJob($job);
+        $job = new Job($command, $arguments);
+        $this->sendJob($job);
     }
 
     /**
@@ -259,8 +266,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexSheetsByTypes(array $typeIds)
     {
-        $job = new Job(IndexSheetsByTypesCommand::NAME, [implode(',', $typeIds)]);
-        $this->setJob($job);
+        $job = new Job(IndexSheetsByTypesCommand::NAME, ['typeIds' => implode(',', $typeIds)]);
+        $this->sendJob($job);
     }
 
     /**
@@ -268,8 +275,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexInCatalogSheetsByEvent(Event $event)
     {
-        $job = new Job(IndexInCatalogSheetsByEventCommand::NAME, [$event->getId()]);
-        $this->setJob($job);
+        $job = new Job(IndexInCatalogSheetsByEventCommand::NAME, ['eventId' => $event->getId()]);
+        $this->sendJob($job);
     }
 
     /**
@@ -279,12 +286,9 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     {
         $job = new Job(
             IndexSheetsCommand::NAME,
-            [implode(',', $sheetIds)],
-            true,
-            Job::DEFAULT_QUEUE,
-            Job::PRIORITY_HIGH
+            ['sheetIds' => implode(',', $sheetIds)],
         );
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -293,13 +297,13 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregateEventUsersFullUnavailability(Event $event, $onlyInCatalog = false): void
     {
         $command = UsersFullUnavailabilityByEventAggregateCommand::NAME;
-        $args =  [
-            $event->getId(),
-            $onlyInCatalog,
+        $arguments =  [
+            'eventId' => $event->getId(),
+            'onlyCatalog' => $onlyInCatalog,
         ];
 
-        $job = new Job($command, $args);
-        $this->setJob($job);
+        $job = new Job($command, $arguments);
+        $this->sendJob($job);
     }
 
     /**
@@ -309,12 +313,12 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     {
         if (!empty($users)) {
             $job = new Job(UsersFullUnavailabilityAggregateCommand::NAME, [
-                $event->getId(),
-                implode(',', array_map(function (User $user) {
+                'eventId' => $event->getId(),
+                'userIds' => implode(',', array_map(function (User $user) {
                     return $user->getId();
                 }, $users)),
             ]);
-            $this->setJob($job);
+            $this->sendJob($job);
         }
     }
 
@@ -323,8 +327,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function aggregateParticipantAssignedToRequest(Event $event): void
     {
-        $job = new Job(ParticipantAssignedToRequestAggregateCommand::NAME, [$event->getId()]);
-        $this->setJob($job);
+        $job = new Job(ParticipantAssignedToRequestAggregateCommand::NAME, ['event' => $event->getId()]);
+        $this->sendJob($job);
     }
 
     /**
@@ -333,12 +337,12 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregateAvailableSlot(Event $event): void
     {
         $command = AvailableSlotCalculatorCommand::NAME;
-        $args = [
-            sprintf('--event=%s', $event->getId()),
+        $arguments = [
+            '--event' => $event->getId(),
         ];
 
-        $job = new Job($command, $args);
-        $this->setJob($job);
+        $job = new Job($command, $arguments);
+        $this->sendJob($job);
     }
 
     /**
@@ -349,13 +353,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             AvailableSlotCalculatorCommand::NAME,
             [
-                sprintf('--sheet=%s', $sheet->getId()),
-            ],
-            true,
-            Job::DEFAULT_QUEUE,
-            Job::PRIORITY_LOW
+                '--sheet' => $sheet->getId(),
+            ]
         );
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -364,10 +365,10 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregatePhoneValidationStatus(Event $event): void
     {
         $job = new Job(PhoneValidationStatusCalculatorCommand::NAME, [
-            sprintf('--event=%s', $event->getId()),
+            '--event' => $event->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     /**
@@ -375,8 +376,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function generateMeetingSolutionAnalytic(Event $event): void
     {
-        $job = new Job(GenerateMeetingSolutionCommand::NAME, [$event->getId()]);
-        $this->setJob($job);
+        $job = new Job(GenerateMeetingSolutionCommand::NAME, ['eventId' => $event->getId()]);
+        $this->sendJob($job);
     }
 
     /**
@@ -384,15 +385,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexSheetsByEvent(Event $event, bool $reset = false): void
     {
-        $job = new Job(
+        $job = new LongJob(
             IndexSheetsByEventCommand::NAME,
             [
-                $event->getId(),
-                $reset ? IndexSheetsByEventCommand::RESET : IndexSheetsByEventCommand::NO_RESET,
-                '--no-debug',
+                'eventId' => $event->getId(),
+                'reset' => $reset ? IndexSheetsByEventCommand::RESET : IndexSheetsByEventCommand::NO_RESET,
             ]
         );
-        $this->setJob($job);
+        $job->setMaxExecutionTime(7200);
+        $this->sendJob($job);
     }
 
     /**
@@ -400,8 +401,12 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function exportOmzUser(Event $event, Admin $admin): void
     {
-        $job = new Job(ExportUserCommand::NAME, [$event->getId(), $admin->getId()]);
-        $this->setJob($job);
+        $job = new Job(ExportUserCommand::NAME, [
+            'event' => $event->getId(),
+            'admin' => $admin->getId()
+        ]);
+
+        $this->sendJob($job);
     }
 
     /**
@@ -409,8 +414,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function indexEventFromScratch(): void
     {
-        $job = new Job(IndexFromScratchCommand::NAME, ['--no-debug']);
-        $this->setJob($job);
+        $job = new LongJob(IndexFromScratchCommand::NAME, []);
+        $this->sendJob($job);
     }
 
     /**
@@ -421,50 +426,24 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             SendEmailingCommand::NAME,
             [
-                $event->getId(),
-                $emailName,
-                implode(',', $sheetIds),
+                'eventId' => $event->getId(),
+                'emailingId' => $emailName,
+                'sheetIds' => implode(',', $sheetIds),
             ]
         );
-        $this->setJob($job);
-    }
-
-    /**
-     * @param Event     $event
-     * @param \DateTime $dateTime
-     * @param Job|null  $job
-     */
-    public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null): void
-    {
-        if (null !== $job) {
-            $job->setExecuteAfter($dateTime);
-
-            $this->updateJob($job);
-
-            return;
-        }
-
-        $job = new Job(
-            GenerateVersionsCommand::NAME,
-            [
-                $event->getId(),
-            ]
-        );
-        $job->addRelatedEntity($event);
-        $job->setExecuteAfter($dateTime);
-
-        $this->setJob($job);
+        $job->setMaxExecutionTime(7200);
+        $this->sendJob($job);
     }
 
     public function exportUploadedObjectsBySheets(Event $event, Admin $admin, Event\ExtraData $extraData): void
     {
         $job = new Job(ExportUploadedObjectsBySheetsCommand::NAME, [
-            $event->getId(),
-            $extraData->getId(),
-            $admin->getId(),
+            'eventId' => $event->getId(),
+            'extraDataId' => $extraData->getId(),
+            'adminId' => $admin->getId(),
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function exportFormTemplateDataByUsers(
@@ -475,47 +454,61 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         Event\ExtraData $extraData
     ): void {
         $job = new Job(ExportFormTemplateDataByUsersCommand::NAME, [
-            $event->getId(),
-            $formTemplate->getId(),
-            $extraData->getId(),
-            $admin->getId(),
-            $locale
+            'eventId' => $event->getId(),
+            'formTemplateId' => $formTemplate->getId(),
+            'extraDataId' => $extraData->getId(),
+            'adminId' => $admin->getId(),
+            'locale' => $locale,
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function exportRoomingList(Event $event, Admin $admin, string $locale): void
     {
         $job = new Job(ExportRoomingListCommand::NAME, [
-            $event->getId(),
-            $admin->getId(),
-            $locale
+            'eventId' => $event->getId(),
+            'adminId' => $admin->getId(),
+            'locale' => $locale
         ]);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function downloadTranslations(?string $emailToNotify = null, ?string $locale = null): void
     {
-        $job = new Job(UpdateTranslationsCommand::NAME, $emailToNotify && $locale ? [$emailToNotify, $locale] : []);
+        $arguments = [];
+        if ($emailToNotify && $locale) {
+            $arguments['emailToNotify'] = $emailToNotify;
+            $arguments['locale'] = $locale;
+        }
+        $job = new Job(UpdateTranslationsCommand::NAME, $arguments);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function scheduleUpdateTranslations(?string $emailToNotify = null, ?string $locale = null): void
     {
+        $arguments = [];
+        if ($emailToNotify && $locale) {
+            $arguments['emailToNotify'] = $emailToNotify;
+            $arguments['locale'] = $locale;
+        }
         $job = new Job(
             ScheduleUpdateTranslationsCommand::NAME,
-            $emailToNotify && $locale ? [$emailToNotify, $locale] : []
+            $arguments
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void
     {
-        $this->setJob(new Job(ExportParticipantsCommand::NAME, [$event->getId(), $admin->getId(), $locale]));
+        $this->sendJob(new Job(ExportParticipantsCommand::NAME, [
+            'event' => $event->getId(),
+            'admin' => $admin->getId(),
+            'locale' => $locale
+        ]));
     }
 
     public function zipRecordArchive(
@@ -525,37 +518,39 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         ?string $locale = null
     ): void {
         $arguments = [
-            $happening->getId(),
-            $forceRegeneration ? 'force' : 'no-force'
+            'happening' => $happening->getId(),
+            'force-regeneration' => $forceRegeneration ? 'force' : 'no-force'
         ];
 
         if ($admin instanceof Admin) {
-            $arguments[] = $admin->getId();
+            $arguments['admin'] = $admin->getId();
 
             if ($locale) {
-                $arguments[] = $locale;
+                $arguments['locale'] = $locale;
             }
         }
-        $job = new Job(
+        $job = new LongJob(
             ForceZipRecordArchiveCommand::NAME,
             $arguments
         );
+        $job->setMaxExecutionTime(7200);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function planDownloadRecordArchive(
         Happening $happening,
         DateTime $dueDate
     ): void {
-        $job = new Job(
+        $job = new LongJob(
             CreateZipRecordArchiveCommand::NAME,
-            [$happening->getId()]
+            ['happening' => $happening->getId()]
         );
+        $job->setMaxExecutionTime(7200);
 
         $job->setExecuteAfter($dueDate);
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 
     public function exportSheet(
@@ -568,14 +563,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(
             ExportSheetCommand::NAME,
             [
-                sprintf('--eventId=%s', $event->getId()),
-                sprintf('--extraDataWithSheetIds=%s', $extraData->getId()),
-                sprintf('--adminId=%s', $admin->getId()),
-                sprintf('--locale=%s', $locale),
-                sprintf('--displayNomenclatureIds=%s', $displayNomenclatureIds ? 'true' : 'false'),
+                '--eventId' => $event->getId(),
+                '--extraDataWithSheetIds' => $extraData->getId(),
+                '--adminId' => $admin->getId(),
+                '--locale' => $locale,
+                '--displayNomenclatureIds' => $displayNomenclatureIds ? 'true' : 'false',
             ]
         );
 
-        $this->setJob($job);
+        $this->sendJob($job);
     }
 }

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -34,8 +34,8 @@ class CreateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var ErrorFactory */
     private $errorFactory;
@@ -46,7 +46,7 @@ class CreateAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         ErrorFactory $errorFactory
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -54,7 +54,7 @@ class CreateAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->errorFactory = $errorFactory;
     }
 
@@ -89,7 +89,7 @@ class CreateAction
             }
         }
 
-        return new Response($this->engine->render('AdminBundle:Admin:create.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Admin:create.html.twig', [
             'form' => $form->createView(),
             'existingAdmin' => $existingDeleteAdmin,
         ]));

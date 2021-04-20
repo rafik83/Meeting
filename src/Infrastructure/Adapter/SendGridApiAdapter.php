@@ -13,6 +13,7 @@ use SendGrid\Content;
 use SendGrid\Email;
 use SendGrid\Mail;
 use SendGrid\Personalization;
+use Twig\Environment;
 
 class SendGridApiAdapter implements EmailingSenderInterface
 {
@@ -28,22 +29,14 @@ class SendGridApiAdapter implements EmailingSenderInterface
      */
     private $client;
 
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
+    private Environment $twig;
 
     /**
      * @var EventSender
      */
     private $eventSender;
 
-    /**
-     * @param SendGridApiClient $client
-     * @param \Twig_Environment $twig
-     * @param EventSender       $eventSender
-     */
-    public function __construct(SendGridApiClient $client, \Twig_Environment $twig, EventSender $eventSender)
+    public function __construct(SendGridApiClient $client, Environment $twig, EventSender $eventSender)
     {
         $this->client      = $client;
         $this->twig        = $twig;

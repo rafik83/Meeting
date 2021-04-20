@@ -10,15 +10,15 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\ListAction;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListActionTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $commandBus;
@@ -30,7 +30,7 @@ class ListActionTest extends TestCase
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->commandBus = $this->prophesize(CommandBus::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
     }
 
     public function testAccessDenied()
@@ -38,12 +38,12 @@ class ListActionTest extends TestCase
         $this->expectException(AccessDeniedException::class);
         $request = $this->prophesize(Request::class);
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(false);
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new ListAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($request->reveal());
@@ -52,26 +52,26 @@ class ListActionTest extends TestCase
     public function testInvoke()
     {
         $request = new Request(['page' => 12]);
-        $response = $this->prophesize(Response::class);
+        $response = new Response('Tip');
         $tipListView = $this->prophesize(PaginatedTipView::class);
 
         $command = new TipViewQuery(12);
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
         $this->commandBus->handle($command)->shouldBeCalled()->willReturn($tipListView->reveal());
-        $this->engine
-            ->renderResponse(ListAction::TEMPLATE, ['tipListView' => $tipListView->reveal()])
+        $this->twig
+            ->render(ListAction::TEMPLATE, ['tipListView' => $tipListView->reveal()])
             ->shouldBeCalled()
-            ->willReturn($response->reveal())
+            ->willReturn('Tip')
         ;
 
         $action = new ListAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($request);
 
-        $this->assertEquals($response->reveal(), $result);
+        $this->assertEquals($response, $result);
     }
 }

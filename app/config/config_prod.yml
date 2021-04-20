@@ -1,7 +1,7 @@
 imports:
-    - { resource: config.yml }
+    # - { resource: config.yml }
     - { resource: services_prod.yml }
-    - { resource: packages/snc_redis.yml }
+    # - { resource: packages/snc_redis.yml }
 
 #framework:
 #    validation:
@@ -9,33 +9,35 @@ imports:
 #    serializer:
 #        cache: serializer.mapping.cache.apc
 
-monolog:
-    handlers:
-        main:
-            type:         fingers_crossed
-            action_level: error
-            handler:      nested
-        nested:
-            type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-        console:
-            type: console
-            process_psr_3_messages: false
-snc_redis:
-    clients:
-        doctrine:
-            type: predis
-            alias: doctrine
-            dsn: '%redis_dsn%/2'
-            logging: '%kernel.debug%'
-    doctrine:
-        metadata_cache:
-            client: doctrine
-            entity_manager: default
-            document_manager: default
-            namespace: '%app_version%:'
-        query_cache:
-            client: doctrine
-            entity_manager: default
-            namespace: '%app_version%:'
+# monolog:
+#     handlers:
+#         main:
+#             type:         fingers_crossed
+#             action_level: error
+#             handler:      nested
+#         nested:
+#             type:  stream
+#             path:  "%kernel.logs_dir%/%kernel.environment%.log"
+#             level: debug
+#         console:
+#             type: console
+#             process_psr_3_messages: false
+
+# since sf4, doctrine cache should be stored in files
+# snc_redis:
+#     clients:
+#         doctrine:
+#             type: predis
+#             alias: doctrine
+#             dsn: '%redis_dsn%/2'
+#             logging: '%kernel.debug%'
+    # doctrine:
+    #     metadata_cache:
+    #         client: doctrine
+    #         entity_manager: default
+    #         document_manager: default
+    #         namespace: '%app_version%:'
+    #     query_cache:
+    #         client: doctrine
+    #         entity_manager: default
+    #         namespace: '%app_version%:'

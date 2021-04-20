@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class MeetingPlanningModifiedCommand
+class MeetingPlanningModifiedCommand implements Command
 {
     /** @var Event */
     public $event;

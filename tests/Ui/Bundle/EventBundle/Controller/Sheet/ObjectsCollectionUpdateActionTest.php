@@ -26,7 +26,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ObjectsCollectionUpdateActionTest extends TestCase
 {
@@ -67,7 +67,7 @@ class ObjectsCollectionUpdateActionTest extends TestCase
     private $blockToArray;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectsCollectionUpdateAction */
     private $objectsCollectionUpdateAction;
@@ -141,11 +141,11 @@ class ObjectsCollectionUpdateActionTest extends TestCase
             ->willReturn($this->form->reveal())
         ;
 
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
 
         $this->objectsCollectionUpdateAction = new ObjectsCollectionUpdateAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->templateDataFactory->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
@@ -170,7 +170,7 @@ class ObjectsCollectionUpdateActionTest extends TestCase
         $this->router->generate('event_sheet_default', ['sheet' => 1337])->shouldNotBeCalled();
 
         $this
-            ->engine
+            ->twig
             ->render(
                 '@Event/Sheet/objectsCollectionUpdate.html.twig',
                 [
@@ -213,7 +213,7 @@ class ObjectsCollectionUpdateActionTest extends TestCase
         ;
 
         $this
-            ->engine
+            ->twig
             ->render(Argument::any())
             ->shouldNotBeCalled()
         ;
@@ -230,6 +230,7 @@ class ObjectsCollectionUpdateActionTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        /** @var RedirectResponse */
         $response = ($this->objectsCollectionUpdateAction)(
             $this->request,
             $this->eventDomain,

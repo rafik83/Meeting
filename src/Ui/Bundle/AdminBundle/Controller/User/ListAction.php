@@ -21,15 +21,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -51,7 +51,7 @@ class ListAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus,
         UrlGeneratorInterface $urlGenerator,
@@ -60,7 +60,7 @@ class ListAction
         FlashBagInterface $flashBag
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
         $this->urlGenerator = $urlGenerator;
@@ -148,7 +148,7 @@ class ListAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Admin/User/users-and-sheets-list.html.twig',
                 [
                     'event' => $event,

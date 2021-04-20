@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Group\Participant\UpdateUsersSheets;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQuery;
@@ -10,31 +13,39 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Group\UsersSheetsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ParticipantUpdateController extends Controller
+class ParticipantUpdateController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Group       $sheetGroup
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, EventDomain $eventDomain, Group $sheetGroup)
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function updateAction(Request $request, EventDomain $eventDomain, Group $sheetGroup): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $sheetGroup);
 
         $event = $eventDomain->getEvent();
 
-        $groupView = $this->get('tactician.commandbus.query')->handle(
+        $groupView = $this->queryBus->handle(
             new GroupViewQuery($sheetGroup)
         );
 
-        $userParticipantViews = $this->get('tactician.commandbus.query')->handle(
+        $userParticipantViews = $this->queryBus->handle(
             new UsersParticipantViewQuery($sheetGroup)
         );
 
@@ -51,16 +62,12 @@ class ParticipantUpdateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             /** @var UpdateUsersSheetsResultView[] $updateUsersSheetsResultViews */
-            $updateUsersSheetsResultViews = $this->get('command.group.participant.update_users_sheets_handler')
-                ->handle($updateUsersSheets)
-            ;
+            $updateUsersSheetsResultViews = $this->commandBus->handle($updateUsersSheets);
 
             $updateUsersSheetsResultMessage = [];
 
-            $translator = $this->get('translator');
-
             foreach ($updateUsersSheetsResultViews as $updateUsersSheetsResultView) {
-                $updateUsersSheetsResultMessage[] = $translator->trans('flash.' . $updateUsersSheetsResultView->type, [
+                $updateUsersSheetsResultMessage[] = $this->translator->trans('flash.' . $updateUsersSheetsResultView->type, [
                     '%participantFullname%' => $updateUsersSheetsResultView->participantFullname,
                     '%sheetTitle%' => $updateUsersSheetsResultView->sheetTitle,
                 ], 'flashes');
@@ -68,7 +75,7 @@ class ParticipantUpdateController extends Controller
 
             $this->addFlash(
                 0 === count($updateUsersSheetsResultMessage) ? 'success' : 'warning',
-                $translator->transChoice(
+                $this->translator->transChoice(
                     'flash.group.participant.update_success',
                     count($updateUsersSheetsResultMessage),
                     ['%result%' => implode("\n", $updateUsersSheetsResultMessage)],

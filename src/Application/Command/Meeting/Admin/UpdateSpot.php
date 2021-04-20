@@ -2,13 +2,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
 
-class UpdateSpot
+class UpdateSpot implements Command
 {
     /** @var Meeting */
     public $meeting;

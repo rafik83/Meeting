@@ -19,7 +19,7 @@ class SendHandlerTest extends TestCase
     {
         $event     = EventFactory::createEvent();
         $createdAt = new \DateTime();
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $receiver  = new User('user@vimeet.com', 'salt', 'password', 'fr');
         $sheet     = SheetFactory::create($event, $receiver);
         $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
@@ -33,7 +33,7 @@ class SendHandlerTest extends TestCase
         $expectedCampaign->setMessage($message);
         $expectedCampaign->addRecipient(Campaign::RECIPIENT_PARTICIPANTS);
         $expectedCampaign->addSheet($sheet);
-        $expectedCampaign->markAsSent($datetime);
+        $expectedCampaign->markAsSent($dateTime);
 
         // Mock
         $campaignRepository = $this->prophesize(CampaignRepositoryInterface::class);
@@ -43,7 +43,7 @@ class SendHandlerTest extends TestCase
         $handler = new SendHandler(
             $campaignRepository->reveal(),
             $jobQueue->reveal(),
-            $datetime
+            $dateTime
         );
 
         $handler->handle(new Send($campaign));

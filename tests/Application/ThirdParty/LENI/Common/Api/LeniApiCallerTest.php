@@ -17,11 +17,11 @@ class LeniApiCallerTest extends TestCase
     private $event;
     private $httpAdapter;
     private $extraParameterRepository;
-    private $datetime;
+    private $dateTime;
 
     public function setUp()
     {
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
         $this->event = $this->prophesize(Event::class);
         $this->httpAdapter = $this->prophesize(HttpAdapterInterface::class);
 
@@ -36,7 +36,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_USER,
                     'user',
                     'leni_user',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -50,7 +50,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_EVENT,
                     'event',
                     'leni_event',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -67,7 +67,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_SAVE_ENDPOINT,
                     'endpoint',
                     'https://endpoint.leni.save',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -81,7 +81,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_MODE,
                     'mode',
                     'save',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -170,7 +170,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_GET_ENDPOINT,
                     'endpoint',
                     'https://endpoint.leni.get',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -184,7 +184,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_MODE,
                     'mode',
                     'save',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;
@@ -203,7 +203,7 @@ class LeniApiCallerTest extends TestCase
                     Type::TYPE_LENI_MODE,
                     'mode',
                     'get',
-                    $this->datetime
+                    $this->dateTime
                 )
             )
         ;

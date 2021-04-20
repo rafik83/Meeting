@@ -2,71 +2,49 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter;
 
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManager;
-use JMS\JobQueueBundle\Entity\Job;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 
 abstract class AbstractJobQueueAdapter
 {
-    /** @var EntityManager */
-    private $entityManager;
+    private MessageBusInterface $bus;
+    private CrossProcessLockFactory $jobLockFactory;
+    private ?LoggerInterface $logger;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        MessageBusInterface $bus,
+        CrossProcessLockFactory $jobLockFactory,
+        LoggerInterface $logger = null
+    ) {
+        $this->bus = $bus;
+        $this->jobLockFactory = $jobLockFactory;
+        $this->logger = $logger;
     }
 
-    protected function hasAlreadyJobPending(string $command, array $args): bool
+    protected function sendJob(Job $job): void
     {
-        $pendingJob = $this->entityManager
-            ->createQuery("SELECT j FROM JMSJobQueueBundle:Job j
-                WHERE j.command = :command
-                AND j.args = :args
-                AND j.state = :state
-            ")
-            ->setParameter('command', $command)
-            ->setParameter('args', $args, Types::JSON)
-            ->setParameter('state', Job::STATE_PENDING)
-            ->setMaxResults(1)
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $pendingJob;
-    }
-
-    protected function setJob(Job $job): void
-    {
-        $command = $job->getCommand();
-        $args = $job->getArgs();
+        $lock = $this->jobLockFactory->createLock($job);
 
         // Avoid to set a job when the same job is already pending.
-        if ($this->hasAlreadyJobPending($command, $args)) {
+        if (!$lock->acquire()) {
+            if ($this->logger) {
+                $this->logger->warning(
+                    '{command}: Job is already running, message not dispatched',
+                    ['command' => $job->getCommand(), 'args' => $job->getArgs()]
+                );
+            }
+
             return;
         }
 
-        $this->entityManager->persist($job);
-        $this->entityManager->flush($job);
-    }
+        $stamps = [];
+        if ($job->isDelayed()) {
+            $stamps[] = new DelayStamp($job->getDelay());
+        }
 
-    protected function updateJob(Job $job): void
-    {
-        $this->entityManager->flush($job);
-    }
-
-    protected function removeJob(string $command, array $args): void
-    {
-         $this->entityManager
-             ->createQueryBuilder()
-             ->delete()
-             ->from(Job::class, 'job')
-             ->where('job.command = :command')
-             ->andWhere('job.args = :args')
-             ->andWhere('job.state = :state')
-            ->setParameter('command', $command)
-            ->setParameter('args', $args, Types::JSON)
-            ->setParameter('state', Job::STATE_PENDING)
-            ->getQuery()
-            ->execute()
-        ;
+        $this->bus->dispatch($job, $stamps);
+        // lock will be released in job handler
     }
 }

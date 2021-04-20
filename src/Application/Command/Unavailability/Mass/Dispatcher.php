@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Mass;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Dispatcher
+class Dispatcher implements Command
 {
     /** @var Event */
     public $event;

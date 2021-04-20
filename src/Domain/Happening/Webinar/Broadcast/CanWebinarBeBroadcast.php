@@ -9,11 +9,11 @@ use Proximum\Vimeet\Domain\Time\DaysHelper;
 class CanWebinarBeBroadcast
 {
     /** @var DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(DateTimeInterface $dateTime)
     {
-        $this->datetime = $dateTime;
+        $this->dateTime = $dateTime;
     }
 
     public function __invoke(Happening $happening): bool
@@ -42,6 +42,6 @@ class CanWebinarBeBroadcast
             return false;
         }
 
-        return $begin < $this->datetime && $this->datetime < $end;
+        return $begin < $this->dateTime && $this->dateTime < $end;
     }
 }

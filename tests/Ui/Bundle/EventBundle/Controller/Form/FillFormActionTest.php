@@ -38,7 +38,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class FillFormActionTest extends TestCase
 {
@@ -60,7 +60,7 @@ class FillFormActionTest extends TestCase
         $participant,
         $sheet,
         $authorizationChecker,
-        $engine,
+        $twig,
         $queryBus,
         $router,
         $formFactory,
@@ -108,7 +108,7 @@ class FillFormActionTest extends TestCase
         ;
         $this->sheet->hasParticipant($this->participant->reveal())->willReturn(true);
 
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
@@ -117,7 +117,7 @@ class FillFormActionTest extends TestCase
 
         $this->fillFormAction = new FillFormAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->queryBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
@@ -290,7 +290,7 @@ class FillFormActionTest extends TestCase
             ->willReturn($participantList)
         ;
         $this
-            ->engine
+            ->twig
             ->render(
                 '@Event/Form/fillForm.html.twig',
                 [
@@ -396,7 +396,7 @@ class FillFormActionTest extends TestCase
             ->willReturn('/next-step')
         ;
 
-        $this->engine->render(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $response = ($this->fillFormAction)(
             $this->request,

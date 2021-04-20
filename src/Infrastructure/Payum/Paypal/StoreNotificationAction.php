@@ -35,24 +35,24 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
     /**
      * @var \DateTimeInterface
      */
-    private $now;
+    private $dateTime;
 
     /**
      * @param NotificationRepositoryInterface $notificationRepository
      * @param PaymentRepositoryInterface      $paymentRepository
      * @param TransactionManager              $transactionManager
-     * @param \DateTimeInterface              $now
+     * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
         PaymentRepositoryInterface $paymentRepository,
         TransactionManager $transactionManager,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->notificationRepository = $notificationRepository;
         $this->paymentRepository      = $paymentRepository;
         $this->transactionManager     = $transactionManager;
-        $this->now                    = $now;
+        $this->dateTime                    = $dateTime;
     }
 
     /**
@@ -66,7 +66,7 @@ class StoreNotificationAction implements ActionInterface, GatewayAwareInterface
         $this->gateway->execute($getHttpRequest);
         $request = $getHttpRequest->request;
 
-        $notification = new Notification($token->getGatewayName(), $request, $this->now);
+        $notification = new Notification($token->getGatewayName(), $request, $this->dateTime);
         $this->notificationRepository->add($notification);
 
         if (isset($request['payment_status']) && Api::PAYMENTSTATUS_COMPLETED === $request['payment_status']) {

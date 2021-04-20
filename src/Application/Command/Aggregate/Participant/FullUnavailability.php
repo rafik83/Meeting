@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Aggregate\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class FullUnavailability
+class FullUnavailability implements Command
 {
     /**
      * @var Event

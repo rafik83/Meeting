@@ -22,7 +22,7 @@ class UpdateType extends AbstractType
             ->add('searchFacets', CollectionType::class, [
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
-                    'help'     => true,
+                    'help' => 'form.configure.children.searchFacets.prototype.help',
                     'required' => false,
                 ],
                 'label' => false,

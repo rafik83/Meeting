@@ -42,7 +42,7 @@ class ParticipateHandlerTest extends TestCase
     private $event;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var User */
     private $user;
@@ -83,7 +83,7 @@ class ParticipateHandlerTest extends TestCase
     public function setUp()
     {
         $this->event = EventFactory::createEvent();
-        $this->datetime = new \DateTime('2015-12-21 09:00:00');
+        $this->dateTime = new \DateTime('2015-12-21 09:00:00');
         $this->user = new User('user@vimeet.com', 'salt', 'password', 'fr');
         $this->sheet = SheetFactory::create($this->event, $this->user);
         $this->participant = ParticipantFactory::create($this->sheet, $this->user);
@@ -105,7 +105,7 @@ class ParticipateHandlerTest extends TestCase
             $this->mustBeAvailableToParticipate->reveal(),
             $this->participationCount->reveal(),
             $this->eventDispatcher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
         $this->happening = new Happening(
             $this->event,
@@ -125,7 +125,7 @@ class ParticipateHandlerTest extends TestCase
             'tata',
             false
         );
-        $this->question = new Question($this->happening, $this->sheet, $this->user, $this->datetime, 'toto');
+        $this->question = new Question($this->happening, $this->sheet, $this->user, $this->dateTime, 'toto');
     }
 
     public function testNotEnoughtRemainingParticipationsException()
@@ -739,7 +739,7 @@ class ParticipateHandlerTest extends TestCase
                     $this->happening,
                     $this->sheet,
                     $this->user,
-                    $this->datetime,
+                    $this->dateTime,
                     'My question is...'
                 )
             )

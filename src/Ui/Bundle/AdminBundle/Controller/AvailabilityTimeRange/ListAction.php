@@ -6,9 +6,9 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -17,8 +17,8 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
@@ -26,10 +26,10 @@ class ListAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationChecker = $authorizationChecker;
     }
 
@@ -52,9 +52,9 @@ class ListAction
 
         $list = $this->queryBus->handle(new ListViewQuery($event));
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'list' => $list,
-        ]);
+        ]));
     }
 }

@@ -27,10 +27,10 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\UserConnectedEventListener:
         arguments:
             - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider'
             - '@domain.key_dates.checker.networking_access_checker'
-            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver'
-            - '@adapter.session'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }

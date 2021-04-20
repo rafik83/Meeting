@@ -2,31 +2,39 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\SearchFacet\Update;
 use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository;
+use Proximum\Vimeet\Domain\Repository\Catalog\CatalogTagFilterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SearchFacetController extends Controller
+class SearchFacetController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Event $event)
+    private SearchFacetRepositoryInterface $searchFacetRepository;
+    private CatalogTagFilterRepositoryInterface $catalogTagFilterRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SearchFacetRepositoryInterface $searchFacetRepository,
+        CatalogTagFilterRepositoryInterface $catalogTagFilterRepository,
+        CommandBusInterface $commandBus) {
+        $this->searchFacetRepository = $searchFacetRepository;
+        $this->catalogTagFilterRepository = $catalogTagFilterRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function updateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')->getByEvent($event);
-        $catalogTagFilters = $this->get(CatalogTagFilterRepository::class)
+        $searchFacets = $this->searchFacetRepository->getByEvent($event);
+        $catalogTagFilters = $this->catalogTagFilterRepository
             ->getByEventAndType($event, CatalogTagFilter::TYPE_INTERNAL);
 
         $types = SearchFacet::getAllTypes();
@@ -38,7 +46,7 @@ class SearchFacetController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->commandBus->handle($command);
             $this->addFlash('success', 'flash.admin.event.filter_facet.update.success');
 
             $submittedSearchFacets = $form->get('searchFacets')->getData();

@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -49,8 +49,8 @@ class UpdateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -61,7 +61,7 @@ class UpdateAction
         TranslatorInterface $translator,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->staticFormulationRepository = $staticFormulationRepository;
@@ -71,7 +71,7 @@ class UpdateAction
         $this->translator = $translator;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, Event $event, string $key, StaticFormulation $staticFormulation)
@@ -105,7 +105,7 @@ class UpdateAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:StaticFormulation:update.html.twig', [
+        return new Response($this->twig->render('AdminBundle:StaticFormulation:update.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
             'staticFormulationTitle' => $staticFormulation->getTitle($locale),

@@ -7,27 +7,27 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ExceptionListener
 {
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /** @var EngineInterface */
+    /** @var Environment */
     private $templating;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
     const TEMPLATE_MAIN_ERRORS = [
-        Response::HTTP_INTERNAL_SERVER_ERROR => 'TwigBundle:Exception:error500.html.twig',
-        Response::HTTP_NOT_FOUND             => 'TwigBundle:Exception:error404.html.twig',
-        Response::HTTP_FORBIDDEN             => 'TwigBundle:Exception:error403.html.twig',
+        Response::HTTP_INTERNAL_SERVER_ERROR => '@Ui/Exception/error500.html.twig',
+        Response::HTTP_NOT_FOUND             => '@Ui/Exception/error404.html.twig',
+        Response::HTTP_FORBIDDEN             => '@Ui/Exception/error403.html.twig',
     ];
 
     const TEMPLATE_EVENT_ERRORS = [
@@ -37,7 +37,7 @@ class ExceptionListener
 
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        EngineInterface $templating,
+        Environment $templating,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->eventRepository             = $eventRepository;
@@ -45,10 +45,10 @@ class ExceptionListener
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $responseForExceptionEvent)
+    public function onKernelException(ExceptionEvent $responseForExceptionEvent)
     {
         $request   = $responseForExceptionEvent->getRequest();
-        $exception = $responseForExceptionEvent->getException();
+        $exception = $responseForExceptionEvent->getThrowable();
 
         /*
          * Symfony throw a redirect when User is not logged
@@ -77,7 +77,7 @@ class ExceptionListener
         $statusCode = $this->resolveHttpStatusCode($exception);
 
         $responseForExceptionEvent->setResponse(
-            $this->buildResponseFromHttpStatusCode($statusCode, $event, $request)
+            $this->buildResponseFromHttpStatusCode($statusCode, $event, $request, $exception->getMessage())
         );
 
         $responseForExceptionEvent->stopPropagation();
@@ -103,7 +103,7 @@ class ExceptionListener
         return $statusCode;
     }
 
-    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request): Response
+    private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request, string $statusText = null): Response
     {
         if (null !== $event && Response::HTTP_INTERNAL_SERVER_ERROR !== $statusCode) {
             $request->setLocale($event->getAvailableLocale($request->getLocale()));
@@ -115,7 +115,7 @@ class ExceptionListener
         }
 
         return new Response(
-            $this->templating->render(self::TEMPLATE_MAIN_ERRORS[$statusCode]),
+            $this->templating->render(self::TEMPLATE_MAIN_ERRORS[$statusCode], ['status_text' => $statusText]),
             $statusCode
         );
     }

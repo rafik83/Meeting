@@ -19,15 +19,15 @@ class TransactionManagerTest extends TestCase
 {
     public function testSetPaid()
     {
-        $datetime    = new \DateTime();
+        $dateTime    = new \DateTime();
         $event       = EventFactory::createEvent();
         $type        = new Type($event);
         $owner       = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet       = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet       = new Sheet($event, $type, [], $owner, $dateTime);
         $transaction = new Transaction(
             $sheet,
             20,
-            $datetime,
+            $dateTime,
             Mode::PAYMENT_PAYPAL,
             '',
             Transaction::STATE_PENDING,

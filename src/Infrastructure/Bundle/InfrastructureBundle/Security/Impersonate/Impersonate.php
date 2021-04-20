@@ -23,18 +23,18 @@ class Impersonate
     private $salt;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         UserProviderInterface $adminProvider,
         UserProviderInterface $userProvider,
         string $salt,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->adminProvider = $adminProvider;
         $this->userProvider = $userProvider;
         $this->salt = $salt;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function getAdmin(string $token): UserInterface
@@ -49,7 +49,7 @@ class Impersonate
 
     public function getEncodedToken(Admin $admin, User $user): string
     {
-        $expire = $this->datetime->getTimestamp() + self::TIME_TO_LIVE;
+        $expire = $this->dateTime->getTimestamp() + self::TIME_TO_LIVE;
         $tokenString = $this->getTokenCheck($admin->getEmail(), $user->getEmail(), $expire);
 
         return base64_encode(
@@ -97,7 +97,7 @@ class Impersonate
             throw new BadCredentialsException('Token check invalid');
         }
 
-        if ($this->datetime->getTimestamp() > $decodedToken['expire']) {
+        if ($this->dateTime->getTimestamp() > $decodedToken['expire']) {
             throw new BadCredentialsException('Token has expired');
         }
     }

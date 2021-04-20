@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Jenkins\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\AbstractSetStatus;
 
-class PrintPdfCallback extends AbstractSetStatus
+class PrintPdfCallback extends AbstractSetStatus implements Command
 {
     /** @var string */
     public $input;

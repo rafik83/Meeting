@@ -27,7 +27,7 @@ class UpdateMeetingRequestHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var RequestPermissionManager
@@ -43,20 +43,20 @@ class UpdateMeetingRequestHandler
      * @param RequestRepositoryInterface $requestRepository
      * @param MessageRepositoryInterface $messageRepository
      * @param RequestPermissionManager   $requestPermissionManager
-     * @param \DateTimeInterface         $datetime
+     * @param \DateTimeInterface         $dateTime
      * @param DelayedEventDispatcher     $eventDispatcher
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $requestPermissionManager,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->requestRepository        = $requestRepository;
         $this->messageRepository        = $messageRepository;
         $this->requestPermissionManager = $requestPermissionManager;
-        $this->datetime                 = $datetime;
+        $this->dateTime                 = $dateTime;
         $this->eventDispatcher          = $eventDispatcher;
     }
 
@@ -90,7 +90,7 @@ class UpdateMeetingRequestHandler
                 $updateRequest->meetingRequest,
                 $updateRequest->sheetEditor,
                 $updateRequest->description,
-                $this->datetime
+                $this->dateTime
             );
 
             $this->messageRepository->add($message);

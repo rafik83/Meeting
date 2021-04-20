@@ -37,11 +37,11 @@ services:
     #
     # Value Resolver
     #
-    Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver:
-        arguments:
-            - '@security.token_storage'
-        tags:
-            - { name: controller.argument_value_resolver, priority: 50 }
+    # Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver:
+    #     arguments:
+    #         - '@security.token_storage'
+    #     tags:
+    #         - { name: controller.argument_value_resolver, priority: 50 }
 
     #
     # Security
@@ -90,13 +90,13 @@ services:
     security_voter.participant_import_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
         arguments:
-            - '@adapter.session'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
         tags:
             - { name: security.voter }
     security_voter.catalog_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
         arguments:
-            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
         tags:
             - { name: security.voter }
     security_voter.agenda_access_voter:
@@ -112,7 +112,7 @@ services:
     security_voter.video_meeting_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter
         arguments:
-            - '@components.security.video_meeting_access'
+            - '@Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess'
         tags:
             - { name: security.voter }
     security_voter.validate_mobile_access_voter:
@@ -184,12 +184,12 @@ services:
         tags:
             - { name: 'form.type' }
 
-    vimeet_app.form_type_participant.type_choice:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
-        arguments:
-            - '@markdown'
-        tags:
-            - { name: 'form.type' }
+    # vimeet_app.form_type_participant.type_choice:
+    #     class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
+    #     arguments:
+    #         - '@markdown'
+    #     tags:
+    #         - { name: 'form.type' }
     vimeet_app.form_type_meeting.approve_request_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType
         arguments:
@@ -213,7 +213,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -222,7 +222,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\MediaCollectionDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -258,7 +258,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\VideoDataType
         arguments:
             - '@transformer.product.id_to_product_transformer'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@buyable_object_resolver'
             - '@sheet.template_object.buyable_included_product_guesser'
         tags:
@@ -414,13 +414,12 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
         arguments:
             - '@adapter.mailer_adapter'
-            - '@event_sender'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
             - '@query.mail.participant_mail_view_query_handler'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
         tags:
             - { name: kernel.event_subscriber }
-    event_listener.submit_sheet_mail_event_subscriber:
-        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SubmitSheetMailEventSubscriber
+    Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SubmitSheetMailEventSubscriber:
         arguments:
             - '@template.participant_info_guesser'
             - '@repository.admin_repository'
@@ -449,7 +448,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter.sheet_indexer'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
         tags:
             - { name: kernel.event_subscriber }
     event_listener.sheet.package_orders_updated_event_subscriber:
@@ -467,7 +466,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@security.token_storage'
             - '@router.default'
@@ -478,7 +477,7 @@ services:
     event_listener.sheet.sheet_populate_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
         arguments:
-            - '@adapter.sheet_indexer'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -578,21 +577,20 @@ services:
     #
     # Twig extension
     #
-    vimeet_app.twig_extension:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig\AppExtension
-        public: false
-        arguments:
-            - '@sonata.intl.templating.helper.locale'
-            - '@markdown'
-            - '@adapter.event_url_generator'
-        tags:
-            - { name: 'twig.extension' }
+    # vimeet_app.twig_extension:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig\AppExtension
+    #     public: false
+    #     arguments:
+    #         - '@sonata.intl.templating.helper.locale'
+    #         - '@markdown'
+    #         - '@adapter.event_url_generator'
+    #     tags:
+    #         - { name: 'twig.extension' }
 
     #
     # Security
     #
-    security.impersonate:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate:
         arguments:
             - '@security.user.provider.concrete.admin_provider'
             - '@security.user.provider.concrete.user_provider'
@@ -614,17 +612,10 @@ services:
             - ~
             - '@?event_dispatcher'
             - ~
-            - '@security.impersonate'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate'
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: monolog.logger, channel: security }
-
-    security.authentication.switch_sheet_group_manager_to_sheet_user:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall\SwitchSheetGroupManagerToSheetUser
-        arguments:
-            - '@security.token_storage'
-            - '@security.user_checker'
-            - '@security.authorization_checker'
 
     security.sheet_voter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter
@@ -649,14 +640,7 @@ services:
             - { name: security.voter }
 
     security.app.user_checker:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
-        arguments:
-            - '@request_stack'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@components.user.type_resolver'
-            - '@session'
+        alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker
 
     security.app.admin_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\AdminChecker
@@ -673,22 +657,21 @@ services:
             - '@adapter.event_url_generator'
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
-    error_factory:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
-        arguments:
-            - '@translator'
-            - '@request_stack'
+    # error_factory:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
+    #     arguments:
+    #         - '@translator'
+    #         - '@request_stack'
 
-    filter_summary:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
-        arguments:
-            - '@translator'
+    # filter_summary:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary
+    #     arguments:
+    #         - '@translator'
 
     markdown:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown
 
-    event_sender:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender:
         arguments:
             - '%domain%'
             - '%mailer_sender%'
@@ -722,7 +705,7 @@ services:
 
     Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser:
         arguments:
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@adapter.validator_adapter'
             - '%infrastructure.import_authentication_token_path%'
@@ -753,7 +736,7 @@ services:
         arguments:
             - '@package.planning.quantity_max_guesser'
             - '@Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode'
-            - '@package.product.template_product_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser'
             - '@datetime'
             - '@order.merger'
             - '@cart_manager'
@@ -776,11 +759,6 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@form.factory'
             - '@tactician.commandbus.query'
-    handler_user_profile.pre_update_handler:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler
-        arguments:
-            - '@security.validate_mobile_process_access_checker'
-            - '@template.participant_info_guesser'
 
     handler.unavailability.create_form_handler:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler
@@ -791,8 +769,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm }
 
-    handler.catalog.availability_confirmation_checker_handler:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler:
         arguments:
             - '@domain.key_dates.checker.agenda_access_checker'
             - '@domain.event.day.event_over'
@@ -806,7 +783,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@catalog.visible_participation_categories'
             - '@catalog.visible_participation_types'
-            - '@templating'
+            - '@twig'
             - '@Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler:
@@ -823,7 +800,7 @@ services:
             - '@Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
-            - '@templating'
+            - '@twig'
             - '@form.factory'
             - '@adapter.router'
             - '@vimeet_infrastructure.adapter.translator_adapter'

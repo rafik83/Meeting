@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class UpdateAvatar
+class UpdateAvatar implements Command
 {
     /**
      * @var TemplateData

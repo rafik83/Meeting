@@ -10,28 +10,25 @@ use Proximum\Vimeet\Application\Command\Event\Participant\AddFastCheckin;
 use Proximum\Vimeet\Application\Command\Event\Participant\TypeMissingForFastCheckinException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Participant\AddFastCheckinType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class AddFastCheckinAction
 {
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var FormFactory */
-    private $formFactory;
-
-    /** @var EngineInterface */
-    private $engine;
+    private FormFactoryInterface $formFactory;
+    private Environment $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -50,8 +47,8 @@ class AddFastCheckinAction
 
     public function __construct(
         CommandBusInterface $commandBus,
-        FormFactory $formFactory,
-        EngineInterface $engine,
+        FormFactoryInterface $formFactory,
+        Environment $twig,
         FlashBagInterface $flashBag,
         RouterInterface $router,
         UserRepositoryInterface $userRepository,
@@ -60,7 +57,7 @@ class AddFastCheckinAction
     ) {
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->userRepository = $userRepository;
@@ -121,11 +118,11 @@ class AddFastCheckinAction
             }
         }
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/Event/fastCheckinForm.html.twig',
             [
                 'form' => $form->createView(),
             ]
-        );
+        ));
     }
 }

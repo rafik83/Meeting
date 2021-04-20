@@ -8,13 +8,13 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\AvailabilityTimeRange\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -23,8 +23,8 @@ class CreateAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -40,14 +40,14 @@ class CreateAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
@@ -95,9 +95,9 @@ class CreateAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

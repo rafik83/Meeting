@@ -16,8 +16,8 @@ use Proximum\Vimeet\Domain\Order\SheetOrderStatus;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
@@ -29,7 +29,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\SearchableObjectInterface;
 use Proximum\Vimeet\Infrastructure\Elastica\AvailableLocales;
 use Proximum\Vimeet\Infrastructure\Elastica\SheetContentView;
-use Symfony\Component\Intl\Intl;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Exception\MissingResourceException;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
@@ -69,6 +71,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /** @var CampaignRepositoryInterface */
     private $campaignRepository;
 
+    private ?LoggerInterface $logger;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -81,7 +85,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         MeetingRepositoryInterface $meetingRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         SheetOrderStatus $sheetOrderStatus,
-        CampaignRepositoryInterface $campaignRepository
+        CampaignRepositoryInterface $campaignRepository,
+        LoggerInterface $logger = null
     ) {
         $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
@@ -95,6 +100,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->sheetOrderStatus = $sheetOrderStatus;
         $this->campaignRepository = $campaignRepository;
+        $this->logger = $logger;
     }
 
     public function transform($sheet, array $fields): Document
@@ -268,11 +274,19 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         $countries = [];
-        $regionBundle = Intl::getRegionBundle();
 
         foreach ($locales as $key => $locale) {
-            $countryName = $regionBundle->getCountryName($countryCode, $locale);
-
+            try {
+                $countryName = $countryCode ? Countries::getName($countryCode, $locale) : '';
+            } catch (MissingResourceException $e) {
+                $countryName = '';
+                if ($this->logger) {
+                    $this->logger->warning(
+                        'Country not found for code {countryCode}, locale {locale}',
+                        ['countryCode' => $countryCode, 'locale' => $locale]
+                    );
+                }
+            }
             $countries[$key]['locale'] = $locale;
             $countries[$key]['label'] = $countryName;
             $countries[$key]['label_autocomplete'] = $countryName;

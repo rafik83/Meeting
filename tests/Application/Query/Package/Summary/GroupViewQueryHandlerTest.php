@@ -24,13 +24,13 @@ class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $locale   = 'fr';
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'Package1', $datetime);
+        $package  = new Package($event, 'Package1', $dateTime);
         $package->enable(false, false, true);
-        $sheet   = SheetFactory::create($event, null, $datetime, $type);
+        $sheet   = SheetFactory::create($event, null, $dateTime, $type);
         $product = ProductFactory::create($event, 'option');
 
         $package->setPlanning($product);

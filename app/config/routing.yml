@@ -47,11 +47,11 @@ vimeet_admin:
     defaults:
         _locale: '%locale%'
 
-JMSJobQueueBundle:
-    resource: "@JMSJobQueueBundle/Controller/"
-    prefix: /{_locale}/jobs
-    host: '%admin_domain%'
-    type: annotation
+# JMSJobQueueBundle:
+#     resource: "@JMSJobQueueBundle/Controller/"
+#     prefix: /{_locale}/jobs
+#     host: '%admin_domain%'
+#     type: annotation
 
 #
 # Event
@@ -65,17 +65,6 @@ default_event:
 #
 vimeet_event_authentication_token_login:
     path: /login
-    methods: [GET]
-
-#
-# Trailing slash redirect to home event
-#
-default_redirect:
-    path: /{_locale}
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: event
-        permanent: true
     methods: [GET]
 
 vimeet_event:

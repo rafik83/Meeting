@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Message;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
-class PreviewQuery
+class PreviewQuery implements Query
 {
     /** @var Message */
     public $message;

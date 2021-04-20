@@ -5,30 +5,32 @@ Feature: Show the homepage of an event
 
   Scenario: I can see the event name
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
-    Then I should see "Les rendez-vous CARNOT 2016"
+    And the event "Les rendez-vous CARNOT" is created
+    And the domain for this event is "rdv-carnot.vimeet.proximum"
+    And there is a type "Exposant" in this event
+    And the "en" translation of this type is "Exhibitor"
+    And there is a type "Visiteur" in this event
+    And the "en" translation of this type is "Visitor"
+    When I go to this page "http://rdv-carnot.vimeet.proximum/fr/"
+    Then I should see "Les rendez-vous CARNOT"
 
-  Scenario: Show the participant types of 'Les rendez-vous Carnot 2016' in French
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
+  Scenario: Show the participant types of 'Les rendez-vous Carnot' in French
+    Given there is an event with domain "rdv-carnot.vimeet.proximum"
+    When I go to this page "http://rdv-carnot.vimeet.proximum/fr/"
     Then I should see "Exposant"
     And I should see "Visiteur"
 
-  Scenario: Show the participant types of 'Les rendez-vous Carnot 2016' in English
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/en/"
+  Scenario: Show the participant types of 'Les rendez-vous Carnot' in English
+    Given there is an event with domain "rdv-carnot.vimeet.proximum"
+    When I go to this page "http://rdv-carnot.vimeet.proximum/en/"
     Then I should see "Exhibitor"
     And I should see "Visitor"
 
   Scenario: See pratical info of the event
-    When I go to this page "http://rdv-carnot-2016.vimeet.proximum/fr/"
+    Given there is an event with domain "rdv-carnot.vimeet.proximum"
+    And the organiser name of this event is "PROXIMUM"
+    And the organiser email of this event is "accounts@proximumgroup.com"
+    When I go to this page "http://rdv-carnot.vimeet.proximum/fr/"
     Then I should see "event.info.contact"
     And I should see "PROXIMUM"
     And I should see "accounts@proximumgroup.com"

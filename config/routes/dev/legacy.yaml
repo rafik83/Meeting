@@ -1,0 +1,2 @@
+_legacy:
+    resource: ../app/config/routing_dev.yml

@@ -7,13 +7,13 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Create;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -31,8 +31,8 @@ class CreateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -40,21 +40,12 @@ class CreateAction
     /** @var array */
     private $defaultLocales;
 
-    /**
-     * @param CommandBus                           $commandBus
-     * @param FormFactoryInterface                 $formFactory
-     * @param FlashBagInterface                    $flashBag
-     * @param RouterInterface                      $router
-     * @param EngineInterface                      $engine
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param array                                $defaultLocales
-     */
     public function __construct(
         CommandBus $commandBus,
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         array $defaultLocales
     ) {
@@ -62,7 +53,7 @@ class CreateAction
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->defaultLocales = $defaultLocales;
     }
@@ -92,8 +83,8 @@ class CreateAction
             return new RedirectResponse($this->router->generate('admin_tip_list'));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

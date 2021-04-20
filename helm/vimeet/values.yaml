@@ -15,15 +15,13 @@ parameters:
     database_name:     proximum_vimeet
     database_user:     root
     database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
-    mailer_sender:     "vimeet@proximum.com"
+    # mailer_sender:     "vimeet@proximum.com"
     mailer_encryption: ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1
@@ -62,14 +60,14 @@ parameters:
     paypal_signature: "AKarEPU9IGhpxmdZtMXPhpeKKLPRAe-BNJglO3FIWyFQxmJFjwjXo1hC"
     paypal_sandbox:   true
 
-    phantomjs_path:                '%kernel.root_dir%/../node_modules/.bin/phantomjs'
-    phantomjs_script:              '%kernel.root_dir%/../phantomjs/render.js'
-    phantomjs_render_script_path:  '%kernel.root_dir%/../phantomjs/'
+    phantomjs_path:                '%kernel.project_dir%/node_modules/.bin/phantomjs'
+    phantomjs_script:              '%kernel.project_dir%/phantomjs/render.js'
+    phantomjs_render_script_path:  '%kernel.project_dir%/phantomjs/'
     phantomjs_render_badge_script: 'renderBadge.js'
     phantomjs_http_user:           'phantomjs'
     phantomjs_http_password:       '7DSJD2sm8YpzfjmnXeethPuybb'
 
-    openl10n_config_file: '%kernel.root_dir%/../.openl10n.yml'
+    openl10n_config_file: '%kernel.project_dir%/.openl10n.yml'
 
     user_activate_account_token_expiration: 'P7D'
 
@@ -91,7 +89,7 @@ parameters:
     tokbox_api_secret: ~
     visio_screen_sharing_chrome_extension: https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp
 
-    planner_files_path: '%kernel.root_dir%/../var/planner'
+    planner_files_path: '%kernel.project_dir%/var/planner'
     planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
     planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
 
@@ -125,7 +123,7 @@ parameters:
     feature_availability_confirmation_enabled: true
     feature_registration_template_builder_enabled: false
     feature_product_vat_enabled: false
-    liip_imagine_data_root: "%kernel.project_dir%/web"
+    liip_imagine_data_root: "%kernel.project_dir%/public"
 
     google_cloud_storage_video_uri: 'https://video-cdn.vimeet.events'
     google_cloud_storage_config:
@@ -174,7 +172,7 @@ image:
 ## Worker
 ##
 worker:
-  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console jms-job-queue:run --no-interaction --env=dev --verbose"
+  command: "php /var/www/proximum-vimeet.project.local/htdocs/current/bin/console messenger:consume -t 7200 job_async job_async_low -vv"
 
 ##
 ## External database configuration

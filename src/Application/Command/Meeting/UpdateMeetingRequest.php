@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class UpdateMeetingRequest
+class UpdateMeetingRequest implements Command
 {
     /** @var Request */
     public $meetingRequest;

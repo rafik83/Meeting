@@ -11,7 +11,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
@@ -21,17 +21,17 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(EventDomain $eventDomain, Sheet $sheet)
@@ -47,7 +47,7 @@ class ListAction
             new NotificationViewQuery($sheet)
         );
 
-        return new Response($this->engine->render('EventBundle:Notification:list.html.twig', [
+        return new Response($this->twig->render('EventBundle:Notification:list.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
             'notifications' => $notificationListView,

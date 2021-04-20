@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,7 +13,7 @@ class Version20170522124715 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         $this->addSql('DROP INDEX date_unique_idx ON mass_unavailability_assignment');
         $this->addSql('ALTER TABLE mass_unavailability_assignment ADD user_id INT DEFAULT NULL');
@@ -30,7 +30,7 @@ class Version20170522124715 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         $this->addSql('ALTER TABLE mass_unavailability_assignment DROP FOREIGN KEY FK_1A5777A3A76ED395');
         $this->addSql('DROP INDEX IDX_1A5777A3A76ED395 ON mass_unavailability_assignment');

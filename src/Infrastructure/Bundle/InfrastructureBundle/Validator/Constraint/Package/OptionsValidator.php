@@ -23,7 +23,7 @@ class OptionsValidator extends ConstraintValidator
     private $quantityMaxGuesser;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     /** @var ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode */
     private $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
@@ -41,13 +41,13 @@ class OptionsValidator extends ConstraintValidator
         QuantityMaxGuesser $quantityMaxGuesser,
         ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode,
         TemplateProductGuesser $templateProductGuesser,
-        \DateTimeInterface $now,
+        \DateTimeInterface $dateTime,
         Merger $merger,
         CartManager $cartManager
     ) {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
         $this->conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
         $this->merger = $merger;
         $this->templateProductGuesser = $templateProductGuesser;
         $this->cartManager = $cartManager;
@@ -190,7 +190,7 @@ class OptionsValidator extends ConstraintValidator
 
     private function validateProductNotDeletable(?Order $order, Product $option, int $quantity): void
     {
-        if (!$order instanceof Order || $option->isDeletable($this->now)) {
+        if (!$order instanceof Order || $option->isDeletable($this->dateTime)) {
             return;
         }
 
@@ -210,7 +210,7 @@ class OptionsValidator extends ConstraintValidator
      */
     private function getAvailableOptionsIndexedByProductId(Sheet $sheet): array
     {
-        $options = $sheet->getPackage()->getAvailablesOptions($this->now);
+        $options = $sheet->getPackage()->getAvailablesOptions($this->dateTime);
 
         $optionsIndexedByProductId = [];
 

@@ -37,7 +37,7 @@ class SMSNotifierSubscriberTest extends TestCase
         $userEventPhone                   = $this->prophesize(User\UserEventPhone::class);
         $sms                              = $this->prophesize(SMS::class);
         $extraData                        = $this->prophesize(ExtraData::class);
-        $datetime                         = new \DateTime();
+        $dateTime                         = new \DateTime();
 
         $participant->getUser()->willReturn($user->reveal());
         $participant->getLocale()->willReturn('fr');
@@ -110,8 +110,8 @@ class SMSNotifierSubscriberTest extends TestCase
                 $user->reveal(),
                 $eventModel->reveal(),
                 Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-                $datetime->format('Y-m-d H:i:s'),
-                $datetime
+                $dateTime->format('Y-m-d H:i:s'),
+                $dateTime
             )
         )->shouldBeCalled();
 
@@ -121,7 +121,7 @@ class SMSNotifierSubscriberTest extends TestCase
             $smsSender->reveal(),
             $extraDataRepository->reveal(),
             $smsFactory->reveal(),
-            $datetime
+            $dateTime
         );
 
         $smsNotifierSubscriber->onMeetingRequestCreated($event->reveal());

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Phone;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class IgnoreConfirmation
+class IgnoreConfirmation implements Command
 {
     /** @var Event */
     public $event;

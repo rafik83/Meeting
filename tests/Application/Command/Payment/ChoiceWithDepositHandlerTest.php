@@ -28,12 +28,12 @@ class ChoiceWithDepositHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime('2017-10-10 10:10:00');
+        $dateTime = new \DateTime('2017-10-10 10:10:00');
 
         $event  = EventFactory::createEvent();
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet  = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet  = new Sheet($event, $type, [], $owner, $dateTime);
         $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = true;
@@ -64,7 +64,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
         $transaction = new Transaction(
             $sheet,
             240,
-            $datetime,
+            $dateTime,
             Mode::PAYMENT_BANK_CARD,
             null,
             Transaction::STATE_PENDING,
@@ -72,7 +72,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
             $owner
         );
 
-        $order = Order::createFromSheet($sheet, $datetime);
+        $order = Order::createFromSheet($sheet, $dateTime);
 
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
@@ -92,7 +92,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
             $cartManager->reveal(),
             $totalToPay->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $queryBus->reveal()
         );
 
@@ -101,12 +101,12 @@ class ChoiceWithDepositHandlerTest extends TestCase
 
     public function testHandleWithoutDeposit()
     {
-        $datetime = new \DateTime('2017-10-10 10:10:10');
+        $dateTime = new \DateTime('2017-10-10 10:10:10');
 
         $event  = EventFactory::createEvent();
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet  = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet  = new Sheet($event, $type, [], $owner, $dateTime);
         $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = false;
@@ -130,7 +130,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
         $transaction = new Transaction(
             $sheet,
             480,
-            $datetime,
+            $dateTime,
             Mode::PAYMENT_BANK_CARD,
             null,
             Transaction::STATE_PENDING,
@@ -138,7 +138,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
             $owner
         );
 
-        $order = Order::createFromSheet($sheet, $datetime);
+        $order = Order::createFromSheet($sheet, $dateTime);
 
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
@@ -158,7 +158,7 @@ class ChoiceWithDepositHandlerTest extends TestCase
             $cartManager->reveal(),
             $totalToPay->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $queryBus->reveal()
         );
 

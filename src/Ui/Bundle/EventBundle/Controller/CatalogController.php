@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
+use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
@@ -25,6 +27,7 @@ use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
@@ -33,7 +36,8 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAnd
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,13 +49,39 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @see CatalogAccessEventListener
  */
-class CatalogController extends Controller
+class CatalogController extends AbstractController
 {
+    private AvailabilityConfirmationCheckerHandler $availabilityConfirmationCheckerHandler;
+    private SheetGuesser $sheetGuesser;
+    private GetViewedSheetsFromFilters $getViewedSheetsFromFilters;
+    private CatalogFilterViewsHandler $catalogFilterViewsHandler;
+    private FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler;
+    private FormFactoryInterface $formFactory;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        AvailabilityConfirmationCheckerHandler $availabilityConfirmationCheckerHandler,
+        SheetGuesser $sheetGuesser,
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters,
+        CatalogFilterViewsHandler $catalogFilterViewsHandler,
+        FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler,
+        FormFactoryInterface $formFactory,
+        QueryBusInterface $queryBus
+    ) {
+        $this->availabilityConfirmationCheckerHandler = $availabilityConfirmationCheckerHandler;
+        $this->sheetGuesser = $sheetGuesser;
+        $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
+        $this->catalogFilterViewsHandler = $catalogFilterViewsHandler;
+        $this->filterAvailableSlotAndSpecificSlotCheckerHandler = $filterAvailableSlotAndSpecificSlotCheckerHandler;
+        $this->formFactory = $formFactory;
+        $this->queryBus = $queryBus;
+    }
+
     public function redirectAction(Request $request, EventDomain $eventDomain): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet(
+        $sheet = $this->sheetGuesser->getUserSheet(
             $this->getUser(),
             $eventDomain->getEvent(),
             $request->getLocale()
@@ -71,7 +101,7 @@ class CatalogController extends Controller
         $locale = $request->getLocale();
         $user = $userDomain->getUser();
 
-        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
+        $availabilityConfirmation = $this->availabilityConfirmationCheckerHandler
             ->handle(new AvailabilityConfirmationChecker(
                 $event,
                 $sheet,
@@ -88,8 +118,7 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $catalogFilterViewsResult = $this
-            ->get(CatalogFilterViewsHandler::class)
+        $catalogFilterViewsResult = $this->catalogFilterViewsHandler
             ->handle(new CatalogFilterViews($event, $sheet, $locale), $sheet->getType()->canDisplayAnalyticsOnCatalog(), $user)
         ;
 
@@ -102,8 +131,7 @@ class CatalogController extends Controller
         $sheetsToExclude = [];
         $availableSlotsIds = [];
 
-        $filterAvailableSlotAndSpecificSlotChecker = $this
-            ->get(FilterAvailableSlotAndSpecificSlotCheckerHandler::class)
+        $filterAvailableSlotAndSpecificSlotChecker = $this->filterAvailableSlotAndSpecificSlotCheckerHandler
             ->handle(new FilterAvailableSlotAndSpecificSlotChecker(
                 $event,
                 $sheet,
@@ -142,8 +170,7 @@ class CatalogController extends Controller
         }
 
         if ($filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
-            $catalogAvailableSlotView = $this
-                ->get('tactician.commandbus.query')
+            $catalogAvailableSlotView = $this->queryBus
                 ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
             ;
 
@@ -155,11 +182,11 @@ class CatalogController extends Controller
 
         $filters = array_merge(Catalog::DEFAULT_FILTERS, $filters);
 
-        $searchFacetView = $this->get('tactician.commandbus.query')->handle(new SearchFacetViewQuery($event, $locale));
+        $searchFacetView = $this->queryBus->handle(new SearchFacetViewQuery($event, $locale));
 
         try {
             /** @var PaginatedResult $paginatedResult */
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+            $paginatedResult = $this->queryBus->handle(
                 new PaginatedCatalogSheetPreviewViewQuery(
                     $event,
                     $filters,
@@ -194,7 +221,7 @@ class CatalogController extends Controller
             $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
             $availableSlotsIds,
             $sheetsToExclude,
-            $this->get(GetViewedSheetsFromFilters::class)->getFilteredByVisitSheetIds($filters, $user, $sheet)
+            $this->getViewedSheetsFromFilters->getFilteredByVisitSheetIds($filters, $user, $sheet)
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -223,7 +250,7 @@ class CatalogController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_CATALOG,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
             'event' => $event,
@@ -258,7 +285,7 @@ class CatalogController extends Controller
             return new JsonResponse([]);
         }
 
-        $localizationView = $this->get('tactician.commandbus.query')->handle(
+        $localizationView = $this->queryBus->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
                 $query,
@@ -285,7 +312,7 @@ class CatalogController extends Controller
             return new JsonResponse([]);
         }
 
-        $keywordView = $this->get('tactician.commandbus.query')->handle(
+        $keywordView = $this->queryBus->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
                 $query,
@@ -324,7 +351,7 @@ class CatalogController extends Controller
         bool $filterAvailableSlotIds = false,
         ?MeetingSlot $specificSlot = null
     ): FormInterface {
-        return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
+        return $this->formFactory->createNamed('', SearchType::class, $filters, [
             'action' => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
             'filterBySheetVisit' => $sheet->getType()->canDisplayAnalyticsOnCatalog(),
             'typeViews' => $catalogFilterViewsResult->typeViews,
@@ -355,7 +382,7 @@ class CatalogController extends Controller
         ?array $prefilteredSheetIds
     ): FormInterface {
         /** @var FilteredFieldsView $filteredFieldsView */
-        $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
+        $filteredFieldsView = $this->queryBus->handle(
             new FilteredFieldsQuery(
                 $event,
                 $filters,

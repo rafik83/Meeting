@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Rule;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Rule;
 
-class SeeWhat
+class SeeWhat implements Command
 {
     /**
      * @var Rule

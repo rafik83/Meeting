@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\TypeView;
 
-class RegisterNewUser
+class RegisterNewUser implements Command
 {
     /**
      * @var string

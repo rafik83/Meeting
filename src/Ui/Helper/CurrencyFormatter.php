@@ -2,31 +2,18 @@
 
 namespace Proximum\Vimeet\Ui\Helper;
 
+use Twig\Extensions\IntlExtension;
+
 class CurrencyFormatter
 {
-    /**
-     * @var \Twig_Extensions_Extension_Intl
-     */
-    private $helper;
+    private IntlExtension $helper;
 
-    /**
-     * CurrencyFormatter constructor.
-     *
-     * @param \Twig_Extensions_Extension_Intl $helper
-     */
-    public function __construct(\Twig_Extensions_Extension_Intl $helper)
+    public function __construct(IntlExtension $helper)
     {
         $this->helper = $helper;
     }
 
-    /**
-     * @param float       $number
-     * @param string|null $currency
-     * @param string|null $locale
-     *
-     * @return string
-     */
-    public function format($number, $currency = null, $locale = null)
+    public function format(float $number, ?string $currency = null, ?string $locale = null): ?string
     {
         foreach ($this->helper->getFilters() as $filter) {
             if ('localizedcurrency' === $filter->getName()) {

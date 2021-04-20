@@ -26,14 +26,14 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
         $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 20, 10, 40);
         $planningProduct = Product::createPlanning($event->reveal(), 'planning', 50, 20, 10);
         $participantProduct = Product::createParticipant($event->reveal(), 'participant', 50, 20, 10);
 
-        $package = new Package($event->reveal(), 'My package', $datetime);
+        $package = new Package($event->reveal(), 'My package', $dateTime);
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);
@@ -52,7 +52,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
             'My promotion code',
             'AXYZ',
             1,
-            $datetime->modify('+1 month')
+            $dateTime->modify('+1 month')
         );
         $planRow = new CartRow($sheet->reveal(), $planProduct, 1);
         $promotionCodeRow = new PromotionCodeRow($sheet->reveal(), $promotionCode);
@@ -116,7 +116,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
 
     public function testWithSeveralParticipantsAndNoPlanningHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
         $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 20, 10, 40);
@@ -132,7 +132,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $participantProduct2->isParticipant()->willReturn(true);
         $participantProduct2->getSerializedData()->willReturn('participantProductSerializedData2');
 
-        $package = new Package($event->reveal(), 'My package', $datetime);
+        $package = new Package($event->reveal(), 'My package', $dateTime);
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);

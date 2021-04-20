@@ -11,15 +11,15 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class PlannerAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var EventOpenAccessChecker */
     private $eventOpenAccessChecker;
@@ -35,14 +35,14 @@ class PlannerAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         EventOpenAccessChecker $eventOpenAccessChecker,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         PlannerJobRepositoryInterface $plannerJobRepository,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
         $this->plannerJobRepository = $plannerJobRepository;
@@ -66,7 +66,7 @@ class PlannerAction
         $meetingSolutions = $this->queryBus->handle(new MeetingSolutionListQuery($event));
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'AdminBundle:Planner:index.html.twig',
                 [
                     'event' => $event,

@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class Attend
+class Attend implements Command
 {
     /**
      * @var Sheet

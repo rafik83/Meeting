@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Order;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 
-class UpdateRow
+class UpdateRow implements Command
 {
     /**
      * @var Row

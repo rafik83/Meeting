@@ -3,20 +3,20 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Account;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class IndexAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
-    public function __construct(EngineInterface $engine)
+    public function __construct(Environment $twig)
     {
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(): Response
     {
-        return new Response($this->engine->render('AdminBundle:Account:index.html.twig'));
+        return new Response($this->twig->render('AdminBundle:Account:index.html.twig'));
     }
 }

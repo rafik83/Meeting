@@ -38,20 +38,20 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $router;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         EventByHostResolver $eventByHostResolver,
         UserRepositoryInterface $userRepository,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->eventByHostResolver = $eventByHostResolver;
         $this->userRepository = $userRepository;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     public function start(Request $request, AuthenticationException $authException = null): JsonResponse
@@ -86,7 +86,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return $this->userRepository->findByAuthenticationTokenAndEvent(
             $credentials['token'],
             $credentials['event'],
-            $this->now
+            $this->dateTime
         );
     }
 

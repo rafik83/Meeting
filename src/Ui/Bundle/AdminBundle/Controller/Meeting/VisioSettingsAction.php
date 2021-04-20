@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class VisioSettingsAction
 {
@@ -32,8 +32,8 @@ class VisioSettingsAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -53,14 +53,14 @@ class VisioSettingsAction
         FlashBagInterface $flashBag,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         VisioSettingsRetriever $visioSettingsRetriever
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->flashBag = $flashBag;
         $this->visioSettingsRetriever = $visioSettingsRetriever;
@@ -95,7 +95,7 @@ class VisioSettingsAction
         $updateVisioSettingsView = $this->queryBus->handle(new UpdateVisioSettingsViewQuery($event, $visioSettings));
 
         return new Response(
-            $this->engine->render(self::TEMPLATE, [
+            $this->twig->render(self::TEMPLATE, [
                 'event' => $event,
                 'view' => $updateVisioSettingsView,
                 'form' => $form->createView(),

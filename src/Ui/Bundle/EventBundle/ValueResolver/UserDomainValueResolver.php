@@ -2,24 +2,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver;
 
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 final class UserDomainValueResolver implements ArgumentValueResolverInterface
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
+    private UserDomainProvider $userDomainProvider;
 
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(UserDomainProvider $userDomainProvider)
     {
-        $this->tokenStorage = $tokenStorage;
+        $this->userDomainProvider = $userDomainProvider;
     }
 
     /**
@@ -31,7 +25,7 @@ final class UserDomainValueResolver implements ArgumentValueResolverInterface
             return false;
         }
 
-        return $this->isTokenSupported();
+        return $this->userDomainProvider->isUserDomainConnected();
     }
 
     /**
@@ -39,25 +33,6 @@ final class UserDomainValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
-        yield new UserDomain($this->tokenStorage->getToken()->getUser());
-    }
-
-    public function getUserDomain(): ?UserDomain
-    {
-        if (!$this->isTokenSupported()) {
-            return null;
-        }
-
-        return new UserDomain($this->tokenStorage->getToken()->getUser());
-    }
-
-    private function isTokenSupported(): bool
-    {
-        $token = $this->tokenStorage->getToken();
-        if (!$token instanceof TokenInterface) {
-            return false;
-        }
-
-        return $token->getUser() instanceof User;
+        yield $this->userDomainProvider->createUserDomain();
     }
 }

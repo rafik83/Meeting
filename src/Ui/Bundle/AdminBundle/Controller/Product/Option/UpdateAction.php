@@ -10,13 +10,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -35,8 +35,8 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
@@ -47,7 +47,7 @@ class UpdateAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         HappeningRepositoryInterface $happeningRepository
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -55,7 +55,7 @@ class UpdateAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->happeningRepository = $happeningRepository;
     }
 
@@ -92,10 +92,10 @@ class UpdateAction
             return new RedirectResponse($this->router->generate('admin_product', ['event' => $event->getId()]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Product:updateOption.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Product:updateOption.html.twig', [
             'event'   => $event,
             'form'    => $form->createView(),
             'product' => $product,
-        ]);
+        ]));
     }
 }

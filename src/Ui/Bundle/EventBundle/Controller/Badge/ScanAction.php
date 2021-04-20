@@ -11,27 +11,27 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ScanAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var HasAccessToSheet */
     private $hasAccessToSheet;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         HasAccessToSheet $hasAccessToSheet
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->hasAccessToSheet = $hasAccessToSheet;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(
@@ -50,7 +50,7 @@ class ScanAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Badge:scan.html.twig',
                 [
                     'event' => $event,

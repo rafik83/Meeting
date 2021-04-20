@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Phone;
 
-class UpdateBlackList
+use Proximum\Vimeet\Application\Command\Command;
+
+class UpdateBlackList implements Command
 {
 }

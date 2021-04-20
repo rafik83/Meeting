@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PostBatchPending
+class PostBatchPending implements Command
 {
     /**
      * @var Sheet[]

@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Sheet\IndexType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Twig\Environment;
 
 class IndexActionTest extends TestCase
 {
@@ -33,7 +33,7 @@ class IndexActionTest extends TestCase
     private $commandBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $flashBag;
@@ -52,7 +52,7 @@ class IndexActionTest extends TestCase
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->request = $this->prophesize(Request::class);
@@ -71,8 +71,8 @@ class IndexActionTest extends TestCase
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
         $this->formFactory->create(IndexType::class, $command)->shouldBeCalled()->willReturn($form->reveal());
-        $this->engine
-            ->renderResponse('AdminBundle:Event:Sheet/index.html.twig', [
+        $this->twig
+            ->render('AdminBundle:Event:Sheet/index.html.twig', [
                 'event' => $this->event->reveal(),
                 'form' => $formView->reveal(),
             ])->shouldBeCalled()
@@ -83,7 +83,7 @@ class IndexActionTest extends TestCase
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal()
         );
@@ -104,7 +104,7 @@ class IndexActionTest extends TestCase
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
         $form->isValid()->shouldBeCalled()->willReturn(true);
         $this->formFactory->create(IndexType::class, $command)->shouldBeCalled()->willReturn($form->reveal());
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($command)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.event.sheets.index.success')->shouldBeCalled();
         $this->event->getId()->willReturn(1);
@@ -114,7 +114,7 @@ class IndexActionTest extends TestCase
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal()
         );

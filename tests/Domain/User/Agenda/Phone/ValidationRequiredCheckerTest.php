@@ -30,7 +30,7 @@ class ValidationRequiredCheckerTest extends TestCase
     private $validationRequiredChecker;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var User */
     private $user;
@@ -49,13 +49,13 @@ class ValidationRequiredCheckerTest extends TestCase
         $this->confirmationPhoneTipChecker = $this->prophesize(ConfirmationPhoneTipChecker::class);
         $this->userEventPhoneChecker       = $this->prophesize(UserEventPhoneChecker::class);
         $this->meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
-        $this->datetime                    = new \DateTime();
+        $this->dateTime                    = new \DateTime();
 
         $this->validationRequiredChecker = new ValidationRequiredChecker(
             $this->confirmationPhoneTipChecker->reveal(),
             $this->userEventPhoneChecker->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $this->user  = UserFactory::create();
@@ -115,8 +115,8 @@ class ValidationRequiredCheckerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $cloneDatetime = clone $this->datetime;
-        $datetimeInFuture = $cloneDatetime->modify('+1 day');
+        $cloneDatetime = clone $this->dateTime;
+        $dateTimeInFuture = $cloneDatetime->modify('+1 day');
 
         $configuration = (new Configuration('leftColor', 'rightColor', 'textColor'))->setDates(
             null,
@@ -125,7 +125,7 @@ class ValidationRequiredCheckerTest extends TestCase
             null,
             null,
             null,
-            $datetimeInFuture
+            $dateTimeInFuture
         );
 
         $this->event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
@@ -137,7 +137,7 @@ class ValidationRequiredCheckerTest extends TestCase
 
     public function testHandleAllConditionsValidated()
     {
-        $cloneDatetime = clone $this->datetime;
+        $cloneDatetime = clone $this->dateTime;
         $oldDatetime = $cloneDatetime->modify('-1 day');
 
         $configuration = (new Configuration('leftColor', 'rightColor', 'textColor'))->setDates(

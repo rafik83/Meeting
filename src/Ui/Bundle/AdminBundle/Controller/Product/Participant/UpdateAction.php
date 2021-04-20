@@ -10,13 +10,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -26,8 +26,8 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -44,7 +44,7 @@ class UpdateAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
@@ -53,7 +53,7 @@ class UpdateAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
@@ -92,10 +92,10 @@ class UpdateAction
             return new RedirectResponse($this->router->generate('admin_product', ['event' => $event->getId()]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Product:updateParticipant.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Product:updateParticipant.html.twig', [
             'event'   => $event,
             'form'    => $form->createView(),
             'product' => $product,
-        ]);
+        ]));
     }
 }

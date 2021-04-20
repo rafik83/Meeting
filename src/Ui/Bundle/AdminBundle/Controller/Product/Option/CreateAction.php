@@ -9,7 +9,7 @@ use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +34,8 @@ class CreateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
@@ -46,7 +46,7 @@ class CreateAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         HappeningRepositoryInterface $happeningRepository
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -54,7 +54,7 @@ class CreateAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->happeningRepository = $happeningRepository;
     }
 
@@ -89,9 +89,9 @@ class CreateAction
             return new RedirectResponse($this->router->generate('admin_product', ['event' => $event->getId()]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Product:createOption.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Product:createOption.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
+        ]));
     }
 }

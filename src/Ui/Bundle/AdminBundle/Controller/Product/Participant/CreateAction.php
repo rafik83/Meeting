@@ -9,13 +9,13 @@ use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -34,8 +34,8 @@ class CreateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AvailabilityTimeRangeRepositoryInterface */
     private $availabilityTimeRangeRepository;
@@ -47,14 +47,14 @@ class CreateAction
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
     }
 
@@ -87,9 +87,9 @@ class CreateAction
             return new RedirectResponse($this->router->generate('admin_product', ['event' => $event->getId()]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Product:createParticipant.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Product:createParticipant.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
+        ]));
     }
 }

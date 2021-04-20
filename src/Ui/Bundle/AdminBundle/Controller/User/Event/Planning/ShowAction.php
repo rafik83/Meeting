@@ -9,26 +9,26 @@ use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var PlanningPrintFactory */
     private $planningPrintFactory;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         PlanningPrintFactory $planningPrintFactory
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->planningPrintFactory = $planningPrintFactory;
     }
 
@@ -44,7 +44,7 @@ class ShowAction
         $plannings[] = $this->planningPrintFactory->getPlanningPrint($user, $event, null);
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'AdminBundle:Planning/Print:plannings.html.twig', [
                     'plannings' => $plannings,
                 ]

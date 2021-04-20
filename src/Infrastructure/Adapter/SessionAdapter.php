@@ -2,24 +2,19 @@
 
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
-use Proximum\Vimeet\Application\Adapter\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Proximum\Vimeet\Application\Adapter\SessionInterface as SessionAdapterInterface;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SessionAdapter implements SessionInterface
+class SessionAdapter implements SessionAdapterInterface
 {
-    /**
-     * @var Session
-     */
-    private $session;
+    private SessionInterface $session;
+    private FlashBagInterface $flashBag;
 
-    /**
-     * SessionAdapter constructor.
-     *
-     * @param Session $session
-     */
-    public function __construct(Session $session)
+    public function __construct(SessionInterface $session, FlashBagInterface $flashBag)
     {
         $this->session = $session;
+        $this->flashBag = $flashBag;
     }
 
     /**
@@ -35,7 +30,7 @@ class SessionAdapter implements SessionInterface
      */
     public function getFromFlashBag($type, array $default = []): array
     {
-        return $this->session->getFlashBag()->get($type, $default);
+        return $this->flashBag->get($type, $default);
     }
 
     /**
@@ -43,7 +38,7 @@ class SessionAdapter implements SessionInterface
      */
     public function addToFlashBag($type, $message): void
     {
-        $this->session->getFlashBag()->add($type, $message);
+        $this->flashBag->add($type, $message);
     }
 
     /**
@@ -60,10 +55,5 @@ class SessionAdapter implements SessionInterface
     public function remove($key)
     {
         $this->session->remove($key);
-    }
-
-    public function getLastUsed(): int
-    {
-        return $this->session->getMetadataBag()->getLastUsed();
     }
 }

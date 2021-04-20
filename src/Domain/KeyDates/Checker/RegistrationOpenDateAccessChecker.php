@@ -16,7 +16,7 @@ class RegistrationOpenDateAccessChecker extends AccessChecker
         $registrationOpenDate = $event->getConfiguration()->getRegistrationOpenDate();
 
         if (null !== $registrationOpenDate) {
-            return $this->datetime >= $registrationOpenDate;
+            return $this->dateTime >= $registrationOpenDate;
         }
 
         return true;

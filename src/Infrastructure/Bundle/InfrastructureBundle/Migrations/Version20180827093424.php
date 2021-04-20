@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Add meeting_participant_extra_data table

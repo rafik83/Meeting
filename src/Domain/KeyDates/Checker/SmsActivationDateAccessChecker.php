@@ -17,6 +17,6 @@ class SmsActivationDateAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getSmsActivationDate();
+        return $this->dateTime >= $event->getConfiguration()->getSmsActivationDate();
     }
 }

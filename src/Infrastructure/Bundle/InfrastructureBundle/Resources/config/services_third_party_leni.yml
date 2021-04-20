@@ -77,9 +77,9 @@ services:
     #
     # Job
     #
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue:
-        arguments:
-            - '@doctrine.orm.entity_manager'
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue:
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'
 
     #
     # Command

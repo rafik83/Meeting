@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Nomenclature;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
-class Import
+class Import implements Command
 {
     /**
      * @var Nomenclature

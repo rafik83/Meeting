@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
@@ -21,8 +21,8 @@ class ListAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -30,12 +30,12 @@ class ListAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
     }
 
@@ -58,7 +58,7 @@ class ListAction
 
         $operatorList = $this->queryBus->handle(new OperatorListViewQuery($adminDomain->getAdmin(), $filters));
 
-        return new Response($this->engine->render('AdminBundle:Operator:list.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Operator:list.html.twig', [
             'operatorList' => $operatorList,
             'filter_form' => $filterForm->createView(),
             'filtered' => $filterForm->isSubmitted() && $filterForm->isValid(),

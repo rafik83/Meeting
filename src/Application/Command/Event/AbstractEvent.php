@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-abstract class AbstractEvent
+abstract class AbstractEvent implements Command
 {
     /** @var string */
     public $title;

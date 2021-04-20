@@ -1,0 +1,18 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:VIMEET_DATABASE_URL)%'
+        charset:  UTF8
+        # TODO : remove 'jms_' when those tables will be drop
+        schema_filter: ~^(?!messenger_jobs|jms_)~
+
+#     orm:
+#         auto_generate_proxy_classes: true
+#         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+#         auto_mapping: true
+#         mappings:
+#             App:
+#                 is_bundle: false
+#                 type: annotation
+#                 dir: '%kernel.project_dir%/src/Entity'
+#                 prefix: 'Proximum\Vimeet\Entity'
+#                 alias: App

@@ -16,7 +16,7 @@ class SelectOptionsHandler
     private $cartManager;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     /** @var Merger */
     private $merger;
@@ -26,12 +26,12 @@ class SelectOptionsHandler
 
     public function __construct(
         CartManager $cartManager,
-        \DateTimeInterface $now,
+        \DateTimeInterface $dateTime,
         Merger $merger,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->cartManager = $cartManager;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
         $this->merger = $merger;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -45,7 +45,7 @@ class SelectOptionsHandler
         /** @var Product[] $options */
         $optionsById = [];
 
-        foreach ($package->getAvailablesOptions($this->now) as $option) {
+        foreach ($package->getAvailablesOptions($this->dateTime) as $option) {
             $optionsById[$option->getId()] = $option;
         }
 

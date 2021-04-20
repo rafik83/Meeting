@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Detail\Participant;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class AgendaConfirmationStatusQuery
+class AgendaConfirmationStatusQuery implements Query
 {
     /** @var Participant */
     public $participant;

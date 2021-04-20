@@ -1,7 +1,7 @@
-admin.mail.activateAccount.activate: 'Activer votre compte'
+admin.mail.activateAccount.activate: 'Activez votre compte'
 admin.mail.activateAccount.body: "Bonjour,\n\nVous avez été invité en tant que collaborateur sur Vimeet\n\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
 admin.mail.activateAccount.end: ''
-admin.mail.activateAccount.subject: 'Activer votre compte'
+admin.mail.activateAccount.subject: 'Activez votre compte'
 admin.mail.export_form_template_data.body: "Bonjour,\nVoici le fichier comportant l'export des données du formulaire de template\n"
 admin.mail.export_form_template_data.end: "Cordialement\n"
 admin.mail.export_form_template_data.file_link: 'Fichier CSV'
@@ -30,10 +30,10 @@ admin.mail.translations.downloaded.body: "Hello,\nTranslations have been downloa
 admin.mail.translations.downloaded.subject: 'Téléchargement des traductions'
 admin.mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"
 admin.mail.userAccountTemporarilyDisabled.subject: 'Votre compte utilisateur a été désactivé temporairement'
-mail.activateAccount.activate: 'Activer votre compte'
+mail.activateAccount.activate: 'Activez votre compte'
 mail.activateAccount.body: "Bonjour,\n\nVous avez reçu une invitation pour participer à l’événement %event%.\n\nPour vous enregistrer en ligne et accéder à votre espace participant, cliquez sur le lien ci-dessous."
 mail.activateAccount.end: 'Bien cordialement,'
-mail.activateAccount.subject: '[%event%] Activer votre compte'
+mail.activateAccount.subject: '[%event%] Activez votre compte'
 mail.agenda.version_diff_changed.body: "Bonjour %firstname% %lastname%,\n\nVotre planning a été modifié :"
 mail.agenda.version_diff_changed.end: 'Cordialement,'
 mail.agenda.version_diff_changed.link: 'Accéder à votre planning'
@@ -177,7 +177,7 @@ mail.spot.export.subject: 'Fichier d''export des lieux'
 mail.thirdParty.comexposium.sso.participantAdded.body: "Bonjour %firstname% %lastname%,\n\nVous avez été ajouté par un de vos collaborateurs pour participer aux rendez-vous d'affaire sur %event%.\n"
 mail.thirdParty.comexposium.sso.participantAdded.end: "Cordialement,\n"
 mail.thirdParty.comexposium.sso.participantAdded.link: Connectez-vous
-mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activer votre compte'
+mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activez votre compte'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
 mail.userAccountTemporarilyDisabled.body: "%firstname% %lastname%,\n\nVotre compte a été désactivé pour une durée de 15 minutes suite à des tentatives de connexion.\n\nBien cordialement,"

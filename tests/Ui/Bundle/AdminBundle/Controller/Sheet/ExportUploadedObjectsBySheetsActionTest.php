@@ -33,7 +33,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
         $flashBag = $this->prophesize(FlashBagInterface::class);
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $queryBus = $this->prophesize(QueryBusInterface::class);
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
         $event->getId()->shouldBeCalled()->willReturn(1);
         $event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
@@ -67,7 +67,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
             $event->reveal(),
             Type::ADMIN_SHEET_BATCH_IDS,
             '1, 2, 3',
-            $datetime
+            $dateTime
         );
 
         $extraDataRepository->add($extraData);
@@ -88,7 +88,7 @@ class ExportUploadedObjectsBySheetsActionTest extends TestCase
             $flashBag->reveal(),
             $jobQueue->reveal(),
             $queryBus->reveal(),
-            $datetime,
+            $dateTime,
             $ruleStorage->reveal()
         );
         $action($request->reveal(), $event->reveal(), $adminDomain->reveal());

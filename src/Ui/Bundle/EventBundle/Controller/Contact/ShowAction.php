@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowAction
 {
@@ -41,8 +41,8 @@ class ShowAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var HasAccessToSheet */
     private $hasAccessToSheet;
@@ -67,7 +67,7 @@ class ShowAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         HasAccessToSheet $hasAccessToSheet,
         QueryBusInterface $queryBus,
         FormFactoryInterface $formFactory,
@@ -77,7 +77,7 @@ class ShowAction
         RouterAdapter $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->hasAccessToSheet = $hasAccessToSheet;
         $this->queryBus = $queryBus;
         $this->formFactory = $formFactory;
@@ -114,7 +114,7 @@ class ShowAction
             );
 
             return new Response(
-                $this->engine->render(
+                $this->twig->render(
                     '@Event/Contact/me.html.twig',
                     [
                         'event' => $event,
@@ -175,7 +175,7 @@ class ShowAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Contact/show.html.twig',
                 [
                     'event'       => $event,

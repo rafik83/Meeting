@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Migrate UserEventExtraData of Sheet owner "protected_key" to SheetExtraData

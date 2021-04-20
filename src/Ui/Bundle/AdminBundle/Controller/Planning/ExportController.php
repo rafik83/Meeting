@@ -4,10 +4,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planning;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExportController extends Controller
+class ExportController extends AbstractController
 {
     /**
      * @param Event  $event

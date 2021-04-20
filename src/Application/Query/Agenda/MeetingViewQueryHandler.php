@@ -28,20 +28,20 @@ class MeetingViewQueryHandler
     private $participantInfoGuesser;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
         VideoMeetingAccess $videoMeetingAccess,
         LinkedSheetsTitle $linkedSheetsTitle,
         ParticipantInfoGuesser $participantInfoGuesser,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->participantHandler = $participantHandler;
         $this->videoMeetingAccess = $videoMeetingAccess;
         $this->linkedSheetsTitle = $linkedSheetsTitle;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -116,7 +116,7 @@ class MeetingViewQueryHandler
 
         $timeRemainingInSeconds = max(
             0,
-            $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->now->getTimestamp()
+            $query->meeting->getSlot()->getEnd()->getTimestamp() - $this->dateTime->getTimestamp()
         );
 
         return new MeetingView(

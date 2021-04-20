@@ -2,9 +2,9 @@
 
 namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
 
-use League\Tactician\CommandBus;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Save;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
@@ -17,7 +17,7 @@ class SaveActionTest extends TestCase
     public function testSaveAction()
     {
         $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $commandBus = $this->prophesize(CommandBus::class);
+        $commandBus = $this->prophesize(CommandBusInterface::class);
         $request = $this->prophesize(Request::class);
         $registrationTemplate = $this->prophesize(RegistrationTemplate::class);
 
@@ -51,7 +51,7 @@ class SaveActionTest extends TestCase
     public function testLocaleNotExists()
     {
         $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $commandBus = $this->prophesize(CommandBus::class);
+        $commandBus = $this->prophesize(CommandBusInterface::class);
         $request = $this->prophesize(Request::class);
         $registrationTemplate = $this->prophesize(RegistrationTemplate::class);
 

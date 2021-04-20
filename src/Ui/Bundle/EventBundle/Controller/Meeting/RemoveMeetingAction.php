@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class RemoveMeetingAction
 {
@@ -28,8 +28,8 @@ class RemoveMeetingAction
     /** @var FormFactoryInterface $formFactory */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -47,7 +47,7 @@ class RemoveMeetingAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CanRemoveMeeting $canRemoveMeeting,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         TranslatorInterface $translator
@@ -55,7 +55,7 @@ class RemoveMeetingAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->translator = $translator;
@@ -90,7 +90,7 @@ class RemoveMeetingAction
         }
 
             return new Response(
-                $this->engine->render('@Event/Meeting/remove-meeting-slot-form.html.twig', [
+                $this->twig->render('@Event/Meeting/remove-meeting-slot-form.html.twig', [
                     'form' => $form->createView(),
                 ])
             );

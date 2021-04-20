@@ -6,10 +6,10 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Type\TypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -21,22 +21,17 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -61,9 +56,9 @@ class ListAction
 
         $typeListsView = $this->queryBus->handle($typeViewQuery);
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'types' => $typeListsView,
-        ]);
+        ]));
     }
 }

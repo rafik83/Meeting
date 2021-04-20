@@ -13,25 +13,25 @@ class SheetFactory
     /**
      * @param Event|null    $event
      * @param User|null     $user
-     * @param DateTime|null $datetime
+     * @param DateTime|null $dateTime
      * @param Type|null     $type
      *
      * @return Sheet
      */
-    public static function create(Event $event = null, User $user = null, DateTime $datetime = null, Type $type = null)
+    public static function create(Event $event = null, User $user = null, DateTime $dateTime = null, Type $type = null)
     {
         $event = (null !== $event) ? $event : EventFactory::createEvent();
 
         $type     = null !== $type ? $type : new Type($event);
         $user     = (null !== $user) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $datetime = (null !== $datetime) ? $datetime : new DateTime();
+        $dateTime = (null !== $dateTime) ? $dateTime : new DateTime();
 
         $sheet = new Sheet(
             $event,
             $type,
             [],
             $user,
-            $datetime
+            $dateTime
         );
 
         return $sheet;

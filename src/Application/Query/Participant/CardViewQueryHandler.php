@@ -16,16 +16,16 @@ class CardViewQueryHandler
     private $scanRepository;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ScanRepositoryInterface $scanRepository,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->scanRepository = $scanRepository;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(CardViewQuery $cardViewQuery): CardView
@@ -46,7 +46,7 @@ class CardViewQueryHandler
                 ? $this->scanRepository->isUserCheckinTodayByEvent(
                     $cardViewQuery->participant->getUser(),
                     $cardViewQuery->participant->getSheet()->getEvent(),
-                    $this->now
+                    $this->dateTime
                 )
                 : false
         );

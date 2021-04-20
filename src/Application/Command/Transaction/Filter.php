@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class Filter
+class Filter implements Command
 {
     /** @var \DateTime */
     public $beginDate;

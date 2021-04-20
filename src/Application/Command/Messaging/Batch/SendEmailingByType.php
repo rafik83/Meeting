@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SendEmailingByType
+class SendEmailingByType implements Command
 {
     /** @var Event */
     public $event;

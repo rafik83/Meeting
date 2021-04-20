@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetValidationViewQuery
+class SheetValidationViewQuery implements Query
 {
     /**
      * @var Sheet

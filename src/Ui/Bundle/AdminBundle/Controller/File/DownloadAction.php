@@ -15,23 +15,18 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DownloadAction
 {
-    /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationCheckerAdapter;
-
-    /** @var string */
-    private $path;
-
-    /** @var FileSystemAdapterInterface */
-    private $fileSystemAdapter;
+    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
+    private FileSystemAdapterInterface $fileSystemAdapter;
+    private string $pathToExport;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FileSystemAdapterInterface $fileSystemAdapter,
-        string $path
+        string $pathToExport
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->fileSystemAdapter = $fileSystemAdapter;
-        $this->path = $path;
+        $this->pathToExport = $pathToExport;
     }
 
     public function __invoke(Event $event, string $hash, File $file): Response
@@ -48,7 +43,7 @@ class DownloadAction
             );
         }
 
-        $path = sprintf('%s%s', $this->path, $file->getPath());
+        $path = sprintf('%s%s', $this->pathToExport, $file->getPath());
 
         if (!$this->fileSystemAdapter->exists($path)) {
             throw new NotFoundHttpException(sprintf('File %s not found', $file->getId()));

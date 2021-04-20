@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\CTA;
 
-use Proximum\Vimeet\Application\Adapter\EngineInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\Link\EventActivateAccountAlreadyKnownLinkSubstitution;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstituteInterface;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\AbstractPrepareMail;

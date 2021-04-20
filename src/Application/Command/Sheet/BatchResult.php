@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class BatchResult
+use Proximum\Vimeet\Application\Command\Command;
+
+class BatchResult implements Command
 {
     /** @var array */
     public $sheets;

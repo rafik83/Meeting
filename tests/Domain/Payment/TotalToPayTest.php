@@ -19,12 +19,12 @@ class TotalToPayTest extends TestCase
 {
     public function testGetTotal()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $owner    = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $package  = new Package($event, 'title', $datetime);
-        $sheet    = new Sheet($event, $type, [], $owner, $datetime);
+        $package  = new Package($event, 'title', $dateTime);
+        $sheet    = new Sheet($event, $type, [], $owner, $dateTime);
         $type->setPackage($package);
 
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);

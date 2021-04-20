@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Schedule;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Generate;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
@@ -12,20 +14,26 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\GenerateType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SlotController extends Controller
+class SlotController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->commandBus = $commandBus;
+    }
+
     public function generateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -41,7 +49,7 @@ class SlotController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $result = $this->get('tactician.commandbus')->handle($command);
+                $result = $this->commandBus->handle($command);
                 $this->addFlash(
                     'success',
                     new TranschoiceMessage('flash.schedule.slot.generate.success', $result->count, [
@@ -67,7 +75,7 @@ class SlotController extends Controller
 
                 $form->get('recipes')
                     ->addError(new FormError(
-                        $this->get('translator')->trans(
+                        $this->translator->trans(
                             'validators.schedule.slot.recipes.slotOutOfDay',
                             [
                                 '%day%'   => $dateFormatter->format($exception->slot->getBegin()),
@@ -146,7 +154,7 @@ class SlotController extends Controller
         $this->denyAccessIfWrongEvent($event, $meetingSlot);
 
         try {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->commandBus->handle($command);
         } catch (IsNotAllowedToRemoveSlotException $isNotAllowedToRemoveSlotException) {
             $this->addFlash('error', 'flash.admin.slot.remove.error');
         }

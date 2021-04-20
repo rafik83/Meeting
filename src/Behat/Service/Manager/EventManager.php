@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use DateTime;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -58,5 +60,27 @@ class EventManager
     public function setLocale(Event $event, string $locale): void
     {
         $event->setLocales([$locale], $locale);
+    }
+
+    public function setOrganiserName(Event $event, string $organiserName): void
+    {
+        $event->setOrganiserName($organiserName);
+        $this->eventRepository->set($event);
+    }
+
+    public function setOrganiserEmail(Event $event, string $organiserEmail): void
+    {
+        $event->setOrganiserEmail($organiserEmail);
+        $this->eventRepository->set($event);
+    }
+
+    public function setDay(Event $event, DateTime $day): void
+    {
+        $start = (clone $day)->setTime(8, 0);
+        $end = (clone $day)->setTime(18, 0);
+        $day = new Day($event, $start, $end);
+        $event->addDay($day);
+
+        $this->eventRepository->set($event);
     }
 }

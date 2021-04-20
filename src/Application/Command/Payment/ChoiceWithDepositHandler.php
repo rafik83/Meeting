@@ -24,7 +24,7 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
      * @param Cart\CartManager               $cartManager
      * @param TotalToPay                     $totalToPay
      * @param DelayedEventDispatcher         $eventDispatcher
-     * @param \DateTimeInterface             $datetime
+     * @param \DateTimeInterface             $dateTime
      * @param QueryBusInterface              $queryBus
      */
     public function __construct(
@@ -33,10 +33,10 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
         Cart\CartManager $cartManager,
         TotalToPay $totalToPay,
         DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         QueryBusInterface $queryBus
     ) {
-        parent::__construct($transactionRepository, $converter, $cartManager, $totalToPay, $eventDispatcher, $datetime);
+        parent::__construct($transactionRepository, $converter, $cartManager, $totalToPay, $eventDispatcher, $dateTime);
 
         $this->queryBus = $queryBus;
     }
@@ -55,7 +55,7 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
 
         if ($choice->deposit) {
             $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($choice->sheet));
-            $totalDeposit = DepositApplicable::calculateDeposit($paymentConditionsView, $this->datetime, $total);
+            $totalDeposit = DepositApplicable::calculateDeposit($paymentConditionsView, $this->dateTime, $total);
 
             if ($total === $totalDeposit) {
                 throw new DepositNotAvailableException('The deposit is equal to the total');

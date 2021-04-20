@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\BadgeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Badge\ConfigureType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ConfigureAction
 {
@@ -40,8 +40,8 @@ class ConfigureAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -58,7 +58,7 @@ class ConfigureAction
         CommandBusInterface $commandBus,
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         TranslatorInterface $translator
     ) {
@@ -67,7 +67,7 @@ class ConfigureAction
         $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->translator = $translator;
     }
@@ -136,12 +136,12 @@ class ConfigureAction
             }
         }
 
-        return $this->engine->renderResponse('AdminBundle:Type/Badge:configure.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Type/Badge:configure.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
             'badge' => $badge,
             'type' => $type,
             'locale' => $event->getAvailableLocale($request->getLocale()),
-        ]);
+        ]));
     }
 }

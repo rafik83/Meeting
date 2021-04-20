@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQuery;
 use Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceUrlView;
@@ -11,8 +12,9 @@ use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use Twig_Template;
-use Twig_TemplateWrapper;
+use Twig\Environment;
+use Twig\Template;
+use Twig\TemplateWrapper;
 
 class InvoicesLinkSubstitutionTest extends TestCase
 {
@@ -26,9 +28,11 @@ class InvoicesLinkSubstitutionTest extends TestCase
 
         $invoiceRepository          = $this->prophesize(InvoiceRepositoryInterface::class);
         $invoiceUrlViewQueryHandler = $this->prophesize(InvoiceUrlViewQueryHandler::class);
-        $twig                       = $this->prophesize(\Twig_Environment::class);
-        $twigTemplate               = $this->prophesize(Twig_Template::class);
-        $twigTemplateWrapper        = new Twig_TemplateWrapper($twig->reveal(), $twigTemplate->reveal());
+        $twig                       = $this->prophesize(Environment::class);
+        $twigTemplate               = $this->prophesize(Template::class);
+        $twigTemplateWrapper        = new TemplateWrapper($twig->reveal(), $twigTemplate->reveal());
+
+        $twigTemplate->render(Argument::any(), Argument::any())->willReturn('<html>HTML invoice</html>');
 
         $invoiceRepository->findBySheet($sheet)->shouldBeCalled()->willReturn([$invoice->reveal()]);
 

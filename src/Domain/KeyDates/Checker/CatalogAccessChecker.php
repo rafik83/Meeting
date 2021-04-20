@@ -17,7 +17,7 @@ class CatalogAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getCatalogOnlineDate();
+        return $this->dateTime >= $event->getConfiguration()->getCatalogOnlineDate();
     }
 
     /**

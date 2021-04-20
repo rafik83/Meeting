@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class StateListViewQuery
+class StateListViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

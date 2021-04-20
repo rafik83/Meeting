@@ -81,7 +81,5 @@ class InfrastructureExtension extends Extension
                 $loaderXml->load($xml);
             }
         }
-
-        $loaderXml->load('twig_bootstrap_extension.xml');
     }
 }

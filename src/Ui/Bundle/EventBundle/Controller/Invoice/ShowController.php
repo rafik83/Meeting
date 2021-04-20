@@ -2,30 +2,37 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Invoice;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceQuery;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\InvoicePdfPrinter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ShowController extends Controller
+class ShowController extends AbstractController
 {
+    private InvoicePdfPrinter $invoicePdfPrinter;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        InvoicePdfPrinter $invoicePdfPrinter,
+        QueryBusInterface $queryBus
+    ) {
+        $this->invoicePdfPrinter = $invoicePdfPrinter;
+        $this->queryBus = $queryBus;
+    }
+
     /**
      * This controller is public
      * Do not add SheetVoter
      *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Invoice     $invoice
-     * @param string      $hash
-     * @param string      $format      'html'|'pdf'
-     *
-     * @return Response
+     * @param string $format 'html'|'pdf'
      */
-    public function showAction(EventDomain $eventDomain, Sheet $sheet, Invoice $invoice, $hash, $format)
+    public function showAction(EventDomain $eventDomain, Sheet $sheet, Invoice $invoice, string $hash, string $format): Response
     {
         if ($invoice->getSheet() !== $sheet || $invoice->getHash() !== $hash) {
             throw $this->createNotFoundException();
@@ -33,12 +40,12 @@ class ShowController extends Controller
 
         if ('pdf' === $format) {
             return new BinaryFileResponse(
-                $this->get('printer.invoice_pdf_printer')->generate($invoice)
+                $this->invoicePdfPrinter->generate($invoice)
             );
         }
 
         /** @var InvoiceView $invoiceView */
-        $invoiceView = $this->get('tactician.commandbus')->handle(new InvoiceQuery($invoice));
+        $invoiceView = $this->queryBus->handle(new InvoiceQuery($invoice));
 
         return $this->render(
             'EventBundle:Invoice:show.html.twig',

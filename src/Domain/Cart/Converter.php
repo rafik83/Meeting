@@ -27,7 +27,7 @@ class Converter
     private $cartRowRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var CartStepRepositoryInterface */
     private $cartStepRepository;
@@ -52,7 +52,7 @@ class Converter
         ParticipantProductSetter $participantProductSetter,
         ProductAttributedToParticipantSetter $productAttributedToParticipantSetter,
         DecrementStockHandler $decrementStockHandler,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->orderRepository = $orderRepository;
         $this->cartRowRepository = $cartRowRepository;
@@ -61,7 +61,7 @@ class Converter
         $this->participantProductSetter = $participantProductSetter;
         $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
         $this->decrementStockHandler = $decrementStockHandler;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -77,7 +77,7 @@ class Converter
         $order = new Order(
             $sheet,
             $groupsData,
-            $this->datetime
+            $this->dateTime
         );
 
         foreach ($cart->getRows() as $cartRow) {

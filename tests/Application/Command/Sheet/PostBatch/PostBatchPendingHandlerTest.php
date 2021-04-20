@@ -24,7 +24,7 @@ class PostBatchPendingHandlerTest extends TestCase
 
         $sheetIndexer    = $this->prophesize(SheetIndexerInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $datetime        = new \DateTime();
+        $dateTime        = new \DateTime();
 
         $eventDispatcher
             ->dispatch(Events::SHEET_PENDING, Argument::type(SheetPendingEvent::class))
@@ -33,7 +33,7 @@ class PostBatchPendingHandlerTest extends TestCase
         $handler = new PostBatchPendingHandler(
             $sheetIndexer->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $dateTime
         );
 
         $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();

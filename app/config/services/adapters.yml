@@ -14,22 +14,22 @@ services:
 
     Proximum\Vimeet\Application\Adapter\QueryBusInterface: '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
-    adapter.exec_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
-
-    adapter.third_party.jenkins.build_creator_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter
+    Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter:
         arguments:
-            - '@adapter.exec_adapter'
-            - '%jenkins_command%'
-            - '%jenkins_user%'
-            - '%jenkins_password%'
+            $execAdapter: '@Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter'
+            $jenkinsCommand: '%jenkins_command%'
+            $jenkinsUser: '%jenkins_user%'
+            $jenkinsPassword: '%jenkins_password%'
+            $logger: '@logger'
+
+    Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter
 
     Proximum\Vimeet\Infrastructure\Adapter\ExpressionLanguageAdapter: ~
 
-    Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
-        arguments:
-            - '@fos_elastica.index.sheet.sheet'
+    # Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
+    #     arguments:
+    #         - '@fos_elastica.index.sheet.sheet'
 
     Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter:
         arguments:
@@ -50,7 +50,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\GoogleCloudStorageAdapter'
             - '%google_cloud_storage_video_uri%'
             - '@Proximum\Vimeet\Infrastructure\Adapter\UuidGenerator'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
 
     #
     # Webinar Notifications (Mercure)

@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
 use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Update;
@@ -13,28 +16,40 @@ use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Service\SheetsGroup\UserToGroupManagerChecker;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Group\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\SearchType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class GroupController extends Controller
+class GroupController extends AbstractController
 {
+    private UserToGroupManagerChecker $userToGroupManagerChecker;
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        UserToGroupManagerChecker $userToGroupManagerChecker,
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->userToGroupManagerChecker = $userToGroupManagerChecker;
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     /**
      * Search user by email to pre-populate the real create form
-     *
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response|RedirectResponse
      */
-    public function preCreateAction(Request $request, Event $event)
+    public function preCreateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -44,7 +59,7 @@ class GroupController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $userView = $this->get('tactician.commandbus')->handle($searchUser);
+                $userView = $this->commandBus->handle($searchUser);
 
                 return $this->redirectToRoute('admin_sheets_group_create', [
                     'event' => $event->getId(),
@@ -64,22 +79,16 @@ class GroupController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     * @param User    $user
-     *
      * @throws UserNotAllowedToManageGroupException
      * @throws AccessDeniedException
-     *
-     * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, Event $event, User $user)
+    public function createAction(Request $request, Event $event, User $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
-            $this->get('user_to_group_manager_checker')->isUserToGroupManagerAllowed($event, $user);
+            $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($event, $user);
         } catch (UserAlreadyGroupManagerOnSameEventException $exception) {
             throw $this->createAccessDeniedException('User is not allowed to be manager');
         } catch (UserAlreadyParticipantOrOwnerOnGroupOnSameEventException $exception) {
@@ -87,13 +96,13 @@ class GroupController extends Controller
         }
 
         $querySheets = new SheetViewQuery($event, $user, $event->getAvailableLocale($request->getLocale()));
-        $sheetViews  = $this->get('tactician.commandbus')->handle($querySheets);
+        $sheetViews  = $this->queryBus->handle($querySheets);
 
         $command = new Create($event, $user);
         $form    = $this->createForm(CreateType::class, $command, ['sheetViews' => $sheetViews]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->commandBus->handle($command);
             $this->addFlash('success', 'flash.admin.group.create.success');
 
             return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
@@ -106,14 +115,7 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Group   $group
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Event $event, Group $group)
+    public function updateAction(Request $request, Event $event, Group $group): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -127,7 +129,7 @@ class GroupController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($command);
+                $this->commandBus->handle($command);
                 $this->addFlash('success', 'flash.admin.group.update.success');
 
                 return $this->redirectToRoute('admin_sheets_group_list', ['event' => $event->getId()]);
@@ -144,15 +146,9 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * @param FormInterface $form
-     * @param string        $field
-     * @param string        $translationKey
-     * @param array         $options
-     */
-    private function notifyFormError(FormInterface $form, $field, $translationKey, array $options = [])
+    private function notifyFormError(FormInterface $form, string $field, string $translationKey, array $options = []): void
     {
-        $translator = $this->get('translator');
+        $translator = $this->translator;
 
         $form->get($field)->addError(
             new FormError($translator->trans(

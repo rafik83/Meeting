@@ -10,7 +10,7 @@ class SlotPlus10minutesTest extends TestCase
 {
     public function testFilteredSpot()
     {
-        $datetime = new \DateTime('2017-01-01 12:00:00');
+        $dateTime = new \DateTime('2017-01-01 12:00:00');
         $slot1    = $this->prophesize(MeetingSlot::class);
         $slot2    = $this->prophesize(MeetingSlot::class);
         $slot3    = $this->prophesize(MeetingSlot::class);
@@ -29,7 +29,7 @@ class SlotPlus10minutesTest extends TestCase
         // Expected slots
         $expectedFilteredSlots = [1 => 2, 2 => 3, 3 => 4];
 
-        $slotPlus10minutes = new SlotFilter($datetime);
+        $slotPlus10minutes = new SlotFilter($dateTime);
 
         $filteredSlots = $slotPlus10minutes->getFilteredSlots([
             $slot1->reveal(),

@@ -23,7 +23,7 @@ use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -59,7 +59,7 @@ class DetailActionTest extends TestCase
     private $flashBag;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -95,7 +95,7 @@ class DetailActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->event = $this->prophesize(Event::class);
@@ -153,8 +153,8 @@ class DetailActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine
-            ->renderResponse(DetailAction::TEMPLATE, [
+        $this->twig
+            ->render(DetailAction::TEMPLATE, [
                 'event' => $this->event->reveal(),
                 'sheet' => $this->sheet->reveal(),
                 'sheetTypeTitle' => 'type',
@@ -174,7 +174,7 @@ class DetailActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->queryBus->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal()
         );
 
@@ -246,7 +246,7 @@ class DetailActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->queryBus->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal()
         );
 

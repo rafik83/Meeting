@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
-class ExportPlanning
+use Proximum\Vimeet\Application\Command\Command;
+
+class ExportPlanning implements Command
 {
     /** @var array */
     public $sheetIds;

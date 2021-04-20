@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Request;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class MeetingRequestListViewQuery
+class MeetingRequestListViewQuery implements Query
 {
     /**
      * @var Sheet

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
-class TransformRequestIntoMeeting
+class TransformRequestIntoMeeting implements Command
 {
     /**
      * @var Request

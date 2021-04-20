@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ApproveRequest
+class ApproveRequest implements Command
 {
     /** @var Request */
     public $request;

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\MassAssignment;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
-class MassAssignmentViewQuery
+class MassAssignmentViewQuery implements Query
 {
     /**
      * @var MassAssignment

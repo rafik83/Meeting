@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\User;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UserDetailsViewQuery
+class UserDetailsViewQuery implements Query
 {
     /**
      * @var User

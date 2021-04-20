@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Nomenclature;
 
-class GlobalNomenclatureViewQuery
+use Proximum\Vimeet\Application\Query\Query;
+
+class GlobalNomenclatureViewQuery implements Query
 {
 }

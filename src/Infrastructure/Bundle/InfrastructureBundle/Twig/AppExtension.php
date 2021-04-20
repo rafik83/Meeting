@@ -3,16 +3,17 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Twig;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
-use Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Proximum\Vimeet\Ui\Helper\ChoiceListFormatter;
 use Proximum\Vimeet\Ui\Helper\DataFormatter;
 use Sonata\IntlBundle\Templating\Helper\LocaleHelper;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Validator\Constraints\UrlValidator;
+use Twig\Extension\AbstractExtension;
 
-class AppExtension extends \Twig_Extension
+class AppExtension extends AbstractExtension
 {
     /**
      * @var LocaleHelper
@@ -32,13 +33,13 @@ class AppExtension extends \Twig_Extension
     /** @var Markdown */
     private $markdown;
 
-    /** @var EventUrlGenerator */
+    /** @var EventUrlGeneratorInterface */
     private $eventUrlGenerator;
 
     public function __construct(
         LocaleHelper $localeHelper,
         Markdown $markdown,
-        EventUrlGenerator $eventUrlGenerator
+        EventUrlGeneratorInterface $eventUrlGenerator
     ) {
         $this->localeHelper = $localeHelper;
         $this->dataFormatter = new DataFormatter($localeHelper);

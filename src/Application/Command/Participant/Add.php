@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Add
+class Add implements Command
 {
     /** @var Sheet */
     public $sheet;

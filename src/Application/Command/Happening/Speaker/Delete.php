@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 
-class Delete
+class Delete implements Command
 {
     /**
      * @var Speaker

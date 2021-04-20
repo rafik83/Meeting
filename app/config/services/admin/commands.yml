@@ -1,18 +1,13 @@
 services:
-    command.sheet.aggregate.sheets_available_slot_aggregator_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregatorHandler
+    Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregatorHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@command.sheet.aggregate.available_slot_aggregator_handler'
-            - '@adapter.sheet_indexer'
-    command.sheet.aggregate.available_slot_aggregator_handler:
-        class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
-        arguments:
-            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
+            - '@Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
     command.analytic.meeting_solution.create_handler:
         class: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\CreateHandler
         arguments:
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@repository.analytic.meeting_solution_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
@@ -46,7 +41,7 @@ services:
     Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettingsHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Visio\VisioSettingsRepository'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Visio\UpdateVisioSettings }
 
@@ -96,8 +91,8 @@ services:
     Proximum\Vimeet\Application\Command\Rooming\Export\ExportRoomingListHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@Proximum\Vimeet\Domain\File\FileFactory'
             - '%infrastructure.export_rooming_list_path%'
             - '@Proximum\Vimeet\Application\Command\Rooming\Export\MailToAdminHandler'
@@ -197,7 +192,7 @@ services:
     Proximum\Vimeet\Application\Command\Type\Badge\ConfigureHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\BadgeRepository'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\Badge\Configure }
 
@@ -266,7 +261,7 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.content_repository'
-            - '@guideline.generator'
+            - '@Proximum\Vimeet\Application\Components\Guideline\Generator'
             - '@domain.event.duplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Create }
@@ -274,9 +269,9 @@ services:
     Proximum\Vimeet\Application\Command\Event\Design\UpdateDesignHandler:
         arguments:
              - '@vimeet_infrastructure.repository.event_repository'
-             - '@adapter.local_file_storage'
+             - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
              - '@command.event.configuration.background.remove_image_handler'
-             - '@guideline.generator'
+             - '@Proximum\Vimeet\Application\Components\Guideline\Generator'
         tags:
              - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Design\UpdateDesign }
 
@@ -286,7 +281,7 @@ services:
     Proximum\Vimeet\Application\Command\Event\Sheet\IndexHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter.sheet_indexer'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
             - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\Index }
@@ -396,19 +391,19 @@ services:
             - '@components.user.user_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@Proximum\Vimeet\Application\Query\Badge\QRCode\QRCodeIdentifierQueryHandler'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     Proximum\Vimeet\Application\Command\OMZ\NotifyHandler:
         arguments:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
 
-    Proximum\Vimeet\Application\Command\OMZ\PersistContentHandler:
-        arguments:
-            - '@adapter.local_file_storage'
-            - '@repository.file_repository'
-            - '%infrastructure.export_omz_path%'
-            - '@datetime'
+    # Proximum\Vimeet\Application\Command\OMZ\PersistContentHandler:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
+    #         - '@repository.file_repository'
+    #         - '%infrastructure.export_omz_path%'
+    #         - '@datetime'
 
     Proximum\Vimeet\Application\Command\OMZ\ExportHandler:
         arguments:
@@ -445,9 +440,9 @@ services:
     Proximum\Vimeet\Application\Command\Participant\Export\ExportHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@repository.file_repository'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@adapter.mailer_adapter'
             - '%infrastructure.export_participant_path%'
             - '%mailer_sender%'
@@ -509,9 +504,9 @@ services:
 
     Proximum\Vimeet\Application\Command\Template\Form\ExportFormTemplateDataByUsersHandler:
         arguments:
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '%infrastructure.export_form_template_user_data_path%'
             - '@Proximum\Vimeet\Domain\File\FileFactory'
             - '@datetime'
@@ -574,8 +569,8 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\User\Import\ImportHandler:
         arguments:
             - '@repository.user.event.extra_data_repository'
-            - '@adapter.local_file_storage'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@datetime'
         tags:
@@ -608,9 +603,9 @@ services:
     Proximum\Vimeet\Application\Command\Product\Export\ExportProductsHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@query.product.products_list_view_query_handler'
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
             - '@repository.file_repository'
             - '@Proximum\Vimeet\Domain\File\FileFactory'
             - '@adapter.mailer_adapter'
@@ -628,7 +623,7 @@ services:
 
     Proximum\Vimeet\Application\Command\PromotionCode\Batch\CreateHandler:
         arguments:
-            - '@promotion.generator.unique_code_generator'
+            - '@Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator'
             - '@Proximum\Vimeet\Application\Command\PromotionCode\PromotionCodeFactory'
             - '@Proximum\Vimeet\Infrastructure\Repository\PromotionCodeGroupRepository'
             - '@repository.promotion_code_repository'
@@ -773,8 +768,8 @@ services:
 
     Proximum\Vimeet\Application\Command\MeetingRequest\Admin\ImportHandler:
         arguments:
-            - '@adapter.local_file_storage'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@adapter.validator_adapter'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.participant_repository'

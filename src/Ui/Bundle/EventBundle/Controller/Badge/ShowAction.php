@@ -15,15 +15,15 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -38,12 +38,12 @@ class ShowAction
         AvailableChecker $availableChecker,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         HasAccessToSheet $hasAccessToSheet,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus
     ) {
         $this->availableChecker = $availableChecker;
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->hasAccessToSheet = $hasAccessToSheet;
     }
@@ -65,7 +65,7 @@ class ShowAction
 
         try {
             return new Response(
-                $this->engine->render(
+                $this->twig->render(
                     'EventBundle:Badge:show.html.twig',
                     [
                         'event' => $event,

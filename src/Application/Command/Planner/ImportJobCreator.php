@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class ImportJobCreator
+class ImportJobCreator implements Command
 {
     /** @var UploadedFile */
     public $file;

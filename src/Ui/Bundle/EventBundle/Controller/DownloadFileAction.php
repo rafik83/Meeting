@@ -11,7 +11,6 @@ use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +18,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
+use Twig\Environment;
 
 class DownloadFileAction
 {
@@ -31,8 +31,7 @@ class DownloadFileAction
     /** @var DataUriNormalizer */
     private $dataUriNormalizer;
 
-    /** @var EngineInterface */
-    private $engine;
+    private Environment $twig;
 
     /** @var UploadObjectDownloadPathGetter */
     private $uploadObjectDownloadPathGetter;
@@ -41,13 +40,13 @@ class DownloadFileAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         TemplateDataFactory $templateDataFactory,
         DataUriNormalizer $dataUriNormalizer,
-        EngineInterface $engine,
+        Environment $twig,
         UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->templateDataFactory = $templateDataFactory;
         $this->dataUriNormalizer = $dataUriNormalizer;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->uploadObjectDownloadPathGetter = $uploadObjectDownloadPathGetter;
     }
 
@@ -74,9 +73,9 @@ class DownloadFileAction
             );
 
             if (true === $preview) {
-                return $this->engine->renderResponse('@Event/base64Image.html.twig', [
+                return new Response($this->twig->render('@Event/base64Image.html.twig', [
                     'file' => $this->dataUriNormalizer->normalize(new \SplFileInfo($downloadPath)),
-                ]);
+                ]));
             }
 
             return (new BinaryFileResponse($downloadPath))

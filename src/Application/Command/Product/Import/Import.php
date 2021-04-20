@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Import;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Import
+class Import implements Command
 {
     /**
      * Event to import the products

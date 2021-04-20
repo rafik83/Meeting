@@ -20,7 +20,7 @@ class CatalogSubmenuViewQueryHandler
     /**
      * @var DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /** @var CanSeeOtherSheets */
     private $canSeeOtherSheets;
@@ -32,18 +32,18 @@ class CatalogSubmenuViewQueryHandler
      * CatalogSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
-     * @param DateTimeInterface          $datetime
+     * @param DateTimeInterface          $dateTime
      * @param CanSeeOtherSheets          $canSeeOtherSheets
      * @param RequestRepositoryInterface $requestRepository
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        DateTimeInterface $datetime,
+        DateTimeInterface $dateTime,
         CanSeeOtherSheets $canSeeOtherSheets,
         RequestRepositoryInterface $requestRepository
     ) {
         $this->navigationBuilder = $navigationBuilder;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->canSeeOtherSheets = $canSeeOtherSheets;
         $this->requestRepository = $requestRepository;
     }
@@ -58,7 +58,7 @@ class CatalogSubmenuViewQueryHandler
 
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
-        if (null == $catalogOnlineDate || !$query->sheet->isInInternalCatalog() || $catalogOnlineDate > $this->datetime) {
+        if (null == $catalogOnlineDate || !$query->sheet->isInInternalCatalog() || $catalogOnlineDate > $this->dateTime) {
             return [];
         }
 

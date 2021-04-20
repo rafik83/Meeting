@@ -2,12 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening\Speaker;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
-use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Update
+class Update implements Command
 {
     /**
      * @var Speaker

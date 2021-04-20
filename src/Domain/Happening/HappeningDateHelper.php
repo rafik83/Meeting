@@ -7,13 +7,13 @@ class HappeningDateHelper
     const DEFAULT_LOCALE = 'fr';
 
     /**
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      * @param string|null        $locale
      * @param string             $timeZone
      *
      * @return string
      */
-    public static function getHour(\DateTimeInterface $datetime, $locale, $timeZone)
+    public static function getHour(\DateTimeInterface $dateTime, $locale, $timeZone)
     {
         $dateFormatter = \IntlDateFormatter::create(
             $locale ?: self::DEFAULT_LOCALE,
@@ -22,17 +22,17 @@ class HappeningDateHelper
             $timeZone
         );
 
-        return self::getStringOutOfFormat($dateFormatter, $datetime);
+        return self::getStringOutOfFormat($dateFormatter, $dateTime);
     }
 
     /**
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      * @param string             $locale
      * @param string             $timeZone
      *
      * @return string
      */
-    public static function getDay(\DateTimeInterface $datetime, string $locale, string $timeZone)
+    public static function getDay(\DateTimeInterface $dateTime, string $locale, string $timeZone)
     {
         $dateFormatter = \IntlDateFormatter::create(
             $locale,
@@ -41,7 +41,7 @@ class HappeningDateHelper
             $timeZone
         );
 
-        return self::getStringOutOfFormat($dateFormatter, $datetime);
+        return self::getStringOutOfFormat($dateFormatter, $dateTime);
     }
 
     public static function getDateTime(\DateTimeInterface $datetime, string $locale, string $timeZone): string
@@ -58,13 +58,13 @@ class HappeningDateHelper
 
     /**
      * @param \IntlDateFormatter $formatter
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      *
      * @return string
      */
-    private static function getStringOutOfFormat(\IntlDateFormatter $formatter, \DateTimeInterface $datetime)
+    private static function getStringOutOfFormat(\IntlDateFormatter $formatter, \DateTimeInterface $dateTime)
     {
-        $formatted = $formatter->format($datetime);
+        $formatted = $formatter->format($dateTime);
 
         return false !== $formatted ? $formatted : '';
     }

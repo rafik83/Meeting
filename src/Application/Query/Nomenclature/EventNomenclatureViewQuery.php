@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Nomenclature;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class EventNomenclatureViewQuery
+class EventNomenclatureViewQuery implements Query
 {
     /** @var Event */
     public $event;

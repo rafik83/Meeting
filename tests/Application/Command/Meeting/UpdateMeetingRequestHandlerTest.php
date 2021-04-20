@@ -29,9 +29,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $datetime  = new \DateTime('2016-01-24 09:00:00');
-        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
-        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+        $dateTime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $dateTime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -41,7 +41,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetFrom->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $dateTime, $user1, $event);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetFrom);
@@ -50,8 +50,8 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true, false , false);
-        $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $dateTime, $user1, $event, false, true, false , false);
+        $expectedMessage = new Message($request, $sheetFrom, 'modif', $dateTime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -70,7 +70,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal()
         );
 
@@ -86,9 +86,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $datetime  = new \DateTime('2016-01-24 09:00:00');
-        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
-        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+        $dateTime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $dateTime);
 
         $participant1 = $this->createParticipantMock($sheetFrom, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetFrom, $user2, 2);
@@ -98,8 +98,8 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetFrom->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $datetime, $user1, $event);
-        $request->approve($datetime);
+        $request = new Request($sheetFrom, [$participant1, $participant2], $sheetTo, [], $dateTime, $user1, $event);
+        $request->approve($dateTime);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetFrom);
@@ -108,9 +108,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $datetime, $user1, $event, false, true, false, false);
-        $expectedRequest->approve($datetime);
-        $expectedMessage = new Message($request, $sheetFrom, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [0 => $participant1, 2 => $participant3], $sheetTo, [], $dateTime, $user1, $event, false, true, false, false);
+        $expectedRequest->approve($dateTime);
+        $expectedMessage = new Message($request, $sheetFrom, 'modif', $dateTime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -129,7 +129,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal()
         );
 
@@ -147,9 +147,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $datetime  = new \DateTime('2016-01-24 09:00:00');
-        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
-        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+        $dateTime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $dateTime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -159,7 +159,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetTo->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $dateTime, $user1, $event);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
@@ -168,8 +168,8 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true, false, false);
-        $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $dateTime, $user1, $event, false, true, false, false);
+        $expectedMessage = new Message($request, $sheetTo, 'modif', $dateTime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -188,7 +188,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal()
         );
 
@@ -204,9 +204,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $datetime  = new \DateTime('2016-01-24 09:00:00');
-        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
-        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+        $dateTime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $dateTime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -216,8 +216,8 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetTo->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
-        $request->approve($datetime);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $dateTime, $user1, $event);
+        $request->approve($dateTime);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
@@ -226,9 +226,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $command->description  = 'modif';
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, true, false, true);
-        $expectedRequest->approve($datetime);
-        $expectedMessage = new Message($request, $sheetTo, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $dateTime, $user1, $event, false, true, false, true);
+        $expectedRequest->approve($dateTime);
+        $expectedMessage = new Message($request, $sheetTo, 'modif', $dateTime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -247,7 +247,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal()
         );
 
@@ -263,9 +263,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $user2     = new User('email@email.com', 'salt', 'password', 'fr');
         $user3     = new User('email@email.com', 'salt', 'password', 'fr');
         $user4     = new User('email@email.com', 'salt', 'password', 'fr');
-        $datetime  = new \DateTime('2016-01-24 09:00:00');
-        $sheetTo   = new Sheet($event, $type, [], $user1, $datetime);
-        $sheetFrom = new Sheet($event, $type, [], $user4, $datetime);
+        $dateTime  = new \DateTime('2016-01-24 09:00:00');
+        $sheetTo   = new Sheet($event, $type, [], $user1, $dateTime);
+        $sheetFrom = new Sheet($event, $type, [], $user4, $dateTime);
 
         $participant1 = $this->createParticipantMock($sheetTo, $user1, 1);
         $participant2 = $this->createParticipantMock($sheetTo, $user2, 2);
@@ -275,8 +275,8 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetTo->addParticipant($participant3);
 
         //Actual
-        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
-        $request->approve($datetime);
+        $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $dateTime, $user1, $event);
+        $request->approve($dateTime);
 
         //Command
         $command = new UpdateMeetingRequest($request, $sheetTo);
@@ -284,9 +284,9 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $command->participants = [$participant1, $participant3];
 
         //Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $datetime, $user1, $event, false, false, false, true);
-        $expectedRequest->approve($datetime);
-        $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $datetime);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [0 => $participant1, 2 => $participant3], $dateTime, $user1, $event, false, false, false, true);
+        $expectedRequest->approve($dateTime);
+        $expectedMessage = new Message($expectedRequest, $sheetTo, 'modif', $dateTime);
 
         //Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -305,7 +305,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
-            $datetime,
+            $dateTime,
             $eventDispatcher->reveal()
         );
 

@@ -2,42 +2,61 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\AuthenticationManager;
+use Proximum\Vimeet\Infrastructure\Repository\AdminRepository;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
-    /**
-     * @return RedirectResponse|Response
-     */
-    public function loginAction()
+    private \DateTimeInterface $dateTime;
+    private AdminRepository $adminRepository;
+    private AuthenticationManager $authenticationManager;
+    private AuthenticationUtils $authenticationUtils;
+    private TranslatorInterface $translator;
+
+    public function __construct(
+        DateTimeInterface $dateTime,
+        AdminRepositoryInterface $adminRepository,
+        AuthenticationManager $authenticationManager,
+        AuthenticationUtils $authenticationUtils,
+        TranslatorInterface $translator
+    ) {
+        $this->dateTime = $dateTime;
+        $this->adminRepository = $adminRepository;
+        $this->authenticationManager = $authenticationManager;
+        $this->authenticationUtils = $authenticationUtils;
+        $this->translator = $translator;
+    }
+
+    public function loginAction(bool $isDebugMode, string $appEnv): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('admin_event_list');
         }
 
-        /** @var AuthenticationUtils */
-        $authenticationUtils = $this->get('security.authentication_utils');
+        $error = $this->authenticationUtils->getLastAuthenticationError();
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        $admin = ['username' => $authenticationUtils->getLastUsername()];
+        $admin = ['username' => $this->authenticationUtils->getLastUsername()];
 
         $form = $this->createForm(LoginType::class, $admin, [
             'action' => $this->generateUrl('admin_login_check'),
         ]);
 
-        $now = $this->get('datetime');
+        $now = $this->dateTime;
 
-        $email = $authenticationUtils->getLastUsername();
+        $email = $this->authenticationUtils->getLastUsername();
         if ($email !== null) {
-            $admin = $this->get('repository.admin_repository')->findByEmail($email);
+            $admin = $this->adminRepository->findByEmail($email);
         } else {
             $admin = null;
         }
@@ -55,7 +74,7 @@ class SecurityController extends Controller
 
             $form->get('password')->addError(
                 new FormError(
-                    $this->get('translator')->transChoice(
+                    $this->translator->transChoice(
                         'authentication.remaining_attempt',
                         $remainingAuthenticationAttempt,
                         ['%remainingAttempt%' => $remainingAuthenticationAttempt]
@@ -64,9 +83,7 @@ class SecurityController extends Controller
             );
         }
 
-        $admins = 'dev' === $this->get('kernel')->getEnvironment() ?
-            $this->get('repository.admin_repository')->all() :
-            [];
+        $admins = ($isDebugMode && $appEnv === 'dev') ? $this->adminRepository->all() : [];
 
         return $this->render('AdminBundle:Security:login.html.twig', [
             'error' => $error,
@@ -77,7 +94,7 @@ class SecurityController extends Controller
 
     public function loginUserAction(Admin $admin): RedirectResponse
     {
-        $this->get('adapter.authentication_manager')->authenticate($admin, 'admin');
+        $this->authenticationManager->authenticate($admin, 'admin');
 
         return $this->redirectToRoute('admin_event_list');
     }

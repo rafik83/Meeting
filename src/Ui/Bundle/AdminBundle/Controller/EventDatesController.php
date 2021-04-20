@@ -2,16 +2,33 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDate;
+use Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventDatesController extends Controller
+class EventDatesController extends AbstractController
 {
+    private \DateTimeInterface $dateTime;
+    private TranslatorInterface $translator;
+    private UpdateEventDatesToCurrentDateHandler $updateEventDatesToCurrentDateHandler;
+
+    public function __construct(
+        DateTimeInterface $dateTime,
+        TranslatorInterface $translator,
+        UpdateEventDatesToCurrentDateHandler $updateEventDatesToCurrentDateHandler
+    ) {
+        $this->dateTime = $dateTime;
+        $this->translator = $translator;
+        $this->updateEventDatesToCurrentDateHandler = $updateEventDatesToCurrentDateHandler;
+    }
+
     private const BEGIN_DATE =  'beginDate';
 
     public function updateEventDatesAction(Request $request, Event $event): Response
@@ -23,23 +40,23 @@ class EventDatesController extends Controller
             $this->createAccessDeniedException('Change event date is not available');
         }
 
-        $form = $this->createFormBuilder([self::BEGIN_DATE => $this->get('datetime')])
+        $form = $this->createFormBuilder([self::BEGIN_DATE => $this->dateTime])
             ->add(self::BEGIN_DATE, DateTimePickerType::class, [
                 'display_hour' => false,
                 'view_timezone' => $event->getTimeZone(),
                 'format' => 'd/m/Y',
-                'label' => $this->get('translator')->trans('admin.event.updateEventDates.begin'),
+                'label' => $this->translator->trans('admin.event.updateEventDates.begin'),
                 'required' => true,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => $this->get('translator')->trans('common.validate'),
+                'label' => $this->translator->trans('common.validate'),
             ])
             ->getForm()
         ;
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('command.event.update_event_dates_to_current_date_handler')->handle(
+                $this->updateEventDatesToCurrentDateHandler->handle(
                     new UpdateEventDatesToCurrentDate($event, $form->getData()[self::BEGIN_DATE])
                 );
 

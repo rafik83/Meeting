@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\Content;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event\Content;
 
-class Update
+class Update implements Command
 {
     /**
      * @var Content

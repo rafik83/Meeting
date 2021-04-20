@@ -51,33 +51,33 @@ class TimeOverlapTest extends TestCase
     public function testFloorReturnFloor()
     {
         $threshold = new \DateTime('2017-11-20 20:00:00');
-        $datetime = new \DateTime('2017-11-20 21:00:00');
+        $dateTime = new \DateTime('2017-11-20 21:00:00');
 
-        $this->assertEquals($threshold, TimeOverlap::floor($threshold, $datetime));
+        $this->assertEquals($threshold, TimeOverlap::floor($threshold, $dateTime));
     }
 
     public function testFloorReturnDatetime()
     {
         $threshold = new \DateTime('2017-11-20 20:00:00');
-        $datetime = new \DateTime('2017-11-20 19:59:59');
+        $dateTime = new \DateTime('2017-11-20 19:59:59');
 
-        $this->assertEquals($datetime, TimeOverlap::floor($threshold, $datetime));
+        $this->assertEquals($dateTime, TimeOverlap::floor($threshold, $dateTime));
     }
 
     public function testCeilReturnCeil()
     {
         $ceiling = new \DateTime('2017-11-20 20:00:00');
-        $datetime = new \DateTime('2017-11-20 19:00:00');
+        $dateTime = new \DateTime('2017-11-20 19:00:00');
 
-        $this->assertEquals($ceiling, TimeOverlap::ceil($ceiling, $datetime));
+        $this->assertEquals($ceiling, TimeOverlap::ceil($ceiling, $dateTime));
     }
 
     public function testCeilReturnDatetime()
     {
         $ceiling = new \DateTime('2017-11-20 20:00:00');
-        $datetime = new \DateTime('2017-11-20 20:59:59');
+        $dateTime = new \DateTime('2017-11-20 20:59:59');
 
-        $this->assertEquals($datetime, TimeOverlap::ceil($ceiling, $datetime));
+        $this->assertEquals($dateTime, TimeOverlap::ceil($ceiling, $dateTime));
     }
 
     public function testBeginIn()

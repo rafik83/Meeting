@@ -2,33 +2,55 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\AddLocale;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
+use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class RegistrationTemplateController extends Controller
+class RegistrationTemplateController extends AbstractController
 {
-    /**
-     * @return Response
-     */
+    private RegistrationTemplateRepositoryInterface $registrationTemplateRepository;
+    private EventRepositoryInterface $eventRepository;
+    private CompletenessCalculator $sheetTemplateCompletenessCalculator;
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
+        EventRepositoryInterface $eventRepository,
+        CompletenessCalculator $sheetTemplateCompletenessCalculator,
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->eventRepository = $eventRepository;
+        $this->sheetTemplateCompletenessCalculator = $sheetTemplateCompletenessCalculator;
+        $this->translator = $translator;
+        $this->commandBus = $commandBus;
+    }
+
     public function listAction(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
-        $templates          = $this->get('repository.template.registration_template_repository')->getBaseTemplates();
-        $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
-        $templatesOrganizer = $this->get('repository.template.registration_template_repository')->getTemplateForGivenEvents($events);
+        $templates          = $this->registrationTemplateRepository->getBaseTemplates();
+        $events             = $this->eventRepository->getListByAdmin($this->getUser());
+        $templatesOrganizer = $this->registrationTemplateRepository->getTemplateForGivenEvents($events);
 
         return $this->render('AdminBundle:RegistrationTemplate:list.html.twig', [
             'templates'          => $templates,
@@ -36,13 +58,6 @@ class RegistrationTemplateController extends Controller
         ]);
     }
 
-    /**
-     * @param Request              $request
-     * @param RegistrationTemplate $registrationTemplate
-     * @param string               $locale
-     *
-     * @return Response
-     */
     public function updateJsonAction(
         Request $request,
         RegistrationTemplate $registrationTemplate,
@@ -67,12 +82,12 @@ class RegistrationTemplateController extends Controller
             ]);
         }
 
-        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($registrationTemplate);
+        $completeness  = $this->sheetTemplateCompletenessCalculator->compute($registrationTemplate);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
         if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($update);
+                $this->commandBus->handle($update);
                 $this->addFlash('success', 'flash.admin.template.registration.update.success');
 
                 return $this->redirectToRoute('admin_template_registration_json', [
@@ -83,7 +98,7 @@ class RegistrationTemplateController extends Controller
                 $this->addFlash('error', 'flash.admin.template.registration.update.error.nomenclatureNotFound');
                 $updateForm->get('value')->addError(
                     new FormError(
-                        $this->get('translator')->trans('validators.admin.template.registration.update.error.nomenclatureNotFound', [], 'validators')
+                        $this->translator->trans('validators.admin.template.registration.update.error.nomenclatureNotFound', [], 'validators')
                     )
                 );
             } catch (RegistrationTemplateException $registrationTemplateException) {
@@ -92,7 +107,7 @@ class RegistrationTemplateController extends Controller
                 $this->addFlash('error', 'flash.admin.template.registration.update.error.template');
                 $updateForm->get('value')->addError(
                     new FormError(
-                        $this->get('translator')->trans('validators.admin.template.registration.update.error.template', [], 'validators')
+                        $this->translator->trans('validators.admin.template.registration.update.error.template', [], 'validators')
                     )
                 );
             }
@@ -113,13 +128,7 @@ class RegistrationTemplateController extends Controller
         ]);
     }
 
-    /**
-     * @param Request              $request
-     * @param RegistrationTemplate $template
-     *
-     * @return RedirectResponse
-     */
-    public function addLocaleAction(Request $request, RegistrationTemplate $template)
+    public function addLocaleAction(Request $request, RegistrationTemplate $template): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -133,7 +142,7 @@ class RegistrationTemplateController extends Controller
 
         if ($addLocaleForm->handleRequest($request)->isSubmitted()) {
             if ($addLocaleForm->isValid()) {
-                $this->get('tactician.commandbus')->handle($addLocale);
+                $this->commandBus->handle($addLocale);
 
                 return $this->redirectToRoute('admin_template_registration_build', [
                     'registrationTemplate' => $template->getId(),

@@ -28,18 +28,18 @@ class ReplyHappeningQuestionHandlerTest extends TestCase
     private $replyHappeningQuestion;
 
     /** @var \DateTime */
-    private $datetime;
+    private $dateTime;
 
     protected function setUp()
     {
-        $this->datetime = \DateTime::createFromFormat('!Y-m-d H:i', '2020-08-02 12:00');
+        $this->dateTime = \DateTime::createFromFormat('!Y-m-d H:i', '2020-08-02 12:00');
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->notificationPublisher = $this->prophesize(NotificationPublisherInterface::class);
 
         $this->replyHappeningQuestion = new ReplyHappeningQuestionHandler(
             $this->questionRepository->reveal(),
             $this->notificationPublisher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
     }
 
@@ -58,7 +58,7 @@ class ReplyHappeningQuestionHandlerTest extends TestCase
 
         $question->getRepliedBy()->willReturn(null);
 
-        $question->setReply($replyContent, $repliedBy->reveal(), $this->datetime)->shouldBeCalled();
+        $question->setReply($replyContent, $repliedBy->reveal(), $this->dateTime)->shouldBeCalled();
 
         $this->questionRepository->update($question->reveal())->shouldBeCalled();
 

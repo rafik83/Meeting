@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Type\HasAvailabilityManagementEnabled;
 use Proximum\Vimeet\Application\Components\Type\HasUnavailabilityManagementDisabled;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
@@ -12,19 +13,48 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\IsParticipantVisio;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeFormHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class AgendaController extends Controller
+class AgendaController extends AbstractController
 {
+    private SheetRepositoryInterface $sheetRepository;
+    private IsParticipantVisio $isParticipantVisio;
+    private SendCodeFormHandler $sendCodeFormHandler;
+    private HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled;
+    private HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled;
+    private UriSigner $uriSigner;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        IsParticipantVisio $isParticipantVisio,
+        SendCodeFormHandler $sendCodeFormHandler,
+        HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
+        HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled,
+        UriSigner $uriSigner,
+        QueryBusInterface $queryBus
+    ) {
+        $this->sheetRepository = $sheetRepository;
+        $this->isParticipantVisio = $isParticipantVisio;
+        $this->sendCodeFormHandler = $sendCodeFormHandler;
+        $this->hasUnavailabilityManagementDisabled = $hasUnavailabilityManagementDisabled;
+        $this->hasAvailabilityManagementEnabled = $hasAvailabilityManagementEnabled;
+        $this->uriSigner = $uriSigner;
+        $this->queryBus = $queryBus;
+    }
+
     public function indexAction(
         EventDomain $eventDomain,
         Sheet $sheet,
@@ -39,7 +69,7 @@ class AgendaController extends Controller
             ? ParticipantHelper::isUserAloneParticipant($user, $sheet)
             : false;
 
-        $isUserParticipantMultipleSheet = $this->get('vimeet_infrastructure.repository.sheet_repository')
+        $isUserParticipantMultipleSheet = $this->sheetRepository
             ->isUserParticipantMultipleSheetsInEvent($user, $eventDomain->getEvent());
 
         if (!$isUserAloneParticipant || $isUserParticipantMultipleSheet) {
@@ -73,7 +103,7 @@ class AgendaController extends Controller
             throw $this->createNotFoundException('This participant is not in this sheet');
         }
 
-        if ($this->get(IsParticipantVisio::class)->isSatisfiedBy($participant) && !$participant->getTimezone()) {
+        if ($this->isParticipantVisio->isSatisfiedBy($participant) && !$participant->getTimezone()) {
             return $this->redirectToRoute('event_participant_timezone', [
                 'participant' => $participant->getId(),
                 'sheet' => $sheet->getId(),
@@ -83,7 +113,7 @@ class AgendaController extends Controller
         $user = $userDomain->getUser();
 
         /** @var AgendaView $agenda */
-        $agenda = $this->get('tactician.commandbus.query')->handle(new AgendaViewQuery(
+        $agenda = $this->queryBus->handle(new AgendaViewQuery(
             $eventDomain->getEvent(),
             $sheet,
             $participant,
@@ -97,7 +127,7 @@ class AgendaController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_AGENDA,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         $sendCodeForm = null;
         $ignorePhoneConfirmationUrl = null;
@@ -120,7 +150,7 @@ class AgendaController extends Controller
                 ]
             );
 
-            $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
+            $sendCodeView = $this->sendCodeFormHandler->handle(
                 new SendCodeForm(
                     $request,
                     $user,
@@ -158,9 +188,9 @@ class AgendaController extends Controller
                 'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
                 'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
                 'participant' => $participant,
-                'isUnavailabilityManagementDisabled' => $this->get(HasUnavailabilityManagementDisabled::class)->isSatisfiedBy($sheet),
-                'isAvailabilityManagementEnabled' => $this->get(HasAvailabilityManagementEnabled::class)->isSatisfiedBy($sheet),
-                'icalUrl' => $this->get('uri_signer')->sign($icalUrl),
+                'isUnavailabilityManagementDisabled' => $this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet),
+                'isAvailabilityManagementEnabled' => $this->hasAvailabilityManagementEnabled->isSatisfiedBy($sheet),
+                'icalUrl' => $this->uriSigner->sign($icalUrl),
             ]
         );
     }

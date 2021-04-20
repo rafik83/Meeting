@@ -35,7 +35,7 @@ class UpdateHandlerTest extends TestCase
         $meetingSlot,
         $meeting;
 
-    private DateTimeInterface $datetime;
+    private DateTimeInterface $dateTime;
 
     public function setUp()
     {
@@ -44,7 +44,7 @@ class UpdateHandlerTest extends TestCase
         $this->translator = $this->prophesize(TranslatorInterface::class);
         $this->messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
         $this->sheet = $this->prophesize(Sheet::class);
         $this->meeting = $this->prophesize(Meeting::class);
         $this->meetingSlot = $this->prophesize(MeetingSlot::class);
@@ -74,7 +74,7 @@ class UpdateHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
         $handler->handle(new Update($this->sheet->reveal(), $this->meeting->reveal(), [], $this->meetingSlot->reveal()));
@@ -101,7 +101,7 @@ class UpdateHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 
@@ -135,7 +135,7 @@ class UpdateHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 
@@ -180,7 +180,7 @@ class UpdateHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 
@@ -205,7 +205,7 @@ class UpdateHandlerTest extends TestCase
         $this->commandBus->handle(new UpdateSlot($this->meeting->reveal(), $this->meetingSlot->reveal(), true, true))
             ->shouldBeCalled();
 
-        $message = new Meeting\Message($this->request->reveal(), $this->sheet->reveal(), 'content', $this->datetime);
+        $message = new Meeting\Message($this->request->reveal(), $this->sheet->reveal(), 'content', $this->dateTime);
         $this->messageRepository->add($message)->shouldBeCalled();
         $this->meetingRepository->set($this->meeting->reveal())->shouldBeCalled();
         $this->requestRepository->set($this->request->reveal())->shouldBeCalled();
@@ -222,7 +222,7 @@ class UpdateHandlerTest extends TestCase
             $this->translator->reveal(),
             $this->messageRepository->reveal(),
             $this->meetingRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 

@@ -8,21 +8,21 @@ use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class PrivacyPolicyAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
     }
 
@@ -34,7 +34,7 @@ class PrivacyPolicyAction
             ) instanceof Event\ExtraParameter;
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Event/privacy-policy.html.twig',
                 [
                     'event' => $event,

@@ -3,7 +3,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\Alice\Fixtures;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,7 +21,7 @@ class FixturesLoader extends AbstractFixture implements ContainerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(EntityManagerInterface $manager)
     {
         $files = [
             __DIR__ . '/User.yml',

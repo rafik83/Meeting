@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ActivateAccountPassword
+class ActivateAccountPassword implements Command
 {
     /**
      * @var User

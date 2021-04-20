@@ -9,7 +9,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Ad
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class BuilderAction
 {
@@ -19,17 +19,17 @@ class BuilderAction
     /** @var PrintTemplateResolver */
     private $printTemplateResolver;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         PrintTemplateResolver $printTemplateResolver,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->printTemplateResolver = $printTemplateResolver;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, SheetTemplate $template): Response
@@ -45,7 +45,7 @@ class BuilderAction
 
         $resolvedPrintTemplateView = $this->printTemplateResolver->resolve($template);
 
-        return new Response($this->engine->render('AdminBundle:SheetPrintTemplate:builder.html.twig', [
+        return new Response($this->twig->render('AdminBundle:SheetPrintTemplate:builder.html.twig', [
             'event' => $template->getEvent(),
             'templateId' => $template->getId(),
             'templateTitle' => $template->getTitle(),

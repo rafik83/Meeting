@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -36,8 +36,8 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var ErrorFactory */
     private $errorFactory;
@@ -48,7 +48,7 @@ class UpdateAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         ErrorFactory $errorFactory
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -56,7 +56,7 @@ class UpdateAction
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->errorFactory = $errorFactory;
     }
 
@@ -94,7 +94,7 @@ class UpdateAction
             }
         }
 
-        return new Response($this->engine->render('AdminBundle:Operator:update.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Operator:update.html.twig', [
             'form' => $form->createView(),
         ]));
     }

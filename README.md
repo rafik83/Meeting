@@ -20,11 +20,11 @@ sudo apt install mysql-client
 
 #### Install PHP
 
-First you will need to install PHP 7.x on your local machine
+First you will need to install PHP 7.4 on your local machine (if not available)
 
 ```bash
 sudo apt update
-sudo apt install php
+sudo apt install php7.4
 ```
 
 #### Install Docker and docker-compose
@@ -35,7 +35,7 @@ After this step you may need to restart your machine.
 
 #### Symfony server
 
-Symfony Server is a local server used to run symfony php files
+Symfony Server is a local server used to run symfony php files [see documentation](https://symfony.com/doc/current/setup/symfony_server.html).
 
 ```bash
 wget https://get.symfony.com/cli/installer -O - | bash
@@ -45,42 +45,36 @@ symfony server:ca:install
 symfony proxy:domain:attach "*.vimeet.proximum"
 ```
 
-Unfortunately for now we are also using `PHP 7.2` to run the application. So we also need to install that version alongside the latest PHP version.
+The last command (`proxy:domain:attach`) must be done from project root folder, as it will attach domain to a folder on filesystem.
 
-This could be related to this [this bug](https://github.com/symfony/cli/issues/292).
-
-**Before you install PHP**: check if you can exectute symfony by running `symfony` from your terminal. If symfony is not found add this in your `.bashrc` (or `.zshrc`, if you are using `zsh`)
+Check if you can execute symfony by running `symfony` from your terminal. If symfony is not found add this in your `.bashrc` (or `.zshrc`, if you are using `zsh`)
 
 ```
 export PATH="$HOME/.symfony/bin:$HOME/.config/composer/vendor/bin:$PATH"
 ```
 
-If Symfony has been found you can run :
-
-```bash
-sudo add-apt-repository ppa:ondrej/php
-sudo apt update
-```
-
-# Install PHP 7.2
+# Install required dependencies for php and php 7.4
 
 ```
-sudo apt install php7.2
+sudo apt install php7.4-intl php7.4-gd php7.4-xml php7.4-curl php7.4-mysql php7.4-mbstring
+sudo apt install php-intl php-gd php-xml php-curl php-mysql php-mbstring
 ```
 
-# Install required dependencies for php and php 7.2
+Create a file for Symfony local parameters:
 
-```
-sudo apt install php7.2-intl php7.2-gd php7.2-xml php7.2-curl php7.2-mysql php7.2-mbstring php7.2-apcu
-sudo apt install php-intl php-gd php-xml php-curl php-mysql php-mbstring php-apcu
-```
+    cp app/config/parameters.yml.dist app/config/parameters.yml
 
-cp app/config/parameters.yml.dist app/config/parameters.yml
+Create a file to set local evironment vaiables:
+
+    touch .env.local
+
+Add the following line to be able to run behat tests locally:
+
+    DATABASE_HOST=127.0.0.1
 
 #### Install the php dependencies
 
-This projet uses a PHAR for composer (version 1.10) stored in `bin/composer.phar`.
-This file is used to install the dependencies on production and staging.
+This projet uses a PHAR for composer stored in `bin/composer.phar`.
 
 The recommended way to install the dependencies on this project is to use this phar, by running :
 
@@ -94,6 +88,10 @@ To avoid ES6 error, run:
 
     $ sudo sysctl -w vm.max_map_count=262144
 
+To make it permanent, add this line to /etc/sysctl.conf:
+
+    vm.max_map_count=262144
+
 Elastic Search, MySQL and NGINX and Redis are living in their dedicated docker container. To run all those services just do :
 
 ```
@@ -103,16 +101,14 @@ docker-compose up -d
 
 ### Import a Database Dump
 
-First ask a team mate to get an anonimyzed database dump.
+First ask a team mate to get an anonymized database dump.
 
-Then let's create the database and import this dump
+Then let's create the database and import this dump.
 
 ##### Create the database
 
 ```
-mysql -h 127.0.0.1 -u root -p
-create database proximum_vimeet;
-exit
+make install-db
 ```
 
 **Import the dump**
@@ -129,10 +125,16 @@ Now it's time to index the Elastic Search Database
 
 ```
 php bin/console vimeet:elasticsearch:index
-php bin/console jms:run
+make worker
 ```
 
-The last command will take ~1h to run . It's time to grab a coffee I guess.
+The command `make worker` is limited to 30 minutes, but you may need more time to index all events in ES. Rerun command until everything is indexed, or run the following command on a specific event you want to make tests over:
+
+```
+bin/console vimeet:event:index-sheets {eventId} reset
+```
+
+Note that this command only indexes sheets, not users.
 
 ### Frontend Setup
 
@@ -162,15 +164,17 @@ Vimeet uses [Yarn](https://yarnpkg.com/) as package manager. Please follow the i
 
 **Please make sure you install Yarn 1.x and not 2.x**
 
-#### Install the node depenencies
+#### Install the node dependencies
 
+```shell
+make install-dep
 ```
-yarn install
+
+#### Build assets
+
+```shell
+make build
 ```
-
-#### Build assets:
-
-    make build
 
 ### Let's start and open the app
 
@@ -183,19 +187,19 @@ symfony server:start -d
 
 Then you're ready to start hacking.
 
-You should access the project via http://admin.vimeet.proximum.wip/app_dev.php/fr/event
+You should access the project via https://admin.vimeet.proximum.wip/
 
 ### Day to day usage
 
 **Build and watch assets:**
 
-```
-    make watch
+```shell
+make watch
 ```
 
 **Build Vimeet events assets**
 
-Sometime events use specific assets like specific css. To build those run :
+Sometime events use specific assets like dynamic css. To build those run :
 
 ```
     bin/console vimeet:event:build-guideline-asset
@@ -229,29 +233,6 @@ To do not forget to rebuild js bundles:
     make build
 ```
 
-### Update
-
-To update the application, for example after git branch checkout:
-
-```
-    make update-app
-```
-
-### Migrations
-
-Drop DB and generate migrations diff:
-
-```
-⇒ make migrations
-```
-
-To generate migration file:
-
-```
-=> make redis-flushdb@vm
-=> bin/console doctrine:migrations:diff
-```
-
 ### Localization
 
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).
@@ -268,56 +249,21 @@ Remarks :
 
 #### Or synchronize manually translations:
 
-    ⇒ make trans-sync@vm
+    $ make trans-sync@vm
 
 ### Deployment
 
-`Incenteev\ParameterHandler\ScriptHandler::buildParameters` is not ran on preprod or prod.
-If you need to set new parameters, you need to do it manually on preprod or prod before deploying.
+Application is deployed automatically on staging environment, each time a commit is pushed to staging branch.
 
-To deploy to preprod and prod, you need to be connected to VPN with this ~/.ssh/config :
+For production, you need to [make a release on github](https://github.com/proximum/vimeet/releases/new), wait for the [container image to be built](https://console.cloud.google.com/cloud-build/builds?folder=&hl=fr&organizationId=&project=proximum-vimeet-staging), then deploy it using [Spinnaker](https://spinnaker.prod.vimeet.synalabs.hosting/#/applications/vimeet/executions).
 
-    Host vimeet-preprod
-            User www-data
-            Hostname 10.11.0.83
+You must select the version tag you want to deploy, and confirm manually the first step of deployment to really launch the deployment in production.
 
-    Host vimeet-prod1
-            User www-data
-            Hostname 10.11.0.31
-
-    Host vimeet-prod2
-            User www-data
-            Hostname 10.11.0.32
-
-[Capistrano 2](https://rubygems.org/gems/capistrano/versions/2.15.9) and [Capifony](https://everzet.github.io/capifony/) must be installed.
-
-There are two branches and two commands to deploy for each environment (to be launched from local machine, not VM):
-
-- `preprod`
-
-  \$ make deploy@preprod
-
-- `prod`
-
-  \$ make deploy@prod
-
-After a deploy, you will need to do manually some commands at prod or preprod ([an issue is opened to automatize that](https://github.com/proximum/vimeet/issues/770)) :
-
-- Update Elastic Search index (all events):
-
-  `⇒ bin/console vimeet:elasticsearch:index --env=prod`
-
-- Update Elastic Search index for only one event (save time when indexing in local dev):
-
-  `⇒ bin/console vimeet:event:index-sheets {eventId} no-reset --env=dev`
-
-- Rebuild events assets:
-
-  `⇒ bin/console vimeet:event:build-guideline-asset`
+To rollback on previous version, do the same using the previous version tag. Note that if you delete columns or made other structural changes on database, the application may fail due to inconsistencies between doctrine model and real database. Such operations should be achieved carrefully.
 
 ### Styleguide
 
-http://(subdomain event).vimeet.proximum/app_dev.php/fr/styleguide
+https://(subdomain event).vimeet.proximum.wip/fr/styleguide
 
 ### Code
 
@@ -328,18 +274,6 @@ En admin, utiliser la méthode de l'event permettant de fallback, car la locale 
 ```php
 $locale = $event->getAvailableLocale($request->getLocale);
 ```
-
-### Jobs Queue
-
-- [Liste des jobs](http://admin.vimeet.proximum.wip/app_dev.php/fr/jobs/)
-
-Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
-
-#### Ajouter un job
-
-Un job correspond une instance de l'entité `JMS\JobQueueBundle\Entity\Job`. Chaque job doit lancer une command console Symfony.
-
-Pour ajouter un job, ajouter une méthode dans `Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter` et injecter la classe dans le service programmant le job.
 
 ### Tester son code sur un autre terminal
 

@@ -4,7 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Updated
+- VIMEET-2301 - Upgrade Symfony version to 4.4
+
 ### Fixed
+- Display original URL on sheet in PDF format instead of redirect link
+
+### Added
+- VIMEET-2358 - Export meeting evaluations
 - MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
 
 ## [2.86.2] - 2021-04-02
@@ -84,7 +91,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
 
-## [2.82.0] - 2021-02-16### Updated
+## [2.82.0] - 2021-02-16
+### Updated
 - Update Elasticsearch to 6.8.13
 
 ## [2.81.0] - 2021-02-16

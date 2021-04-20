@@ -34,7 +34,7 @@ class AuthenticationFailureSubscriberTest extends TestCase
     private $eventDispatcher;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function setup()
     {
@@ -46,7 +46,7 @@ class AuthenticationFailureSubscriberTest extends TestCase
         $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
     }
 
     public function testFirstFailWithExistingUser()
@@ -62,8 +62,8 @@ class AuthenticationFailureSubscriberTest extends TestCase
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
         $foundUser = $this->prophesize(User::class);
-        $foundUser->updateLastFailedAuthentication($this->datetime)->shouldBeCalled();
-        $foundUser->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(false);
+        $foundUser->updateLastFailedAuthentication($this->dateTime)->shouldBeCalled();
+        $foundUser->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)->shouldBeCalled()->willReturn(false);
 
         $this->userRepository->findByEmail($submittedUser)->shouldBeCalled()->willReturn($foundUser->reveal());
         $this->userRepository->set($foundUser->reveal())->shouldBeCalled();
@@ -75,7 +75,7 @@ class AuthenticationFailureSubscriberTest extends TestCase
             $this->eventRepository->reveal(),
             $this->userRepository->reveal(),
             $this->eventDispatcher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $authenticationFailureSubscriber->processException($authenticationFailureEvent->reveal());
@@ -94,8 +94,8 @@ class AuthenticationFailureSubscriberTest extends TestCase
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
         $foundUser = $this->prophesize(User::class);
-        $foundUser->updateLastFailedAuthentication($this->datetime)->shouldBeCalled();
-        $foundUser->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(true);
+        $foundUser->updateLastFailedAuthentication($this->dateTime)->shouldBeCalled();
+        $foundUser->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)->shouldBeCalled()->willReturn(true);
         $foundUser->getLocale()->willReturn('fr');
 
         $this->userRepository->findByEmail($submittedUser)->shouldBeCalled()->willReturn($foundUser->reveal());
@@ -113,7 +113,7 @@ class AuthenticationFailureSubscriberTest extends TestCase
             $this->eventRepository->reveal(),
             $this->userRepository->reveal(),
             $this->eventDispatcher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $authenticationFailureSubscriber->processException($authenticationFailureEvent->reveal());

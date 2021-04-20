@@ -1,461 +1,465 @@
 parameters:
-    sms_directory: '%kernel.root_dir%/../var/sms'
+    sms_directory: '%kernel.project_dir%/var/sms'
 
 services:
     #
     # Storage
     #
     behat_storage:
-        class: Proximum\Vimeet\Behat\Service\Storage\Storage
+        alias: Proximum\Vimeet\Behat\Service\Storage\Storage
 
     #
     # Fixture providers
     #
-    vimeet_infrastructure.data_fixtures_orm.provider:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
-        arguments:
-            - '%domain%'
-        tags:
-            - { name: hautelook_alice.faker.provider }
+    # vimeet_infrastructure.data_fixtures_orm.provider:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
+    #     arguments:
+    #         - '%domain%'
+    #     tags:
+    #         - { name: hautelook_alice.faker.provider }
 
     #
     # Managers
     #
-    behat_manager.user:
-        class: Proximum\Vimeet\Behat\Service\Manager\UserManager
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.user_event_repository'
+    # behat_manager.user:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\UserManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.user_repository'
+    #         - '@vimeet_infrastructure.repository.user_event_repository'
+    #         - '@repository.user_activate_account_token_repository'
+    #         - '@repository.change_mail_token_repository'
 
-    behat_manager.event:
-        class: Proximum\Vimeet\Behat\Service\Manager\EventManager
-        arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
+    # behat_manager.event:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\EventManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.event_repository'
 
-    behat_manager.type:
-        class: Proximum\Vimeet\Behat\Service\Manager\TypeManager
-        arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
-            - '@behat_manager.user'
-            - '@behat_manager.sheet_template'
-            - '@behat_manager.registration_template'
-            - '@behat_manager.nomenclature'
+    # behat_manager.type:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\TypeManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.type_repository'
+    #         - '@behat_manager.sheet_template'
+    #         - '@behat_manager.registration_template'
+    #         - '@behat_manager.nomenclature'
 
-    behat_manager.category:
-        class: Proximum\Vimeet\Behat\Service\Manager\CategoryManager
-        arguments:
-            - '@vimeet_infrastructure.repository.category_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
+    # behat_manager.category:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\CategoryManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.category_repository'
+    #         - '@vimeet_infrastructure.repository.type_repository'
 
-    behat_manager.sheet_template:
-        class: Proximum\Vimeet\Behat\Service\Manager\SheetTemplateManager
-        arguments:
-            - '@repository.template.sheet_template_repository'
+    # behat_manager.sheet_template:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\SheetTemplateManager
+    #     arguments:
+    #         - '@repository.template.sheet_template_repository'
 
-    behat_manager.registration_template:
-        class: Proximum\Vimeet\Behat\Service\Manager\RegistrationTemplateManager
-        arguments:
-            - '@repository.template.registration_template_repository'
+    # behat_manager.registration_template:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\RegistrationTemplateManager
+    #     arguments:
+    #         - '@repository.template.registration_template_repository'
 
-    behat_manager.sheet:
-        class: Proximum\Vimeet\Behat\Service\Manager\SheetManager
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@template.sheet.sheet_info_setter'
-            - '@behat_manager.user'
-            - '@behat_manager.type'
+    # behat_manager.sheet:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\SheetManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@repository.sheet.completeness_repository'
+    #         - '@template.sheet.sheet_info_setter'
+    #         - '@behat_manager.user'
+    #         - '@behat_manager.type'
 
-    behat.service.manager.rule_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\RuleManager
-        arguments:
-            - '@repository.rule_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
+    # behat.service.manager.rule_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\RuleManager
+    #     arguments:
+    #         - '@repository.rule_repository'
+    #         - '@vimeet_infrastructure.repository.type_repository'
 
-    behat_manager.group:
-        class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
-        arguments:
-            - '@repository.sheet.group_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@behat_manager.sheet'
+    # behat_manager.group:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
+    #     arguments:
+    #         - '@repository.sheet.group_repository'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@behat_manager.sheet'
 
-    behat_manager.invoice:
-        class: Proximum\Vimeet\Behat\Service\Manager\InvoiceManager
-        arguments:
-            - '@behat_manager.sheet'
-            - '@repository.invoice.invoice_repository'
+    # behat_manager.invoice:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\InvoiceManager
+    #     arguments:
+    #         - '@behat_manager.sheet'
+    #         - '@repository.invoice.invoice_repository'
 
-    behat_manager.participant:
-        class: Proximum\Vimeet\Behat\Service\Manager\ParticipantManager
-        arguments:
-            - '@vimeet_infrastructure.repository.participant_repository'
-            - '@repository.user.event.extra_data_repository'
-            - '@behat_manager.sheet'
-            - '@behat_manager.user'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+    # behat_manager.participant:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\ParticipantManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.participant_repository'
+    #         - '@repository.user.event.extra_data_repository'
+    #         - '@behat_manager.sheet'
+    #         - '@behat_manager.user'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
-    behat_manager.nomenclature:
-        class: Proximum\Vimeet\Behat\Service\Manager\NomenclatureManager
-        arguments:
-            - '@repository.nomenclature_repository'
+    # behat_manager.nomenclature:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\NomenclatureManager
+    #     arguments:
+    #         - '@repository.nomenclature_repository'
+    #         - '@repository.filter.tagged_nomenclature_filter_repository'
 
-    behat_manager.slot:
-        class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@domain.meeting.slot.slot_generator'
+    # behat_manager.slot:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\SlotManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.meeting_slot_repository'
+    #         - '@domain.meeting.slot.slot_generator'
 
-    behat_manager.spot:
-        class: Proximum\Vimeet\Behat\Service\Manager\SpotManager
-        arguments:
-            - '@vimeet_infrastructure.repository.spot_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
+    # behat_manager.spot:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\SpotManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.spot_repository'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
 
-    behat_manager.meeting:
-        class: Proximum\Vimeet\Behat\Service\Manager\MeetingManager
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@behat_manager.participant'
-            - '@behat_manager.slot'
-            - '@behat_manager.spot'
+    # behat_manager.meeting:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\MeetingManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.meeting_repository'
+    #         - '@vimeet_infrastructure.repository.meeting.request_repository'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@behat_manager.participant'
+    #         - '@behat_manager.slot'
+    #         - '@behat_manager.spot'
 
-    behat_manager.order:
-        class: Proximum\Vimeet\Behat\Service\Manager\OrderManager
-        arguments:
-            - '@vimeet_infrastructure.repository.order_repository'
-            - '@behat_manager.sheet'
-            - '@behat_manager.billing_info'
-            - '@datetime'
+    # Proximum\Vimeet\Behat\Service\Manager\OrderManager:
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.order_repository'
+    #         - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+    #         - '@vimeet_infrastructure.repository.participant_repository'
+    #         - '@behat_manager.sheet'
+    #         - '@behat_manager.billing_info'
+    #         - '@datetime'
 
-    behat_manager.billing_info:
-        class: Proximum\Vimeet\Behat\Service\Manager\BillingInfoManager
-        arguments:
-            - '@repository.billing_info_repository'
+    # behat_manager.billing_info:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\BillingInfoManager
+    #     arguments:
+    #         - '@repository.billing_info_repository'
 
-    behat_manager.tip:
-        class: Proximum\Vimeet\Behat\Service\Manager\TipManager
-        arguments:
-            - '@repository.tip.repository'
-            - '@behat_manager.event'
-            - '@behat_manager.type'
+    # behat_manager.tip:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\TipManager
+    #     arguments:
+    #         - '@repository.tip.repository'
+    #         - '@behat_manager.event'
+    #         - '@behat_manager.type'
 
-    behat_manager.event.day:
-        class: Proximum\Vimeet\Behat\Service\Manager\Event\DayManager
-        arguments:
-             - '@repository.event.day_repository'
+    # behat_manager.event.day:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Event\DayManager
+    #     arguments:
+    #          - '@repository.event.day_repository'
 
-    behat_manager.event.access:
-        class: Proximum\Vimeet\Behat\Service\Manager\Event\AccessManager
-        arguments:
-             - '@vimeet_infrastructure.repository.event_repository'
+    # behat_manager.event.access:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Event\AccessManager
+    #     arguments:
+    #          - '@vimeet_infrastructure.repository.event_repository'
 
-    behat_manager.token.user_event_token_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\Token\UserEventTokenManager
-        arguments:
-             - '@repository.token.user_event_token_repository'
+    # behat_manager.token.user_event_token_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Token\UserEventTokenManager
+    #     arguments:
+    #          - '@repository.token.user_event_token_repository'
 
-    behat_manager.user.event.authentication_token_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\User\Event\AuthenticationTokenManager
-        arguments:
-             - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
+    # behat_manager.user.event.authentication_token_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\User\Event\AuthenticationTokenManager
+    #     arguments:
+    #          - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
 
-    behat_manager.admin_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
-        arguments:
-            - '@repository.admin_repository'
-            - '@repository.admin_activate_account_token_repository'
+    # behat_manager.admin_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
+    #     arguments:
+    #         - '@repository.admin_repository'
+    #         - '@repository.admin_activate_account_token_repository'
 
-    behat_manager.invoice.prefix_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\Invoice\PrefixManager
-        arguments:
-            - '@repository.invoice.prefix_repository'
+    # behat_manager.invoice.prefix_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Invoice\PrefixManager
+    #     arguments:
+    #         - '@repository.invoice.prefix_repository'
 
-    behat.service.manager.catalog_visibility_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
-        arguments:
-            - '@repository.catalog_visibility_repository'
-            - '@vimeet_infrastructure.repository.type_repository'
+    # behat.service.manager.catalog_visibility_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
+    #     arguments:
+    #         - '@repository.catalog_visibility_repository'
+    #         - '@vimeet_infrastructure.repository.type_repository'
 
-    behat_manager.event.content_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
-        arguments:
-            - '@repository.event.content_repository'
+    # behat_manager.event.content_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
+    #     arguments:
+    #         - '@repository.event.content_repository'
 
-    behat.service.manager.meeting.request_manager:
-        class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
-        arguments:
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
+    # behat.service.manager.meeting.request_manager:
+    #     class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.meeting.request_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\ProductManager:
-        arguments:
-            - '@vimeet_infrastructure.repository.product_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\ProductManager:
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.product_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\PackageManager:
-        arguments:
-            - '@repository.package_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\PackageManager:
+    #     arguments:
+    #         - '@repository.package_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+    # Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager:
-        arguments:
-            - '@vimeet_infrastructure.repository_happening.category_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager:
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository_happening.category_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager:
-        arguments:
-            - '@repository.unavailability.category_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager:
+    #     arguments:
+    #         - '@repository.unavailability.category_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager:
-        arguments:
-            - '@repository.unavailability.mass_repository'
-            - '@repository.unavailability.mass_assignment_repository'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+    # Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager:
+    #     arguments:
+    #         - '@repository.unavailability.mass_repository'
+    #         - '@repository.unavailability.mass_assignment_repository'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
 
-    Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager:
-        arguments:
-            - '@repository.messaging.message_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager:
+    #     arguments:
+    #         - '@repository.messaging.message_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager:
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager:
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.notification_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager:
-        arguments:
-            - '@repository.sheet.completeness_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager:
+    #     arguments:
+    #         - '@repository.sheet.completeness_repository'
 
-    Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager:
-        arguments:
-            - '@repository.transaction'
+    # Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager:
+    #     arguments:
+    #         - '@repository.transaction'
 
-    Proximum\Vimeet\Behat\Service\Manager\HappeningManager:
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_repository'
-            - '@vimeet_infrastructure.repository.happening_participation_repository'
+    # Proximum\Vimeet\Behat\Service\Manager\HappeningManager:
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.happening_repository'
+    #         - '@vimeet_infrastructure.repository.happening_participation_repository'
 
     #
     # Proxies
     #
-    behat_proxy.feature_context:
-        class: Proximum\Vimeet\Behat\Proxy\FeatureContextProxy
-        arguments:
-            - '@behat_storage'
+    # behat_proxy.feature_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\FeatureContextProxy
+    #     arguments:
+    #         - '@behat_storage'
 
-    behat_proxy.event_context:
-        class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.event'
-            - '@behat_manager.event.access'
+    # behat_proxy.event_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\EventContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.event'
+    #         - '@behat_manager.event.access'
 
-    behat_proxy.user_context:
-        class: Proximum\Vimeet\Behat\Proxy\UserContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.user'
+    # behat_proxy.user_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\UserContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.user'
 
-    behat_proxy.slot_context:
-        class: Proximum\Vimeet\Behat\Proxy\SlotContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.slot'
+    # behat_proxy.slot_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\SlotContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.slot'
 
-    behat_proxy.spot_context:
-        class: Proximum\Vimeet\Behat\Proxy\SpotContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.spot'
+    # behat_proxy.spot_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\SpotContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.spot'
 
-    behat_proxy.type_context:
-        class: Proximum\Vimeet\Behat\Proxy\TypeContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.type'
+    # behat_proxy.type_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\TypeContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.type'
 
-    behat_proxy.category_context:
-        class: Proximum\Vimeet\Behat\Proxy\CategoryContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.category'
+    # behat_proxy.category_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\CategoryContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.category'
 
-    behat_proxy.sheet_context:
-        class: Proximum\Vimeet\Behat\Proxy\SheetContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.sheet'
+    # behat_proxy.sheet_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\SheetContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.sheet'
 
-    behat_proxy.group_context:
-        class: Proximum\Vimeet\Behat\Proxy\GroupContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.group'
+    # behat_proxy.group_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\GroupContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.group'
 
-    behat_proxy.invoice_context:
-        class: Proximum\Vimeet\Behat\Proxy\InvoiceContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.sheet'
-            - '@behat_manager.invoice'
+    # behat_proxy.invoice_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\InvoiceContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.sheet'
+    #         - '@behat_manager.invoice'
 
-    behat_proxy.participant_context:
-        class: Proximum\Vimeet\Behat\Proxy\ParticipantContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.participant'
+    # behat_proxy.participant_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\ParticipantContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.participant'
 
-    behat_proxy.meeting_context:
-        class: Proximum\Vimeet\Behat\Proxy\MeetingContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.meeting'
-            - '@behat_manager.spot'
-            - '@behat_manager.slot'
+    # behat_proxy.meeting_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\MeetingContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.meeting'
+    #         - '@behat_manager.spot'
+    #         - '@behat_manager.slot'
 
-    behat_proxy.order_context:
-        class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.order'
+    # behat_proxy.order_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.order'
 
-    behat_proxy.tip_context:
-        class: Proximum\Vimeet\Behat\Proxy\TipContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.tip'
+    # behat_proxy.tip_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\TipContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.tip'
 
-    behat_proxy.login_context:
-        class: Proximum\Vimeet\Behat\Proxy\LoginContextProxy
-        arguments:
-             - '@behat_storage'
+    # behat_proxy.login_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\LoginContextProxy
+    #     arguments:
+    #          - '@behat_storage'
 
-    behat.proxy.catalog_visibility_context_proxy:
-        class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat.service.manager.catalog_visibility_manager'
+    # behat.proxy.catalog_visibility_context_proxy:
+    #     class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat.service.manager.catalog_visibility_manager'
 
-    behat_proxy.event.day_context:
-        class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.event.day'
+    # behat_proxy.event.day_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.event.day'
 
-    behat_proxy.admin_context:
-        class: Proximum\Vimeet\Behat\Proxy\AdminContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.admin_manager'
+    # behat_proxy.admin_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\AdminContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.admin_manager'
 
-    behat_proxy.invoice.prefix_context:
-        class: Proximum\Vimeet\Behat\Proxy\Invoice\PrefixContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.invoice.prefix_manager'
+    # behat_proxy.invoice.prefix_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\Invoice\PrefixContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.invoice.prefix_manager'
 
-    behat_proxy.event.content_context:
-        class: Proximum\Vimeet\Behat\Proxy\Event\ContentContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.event.content_manager'
+    # behat_proxy.event.content_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\Event\ContentContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.event.content_manager'
 
-    behat.proxy.rule_context:
-        class: Proximum\Vimeet\Behat\Proxy\RuleContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat.service.manager.rule_manager'
+    # behat.proxy.rule_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\RuleContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat.service.manager.rule_manager'
 
-    Proximum\Vimeet\Behat\Proxy\ProductContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\ProductManager'
+    # Proximum\Vimeet\Behat\Proxy\ProductContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\ProductManager'
 
-    Proximum\Vimeet\Behat\Proxy\PackageContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\PackageManager'
+    # Proximum\Vimeet\Behat\Proxy\PackageContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\PackageManager'
 
-    Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager'
+    # Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager'
 
-    Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.billing_info'
+    # Proximum\Vimeet\Behat\Proxy\BillingInfoContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.billing_info'
 
-    Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+    # Proximum\Vimeet\Behat\Proxy\Happening\CategoryContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
 
-    Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
+    # Proximum\Vimeet\Behat\Proxy\Unavailability\CategoryContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\CategoryManager'
 
-    Proximum\Vimeet\Behat\Proxy\Unavailability\MassContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager'
+    # Proximum\Vimeet\Behat\Proxy\Unavailability\MassContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Unavailability\MassManager'
 
-    Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
+    # Proximum\Vimeet\Behat\Proxy\Messaging\MessageContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Messaging\MessageManager'
 
-    Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
+    # Proximum\Vimeet\Behat\Proxy\Notification\NotificationContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Notification\NotificationManager'
 
-    Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager'
+    # Proximum\Vimeet\Behat\Proxy\Sheet\SheetCompletenessContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Sheet\SheetCompletenessManager'
 
-    Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
+    # Proximum\Vimeet\Behat\Proxy\Transaction\TransactionContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Transaction\TransactionManager'
 
-    Proximum\Vimeet\Behat\Proxy\HappeningContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@Proximum\Vimeet\Behat\Service\Manager\HappeningManager'
-            - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
+    # Proximum\Vimeet\Behat\Proxy\HappeningContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\HappeningManager'
+    #         - '@Proximum\Vimeet\Behat\Service\Manager\Happening\CategoryManager'
 
-    Proximum\Vimeet\Behat\Proxy\Template\RegistrationTemplateContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.registration_template'
+    # Proximum\Vimeet\Behat\Proxy\Template\RegistrationTemplateContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.registration_template'
 
-    Proximum\Vimeet\Behat\Proxy\Template\SheetTemplateContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.sheet_template'
+    # Proximum\Vimeet\Behat\Proxy\Template\SheetTemplateContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.sheet_template'
 
-    Proximum\Vimeet\Behat\Proxy\NomenclatureContextProxy:
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.nomenclature'
+    # Proximum\Vimeet\Behat\Proxy\NomenclatureContextProxy:
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.nomenclature'
 
     #
     # Other services
     #
 
-    behat_proxy.token.user_event_token_context:
-        class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.token.user_event_token_manager'
+    # behat_proxy.token.user_event_token_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.token.user_event_token_manager'
 
-    behat_proxy.user.event.authentication_token_context:
-        class: Proximum\Vimeet\Behat\Proxy\User\Event\AuthenticationTokenContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat_manager.user.event.authentication_token_manager'
+    # behat_proxy.user.event.authentication_token_context:
+    #     class: Proximum\Vimeet\Behat\Proxy\User\Event\AuthenticationTokenContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat_manager.user.event.authentication_token_manager'
 
     #
     # Adapter
@@ -470,17 +474,17 @@ services:
         calls:
             - [registerProvider, ['@Proximum\Vimeet\Behat\Service\Adapter\SMS\StorageProvider']]
 
-    behat.proxy.meeting.request_context_proxy:
-        class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
-        arguments:
-            - '@behat_storage'
-            - '@behat.service.manager.meeting.request_manager'
+    # behat.proxy.meeting.request_context_proxy:
+    #     class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
+    #     arguments:
+    #         - '@behat_storage'
+    #         - '@behat.service.manager.meeting.request_manager'
 
     event_listener.exception_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@templating'
+            - '@twig'
             - '@adapter.authorization_checker'
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: -127 }

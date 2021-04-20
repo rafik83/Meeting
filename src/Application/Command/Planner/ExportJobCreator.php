@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ExportJobCreator
+class ExportJobCreator implements Command
 {
     const MODE_AUTO = 'auto';
     const MODE_MANUAL = 'manual';

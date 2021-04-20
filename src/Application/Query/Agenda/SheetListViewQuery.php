@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SheetListViewQuery
+class SheetListViewQuery implements Query
 {
     /**
      * @var Event

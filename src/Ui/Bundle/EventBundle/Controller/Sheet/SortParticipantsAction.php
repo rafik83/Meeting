@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SortParticipantsAction
 {
@@ -29,8 +29,8 @@ class SortParticipantsAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -47,7 +47,7 @@ class SortParticipantsAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         QueryBusInterface $queryBus,
@@ -55,7 +55,7 @@ class SortParticipantsAction
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
         $this->queryBus = $queryBus;
@@ -101,7 +101,7 @@ class SortParticipantsAction
         $cardListView = $this->queryBus->handle(new CardListViewQuery($sheet, $userDomain->getUser(), $locale, false));
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Sheet/sortParticipants.html.twig',
                 [
                     'sheet' => $sheet,
