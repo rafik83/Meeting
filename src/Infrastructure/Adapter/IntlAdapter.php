@@ -13,6 +13,10 @@ class IntlAdapter implements IntlInterface
      */
     public function getCountryName($countryCode, $locale = null)
     {
+        if (empty($countryCode)) {
+            return '';
+        }
+
         return Countries::getName(\mb_strtoupper($countryCode), $locale);
     }
 
