@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2412 Height space between nav buttons
 
-## Fixed
+### Fixed
+- Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated
 
 ## [2.87.5] - 2021-04-20
+### Fixed
 - Fix duplicated commercial status changes
 
 ## [2.87.4] - 2021-04-20
