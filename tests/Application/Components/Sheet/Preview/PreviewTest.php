@@ -35,7 +35,7 @@ class PreviewTest extends TestCase
 
     public function setUp()
     {
-        $this->event = EventFactory::createEvent();
+        $this->event = EventFactory::createEvent(null, 'en');
     }
 
     public function testGetPreview()
@@ -85,7 +85,7 @@ class PreviewTest extends TestCase
             $taggedDataView1,
             $taggedDataView2,
         ]);
-        $tagObject->getLabel($locale)->shouldBeCalled()->willReturn('Label');
+        $tagObject->getLabel($locale, 'en')->shouldBeCalled()->willReturn('Label');
 
         $templateData = $this->prophesize(TemplateData::class);
         $participantObject = $this->prophesize(ParticipantObject::class);

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - update services config to avoid duplicates in event subscribers
+- Add fallback for getLabel call, to prevent exception if label is not translated
 
 ## [2.87.5] - 2021-04-20
 ### Fixed
