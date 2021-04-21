@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MV-324 - fix bad viewers count for speakers when opening webinar
 
 ## [2.87.5] - 2021-04-20
+### Fixed
 - Fix duplicated commercial status changes
 
 ## [2.87.4] - 2021-04-20
