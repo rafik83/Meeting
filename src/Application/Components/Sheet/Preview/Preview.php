@@ -29,6 +29,8 @@ class Preview
     /** @var ParticipantsPositionResolver */
     private $participantsPositionResolver;
 
+    private string $localeFallback = 'en';
+
     /**
      * @param TaggedDataFactory            $taggedDataFactory
      * @param TranslatorInterface          $translator
@@ -56,6 +58,8 @@ class Preview
      */
     public function getPreview(Sheet $sheet, string $locale, ComposedRule $composedRule = null)
     {
+        $this->localeFallback = $sheet->getEvent()->getLocaleFallback();
+
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
         $rules             = null !== $composedRule ? [$composedRule->rule] : [];
@@ -143,7 +147,7 @@ class Preview
                 $previewView->addTagView(
                     new TagView(
                         $taggedDataView->type,
-                        $templateObject->getLabel($locale),
+                        $templateObject->getLabel($locale, $this->localeFallback),
                         $taggedDataView->content,
                         $taggedDataView->originalUrl
                     )
