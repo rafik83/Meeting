@@ -16,4 +16,6 @@ interface CustomLinkRepositoryInterface
     public function add(Event\CustomLink $customLink): void;
 
     public function remove(Event\CustomLink $customLink): void;
+
+    public function set(Event\CustomLink $customLink): void;
 }

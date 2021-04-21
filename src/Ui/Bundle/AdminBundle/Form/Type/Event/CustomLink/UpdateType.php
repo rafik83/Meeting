@@ -2,10 +2,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CustomLink;
 
-use Proximum\Vimeet\Application\Command\Event\CustomLink\Create;
+use Proximum\Vimeet\Application\Command\Event\CustomLink\Update;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateType extends AbstractCustomLinkType
+class UpdateType extends AbstractCustomLinkType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -13,13 +13,13 @@ class CreateType extends AbstractCustomLinkType
 
         $resolver->setDefaults(
             [
-                'data_class' => Create::class,
+                'data_class' => Update::class,
             ]
         );
     }
 
     public function getBlockPrefix(): string
     {
-        return 'custom_link_create';
+        return 'custom_link_update';
     }
 }

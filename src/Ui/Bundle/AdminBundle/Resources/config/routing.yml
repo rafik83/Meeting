@@ -2280,6 +2280,14 @@ admin_event_custom_link_create:
     methods: [GET, POST]
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\CreateAction
 
+admin_event_custom_link_update:
+    path: /event/{event}/custom-link/update/{customLink}
+    requirements:
+        event: \d+
+        customLink: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\UpdateAction
+
 admin_event_custom_link_remove:
     path: /event/{event}/custom-link/{customLink}/remove
     requirements:

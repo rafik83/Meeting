@@ -74,4 +74,45 @@ class CustomLink
     {
         return $this->staticFormulation;
     }
+
+    public function getIconName(): string
+    {
+        return $this->iconName;
+    }
+
+    public function getIconColor(): string
+    {
+        return $this->iconColor;
+    }
+
+    public function getLabelColor(): string
+    {
+        return $this->labelColor;
+    }
+
+    public function getButtonColor(): string
+    {
+        return $this->buttonColor;
+    }
+
+    public function update(
+        array $translations,
+        array $types,
+        string $url,
+        string $iconName,
+        string $iconColor,
+        string $labelColor,
+        string $buttonColor
+    ): void {
+        foreach ($translations as $locale => $translation) {
+            $this->staticFormulation->translate($locale, $translation['title']);
+        }
+        $this->staticFormulation->update($types);
+
+        $this->url = $url;
+        $this->iconName = $iconName;
+        $this->iconColor = $iconColor;
+        $this->labelColor = $labelColor;
+        $this->buttonColor = $buttonColor;
+    }
 }

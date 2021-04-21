@@ -31,6 +31,14 @@
                     </ul>
                 </td>
                 <td class="text-right">
+                    <a href="{{ path('admin_event_custom_link_update', {
+                        'event': event.id,
+                        'customLink': customLink.id
+                    }) }}"
+                       class="btn btn-warning"
+                    >
+                        {{ 'admin.custom_links.action.update'|trans }}
+                    </a>
                     {{ delete_button(
                         path('admin_event_custom_link_remove', {
                             'event': event.id,

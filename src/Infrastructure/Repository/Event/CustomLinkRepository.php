@@ -45,4 +45,9 @@ class CustomLinkRepository implements CustomLinkRepositoryInterface
         $this->entityManager->remove($customLink);
         $this->entityManager->flush($customLink);
     }
+
+    public function set(Event\CustomLink $customLink): void
+    {
+        $this->entityManager->flush($customLink);
+    }
 }
