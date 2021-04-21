@@ -1,6 +1,5 @@
 services:
-    event_listener.exception_listener:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@twig'

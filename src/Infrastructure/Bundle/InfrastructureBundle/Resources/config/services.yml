@@ -2,12 +2,15 @@ services:
     #
     # Event
     #
-    vimeet_infrastructure.adapter.delayed_event_dispatcher:
-        class: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
+    Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher:
         arguments:
             - '@event_dispatcher'
         tags:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
+    vimeet_infrastructure.adapter.delayed_event_dispatcher:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
+    Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
 
     #
     # Repositories

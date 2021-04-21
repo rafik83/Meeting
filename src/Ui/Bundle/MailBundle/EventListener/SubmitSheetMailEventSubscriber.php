@@ -43,13 +43,13 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         ParticipantInfoGuesser $participantInfoGuesser,
         AdminRepositoryInterface $adminRepository,
         MailerInterface $mailer,
-        $sender,
+        string $mailerSender,
         \DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->adminRepository        = $adminRepository;
         $this->mailer                 = $mailer;
-        $this->sender                 = $sender;
+        $this->sender                 = $mailerSender;
         $this->dateTime               = $dateTime;
     }
 
