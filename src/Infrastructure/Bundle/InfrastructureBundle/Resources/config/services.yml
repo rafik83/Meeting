@@ -4647,6 +4647,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
 
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQuery }
+
     Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Leni\BadgeLink\AvailableChecker'

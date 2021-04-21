@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2355 - Add custom link administration
+- VIMEET-2413 - Display custom buttons
 
 ### Fixed
 - MV-324 - fix bad viewers count for speakers when opening webinar

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Domain\Repository\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 interface CustomLinkRepositoryInterface
 {
@@ -18,4 +19,11 @@ interface CustomLinkRepositoryInterface
     public function remove(Event\CustomLink $customLink): void;
 
     public function set(Event\CustomLink $customLink): void;
+
+    /**
+     * @param Type $type
+     *
+     * @return Event\CustomLink[]
+     */
+    public function findByType(Type $type): array;
 }

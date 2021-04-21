@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Event;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\CustomLinkRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\StaticFormulation\StaticFormulationRepositoryInterface;
 
@@ -50,5 +51,20 @@ class CustomLinkRepository implements CustomLinkRepositoryInterface
     public function set(Event\CustomLink $customLink): void
     {
         $this->entityManager->flush($customLink);
+    }
+
+    public function findByType(Type $type): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('custom_link', 'staticFormulation')
+            ->from(Event\CustomLink::class, 'custom_link')
+            ->join('custom_link.staticFormulation', 'staticFormulation')
+            ->join('staticFormulation.types', 'types')
+            ->where('types = :type')
+            ->setParameter('type', $type)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
