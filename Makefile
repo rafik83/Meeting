@@ -122,12 +122,13 @@ test-phpunit@test:
 	stty cols 80; bin/phpunit --log-junit var/tests/junit.xml --coverage-clover var/tests/clover.xml --coverage-html var/tests/coverage
 
 ## Run tests on localhost
+test-behat: export DATABASE_HOST=127.0.0.1
 test-behat: redis-flushlocks@local
 	rm -rf var/tests/behat
 	rm -rf var/sms
-	DATABASE_HOST=127.0.0.1 bin/console ca:cl --env=test --no-warmup
-	DATABASE_HOST=127.0.0.1 bin/console fos:elastica:reset --env=test --no-debug
-	DATABASE_HOST=127.0.0.1 REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --stop-on-failure
+	bin/console ca:cl --env=test --no-warmup
+	bin/console fos:elastica:reset --env=test --no-debug
+	REDIS_URL=redis://localhost php -d date.timezone=UTC bin/behat --stop-on-failure
 
 test-behat@test:
 	rm -rf var/cache/test/*
