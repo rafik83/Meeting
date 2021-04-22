@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2395 - Header event width full
+- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
 ### Fixed
 - update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated
