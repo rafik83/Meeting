@@ -62,6 +62,7 @@ class CustomLinkRepository implements CustomLinkRepositoryInterface
             ->join('custom_link.staticFormulation', 'staticFormulation')
             ->join('staticFormulation.types', 'types')
             ->where('types = :type')
+            ->orderBy('custom_link.priority')
             ->setParameter('type', $type)
         ;
 
