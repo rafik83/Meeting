@@ -7,39 +7,15 @@ use Proximum\Vimeet\Domain\Model\Rule;
 
 class SeeWhat implements Command
 {
-    /**
-     * @var Rule
-     */
-    public $rule;
+    public Rule $rule;
+    public array $seeWhat;
+    public int $priority;
+    public ?int $phoneAccessMinEvaluation;
+    public ?int $emailAccessMinEvaluation;
+    public ?int $sendEmailMinEvaluation;
 
-    /**
-     * @var array
-     */
-    public $seeWhat;
+    public bool $requestAutomaticallyTransformedIntoMeeting;
 
-    /**
-     * @var int
-     */
-    public $priority;
-
-    /**
-     * @var int
-     */
-    public $phoneAccessMinEvaluation;
-
-    /**
-     * @var int
-     */
-    public $emailAccessMinEvaluation;
-
-    /**
-     * @var bool
-     */
-    public $requestAutomaticallyTransformedIntoMeeting;
-
-    /**
-     * @param Rule $rule
-     */
     public function __construct(Rule $rule)
     {
         $this->rule = $rule;
@@ -47,6 +23,7 @@ class SeeWhat implements Command
         $this->seeWhat = $rule->getWhat();
         $this->phoneAccessMinEvaluation = $rule->getPhoneAccessMinEvaluation();
         $this->emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
+        $this->sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
         $this->requestAutomaticallyTransformedIntoMeeting = $rule->getRequestAutomaticallyTransformedIntoMeeting();
     }
 }
