@@ -176,6 +176,8 @@ class SubmenuViewQueryHandler
         $customLinkViews = $this->queryBus->handle(
             new CustomLinkSubmenuViewQuery(
                 $submenuViewQuery->sheet,
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
                 $submenuViewQuery->locale
             )
         );
