@@ -81,6 +81,11 @@ class SeeWhatType extends AbstractType
                 'placeholder' => 'form.rule_see_what.children.unrestricted',
                 'choices' => $gradeChoices,
             ])
+            ->add('sendEmailMinEvaluation', ChoiceType::class, [
+                'required' => false,
+                'placeholder' => 'form.rule_see_what.children.unrestrictedSend',
+                'choices' => $gradeChoices,
+            ])
             ->add('requestAutomaticallyTransformedIntoMeeting', CheckboxType::class, [
                 'required' => false,
             ])
