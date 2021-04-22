@@ -2,25 +2,32 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Exception\Event\EventAlreadyArchivedException;
 use Proximum\Vimeet\Domain\Exception\Event\EventNotArchivedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ArchiveUnArchiveType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ArchiveController extends Controller
+class ArchiveController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->commandBus = $commandBus;
+    }
+
     public function archiveAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
@@ -41,12 +48,12 @@ class ArchiveController extends Controller
             }
 
             try {
-                $result = $this->get('tactician.commandbus')->handle($archiveUnArchive);
+                $result = $this->commandBus->handle($archiveUnArchive);
 
                 if (null !== $result) {
                     if (ArchiveUnArchive::ARCHIVED === $result) {
                         $translatedMessage = $this
-                            ->get('translator')
+                            ->translator
                             ->trans('flash.admin.event.archive.success', ['%domain%' => $event->getDomain()], 'flashes')
                         ;
 
@@ -61,15 +68,15 @@ class ArchiveController extends Controller
                 }
             } catch (DayNotDefinedException $exception) {
                 $form->addError(new FormError(
-                   $this->get('translator')->trans('validators.event.archive.dayNotDefined', [], 'validators')
+                   $this->translator->trans('validators.event.archive.dayNotDefined', [], 'validators')
                 ));
             } catch (EventAlreadyArchivedException $exception) {
                 $form->addError(new FormError(
-                    $this->get('translator')->trans('validators.event.archive.alreadyArchived', [], 'validators')
+                    $this->translator->trans('validators.event.archive.alreadyArchived', [], 'validators')
                 ));
             } catch (EventNotArchivedException $exception) {
                 $form->addError(new FormError(
-                    $this->get('translator')->trans('validators.event.unArchive.notArchived', [], 'validators')
+                    $this->translator->trans('validators.event.unArchive.notArchived', [], 'validators')
                 ));
             }
         }

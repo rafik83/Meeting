@@ -13,7 +13,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateActionTest extends TestCase
 {
@@ -32,7 +32,7 @@ class UpdateActionTest extends TestCase
     private $formFactory;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -56,7 +56,7 @@ class UpdateActionTest extends TestCase
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
@@ -80,7 +80,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->category->reveal());
@@ -104,7 +104,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->category->reveal());
@@ -141,8 +141,8 @@ class UpdateActionTest extends TestCase
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->willReturn(false);
 
-        $this->engine
-            ->renderResponse(UpdateAction::TEMPLATE, ['event' => $this->event->reveal(), 'form' => $formView->reveal()])
+        $this->twig
+            ->render(UpdateAction::TEMPLATE, ['event' => $this->event->reveal(), 'form' => $formView->reveal()])
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -153,7 +153,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->category->reveal());
@@ -191,7 +191,7 @@ class UpdateActionTest extends TestCase
         $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($update)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.happening.category.update.success')->shouldBeCalled();
 
@@ -207,7 +207,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->category->reveal());

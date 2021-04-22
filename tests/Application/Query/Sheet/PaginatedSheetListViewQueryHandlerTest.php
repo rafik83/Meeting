@@ -37,8 +37,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $admin->hasAllowedTypes()->willReturn(false);
         $linkedSheets = $this->prophesize(LinkedSheets::class);
 
-        $datetime1 = new \DateTime();
-        $datetime2 = new \DateTime();
+        $dateTime1 = new \DateTime();
+        $dateTime2 = new \DateTime();
 
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
@@ -59,11 +59,11 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet1->getOwner()->willReturn($ownerSheet1->reveal());
         $sheet2->getOwner()->willReturn($ownerSheet2->reveal());
 
-        $sheet1->getCreatedAt()->willReturn($datetime1);
-        $sheet1->getLastLoginAt()->willReturn($datetime1);
+        $sheet1->getCreatedAt()->willReturn($dateTime1);
+        $sheet1->getLastLoginAt()->willReturn($dateTime1);
 
-        $sheet2->getCreatedAt()->willReturn($datetime2);
-        $sheet2->getLastLoginAt()->willReturn($datetime2);
+        $sheet2->getCreatedAt()->willReturn($dateTime2);
+        $sheet2->getLastLoginAt()->willReturn($dateTime2);
 
         $sheet1->getParticipantOwner()->willReturn($participant->reveal());
         $sheet2->getParticipantOwner()->willReturn(null);
@@ -113,8 +113,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->isValidated()->willReturn(false);
         $sheet1->getCommercialStatus()->willReturn(CommercialStatus::STATUS_INTEREST);
         $sheet2->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
-        $sheet1->getReminderDate()->willReturn($datetime1);
-        $sheet2->getReminderDate()->willReturn($datetime1);
+        $sheet1->getReminderDate()->willReturn($dateTime1);
+        $sheet2->getReminderDate()->willReturn($dateTime1);
         $sheet2->getLinkedSheets()->willReturn(null);
         $sheet2->getTitle()->willReturn('Title');
 
@@ -132,7 +132,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $traceRepository = $this->prophesize(TraceRepositoryInterface::class);
         $trace = $this->prophesize(Trace::class);
         $trace->getAction()->willReturn('validate');
-        $trace->getDate()->willReturn($datetime1);
+        $trace->getDate()->willReturn($dateTime1);
         $trace->getAuthor()->willReturn('Toto');
         $trace->getObjectType()->willReturn('Sheet');
         $trace->getObjectId()->willReturn(1);
@@ -174,9 +174,9 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr', 123),
             'admin name',
             CommercialStatus::STATUS_INTEREST,
-            $datetime1,
-            $datetime1,
-            $datetime1,
+            $dateTime1,
+            $dateTime1,
+            $dateTime1,
             1,
             true,
             'group title 1',
@@ -198,9 +198,9 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             new SheetParticipantView('truc', 'muche', 'email2@sheet.fr', 456),
             '',
             CommercialStatus::STATUS_DO_NOT_CALL,
-            $datetime1,
-            $datetime2,
-            $datetime2,
+            $dateTime1,
+            $dateTime2,
+            $dateTime2,
             2,
             false,
             null,

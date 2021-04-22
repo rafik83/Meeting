@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class BatchGenerateInvoice
+class BatchGenerateInvoice implements Command
 {
     /**
      * @var int[] of Sheet id

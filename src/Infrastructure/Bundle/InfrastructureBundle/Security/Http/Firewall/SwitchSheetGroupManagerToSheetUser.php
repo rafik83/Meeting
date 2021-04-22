@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Ht
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\UserChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -12,7 +13,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
 
 /**
  * Switch Sheet Group manager to Sheet user
@@ -25,20 +25,14 @@ class SwitchSheetGroupManagerToSheetUser
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    /** @var UserCheckerInterface */
-    private $userChecker;
+    private UserChecker $userChecker;
 
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @param TokenStorageInterface         $tokenStorage
-     * @param UserCheckerInterface          $userChecker
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        UserCheckerInterface $userChecker,
+        UserChecker $userChecker,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->tokenStorage         = $tokenStorage;

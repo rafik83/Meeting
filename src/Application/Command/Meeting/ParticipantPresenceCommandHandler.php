@@ -11,14 +11,14 @@ class ParticipantPresenceCommandHandler
     private $participantExtraDataRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         ParticipantExtraDataRepositoryInterface $participantExtraDataRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->participantExtraDataRepository = $participantExtraDataRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(ParticipantPresenceCommand $command): void
@@ -35,14 +35,14 @@ class ParticipantPresenceCommandHandler
                     ParticipantExtraData::TYPE_PRESENCE,
                     $command->participant,
                     $command->meeting,
-                    $this->datetime
+                    $this->dateTime
                 )
             );
 
             return;
         }
 
-        $participantExtraData->setDate($this->datetime);
+        $participantExtraData->setDate($this->dateTime);
         $this->participantExtraDataRepository->set($participantExtraData);
     }
 }

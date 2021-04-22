@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class MeetingRequestListViewQuery
+class MeetingRequestListViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

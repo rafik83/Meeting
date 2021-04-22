@@ -25,15 +25,15 @@ class TransactionViewQueryHandlerTest extends TestCase
 {
     public function testHandleNotificationPending(): void
     {
-        $datetime    = new \DateTime();
+        $dateTime    = new \DateTime();
         $event       = EventFactory::createEvent();
         $user        = new User('user@gmail.com', 'salt', 'pasword', 'fr');
-        $sheet       = SheetFactory::create($event, $user, $datetime);
-        $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
+        $sheet       = SheetFactory::create($event, $user, $dateTime);
+        $transaction = new Transaction($sheet, 100.0, $dateTime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
 
         // Expected view
         $expectedNotificationView = new NotificationView(
-            $datetime,
+            $dateTime,
             Category::BILLING_ICON,
             Notification::CATEGORY_TRANSACTION,
             'notification.transaction.pending',
@@ -60,15 +60,15 @@ class TransactionViewQueryHandlerTest extends TestCase
 
     public function testHandleNotificationPaid(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $user = new User('user@gmail.com', 'salt', 'pasword', 'fr');
-        $sheet = SheetFactory::create($event, $user, $datetime);
-        $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
+        $sheet = SheetFactory::create($event, $user, $dateTime);
+        $transaction = new Transaction($sheet, 100.0, $dateTime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
 
         // Expected view
         $expectedNotificationView = new NotificationView(
-            $datetime,
+            $dateTime,
             Category::BILLING_ICON,
             Notification::CATEGORY_TRANSACTION,
             'notification.transaction.paid',
@@ -95,12 +95,12 @@ class TransactionViewQueryHandlerTest extends TestCase
 
     public function testHandle(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $user = new User('user@gmail.com', 'salt', 'pasword', 'fr');
-        $sheet = SheetFactory::create($event, $user, $datetime);
-        $transaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
-        $paidTransaction = new Transaction($sheet, 100.0, $datetime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
+        $sheet = SheetFactory::create($event, $user, $dateTime);
+        $transaction = new Transaction($sheet, 100.0, $dateTime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PENDING, 'EUR', $user);
+        $paidTransaction = new Transaction($sheet, 100.0, $dateTime, Mode::PAYMENT_BANK_CHECK, '', Transaction::STATE_PAID, 'EUR', $user);
 
         // Mock
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
@@ -113,7 +113,7 @@ class TransactionViewQueryHandlerTest extends TestCase
         $transactionRepository->findPaid($sheet)->shouldBeCalled()->willReturn([$paidTransaction]);
 
         $notificationTransactionPendingView = new NotificationView(
-            $datetime,
+            $dateTime,
             'icon',
             'category',
             'description',
@@ -128,7 +128,7 @@ class TransactionViewQueryHandlerTest extends TestCase
         ;
 
         $notificationTransactionPaidView = new NotificationView(
-            $datetime,
+            $dateTime,
             'icon',
             'category',
             'description',

@@ -2,25 +2,28 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\ExtraParameter;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\ExtraParameter\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UpdateController extends Controller
+class UpdateController extends AbstractController
 {
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        CommandBusInterface $commandBus
+    ) {
+        $this->commandBus = $commandBus;
+    }
+
     /**
-     * @param Request        $request
-     * @param Event          $event
-     * @param ExtraParameter $extraParameter
-     *
      * @throws NotFoundHttpException
-     *
-     * @return Response
      */
     public function updateAction(Request $request, Event $event, ExtraParameter $extraParameter): Response
     {
@@ -39,7 +42,7 @@ class UpdateController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
 
             $this->addFlash('success', 'flash.admin.event.extraParameter.update.success');
 

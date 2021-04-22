@@ -19,7 +19,7 @@ class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
 
@@ -27,7 +27,7 @@ class GroupViewQueryHandlerTest extends TestCase
         $propertyGroupId = $reflectionGroup->getProperty('id');
         $propertyGroupId->setAccessible(true);
 
-        $group = new Group($event, $user, 'My entity', false, $datetime);
+        $group = new Group($event, $user, 'My entity', false, $dateTime);
         $propertyGroupId->setValue($group, 1);
 
         $reflectionSheet = new \ReflectionClass(Sheet::class);

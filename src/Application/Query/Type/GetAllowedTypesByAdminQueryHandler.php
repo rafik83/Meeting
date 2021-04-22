@@ -10,12 +10,12 @@ class GetAllowedTypesByAdminQueryHandler
     private $typeRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
-    public function __construct(TypeRepositoryInterface $typeRepository, \DateTimeInterface $datetime)
+    public function __construct(TypeRepositoryInterface $typeRepository, \DateTimeInterface $dateTime)
     {
         $this->typeRepository = $typeRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(GetAllowedTypesByAdminQuery $query): iterable
@@ -23,7 +23,7 @@ class GetAllowedTypesByAdminQueryHandler
         return $this->typeRepository->getAllowedTypesExcludedCurrentEventByAdmin(
             $query->admin,
             $query->event,
-            $this->datetime
+            $this->dateTime
         );
     }
 }

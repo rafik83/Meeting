@@ -3,26 +3,43 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
+use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQueryHandler;
 use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Infrastructure\Repository\Catalog\CatalogTagFilterRepository;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
+use Proximum\Vimeet\Domain\Repository\Catalog\CatalogTagFilterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CatalogController extends Controller
+class CatalogController extends AbstractController
 {
-    /**
-     * @param Request       $request
-     * @param Event         $event
-     * @param UserInterface $user
-     *
-     * @return Response
-     */
+    private SearchFacetRepositoryInterface $searchFacetRepository;
+    private CatalogTagFilterRepositoryInterface $catalogTagFilterRepository;
+    private ConfigureHandler $catalogConfigureHandler;
+    private EventUrlGeneratorInterface $urlGenerator;
+    private CatalogVisibilityQueryHandler $catalogVisibilityQueryHandler;
+
+    public function __construct(
+        SearchFacetRepositoryInterface $searchFacetRepository,
+        CatalogTagFilterRepositoryInterface $catalogTagFilterRepository,
+        ConfigureHandler $catalogConfigureHandler,
+        EventUrlGeneratorInterface $urlGenerator,
+        CatalogVisibilityQueryHandler $catalogVisibilityQueryHandler
+    ) {
+        $this->searchFacetRepository = $searchFacetRepository;
+        $this->catalogTagFilterRepository = $catalogTagFilterRepository;
+        $this->urlGenerator = $urlGenerator;
+        $this->catalogConfigureHandler = $catalogConfigureHandler;
+        $this->catalogVisibilityQueryHandler = $catalogVisibilityQueryHandler;
+    }
+
     public function configureAction(Request $request, Event $event, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE', $event);
@@ -30,12 +47,11 @@ class CatalogController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $searchFacets = $this->get('vimeet_infrastructure.repository.catalog.external.search_facet')->getByEvent($event);
-        $catalogTagFilters = $this->get(CatalogTagFilterRepository::class)
+        $searchFacets = $this->searchFacetRepository->getByEvent($event);
+        $catalogTagFilters = $this->catalogTagFilterRepository
             ->getByEventAndType($event, CatalogTagFilter::TYPE_EXTERNAL);
 
-        $catalogVisibility = $this
-            ->get('query.catalog.external.catalog_visibility_view_query_handler')
+        $catalogVisibility = $this->catalogVisibilityQueryHandler
             ->handle(new CatalogVisibilityQuery($event));
 
         $configure = new Configure($event, $catalogVisibility, $searchFacets, $catalogTagFilters);
@@ -48,7 +64,7 @@ class CatalogController extends Controller
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {
-            $this->get('catalog.external.configure_handler')->handle($configure);
+            $this->catalogConfigureHandler->handle($configure);
             $this->addFlash('success', 'flash.admin.event.catalog.external.configure.success');
 
             return $this->redirectToRoute('admin_event_external_catalog_configure', ['event' => $event->getId()]);
@@ -56,7 +72,7 @@ class CatalogController extends Controller
 
         $externalCatalogUrls = [];
         foreach ($event->getLocales() as $locale) {
-            $externalCatalogUrls[] = $this->get('adapter.event_url_generator')->generateEventAbsoluteUrl(
+            $externalCatalogUrls[] = $this->urlGenerator->generateEventAbsoluteUrl(
                 $event,
                 'event_catalog_external_index',
                 ['_locale' => $locale]

@@ -287,17 +287,17 @@ class PromotionCode
     }
 
     /**
-     * @param DateTimeInterface $datetime
+     * @param DateTimeInterface $dateTime
      *
      * @return bool
      */
-    public function isOutDated(DateTimeInterface $datetime)
+    public function isOutDated(DateTimeInterface $dateTime)
     {
         if (empty($this->validUntil)) {
             return false;
         }
 
-        return $datetime >= $this->validUntil;
+        return $dateTime >= $this->validUntil;
     }
 
     /**

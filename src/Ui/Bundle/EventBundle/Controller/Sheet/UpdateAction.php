@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 /**
  * Update an object and display the sheet with the modal in case of form error.
@@ -65,8 +65,8 @@ class UpdateAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var SheetInfosHelper */
     private $sheetInfosHelper;
@@ -84,7 +84,7 @@ class UpdateAction
         FileStorageInterface $fileStorage,
         MultiUploadCollectionHandler $multiUploadCollectionHandler,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         SheetInfosHelper $sheetInfosHelper,
         AddParticipantChecker $addParticipantChecker
     ) {
@@ -97,7 +97,7 @@ class UpdateAction
         $this->fileStorage = $fileStorage;
         $this->multiUploadCollectionHandler = $multiUploadCollectionHandler;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->sheetInfosHelper = $sheetInfosHelper;
         $this->addParticipantChecker = $addParticipantChecker;
     }
@@ -227,7 +227,7 @@ class UpdateAction
         $canAddParticipant = $this->addParticipantChecker->canAddParticipant($sheet);
 
         return new Response(
-            $this->engine->render($twig, [
+            $this->twig->render($twig, [
                 'canAddParticipant' => $canAddParticipant,
                 'event' => $eventDomain->getEvent(),
                 'form' => $form->createView(),

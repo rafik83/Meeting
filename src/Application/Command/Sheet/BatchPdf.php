@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
-class BatchPdf
+use Proximum\Vimeet\Application\Command\Command;
+
+class BatchPdf implements Command
 {
     /** @var string */
     public $emailToNotify;

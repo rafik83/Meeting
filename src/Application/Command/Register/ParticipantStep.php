@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Register;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class ParticipantStep
+class ParticipantStep implements Command
 {
     /**
      * @var int

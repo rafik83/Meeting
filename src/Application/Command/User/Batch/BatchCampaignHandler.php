@@ -15,21 +15,21 @@ class BatchCampaignHandler
     private $campaignRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
         CampaignRepositoryInterface $campaignRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->userRepository = $userRepository;
         $this->campaignRepository = $campaignRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(BatchCampaign $batch): BatchCampaignResult
     {
-        $campaign = new Campaign($batch->event, $batch->campaignTitle, [], $this->datetime, Campaign::RECIPIENT_USER);
+        $campaign = new Campaign($batch->event, $batch->campaignTitle, [], $this->dateTime, Campaign::RECIPIENT_USER);
         $users = $this->userRepository->findByIds($batch->ids);
 
         foreach ($users as $user) {

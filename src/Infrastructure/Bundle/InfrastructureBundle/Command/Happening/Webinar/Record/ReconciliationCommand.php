@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Hap
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Reconciliate;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,20 +15,20 @@ class ReconciliationCommand extends Command
 {
     public const NAME = 'vimeet:happening:webinar:reconciliate-record';
 
-    /** @var CommandBusInterface */
-    private $commandBus;
-
-    /** @var HappeningRepositoryInterface */
-    private $happeningRepository;
+    private CommandBusInterface $commandBus;
+    private HappeningRepositoryInterface $happeningRepository;
+    private LoggerInterface $logger;
 
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        LoggerInterface $logger
     ) {
         parent::__construct(self::NAME);
 
         $this->commandBus = $commandBus;
         $this->happeningRepository = $happeningRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,6 +55,7 @@ class ReconciliationCommand extends Command
         }
 
         if (!$happening->isWebinarRecorded()) {
+            $this->logger->error(sprintf('Webinar %d is not set to be recorded, abort reconciliation', $happening->getId()));
             return 0;
         }
 

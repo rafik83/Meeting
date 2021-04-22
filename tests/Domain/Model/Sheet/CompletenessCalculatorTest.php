@@ -25,9 +25,9 @@ class CompletenessCalculatorTest extends TestCase
     public function testCalculateFullCompleteness()
     {
         $locales  = ['fr', 'en'];
-        $datetime = new DateTime();
+        $dateTime = new DateTime();
         $user     = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet    = SheetFactory::create(null, $user, $datetime);
+        $sheet    = SheetFactory::create(null, $user, $dateTime);
         $sheet->getEvent()->setLocales($locales);
 
         $participant = new Participant($sheet, $user, [
@@ -43,7 +43,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true, $datetime);
+        ], true, $dateTime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data
@@ -101,7 +101,7 @@ class CompletenessCalculatorTest extends TestCase
         $registrationTemplateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedSheet = SheetFactory::create(null, $user, $datetime);
+        $expectedSheet = SheetFactory::create(null, $user, $dateTime);
         $expectedSheet->setCompleteness(100);
 
         // Mock
@@ -142,9 +142,9 @@ class CompletenessCalculatorTest extends TestCase
     public function testCalculateSheetCompleteness()
     {
         $locales  = ['fr', 'en'];
-        $datetime = new DateTime();
+        $dateTime = new DateTime();
         $user     = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet    = SheetFactory::create(null, $user, $datetime);
+        $sheet    = SheetFactory::create(null, $user, $dateTime);
         $sheet->getEvent()->setLocales($locales);
 
         $participant = new Participant($sheet, $user, [
@@ -160,7 +160,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true, $datetime);
+        ], true, $dateTime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data
@@ -238,7 +238,7 @@ class CompletenessCalculatorTest extends TestCase
         $registrationTemplateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedSheet = SheetFactory::create(null, $user, $datetime);
+        $expectedSheet = SheetFactory::create(null, $user, $dateTime);
         $expectedSheet->setCompleteness(66);
 
         // Mock
@@ -282,9 +282,9 @@ class CompletenessCalculatorTest extends TestCase
     public function calculateParticipantCompleteness()
     {
         $locales  = ['fr', 'en'];
-        $datetime = new DateTime();
+        $dateTime = new DateTime();
         $user     = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet    = SheetFactory::create(null, $user, $datetime);
+        $sheet    = SheetFactory::create(null, $user, $dateTime);
         $sheet->getEvent()->setLocales($locales);
 
         $participant = new Participant($sheet, $user, [
@@ -299,7 +299,7 @@ class CompletenessCalculatorTest extends TestCase
             '3b759fbb' => [
                 'telephone' => 'telephone2',
             ],
-        ], true, $datetime);
+        ], true, $dateTime);
         $sheet->addParticipant($participant);
 
         // Sheet Template Data
@@ -357,7 +357,7 @@ class CompletenessCalculatorTest extends TestCase
         $registrationTemplateData->addChild(0, '811f6edf', $block);
 
         // Expected
-        $expectedSheet = SheetFactory::create(null, $user, $datetime);
+        $expectedSheet = SheetFactory::create(null, $user, $dateTime);
         $expectedSheet->setCompleteness(83);
 
         // Mock

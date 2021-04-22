@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Phone;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\User\UserEventPhone;
 
-class ValidateCode
+class ValidateCode implements Command
 {
     /** @var UserEventPhone */
     public $userEventPhone;

@@ -4,29 +4,33 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Crisp;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Event\ExtraParameter\GetExtraParameterQuery;
+use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ChatAction
 {
     /** @var QueryBusInterface */
     private $queryBus;
-
-    /** @var EngineInterface */
-    private $engine;
+    private Environment $twig;
+    private EventByHostResolver $eventByHostResolver;
 
     public function __construct(
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig,
+        EventByHostResolver $eventByHostResolver
     ) {
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
+        $this->eventByHostResolver = $eventByHostResolver;
     }
 
-    public function __invoke(Event $event): Response
+    public function __invoke(Request $request): Response
     {
+        $event = $this->eventByHostResolver->resolveEventFromHost($request->getHost());
         $extraParameter = $this->queryBus->handle(new GetExtraParameterQuery($event, Type::TYPE_CRISP_SITE_ID));
         $siteId = $extraParameter instanceof Event\ExtraParameter ? $extraParameter->getValue() : null;
 
@@ -34,7 +38,7 @@ class ChatAction
 
         if (null !== $siteId) {
             $response = new Response(
-                $this->engine->render('@Event/Crisp/chat.html.twig', [
+                $this->twig->render('@Event/Crisp/chat.html.twig', [
                     'siteId' => $siteId,
                 ])
             );

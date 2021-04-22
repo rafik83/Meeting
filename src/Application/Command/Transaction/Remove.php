@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Transaction;
 
-class Remove
+class Remove implements Command
 {
     /**
      * @var Transaction

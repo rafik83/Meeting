@@ -5,10 +5,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Happening\CategoryRepositoryInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -20,22 +20,17 @@ class ListAction
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param CategoryRepositoryInterface          $categoryRepository
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CategoryRepositoryInterface $categoryRepository,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->categoryRepository = $categoryRepository;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -57,9 +52,9 @@ class ListAction
             $event->getAvailableLocale($request->getLocale())
         );
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event'      => $event,
             'categories' => $categories,
-        ]);
+        ]));
     }
 }

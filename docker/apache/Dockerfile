@@ -145,8 +145,9 @@ RUN php bin/composer.phar install --no-interaction --verbose --prefer-dist --opt
 RUN make install@prod
 
 # Symfony
-#RUN bin/console cache:clear --env=prod && \
-#    bin/console cache:warmup --env=prod
+ENV APP_ENV=prod
+ARG APP_SECRET
+ENV APP_SECRET=${APP_SECRET}
 
 # OpenL10N fetch
 ARG OPENL10N_UPDATE="false"
@@ -156,7 +157,7 @@ ARG OPENL10N_USERNAME
 ARG OPENL10N_PASSWORD
 RUN if [ "$OPENL10N_UPDATE" = "true" ]; then \
       envsubst < docker/apache/etc/symfony/openl10n.yml > .openl10n.yml && \
-      php bin/console vimeet:translations:update; \
+      php bin/console vimeet:translations:update -vv; \
     fi
 
 ARG VCS_REF
@@ -164,16 +165,16 @@ ENV APP_VERSION=${VCS_REF:-unkown}
 
 # Cleanup
 RUN rm -f app/config/parameters.yml && \
-    rm -f web/*_dev.php && \
-    rm -f web/*_test.php && \
-    rm -rf web/uploads && \
-    rm -rf web/css && \
+    rm -f public/*_dev.php && \
+    rm -f public/*_test.php && \
+    rm -rf public/uploads && \
+    rm -rf public/css && \
     rm -rf var/logs
 
 # Symlinks
-RUN ln -sfn /share/shared/web/media web/ && \
-    ln -sfn /share/shared/web/uploads web/ && \
-    ln -sfn /share/shared/web/css web/ && \
+RUN ln -sfn /share/shared/web/media public/ && \
+    ln -sfn /share/shared/web/uploads public/ && \
+    ln -sfn /share/shared/web/css public/ && \
     ln -sfn /share/shared/var/logs var/ && \
     ln -sfn /share/shared/var/shared_uploaded_files var/ && \
     ln -sfn /share/shared/var/participants_imports var/ && \

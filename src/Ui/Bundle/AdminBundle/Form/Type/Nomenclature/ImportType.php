@@ -16,7 +16,7 @@ class ImportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class, ['help' => true])
+            ->add('file', FileType::class, ['help' => 'form.nomenclature_import_type.children.file.help'])
             ->add('charset', CharsetChoiceType::class)
         ;
     }

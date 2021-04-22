@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Agenda\Version\Notification;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class MailNotificationCommand
+class MailNotificationCommand implements Command
 {
     /** @var Event */
     public $event;

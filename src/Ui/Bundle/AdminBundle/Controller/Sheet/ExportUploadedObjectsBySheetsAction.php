@@ -44,7 +44,7 @@ class ExportUploadedObjectsBySheetsAction
     private $queryBus;
 
     /** var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var RuleStorageInterface */
     private $ruleStorage;
@@ -57,7 +57,7 @@ class ExportUploadedObjectsBySheetsAction
         FlashBagInterface $flashBag,
         JobQueueInterface $jobQueue,
         QueryBusInterface $queryBus,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         RuleStorageInterface $ruleStorage
     ) {
         $this->sheetFilterSubmittedDataGetter = $sheetFilterSubmittedDataGetter;
@@ -67,7 +67,7 @@ class ExportUploadedObjectsBySheetsAction
         $this->flashBag = $flashBag;
         $this->jobQueue = $jobQueue;
         $this->queryBus = $queryBus;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->ruleStorage = $ruleStorage;
     }
 
@@ -102,7 +102,7 @@ class ExportUploadedObjectsBySheetsAction
             $event,
             Type::ADMIN_SHEET_BATCH_IDS,
             implode(', ', $sheetIdsView->sheetIds),
-            $this->datetime
+            $this->dateTime
         );
 
         $this->extraDataRepository->add($extraData);

@@ -173,9 +173,9 @@ class ApproveRequestHandlerTest extends TestCase
         $handler->handle($approveRequest);
     }
 
-    public function createParticipantMock(Sheet $sheet, User $user, $id, \DateTime $datetime)
+    public function createParticipantMock(Sheet $sheet, User $user, $id, \DateTime $dateTime)
     {
-        $participant = new Participant($sheet, $user, [], false, $datetime);
+        $participant = new Participant($sheet, $user, [], false, $dateTime);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');

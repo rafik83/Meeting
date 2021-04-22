@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -10,22 +11,26 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Availability\Confirmati
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AvailabilityController extends Controller
+class AvailabilityController extends AbstractController
 {
-    /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     *
-     * @return Response
-     */
+    private FlashBagInterface $flashBag;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FlashBagInterface $flashBag,
+        CommandBusInterface $commandBus
+    ) {
+        $this->flashBag = $flashBag;
+        $this->commandBus = $commandBus;
+    }
+
     public function confirmationAction(
         Request $request,
         EventDomain $eventDomain,
@@ -46,7 +51,7 @@ class AvailabilityController extends Controller
         $form = $this->createForm(ConfirmationType::class, $availabilityConfirmation);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($availabilityConfirmation);
+            $this->commandBus->handle($availabilityConfirmation);
 
             if ($this->hasFlash(AvailabilityConfirmationChecker::ORIGIN_MEETING_REQUEST_MANAGEMENT)) {
                 return $this->redirectToRoute('event_meeting_list_request', [
@@ -73,7 +78,7 @@ class AvailabilityController extends Controller
      */
     private function hasFlash(string $flash): bool
     {
-        $values = $this->container->get('session')->getFlashBag()->get($flash);
+        $values = $this->flashBag->get($flash);
 
         return !empty($values);
     }

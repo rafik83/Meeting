@@ -3,24 +3,22 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\CatalogExternal;
 
 use Proximum\Vimeet\Application\Command\Catalog\GetNomenclaturesByTag;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SelectItemsFromNomenclaturesType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SelectItemsFromNomenclaturesAction
 {
     /** @var CatalogVisibilityRepositoryInterface */
     private $catalogVisibilityRepository;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -30,12 +28,12 @@ class SelectItemsFromNomenclaturesAction
 
     public function __construct(
         CatalogVisibilityRepositoryInterface $catalogVisibilityRepository,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         GetNomenclaturesByTag $getNomenclaturesByTag
     ) {
         $this->catalogVisibilityRepository = $catalogVisibilityRepository;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->getNomenclaturesByTag = $getNomenclaturesByTag;
     }
@@ -63,7 +61,7 @@ class SelectItemsFromNomenclaturesAction
         );
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:Catalog/Partial:selectItemsFromNomenclatures.html.twig',
                 [
                     'event' => $event,

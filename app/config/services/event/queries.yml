@@ -42,7 +42,7 @@ services:
     Proximum\Vimeet\Application\Query\Happening\Webinar\GetWebinarViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Application\Query\User\Event\Participant\GetUserParticipantInfosHandler'
-            - '@adapter.video_conference_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
             - '@Proximum\Vimeet\Infrastructure\Repository\Happening\Webinar\RecordArchiveRepository'
@@ -72,7 +72,7 @@ services:
     Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Export\PrepareContent }
 

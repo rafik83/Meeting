@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Group\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\View\Group\Participant\UserParticipantView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
-class UpdateUsersSheets
+class UpdateUsersSheets implements Command
 {
     /** @var Group */
     public $group;

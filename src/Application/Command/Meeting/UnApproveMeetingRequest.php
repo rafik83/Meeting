@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UnApproveMeetingRequest
+class UnApproveMeetingRequest implements Command
 {
     /**
      * @var Meeting\Request

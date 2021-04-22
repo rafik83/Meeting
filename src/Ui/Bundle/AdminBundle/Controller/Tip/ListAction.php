@@ -5,10 +5,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -20,22 +20,22 @@ class ListAction
     /** @var CommandBus */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /**
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      * @param CommandBus                           $commandBus
-     * @param EngineInterface                      $engine
+     * @param Environment                      $twig
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBus $commandBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -54,8 +54,8 @@ class ListAction
         $tipViewQuery = new TipViewQuery($request->query->get('page', 1));
         $tipListView = $this->commandBus->handle($tipViewQuery);
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'tipListView' => $tipListView,
-        ]);
+        ]));
     }
 }

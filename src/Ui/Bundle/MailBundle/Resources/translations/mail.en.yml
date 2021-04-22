@@ -29,6 +29,7 @@ admin.mail.resetPassword.subject: 'Forgotten password'
 admin.mail.translations.downloaded.body: 'Hello, The translations were downloaded from openl10n.'
 admin.mail.translations.downloaded.subject: 'Download translations'
 admin.mail.userAccountTemporarilyDisabled.body: '%firstname% %lastname%, Your account has been disabled for 15 minutes following login attempts. Best regards,'
+admin.mail.userAccountTemporarilyDisabled.subject: 'Your user account has been temporarily deactivated'
 mail.activateAccount.activate: 'Activate your account'
 mail.activateAccount.body: "Hello,\n\nYou have just been added as a participant for the event %event%\n\nTo join, click on the link below and enter a password to activate your account"
 mail.activateAccount.end: "Regards, The Vimeet Team\n"
@@ -73,6 +74,16 @@ mail.happening.participation.intro: 'List of participants automatically updated 
 mail.happening.participation.register: '%name% registered'
 mail.happening.participation.subject: 'List of participants automatically updated by event'
 mail.happening.participation.unregister: '%name% unregistered'
+mail.happening.webinar.admin.zip_record_archive_not_prepared.content: 'Hello, The %happeningTitle% webinar recording file is not yet available for download because the webinar is still being recorded. Please try again later or wait for automatic generation.'
+mail.happening.webinar.admin.zip_record_archive_not_prepared.subject: '%happeningTitle%: The recording cannot be downloaded at the moment'
+mail.happening.webinar.admin.zip_record_archive_prepared.intro: "Hello,\n\nThe %happeningTitle% webinar recording file is available for download :"
+mail.happening.webinar.admin.zip_record_archive_prepared.link: 'Download recording'
+mail.happening.webinar.admin.zip_record_archive_prepared.outro: 'Best regards,'
+mail.happening.webinar.admin.zip_record_archive_prepared.subject: '%happeningTitle%: Download the webinar recording'
+mail.happening.webinar.zip_record_archive_available_for_speaker.intro: "Hello,\n\nThe %happeningTitle% webinar recording file is available for download.\nPlease note, this link is only valid for 7 days."
+mail.happening.webinar.zip_record_archive_available_for_speaker.link: 'Download recording'
+mail.happening.webinar.zip_record_archive_available_for_speaker.outro: 'Best regards,'
+mail.happening.webinar.zip_record_archive_available_for_speaker.subject: '%happeningTitle%: Download the webinar recording'
 mail.omz.export.intro: 'Hello, Here is the OMZ export for the event %eventTitle% :'
 mail.omz.export.link.click: 'Download the OMZ participants file'
 mail.omz.export.subject: 'OMZ export file'

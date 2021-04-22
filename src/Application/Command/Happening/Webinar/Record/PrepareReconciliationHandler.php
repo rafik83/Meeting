@@ -19,12 +19,6 @@ class PrepareReconciliationHandler
     {
         $happening = $prepareReconciliation->happening;
 
-        if (!$happening->isWebinarRecorded()) {
-            $this->jobQueue->removeReconciliation($happening->getId());
-
-            return;
-        }
-
         $date = $prepareReconciliation->dueDate;
 
         if (!$date instanceof DateTimeInterface) {

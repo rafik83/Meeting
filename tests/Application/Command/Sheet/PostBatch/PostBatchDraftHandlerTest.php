@@ -31,7 +31,7 @@ class PostBatchDraftHandlerTest extends TestCase
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $sheetIndexer    = $this->prophesize(SheetIndexerInterface::class);
-        $datetime        = new \DateTime();
+        $dateTime        = new \DateTime();
 
         $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
@@ -41,7 +41,7 @@ class PostBatchDraftHandlerTest extends TestCase
         )->shouldBeCalledTimes(3);
 
         $query   = new PostBatchDraft([$sheet1, $sheet2, $sheet3], $admin);
-        $handler = new PostBatchDraftHandler($eventDispatcher->reveal(), $datetime, $sheetIndexer->reveal());
+        $handler = new PostBatchDraftHandler($eventDispatcher->reveal(), $dateTime, $sheetIndexer->reveal());
 
         $handler->handle($query);
     }

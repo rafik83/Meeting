@@ -17,6 +17,6 @@ class ScheduleAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getSchedulePublishDate();
+        return $this->dateTime >= $event->getConfiguration()->getSchedulePublishDate();
     }
 }

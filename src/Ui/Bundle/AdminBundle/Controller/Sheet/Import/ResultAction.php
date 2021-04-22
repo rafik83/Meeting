@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ResultAction
@@ -30,8 +30,8 @@ class ResultAction
     /** @var ImportResultViewQueryHandler */
     private $importResultViewQueryHandler;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -53,7 +53,7 @@ class ResultAction
         ImportResultViewQueryHandler $importResultViewQueryHandler,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         FlashBagInterface $flashBag,
         TranslatorInterface $translator
@@ -61,7 +61,7 @@ class ResultAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->importResultViewQueryHandler = $importResultViewQueryHandler;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->router = $router;
         $this->flashBag = $flashBag;
@@ -139,7 +139,7 @@ class ResultAction
             }
         }
 
-        return new Response($this->engine->render('AdminBundle:Sheet:importResult.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Sheet:importResult.html.twig', [
             'event' => $event,
             'view' => $participantDenormalizerView,
             'createForm' => $createForm !== null ? $createForm->createView() : null,

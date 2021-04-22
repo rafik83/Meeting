@@ -3,27 +3,21 @@
 namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\Context;
-use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
-class DoctrineORMContext implements Context, KernelAwareContext
+class DoctrineORMContext implements Context
 {
     const NotMappedTables = [
-        'jms_job_related_entities',
+        'messenger_jobs',
     ];
 
-    /** @var KernelInterface */
-    private $kernel;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setKernel(KernelInterface $kernel)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->kernel = $kernel;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -41,31 +35,23 @@ class DoctrineORMContext implements Context, KernelAwareContext
      */
     public function purgeDatabase()
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
-        $purger = new ORMPurger($entityManager);
+        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $purger = new ORMPurger($this->entityManager);
         $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+        $this->entityManager->getConnection()->executeQuery('SET foreign_key_checks = 0;');
         $purger->purge();
         $this->purgeNotMappedTables();
-        $entityManager->clear();
+        $this->entityManager->getConnection()->executeQuery('SET foreign_key_checks = 1;');
+        $this->entityManager->clear();
     }
 
     private function purgeNotMappedTables()
     {
-        $entityManager = $this->getEntityManager();
-        $platform = $entityManager->getConnection()->getDatabasePlatform();
-        $connection = $entityManager->getConnection();
+        $platform = $this->entityManager->getConnection()->getDatabasePlatform();
+        $connection = $this->entityManager->getConnection();
 
         foreach (self::NotMappedTables as $tableName) {
-            $connection->executeUpdate($platform->getTruncateTableSQL($tableName, true));
+            $connection->executeQuery($platform->getTruncateTableSQL($tableName, true));
         }
-    }
-
-    /**
-     * @return EntityManagerInterface
-     */
-    private function getEntityManager()
-    {
-        return $this->kernel->getContainer()->get('doctrine.orm.entity_manager');
     }
 }

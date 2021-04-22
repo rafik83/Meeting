@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ListViewQuery
+class ListViewQuery implements Query
 {
     /**
      * @var Event

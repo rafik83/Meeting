@@ -24,7 +24,7 @@ class RemoveHandlerTest extends TestCase
         $messageRepository,
         $meetingRepository,
         $delayedEventDispatcher,
-        $datetime,
+        $dateTime,
         $sheet,
         $meeting;
 
@@ -39,7 +39,7 @@ class RemoveHandlerTest extends TestCase
         $this->messageRepository = $this->prophesize(MessageRepositoryInterface::class);
         $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $this->delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
         $this->sheet = $this->prophesize(Sheet::class);
         $this->meeting = $this->prophesize(Meeting::class);
         $this->requestRepository = $this->prophesize(RequestRepositoryInterface::class);
@@ -65,7 +65,7 @@ class RemoveHandlerTest extends TestCase
             $this->meetingRepository->reveal(),
             $this->delayedEventDispatcher->reveal(),
             $this->canRemoveMeeting->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
         $handler->handle(new Remove($this->sheet->reveal(), $this->meeting->reveal()));
@@ -91,7 +91,7 @@ class RemoveHandlerTest extends TestCase
             $this->meetingRepository->reveal(),
             $this->delayedEventDispatcher->reveal(),
             $this->canRemoveMeeting->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 
@@ -122,7 +122,7 @@ class RemoveHandlerTest extends TestCase
             $this->meetingRepository->reveal(),
             $this->delayedEventDispatcher->reveal(),
             $this->canRemoveMeeting->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 
@@ -147,7 +147,7 @@ class RemoveHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $message = new Meeting\Message($this->request->reveal(), $this->sheet->reveal(), 'content', $this->datetime);
+        $message = new Meeting\Message($this->request->reveal(), $this->sheet->reveal(), 'content', $this->dateTime);
         $this->messageRepository->add($message)->shouldBeCalled();
         $this->meetingRepository->remove($this->meeting->reveal())->shouldBeCalled();
         $this->requestRepository->set($this->request->reveal())->shouldBeCalled();
@@ -157,7 +157,7 @@ class RemoveHandlerTest extends TestCase
             $this->meetingRepository->reveal(),
             $this->delayedEventDispatcher->reveal(),
             $this->canRemoveMeeting->reveal(),
-            $this->datetime,
+            $this->dateTime,
             $this->requestRepository->reveal()
         );
 

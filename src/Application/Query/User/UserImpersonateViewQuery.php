@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\User;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\AbstractUser;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UserImpersonateViewQuery
+class UserImpersonateViewQuery implements Query
 {
     /**
      * @var AbstractUser

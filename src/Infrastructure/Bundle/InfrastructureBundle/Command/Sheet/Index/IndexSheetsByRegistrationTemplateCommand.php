@@ -60,5 +60,7 @@ class IndexSheetsByRegistrationTemplateCommand extends Command
         }
 
         $this->indexHandler->handle(new Index($registrationTemplate));
+
+        return 0;
     }
 }

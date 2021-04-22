@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Nomenclature;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
-class Assign
+class Assign implements Command
 {
     /**
      * @var Nomenclature

@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use InvalidArgumentException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -67,6 +68,17 @@ class ProductManager
         return $product;
     }
 
+    public function getPlan(Event $event, string $title): Product
+    {
+        $plans = $this->productRepository->findByEventAndTypes($event, [Product::TYPE_PLAN]);
+        foreach ($plans as $plan) {
+            if ($plan->getTitle('fr') === $title) {
+                return $plan;
+            }
+        }
+        throw new InvalidArgumentException($title.': Plan not found');
+    }
+
     /**
      * @param Product $plan
      * @param Product $productParticipant
@@ -79,6 +91,22 @@ class ProductManager
         }
 
         $plan->includeProduct($productParticipant, $quantity);
+
+        $this->productRepository->update($plan);
+    }
+
+    /**
+     * @param Product $plan
+     * @param Product $option
+     * @param int     $quantity
+     */
+    public function assignProductOptionToPlan(Product $plan, Product $productOption)
+    {
+        if (!$plan->isPlan() || !$productOption->isOption()) {
+            throw new \InvalidArgumentException('The given products have not the right type');
+        }
+
+        $plan->includeProduct($productOption, 1);
 
         $this->productRepository->update($plan);
     }

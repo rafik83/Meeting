@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -29,8 +29,8 @@ class UpdateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -45,7 +45,7 @@ class UpdateAction
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CanBeUpdatable $canBeUpdatable,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router
@@ -53,7 +53,7 @@ class UpdateAction
         $this->authorizationChecker = $authorizationChecker;
         $this->canBeUpdatable = $canBeUpdatable;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->flashBag = $flashBag;
@@ -92,7 +92,7 @@ class UpdateAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Admin/PromotionCode/Batch/update.html.twig',
                 [
                     'event' => $event,

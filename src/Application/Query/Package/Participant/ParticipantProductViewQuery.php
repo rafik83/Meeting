@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class ParticipantProductViewQuery
+class ParticipantProductViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

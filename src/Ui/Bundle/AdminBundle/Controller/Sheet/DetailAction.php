@@ -17,7 +17,6 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class DetailAction
 {
@@ -48,8 +48,8 @@ class DetailAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -69,7 +69,7 @@ class DetailAction
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         FlashBagInterface $flashBag,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
@@ -80,7 +80,7 @@ class DetailAction
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
     }
 
@@ -150,13 +150,13 @@ class DetailAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'sheet' => $sheet,
             'sheetTypeTitle' => $sheet->getType()->getTitle($locale),
             'details' => $sheetDetailView,
             'addCommentForm' => $addCommentForm->createView(),
             'changeTypeForm' => null === $changeTypeForm ? null : $changeTypeForm->createView(),
-        ]);
+        ]));
     }
 }

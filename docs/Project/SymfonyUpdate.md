@@ -2,13 +2,13 @@
 
 Pour mettre à jour la version de Symfony, suivre ces étapes:
 
-1. Tout d'abord, mettre à jour le fichier `composer.json` avec la version souhaitée puis lancer la commande suivante dans la VM:
+1. Tout d'abord, mettre à jour le fichier `composer.json` avec la version souhaitée puis lancer la commande suivante:
 
     ```
-    ⇒ composer update symfony/symfony --with-dependencies
+    ⇒ composer update
     ```
 
-2. Une fois la version de Symfony mise à jour, il faut appliquer le patch de diff. Pour créer un patch, se rendre sur le repository officiel de symfony et faire un compare entre la branche symfony d'origine et celle de cible et télécharger le `.diff` en ajoutant `.patch` à la fin du nom pour créer un patch:
+2. [A verifier] Une fois la version de Symfony mise à jour, il faut appliquer le patch de diff. Pour créer un patch, se rendre sur le repository officiel de symfony et faire un compare entre la branche symfony d'origine et celle de cible et télécharger le `.diff` en ajoutant `.patch` à la fin du nom pour créer un patch:
 
     ```
     $ curl https://github.com/symfony/symfony-standard/compare/3.2...3.3.diff --output 3.2...3.3.diff.patch

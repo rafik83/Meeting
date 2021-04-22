@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Message;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
-final class Update
+final class Update implements Command
 {
     /**
      * @var string

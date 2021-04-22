@@ -25,7 +25,7 @@ class PostBatchValidateHandlerTest extends TestCase
 
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $datetime        = new \DateTime();
+        $dateTime        = new \DateTime();
 
         $eventDispatcher->dispatch(
             Events::SHEET_VALIDATED,
@@ -35,7 +35,7 @@ class PostBatchValidateHandlerTest extends TestCase
         $query   = new PostBatchValidate([$sheet1, $sheet2, $sheet3], $admin, 'comment');
         $handler = new PostBatchValidateHandler(
             $eventDispatcher->reveal(),
-            $datetime
+            $dateTime
         );
 
         $handler->handle($query);

@@ -9,7 +9,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class DashboardAction
 {
@@ -19,17 +19,17 @@ class DashboardAction
     /** @var DashboardViewQueryHandler */
     private $dashboardViewQueryHandler;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         DashboardViewQueryHandler $dashboardViewQueryHandler,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->dashboardViewQueryHandler = $dashboardViewQueryHandler;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -48,7 +48,7 @@ class DashboardAction
             new DashboardViewQuery($event, $event->getAvailableLocale($request->getLocale()))
         );
 
-        return new Response($this->engine->render('AdminBundle:Event/Dashboard:index.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Event/Dashboard:index.html.twig', [
             'event'     => $event,
             'dashboard' => $view,
         ]));

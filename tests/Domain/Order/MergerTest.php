@@ -18,20 +18,20 @@ class MergerTest extends TestCase
 {
     public function testMerge()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'package', $datetime);
+        $package  = new Package($event, 'package', $dateTime);
         $type->setPackage($package);
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet = new Sheet($event, $type, [], $owner, $dateTime);
 
         $plan        = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $participant = Product::createParticipant($event, 'participant', 1250, 20, 20);
         $option      = Product::createOption($event, 'option', '', 99, 20, 50, 10, 20, true);
 
         // Setup
-        $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
+        $orderOne = new Order($sheet, '[]', $dateTime->modify('-5 day'));
         $row = new Order\Row($orderOne, 1, 20, $plan);
         $orderOne->addRow($row);
         $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
@@ -54,7 +54,7 @@ class MergerTest extends TestCase
         $orderOne->addRow($rowWithoutIdWithQuantity->reveal());
         $sheet->addOrder($orderOne);
 
-        $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
+        $orderTwo = new Order($sheet, '[]', $dateTime->modify('-2 day'));
         $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
@@ -78,7 +78,7 @@ class MergerTest extends TestCase
 
     public function test_child_row_with_parent_row_removed()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $event = $this->prophesize(Event::class);
         $event->getCurrency()->willReturn('EUR');
@@ -89,7 +89,7 @@ class MergerTest extends TestCase
         $option1 = Product::createOption($event->reveal(), 'option', '', 99, 20, 50, 10, 20, true);
         $option2 = Product::createOption($event->reveal(), 'option', '', 150, 20, 50, 10, 20, true);
 
-        $order1 = new Order($sheet->reveal(), '[]', $datetime);
+        $order1 = new Order($sheet->reveal(), '[]', $dateTime);
         $order1row1 = new Order\Row($order1, 2, 20, $option1, 1337);
         $order1row1child1 = new Order\Row($order1, 2, 20, null, 1337, 'Custom row 1', 399, $order1row1);
         $order1row2 = new Order\Row($order1, 2, 20, $option2);
@@ -97,7 +97,7 @@ class MergerTest extends TestCase
         $order1->addRow($order1row1child1);
         $order1->addRow($order1row2);
 
-        $order2 = new Order($sheet->reveal(), '[]', $datetime);
+        $order2 = new Order($sheet->reveal(), '[]', $dateTime);
         $order2row1 = new Order\Row($order2, -2, 20, $option1, 1337);
         $order2row2 = new Order\Row($order2, 1, 20, $option2);
         $order2->addRow($order2row1);
@@ -117,7 +117,7 @@ class MergerTest extends TestCase
 
     public function test_groups_merge(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $event = $this->prophesize(Event::class);
         $event->getCurrency()->willReturn('EUR');
@@ -125,8 +125,8 @@ class MergerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getEvent()->willReturn($event->reveal());
 
-        $order1 = new Order($sheet->reveal(), '{"1": "foo", "2": "bar"}', $datetime);
-        $order2 = new Order($sheet->reveal(), '{"2": "bar", "3": "foobar"}', $datetime);
+        $order1 = new Order($sheet->reveal(), '{"1": "foo", "2": "bar"}', $dateTime);
+        $order2 = new Order($sheet->reveal(), '{"2": "bar", "3": "foobar"}', $dateTime);
 
         $orderMerger = new Merger();
         $orderMerger = $orderMerger->merge([$order1, $order2]);

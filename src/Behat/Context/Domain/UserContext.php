@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\UserContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class UserContext implements Context
@@ -131,5 +132,27 @@ class UserContext implements Context
             throw new \InvalidArgumentException('Missing User');
         }
         $this->userContextProxy->getUserManager()->addUserEvent($user, $event, $storage->get('type'));
+    }
+
+    /**
+     * @Given this user has an activate token :token for this sheet
+     */
+    public function thisUserHasAnActivateToken(string $token)
+    {
+        /** @var User */
+        $user = $this->userContextProxy->getStorage()->get('user');
+        /** @var Sheet */
+        $sheet = $this->userContextProxy->getStorage()->get('sheet');
+        $this->userContextProxy->getUserManager()->addUserActivateToken($user, $sheet, $token);
+    }
+
+    /**
+     * @Given this user has a token :token to change his email to :email
+     */
+    public function thisUserHasATokenToChangeHisEmail(string $token, string $email)
+    {
+        /** @var User */
+        $user = $this->userContextProxy->getStorage()->get('user');
+        $this->userContextProxy->getUserManager()->addUserEmailToken($user, $email, $token);
     }
 }

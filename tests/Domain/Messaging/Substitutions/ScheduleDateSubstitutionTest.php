@@ -11,9 +11,9 @@ class ScheduleDateSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent('Proximum');
-        $event->getConfiguration()->setDates(null, null, $datetime);
+        $event->getConfiguration()->setDates(null, null, $dateTime);
         $sheet  = SheetFactory::create($event);
         $locale = 'fr';
 
@@ -27,6 +27,6 @@ class ScheduleDateSubstitutionTest extends TestCase
         $substitution = new ScheduleDateSubstitution();
         $scheduleDate = $substitution->getValue($sheet, $locale);
 
-        $this->assertEquals($dateFormatter->format($datetime), $scheduleDate);
+        $this->assertEquals($dateFormatter->format($dateTime), $scheduleDate);
     }
 }

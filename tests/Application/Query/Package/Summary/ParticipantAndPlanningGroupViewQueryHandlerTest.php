@@ -23,13 +23,13 @@ class ParticipantAndPlanningGroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $locale   = 'fr';
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'Package1', $datetime);
+        $package  = new Package($event, 'Package1', $dateTime);
         $package->enable(false, true, false);
-        $sheet   = SheetFactory::create($event, null, $datetime, $type);
+        $sheet   = SheetFactory::create($event, null, $dateTime, $type);
         $product = ProductFactory::create($event, 'participant');
 
         $package->setParticipants([$product]);
@@ -70,13 +70,13 @@ class ParticipantAndPlanningGroupViewQueryHandlerTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $locale   = 'fr';
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'Package1', $datetime);
+        $package  = new Package($event, 'Package1', $dateTime);
         $package->enable(false, false, false);
-        $sheet   = SheetFactory::create($event, null, $datetime, $type);
+        $sheet   = SheetFactory::create($event, null, $dateTime, $type);
         $product = ProductFactory::create($event, 'other_than_participant');
 
         $package->setParticipants([$product]);

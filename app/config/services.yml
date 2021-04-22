@@ -16,20 +16,20 @@ services:
     #
     # Twig extension
     #
-    twig.extension.intl:
-        class: Twig_Extensions_Extension_Intl
-        tags:
-            - { name: twig.extension }
+    # twig.extension.intl:
+    #     class: Twig_Extensions_Extension_Intl
+    #     tags:
+    #         - { name: twig.extension }
 
     #
     # Session handler
     #
-    session.handler.pdo:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        public:    false
-        arguments:
-            - "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
-            - { db_username: "%database_user%", db_password: "%database_password%" }
+    # session.handler.pdo:
+    #     class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+    #     public:    false
+    #     arguments:
+    #         - "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
+    #         - { db_username: "%database_user%", db_password: "%database_password%" }
 
     #
     # Form translation CollectionTypeExtension
@@ -51,17 +51,13 @@ imports:
     - { resource: services/event/commands.yml }
     - { resource: services/event/queries.yml }
     - { resource: services/event/serializers.yml }
-    - { resource: services/event/actions.yml }
     - { resource: services/event/components.yml }
     - { resource: services/event/templateSnippet.yml }
     - { resource: services/admin/queries.yml }
     - { resource: services/admin/commands.yml }
     - { resource: services/admin/components.yml }
     - { resource: services/admin/serializers.yml }
-    - { resource: services/admin/actions.yml }
-    - { resource: services/infrastructure/actions.yml }
     - { resource: services/infrastructure/symfony_commands.yml }
     - { resource: services/infrastructure/listeners.yml }
     - { resource: services/infrastructure/validators.yml }
     - { resource: services/third_party/services_tech_event.yml }
-

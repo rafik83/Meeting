@@ -21,18 +21,18 @@ class PlanningViewQueryHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @param CartManager        $cartManager
      * @param Merger             $orderMerger
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(CartManager $cartManager, Merger $orderMerger, \DateTimeInterface $datetime)
+    public function __construct(CartManager $cartManager, Merger $orderMerger, \DateTimeInterface $dateTime)
     {
         $this->cartManager = $cartManager;
         $this->orderMerger = $orderMerger;
-        $this->datetime    = $datetime;
+        $this->dateTime    = $dateTime;
     }
 
     /**
@@ -78,7 +78,7 @@ class PlanningViewQueryHandler
             $planningProduct->getSubjectedToValidationHelp($planningViewQuery->locale),
             $planningProduct->isSubjectedToValidation(),
             $included,
-            $planningProduct->isBuyable($this->datetime)
+            $planningProduct->isBuyable($this->dateTime)
         );
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 
-class Process
+class Process implements Command
 {
     /**
      * @var Campaign

@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class LockMeetingRequestUpdate
+class LockMeetingRequestUpdate implements Command
 {
     /**
      * @var bool

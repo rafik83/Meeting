@@ -6,6 +6,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2395 - Header event width full
+### Fixed
+- update services config to avoid duplicates in event subscribers
+- Add fallback for getLabel call, to prevent exception if label is not translated
+
+## [2.87.5] - 2021-04-20
+### Fixed
+- Fix duplicated commercial status changes
+
+## [2.87.4] - 2021-04-20
+### Fixed
+- Fix duplicated jobs
+
+## [2.87.3] - 2021-04-20
+### Fixed
+- Fix sheetToDisplayId route parameter
+- Fix exceptions when country code is empty or unsupported
+
+## [2.87.2] - 2021-04-20
+### Fixed
+- Fix permission service in meeting request controller
+- Failover if country code is not defined (in IntlAdapter)
+
+## [2.87.1] - 2021-04-20
+### Fixed
+- Don't throw exception if country not defined
+
+## [2.87.0] - 2021-04-20
+### Updated
+- VIMEET-2301 - Upgrade Symfony version to 4.4
+
+### Fixed
+- Display original URL on sheet in PDF format instead of redirect link
+
+### Added
+- VIMEET-2358 - Export meeting evaluations
+- MV-275 - Open visio meeting from sheet not in meeting, in a context of multi-sheet user
+
+## [2.86.2] - 2021-04-02
+### Fixed
+- MV-322 - webinar viewer's count has to be reset on WebRTC init
+- MV-323 - Webinar note redirect fix
 
 ## [2.86.1] - 2021-03-31
 ### Fixed
@@ -79,7 +120,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-308 - fix "values doesn't support values of type: START_OBJECT" ES error
 
-## [2.82.0] - 2021-02-16### Updated
+## [2.82.0] - 2021-02-16
+### Updated
 - Update Elasticsearch to 6.8.13
 
 ## [2.81.0] - 2021-02-16

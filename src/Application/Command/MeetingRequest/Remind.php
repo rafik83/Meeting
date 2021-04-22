@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-class Remind
+use Proximum\Vimeet\Application\Command\Command;
+
+class Remind implements Command
 {
 }

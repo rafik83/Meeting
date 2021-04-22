@@ -10,13 +10,13 @@ use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update;
 use Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class PaymentConditionsAction
 {
@@ -34,8 +34,8 @@ class PaymentConditionsAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -43,15 +43,6 @@ class PaymentConditionsAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param FormFactoryInterface                 $formFactory
-     * @param RouterInterface                      $router
-     * @param FlashBagInterface                    $flashBag
-     * @param CommandBusInterface                  $commandBus
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
@@ -59,13 +50,13 @@ class PaymentConditionsAction
         FlashBagInterface $flashBag,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->flashBag = $flashBag;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
     }
@@ -108,10 +99,10 @@ class PaymentConditionsAction
         );
         $typeWithPaymentConditions = $this->queryBus->handle($typesWithPaymentConditionsViewQuery);
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event'                     => $event,
             'form'                      => $form->createView(),
             'typeWithPaymentConditions' => $typeWithPaymentConditions,
-        ]);
+        ]));
     }
 }

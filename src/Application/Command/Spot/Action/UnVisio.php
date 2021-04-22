@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot\Action;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Spot;
 
-class UnVisio
+class UnVisio implements Command
 {
     /**
      * @var Spot

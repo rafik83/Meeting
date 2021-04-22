@@ -9,7 +9,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\She
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -29,7 +29,7 @@ class SheetNotFoundExceptionListenerTest extends TestCase
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->getEventByDomain($event->getDomain())->shouldBeCalled()->willReturn($event);
 
-        $kernelEvent = new GetResponseForExceptionEvent(
+        $kernelEvent = new ExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request,
             HttpKernelInterface::MASTER_REQUEST,
@@ -56,7 +56,7 @@ class SheetNotFoundExceptionListenerTest extends TestCase
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->getEventByDomain()->shouldNotBeCalled();
 
-        $kernelEvent = new GetResponseForExceptionEvent(
+        $kernelEvent = new ExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             Request::create('/'),
             HttpKernelInterface::MASTER_REQUEST,
@@ -84,7 +84,7 @@ class SheetNotFoundExceptionListenerTest extends TestCase
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository->getEventByDomain($event->getDomain())->shouldBeCalled()->willReturn(null);
 
-        $kernelEvent = new GetResponseForExceptionEvent(
+        $kernelEvent = new ExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request,
             HttpKernelInterface::MASTER_REQUEST,

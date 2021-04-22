@@ -20,7 +20,7 @@ class AddHandler
     private $promotionCodeRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var Merger */
     private $orderMerger;
@@ -28,18 +28,18 @@ class AddHandler
     /**
      * @param CartManager                      $cartManager
      * @param PromotionCodeRepositoryInterface $promotionCodeRepository
-     * @param \DateTimeInterface               $datetime
+     * @param \DateTimeInterface               $dateTime
      * @param Merger                           $orderMerger
      */
     public function __construct(
         CartManager $cartManager,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         Merger $orderMerger
     ) {
         $this->cartManager             = $cartManager;
         $this->promotionCodeRepository = $promotionCodeRepository;
-        $this->datetime                = $datetime;
+        $this->dateTime                = $dateTime;
         $this->orderMerger             = $orderMerger;
     }
 
@@ -73,7 +73,7 @@ class AddHandler
             }
         }
 
-        $cart->apply($promotionCode, $this->datetime);
+        $cart->apply($promotionCode, $this->dateTime);
 
         $this->cartManager->save($cart);
     }

@@ -11,14 +11,14 @@ class RestoreHandler
     private $adminRepository;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         AdminRepositoryInterface $adminRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->adminRepository = $adminRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(Restore $restore): void

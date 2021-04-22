@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 
-class Import
+class Import implements Command
 {
     const UNSOLVED_SUFFIX = '.xml';
     const SOLVED_SUFFIX = '-solved.xml';

@@ -2,8 +2,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantAttributedToProductCanNotBeRemovedException;
@@ -17,42 +21,62 @@ use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class SheetParticipantController extends Controller
+class SheetParticipantController extends AbstractController
 {
+    private AddParticipantChecker $addParticipantChecker;
+    private TemplateDataFactory $templateDataFactory;
+    private SheetInfosHelper $sheetInfosHelper;
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        AddParticipantChecker $addParticipantChecker,
+        TemplateDataFactory $templateDataFactory,
+        SheetInfosHelper $sheetInfosHelper,
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->addParticipantChecker = $addParticipantChecker;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->sheetInfosHelper = $sheetInfosHelper;
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     /**
      * Render the form of the addition of a participant. Loaded by ajax from the sheet.
-     *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     * @param UserDomain  $userDomain
-     *
-     * @return Response
      */
-    public function addParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key, UserDomain $userDomain)
-    {
+    public function addParticipantAction(
+        Sheet $sheet,
+        string $locale,
+        string $key,
+        UserDomain $userDomain
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
+        if (!$this->addParticipantChecker->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
         }
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
         try {
             $object = $templateData->getObject($key);
@@ -64,7 +88,7 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+        $participantProductViews = $this->queryBus->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
@@ -95,37 +119,28 @@ class SheetParticipantController extends Controller
 
     /**
      * Add a participant and display the sheet with the modal in case of form error.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     * @param UserDomain  $userDomain
-     *
-     * @return Response
      */
     public function handleAddParticipantAction(
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        $locale,
-        $key,
+        string $locale,
+        string $key,
         UserDomain $userDomain
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $user = $userDomain->getUser();
 
-        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+        $canAddParticipant = $this->addParticipantChecker->canAddParticipant($sheet);
         if (!$canAddParticipant) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
         }
 
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+        $participantProductViews = $this->queryBus->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
@@ -148,7 +163,7 @@ class SheetParticipantController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($addParticipant);
+                $this->commandBus->handle($addParticipant);
 
                 return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
@@ -159,15 +174,15 @@ class SheetParticipantController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->sheetInfosHelper->getInfos(
             $sheet,
             $user,
             $locale,
             false
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
-        $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
+        $label        = $object->getLabel($locale, $sheet->getEvent()->getLocaleFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet,
@@ -175,7 +190,7 @@ class SheetParticipantController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
@@ -198,23 +213,16 @@ class SheetParticipantController extends Controller
     /**
      * Render the form to remove participant. Loaded by ajax from the sheet.
      *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
      * @throws NotFoundHttpException
-     *
-     * @return Response
      */
-    public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
+    public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, string $locale, string $key): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         list($form) = $this->removeParticipantData($sheet, $locale, $key);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
 
         try {
             $object = $templateData->getObject($key);
@@ -228,7 +236,7 @@ class SheetParticipantController extends Controller
 
         $label             = $object->getLabel($locale, $sheet->getEvent()->getFallback());
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+        $participants      = $this->queryBus->handle($cardListViewQuery);
 
         return $this->render('EventBundle:Participant:remove.html.twig', [
             'uid'          => $key,
@@ -241,19 +249,16 @@ class SheetParticipantController extends Controller
     /**
      * Remove a participant and display the sheet with the modal in case of form error.
      *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param UserDomain  $userDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
      * @throws \Exception
-     *
-     * @return Response
      */
-    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale, $key): Response
-    {
+    public function handleRemoveParticipantAction(
+        Request $request,
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        Sheet $sheet,
+        string $locale,
+        string $key
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
@@ -264,7 +269,7 @@ class SheetParticipantController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($remove);
+                $this->commandBus->handle($remove);
 
                 return $this->redirectToRoute(
                     'event_sheet_locale',
@@ -275,7 +280,7 @@ class SheetParticipantController extends Controller
             } catch (ParticipantAttributedToProductCanNotBeRemovedException $exception) {
                 $form->addError(
                     new FormError(
-                        $this->get('translator')->transChoice(
+                        $this->translator->transChoice(
                             'validators.participant.remove.hasAttributedProduct',
                             $exception->countParticipants(),
                             [
@@ -288,7 +293,7 @@ class SheetParticipantController extends Controller
             } catch (ParticipantWithMeetingCanNotBeRemovedException $exception) {
                 $form->addError(
                     new FormError(
-                        $this->get('translator')->transChoice(
+                        $this->translator->transChoice(
                             'validators.participant.remove.hasMeeting',
                             $exception->countParticipants(),
                             [
@@ -303,15 +308,15 @@ class SheetParticipantController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the remove participant form
-        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->sheetInfosHelper->getInfos(
             $sheet,
             $this->getUser(),
             $locale,
             false
         );
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
-        $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
+        $label        = $object->getLabel($locale, $sheet->getEvent()->getLocaleFallback());
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet,
@@ -319,8 +324,8 @@ class SheetParticipantController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
-        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
+        $canAddParticipant = $this->addParticipantChecker->canAddParticipant($sheet);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
@@ -339,14 +344,7 @@ class SheetParticipantController extends Controller
         ]);
     }
 
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param string $key
-     *
-     * @return array
-     */
-    private function removeParticipantData(Sheet $sheet, $locale, $key): array
+    private function removeParticipantData(Sheet $sheet, string $locale, string $key): array
     {
         if (1 === $sheet->countParticipants()) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -368,14 +366,9 @@ class SheetParticipantController extends Controller
     }
 
     /**
-     * @param Template\TemplateData $templateData
-     * @param string                $key
-     *
      * @throws NotFoundHttpException
-     *
-     * @return Template\TemplateObject
      */
-    private function getParticipantObject(Template\TemplateData $templateData, $key): Template\TemplateObject
+    private function getParticipantObject(Template\TemplateData $templateData, string $key): Template\TemplateObject
     {
         try {
             $object = $templateData->getObject($key);

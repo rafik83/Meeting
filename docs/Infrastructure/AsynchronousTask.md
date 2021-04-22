@@ -21,7 +21,7 @@ Exemple:
 ```php
 public function exportHappeningParticipants(Event $event, Admin $admin, string $locale): void
 {
-    $this->setJob(new Job(ExportParticipantsCommand::NAME, [$event->getId(), $admin->getId(), $locale]));
+    $this->setJob(new Job(ExportParticipantsCommand::NAME, ['event' => $event->getId(), 'admin' => $admin->getId(), 'locale' => $locale]));
 }
 ```
 

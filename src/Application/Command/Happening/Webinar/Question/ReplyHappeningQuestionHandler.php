@@ -18,16 +18,16 @@ class ReplyHappeningQuestionHandler
     private $notificationPublisher;
 
     /** @var DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
         NotificationPublisherInterface $notificationPublisher,
-        DateTimeInterface $datetime
+        DateTimeInterface $dateTime
     ) {
         $this->questionRepository = $questionRepository;
         $this->notificationPublisher = $notificationPublisher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(ReplyHappeningQuestion $command): void
@@ -50,7 +50,7 @@ class ReplyHappeningQuestionHandler
             throw new ReplyQuestionNotAllowedException('Updating reply to question is allowed only for author of reply');
         }
 
-        $question->setReply($command->replyContent, $command->repliedBy, $this->datetime);
+        $question->setReply($command->replyContent, $command->repliedBy, $this->dateTime);
         $this->questionRepository->update($question);
 
         $this->notificationPublisher->publishHappeningNotification($question->getHappening(), AbstractNotification::TYPE_QUESTIONS, [

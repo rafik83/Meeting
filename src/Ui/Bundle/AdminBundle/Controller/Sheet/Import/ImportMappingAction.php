@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ImportMappingAction
 {
@@ -35,8 +35,8 @@ class ImportMappingAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -50,14 +50,14 @@ class ImportMappingAction
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->flashBag = $flashBag;
     }
@@ -113,7 +113,7 @@ class ImportMappingAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:Sheet:importMapping.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Sheet:importMapping.html.twig', [
             'form'  => $form->createView(),
             'event' => $event,
         ]));

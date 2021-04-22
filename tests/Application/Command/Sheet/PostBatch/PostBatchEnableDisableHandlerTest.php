@@ -32,7 +32,7 @@ class PostBatchEnableDisableHandlerTest extends TestCase
         // Mock
         $batchCatalogHandler  = $this->prophesize(BatchCatalogHandler::class);
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
-        $datetime             = new \DateTime();
+        $dateTime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
@@ -55,7 +55,7 @@ class PostBatchEnableDisableHandlerTest extends TestCase
         $handler = new PostBatchEnableDisableHandler(
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $enableDisableManager->reveal(),
             $sheetIndexer->reveal()
         );
@@ -74,7 +74,7 @@ class PostBatchEnableDisableHandlerTest extends TestCase
         // Mock
         $batchCatalogHandler  = $this->prophesize(BatchCatalogHandler::class);
         $eventDispatcher      = $this->prophesize(EventDispatcherInterface::class);
-        $datetime             = new \DateTime();
+        $dateTime             = new \DateTime();
         $enableDisableManager = $this->prophesize(EnableDisableManager::class);
         $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
@@ -97,7 +97,7 @@ class PostBatchEnableDisableHandlerTest extends TestCase
         $handler = new PostBatchEnableDisableHandler(
             $batchCatalogHandler->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $enableDisableManager->reveal(),
             $sheetIndexer->reveal()
         );

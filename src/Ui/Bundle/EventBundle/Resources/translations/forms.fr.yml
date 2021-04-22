@@ -4,7 +4,7 @@ form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
 form.add_participant.children.product.label: 'Produits liés'
-form.block.children.locale.label: 'Langue du site'
+form.block.children.locale.label: 'choix de la langue'
 form.catalog_approve_meeting_request.children.description.label: 'Répondre à la proposition de RDV?'
 form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
@@ -51,6 +51,12 @@ form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.group.participant.submit: Enregistrer
 form.login.children.password.placeholder: 'Mot de passe'
 form.login.children.rememberMe.label: 'Rester connecté'
+form.move_meeting_slot.children.content.label: 'Commentaire à destination de votre interlocuteur'
+form.move_meeting_slot.children.meetingSlot.label: 'Choisir un créneau disponible'
+form.move_meeting_slot.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
+form.move_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
+form.move_meeting.children.meetingSlot.label: 'Choisir un créneau disponible'
+form.move_meeting.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
 form.multi_upload_data.children.submit.label: Valider
 form.multi_upload_data.children.uploads.label_add: Ajouter
 form.multi_upload_data.children.uploads.label_delete: Supprimer
@@ -97,7 +103,7 @@ form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Virement
 form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
-form.profile.children.locale.label: 'Langue du site'
+form.profile.children.locale.label: 'Choix de la langue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.remove_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
@@ -182,7 +188,7 @@ form.sort_participants.children.submit.label: Enregistrer
 form.update_meeting.children.content.label: 'Commentaire à destination de votre interlocuteur'
 form.update_meeting.children.meetingSlot.label: 'Choisir un créneau disponible'
 form.update_meeting.children.meetingSlot.label.begin.end: '%day% de %begin% à %end%'
-form.update_meeting.children.participants.label: 'Participants'
+form.update_meeting.children.participants.label: Participants
 form.user_availability_confirmation.children.confirm.label: 'Accéder directement au catalogue'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer

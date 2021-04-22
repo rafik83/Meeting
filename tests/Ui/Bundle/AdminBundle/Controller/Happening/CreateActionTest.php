@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateActionTest extends TestCase
 {
@@ -34,7 +34,7 @@ class CreateActionTest extends TestCase
     private $formFactory;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -64,7 +64,7 @@ class CreateActionTest extends TestCase
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
@@ -91,7 +91,7 @@ class CreateActionTest extends TestCase
         $action = new CreateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
@@ -135,8 +135,8 @@ class CreateActionTest extends TestCase
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine
-            ->renderResponse(CreateAction::TEMPLATE, ['event' => $this->event->reveal(), 'form' => $formView->reveal()])
+        $this->twig
+            ->render(CreateAction::TEMPLATE, ['event' => $this->event->reveal(), 'form' => $formView->reveal()])
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -144,7 +144,7 @@ class CreateActionTest extends TestCase
         $action = new CreateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
@@ -193,12 +193,12 @@ class CreateActionTest extends TestCase
         $this->flashBag->add('success', 'flash.admin.happening.create.success')->shouldBeCalled();
         $this->router->generate('admin_happening_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new CreateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),

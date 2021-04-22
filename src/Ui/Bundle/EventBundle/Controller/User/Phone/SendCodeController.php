@@ -6,22 +6,23 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeFormHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SendCodeController extends Controller
+class SendCodeController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     *
-     * @return Response
-     */
+    private SendCodeFormHandler $sendCodeFormHandler;
+
+    public function __construct(
+        SendCodeFormHandler $sendCodeFormHandler
+    ) {
+        $this->sendCodeFormHandler = $sendCodeFormHandler;
+    }
+
     public function sendCodeAction(
         Request $request,
         EventDomain $eventDomain,
@@ -38,7 +39,7 @@ class SendCodeController extends Controller
             $this->addFlash('redirectTo', $redirectTo);
         }
 
-        $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
+        $sendCodeView = $this->sendCodeFormHandler->handle(
             new SendCodeForm($request, $user, $eventDomain->getEvent(), null, $mobileNumber, true)
         );
 
@@ -56,14 +57,6 @@ class SendCodeController extends Controller
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     *
-     * @return RedirectResponse
-     */
     public function redirectToSendCodeWithFlashAction(
         Request $request,
         EventDomain $eventDomain,

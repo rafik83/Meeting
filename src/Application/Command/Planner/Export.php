@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
-class Export
+class Export implements Command
 {
     /** @var bool */
     public $lockMeetingRequest;

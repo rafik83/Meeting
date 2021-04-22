@@ -17,6 +17,7 @@ data:
     MASTER_USER: {{ .Values.mysql.mysqlUser }}
         {{- else }}
     MASTER_HOST: {{ .Values.externalDatabase.host }}
+    MASTER_PORT: {{ .Values.externalDatabase.port }}
     MASTER_DB_NAME: {{ .Values.externalDatabase.database }}
     MASTER_USER: {{ .Values.externalDatabase.user }}
         {{- end }}
@@ -25,7 +26,8 @@ data:
     SLAVE_DB_NAME: {{ .Values.externalDatabase.slave.database }}
     SLAVE_USER: {{ .Values.externalDatabase.slave.user }}
         {{- end }}
-    APP_ENV: {{ default "dev" .Values.environment }}
+    ENVIRONMENT_NAME: {{ default "undefined" .Values.environment }}
+    APP_ENV: {{ default "prod" .Values.appEnv }}
         {{- if .Values.proxyCache.enabled }}
     PROXYCACHE_HOST: {{ .Values.proxyCache.host }}
         {{- end }}

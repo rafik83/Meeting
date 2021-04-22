@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateActionTest extends TestCase
 {
@@ -33,7 +33,7 @@ class UpdateActionTest extends TestCase
         $commandBus,
         $flashBag,
         $router,
-        $engine,
+        $twig,
         $errorFactory,
         $request,
         $admin
@@ -45,7 +45,7 @@ class UpdateActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->errorFactory = $this->prophesize(ErrorFactory::class);
         $this->request = $this->prophesize(Request::class);
         $this->admin = $this->prophesize(Admin::class);
@@ -65,7 +65,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -97,7 +97,7 @@ class UpdateActionTest extends TestCase
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form);
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Admin:update.html.twig', ['form' => $view])
             ->shouldBeCalled()
             ->willReturn('<html></html>')
@@ -109,7 +109,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -156,7 +156,7 @@ class UpdateActionTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Admin:create.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
@@ -167,7 +167,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 
@@ -229,7 +229,7 @@ class UpdateActionTest extends TestCase
         $form->get('email')->shouldBeCalled()->willReturn($form);
         $form->addError($error)->shouldBeCalled();
 
-        $this->engine
+        $this->twig
             ->render('AdminBundle:Admin:update.html.twig', ['form' => $view])
             ->shouldBeCalled()
             ->willReturn('<html></html>')
@@ -241,7 +241,7 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->errorFactory->reveal()
         );
 

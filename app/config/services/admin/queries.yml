@@ -31,7 +31,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQueryHandler
         arguments:
             - '@repository.analytic.meeting_solution_repository'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQuery }
 

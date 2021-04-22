@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Spot;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SpotUnavailabilityQuery
+class SpotUnavailabilityQuery implements Query
 {
     /**
      * @var Event

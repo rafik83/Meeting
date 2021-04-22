@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Messaging;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Update;
 use Proximum\Vimeet\Application\Query\Messaging\Message\ListQuery;
@@ -10,39 +12,38 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Message\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MessageController extends Controller
+class MessageController extends AbstractController
 {
+    private CommandBusInterface $commandBus;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(QueryBusInterface $queryBus, CommandBusInterface $commandBus)
+    {
+        $this->commandBus = $commandBus;
+        $this->queryBus = $queryBus;
+    }
+
     /**
      * Displays a list of all emailing messages for a given event.
-     *
-     * @param Event $event
-     *
-     * @return Response
      */
-    public function listAction(Event $event)
+    public function listAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         return $this->render('AdminBundle:Messaging\Message:list.html.twig', [
             'event'    => $event,
-            'messages' => $this->get('tactician.commandbus')->handle(new ListQuery($event)),
+            'messages' => $this->queryBus->handle(new ListQuery($event)),
         ]);
     }
 
     /**
      * Handles creation of an emailing message.
-     *
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response|RedirectResponse
      */
-    public function createAction(Request $request, Event $event)
+    public function createAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -50,7 +51,7 @@ class MessageController extends Controller
         $form   = $this->createForm(CreateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.messaging.message.create.success');
 
             return $this->redirectToRoute('admin_messaging_message_list', ['event' => $event->getId()]);
@@ -64,14 +65,8 @@ class MessageController extends Controller
 
     /**
      * Handles update of a given emailing message.
-     *
-     * @param Request $request
-     * @param Event   $event
-     * @param Message $message
-     *
-     * @return Response|RedirectResponse
      */
-    public function updateAction(Request $request, Event $event, Message $message)
+    public function updateAction(Request $request, Event $event, Message $message): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -83,7 +78,7 @@ class MessageController extends Controller
         $form   = $this->createForm(UpdateType::class, $create, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.messaging.message.update.success');
 
             return $this->redirectToRoute('admin_messaging_message_list', ['event' => $event->getId()]);
@@ -96,14 +91,7 @@ class MessageController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Message $message
-     *
-     * @return Response
-     */
-    public function previewAction(Request $request, Event $event, Message $message)
+    public function previewAction(Request $request, Event $event, Message $message): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -113,7 +101,7 @@ class MessageController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $messageView = $this->get('tactician.commandbus')->handle(new PreviewQuery($message, $locale));
+        $messageView = $this->queryBus->handle(new PreviewQuery($message, $locale));
 
         return $this->render('AdminBundle:Messaging\Message:preview.html.twig', [
             'event' => $event,

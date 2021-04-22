@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Event;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Admin;
 
-class EventListQuery
+class EventListQuery implements Query
 {
     const STATE_CURRENT = 'current';
     const STATE_PAST = 'past';

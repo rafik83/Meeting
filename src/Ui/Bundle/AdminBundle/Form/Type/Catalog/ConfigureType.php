@@ -54,7 +54,7 @@ class ConfigureType extends AbstractType
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
                     'required' => false,
-                    'help'     => true,
+                    'help'     => 'form.configure.children.searchFacets.prototype.help',
                 ],
                 'label'         => false,
             ])

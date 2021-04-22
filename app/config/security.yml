@@ -1,176 +1,177 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/security.html
-security:
-    encoders:
-        Proximum\Vimeet\Domain\Model\User:
-            algorithm: sha1
-            iterations: 5
-            encode_as_base64: true
-        Proximum\Vimeet\Domain\Model\Admin:
-            algorithm: 'argon2i'
-        Symfony\Component\Security\Core\User\User: plaintext
+# security:
+#     encoders:
+#         Proximum\Vimeet\Domain\Model\User:
+#             algorithm: sha1
+#             iterations: 5
+#             encode_as_base64: true
+#         Proximum\Vimeet\Domain\Model\Admin:
+#             algorithm: 'argon2i'
+#         Symfony\Component\Security\Core\User\User: plaintext
 
-    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
-    providers:
-        user_provider:
-            entity:
-                class: Proximum\Vimeet\Domain\Model\User
-                property: email
-        admin_provider:
-            entity:
-                class: Proximum\Vimeet\Domain\Model\Admin
-                property: email
-        phantomjs_provider:
-            memory:
-                users:
-                    phantomjs:
-                        password: '%phantomjs_http_password%'
-                        roles: 'ROLE_PHANTOMJS'
-        api_key_user_provider:
-            memory:
-                users:
-                    api:
-                        roles: 'ROLE_API'
+#     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+#     providers:
+#         user_provider:
+#             entity:
+#                 class: Proximum\Vimeet\Domain\Model\User
+#                 property: email
+#         admin_provider:
+#             entity:
+#                 class: Proximum\Vimeet\Domain\Model\Admin
+#                 property: email
+#         phantomjs_provider:
+#             memory:
+#                 users:
+#                     phantomjs:
+#                         password: '%phantomjs_http_password%'
+#                         roles: 'ROLE_PHANTOMJS'
+#         api_key_user_provider:
+#             memory:
+#                 users:
+#                     api:
+#                         roles: 'ROLE_API'
 
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+#     firewalls:
+#         dev:
+#             pattern: ^/(_(profiler|wdt)|css|images|js)/
+#             security: false
 
-        internal:
-            pattern: '^/([a-z]{2})/_internal/'
-            anonymous: false
-            logout_on_user_change: true
-            provider: user_provider # unless a provider is specified explicitly, the first provider is always used
-            http_basic:
-                provider: phantomjs_provider
+#         internal:
+#             pattern: '^/([a-z]{2})/_internal/'
+#             anonymous: false
+#             logout_on_user_change: true
+#             provider: user_provider # unless a provider is specified explicitly, the first provider is always used
+#             http_basic:
+#                 provider: phantomjs_provider
 
-        api:
-            pattern: '^/([a-z]{2})/api/'
-            stateless: true
-            guard:
-                authenticators:
-                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator
-            provider: api_key_user_provider
+#         api:
+#             pattern: '^/([a-z]{2})/api/'
+#             stateless: true
+#             guard:
+#                 authenticators:
+#                     - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\ApiKeyAuthenticator
+#             provider: api_key_user_provider
 
-        planner:
-            pattern: '^/planner/callback'
-            host: '%admin_domain%'
-            security: false
+#         planner:
+#             pattern: '^/planner/callback'
+#             host: '%admin_domain%'
+#             security: false
 
-        jenkins:
-            pattern: '^/jenkins/callback'
-            host: '%admin_domain%'
-            security: false
+#         jenkins:
+#             pattern: '^/jenkins/callback'
+#             host: '%admin_domain%'
+#             security: false
 
-        admin:
-            anonymous: ~
-            host: '%admin_domain%'
-            provider: admin_provider
-            logout_on_user_change: true
-            user_checker: security.app.admin_checker
-            form_login:
-                login_path: admin_login
-                check_path: admin_login_check
-                username_parameter: "login[username]"
-                password_parameter: "login[password]"
-                default_target_path: admin_event_list
-                use_referer: true
-            remember_me:
-                name: admin_remembered
-                remember_me_parameter: login[rememberMe]
-                secret:   '%adminSecret%'
-                secure: true
-                lifetime: 2592000
-                path:     /
-            logout:
-                path: admin_logout
-                target: admin_login
+#         admin:
+#             anonymous: ~
+#             host: '%admin_domain%'
+#             provider: admin_provider
+#             logout_on_user_change: true
+#             user_checker: security.app.admin_checker
+#             form_login:
+#                 login_path: admin_login
+#                 check_path: admin_login_check
+#                 username_parameter: "login[username]"
+#                 password_parameter: "login[password]"
+#                 default_target_path: admin_event_list
+#                 use_referer: true
+#             remember_me:
+#                 name: admin_remembered
+#                 remember_me_parameter: login[rememberMe]
+#                 secret:   '%adminSecret%'
+#                 secure: true
+#                 lifetime: 2592000
+#                 path:     /
+#             logout:
+#                 path: admin_logout
+#                 target: admin_login
 
-        main:
-            anonymous: ~
-            provider: user_provider
-            logout_on_user_change: true
-            user_checker: security.app.user_checker
-            form_login:
-                login_path: event_login_second_step
-                check_path: event_login_check
-                username_parameter: "login[username]"
-                password_parameter: "login[password]"
-                default_target_path: event
-                use_referer: true
-            remember_me:
-                name: user_remembered
-                remember_me_parameter: login[rememberMe]
-                secret:   '%secret%'
-                secure: true
-                lifetime: 2592000
-                path:     /
-            guard:
-                entry_point: Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
-                authenticators:
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticator
-                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventTokenAuthenticator
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Google\GoogleAuthenticator
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator
-            logout:
-                path: event_logout
-                target: event_logout_success
-            switch_user:
-                parameter: _switchto
+#         main:
+#             anonymous: ~
+#             provider: user_provider
+#             logout_on_user_change: true
+#             user_checker: security.app.user_checker
+#             form_login:
+#                 login_path: event_login_second_step
+#                 check_path: event_login_check
+#                 username_parameter: "login[username]"
+#                 password_parameter: "login[password]"
+#                 default_target_path: event
+#                 use_referer: true
+#             remember_me:
+#                 name: user_remembered
+#                 remember_me_parameter: login[rememberMe]
+#                 secret:   '%secret%'
+#                 secure: true
+#                 lifetime: 2592000
+#                 path:     /
+#             guard:
+#                 entry_point: Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
+#                 authenticators:
+#                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
+#                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventAuthenticator
+#                     - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator
+#                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\TechEvent\TechEventTokenAuthenticator
+#                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Google\GoogleAuthenticator
+#                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\LinkedIn\LinkedInAuthenticator
+#             logout:
+#                 path: event_logout
+#                 target: event_logout_success
+#             switch_user:
+#                 parameter: _switchto
 
-    access_control:
-        - { path: ^/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
-        - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
-        - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
-        - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event$', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/past', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/archived', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/impersonate', role: ROLE_ALLOWED_TO_SWITCH, host: '%admin_domain%' }
-        - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/meeting-request', role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/meeting', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/access', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: '^/(fr|en)/event/[0-9]+/user/[0-9]+/badge', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
-        - { path: ^/(fr|en)/logout, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
-        - { path: '^/(fr|en)/_internal', roles: ROLE_PHANTOMJS, host: '%admin_domain%' }
-        - { path: '/(fr|en)/happening/webinar/record/archive/status-change', role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' } # Tokbox Callback
-        - { path: '/healthz', role: IS_AUTHENTICATED_ANONYMOUSLY } # Healthcheck
-        - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
-        # calendar feed
-        - { path: '^/([a-z]{2})/sheet/\d+/agenda/participant/\d+/[^./]+.ics$', role: IS_AUTHENTICATED_ANONYMOUSLY }
-        # Front
-        - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
-        # Print
-        - { path: '^/([a-z]{2})/_internal', roles: ROLE_PHANTOMJS }
-        # Badge
-        - { path: '/([a-z]{2})/badge', role: IS_AUTHENTICATED_ANONYMOUSLY }
+#     access_control:
+#         - { path: ^/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+#         - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+#         - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+#         - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event$', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/past', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/archived', roles: [ROLE_ALLOWED_TO_MANAGE_SHEET, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/impersonate', role: ROLE_ALLOWED_TO_SWITCH, host: '%admin_domain%' }
+#         - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/meeting-request', role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/meeting', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/access', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/event/[0-9]+/user/[0-9]+/badge', roles: [ROLE_ALLOWED_TO_ADMIN, ROLE_ALLOWED_TO_HOST], host: '%admin_domain%' }
+#         - { path: ^/(fr|en)/logout, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
+#         - { path: '^/(fr|en)/_internal', roles: ROLE_PHANTOMJS, host: '%admin_domain%' }
+#         - { path: '/(fr|en)/happening/webinar/record/archive/status-change', role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' } # Tokbox Callback
+#         - { path: '/healthz', role: IS_AUTHENTICATED_ANONYMOUSLY } # Healthcheck
+#         - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
+#         # calendar feed
+#         - { path: '^/([a-z]{2})/sheet/\d+/agenda/participant/\d+/[^./]+.ics$', role: IS_AUTHENTICATED_ANONYMOUSLY }
+#         # Front
+#         - { path: '^/([a-z]{2})/sheet', role: ROLE_USER }
+#         # Print
+#         - { path: '^/([a-z]{2})/_internal', roles: ROLE_PHANTOMJS }
+#         # Badge
+#         - { path: '/([a-z]{2})/badge', role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-    role_hierarchy:
-        ROLE_ALLOWED_TO_ADMIN:
-            - 'ROLE_ALLOWED_TO_SWITCH'
-            - 'ROLE_ALLOWED_TO_ACCOUNT'
-            - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
-            - 'ROLE_ALLOWED_TO_MANAGE_USER'
-            - 'ROLE_ALLOWED_TO_OPERATE'
-            - 'ROLE_ALLOWED_TO_PARTNER'
-            - 'ROLE_ALLOWED_TO_HOST'
+#     role_hierarchy:
+#         ROLE_ALLOWED_TO_ADMIN:
+#             - 'ROLE_ALLOWED_TO_SWITCH'
+#             - 'ROLE_ALLOWED_TO_ACCOUNT'
+#             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
+#             - 'ROLE_ALLOWED_TO_MANAGE_USER'
+#             - 'ROLE_ALLOWED_TO_OPERATE'
+#             - 'ROLE_ALLOWED_TO_PARTNER'
+#             - 'ROLE_ALLOWED_TO_HOST'
 
-        ROLE_ALLOWED_TO_PARTNER:
-            - 'ROLE_ALLOWED_TO_SWITCH'
-            - 'ROLE_ALLOWED_TO_ACCOUNT'
-            - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
+#         ROLE_ALLOWED_TO_PARTNER:
+#             - 'ROLE_ALLOWED_TO_SWITCH'
+#             - 'ROLE_ALLOWED_TO_ACCOUNT'
+#             - 'ROLE_ALLOWED_TO_MANAGE_SHEET'
+#             - 'ROLE_ALLOWED_TO_MANAGE_USER'
 
-        ROLE_ALLOWED_TO_HOST:
-            - 'ROLE_ALLOWED_TO_ACCOUNT'
+#         ROLE_ALLOWED_TO_HOST:
+#             - 'ROLE_ALLOWED_TO_ACCOUNT'
 
-        ROLE_SUPER_ADMIN: ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
-        ROLE_ORGANIZER:   ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
-        ROLE_OPERATOR:    ['ROLE_ALLOWED_TO_ADMIN']
-        ROLE_PARTNER:     ['ROLE_ALLOWED_TO_PARTNER']
-        ROLE_HOST:        ['ROLE_ALLOWED_TO_HOST']
+#         ROLE_SUPER_ADMIN: ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
+#         ROLE_ORGANIZER:   ['ROLE_ALLOWED_TO_ADMIN', 'ROLE_ALLOWED_TO_ORGANIZE']
+#         ROLE_OPERATOR:    ['ROLE_ALLOWED_TO_ADMIN']
+#         ROLE_PARTNER:     ['ROLE_ALLOWED_TO_PARTNER']
+#         ROLE_HOST:        ['ROLE_ALLOWED_TO_HOST']

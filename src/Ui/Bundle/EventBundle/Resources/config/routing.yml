@@ -320,11 +320,11 @@ event_sheet_generate_pdf:
     defaults: { _controller: EventBundle:Sheet:generatePdf }
 
 event_sheet_internal_print:
-    path:     /_internal/sheet/{sheet}/{user}/print/{sheetToDisplay}/{locale}
+    path:     /_internal/sheet/{sheet}/{user}/print/{sheetToDisplayId}/{locale}
     requirements:
         user: \d+
         sheet: \d+
-        sheetToDisplay: \d+
+        sheetToDisplayId: \d+
         locale: '[a-z]{2}'
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:print }

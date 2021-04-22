@@ -1,0 +1,11 @@
+services:
+    Proximum\Vimeet\Application\Adapter\EmailingSenderInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\FakeEmailingSenderAdapter
+
+
+    Proximum\Vimeet\Infrastructure\Adapter\SMS\SMSProviders:
+        calls:
+            - [registerProvider, ['@Proximum\Vimeet\Infrastructure\Adapter\SMS\MonologProvider']]
+
+    Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\FakeBuildCreatorAdapter

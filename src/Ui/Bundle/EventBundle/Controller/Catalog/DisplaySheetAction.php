@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 /**
  * Display a sheet.
@@ -39,8 +39,8 @@ class DisplaySheetAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -86,7 +86,7 @@ class DisplaySheetAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         CommandBusInterface $commandBus,
         SheetRepositoryInterface $sheetRepository,
@@ -103,7 +103,7 @@ class DisplaySheetAction
         Applyer $applyer
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->commandBus = $commandBus;
         $this->sheetRepository = $sheetRepository;
@@ -222,7 +222,7 @@ class DisplaySheetAction
             }
         }
 
-        return new Response($this->engine->render('@Event/Catalog/displaySheet.html.twig', [
+        return new Response($this->twig->render('@Event/Catalog/displaySheet.html.twig', [
             'event' => $event,
             'sheet' => $sheet,
             'participant' => $sheet->getUserParticipant($user),

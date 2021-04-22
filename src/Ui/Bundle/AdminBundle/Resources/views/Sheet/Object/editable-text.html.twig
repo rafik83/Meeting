@@ -2,7 +2,11 @@
     <b>{{ object.getDefaultLabel }}:</b>
     <ul>
     {% for locale, translation in object.translations %}
+        {% if locale %}
         <li><i>{{ locale|locale }}:</i> {{ object.contentValueLocalize(locale)|nl2br }}</li>
+        {% else %}
+        <li>{{ object.contentValueLocalize(app.request.locale)|nl2br }}</li>
+        {% endif %}
     {% endfor %}
     </ul>
 {% else %}

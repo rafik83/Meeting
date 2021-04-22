@@ -288,4 +288,14 @@ class MeetingManager
 
         return $this->createMeetingFromRequest($event, $meetingRequest, $slot, $spot);
     }
+
+    public function approveMeetingRequest(Request $request)
+    {
+        $request->approve(new \DateTime());
+    }
+
+    public function refuseMeetingRequest(Request $request)
+    {
+        $request->refuse(new \DateTime());
+    }
 }

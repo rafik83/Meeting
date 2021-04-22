@@ -2,26 +2,36 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Attend;
 use Proximum\Vimeet\Application\Query\Sheet\Attend\SheetAttendanceViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\AttendanceChoiceType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AttendanceController extends Controller
+class AttendanceController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function cancelAttendanceAction(Request $request, Event $event, Sheet $sheet)
+    private MeetingRepositoryInterface $meetingRepository;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        MeetingRepositoryInterface $meetingRepository,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->meetingRepository = $meetingRepository;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+   public function cancelAttendanceAction(Request $request, Event $event, Sheet $sheet): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
@@ -30,8 +40,8 @@ class AttendanceController extends Controller
             throw $this->createNotFoundException('Not allowed');
         }
 
-        $meetingCount = $this->get('vimeet_infrastructure.repository.meeting_repository')->countMeetingsOfSheet($sheet);
-        $view = $this->get('tactician.commandbus.query')->handle(new SheetAttendanceViewQuery($sheet));
+        $meetingCount = $this->meetingRepository->countMeetingsOfSheet($sheet);
+        $view = $this->queryBus->handle(new SheetAttendanceViewQuery($sheet));
 
         $attend = new Attend($sheet);
         $form   = $this->createForm(AttendanceChoiceType::class, $attend, [
@@ -40,7 +50,7 @@ class AttendanceController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($attend);
+            $this->commandBus->handle($attend);
 
             return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),
@@ -56,13 +66,7 @@ class AttendanceController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     * @param Sheet $sheet
-     *
-     * @return RedirectResponse
-     */
-    public function redirectToCancelAttendanceAction(Event $event, Sheet $sheet)
+    public function redirectToCancelAttendanceAction(Event $event, Sheet $sheet): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);

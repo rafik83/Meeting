@@ -2,27 +2,29 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MultipleSheets;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Sheet\Multiple\MultipleViewQuery;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class HomeController extends Controller
+class HomeController extends AbstractController
 {
-    /**
-     * @param EventDomain   $eventDomain
-     * @param UserInterface $user
-     *
-     * @return RedirectResponse|Response
-     */
-    public function selectSheetAction(EventDomain $eventDomain, UserInterface $user = null)
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        QueryBusInterface $queryBus
+    ) {
+        $this->queryBus = $queryBus;
+    }
+
+    public function selectSheetAction(EventDomain $eventDomain, UserInterface $user = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $eventDomain->getEvent();
 
-        $sheetViews = $this->get('tactician.commandbus.query')->handle(
+        $sheetViews = $this->queryBus->handle(
             new MultipleViewQuery($user, $event)
         );
 

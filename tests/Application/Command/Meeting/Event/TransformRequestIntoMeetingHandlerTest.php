@@ -34,7 +34,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
     public function testHandleWithAssignedParticipantsOnBothSide()
     {
         $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
@@ -89,7 +89,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant->reveal()],
             $toSheet->reveal(),
             [$toParticipant->reveal()],
-            $datetime,
+            $dateTime,
             $spot->reveal(),
             $event,
             false,
@@ -146,7 +146,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 
@@ -160,7 +160,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
     public function testHandleWithFromSheetHasNoPreferenceWithOneParticipant()
     {
         $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
@@ -264,7 +264,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant->reveal()],
             $toSheet->reveal(),
             [$toParticipant->reveal()],
-            $datetime,
+            $dateTime,
             $spot->reveal(),
             $event,
             false,
@@ -298,7 +298,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 
@@ -312,7 +312,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
     public function testHandleWithBothSideHasNoPreference()
     {
         $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
@@ -489,7 +489,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 
@@ -504,7 +504,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant2->reveal()],
             $toSheet->reveal(),
             [$toParticipant2->reveal()],
-            $datetime,
+            $dateTime,
             $spot->reveal(),
             $event,
             false,
@@ -520,7 +520,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $this->expectException(CannotBeTransformIntoMeetingOnDdayException::class);
 
         $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
@@ -694,7 +694,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 
@@ -706,7 +706,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $this->expectException(CannotBeTransformIntoMeetingOnDdayException::class);
 
         $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->willReturn(false);
@@ -831,7 +831,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 
@@ -841,7 +841,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
     public function testAddMeetingForParticipantsNotOnSameSheet()
     {
         $event = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $type = $this->prophesize(Type::class);
         $type->areAllSheetParticipantsAssignedToMeeting()->shouldBeCalled()->willReturn(true);
@@ -924,7 +924,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant->reveal(), $fromOtherParticipant->reveal()],
             $toSheet->reveal(),
             [$toParticipant->reveal()],
-            $datetime,
+            $dateTime,
             $spot->reveal(),
             $event,
             false,
@@ -976,7 +976,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $slotFilter->reveal(),
             $visioGuesser->reveal(),
             $eventDispatcher->reveal(),
-            $datetime,
+            $dateTime,
             $meetingParticipants->reveal()
         );
 

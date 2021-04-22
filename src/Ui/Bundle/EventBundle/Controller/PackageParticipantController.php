@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
@@ -10,29 +11,29 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PackageParticipantController extends Controller
+class PackageParticipantController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param int         $step
-     * @param UserDomain  $userDomain
-     *
-     * @return Response
-     */
+    private AddParticipantChecker $addParticipantChecker;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        AddParticipantChecker $addParticipantChecker,
+        QueryBusInterface $queryBus
+    ) {
+        $this->addParticipantChecker = $addParticipantChecker;
+        $this->queryBus = $queryBus;
+    }
+
     public function addParticipantAction(
         Request $request,
-        EventDomain $eventDomain,
         Sheet $sheet,
-        $step,
+        int $step,
         UserDomain $userDomain
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -48,14 +49,14 @@ class PackageParticipantController extends Controller
             );
         }
 
-        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
+        if (!$this->addParticipantChecker->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
         }
 
         $locale = $request->getLocale();
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+        $participantProductViews = $this->queryBus->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
@@ -78,14 +79,7 @@ class PackageParticipantController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Sheet   $sheet
-     * @param int     $step
-     *
-     * @return Response
-     */
-    public function removeParticipantAction(Request $request, Sheet $sheet, $step)
+    public function removeParticipantAction(Request $request, Sheet $sheet, int $step): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -105,7 +99,7 @@ class PackageParticipantController extends Controller
         ]);
 
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+        $participants      = $this->queryBus->handle($cardListViewQuery);
 
         return $this->render('EventBundle:Participant:removeFromPackage.html.twig', [
             'form'         => $form->createView(),

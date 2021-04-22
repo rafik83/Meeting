@@ -20,6 +20,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Helper\EntityId;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
+use Twig\Environment;
 
 class ProcessHandlerTest extends TestCase
 {
@@ -38,12 +39,12 @@ class ProcessHandlerTest extends TestCase
         $campaign->addRecipient(Campaign::RECIPIENT_PARTICIPANTS);
         $campaign->addSheet($sheet);
 
-        $template = $this->prophesize(\Twig_TemplateInterface::class);
+        $template = $this->prophesize(Environment::class);
         foreach ($event->getLocales() as $locale) {
             $template->render(['mail' => new MessageContentMail($message, $event, $locale)])->willReturn('test content ' . $locale);
         }
 
-        $twig = $this->prophesize(\Twig_Environment::class);
+        $twig = $this->prophesize(Environment::class);
         $twig->load($message->getTemplate())->willReturn($template);
 
         $mailer = new SendGridApiAdapter(
@@ -83,7 +84,7 @@ class ProcessHandlerTest extends TestCase
         $campaign  = new Campaign($event, 'amazing campaign', [], $createdAt);
         $mailer    = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->prophesize(Environment::class)->reveal(),
             $this->getEventSender()
         );
 
@@ -111,7 +112,7 @@ class ProcessHandlerTest extends TestCase
 
         $mailer = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->prophesize(Environment::class)->reveal(),
             $this->getEventSender()
         );
 
@@ -140,7 +141,7 @@ class ProcessHandlerTest extends TestCase
 
         $mailer = new SendGridApiAdapter(
             $this->prophesize(SendGridApiClient::class)->reveal(),
-            $this->prophesize(\Twig_Environment::class)->reveal(),
+            $this->prophesize(Environment::class)->reveal(),
             $this->getEventSender()
         );
 

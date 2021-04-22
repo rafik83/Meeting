@@ -82,5 +82,7 @@ class IndexSheetsByEventCommand extends Command
         $this->commandBus->handle(new UserEventViewIndex($event, $reset));
 
         $output->writeln('Indexation finished.');
+
+        return 0;
     }
 }

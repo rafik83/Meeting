@@ -19,12 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class MenuAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -42,13 +42,13 @@ class MenuAction
 
     public function __construct(
         RequestStack $requestStack,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         IsValidatedRequiredPackageMissing $isValidatedRequiredPackageMissing,
         IsValidatedTransactionMissing $isValidatedTransactionMissing,
         StaticFormulationRepositoryInterface $staticFormulationRepository
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->requestStack = $requestStack;
         $this->isValidatedRequiredPackageMissing = $isValidatedRequiredPackageMissing;
@@ -155,7 +155,7 @@ class MenuAction
         $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
 
         return new Response(
-            $this->engine->render('EventBundle::Navigation/header.html.twig', [
+            $this->twig->render('EventBundle::Navigation/header.html.twig', [
                 'menuHeaderView' => $menuHeaderView,
                 'menuView' => $menuView,
                 'submenuView' => $submenuView,

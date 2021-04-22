@@ -22,7 +22,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $locale           = 'fr';
-        $datetime         = new \DateTime();
+        $dateTime         = new \DateTime();
         $sheet            = $this->prophesize(Sheet::class);
         $sheet2           = $this->prophesize(Sheet::class);
         $user             = UserFactory::create();
@@ -37,7 +37,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
 
-        $meetingRequest->getCreatedAt()->willReturn($datetime);
+        $meetingRequest->getCreatedAt()->willReturn($dateTime);
         $meetingRequest->getFromSheet()->willReturn($sheet->reveal());
         $meetingRequest->getToSheet()->willReturn($sheet2->reveal());
         $meetingRequest->getState()->willReturn(Request::STATE_SENT);
@@ -100,7 +100,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             'sheet name',
             'sent',
             'category',
-            $datetime,
+            $dateTime,
             $meetingRequest->reveal(),
             [],
             false,

@@ -10,32 +10,13 @@ use Proximum\Vimeet\Domain\Model\Happening;
 
 class PrepareReconciliationHandlerTest extends TestCase
 {
-    public function testHandleNotWebinar(): void
-    {
-        $happening = $this->prophesize(Happening::class);
-        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
-        $happening->getId()->shouldBeCalled()->willReturn(12);
-
-        $jobQueue = $this->prophesize(RecordJobQueueInterface::class);
-        $jobQueue->removeReconciliation(12)->shouldBeCalled();
-
-        $command = new PrepareReconciliation($happening->reveal(), null);
-        $handler = new PrepareReconciliationHandler(
-            $jobQueue->reveal()
-        );
-
-        $handler->handle($command);
-    }
-
     public function testHandleWithDueDate(): void
     {
         $dueDate = new \DateTime('2022-10-10 10:00:00.000');
         $happening = $this->prophesize(Happening::class);
-        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $happening->getId()->shouldBeCalled()->willReturn(12);
 
         $jobQueue = $this->prophesize(RecordJobQueueInterface::class);
-        $jobQueue->removeReconciliation(12)->shouldNotBeCalled();
         $jobQueue->prepareReconciliation(12, $dueDate);
 
         $command = new PrepareReconciliation($happening->reveal(), $dueDate);
@@ -52,11 +33,9 @@ class PrepareReconciliationHandlerTest extends TestCase
         $endDatePlusTime = new \DateTime('2022-10-10 10:05:00.000');
         $happening = $this->prophesize(Happening::class);
         $happening->getEnd()->shouldBeCalled()->willReturn($endDate);
-        $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $happening->getId()->shouldBeCalled()->willReturn(12);
 
         $jobQueue = $this->prophesize(RecordJobQueueInterface::class);
-        $jobQueue->removeReconciliation(12)->shouldNotBeCalled();
         $jobQueue->prepareReconciliation(12, $endDatePlusTime);
 
         $command = new PrepareReconciliation($happening->reveal(), null);

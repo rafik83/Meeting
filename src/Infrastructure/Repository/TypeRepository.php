@@ -339,7 +339,7 @@ class TypeRepository implements TypeRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function getAllowedTypesExcludedCurrentEventByAdmin(Admin $admin, Event $excludedEvent, \DateTimeInterface $datetime): iterable
+    public function getAllowedTypesExcludedCurrentEventByAdmin(Admin $admin, Event $excludedEvent, \DateTimeInterface $dateTime): iterable
     {
         $queryBuilder = $this
             ->entityManager
@@ -352,7 +352,7 @@ class TypeRepository implements TypeRepositoryInterface
             ->where('days.id IS NULL OR days.startTime > :datetime')
             ->setParameters([
                 'excludedEvent' => $excludedEvent,
-                'datetime' => $datetime,
+                'datetime' => $dateTime,
             ])
             ->orderBy('event.title, typeTranslation.title', 'ASC');
 

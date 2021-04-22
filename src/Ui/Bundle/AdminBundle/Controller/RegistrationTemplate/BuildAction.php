@@ -12,12 +12,12 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class BuildAction
 {
@@ -27,8 +27,8 @@ class BuildAction
     /** @var CompletenessCalculator */
     private $completenessCalculator;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -45,7 +45,7 @@ class BuildAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CompletenessCalculator $completenessCalculator,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         NomenclatureRepositoryInterface $nomenclatureRepository,
         RouterInterface $router,
@@ -53,7 +53,7 @@ class BuildAction
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->completenessCalculator = $completenessCalculator;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->nomenclatureRepository = $nomenclatureRepository;
         $this->router = $router;
@@ -104,7 +104,7 @@ class BuildAction
             $this->nomenclatureRepository->findByEvent($registrationTemplate->getEvent()) :
             $this->nomenclatureRepository->findGlobals();
 
-        return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:builder.html.twig', [
+        return new Response($this->twig->render('AdminBundle:RegistrationTemplate:builder.html.twig', [
             'addLocaleForm' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness' => $this->completenessCalculator->compute($registrationTemplate),
             'event' => $registrationTemplate->getEvent(),
@@ -113,6 +113,6 @@ class BuildAction
             'nomenclatures' => $nomenclatures,
             'registrationTemplate' => $registrationTemplate,
             'registrationTemplateTagView' => Tag::getRegistrationTemplateTagView(),
-        ]);
+        ]));
     }
 }

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
+use InvalidArgumentException;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\SheetContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -64,6 +65,16 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given this sheet has confirmed attendance
+     */
+    public function thisSheetHasConfirmedAttendance()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $sheet->setAttendance(true);
+        $this->sheetContextProxy->getSheetManager()->setAttendance($sheet);
+    }
+
+    /**
      * @Given /^there is a sheet with the title "(?P<title>[^"]+)"$/
      *
      * @param string|null $title
@@ -72,6 +83,20 @@ class SheetContext implements Context
     {
         $event = $this->getEvent();
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given there is an existing sheet with the title :title in this event
+     */
+    public function thereIsAnExisitngSheetWithTheTitle(string $title)
+    {
+        $event = $this->getEvent();
+        $sheet = $this->sheetContextProxy->getSheetManager()->getSheetByEventAndTitle($event, $title);
+        if (null === $sheet) {
+            throw new InvalidArgumentException('Sheet not found');
+        }
+
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 
@@ -151,6 +176,68 @@ class SheetContext implements Context
     {
         $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
         $this->sheetContextProxy->getSheetManager()->setEnabled($sheet);
+    }
+
+    /**
+     * @Given this sheet has :city as city
+     */
+    public function thisSheetHasCity(string $city)
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getRegistrationData();
+        $data['d224f0e7']['text'] = $city;
+        $sheet->setRegistrationData($data);
+    }
+
+    /**
+     * @Given this sheet has supply services
+     */
+    public function thisSheetHasSupplyService()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['03b394ac']['items'][] = 'ab93de01';
+        $data['03b394ac']['items'][] = 'ab93de02';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet has needs
+     */
+    public function thisSheetHasNeeds()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['63ccc105']['items'][] = 'ab93de02';
+        $data['63ccc105']['items'][] = 'ab93de05';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet supply computing
+     */
+    public function thisSheetSupplyComputing()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['03b394ac']['items'][] = 'ab93de05';
+        $sheet->setData($data);
+    }
+
+    /**
+     * @Given this sheet needs prototyping
+     */
+    public function thisSheetNeedsPrototyping()
+    {
+        /** @var Sheet */
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $data = $sheet->getData();
+        $data['63ccc105']['items'][] = 'ab93de06';
+        $sheet->setData($data);
     }
 
     /**

@@ -24,7 +24,7 @@ abstract class AbstractChoiceHandler
     protected $totalToPay;
 
     /** @var \DateTimeInterface */
-    protected $datetime;
+    protected $dateTime;
 
     /** @var TransactionRepositoryInterface */
     protected $transactionRepository;
@@ -38,7 +38,7 @@ abstract class AbstractChoiceHandler
      * @param Cart\CartManager               $cartManager
      * @param TotalToPay                     $totalToPay
      * @param DelayedEventDispatcher         $eventDispatcher
-     * @param \DateTimeInterface             $datetime
+     * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
@@ -46,14 +46,14 @@ abstract class AbstractChoiceHandler
         Cart\CartManager $cartManager,
         TotalToPay $totalToPay,
         DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->converter             = $converter;
         $this->cartManager           = $cartManager;
         $this->totalToPay            = $totalToPay;
         $this->eventDispatcher       = $eventDispatcher;
-        $this->datetime              = $datetime;
+        $this->dateTime              = $dateTime;
     }
 
     /**
@@ -78,13 +78,13 @@ abstract class AbstractChoiceHandler
                 $choice->sheet,
                 $choice->user,
                 $total,
-                $this->datetime
+                $this->dateTime
             );
         } else {
             $transaction = new Transaction(
                 $choice->sheet,
                 $total,
-                $this->datetime,
+                $this->dateTime,
                 $choice->mode,
                 null,
                 Transaction::STATE_PENDING,

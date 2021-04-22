@@ -251,7 +251,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
             - '@query.mail.participant_mail_view_query_handler'
 
     Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareRegisterAccountMail:
@@ -261,7 +261,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
             - '@query.mail.participant_mail_view_query_handler'
             - '@adapter.event_url_generator'
 
@@ -275,7 +275,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\Transactional\Mail\MessageRepository'
             - '@Proximum\Vimeet\Application\Components\Transactional\Mail\Substitution\SubstitutionHandler'
-            - '@event_sender'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
             - '@query.mail.participant_mail_view_query_handler'
             - '@adapter.event_url_generator'
 

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SetSearchFacet
+class SetSearchFacet implements Command
 {
     /** @var array */
     public $searchFacets;

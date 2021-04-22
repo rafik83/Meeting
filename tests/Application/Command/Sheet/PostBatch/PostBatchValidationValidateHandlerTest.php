@@ -25,7 +25,7 @@ class PostBatchValidationValidateHandlerTest extends TestCase
 
         // Mock
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-        $datetime        = new \DateTime();
+        $dateTime        = new \DateTime();
 
         $eventDispatcher->dispatch(
             Events::SHEET_VALIDATION_VALIDATE,
@@ -35,7 +35,7 @@ class PostBatchValidationValidateHandlerTest extends TestCase
         $query   = new PostBatchValidationValidate([$sheet1, $sheet2, $sheet3], $admin);
         $handler = new PostBatchValidationValidateHandler(
             $eventDispatcher->reveal(),
-            $datetime
+            $dateTime
         );
 
         $handler->handle($query);

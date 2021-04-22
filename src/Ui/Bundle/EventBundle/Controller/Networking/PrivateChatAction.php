@@ -18,12 +18,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class PrivateChatAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -42,13 +42,13 @@ class PrivateChatAction
 
     public function __construct(
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker,
         NetworkingAccessChecker $networkingAccessChecker,
         UserRepositoryInterface $userRepository
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
@@ -87,7 +87,7 @@ class PrivateChatAction
         $chatView = $this->queryBus->handle(new PrivateChatQuery($sheet, $userDomain->getUser(), $toUser));
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Networking/privateChat.html.twig',
                 [
                     'privateChatView' => $chatView,

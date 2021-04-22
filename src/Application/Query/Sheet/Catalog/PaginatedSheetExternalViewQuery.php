@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Catalog;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginatedSheetExternalViewQuery
+class PaginatedSheetExternalViewQuery implements Query
 {
     /** @var Event */
     public $event;

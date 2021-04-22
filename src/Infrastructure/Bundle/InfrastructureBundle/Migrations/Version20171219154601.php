@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,7 +13,7 @@ class Version20171219154601 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
@@ -25,7 +25,7 @@ class Version20171219154601 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function postUp(Schema $schema)
+    public function postUp(Schema $schema) : void
     {
         $this->connection->executeQuery(
             'INSERT INTO package_participant (package_id, product_participant_id, rank)
@@ -42,7 +42,7 @@ class Version20171219154601 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
@@ -54,7 +54,7 @@ class Version20171219154601 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function postDown(Schema $schema)
+    public function postDown(Schema $schema) : void
     {
         $this->connection->executeQuery(
             'UPDATE package set package.participant_id = (

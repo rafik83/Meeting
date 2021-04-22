@@ -23,6 +23,44 @@ class SheetTemplateContext implements Context
      */
     public function thereIsASheetTemplate()
     {
-        $this->sheetTemplateContextProxy->getSheetTemplateManager()->create(null);
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $template = $this->sheetTemplateContextProxy->getSheetTemplateManager()->create($event, null);
+
+        $this->sheetTemplateContextProxy->getStorage()->set('sheetTemplate', $template);
+    }
+
+    /**
+     * @Given child :objectId of sheet templates has product options
+     */
+    public function childOfThisSheetTemplateHasProductOptions($objectId)
+    {
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $options = $this->sheetTemplateContextProxy->getStorage()->get('options');
+        if (null === $options) {
+            throw new \InvalidArgumentException('Missing options');
+        }
+
+        $this->sheetTemplateContextProxy->getSheetTemplateManager()->updateChild(
+            $event,
+            $objectId,
+            'products',
+            array_map(fn ($option) => $option->getId(), $options)
+        );
+    }
+
+    /**
+     * @Given these options are added to logo in sheet template
+     */
+    public function theseOptionsAreAddedToLogoInSheetTemplate()
+    {
+        $event = $this->sheetTemplateContextProxy->getStorage()->get('event');
+        $options = $this->sheetTemplateContextProxy->getStorage()->get('options');
+
+        $this->sheetTemplateContextProxy->getSheetTemplateManager()->updateChild(
+            $event,
+            '1b9a00b3',
+            'products',
+            array_map(fn ($option) => $option->getId(), $options)
+        );
     }
 }

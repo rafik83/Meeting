@@ -15,7 +15,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CreateUnavailabilitiesAction
@@ -32,21 +32,20 @@ class CreateUnavailabilitiesAction
     /** @var HasAvailabilityManagementEnabled */
     private $hasAvailabilityManagementEnabled;
 
-    /** @var Session */
-    private $session;
+    private FlashBagInterface $flashBag;
 
     public function __construct(
         CommandBusInterface $commandBus,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         HasUnavailabilityManagementDisabled $hasUnavailabilityManagementDisabled,
         HasAvailabilityManagementEnabled $hasAvailabilityManagementEnabled,
-        Session $session
+        FlashBagInterface $flashBag
     ) {
         $this->commandBus = $commandBus;
         $this->authorizationChecker = $authorizationChecker;
         $this->hasUnavailabilityManagementDisabled = $hasUnavailabilityManagementDisabled;
         $this->hasAvailabilityManagementEnabled = $hasAvailabilityManagementEnabled;
-        $this->session = $session;
+        $this->flashBag = $flashBag;
     }
 
     public function __invoke(
@@ -94,7 +93,7 @@ class CreateUnavailabilitiesAction
         }
 
         if (!$hasError) {
-            $this->session->getFlashBag()->add('success', 'flash.agenda.availability.ok_message_on_save');
+            $this->flashBag->add('success', 'flash.agenda.availability.ok_message_on_save');
         }
 
         return new JsonResponse([

@@ -2,59 +2,72 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\PromotionCode\Create;
 use Proximum\Vimeet\Application\Command\PromotionCode\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
+use Proximum\Vimeet\Domain\Promotion\Generator\UniqueCodeGenerator;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\PromotionCode\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PromotionCodeController extends Controller
+class PromotionCodeController extends AbstractController
 {
-    /**
-     * @param Event $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function listAction(Event $event)
+    private ErrorFactory $errorFactory;
+    private PromotionCodeRepositoryInterface $promotionCodeRepository;
+    private UniqueCodeGenerator $uniqueCodeGenerator;
+    private OrderRepositoryInterface $orderRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        ErrorFactory $errorFactory,
+        PromotionCodeRepositoryInterface $promotionCodeRepository,
+        UniqueCodeGenerator $uniqueCodeGenerator,
+        OrderRepositoryInterface $orderRepository,
+        CommandBusInterface $commandBus
+    ) {
+        $this->errorFactory = $errorFactory;
+        $this->promotionCodeRepository = $promotionCodeRepository;
+        $this->uniqueCodeGenerator = $uniqueCodeGenerator;
+        $this->orderRepository = $orderRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $promotionCodes = $this->get('repository.promotion_code_repository')->findWithoutGroupByEvent($event);
+        $promotionCodes = $this->promotionCodeRepository->findWithoutGroupByEvent($event);
 
         return $this->render('AdminBundle:PromotionCode:list.html.twig', [
-            'event'           => $event,
+            'event' => $event,
             'promotion_codes' => $promotionCodes,
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createAction(Request $request, Event $event)
+    public function createAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $create       = new Create($event);
-        $create->code = $this->get('promotion.generator.unique_code_generator')->generate($event);
-        $form         = $this->createForm(CreateType::class, $create, [
+        $create = new Create($event);
+        $create->code = $this->uniqueCodeGenerator->generate($event);
+        $form = $this->createForm(CreateType::class, $create, [
             'submit' => true,
-            'event'  => $event,
+            'event' => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($create);
+                $this->commandBus->handle($create);
                 $this->addFlash('success', 'flash.promotion_code.create.success');
 
                 return $this->redirectToRoute('admin_promotion_code_list', [
@@ -66,19 +79,12 @@ class PromotionCodeController extends Controller
         }
 
         return $this->render('AdminBundle:PromotionCode:create.html.twig', [
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'event' => $event,
         ]);
     }
 
-    /**
-     * @param Request       $request
-     * @param Event         $event
-     * @param PromotionCode $promotionCode
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Event $event, PromotionCode $promotionCode)
+    public function updateAction(Request $request, Event $event, PromotionCode $promotionCode): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongPromotionCodeEvent($event, $promotionCode);
@@ -88,11 +94,10 @@ class PromotionCodeController extends Controller
         }
 
         $update = new Update($promotionCode);
-        $form   = $this->createForm(UpdateType::class, $update, [
+        $form = $this->createForm(UpdateType::class, $update, [
             'submit' => true,
-            'event'  => $event,
-            'can_update_promotions' => !$this
-                ->get('vimeet_infrastructure.repository.order_repository')
+            'event' => $event,
+            'can_update_promotions' => !$this->orderRepository
                 ->hasOrderWithPromotionCode($promotionCode)
             ,
             'locale' => $event->getAvailableLocale($request->getLocale()),
@@ -100,7 +105,7 @@ class PromotionCodeController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($update);
+                $this->commandBus->handle($update);
                 $this->addFlash('success', 'flash.promotion_code.update.success');
 
                 return $this->redirectToRoute('admin_promotion_code_list', [
@@ -118,15 +123,11 @@ class PromotionCodeController extends Controller
 
         return $this->render('AdminBundle:PromotionCode:update.html.twig', [
             'promotion_code' => $promotionCode,
-            'event'          => $event,
-            'form'           => $form->createView(),
+            'event' => $event,
+            'form' => $form->createView(),
         ]);
     }
 
-    /**
-     * @param Event         $event
-     * @param PromotionCode $promotionCode
-     */
     private function notFoundIfWrongPromotionCodeEvent(Event $event, PromotionCode $promotionCode)
     {
         if ($event !== $promotionCode->getEvent()) {
@@ -134,13 +135,8 @@ class PromotionCodeController extends Controller
         }
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return FormError
-     */
-    private function createNonUniqueCodeError($locale)
+    private function createNonUniqueCodeError(string $locale): FormError
     {
-        return $this->get('error_factory')->create('validators.promotion_code.code.already_exist', $locale);
+        return $this->errorFactory->create('validators.promotion_code.code.already_exist', $locale);
     }
 }

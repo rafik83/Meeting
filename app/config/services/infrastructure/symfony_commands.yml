@@ -129,7 +129,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Invoice\FixInvoiceDataCommand:
         arguments:
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@query.invoice.invoice_data_query_handler'
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -149,6 +149,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@logger'
         tags:
             - { name: console.command }
 

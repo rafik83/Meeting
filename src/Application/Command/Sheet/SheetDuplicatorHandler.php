@@ -33,7 +33,7 @@ class SheetDuplicatorHandler
     private $mailer;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var string */
     private $sender;
@@ -47,13 +47,13 @@ class SheetDuplicatorHandler
         GroupDuplicator $groupDuplicator,
         TemplateDataDuplicator $templateDataDuplicator,
         MailerInterface $mailer,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         string $sender
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->groupDuplicator = $groupDuplicator;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->mailer = $mailer;
         $this->sender = $sender;
         $this->templateDataDuplicator = $templateDataDuplicator;
@@ -105,7 +105,7 @@ class SheetDuplicatorHandler
         }
 
         $group = $this->duplicateGroupFrom($sheet, $destinationEvent);
-        $duplicatedSheet = Sheet::duplicateSheetFrom($sheet, $group, $destinationType, $this->datetime);
+        $duplicatedSheet = Sheet::duplicateSheetFrom($sheet, $group, $destinationType, $this->dateTime);
 
         $this->templateDataDuplicator->duplicateData(
             $duplicatedSheet,

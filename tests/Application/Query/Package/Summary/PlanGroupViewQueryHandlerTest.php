@@ -22,10 +22,10 @@ class PlanGroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'Package1', $datetime);
+        $package  = new Package($event, 'Package1', $dateTime);
         $package->enable(true, false, false);
         $product = ProductFactory::create($event, 'plan');
 
@@ -71,10 +71,10 @@ class PlanGroupViewQueryHandlerTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $package  = new Package($event, 'Package1', $datetime);
+        $package  = new Package($event, 'Package1', $dateTime);
         $type->setPackage($package);
         $sheet  = SheetFactory::create($event, null, null, $type);
         $cart   = new Cart($sheet, [], []);

@@ -29,7 +29,7 @@ class GetEventReferenceHandler
         );
 
         if (!$eventReferenceExtraParameter instanceof ExtraParameter) {
-            throw new EventHasNotComexposiumReferenceException('Eevent has not Comexposium event reference');
+            throw new EventHasNotComexposiumReferenceException('Event has not Comexposium event reference');
         }
 
         return $eventReferenceExtraParameter->getValue();

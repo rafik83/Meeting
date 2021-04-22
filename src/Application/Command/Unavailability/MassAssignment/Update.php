@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\MassAssignment;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 
-class Update
+class Update implements Command
 {
     /**
      * @var MassAssignment

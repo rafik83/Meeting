@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class AssignSpot
+class AssignSpot implements Command
 {
     /**
      * @var Event

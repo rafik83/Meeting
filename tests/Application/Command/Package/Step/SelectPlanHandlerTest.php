@@ -26,9 +26,9 @@ class SelectPlanHandlerTest extends TestCase
     {
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
+        $sheet    = new Sheet($event, $type, [], $user, $dateTime);
         $product  = Product::createPlan($event, 'plan', '', 100, 20, 10, 40);
 
         $emptyCart    = new Cart($sheet, [], [], 1);
@@ -65,11 +65,11 @@ class SelectPlanHandlerTest extends TestCase
     {
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $product1 = Product::createPlan($event, 'plan1', '', 100, 20, 10, 40);
         $product2 = Product::createPlan($event, 'plan2', '', 50, 20, 10, 50);
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
+        $sheet    = new Sheet($event, $type, [], $user, $dateTime);
 
         $actualCart   = new Cart($sheet, [new CartRow($sheet, $product1, 1)], [], 1);
         $expectedCart = new Cart($sheet, [new CartRow($sheet, $product2, 1)], [], 1);

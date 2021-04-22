@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class EvaluateMeetingAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -45,13 +45,13 @@ class EvaluateMeetingAction
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->router = $router;
         $this->formFactory = $formFactory;
@@ -119,7 +119,7 @@ class EvaluateMeetingAction
         }
 
         return new Response(
-            $this->engine->render('@Event/Meeting/evaluate-meeting.html.twig', [
+            $this->twig->render('@Event/Meeting/evaluate-meeting.html.twig', [
                 'event' => $eventDomain->getEvent(),
                 'sheet' => $sheet,
                 'participant' => $participant,

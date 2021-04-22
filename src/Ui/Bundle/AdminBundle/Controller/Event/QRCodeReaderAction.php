@@ -12,21 +12,21 @@ use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Participant\SearchEmailForFastCheckinType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class QRCodeReaderAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -48,7 +48,7 @@ class QRCodeReaderAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         \DateTimeInterface $dateTime,
         FormFactoryInterface $formFactory,
@@ -57,7 +57,7 @@ class QRCodeReaderAction
         FlashBagInterface $flashBag
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->dateTime = $dateTime;
         $this->formFactory = $formFactory;
@@ -121,7 +121,7 @@ class QRCodeReaderAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Admin/Event/qrCodeReader.html.twig',
                 [
                     'event' => $event,

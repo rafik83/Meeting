@@ -10,6 +10,7 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
+use Twig\Environment;
 
 class CreateMessageHandlerTest extends TestCase
 {
@@ -22,7 +23,7 @@ class CreateMessageHandlerTest extends TestCase
         $createMessage = new CreateMessage($event->reveal(), 'name', 'subject', 'template', false, false);
 
         // Mock
-        $twig = $this->prophesize(\Twig_Environment::class);
+        $twig = $this->prophesize(Environment::class);
         $translator = $this->prophesize(TranslatorInterface::class);
         $translator->trans('subject', [], 'mail', 'fr')->shouldBeCalled()->willReturn('subject fr');
         $translator->trans('subject', [], 'mail', 'en')->shouldBeCalled()->willReturn('subject en');

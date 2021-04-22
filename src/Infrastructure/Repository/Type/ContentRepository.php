@@ -2,17 +2,16 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository\Type;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Type\Content;
 use Proximum\Vimeet\Domain\Repository\Type\ContentRepositoryInterface;
 
 class ContentRepository implements ContentRepositoryInterface
 {
-    /** @var EntityManager */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }

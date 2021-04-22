@@ -35,7 +35,7 @@ class BatchEnableDisableHandler
     /**
      * @var BatchJobQueueInterface
      */
-    private $batchJobQueue;
+    private $batchEnableDisableJobQueue;
 
     /** @var CancelAllHandler */
     private $cancelAllHandler;
@@ -45,13 +45,13 @@ class BatchEnableDisableHandler
         SheetRepositoryInterface $sheetRepository,
         MeetingRepositoryInterface $meetingRepository,
         SheetInfoGuesser $sheetInfoGuesser,
-        BatchJobQueueInterface $batchJobQueue
+        BatchJobQueueInterface $batchEnableDisableJobQueue
     ) {
         $this->cancelAllHandler = $cancelAllHandler;
         $this->sheetRepository = $sheetRepository;
         $this->meetingRepository = $meetingRepository;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->batchJobQueue = $batchJobQueue;
+        $this->batchEnableDisableJobQueue = $batchEnableDisableJobQueue;
     }
 
     public function handle(BatchEnableDisable $batchEnableDisable): BatchResult
@@ -112,7 +112,7 @@ class BatchEnableDisableHandler
         if (!empty($processedSheetsIds)) {
             $this->sheetRepository->updateEnableStateBySheetsId($processedSheetsIds, $batchEnableDisable->state);
 
-            $this->batchJobQueue->createJob(
+            $this->batchEnableDisableJobQueue->createJob(
                 $processedSheetsIds,
                 $batchEnableDisable->admin,
                 ['state' => $batchEnableDisable->state ? self::STATE_ENABLE : self::STATE_DISABLE]

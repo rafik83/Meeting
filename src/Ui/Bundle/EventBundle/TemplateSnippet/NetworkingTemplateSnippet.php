@@ -9,21 +9,21 @@ use Proximum\Vimeet\Application\Query\Networking\ClosedNetworkingException;
 use Proximum\Vimeet\Application\Query\Networking\GetSnippetQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class NetworkingTemplateSnippet
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
     }
 
@@ -44,7 +44,7 @@ class NetworkingTemplateSnippet
             return ' ';
         }
 
-        $template = $this->engine->render(
+        $template = $this->twig->render(
             '@Event/Networking/snippet.html.twig',
             [
                 'getSnippetView' => $getSnippetView,

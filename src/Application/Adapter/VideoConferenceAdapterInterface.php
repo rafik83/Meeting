@@ -26,6 +26,8 @@ interface VideoConferenceAdapterInterface
     public function getSession(string $sessionId): Session;
     public function getSessionStreamCount($sessionId): int;
 
+    public function checkApiKey(string $apiKey): bool;
+
     public function archive(string $sessionId, string $name): Archive;
 
     public function changeArchiveLayout(string $archiveId, Layout $layout): void;

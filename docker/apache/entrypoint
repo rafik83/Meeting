@@ -18,6 +18,8 @@ for tmpl in $TEMPLATES; do
   envsubst < $tmpl > $cf
 done
 
+bin/dump-env.sh
+
 if [[ -z "${PHP_NEWRELIC_ENABLED}" ]]; then
   echo "Environment variable PHP_NEWRELIC_ENABLED is missing, New Relic PHP extension stays disabled"
 else

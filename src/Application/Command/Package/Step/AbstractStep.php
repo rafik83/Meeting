@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class AbstractStep
+class AbstractStep implements Command
 {
     /** @var Sheet */
     public $sheet;

@@ -25,12 +25,12 @@ class ChoiceHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $event  = EventFactory::createEvent();
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet  = new Sheet($event, $type, [], $owner, $datetime);
+        $sheet  = new Sheet($event, $type, [], $owner, $dateTime);
         $choice = new Choice($sheet, $owner);
         $choice->mode = Mode::PAYMENT_BANK_CARD;
 
@@ -50,7 +50,7 @@ class ChoiceHandlerTest extends TestCase
         $transaction = new Transaction(
             $sheet,
             480,
-            $datetime,
+            $dateTime,
             Mode::PAYMENT_BANK_CARD,
             null,
             Transaction::STATE_PENDING,
@@ -58,7 +58,7 @@ class ChoiceHandlerTest extends TestCase
             $owner
         );
 
-        $order = Order::createFromSheet($sheet, $datetime);
+        $order = Order::createFromSheet($sheet, $dateTime);
 
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
@@ -78,7 +78,7 @@ class ChoiceHandlerTest extends TestCase
             $cartManager->reveal(),
             $totalToPay->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $dateTime
         );
 
         $handler->handle($choice);

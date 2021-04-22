@@ -24,7 +24,7 @@ services:
     domain.product.duplicator:
         class: Proximum\Vimeet\Domain\Product\Duplicator
         arguments:
-            - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter'
 
     domain.package.duplicator:
         class: Proximum\Vimeet\Domain\Package\Duplicator

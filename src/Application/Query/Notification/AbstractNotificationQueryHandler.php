@@ -10,11 +10,11 @@ abstract class AbstractNotificationQueryHandler
     protected $router;
 
     /** @var \DateTimeInterface */
-    protected $datetime;
+    protected $dateTime;
 
-    public function __construct(RouterInterface $router, \DateTimeInterface $datetime)
+    public function __construct(RouterInterface $router, \DateTimeInterface $dateTime)
     {
         $this->router = $router;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 }

@@ -10,12 +10,12 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class DuplicateAction
 {
@@ -31,21 +31,21 @@ class DuplicateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
         CommandBusInterface $commandBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -83,9 +83,9 @@ class DuplicateAction
             ]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:duplicate.html.twig', [
+        return new Response($this->twig->render('AdminBundle:RegistrationTemplate:duplicate.html.twig', [
             'template' => $template,
             'form'     => $form->createView(),
-        ]);
+        ]));
     }
 }

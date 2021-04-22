@@ -3,20 +3,17 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
 class HealthCheckAction
 {
-    /** @var ManagerRegistry|null */
-    private $doctrine;
-
-    /** @var LoggerInterface */
-    private $logger;
+    private ?EntityManagerInterface $doctrine;
+    private LoggerInterface $logger;
 
     public function __construct(
-        ?ManagerRegistry $doctrine,
+        ?EntityManagerInterface $doctrine,
         LoggerInterface $logger
     ) {
         $this->doctrine = $doctrine;

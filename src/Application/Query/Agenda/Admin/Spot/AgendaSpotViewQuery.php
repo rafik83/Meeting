@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Spot;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 
-class AgendaSpotViewQuery
+class AgendaSpotViewQuery implements Query
 {
     /**
      * @var Spot

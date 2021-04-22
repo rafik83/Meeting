@@ -18,7 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowActionTest extends TestCase
 {
@@ -66,8 +66,8 @@ class ShowActionTest extends TestCase
         $badgeAvailableChecker = $this->prophesize(AvailableChecker::class);
         $badgeAvailableChecker->isSatisfiedBy($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
-        $engine = $this->prophesize(EngineInterface::class);
-        $engine
+        $twig = $this->prophesize(Environment::class);
+        $twig
             ->render('EventBundle:Badge:show.html.twig',
                 [
                     'event' => $event->reveal(),
@@ -91,7 +91,7 @@ class ShowActionTest extends TestCase
             $badgeAvailableChecker->reveal(),
             $authorizationChecker->reveal(),
             $hasAccessToSheet->reveal(),
-            $engine->reveal(),
+            $twig->reveal(),
             $queryBus->reveal()
         );
         $response = $showAction($request->reveal(), $eventDomain->reveal(), $user->reveal(), $sheet->reveal());

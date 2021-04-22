@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\ExtraData;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class AddOrUpdate
+class AddOrUpdate implements Command
 {
     /** @var Event */
     public $event;

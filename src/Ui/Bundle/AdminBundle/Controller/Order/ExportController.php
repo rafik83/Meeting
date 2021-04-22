@@ -2,26 +2,32 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Order;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Command\Order\Export\ExportJobCreator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ExportController extends Controller
+class ExportController extends AbstractController
 {
-    /**
-     * @param Request       $request
-     * @param UserInterface $admin
-     * @param Event         $event
-     *
-     * @return RedirectResponse
-     */
-    public function exportAction(Request $request, UserInterface $admin, Event $event)
+    private FileSystemAdapterInterface $filesystem;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FileSystemAdapterInterface $filesystem,
+        CommandBusInterface $commandBus
+    ) {
+        $this->filesystem = $filesystem;
+        $this->commandBus = $commandBus;
+    }
+
+    public function exportAction(Request $request, UserInterface $admin, Event $event): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -32,21 +38,14 @@ class ExportController extends Controller
 
         $exportJobCreator = new ExportJobCreator($event, $admin, $request->getLocale());
 
-        $this->get('tactician.commandbus')->handle($exportJobCreator);
+        $this->commandBus->handle($exportJobCreator);
 
         $this->addFlash('success', 'flash.admin.order.export.success');
 
         return $this->redirectToRoute('admin_sheet_order_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Event  $event
-     * @param string $hash
-     * @param File   $file
-     *
-     * @return CsvFileResponse
-     */
-    public function exportFileAction(Event $event, $hash, File $file)
+    public function exportFileAction(Event $event, string $hash, File $file): CsvFileResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -59,7 +58,7 @@ class ExportController extends Controller
 
         $path = sprintf('%s%s', $this->getParameter('infrastructure.export_order_path'), $file->getPath());
 
-        if (!$this->get('filesystem')->exists($path)) {
+        if (!$this->filesystem->exists($path)) {
             throw $this->createNotFoundException(sprintf('File %s not found', $file->getId()));
         }
 

@@ -29,13 +29,13 @@ class SubmenuViewQueryHandlerTest extends TestCase
 {
     public function testCatalogHandle(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
 
         $event->getConfiguration()->setDates(
-            $datetime->modify('-1 month'),
-            $datetime->modify('-1 month'),
-            $datetime->modify('-1 month')
+            $dateTime->modify('-1 month'),
+            $dateTime->modify('-1 month'),
+            $dateTime->modify('-1 month')
         );
 
         $user = new User('email@email.com', 'salt', 'password', 'fr');
@@ -105,7 +105,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
 
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets, $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets, $requestRepository->reveal());
         $menuButtonViews = $handler->handle($query);
 
         $this->assertEquals($expectedSubmenuButtonViews, $menuButtonViews);
@@ -113,12 +113,12 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
     public function testSheetHasLinkedSheets(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $event->getConfiguration()->setDates(
-            $datetime->modify('-1 month'),
-            $datetime->modify('-1 month'),
-            $datetime->modify('-1 month')
+            $dateTime->modify('-1 month'),
+            $dateTime->modify('-1 month'),
+            $dateTime->modify('-1 month')
         );
 
         $user = new User('email@email.com', 'salt', 'password', 'fr');
@@ -178,7 +178,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         ;
 
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $datetime, $canSeeOtherSheets, $requestRepository->reveal());
+        $handler = new CatalogSubmenuViewQueryHandler($navigationBuilder->reveal(), $dateTime, $canSeeOtherSheets, $requestRepository->reveal());
         $menuButtonViews = $handler->handle(
             new CatalogSubmenuViewQuery(
                 $user,
@@ -195,11 +195,11 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
     public function testSheetHandle(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $type = new Type($event);
         $user = new User('email@email.com', 'salt', 'password', 'fr');
-        $package = new Package($event, 'package', $datetime);
+        $package = new Package($event, 'package', $dateTime);
         $type->setPackage($package);
 
         $sheet = $this->prophesize(Sheet::class);
@@ -237,11 +237,11 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
     public function testSheetHandleWithStaticFormulation(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $type = new Type($event);
         $user = new User('email@email.com', 'salt', 'password', 'fr');
-        $package = new Package($event, 'package', $datetime);
+        $package = new Package($event, 'package', $dateTime);
         $type->setPackage($package);
 
         $sheet = $this->prophesize(Sheet::class);
@@ -281,7 +281,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
 
     public function testAgendaHandle(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = EventFactory::createEvent();
         $type = new Type($event);
         $user = new User('email@email.com', 'salt', 'password', 'fr');
@@ -289,7 +289,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->shouldBeCalled()->willReturn(1);
 
-        $package = new Package($event, 'package', $datetime);
+        $package = new Package($event, 'package', $dateTime);
         $type->setPackage($package);
 
         $locale = 'fr';

@@ -29,7 +29,7 @@ class BatchGenerateInvoiceHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var JobQueueInterface
@@ -40,20 +40,20 @@ class BatchGenerateInvoiceHandler
      * @param SheetRepositoryInterface $sheetRepository
      * @param CreateHandler            $createHandler
      * @param EventDispatcherInterface $eventDispatcher
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         CreateHandler $createHandler,
         EventDispatcherInterface $eventDispatcher,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         JobQueueInterface $jobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->createHandler   = $createHandler;
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->dateTime        = $dateTime;
         $this->jobQueue        = $jobQueue;
     }
 
@@ -99,7 +99,7 @@ class BatchGenerateInvoiceHandler
                 new SheetInvoicedEvent(
                     $batchGenerateInvoice->admin,
                     $event,
-                    $this->datetime,
+                    $this->dateTime,
                     $sheetInvoicedViews
                 )
             );

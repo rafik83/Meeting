@@ -60,15 +60,15 @@ class RequestPermissionManagerTest extends TestCase
     {
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $user     = new User('test@test.fr', 'test', 'test', 'fr');
         $user2    = new User('test2@test.fr', 'test2', 'test2', 'en');
-        $sheet    = new Sheet($event, $type, [], $user, $datetime);
-        $sheet2   = new Sheet($event, $type, [], $user2, $datetime);
-        $request  = new Request($sheet, [], $sheet2, [], $datetime, $user, $event);
+        $sheet    = new Sheet($event, $type, [], $user, $dateTime);
+        $sheet2   = new Sheet($event, $type, [], $user2, $dateTime);
+        $request  = new Request($sheet, [], $sheet2, [], $dateTime, $user, $event);
 
         return [
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request,
@@ -78,7 +78,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditFalseAsSheetIsTheToSheet()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -93,12 +93,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditFalseAsRequestIsApproved()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEdit(
             $request,
@@ -109,12 +109,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditFalseAsRequestIsRefused()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEdit(
             $request,
@@ -125,7 +125,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditFalseAsDateForAnsweringIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -142,7 +142,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditTrue()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -159,12 +159,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsRequestIsRefuseAndEditBySheetFrom()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
             $request,
@@ -175,7 +175,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsSheetToTryToEditSentRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -190,12 +190,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsSheetToTryToEditRefuseRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
             $request,
@@ -206,7 +206,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseForSheetFromAndSentRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -221,12 +221,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedTureAsRequestIsPlacedButMeetingNotPublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
@@ -243,12 +243,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsMeetingRequestUpdateIsLocked()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $sheet->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
@@ -260,12 +260,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsRequestIsPlacedAndMeetingPublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
@@ -282,12 +282,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedFalseAsDateToAnswerIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(false);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToEditApproved(
@@ -299,12 +299,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToEditApprovedTrueForSheetFromAndApprovedRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToEditApproved(
@@ -316,7 +316,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsDateAnsweringRequestIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -332,12 +332,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsRequestIsRefuseAndDoneBySheetFrom()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToCancel(
@@ -349,12 +349,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsRequestIsRefuseAndDoneBySheetTo()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
@@ -367,12 +367,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsSheetToIsTryingToCancel()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
@@ -385,7 +385,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelTrueAsRequestIsSentAndSheetFromIsTryingToCancel()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -402,12 +402,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsMeetingRequestUpdateIsLocked()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
         $sheet->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
 
@@ -420,13 +420,13 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelFalseAsRequestIsPlacedAndMeetingPublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
@@ -442,13 +442,13 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelTrueAsRequestIsPlacedAndMeetingNotPublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
         $meeting = new Meeting($request, $slot, $sheet, [], $sheet2, [], new \DateTime(), $spot, $this->event);
@@ -464,12 +464,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToCancelTrueAsRequestIsApprovedAndSheetFromIsTryingToCancel()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToCancel(
@@ -481,7 +481,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToRefuseFalseAsSheetFromIsTryingToRefuse()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -496,12 +496,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToRefuseFalseAsSheetToIsTryingToRefuseAnApprovedRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToRefuse(
             $request,
@@ -512,7 +512,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToRefuseFalseAsDateToAnswerRequestIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -528,7 +528,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToRefuseTrueAsSheetToIsTryingToRefuseSentRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -544,7 +544,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToApproveFalseAsSheetFromIsTryingToApprove()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -559,12 +559,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToApproveFalseAsSheetToIsTryingToApproveAnApprovedRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToApprove(
             $request,
@@ -575,12 +575,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToApproveFalseAsSheetToIsTryingToApproveRefusedRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
             ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToApprove(
             $request,
@@ -591,7 +591,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToApproveFalseAsDateToAnswerIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -607,7 +607,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToApproveTrueAsSheetToIsTryingToApproveSentRequest()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -623,7 +623,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeTrueForSheetFrom()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -638,7 +638,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeTrueForSheetTo()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -653,7 +653,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnRefuseFalseAsRequestIsNotRefuse()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -668,12 +668,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnRefuseFalseAsItIsDoneBySheetFrom()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
             $request,
@@ -684,12 +684,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnRefuseFalseAsUserIsNotOnSheet()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
             ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
             $request,
@@ -700,12 +700,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnRefuseFalseAsDateToAnswerIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
             ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
@@ -717,12 +717,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnRefuseTrueAsItIsDoneBySheetTo()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
             ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnRefuse(
@@ -734,12 +734,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsDateToAnswerRequestIsPassed()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
             ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(false);
 
@@ -752,7 +752,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsItIsDoneBySheetFrom()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -768,7 +768,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsSheetDoesNotHaveUser()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -784,7 +784,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsRequestIsNotApproved()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -800,12 +800,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveTrueAsRequestIsApprovedAndSheetToIsTryingToUnApproveIt()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToUnApprove(
@@ -817,12 +817,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsMeetingRequestUpdateAreLocked()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
         $sheet2->getEvent()->getConfiguration()->setMeetingRequestUpdateLocked(true);
         $this->answeringMeetingRequestAccessChecker->allowedToAccess($sheet2->getEvent())->shouldBeCalled()->willReturn(true);
 
@@ -835,12 +835,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveFalseAsMeetingsArePublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
@@ -858,12 +858,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToUnApproveTrueAsMeetingsAreNotPublished()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->approve($datetime);
+        $request->approve($dateTime);
 
         $slot    = new MeetingSlot($sheet->getEvent(), new \DateTime(), new \DateTime(), false);
         $spot    = SpotFactory::create($sheet->getEvent());
@@ -881,7 +881,7 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeConversationOfRefuseMeetingRequestFalseAsRequestIsNotRefused()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
@@ -896,12 +896,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeConversationOfRefuseMeetingRequestFalseAsItIsDoneByUnknownUser()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
         $sheet3 = SheetFactory::create();
 
         $this->assertEquals(false, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
@@ -913,12 +913,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeConversationOfRefuseMeetingRequestTrueAsItIsDoneByUser()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
             $sheet,
@@ -929,12 +929,12 @@ class RequestPermissionManagerTest extends TestCase
     public function testIsAllowedToSeeConversationOfRefuseMeetingRequestTrueAsItIsDoneByUser2()
     {
         list(
-            $datetime,
+            $dateTime,
             $sheet,
             $sheet2,
             $request
         ) = $this->getInitialsValue();
-        $request->refuse($datetime);
+        $request->refuse($dateTime);
 
         $this->assertEquals(true, $this->getRequestPermissionManager()->isAllowedToSeeConversationOfRefuseMeetingRequest(
             $sheet,

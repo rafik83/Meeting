@@ -2,30 +2,45 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery;
 use Proximum\Vimeet\Domain\Catalog\ExternalCatalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory\SearchFacetExternalFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CatalogExternalController extends Controller
+class CatalogExternalController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return Response
-     */
+    private SearchFacetExternalViewQueryHandler $searchFacetExternalViewQueryHandler;
+    private SearchFacetExternalFactory $searchFacetExternalFactory;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SearchFacetExternalViewQueryHandler $searchFacetExternalViewQueryHandler,
+        SearchFacetExternalFactory $searchFacetExternalFactory,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->searchFacetExternalViewQueryHandler = $searchFacetExternalViewQueryHandler;
+        $this->searchFacetExternalFactory = $searchFacetExternalFactory;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     public function indexAction(Request $request, EventDomain $eventDomain): Response
     {
         $event   = $eventDomain->getEvent();
@@ -34,19 +49,19 @@ class CatalogExternalController extends Controller
         $filters = [];
 
         try {
-            $searchFacetsView = $this->get('query.catalog.search_facet_external_view_query_handler')->handle(
+            $searchFacetsView = $this->searchFacetExternalViewQueryHandler->handle(
                 new SearchFacetExternalViewQuery($event, $locale)
             );
 
-            $searchForm = $this->get('form_factory.search_facet_external_factory')
+            $searchForm = $this->searchFacetExternalFactory
                 ->create($event, $locale, $filters, $searchFacetsView);
 
             $categoryViews = $searchFacetsView->hasCategory()
-                ? $this->get('form_factory.search_facet_external_factory')->getCategoryViews($event, $locale)
+                ? $this->searchFacetExternalFactory->getCategoryViews($event, $locale)
                 : null;
 
             $typeViews = $searchFacetsView->hasType()
-                ? $this->get('form_factory.search_facet_external_factory')->getTypeViews($event, $locale)
+                ? $this->searchFacetExternalFactory->getTypeViews($event, $locale)
                 : null
             ;
 
@@ -73,7 +88,7 @@ class CatalogExternalController extends Controller
         $filters = array_merge($filters, ExternalCatalog::DEFAULT_FILTERS);
 
         try {
-            $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+            $paginatedResult = $this->queryBus->handle(
                 new PaginatedSheetExternalViewQuery(
                     $event,
                     $filters,
@@ -87,13 +102,13 @@ class CatalogExternalController extends Controller
             throw $this->createNotFoundException($exception->getMessage());
         }
 
-        $searchForm = $this->get('form_factory.search_facet_external_factory')
+        $searchForm = $this->searchFacetExternalFactory
             ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations, $searchFacetsView);
-        $message = $this->get('tactician.commandbus.query')->handle(
+        $message = $this->queryBus->handle(
             new CatalogVisibilityMessageQuery($event, $locale)
         );
 
-        $registrationUrl = $this->get('tactician.commandbus.query')->handle(
+        $registrationUrl = $this->queryBus->handle(
             new CatalogVisibilityRegistrationUrlQuery($event)
         );
 
@@ -133,11 +148,6 @@ class CatalogExternalController extends Controller
 
     /**
      * Get localization asynchronously
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return JsonResponse
      */
     public function searchLocalizationAction(Request $request, EventDomain $eventDomain): JsonResponse
     {
@@ -151,7 +161,7 @@ class CatalogExternalController extends Controller
             return new JsonResponse([]);
         }
 
-        $localizationView = $this->get('tactician.commandbus.query')->handle(
+        $localizationView = $this->queryBus->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
                 $query,
@@ -163,12 +173,6 @@ class CatalogExternalController extends Controller
         return new JsonResponse($localizationView);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     *
-     * @return JsonResponse
-     */
     public function searchKeywordsAction(Request $request, EventDomain $eventDomain): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
@@ -181,7 +185,7 @@ class CatalogExternalController extends Controller
             return new JsonResponse([]);
         }
 
-        $keywordView = $this->get('tactician.commandbus.query')->handle(
+        $keywordView = $this->queryBus->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
                 $query,

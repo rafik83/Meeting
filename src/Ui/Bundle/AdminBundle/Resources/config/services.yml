@@ -111,7 +111,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
-            - '@ui.helper.currency_formatter'
+            - '@Proximum\Vimeet\Ui\Helper\CurrencyFormatter'
         tags:
             - { name: form.type }
     form_type_package.package_choice_type:
@@ -129,6 +129,7 @@ services:
             - '@security.authorization_checker'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.event_url_generator'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer'
         tags:
             - { name: form.type }
     form_type_event.create_type:
@@ -138,6 +139,7 @@ services:
             - '%infrastructure.preferred_locales%'
             - '@repository.invoice.prefix_repository'
             - '@security.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer'
         tags:
             - { name: form.type }
     form_type_type.type_update_type:
@@ -183,30 +185,29 @@ services:
         tags:
             - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType }
 
-    form_type_product.abstract_update_type:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType:
         abstract: true
         arguments:
             - '@domain.product.update_price_resolver'
             - '%feature_product_vat_enabled%'
     form_type_product.option_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.plan_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.planning_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\UpdatePlanningType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_product.participant_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType
-        parent: form_type_product.abstract_update_type
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         tags:
             - { name: form.type }
     form_type_partner.partner_type:
@@ -379,10 +380,10 @@ services:
     #
     # Helper
     #
-    ui.helper.currency_formatter:
-        class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
-        arguments:
-            - '@twig.extension.intl'
+    # ui.helper.currency_formatter:
+    #     class: Proximum\Vimeet\Ui\Helper\CurrencyFormatter
+        # arguments:
+        #     - '@twig.extension.intl'
 
     ui.helper.messaging_message_placeholder_helper:
         class: Proximum\Vimeet\Ui\Helper\Messaging\MessagePlaceholderHelper
@@ -396,93 +397,94 @@ services:
     #
     # Subscriber
     #
-    event_listener.locale_changed_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LocaleChangedEventSubscriber
-        arguments:
-            - '@repository.template.sheet_template_repository'
-            - '@repository.template.registration_template_repository'
-        tags:
-            - { name: kernel.event_subscriber }
-    event_listener.registration_template_updated_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Registration\RegistrationTemplateUpdatedEventSubscriber
-        arguments:
-            - '@repository.template.registration_template_repository'
-            - '@repository.filter.boolean_template_filter_repository'
-            - '@Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository'
-            - '@repository.filter.tagged_nomenclature_filter_repository'
-            - '@template.template_data_factory'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.locale_changed_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LocaleChangedEventSubscriber
+    #     arguments:
+    #         - '@repository.template.sheet_template_repository'
+    #         - '@repository.template.registration_template_repository'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # event_listener.registration_template_updated_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Registration\RegistrationTemplateUpdatedEventSubscriber
+    #     arguments:
+    #         - '@repository.template.registration_template_repository'
+    #         - '@repository.filter.boolean_template_filter_repository'
+    #         - '@Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository'
+    #         - '@repository.filter.tagged_nomenclature_filter_repository'
+    #         - '@template.template_data_factory'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
-            - '@domain.event.day.dday_guesser'
-            - '@router'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@security.token_storage'
-            - '@datetime'
-            - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Event\VisioCheckinSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+    #         - '@domain.event.day.dday_guesser'
+    #         - '@router'
+    #         - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@security.token_storage'
+    #         - '@datetime'
+    #         - '@Proximum\Vimeet\Domain\Participant\IsParticipantVisio'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener_meeting_request.smsnotifier_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest\SMSNotifierSubscriber
-        arguments:
-            - '@domain.event.day.dday_guesser'
-            - '@domain.user_event.user_event_phone_checker'
-            - '@adapter.smssender_alias'
-            - '@repository.user.event.extra_data_repository'
-            - '@service.smsfactory'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener_meeting_request.smsnotifier_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\MeetingRequest\SMSNotifierSubscriber
+    #     arguments:
+    #         - '@domain.event.day.dday_guesser'
+    #         - '@domain.user_event.user_event_phone_checker'
+    #         - '@adapter.smssender_alias'
+    #         - '@repository.user.event.extra_data_repository'
+    #         - '@service.smsfactory'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener_meeting.smsnotifier_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\SMSNotifierEventSubscriber
-        arguments:
-            - '@adapter.smssender_alias'
-            - '@service.smsfactory'
-            - '@domain.user_event.user_event_phone_checker'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener_meeting.smsnotifier_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\SMSNotifierEventSubscriber
+    #     arguments:
+    #         - '@adapter.smssender_alias'
+    #         - '@service.smsfactory'
+    #         - '@domain.user_event.user_event_phone_checker'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\PlanningModifiedEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Application\Command\User\Event\MeetingPlanningModifiedCommandHandler'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\PlanningModifiedEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Application\Command\User\Event\MeetingPlanningModifiedCommandHandler'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@adapter.sheet_indexer'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Product\ProductUpdatedEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Product\ProductUpdatedEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\GenerateParticipantProductSystemUnavailabilities'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
-        arguments:
-            - '@adapter.file_system_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
+    #     arguments:
+    #         - '@adapter.file_system_adapter'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\User\UserEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\User\UserEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Form\FillFormEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Template\Form\FillFormEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+    #     tags:
+    #         - { name: kernel.event_subscriber }

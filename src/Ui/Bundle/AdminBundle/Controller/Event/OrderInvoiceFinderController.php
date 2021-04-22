@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\Find\Find;
 use Proximum\Vimeet\Application\Command\Event\Find\FindResult;
 use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
@@ -10,21 +13,29 @@ use Proximum\Vimeet\Application\Exception\Order\InvalidNumeroOrderException;
 use Proximum\Vimeet\Application\Exception\Order\OrderNotFoundException;
 use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order\FindType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class OrderInvoiceFinderController extends Controller
+class OrderInvoiceFinderController extends AbstractController
 {
-    /**
-     * @param Request       $request
-     * @param UserInterface $admin
-     *
-     * @return Response
-     */
+    private TranslatorInterface $translator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     public function findAction(Request $request, UserInterface $admin): Response
     {
         $this->isGranted('ROLE_ALLOWED_TO_OPERATE');
@@ -36,7 +47,7 @@ class OrderInvoiceFinderController extends Controller
         if ($findForm->handleRequest($request)->isSubmitted() && $findForm->isValid()) {
             try {
                 /** @var FindResult $result */
-                $result = $this->get('tactician.commandbus')->handle($find);
+                $result = $this->commandBus->handle($find);
 
                 if ($result->hasOnlyOneSheet()) {
                     return $this->redirectToRoute('admin_sheet_details', [
@@ -46,7 +57,7 @@ class OrderInvoiceFinderController extends Controller
                     ]);
                 } else {
                     // Warn the user that there is multiple sheet with an invoice with this numero
-                    $multipleSheetsView = $this->get('tactician.commandbus.query')->handle(
+                    $multipleSheetsView = $this->queryBus->handle(
                         new MultipleSheetFoundViewQuery($find->numero, $result->getSheets())
                     );
                 }
@@ -67,12 +78,8 @@ class OrderInvoiceFinderController extends Controller
         ]);
     }
 
-    /**
-     * @param FormInterface $formElement
-     * @param string        $message
-     */
-    private function addError(FormInterface $formElement, $message)
+    private function addError(FormInterface $formElement, string $message): void
     {
-        $formElement->addError(new FormError($this->get('translator')->trans($message, [], 'validators')));
+        $formElement->addError(new FormError($this->translator->trans($message, [], 'validators')));
     }
 }

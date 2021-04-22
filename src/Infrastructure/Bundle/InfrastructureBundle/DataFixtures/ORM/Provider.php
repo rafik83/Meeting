@@ -27,15 +27,15 @@ class Provider
     }
 
     /**
-     * @param string $datetime
+     * @param string $dateTime
      * @param string $inputTimezone
      * @param string $outputTimezone
      *
      * @return \DateTimeInterface
      */
-    public function date($datetime, $inputTimezone, $outputTimezone)
+    public function date($dateTime, $inputTimezone, $outputTimezone)
     {
-        return (new \DateTime($datetime, new \DateTimeZone($inputTimezone)))
+        return (new \DateTime($dateTime, new \DateTimeZone($inputTimezone)))
             ->setTimezone(new \DateTimeZone($outputTimezone));
     }
 }

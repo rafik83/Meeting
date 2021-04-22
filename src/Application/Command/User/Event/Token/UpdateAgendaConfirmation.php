@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Event\Token;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class UpdateAgendaConfirmation
+class UpdateAgendaConfirmation implements Command
 {
     /** @var Event */
     public $event;

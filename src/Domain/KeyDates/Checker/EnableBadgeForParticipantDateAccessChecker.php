@@ -16,7 +16,7 @@ class EnableBadgeForParticipantDateAccessChecker extends AccessChecker
         $enableBadgeForParticipantDate = $event->getConfiguration()->getEnableBadgeForParticipantDate();
 
         if (null !== $enableBadgeForParticipantDate) {
-            return $enableBadgeForParticipantDate <= $this->datetime;
+            return $enableBadgeForParticipantDate <= $this->dateTime;
         }
 
         return false;

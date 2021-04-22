@@ -5,22 +5,64 @@ Feature: Meeting Request / Proposition
 
   Scenario: I can see my meeting requests
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Product.yml         |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Type.yml            |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Category.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Rule.yml            |
-      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
-    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
-    And I go to this page "/fr"
+    And the event "RDV Carnot" is created
+    And the domain for this event is "rdv-carnot.vimeet.proximum"
+    And the catalog visibility is configured
+    And the catalog is open since "2020-09-10 10:00:00"
+    And there is a type "Fournisseur" in this event
+    And this type is visible in catalog
+
+    And the user "test@fairness.coop" is created
+    And there is a sheet for this type with the title "Fairness"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a type "Donneur d'ordre" in this event
+    And this type is visible in catalog
+
+    And the user "user_1@proximum.com" is created
+    And there is a sheet for this type with the title "Company #1"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a request between "Company #1" and "Fairness"
+    And this request has been approved
+
+    And there is a type "Exposant" in this event
+    And this type is visible in catalog
+    And the user "user_2@proximum.com" is created
+    And there is a sheet for this type with the title "Company #2"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a request between "Fairness" and "Company #2"
+
+    And the user "user_3@proximum.com" is created
+    And there is a sheet for this type with the title "Company #3"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a request between "Company #3" and "Fairness"
+    And this request has been refused
+
+    And the user "user_4@proximum.com" is created
+    And there is a sheet for this type with the title "Company #4"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a request between "Fairness" and "Company #4"
+    And this request has been refused
+
+    And the user "user_5@proximum.com" is created
+    And there is a sheet for this type with the title "Company #5"
+    And there is a participant for this sheet and this user
+    And this sheet is validated
+    And this sheet is in catalog
+    And there is a request between "Company #5" and "Fairness"
+
+    And elastica is populate
+    And I am logged with "test@fairness.coop" on front
+
     When I go to this page "/fr/sheet/1/meeting/request"
     Then I should see "form.search.meeting.state.label"
     And I should see "form.search.meeting.state.all"
@@ -34,11 +76,8 @@ Feature: Meeting Request / Proposition
     And I should see "form.search.type.label"
     And the "type_0" checkbox should be checked
     And the "type_1" checkbox should be checked
-    And the "type_2" checkbox should be checked
-    And I should not see field "type_3"
-    And I should not see field "type_4"
     And I should see "Exposant"
-    And I should see "Investisseur"
+    And I should see "Donneur d'ordre"
     And I should see "catalog.meeting_request.proposition.approved"
     And I should see "catalog.meeting_request.pending"
     And I should see "catalog.meeting_request.request.refused"
@@ -46,12 +85,10 @@ Feature: Meeting Request / Proposition
     And I should see "catalog.meeting_request.approve"
     And I should see "catalog.meeting_request.refuse"
     And I should see "catalog.complete_sheet"
-    And I should see "Exposant"
 
   Scenario: I can filter by participant type (not see Exposant type)
-    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
-    And I go to this page "/fr"
-    When I go to this page "/fr/sheet/1/meeting/request"
-    Then I uncheck "type_2"
-    And I go to this page "/fr/sheet/1/meeting/request?type%5B%5D=3&type%5B%5D=4&type%5B%5D=2&type%5B%5D=5"
-    And I should not see "Exposant" in the "footer" element
+    Given there is an event with domain "rdv-carnot.vimeet.proximum"
+    And I am logged with "test@fairness.coop" on front
+
+    When I go to this page "/fr/sheet/1/meeting/request?type[]=0"
+    Then I should not see "Exposant" in the "footer" element

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class SubmitValidation
+class SubmitValidation implements Command
 {
     /**
      * @var Sheet

@@ -17,7 +17,7 @@ class CanAccessToWebinarTest extends TestCase
     private $happeningParticipationRepository;
 
     /** @var DateTime */
-    private $datetime;
+    private $dateTime;
 
     /** @var CanAccessToWebinar */
     private $canAccessToWebinar;
@@ -33,11 +33,11 @@ class CanAccessToWebinarTest extends TestCase
         $this->happening = $this->prophesize(Happening::class);
         $this->user = $this->prophesize(User::class);
 
-        $this->datetime = new DateTime('2020-04-12 09:33:00');
+        $this->dateTime = new DateTime('2020-04-12 09:33:00');
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $this->canAccessToWebinar = new CanAccessToWebinar(
             $this->happeningParticipationRepository->reveal(),
-            $this->datetime,
+            $this->dateTime,
             true,
             true
         );

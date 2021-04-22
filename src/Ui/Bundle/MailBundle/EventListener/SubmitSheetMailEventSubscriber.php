@@ -30,27 +30,27 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
     private $participantInfoGuesser;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @param ParticipantInfoGuesser   $participantInfoGuesser
      * @param AdminRepositoryInterface $adminRepository
      * @param MailerInterface          $mailer
      * @param string                   $sender
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      */
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         AdminRepositoryInterface $adminRepository,
         MailerInterface $mailer,
-        $sender,
-        \DateTimeInterface $datetime
+        string $mailerSender,
+        \DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->adminRepository        = $adminRepository;
         $this->mailer                 = $mailer;
-        $this->sender                 = $sender;
-        $this->datetime               = $datetime;
+        $this->sender                 = $mailerSender;
+        $this->dateTime               = $dateTime;
     }
 
     /**
@@ -93,7 +93,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $admin->getLocale(),
                 $event->getSheet(),
                 $admin,
-                $this->datetime,
+                $this->dateTime,
                 $sheetName,
                 $firstName,
                 $lastName
