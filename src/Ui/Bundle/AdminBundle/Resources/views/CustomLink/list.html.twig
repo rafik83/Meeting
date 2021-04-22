@@ -15,6 +15,7 @@
             <th class="col-md-3">{{ 'admin.custom_links.list.column.label'|trans }}</th>
             <th class="col-md-3">{{ 'admin.custom_links.list.column.url'|trans }}</th>
             <th class="col-md-4">{{ 'admin.custom_links.list.column.type'|trans }}</th>
+            <th class="col-md-4">{{ 'admin.custom_links.list.column.priority'|trans }}</th>
             <th class="col-md-2"></th>
         </tr>
         </thead>
@@ -30,6 +31,7 @@
                         {% endfor %}
                     </ul>
                 </td>
+                <td>{{ customLink.priority }}</td>
                 <td class="text-right">
                     <a href="{{ path('admin_event_custom_link_update', {
                         'event': event.id,
@@ -56,7 +58,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">{{ 'admin.custom_links.list.empty'|trans }}</td>
+                <td colspan="5">{{ 'admin.custom_links.list.empty'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

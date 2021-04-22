@@ -24,6 +24,8 @@ class CustomLink
 
     private string $buttonColor;
 
+    private int $priority;
+
     public function __construct(
         Event $event,
         StaticFormulation $staticFormulation,
@@ -31,7 +33,8 @@ class CustomLink
         string $iconName,
         string $iconColor,
         string $labelColor,
-        string $buttonColor
+        string $buttonColor,
+        int $priority
     ) {
         $this->event = $event;
         $this->staticFormulation = $staticFormulation;
@@ -40,6 +43,7 @@ class CustomLink
         $this->iconColor = $iconColor;
         $this->labelColor = $labelColor;
         $this->buttonColor = $buttonColor;
+        $this->priority = $priority;
     }
 
     public function getId(): int
@@ -95,6 +99,11 @@ class CustomLink
         return $this->buttonColor;
     }
 
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
     public function update(
         array $translations,
         array $types,
@@ -102,7 +111,8 @@ class CustomLink
         string $iconName,
         string $iconColor,
         string $labelColor,
-        string $buttonColor
+        string $buttonColor,
+        int $priority
     ): void {
         foreach ($translations as $locale => $translation) {
             $this->staticFormulation->translate($locale, $translation['title']);
@@ -114,5 +124,6 @@ class CustomLink
         $this->iconColor = $iconColor;
         $this->labelColor = $labelColor;
         $this->buttonColor = $buttonColor;
+        $this->priority = $priority;
     }
 }

@@ -23,6 +23,8 @@ class Update implements Command
 
     public string $buttonColor;
 
+    public int $priority;
+
     public function __construct(Event\CustomLink $customLink, array $locales)
     {
         $this->customLink = $customLink;
@@ -39,5 +41,6 @@ class Update implements Command
         $this->iconColor = $customLink->getIconColor();
         $this->labelColor = $customLink->getLabelColor();
         $this->buttonColor = $customLink->getButtonColor();
+        $this->priority = $customLink->getPriority();
     }
 }

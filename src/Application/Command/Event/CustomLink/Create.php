@@ -23,6 +23,8 @@ class Create implements Command
 
     public string $buttonColor;
 
+    public int $priority;
+
     public function __construct(Event $event, array $locales)
     {
         $this->event = $event;

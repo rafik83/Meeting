@@ -32,7 +32,8 @@ class CreateHandler
             $command->iconName,
             $command->iconColor,
             $command->labelColor,
-            $command->buttonColor
+            $command->buttonColor,
+            $command->priority
         );
 
         $this->customLinkRepository->add($customLink);

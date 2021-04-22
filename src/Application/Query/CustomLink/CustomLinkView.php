@@ -10,19 +10,18 @@ class CustomLinkView
     public string $label;
     public string $url;
     public array $typeTitles;
+    public int $priority;
 
     /**
-     * @param int      $id
-     * @param string   $label
-     * @param string   $url
      * @param string[] $typeTitles
      */
-    public function __construct(int $id, string $label, string $url, array $typeTitles)
+    public function __construct(int $id, string $label, string $url, array $typeTitles, int $priority)
     {
         $this->id = $id;
         $this->label = $label;
         $this->url = $url;
         $this->typeTitles = $typeTitles;
+        $this->priority = $priority;
     }
 
     public function getIntention(): string

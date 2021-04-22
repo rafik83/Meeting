@@ -27,6 +27,7 @@ class CustomLinkRepository implements CustomLinkRepositoryInterface
             ->select('custom_link')
             ->from(Event\CustomLink::class, 'custom_link')
             ->where('custom_link.event = :event')
+            ->orderBy('custom_link.priority')
             ->setParameter('event', $event)
         ;
 

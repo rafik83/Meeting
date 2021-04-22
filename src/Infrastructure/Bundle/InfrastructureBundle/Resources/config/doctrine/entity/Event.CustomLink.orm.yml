@@ -17,6 +17,8 @@ Proximum\Vimeet\Domain\Model\Event\CustomLink:
             type: string
         buttonColor:
             type: string
+        priority:
+            type: integer
     oneToOne:
         staticFormulation:
             targetEntity: Proximum\Vimeet\Domain\Model\StaticFormulation

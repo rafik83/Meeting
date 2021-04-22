@@ -22,7 +22,8 @@ class UpdateHandler
             $command->iconName,
             $command->iconColor,
             $command->labelColor,
-            $command->buttonColor
+            $command->buttonColor,
+            $command->priority
         );
 
         $this->customLinkRepository->set($command->customLink);

@@ -27,7 +27,8 @@ class CustomLinkListViewQueryHandler
                 array_map(
                     static fn(Type $type) => $type->getTitle($query->locale),
                     $customLink->getTypes()
-                )
+                ),
+                $customLink->getPriority()
             ),
             $customLinks
         );

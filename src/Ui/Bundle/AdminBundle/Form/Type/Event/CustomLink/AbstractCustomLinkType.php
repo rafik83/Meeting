@@ -8,6 +8,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\StaticFormulation\Translatio
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -85,6 +86,16 @@ class AbstractCustomLinkType extends AbstractType
                 ColorType::class,
                 [
                     'required' => true,
+                ]
+            )
+            ->add(
+                'priority',
+                IntegerType::class,
+                [
+                    'required' => true,
+                    'constraints' => [
+                        new NotBlank(),
+                    ],
                 ]
             )
         ;
