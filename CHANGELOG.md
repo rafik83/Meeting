@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Disable mailer spool, to enabled previous fix (closing smtp is not supported with spool)
+
 ## [2.88.0] - 2021-04-23
 ### Added
 - VIMEET-2395 - Header event width full
