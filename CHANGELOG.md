@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2355 - Add custom link administration
+
 ### Fixed
 - MV-324 - fix bad viewers count for speakers when opening webinar
 - Static formulation list : orignal title was always translated with event default locale
