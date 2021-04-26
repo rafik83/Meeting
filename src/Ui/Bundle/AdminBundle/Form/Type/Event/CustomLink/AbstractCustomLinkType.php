@@ -46,6 +46,7 @@ class AbstractCustomLinkType extends AbstractType
                 TextType::class,
                 [
                     'required' => true,
+                    'help' => 'form.custom_link_create.children.url.help',
                 ]
             )
             ->add(
