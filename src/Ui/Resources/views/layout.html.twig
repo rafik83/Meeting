@@ -129,6 +129,16 @@
     </div>
 {% endblock %}
 
+{% block style_guide_icon_widget %}
+    <div {{ block('widget_container_attributes') }}>
+        {% for child in form %}
+            <label class="style_guide_icon__label">
+            {{- form_widget(child) -}}
+            <i class="style_guide_icon__icon {{ child.vars.value }}"></i></label>
+        {% endfor %}
+    </div>
+{% endblock %}
+
 {% block _happening_update_translations_entry_webinarHeaderImage_row %}
     {{ form_row(form) }}
 

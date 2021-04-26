@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CustomLink;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\StaticFormulation\TranslationType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\StyleGuideIconType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -62,7 +63,7 @@ class AbstractCustomLinkType extends AbstractType
             )
             ->add(
                 'iconName',
-                TextType::class,
+                StyleGuideIconType::class,
                 [
                     'required' => true,
                 ]
