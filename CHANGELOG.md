@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- MV-331 - Add missing fontconfig lib
 
 ## [2.88.2] - 2021-04-26
 ### Fixed
@@ -12,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.88.1] - 2021-04-23
 ### Fixed
-- Disable mailer spool, to enabled previous fix (closing smtp is not supported with spool)
+- MV-330 - Disable mailer spool, to enabled previous fix (closing smtp is not supported with spool)
 
 ## [2.88.0] - 2021-04-23
 ### Added
@@ -20,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated
-- Close smtp transport after sending email, to avoid disconnection after timeout
+- MV-330 - Close smtp transport after sending email, to avoid disconnection after timeout
 
 ## [2.87.5] - 2021-04-20
 ### Fixed
