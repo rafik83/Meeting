@@ -13,7 +13,7 @@ class Create implements Command
 
     public array $types;
 
-    public string $url;
+    public array $localizedUrls;
 
     public string $iconName;
 
@@ -31,6 +31,9 @@ class Create implements Command
 
         foreach ($locales as $locale) {
             $this->translatedLabels[$locale] = [
+                'title' => '',
+            ];
+            $this->localizedUrls[$locale] = [
                 'title' => '',
             ];
         }

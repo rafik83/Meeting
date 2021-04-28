@@ -23,7 +23,13 @@
         {% for customLink in list.customLinkViews %}
             <tr>
                 <td>{{ customLink.label }}</td>
-                <td>{{ customLink.url }}</td>
+                <td>
+                    <ul>
+                        {% for locale, url in customLink.urls %}
+                            <li>{{ locale }} : {{ url }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
                 <td>
                     <ul>
                         {% for type in customLink.typeTitles %}

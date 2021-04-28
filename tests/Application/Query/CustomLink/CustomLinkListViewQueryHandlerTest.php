@@ -30,15 +30,36 @@ class CustomLinkListViewQueryHandlerTest extends TestCase
         $customLink1->getLabel('en')->willReturn('External link 1');
         $customLink1->getTypes()->willReturn([$type1->reveal()]);
         $customLink1->getPriority()->willReturn(0);
-        $customLink1->getUrl()->willReturn('https://example.org/1');
+        $customLink1->getLocalizedUrls()->willReturn()->willReturn([
+            new Event\LocalizedCustomLinkUrl(
+                $customLink1->reveal(),
+                'en',
+                'https://example.org/1/en'
+            ),
+            new Event\LocalizedCustomLinkUrl(
+                $customLink1->reveal(),
+                'fr',
+                'https://example.org/1/fr'
+            )
+        ]);
 
         $customLink2 = $this->prophesize(Event\CustomLink::class);
         $customLink2->getId()->willReturn(66);
         $customLink2->getLabel('en')->willReturn('External link 2');
         $customLink2->getTypes()->willReturn([$type1->reveal(), $type2->reveal(),]);
         $customLink2->getPriority()->willReturn(1);
-        $customLink2->getUrl()->willReturn('https://example.org/2');
-
+        $customLink2->getLocalizedUrls()->shouldBeCalled()->willReturn([
+           new Event\LocalizedCustomLinkUrl(
+               $customLink2->reveal(),
+               'en',
+               'https://example.org/1/en'
+           ),
+            new Event\LocalizedCustomLinkUrl(
+                $customLink2->reveal(),
+                'fr',
+                'https://example.org/1/fr'
+            )
+        ]);
         // dependency's prophesizes
 
         $customLinkRepository = $this->prophesize(CustomLinkRepositoryInterface::class);
@@ -54,8 +75,8 @@ class CustomLinkListViewQueryHandlerTest extends TestCase
         $result = $handler->handle($query);
 
         $expectedCustomLinkViews = [
-            new CustomLinkView(42, 'External link 1', 'https://example.org/1', ['Seller'], 0),
-            new CustomLinkView(66, 'External link 2', 'https://example.org/2', ['Seller', 'Buyer'], 1),
+            new CustomLinkView(42, 'External link 1', ['en' => 'https://example.org/1/en', 'fr' => 'https://example.org/1/fr'], ['Seller'], 0),
+            new CustomLinkView(66, 'External link 2', ['en' => 'https://example.org/1/en', 'fr' => 'https://example.org/1/fr'], ['Seller', 'Buyer'], 1),
         ];
         $expectedResult = new CustomLinkListView($expectedCustomLinkViews);
 

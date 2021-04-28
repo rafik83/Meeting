@@ -28,13 +28,16 @@ class CreateHandler
         $customLink = new CustomLink(
             $command->event,
             $staticFormulation,
-            $command->url,
             $command->iconName,
             $command->iconColor,
             $command->labelColor,
             $command->buttonColor,
             $command->priority
         );
+
+        foreach ($command->localizedUrls as $locale => $url) {
+            $customLink->setLocalizedUrl($locale, $url['title']);
+        }
 
         $this->customLinkRepository->add($customLink);
     }

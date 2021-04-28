@@ -42,11 +42,13 @@ class AbstractCustomLinkType extends AbstractType
                 ]
             )
             ->add(
-                'url',
-                TextType::class,
+                'localizedUrls',
+                CollectionType::class,
                 [
+                    'entry_type' => TranslationType::class,
                     'required' => true,
-                    'help' => 'form.custom_link_create.children.url.help',
+                    'entry_options'=>['help' => 'form.custom_link_create.children.url.help'],
+                    'label' => false,
                 ]
             )
             ->add(
@@ -106,6 +108,10 @@ class AbstractCustomLinkType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         foreach ($view->children['translatedLabels'] as $translation) {
+            $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
+        }
+
+        foreach ($view->children['localizedUrls'] as $translation) {
             $translation->vars['label'] = Intl::getLocaleBundle()->getLocaleName($translation->vars['name']);
         }
     }

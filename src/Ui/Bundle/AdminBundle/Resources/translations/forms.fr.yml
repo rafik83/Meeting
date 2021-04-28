@@ -257,6 +257,9 @@ form.custom_link_create.children.buttonColor.label: Couleur du bouton
 form.custom_link_create.children.iconColor.label: Couleur de l'icone
 form.custom_link_create.children.iconName.label: Icone
 form.custom_link_create.children.labelColor.label: Couleur du libellé
+form.custom_link_create.children.localizedUrls.label: URL
+form.custom_link_create.children.localizedUrls.prototype.children.title.label: URL
+form.custom_link_create.children.localizedUrls.prototype.label: URL
 form.custom_link_create.children.priority.label: Ordre
 form.custom_link_create.children.submit.label: Enregistrer
 form.custom_link_create.children.translatedLabels.prototype.children.title.label: 'Libellé du lien'
@@ -267,6 +270,9 @@ form.custom_link_update.children.buttonColor.label: Couleur du bouton
 form.custom_link_update.children.iconColor.label: Couleur de l'icone
 form.custom_link_update.children.iconName.label: Icone
 form.custom_link_update.children.labelColor.label: Couleur du libellé
+form.custom_link_update.children.localizedUrls.label: URL
+form.custom_link_update.children.localizedUrls.prototype.children.title.label: URL
+form.custom_link_update.children.localizedUrls.prototype.label: URL
 form.custom_link_update.children.priority.label: Ordre
 form.custom_link_update.children.submit.label: Enregistrer
 form.custom_link_update.children.translatedLabels.prototype.children.title.label: 'Libellé du lien'

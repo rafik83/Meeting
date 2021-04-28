@@ -7,8 +7,6 @@ Proximum\Vimeet\Domain\Model\Event\CustomLink:
             generator:
                 strategy: AUTO
     fields:
-        url:
-            type: string
         iconName:
             type: string
         iconColor:
@@ -30,3 +28,9 @@ Proximum\Vimeet\Domain\Model\Event\CustomLink:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+    oneToMany:
+        localizedUrls:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event\LocalizedCustomLinkUrl
+            mappedBy: customLink
+            indexBy: locale
+            cascade: ["persist", "remove"]

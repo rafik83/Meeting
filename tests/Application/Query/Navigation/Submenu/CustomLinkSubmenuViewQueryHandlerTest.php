@@ -37,7 +37,7 @@ class CustomLinkSubmenuViewQueryHandlerTest extends TestCase
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
         $customLink = $this->prophesize(Event\CustomLink::class);
-        $customLink->getUrl()->shouldBeCalled()->willReturn('https://example.net/42/test@yahoo.fr/{participantId}/25f9e794323b453885f5181f1b624d0b/746');
+        $customLink->getUrl('fr')->shouldBeCalled()->willReturn('https://example.net/42/test@yahoo.fr/{participantId}/25f9e794323b453885f5181f1b624d0b/746');
         $customLink->getIconName()->shouldBeCalled()->willReturn('icon-Panier_2');
         $customLink->getLabel('fr')->shouldBeCalled()->willReturn('Mon bouton');
         $customLink->getIconColor()->shouldBeCalled()->willReturn('#FF0000');
@@ -108,7 +108,7 @@ class CustomLinkSubmenuViewQueryHandlerTest extends TestCase
         $sheet->getType()->shouldBeCalled()->willReturn($type->reveal());
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
         $customLink = $this->prophesize(Event\CustomLink::class);
-        $customLink->getUrl()->shouldBeCalled()->willReturn('https://example.net/42/test@yahoo.fr/{participantId}/25f9e794323b453885f5181f1b624d0b/746/{techEventIdContact}');
+        $customLink->getUrl('fr')->shouldBeCalled()->willReturn('https://example.net/42/test@yahoo.fr/{participantId}/25f9e794323b453885f5181f1b624d0b/746/{techEventIdContact}');
         $customLink->getIconName()->shouldBeCalled()->willReturn('icon-Panier_2');
         $customLink->getLabel('fr')->shouldBeCalled()->willReturn('Mon bouton');
         $customLink->getIconColor()->shouldBeCalled()->willReturn('#FF0000');

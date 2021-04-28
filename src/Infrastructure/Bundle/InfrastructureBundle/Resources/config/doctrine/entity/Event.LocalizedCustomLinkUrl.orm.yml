@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Event\LocalizedCustomLinkUrl:
+    type:  entity
+    table: custom_link_localized_url
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        locale:
+            type: string
+        url:
+            type: string
+            length: 5000
+    manyToOne:
+        customLink:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event\CustomLink
+            inversedBy: localizedUrls
+            joinColumn:
+                onDelete: CASCADE

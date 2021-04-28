@@ -20,16 +20,23 @@ class CustomLinkListViewQueryHandler
         $customLinks = $this->customLinkRepository->findByEvent($query->event);
 
         $customLinkViews = array_map(
-            static fn(CustomLink $customLink) => new CustomLinkView(
-                $customLink->getId(),
-                $customLink->getLabel($query->locale),
-                $customLink->getUrl(),
-                array_map(
-                    static fn(Type $type) => $type->getTitle($query->locale),
-                    $customLink->getTypes()
-                ),
-                $customLink->getPriority()
-            ),
+            static function (CustomLink $customLink) use ($query) {
+                $urls = [];
+                foreach ($customLink->getLocalizedUrls() as $localizedUrl) {
+                    $urls[$localizedUrl->getLocale()] = $localizedUrl->getUrl();
+                }
+
+                return new CustomLinkView(
+                    $customLink->getId(),
+                    $customLink->getLabel($query->locale),
+                    $urls,
+                    array_map(
+                        static fn(Type $type) => $type->getTitle($query->locale),
+                        $customLink->getTypes()
+                    ),
+                    $customLink->getPriority()
+                );
+            },
             $customLinks
         );
 

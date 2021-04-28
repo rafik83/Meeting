@@ -18,7 +18,7 @@ class UpdateHandler
         $command->customLink->update(
             $command->translatedLabels,
             $command->types,
-            $command->url,
+            array_map(static fn (array $item) => $item['title'], $command->localizedUrls),
             $command->iconName,
             $command->iconColor,
             $command->labelColor,

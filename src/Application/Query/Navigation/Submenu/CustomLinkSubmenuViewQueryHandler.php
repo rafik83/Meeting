@@ -45,11 +45,11 @@ class CustomLinkSubmenuViewQueryHandler
 
         foreach ($customLinks as $customLink) {
             $needParticipantId = $needParticipantId || $this->urlContainsPlaceholder(
-                    $customLink->getUrl(),
+                    $customLink->getUrl($query->locale),
                     self::PLACEHOLDER_PARTICIPANT_ID
                 );
             $needTechEventIdContact = $needTechEventIdContact || $this->urlContainsPlaceholder(
-                    $customLink->getUrl(),
+                    $customLink->getUrl($query->locale),
                     self::PLACEHOLDER_TECH_EVENT_ID_CONTACT
                 );
         }
@@ -74,7 +74,7 @@ class CustomLinkSubmenuViewQueryHandler
         foreach ($customLinks as $customLink) {
 
             $needParticipantId = $this->urlContainsPlaceholder(
-                $customLink->getUrl(),
+                $customLink->getUrl($query->locale),
                 self::PLACEHOLDER_PARTICIPANT_ID
             );
 
@@ -83,7 +83,7 @@ class CustomLinkSubmenuViewQueryHandler
             }
 
             $needTechEventIdContact = $this->urlContainsPlaceholder(
-                $customLink->getUrl(),
+                $customLink->getUrl($query->locale),
                 self::PLACEHOLDER_TECH_EVENT_ID_CONTACT
             );
 
@@ -95,7 +95,7 @@ class CustomLinkSubmenuViewQueryHandler
             $submenuButtonViews[] = new SubmenuButtonView(
                 $customLink->getIconName(),
                 $customLink->getLabel($locale),
-                $this->uriTemplate->render($customLink->getUrl(), $values),
+                $this->uriTemplate->render($customLink->getUrl($query->locale), $values),
                 false,
                 null,
                 false,

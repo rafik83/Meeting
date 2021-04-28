@@ -8,18 +8,20 @@ class CustomLinkView
 {
     public int $id;
     public string $label;
-    public string $url;
+    /** @var string[]  */
+    public array $urls;
     public array $typeTitles;
     public int $priority;
 
     /**
      * @param string[] $typeTitles
+     * @param string[] $urls
      */
-    public function __construct(int $id, string $label, string $url, array $typeTitles, int $priority)
+    public function __construct(int $id, string $label, array $urls, array $typeTitles, int $priority)
     {
         $this->id = $id;
         $this->label = $label;
-        $this->url = $url;
+        $this->urls = $urls;
         $this->typeTitles = $typeTitles;
         $this->priority = $priority;
     }

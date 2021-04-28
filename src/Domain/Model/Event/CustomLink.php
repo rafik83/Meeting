@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Model\Event;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\StaticFormulation;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -14,7 +15,8 @@ class CustomLink
 
     private StaticFormulation $staticFormulation;
 
-    private string $url;
+    /** @var LocalizedCustomLinkUrl[]|ArrayCollection */
+    private $localizedUrls;
 
     private string $iconName;
 
@@ -29,7 +31,6 @@ class CustomLink
     public function __construct(
         Event $event,
         StaticFormulation $staticFormulation,
-        string $url,
         string $iconName,
         string $iconColor,
         string $labelColor,
@@ -38,7 +39,7 @@ class CustomLink
     ) {
         $this->event = $event;
         $this->staticFormulation = $staticFormulation;
-        $this->url = $url;
+        $this->localizedUrls = new ArrayCollection();
         $this->iconName = $iconName;
         $this->iconColor = $iconColor;
         $this->labelColor = $labelColor;
@@ -64,9 +65,13 @@ class CustomLink
         return $this->staticFormulation->getTypes();
     }
 
-    public function getUrl(): string
+    public function getUrl($locale): string
     {
-        return $this->url;
+        if ($this->hasUrl($locale)) {
+            return $this->localizedUrls->get($locale)->getUrl();
+        }
+
+        return '';
     }
 
     public function getEvent(): Event
@@ -104,10 +109,15 @@ class CustomLink
         return $this->priority;
     }
 
+    public function hasUrl(string $locale): bool
+    {
+        return $this->localizedUrls->containsKey($locale);
+    }
+
     public function update(
         array $translations,
         array $types,
-        string $url,
+        array $localizedUrls,
         string $iconName,
         string $iconColor,
         string $labelColor,
@@ -119,11 +129,31 @@ class CustomLink
         }
         $this->staticFormulation->update($types);
 
-        $this->url = $url;
         $this->iconName = $iconName;
         $this->iconColor = $iconColor;
         $this->labelColor = $labelColor;
         $this->buttonColor = $buttonColor;
         $this->priority = $priority;
+
+        foreach ($localizedUrls as $locale => $localizedUrl) {
+            $this->setLocalizedUrl($locale, $localizedUrl);
+        }
+    }
+
+    public function setLocalizedUrl(string $locale, string $url): void
+    {
+        if ($this->localizedUrls->containsKey($locale)) {
+            $this->localizedUrls->get($locale)->update($url);
+        } else {
+            $this->localizedUrls->set($locale, new LocalizedCustomLinkUrl($this, $locale, $url));
+        }
+    }
+
+    /**
+     * @return LocalizedCustomLinkUrl[]
+     */
+    public function getLocalizedUrls(): array
+    {
+        return $this->localizedUrls->toArray();
     }
 }

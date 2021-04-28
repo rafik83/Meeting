@@ -13,7 +13,7 @@ class Update implements Command
 
     public array $types;
 
-    public string $url;
+    public array $localizedUrls;
 
     public string $iconName;
 
@@ -33,10 +33,13 @@ class Update implements Command
             $this->translatedLabels[$locale] = [
                 'title' => $customLink->getStaticFormulation()->getTitle($locale),
             ];
+
+            $this->localizedUrls[$locale] = [
+                'title' => $customLink->getUrl($locale),
+            ];
         }
 
         $this->types = $customLink->getTypes();
-        $this->url = $customLink->getUrl();
         $this->iconName = $customLink->getIconName();
         $this->iconColor = $customLink->getIconColor();
         $this->labelColor = $customLink->getLabelColor();

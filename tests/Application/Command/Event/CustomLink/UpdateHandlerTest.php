@@ -26,7 +26,8 @@ class UpdateHandlerTest extends TestCase
         $customLink = $this->prophesize(CustomLink::class);
         $customLink->getStaticFormulation()->willReturn($staticFormulation->reveal());
         $customLink->getTypes()->willReturn([$type1->reveal()]);
-        $customLink->getUrl()->willReturn('https://example.org/1');
+        $customLink->getUrl('fr')->willReturn('https://example.org/1');
+        $customLink->getUrl('en')->willReturn('https://example.org/2');
         $customLink->getIconName()->willReturn('prev-icon');
         $customLink->getIconColor()->willReturn('#aaaaaa');
         $customLink->getLabelColor()->willReturn('#bbbbbb');
@@ -35,7 +36,7 @@ class UpdateHandlerTest extends TestCase
         $customLink->update(
             ['fr' => ['title' => 'titre à jour'], 'en' => ['title' => 'updated title'],],
             [$type2->reveal()],
-            'https://example.org/2',
+            ['fr' => 'https://example.org/1', 'en'  => 'https://example.org/2'],
             'loader-icon',
             '#111111',
             '#222222',
@@ -56,7 +57,7 @@ class UpdateHandlerTest extends TestCase
         $update->iconName = 'loader-icon';
         $update->translatedLabels = ['fr' => ['title' => 'titre à jour'], 'en' => ['title' => 'updated title'],];
         $update->types = [$type2->reveal()];
-        $update->url = 'https://example.org/2';
+        $update->localizedUrls = ['fr' => ['title' => 'https://example.org/1'], 'en' => ['title' => 'https://example.org/2'],];
         $update->iconColor = '#111111';
         $update->labelColor = '#222222';
         $update->buttonColor = '#333333';

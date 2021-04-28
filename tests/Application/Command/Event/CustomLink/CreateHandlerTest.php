@@ -27,17 +27,21 @@ class CreateHandlerTest extends TestCase
         // dependency's prophesizes
 
         $customLinkRepository = $this->prophesize(CustomLinkRepositoryInterface::class);
+        $customLink = new Event\CustomLink(
+            $event->reveal(),
+            $staticFormulation->reveal(),
+            'phone-icon',
+            '#333333',
+            '#222222',
+            '#111111',
+            3
+        );
+
+        $customLink->setLocalizedUrl('fr','http://google.fr');
+        $customLink->setLocalizedUrl('en','http://google.com');
+
         $customLinkRepository->add(
-            new Event\CustomLink(
-                $event->reveal(),
-                $staticFormulation->reveal(),
-                'https://example.org/',
-                'phone-icon',
-                '#333333',
-                '#222222',
-                '#111111',
-                3
-            )
+            $customLink
         )->shouldBeCalled()
         ;
 
@@ -66,7 +70,10 @@ class CreateHandlerTest extends TestCase
         $command->buttonColor = '#111111';
         $command->labelColor = '#222222';
         $command->iconColor = '#333333';
-        $command->url = 'https://example.org/';
+        $command->localizedUrls = [
+            'en' => ['title' => 'http://google.com'],
+            'fr' => ['title' => 'http://google.fr'],
+        ];
         $command->translatedLabels = [
             'en' => ['title' => 'External link'],
             'fr' => ['title' => 'Lien externe'],
