@@ -1263,6 +1263,7 @@ admin.transactional.mail.list.disabled: Désactivé
 admin.transactional.mail.list.generic.title: 'Email génériques'
 admin.transactional.mail.list.key.mail_agenda_version_diff_changed: 'Notification automatique de la modification du planning'
 admin.transactional.mail.list.key.mail_happening_participation_automatically_updated: 'Recalcule automatique des sous-événements suite à changement de plage de disponbilité'
+admin.transactional.mail.list.key.mail_meeting_follow_up: 'Reprise de contact après rendez-vous'
 admin.transactional.mail.list.key.mail_order_confirmed: 'Commande passée'
 admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Participant ajouté à votre fiche'
 admin.transactional.mail.list.key.mail_pre_registered: Pre-enregistrement
@@ -1287,6 +1288,10 @@ admin.transactional.mail.substitution.parameter.description.%agendaLink%: 'Lien 
 admin.transactional.mail.substitution.parameter.description.%agendaLinkWithCTA%: 'CTA avec lien vers l''agenda'
 admin.transactional.mail.substitution.parameter.description.%agendaModifications%: 'Liste des modifications du planning'
 admin.transactional.mail.substitution.parameter.description.%currentEmail%: 'Email courant'
+admin.transactional.mail.substitution.parameter.description.%evaluatedSheet%: 'Titre de la fiche évaluée (recevant l''email)'
+admin.transactional.mail.substitution.parameter.description.%evaluatingSheet%: 'Titre de la fiche au nom de laquelle le participant a donné l''évaluation'
+admin.transactional.mail.substitution.parameter.description.%meetingEvaluation%: 'Note donnée au meeting'
+admin.transactional.mail.substitution.parameter.description.%metParticipants%: 'Liste des participants (de la fiche ayant donné la note), avec téléphone et email affichés en fonction des règles de qui voit qui'
 admin.transactional.mail.substitution.parameter.description.%event%: 'Titre de l''événément'
 admin.transactional.mail.substitution.parameter.description.%firstName%: 'Prénom du participant'
 admin.transactional.mail.substitution.parameter.description.%fromType%: 'Type de participation d''origine'
