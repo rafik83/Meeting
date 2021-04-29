@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -23,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateActionTest extends TestCase
 {
@@ -36,7 +36,7 @@ class UpdateActionTest extends TestCase
     private $formFactory;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $flashBag;
@@ -65,7 +65,7 @@ class UpdateActionTest extends TestCase
         $this->commandBus = $this->prophesize(CommandBus::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
 
@@ -93,14 +93,14 @@ class UpdateActionTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
 
         $action = new UpdateAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -121,14 +121,14 @@ class UpdateActionTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
 
         $action = new UpdateAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -151,14 +151,14 @@ class UpdateActionTest extends TestCase
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
         $this->formFactory->create(Argument::any())->shouldNotBeCalled();
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
 
         $action = new UpdateAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -213,21 +213,21 @@ class UpdateActionTest extends TestCase
         ;
 
         $this->router->generate(Argument::any())->shouldNotBeCalled();
-        $response = new Response();
-        $this->engine->renderResponse(
+        $response = new Response('Update Form');
+        $this->twig->render(
             UpdateAction::TEMPLATE,
             [
                 'event' => $this->event->reveal(),
                 'form' => $formView->reveal(),
             ]
         )->shouldBeCalled()
-            ->willReturn($response);
+            ->willReturn('Update Form');
 
         $action = new UpdateAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
@@ -284,14 +284,14 @@ class UpdateActionTest extends TestCase
             ->willReturn($form->reveal())
         ;
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->router->generate('admin_tip_event_list', ['event' => 12])->shouldBeCalled()->willReturn('route');
 
         $action = new UpdateAction(
             $this->commandBus->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->flashBag->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );

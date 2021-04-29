@@ -17,7 +17,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Ad
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\DuplicateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -25,6 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class DuplicateActionTest extends TestCase
 {
@@ -41,7 +41,7 @@ class DuplicateActionTest extends TestCase
     private $commandBus;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $template;
@@ -58,7 +58,7 @@ class DuplicateActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->template = $this->prophesize(RegistrationTemplate::class);
         $this->admin = $this->prophesize(Admin::class);
         $this->adminDomain = new AdminDomain($this->admin->reveal());
@@ -75,7 +75,7 @@ class DuplicateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();
@@ -104,7 +104,7 @@ class DuplicateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $request = new Request();
@@ -149,15 +149,15 @@ class DuplicateActionTest extends TestCase
         $form->handleRequest($request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $response = new Response();
-        $this->engine
-            ->renderResponse(
+        $response = new Response('Duplicate form');
+        $this->twig
+            ->render(
                 'AdminBundle:RegistrationTemplate:duplicate.html.twig', [
                     'template' => $this->template->reveal(),
                     'form' => $view->reveal()
                 ]
             )->shouldBeCalled()
-            ->willReturn($response)
+            ->willReturn('Duplicate form')
         ;
 
         $controller = new DuplicateAction(
@@ -165,7 +165,7 @@ class DuplicateActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $controller($request, $this->template->reveal(), $this->adminDomain);
@@ -227,14 +227,14 @@ class DuplicateActionTest extends TestCase
             ->willReturn('/path/to/route')
         ;
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $controller = new DuplicateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->router->reveal(),
             $this->commandBus->reveal(),
-            $this->engine->reveal()
+            $this->twig->reveal()
         );
 
         $result = $controller($request, $this->template->reveal(), $this->adminDomain);

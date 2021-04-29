@@ -95,6 +95,23 @@ class AccessManager
         $this->eventRepository->set($event);
     }
 
+    public function setHappeningsOpenDate(\DateTime $dateTime, Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $dateTime,
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            $event->getConfiguration()->getRegistrationOpenDate(),
+            $event->getConfiguration()->getRegistrationCloseDate()
+        );
+
+        $this->eventRepository->set($event);
+    }
+
     /**
      * @param Event $event
      */
@@ -107,11 +124,11 @@ class AccessManager
 
     /**
      * @param Event     $event
-     * @param \DateTime $datetime
+     * @param \DateTime $dateTime
      */
-    public function openCatalog(Event $event, \DateTime $datetime)
+    public function openCatalog(Event $event, \DateTime $dateTime)
     {
-        $event->getConfiguration()->setDates($datetime);
+        $event->getConfiguration()->setDates($dateTime);
 
         $this->eventRepository->set($event);
     }

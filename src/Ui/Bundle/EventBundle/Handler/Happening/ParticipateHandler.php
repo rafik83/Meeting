@@ -30,7 +30,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ParticipateHandler
 {
@@ -52,8 +52,8 @@ class ParticipateHandler
     /** @var PackageProductsNeededByHappening */
     private $packageProductsNeededByHappening;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -80,7 +80,7 @@ class ParticipateHandler
         ParticipantsAllowedToAccessQueryHandler $participantsAllowedToAccessQueryHandler,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
         PackageProductsNeededByHappening $packageProductsNeededByHappening,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
         TranslatorInterface $translator,
@@ -94,7 +94,7 @@ class ParticipateHandler
         $this->participantsAllowedToAccessQueryHandler = $participantsAllowedToAccessQueryHandler;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
         $this->packageProductsNeededByHappening = $packageProductsNeededByHappening;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->router = $router;
         $this->translator = $translator;
@@ -118,7 +118,7 @@ class ParticipateHandler
             return new JsonResponse(
                 [
                     'status' => 'show-form',
-                    'html' => $this->engine->render(
+                    'html' => $this->twig->render(
                         'EventBundle:Program/Partials:max-number-happening-participation-reached.html.twig',
                         [
                             'title' => $happening->getTitle($request->getLocale())
@@ -401,7 +401,7 @@ class ParticipateHandler
         return new JsonResponse(
             [
                 'status' => 'show-form',
-                'html' => $this->engine->render(
+                'html' => $this->twig->render(
                     'EventBundle:Program/Partials:participate-modal.html.twig',
                     [
                         'event' => $sheet->getEvent(),

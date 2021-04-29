@@ -2,31 +2,58 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilterSummary;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterPartType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
+    private FormFactoryInterface $formFactory;
+    private FilterSummary $filterSummary;
+    private TypeRepositoryInterface $typeRepository;
+    private TranslatorInterface $translator;
+    private EventUrlGeneratorInterface $urlGenerator;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        FilterSummary $filterSummary,
+        TypeRepositoryInterface $typeRepository,
+        TranslatorInterface $translator,
+        EventUrlGeneratorInterface $urlGenerator,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->formFactory = $formFactory;
+        $this->typeRepository = $typeRepository;
+        $this->filterSummary = $filterSummary;
+        $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -59,14 +86,13 @@ class UserController extends Controller
         }
 
         if (!isset($filters['type'])) {
-            $filters['types'] = $this
-                ->get('vimeet_infrastructure.repository.type_repository')
+            $filters['types'] = $this->typeRepository
                 ->getAllowedTypesByEvent($this->getUser(), $event);
         } else {
             $filters['types'] = [$filters['type']];
         }
 
-        $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+        $paginatedResult = $this->queryBus->handle(
             new UserListViewQuery($event, $locale, $request->query->get('page', 1), $filters)
         );
 
@@ -77,18 +103,11 @@ class UserController extends Controller
             'paginatedResult'  => $paginatedResult,
             'filter_form'      => $filterFormView,
             'filter_part_form' => $filterPartForm->createView(),
-            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
+            'filters_summary'  => $this->filterSummary->getFilters($filterFormView, $filters, $event, $locale),
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param User    $user
-     *
-     * @return Response
-     */
-    public function showAction(Request $request, Event $event, User $user)
+    public function showAction(Request $request, Event $event, User $user): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -110,13 +129,13 @@ class UserController extends Controller
 
         if ($forgottenPasswordForm->handleRequest($request)->isSubmitted() && $forgottenPasswordForm->isValid()) {
             /** @var ForgottenPasswordToken $forgottenPasswordToken */
-            $forgottenPasswordToken = $this->get('tactician.commandbus')->handle($forgottenPassword);
+            $forgottenPasswordToken = $this->commandBus->handle($forgottenPassword);
             $this->addFlash(
                 'success',
-                $this->get('translator')->trans(
+                $this->translator->trans(
                     'admin.user.requestedNewPasswordLink',
                     [
-                        '%url%' => $this->get('adapter.event_url_generator')->generateEventAbsoluteUrl(
+                        '%url%' => $this->urlGenerator->generateEventAbsoluteUrl(
                             $event,
                             'event_create_new_password',
                             [
@@ -135,10 +154,7 @@ class UserController extends Controller
         }
 
         try {
-            $view = $this
-                ->get('query.user.user_details_view_query_handler')
-                ->handle(new UserDetailsViewQuery($user, $event))
-            ;
+            $view = $this->queryBus->handle(new UserDetailsViewQuery($user, $event));
         } catch (UserEventMissingException $userEventMissingException) {
             throw $this->createNotFoundException($userEventMissingException->getMessage());
         } catch (SheetNotFoundException $sheetNotFoundException) {
@@ -153,16 +169,9 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * @param string $type
-     * @param array  $data
-     * @param array  $options
-     *
-     * @return FormInterface
-     */
-    private function createFilterForm($type, $data, array $options = [])
+    private function createFilterForm(string $type, array $data, array $options = []): FormInterface
     {
-        return $this->get('form.factory')->createNamed('', $type, $data, array_merge($options, [
+        return $this->formFactory->createNamed('', $type, $data, array_merge($options, [
             'method'             => 'GET',
             'csrf_protection'    => false,
             'required'           => false,

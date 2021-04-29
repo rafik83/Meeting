@@ -21,19 +21,23 @@ agenda.availability.save: 'Enregistrer mes disponibilités'
 agenda.day.hide: 'Cacher cette journée'
 agenda.day.see: 'Voir la journée'
 agenda.meeting.details: Details
-agenda.meeting.edit.button: 'Modifier'
+agenda.meeting.edit.button: Modifier
+agenda.meeting.move.back: Retour
+agenda.meeting.move.button: 'Déplacer le RDV'
+agenda.meeting.move.no_available_slots: 'Le rendez-vous ne peut être déplacé car il n''y a pas de d''autres disponibilités conjointes'
+agenda.meeting.move.success: 'Le RDV a bien été déplacé'
+agenda.meeting.ownSheetParticipants: 'Participe au rendez-vous :'
+agenda.meeting.remove.button: Supprimer
+agenda.meeting.remove.confirm: 'Confirmer la suppression ?'
+agenda.meeting.remove.success: 'Le RDV a bien été supprimé'
 agenda.meeting.udpate.back: Retour
 agenda.meeting.update.no_available_slots: 'Le rendez-vous ne peut être modifié car il n''y a pas de d''autres disponibilités conjointes'
 agenda.meeting.update.success: 'Le RDV a bien été modifié'
-agenda.meeting.ownSheetParticipants: 'Participe au rendez-vous :'
-agenda.meeting.remove.button: 'Supprimer'
-agenda.meeting.remove.confirm: 'Confirmer la suppression ?'
-agenda.meeting.remove.success: 'Le RDV a bien été supprimé'
 agenda.meeting.updateSlot.error: 'Impossible de modifier ce RDV'
 agenda.myAgenda.button.title: 'Mon agenda'
 agenda.participant.view: 'Agenda de %participant%'
 agenda.sheetAgenda.button.title: 'Agenda global'
-agenda.sheetAgenda.participantsAgenda.title: "Agenda des participants"
+agenda.sheetAgenda.participantsAgenda.title: 'Agenda des participants'
 agenda.sheetAgenda.title: 'Agenda global'
 agenda.slot.available: Disponible
 agenda.slot.imperative-presence: 'Votre présence est impérative.'
@@ -200,7 +204,7 @@ event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien 
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 event.visio.agenda_access: 'Cliquez ici pour accéder à votre agenda'
 event.visio.close_warning_preparation: 'Fermer ce message'
-event.visio.preparation: "Le webinaire n’est pas encore ouvert au public, vous pouvez préparer votre intervention.\nUn compte à rebours vous indique l’heure de début du webinaire. Vous pouvez alors cliquer sur \"Ouvrir au public\"."
+event.visio.preparation: "Le webinaire n’est pas encore ouvert au public, vous pouvez préparer votre intervention. \nUn compte à rebours vous indique l’heure de début du webinaire. Vous pouvez alors cliquer sur \"Ouvrir au public\"."
 event.visio.settings.askPermissions: 'Activer votre caméra et votre micro'
 event.visio.settings.askPermissionsDenial: 'Vous devez valider les permissions pour pouvoir rejoindre un rendez-vous visio. Rechargez la page pour réessayer. Si le problème persiste, contactez nous.'
 event.visio.settings.askPermissionsDescription: "Vous êtes sur le point de rejoindre une room visio.\nPour que les autres participants puissent vous voir et vous entendre, votre navigateur va vous demander l'autorisation d'accéder à votre caméra et votre micro.\nVous aurez la possibilité de les désactiver à n'importe quel moment du rendez-vous."
@@ -227,7 +231,7 @@ event.visio.test.edge: 'Votre navigateur, Edge, n''est pas compatible pour effec
 event.visio.test.error.network.api: 'Impossible de se connecter au serveur de visio conférence. Veuillez vérifier votre connexion ou la configuration de votre navigateur web afin d''autoriser l''accès à votre appareil photo et votre matériel audio.'
 event.visio.test.loading: 'Merci de patienter...'
 event.visio.test.network: Réseau
-event.visio.test.quality: 'Qualité'
+event.visio.test.quality: Qualité
 event.visio.test.screenSharing: 'Partage d''écran'
 event.visio.test.start: 'Démarrer le test'
 event.visio.test.testInProgress: 'Test en cours'
@@ -287,13 +291,14 @@ happening.webinar.confirmDeleteReply: 'Souhaitez-vous supprimer la réponse ?'
 happening.webinar.desktopNotificationBody: 'Cliquez ici pour retourner dans le webinaire'
 happening.webinar.desktopNotificationTitle: 'Vous présentez à l’ensemble des participants'
 happening.webinar.end: Arrêter
-happening.webinar.ended: Évènement terminé
+happening.webinar.ended: 'Évènement terminé'
 happening.webinar.endingAt: 'Fin dans'
-happening.webinar.invisibleMode.button: 'Invisible mode'
-happening.webinar.invisibleMode.enableConfirmation: 'Activate the invisible mode (your microphone is muted and you do not appear on the screen)?'
-happening.webinar.invisibleMode.option: 'Invisible mode'
-happening.webinar.invisibleMode.optionHelp: 'Your microphone is muted and you do not appear on the screen. You can deactivate the invisible mode at any time by clicking on the button :'
-happening.webinar.invisibleMode.quitConfirmation: 'Exit invisible mode and activate your camera and microphone?'
+happening.webinar.endingAtTime: 'Fin à %endTime%'
+happening.webinar.invisibleMode.button: 'Mode invisible'
+happening.webinar.invisibleMode.enableConfirmation: 'Activez le mode invisible (votre microphone est coupé et vous n''apparaissez pas à l''écran)'
+happening.webinar.invisibleMode.option: 'Mode invisible'
+happening.webinar.invisibleMode.optionHelp: 'Votre microphone est coupé et vous n''apparaissez pas à l''écran. Vous pouvez désactiver le mode invisible à tout moment en cliquant sur le bouton :'
+happening.webinar.invisibleMode.quitConfirmation: 'Quitter le mode invisible et activer votre caméra et votre microphone?'
 happening.webinar.media.share: Partager
 happening.webinar.media.stopSharing: 'Arrêter le partage'
 happening.webinar.media.videoshare.title: 'Partager une vidéo'
@@ -302,10 +307,10 @@ happening.webinar.messageChatConfirm: 'Souhaitez-vous effacer le message ?'
 happening.webinar.messageQuestionConfirm: 'Souhaitez-vous effacer la question ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.muteStreamConfirm: 'Souhaitez-vous désactiver le micro du speaker ?'
-happening.webinar.open: Ouvrir au public
+happening.webinar.open: 'Ouvrir au public'
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.reply: 'Réponse de %name% :'
-happening.webinar.questions.reply_button: 'Répondre'
+happening.webinar.questions.reply_button: Répondre
 happening.webinar.questions.reply_writing: '%name% est en train de répondre...'
 happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Retirer mon vote'
@@ -318,9 +323,9 @@ happening.webinar.screenshare.end: 'Arrêter le partage de mon écran'
 happening.webinar.screenshare.start: 'Partager mon écran'
 happening.webinar.screenshare.thereIsAlreadyAScreenShareInProgress: 'Il y a déjà un partage d''écran en cours.'
 happening.webinar.start: Démarrez
-happening.webinar.timeToOpen.message: Il est l’heure.
-happening.webinar.timeToOpen.notOpen.button: Pas maintenant
-happening.webinar.timeToOpen.open.button: Ouvrir au public
+happening.webinar.timeToOpen.message: 'Il est l’heure.'
+happening.webinar.timeToOpen.notOpen.button: 'Pas maintenant'
+happening.webinar.timeToOpen.open.button: 'Ouvrir au public'
 happening.webinar.viewers: 'Connectés :'
 happening.webinar.waiting.message: 'Le webinaire va démarrer dans quelques instants.'
 invoice.list.column.date: Date
@@ -450,8 +455,8 @@ networking.chat.visio.no.response: 'votre interlocuteur ne répond pas'
 networking.chat.visio.pending: 'En attente de confirmation'
 networking.chat.visio.refuse: 'Votre appel a été refusé'
 networking.chat.visio.request: 'Appel visio'
-networking.chat.visio.request.message.author: 'Vous avez reçu un appel visio de :'
 networking.chat.visio.request.message: 'Acceptez-vous cet appel visio ?'
+networking.chat.visio.request.message.author: 'Vous avez reçu un appel visio de :'
 networking.chat.with: 'Chat privé avec %user%'
 networking.participants.intro: 'cliquez sur un participant pour lancer une conversation privée'
 networking.participants.search: 'Chercher dans la liste'
@@ -751,7 +756,7 @@ timezone.america-dawson_creek: 'Dawson Creek'
 timezone.america-denver: Denver
 timezone.america-detroit: Detroit
 timezone.america-dominica: Dominica
-timezone.america-edmonton: Edmonton
+timezone.america-edmonton: 'Edmonton / Calgary'
 timezone.america-eirunepe: Eirunepe
 timezone.america-el_salvador: 'El Salvador'
 timezone.america-fort_nelson: 'Fort Nelson'
@@ -834,7 +839,7 @@ timezone.america-sao_paulo: 'Sao Paulo'
 timezone.america-scoresbysund: Scoresbysund
 timezone.america-sitka: Sitka
 timezone.america-st_barthelemy: 'St Barthelemy'
-timezone.america-st_johns: 'St Johns'
+timezone.america-st_johns: 'Saint Johns'
 timezone.america-st_kitts: 'St Kitts'
 timezone.america-st_lucia: 'St Lucia'
 timezone.america-st_thomas: 'St Thomas'
@@ -844,11 +849,11 @@ timezone.america-tegucigalpa: Tegucigalpa
 timezone.america-thule: Thule
 timezone.america-thunder_bay: 'Thunder Bay'
 timezone.america-tijuana: Tijuana
-timezone.america-toronto: Toronto
+timezone.america-toronto: 'Toronto / Montréal'
 timezone.america-tortola: Tortola
 timezone.america-vancouver: Vancouver
 timezone.america-whitehorse: Whitehorse
-timezone.america-winnipeg: Winnipeg
+timezone.america-winnipeg: 'Winnipeg / Regina / Saskatoon'
 timezone.america-yakutat: Yakutat
 timezone.america-yellowknife: Yellowknife
 timezone.antarctica-casey: Casey

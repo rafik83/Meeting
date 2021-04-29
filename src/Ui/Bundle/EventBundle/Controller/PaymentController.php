@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
@@ -9,31 +10,58 @@ use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
+use Proximum\Vimeet\Domain\Cart\CartCleaner;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
+use Proximum\Vimeet\Infrastructure\Payum\Paypal\PreparePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
-class PaymentController extends Controller
+class PaymentController extends AbstractController
 {
+    private FunnelFactory $packageFunnelFactory;
+    private CartCleaner $cartCleaner;
+    private TotalToPay $paymentTotalToPay;
+    private PreparePayment $preparePayment;
+    private CapturePayment $capturePayment;
+    private FlashBagInterface $flashBag;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        FunnelFactory $packageFunnelFactory,
+        CartCleaner $cartCleaner,
+        TotalToPay $paymentTotalToPay,
+        PreparePayment $preparePayment,
+        CapturePayment $capturePayment,
+        FlashBagInterface $flashBag,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->packageFunnelFactory = $packageFunnelFactory;
+        $this->cartCleaner = $cartCleaner;
+        $this->paymentTotalToPay = $paymentTotalToPay;
+        $this->preparePayment = $preparePayment;
+        $this->capturePayment = $capturePayment;
+        $this->flashBag = $flashBag;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param UserDomain  $userDomain
-     *
      * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
-     *
-     * @return Response
      */
     public function paymentChoiceAction(
         Request $request,
@@ -45,7 +73,7 @@ class PaymentController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
-        $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $funnel    = $this->packageFunnelFactory->create($sheet, $request->getLocale());
         $user = $userDomain->getUser();
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
@@ -60,29 +88,26 @@ class PaymentController extends Controller
         }
 
         $now   = new \DateTime();
-        $this->get('cart_cleaner')->handle($sheet);
-        $total = $this->get('payment.total_to_pay')->getTotal($sheet);
+        $this->cartCleaner->handle($sheet);
+        $total = $this->paymentTotalToPay->getTotal($sheet);
 
         // If nothing to pay, create the order
         if ($total <= 0) {
             $create = new Create($sheet, $user);
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
 
             return $this->redirectToRoute('event_order_list', [
                 'sheet' => $sheet->getId(),
             ]);
         }
 
-        $paymentConditionsView = $this
-            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
-            ->handle(new PaymentConditionsViewQuery($sheet))
-        ;
+        $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($sheet));
         $depositAllowed = DepositApplicable::isApplicable($paymentConditionsView, $now, $total);
         $deposit        = DepositApplicable::calculateDeposit($paymentConditionsView, $now, $total);
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
-            $this->get('tactician.commandbus')->handle(new Create($sheet, $user));
+            $this->commandBus->handle(new Create($sheet, $user));
 
             return $this->redirectToRoute('event_order_list', [
                 'sheet' => $sheet->getId(),
@@ -104,7 +129,7 @@ class PaymentController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 /** @var Transaction $transaction */
-                $transaction = $this->get('tactician.commandbus')->handle($paymentChoice);
+                $transaction = $this->commandBus->handle($paymentChoice);
                 $this->consumePackageCompletedPaymentFlash();
 
                 if ($transaction->isPaypal()) {
@@ -126,7 +151,7 @@ class PaymentController extends Controller
             }
         }
 
-        $paymentInfoView = $this->get(QueryBusInterface::class)->handle(new InfoViewQuery($sheet, $request->getLocale()));
+        $paymentInfoView = $this->queryBus->handle(new InfoViewQuery($sheet, $request->getLocale()));
 
         return $this->render('EventBundle:Payment:choice.html.twig', [
             'event' => $eventDomain->getEvent(),
@@ -139,39 +164,23 @@ class PaymentController extends Controller
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Transaction $transaction
-     *
-     * @return RedirectResponse
-     */
     public function preparePaypalAction(
         Request $request,
-        EventDomain $eventDomain,
         Sheet $sheet,
         Transaction $transaction
-    ) {
+    ): RedirectResponse {
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $captureToken = $this->get('vimeet.payum.paypal.prepare_payment')->process($transaction, $request->getLocale());
+        $captureToken = $this->preparePayment->process($transaction, $request->getLocale());
 
         return $this->redirect($captureToken->getTargetUrl());
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return Response
-     */
-    public function donePaymentAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function donePaymentAction(Request $request, Sheet $sheet): Response
     {
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $status = $this->get('vimeet.payum.paypal.capture_payment')->process($request);
+        $status = $this->capturePayment->process($request);
 
         $this->addFlash(
             CapturePayment::STATUS_SUCCESS === $status ? 'success' : 'error',
@@ -181,10 +190,7 @@ class PaymentController extends Controller
         return $this->redirectToRoute('event_order_list', ['sheet' => $sheet->getId()]);
     }
 
-    /**
-     * @return bool
-     */
-    private function hasPackageCompletedPaymentFlash()
+    private function hasPackageCompletedPaymentFlash(): bool
     {
         $sheetId = $this->consumePackageCompletedPaymentFlash();
 
@@ -195,13 +201,10 @@ class PaymentController extends Controller
         return !empty($sheetId);
     }
 
-    /**
-     * @return null|int
-     */
-    private function consumePackageCompletedPaymentFlash()
+    private function consumePackageCompletedPaymentFlash(): ?int
     {
-        $sheetId = $this->get('session')->getFlashBag()->get('package_completed_payment');
+        $sheetId = $this->flashBag->get('package_completed_payment');
 
-        return $sheetId;
+        return array_pop($sheetId);
     }
 }

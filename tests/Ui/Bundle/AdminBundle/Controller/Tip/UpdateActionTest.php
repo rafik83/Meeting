@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Command\Tip\Update;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\UpdateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -21,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateActionTest extends TestCase
 {
@@ -37,7 +37,7 @@ class UpdateActionTest extends TestCase
     private $router;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $authorizationCheckerAdapter;
@@ -48,7 +48,7 @@ class UpdateActionTest extends TestCase
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
     }
 
@@ -64,7 +64,7 @@ class UpdateActionTest extends TestCase
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal()
         );
@@ -108,8 +108,8 @@ class UpdateActionTest extends TestCase
         ;
 
         $this->router->generate(Argument::any())->shouldNotBeCalled();
-        $this->engine
-            ->renderResponse(UpdateAction::TEMPLATE, ['form' => $formView->reveal()])
+        $this->twig
+            ->render(UpdateAction::TEMPLATE, ['form' => $formView->reveal()])
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -118,7 +118,7 @@ class UpdateActionTest extends TestCase
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal()
         );
@@ -164,13 +164,13 @@ class UpdateActionTest extends TestCase
         ;
 
         $this->router->generate('admin_tip_list')->shouldBeCalled()->willReturn('route');
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $action = new UpdateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->flashBag->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->router->reveal()
         );

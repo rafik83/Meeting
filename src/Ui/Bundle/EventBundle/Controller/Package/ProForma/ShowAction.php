@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ShowAction
 {
@@ -23,17 +23,17 @@ class ShowAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order): Response
@@ -56,7 +56,7 @@ class ShowAction
             )
         );
 
-        return new Response($this->engine->render('EventBundle:Order:pro_forma.html.twig', [
+        return new Response($this->twig->render('EventBundle:Order:pro_forma.html.twig', [
             'event' => $eventDomain->getEvent(),
             'pro_forma' => $view,
             'sheet' => $sheet,

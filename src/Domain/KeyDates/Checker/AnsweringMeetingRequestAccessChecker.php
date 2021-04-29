@@ -20,6 +20,6 @@ class AnsweringMeetingRequestAccessChecker extends AccessChecker
             return true;
         }
 
-        return $this->datetime <= $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
+        return $this->dateTime <= $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
     }
 }

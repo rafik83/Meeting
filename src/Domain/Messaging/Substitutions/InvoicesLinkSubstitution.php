@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
+use Twig\Environment;
 
 class InvoicesLinkSubstitution implements SubstituteInterface
 {
@@ -20,22 +21,12 @@ class InvoicesLinkSubstitution implements SubstituteInterface
      */
     private $invoiceUrlViewQueryHandler;
 
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * InvoicesLinkSubstitution constructor.
-     *
-     * @param InvoiceRepositoryInterface $invoiceRepository
-     * @param InvoiceUrlViewQueryHandler $invoiceUrlViewQueryHandler
-     * @param \Twig_Environment          $twig
-     */
     public function __construct(
         InvoiceRepositoryInterface $invoiceRepository,
         InvoiceUrlViewQueryHandler $invoiceUrlViewQueryHandler,
-        \Twig_Environment $twig
+        Environment $twig
     ) {
         $this->invoiceRepository          = $invoiceRepository;
         $this->invoiceUrlViewQueryHandler = $invoiceUrlViewQueryHandler;

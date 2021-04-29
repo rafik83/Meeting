@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting\Message;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Meeting;
 
-class DiscussionMeetingRequestViewQuery
+class DiscussionMeetingRequestViewQuery implements Query
 {
     /**
      * @var Meeting\Request

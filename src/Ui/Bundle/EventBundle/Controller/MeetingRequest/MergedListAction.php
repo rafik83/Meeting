@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class MergedListAction
 {
@@ -26,8 +26,8 @@ class MergedListAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -37,12 +37,12 @@ class MergedListAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->queryBus = $queryBus;
     }
@@ -108,7 +108,7 @@ class MergedListAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/MeetingRequestMergedList/list.html.twig',
                 [
                     'event' => $event,

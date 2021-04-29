@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Message;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-final class ListQuery
+final class ListQuery implements Query
 {
     /**
      * @var Event

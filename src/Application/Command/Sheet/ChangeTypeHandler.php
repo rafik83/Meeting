@@ -30,7 +30,7 @@ class ChangeTypeHandler
     private $translator;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var StepManager */
     private $registrationStepManager;
@@ -56,7 +56,7 @@ class ChangeTypeHandler
      * @param TranslatorInterface        $translator
      * @param DelayedEventDispatcher     $eventDispatcher
      * @param StepManager                $registrationStepManager
-     * @param \DateTimeInterface         $datetime
+     * @param \DateTimeInterface         $dateTime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -67,14 +67,14 @@ class ChangeTypeHandler
         TranslatorInterface $translator,
         DelayedEventDispatcher $eventDispatcher,
         StepManager $registrationStepManager,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->sheetRepository         = $sheetRepository;
         $this->orderRepository         = $orderRepository;
         $this->cancelPackageHandler    = $cancelPackageHandler;
         $this->translator              = $translator;
         $this->eventDispatcher         = $eventDispatcher;
-        $this->datetime                = $datetime;
+        $this->dateTime                = $dateTime;
         $this->registrationStepManager = $registrationStepManager;
         $this->meetingRepository       = $meetingRepository;
         $this->enableDisableManager    = $enableDisableManager;
@@ -127,7 +127,7 @@ class ChangeTypeHandler
             new SheetChangedTypeEvent(
                 $changeType->sheet,
                 $changeType->admin,
-                $this->datetime,
+                $this->dateTime,
                 $this->translator->trans('admin.sheet.trace.changed_type_comment', [
                     '%fromType%' => $previousType->getTitle($changeType->locale),
                     '%toType%'   => $changeType->type->getTitle($changeType->locale),

@@ -20,24 +20,24 @@ class CreateHandler
     private $eventDispatcher;
 
     /** @var \DateTimeInterface */
-    protected $datetime;
+    protected $dateTime;
 
     /**
      * @param Cart\Converter         $converter
      * @param Cart\CartManager       $cartManager
      * @param DelayedEventDispatcher $eventDispatcher
-     * @param \DateTimeInterface     $datetime
+     * @param \DateTimeInterface     $dateTime
      */
     public function __construct(
         Cart\Converter $converter,
         Cart\CartManager $cartManager,
         DelayedEventDispatcher $eventDispatcher,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
         $this->converter       = $converter;
         $this->cartManager     = $cartManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime        = $datetime;
+        $this->dateTime        = $dateTime;
     }
 
     public function handle(Create $create): void

@@ -45,7 +45,7 @@ flash.admin.happening.category.create.success: 'La catégorie de sous-événemen
 flash.admin.happening.category.update.success: 'La catégorie de sous événement a bien été mise à jour'
 flash.admin.happening.create.success: 'Le sous-événement a bien été créé'
 flash.admin.happening.empty: 'Il n''y a aucune conférence à exporter pour cet événement'
-flash.admin.happening.error.maxDuration: 'Les webinaires diffusé en HLS ne peuvent pas durer plus de 10h'
+flash.admin.happening.error.maxDuration: 'Les webinaires diffusés en HLS ne peuvent pas durer plus de 10h'
 flash.admin.happening.participation.empty: 'Il n''y a aucun participant à exporter pour ces conférences'
 flash.admin.happening.participation.export_scheduled: 'L''export des participants aux conférences est en cours. Vous recevrez un email contenant le lien vers le fichier dès qu''il est prêt.'
 flash.admin.happening.update.success: 'Le sous-événement a bien été mis à jour'

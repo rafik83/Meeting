@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -10,7 +10,7 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20190531134044 extends AbstractMigration
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
@@ -18,7 +18,7 @@ class Version20190531134044 extends AbstractMigration
         $this->addSql('ALTER TABLE tip ADD display VARCHAR(255) DEFAULT \'default\' NOT NULL, ADD condition_has_cart TINYINT(1) DEFAULT NULL, ADD condition_has_remaining_to_pay TINYINT(1) DEFAULT NULL, ADD condition_is_phone_confirmed TINYINT(1) DEFAULT NULL, ADD condition_is_complete_sheet TINYINT(1) DEFAULT NULL, ADD condition_has_pending_meeting_proposition TINYINT(1) DEFAULT NULL, ADD condition_on_orders LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json_array)\'');
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');

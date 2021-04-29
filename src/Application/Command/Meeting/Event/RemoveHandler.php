@@ -22,7 +22,7 @@ class RemoveHandler
     private $eventDispatcher;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var MessageRepositoryInterface */
     private $messageRepository;
@@ -38,12 +38,12 @@ class RemoveHandler
         MeetingRepositoryInterface $meetingRepository,
         DelayedEventDispatcherInterface $eventDispatcher,
         CanRemoveMeeting $canRemoveMeeting,
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         RequestRepositoryInterface $requestRepository
     ) {
         $this->meetingRepository  = $meetingRepository;
         $this->eventDispatcher = $eventDispatcher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->messageRepository = $messageRepository;
         $this->canRemoveMeeting = $canRemoveMeeting;
         $this->requestRepository = $requestRepository;
@@ -70,7 +70,7 @@ class RemoveHandler
                     $request,
                     $command->sheet,
                     $command->content,
-                    $this->datetime
+                    $this->dateTime
                 );
                 $this->messageRepository->add($message);
                 $request->setUpdateOrDeleteReasonMessage($message);

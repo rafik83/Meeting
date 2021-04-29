@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Rooming\Export;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 
-class MailToAdmin
+class MailToAdmin implements Command
 {
     /** @var Event */
     public $event;

@@ -2,32 +2,36 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\Update;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryUpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
+    private CategoryRepositoryInterface $categoryRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository, CommandBusInterface $commandBus)
+    {
+        $this->categoryRepository = $categoryRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $categories = $this
-            ->get('vimeet_infrastructure.repository.category_repository')
+        $categories = $this->categoryRepository
             ->paginate($request->query->get('page', 1), 20, $event->getId(), $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Category:list.html.twig', [
@@ -55,7 +59,7 @@ class CategoryController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
+            $this->commandBus->handle($create);
             $this->addFlash('success', 'flash.admin.category.create.success');
 
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);
@@ -91,7 +95,7 @@ class CategoryController extends Controller
         $form->add('submit', SubmitType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
             $this->addFlash('success', 'flash.admin.category.update.success');
 
             return $this->redirectToRoute('admin_category_list', ['event' => $event->getId()]);

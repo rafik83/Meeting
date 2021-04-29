@@ -18,6 +18,6 @@ class NetworkingAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime <= $event->getConfiguration()->getNetworkingCloseDate() && $this->datetime >= $event->getConfiguration()->getNetworkingOpenDate();
+        return $this->dateTime <= $event->getConfiguration()->getNetworkingCloseDate() && $this->dateTime >= $event->getConfiguration()->getNetworkingOpenDate();
     }
 }

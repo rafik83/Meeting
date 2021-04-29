@@ -3,9 +3,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Connect;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class GoogleConnectController extends Controller
+class GoogleConnectController extends AbstractController
 {
     /** @var ClientRegistry */
     private $clientRegistry;
@@ -22,7 +22,8 @@ class GoogleConnectController extends Controller
             ->redirect(
                 [
                     'https://www.googleapis.com/auth/userinfo.email',
-                ]
+                ],
+                []
             );
     }
 }

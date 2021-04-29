@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.yml }
+    # - { resource: security.yml }
+    # - { resource: services.yml }
     - { resource: elasticsearch.yml }
     - { resource: packages/knpu_oauth2_client.yml }
 
@@ -12,36 +12,37 @@ parameters:
     # should be set to deployed version hash on k8s environments
     app_version: '%env(APP_VERSION)%'
     env(APP_VERSION): dev
+    mailer_sender: '%env(MAILER_SENDER)%'
 
 framework:
-    esi: { enabled: true }
-    translator:
-        fallbacks: ["%locale%"]
-        logging: false
-    secret:          "%secret%"
-    router:
-        resource: "%kernel.project_dir%/app/config/routing.yml"
-        strict_requirements: ~
+    # esi: { enabled: true }
+    # translator:
+    #     fallbacks: ["%locale%"]
+    #     logging: false
+    # secret:          "%secret%"
+    # router:
+    #     resource: "%kernel.project_dir%/app/config/routing.yml"
+    #     strict_requirements: ~
     form:            ~
-    csrf_protection: ~
+    # csrf_protection: ~
     validation:      { enable_annotations: false }
     serializer:      { enable_annotations: false }
     templating:
         engines: ['twig']
-    default_locale:  "%locale%"
+    # default_locale:  "%locale%"
     trusted_hosts:   ~
 #    trusted_proxies: "%trusted_proxies%"
-    session:
-        cookie_secure:   true
-        handler_id:      snc_redis.session.handler
-        name:            vimeet
-        gc_probability:  ~
-        cookie_lifetime: 86400
-        gc_maxlifetime:  86400
+    # session:
+    #     cookie_secure:   true
+    #     handler_id:      snc_redis.session.handler
+    #     name:            vimeet
+    #     gc_probability:  ~
+    #     cookie_lifetime: 86400
+    #     gc_maxlifetime:  86400
     fragments: { path: /_fragment }
-    http_method_override: true
+    # http_method_override: true
     assets:
-        json_manifest_path: '%kernel.project_dir%/web/assets/manifest.json'
+        json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
     php_errors:
         log: true
 
@@ -66,19 +67,19 @@ twig:
 
 # Doctrine Configuration
 doctrine:
-    dbal:
-        server_version: 5.6
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        schema_filter: ~^(?!sessions)~
+    # dbal:
+    #     server_version: 5.6
+    #     driver:   pdo_mysql
+    #     host:     "%database_host%"
+    #     port:     "%database_port%"
+    #     dbname:   "%database_name%"
+    #     user:     "%database_user%"
+    #     password: "%database_password%"
+    #     charset:  UTF8
+    #     schema_filter: ~^(?!sessions)~
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #     e.g. database_path: "%kernel.project_dir%/data/data.db3"
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
@@ -91,32 +92,12 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
+                dir: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
         dql:
             string_functions:
                 MD5: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Doctrine\Extension\Md5
-
-# Swiftmailer Configuration
-swiftmailer:
-    default_mailer: default
-    mailers:
-        default:
-            transport:  "%mailer_transport%"
-            host:       "%mailer_host%"
-            username:   "%mailer_user%"
-            password:   "%mailer_password%"
-            port:       "%mailer_port%"
-            encryption: "%mailer_encryption%"
-            spool:      { type: memory }
-        error:
-            transport:  "%mailer_error_transport%"
-            host:       "%mailer_error_host%"
-            username:   "%mailer_error_user%"
-            password:   "%mailer_error_password%"
-            port:       "%mailer_error_port%"
-            encryption: "%mailer_error_encryption%"
 
 # Sonata Intl Configuration
 sonata_intl:
@@ -142,20 +123,20 @@ infrastructure:
     bundle_guideline_path: "%kernel.project_dir%/src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
-    print_planning_path: '%kernel.project_dir%/web/uploads/print_planning'
-    print_sheet_path: '%kernel.project_dir%/web/uploads/print_sheet'
-    export_transactions_path: '%kernel.project_dir%/web/uploads/export_transactions'
-    export_order_path: '%kernel.project_dir%/web/uploads/export_orders'
-    export_products_path: '%kernel.project_dir%/web/uploads/export_products'
-    export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'
-    import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
-    import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
+    print_planning_path: '%kernel.project_dir%/public/uploads/print_planning'
+    print_sheet_path: '%kernel.project_dir%/public/uploads/print_sheet'
+    export_transactions_path: '%kernel.project_dir%/public/uploads/export_transactions'
+    export_order_path: '%kernel.project_dir%/public/uploads/export_orders'
+    export_products_path: '%kernel.project_dir%/public/uploads/export_products'
+    export_planner_path: '%kernel.project_dir%/public/uploads/export_planner'
+    import_planner_path: '%kernel.project_dir%/public/uploads/import_planner'
+    import_spot_path: '%kernel.project_dir%/public/uploads/import_spots/'
     import_authentication_token_path: '%shared_uploaded_files%/import_authentication_tokens/'
     encrypted_files_path: '%shared_uploaded_files%/encrypted_files/'
-    export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
+    export_omz_path: '%kernel.project_dir%/public/uploads/export_omz'
     common_export_path: '%shared_uploaded_files%/export/'
     export_participant_path: '%shared_uploaded_files%/export/participant/'
-    export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
+    export_spot_path: '%kernel.project_dir%/public/uploads/export_spot'
     export_form_template_user_data_path: '%shared_uploaded_files%/export/form-template/'
     export_rooming_list_path: '%shared_uploaded_files%/export/rooming-list/'
     print_invoices_path: '%shared_uploaded_files%/export/invoices'
@@ -186,7 +167,7 @@ tactician:
 # Liip Imagine Bundle
 #
 liip_imagine:
-    driver: imagick
+    driver: gd
     resolvers:
         default:
             web_path: ~
@@ -222,28 +203,28 @@ liip_imagine:
                 thumbnail:  { size: [250, 100], mode: inset }
 
 # Doctrine migrations configuration
-doctrine_migrations:
-    dir_name: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
-    namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
-    table_name: migration_versions
-    name: Application Migrations
+# doctrine_migrations:
+#     dir_name: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
+#     namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
+#     table_name: migration_versions
+#     name: Application Migrations
 
-payum:
-    security:
-        token_storage:
-            Proximum\Vimeet\Domain\Model\Payment\PaymentToken: { doctrine: orm }
-    storages:
-        Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
-    gateways:
-        paypal_express_checkout:
-            factory: paypal_express_checkout
-            username:  "%paypal_username%"
-            password:  "%paypal_password%"
-            signature: "%paypal_signature%"
-            sandbox:   "%paypal_sandbox%"
-            payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
-        offline:
-            factory: offline
+# payum:
+#     security:
+#         token_storage:
+#             Proximum\Vimeet\Domain\Model\Payment\PaymentToken: { doctrine: orm }
+#     storages:
+#         Proximum\Vimeet\Domain\Model\Payment\Payment: { doctrine: orm }
+#     gateways:
+#         paypal_express_checkout:
+#             factory: paypal_express_checkout
+#             username:  "%paypal_username%"
+#             password:  "%paypal_password%"
+#             signature: "%paypal_signature%"
+#             sandbox:   "%paypal_sandbox%"
+#             payum.action.store_notification: '@vimeet.payum.paypal.action.store_notification'
+#         offline:
+#             factory: offline
 
 # Sentry configuration (Data source name)
 sentry:

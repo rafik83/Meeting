@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class ChangeMail
+class ChangeMail implements Command
 {
     /** @var User */
     public $user;

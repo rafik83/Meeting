@@ -29,7 +29,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
     private $eventDispatcher;
 
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function setup()
     {
@@ -39,7 +39,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
 
         $this->adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $this->datetime = new \DateTime();
+        $this->dateTime = new \DateTime();
     }
 
     public function testFirstFailWithExistingAdmin()
@@ -54,8 +54,8 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
         $foundAdmin = $this->prophesize(Admin::class);
-        $foundAdmin->updateLastFailedAuthentication($this->datetime)->shouldBeCalled();
-        $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(false);
+        $foundAdmin->updateLastFailedAuthentication($this->dateTime)->shouldBeCalled();
+        $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)->shouldBeCalled()->willReturn(false);
 
         $this->adminRepository->findByEmail('test@yahoo.fr')->shouldBeCalled()->willReturn($foundAdmin->reveal());
         $this->adminRepository->set($foundAdmin->reveal())->shouldBeCalled();
@@ -66,7 +66,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
             $this->requestStack->reveal(),
             $this->adminRepository->reveal(),
             $this->eventDispatcher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $authenticationFailureSubscriber->processException($authenticationFailureEvent->reveal());
@@ -84,8 +84,8 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
         $authenticationFailureEvent->getAuthenticationToken()->shouldBeCalled()->willReturn($token->reveal());
 
         $foundAdmin = $this->prophesize(Admin::class);
-        $foundAdmin->updateLastFailedAuthentication($this->datetime)->shouldBeCalled();
-        $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->datetime)->shouldBeCalled()->willReturn(true);
+        $foundAdmin->updateLastFailedAuthentication($this->dateTime)->shouldBeCalled();
+        $foundAdmin->isTemporarilyDisabledDueToFailedAuthentication($this->dateTime)->shouldBeCalled()->willReturn(true);
         $foundAdmin->getLocale()->willReturn('fr');
 
         $this->adminRepository->findByEmail('test@yahoo.fr')->shouldBeCalled()->willReturn($foundAdmin->reveal());
@@ -100,7 +100,7 @@ class AdminAuthenticationFailureSubscriberTest extends TestCase
             $this->requestStack->reveal(),
             $this->adminRepository->reveal(),
             $this->eventDispatcher->reveal(),
-            $this->datetime
+            $this->dateTime
         );
 
         $authenticationFailureSubscriber->processException($authenticationFailureEvent->reveal());

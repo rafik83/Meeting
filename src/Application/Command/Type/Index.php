@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Index
+class Index implements Command
 {
     /**
      * @var Type[]

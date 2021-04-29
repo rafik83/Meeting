@@ -18,7 +18,7 @@ class HappeningContext implements Context
     }
 
     /**
-     * @Given /^there is a webinar in this event$/
+     * @Given there is a webinar in this event
      */
     public function thereIsAWebinar()
     {
@@ -37,16 +37,11 @@ class HappeningContext implements Context
     }
 
     /**
-     * @Given /^this user participate to this happening$/
+     * @Given this user participate to this happening
      */
     public function thisUserParticipateToThisHappening()
     {
-        /** @var null|Happening $happening */
-        $happening = $this->happeningContextProxy->getStorage()->get('happening');
-
-        if (null === $happening) {
-            throw new \InvalidArgumentException('Missing Happening');
-        }
+        $happening = $this->getHappening();
 
         /** @var null|User $user */
         $user = $this->happeningContextProxy->getStorage()->get('user');
@@ -57,5 +52,35 @@ class HappeningContext implements Context
 
         $happeningManager = $this->happeningContextProxy->getHappeningManager();
         $happeningManager->userParticipateToHappening($user, $happening);
+    }
+
+    /**
+     * @Given this type can access this happening
+     */
+    public function thisTypeCanAccessThisHappening()
+    {
+        $happening = $this->getHappening();
+
+        $type = $this->happeningContextProxy->getStorage()->get('type');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing type');
+        }
+
+        $happeningManager = $this->happeningContextProxy->getHappeningManager();
+        $happeningManager->allowTypeToAccessHappening($type, $happening);
+    }
+
+
+    private function getHappening(): Happening
+    {
+        /** @var null|Happening $happening */
+        $happening = $this->happeningContextProxy->getStorage()->get('happening');
+
+        if (null === $happening) {
+            throw new \InvalidArgumentException('Missing Happening');
+        }
+
+        return $happening;
     }
 }

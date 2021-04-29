@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Catalog\External;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Catalog\AbstractSearchFacet;
 use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilter;
 use Proximum\Vimeet\Domain\Model\Catalog\CatalogTagFilterTranslation;
 use Proximum\Vimeet\Domain\Model\Event;
 
-abstract class ConfigureSearchFacet
+abstract class ConfigureSearchFacet implements Command
 {
     /** @var Event */
     public $event;

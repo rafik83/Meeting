@@ -12,20 +12,20 @@ class DatetimeDataType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $datetime = $options['object'];
+        $dateTime = $options['object'];
         $locale = $options['locale'];
 
         $builder
             ->add('datetime', DateTimePickerType::class, [
-                'label' => $datetime->getOption('label', $locale),
-                'required' => $datetime->getOption('required'),
-                'help' => $datetime->getOption('help')[$locale],
+                'label' => $dateTime->getOption('label', $locale),
+                'required' => $dateTime->getOption('required'),
+                'help' => $dateTime->getOption('help')[$locale],
                 'translation_domain' => false,
-                'display_hour' => $datetime->displayHours(),
-                'format' => $datetime->getDatepickerFormat(),
-                'view_timezone' => $datetime->getTimezone(),
-                'min_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_min'),
-                'max_date' => $datetime->getOptionDateFormattedForDatepicker('datetime_max'),
+                'display_hour' => $dateTime->displayHours(),
+                'format' => $dateTime->getDatepickerFormat(),
+                'view_timezone' => $dateTime->getTimezone(),
+                'min_date' => $dateTime->getOptionDateFormattedForDatepicker('datetime_min'),
+                'max_date' => $dateTime->getOptionDateFormattedForDatepicker('datetime_max'),
             ])
         ;
     }

@@ -2,26 +2,33 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RuleController extends Controller
+class RuleController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function listAction(Request $request, Event $event)
+    private RuleRepositoryInterface $ruleRepository;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        RuleRepositoryInterface $ruleRepository,
+        CommandBusInterface $commandBus
+    ) {
+        $this->ruleRepository = $ruleRepository;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -41,7 +48,7 @@ class RuleController extends Controller
             return $this->redirectToRoute('admin_rule_see_what', ['event' => $event->getId(), 'rule' => $rule->getId()]);
         }
 
-        $rules = $this->get('repository.rule_repository')->getByEvent($event);
+        $rules = $this->ruleRepository->getByEvent($event);
 
         // Order rules by priority asc
         usort($rules, function (Rule $rule, Rule $anotherRule) {
@@ -56,14 +63,7 @@ class RuleController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Rule    $rule
-     *
-     * @return RedirectResponse|Response
-     */
-    public function seeWhatAction(Request $request, Event $event, Rule $rule)
+    public function seeWhatAction(Request $request, Event $event, Rule $rule): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -85,7 +85,7 @@ class RuleController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus.default')->handle($seeWhat);
+            $this->commandBus->handle($seeWhat);
 
             $this->addFlash('success', 'flash.admin.event.who_see_what.success');
 
@@ -101,13 +101,7 @@ class RuleController extends Controller
         ]);
     }
 
-    /**
-     * @param Event $event
-     * @param Rule  $rule
-     *
-     * @return RedirectResponse
-     */
-    public function deleteAction(Event $event, Rule $rule)
+    public function deleteAction(Event $event, Rule $rule): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -115,36 +109,20 @@ class RuleController extends Controller
             throw $this->createNotFoundException('Rule not found');
         }
 
-        $this->get('repository.rule_repository')->remove($rule);
+        $this->ruleRepository->remove($rule);
 
         return $this->redirectToRoute('admin_rule_list', ['event' => $event->getId()]);
     }
 
-    /**
-     * @param Event        $event
-     * @param WhoInterface $seer
-     * @param WhoInterface $seeable
-     *
-     * @return Rule|null
-     */
-    private function findRule(Event $event, WhoInterface $seer, WhoInterface $seeable)
+    private function findRule(Event $event, WhoInterface $seer, WhoInterface $seeable): ?Rule
     {
-        return $this
-            ->get('repository.rule_repository')
+        return $this->ruleRepository
             ->getByEventSeerAndSeeable($event, $seer, $seeable);
     }
 
-    /**
-     * @param Event        $event
-     * @param WhoInterface $seer
-     * @param WhoInterface $seeable
-     * @param int          $priority
-     *
-     * @return Rule
-     */
-    private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable, $priority)
+    private function findOrCreateRule(Event $event, WhoInterface $seer, WhoInterface $seeable, int $priority): Rule
     {
         return $this->findRule($event, $seer, $seeable) ?:
-            $this->get('repository.rule_repository')->add(Rule::createDefault($event, $seer, $seeable, $priority));
+            $this->ruleRepository->add(Rule::createDefault($event, $seer, $seeable, $priority));
     }
 }

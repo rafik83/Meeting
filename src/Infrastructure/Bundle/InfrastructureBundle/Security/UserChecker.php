@@ -11,7 +11,7 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Exception\SheetDisabledException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\User\UserChecker as SymfonyUserChecker;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,44 +33,30 @@ class UserChecker extends SymfonyUserChecker
     private $requestStack;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var TypeRepositoryInterface
      */
     private $typeRepository;
 
+    private FlashBagInterface $flashBag;
     /**
      * @var TypeResolver
      */
     private $typeResolver;
 
-    /**
-     * UserChecker constructor.
-     *
-     * @param RequestStack             $requestStack
-     * @param EventRepositoryInterface $eventRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param TypeRepositoryInterface  $typeRepository
-     * @param TypeResolver             $typeResolver
-     * @param Session                  $session
-     */
     public function __construct(
         RequestStack $requestStack,
         EventRepositoryInterface $eventRepository,
         SheetRepositoryInterface $sheetRepository,
         TypeRepositoryInterface $typeRepository,
         TypeResolver $typeResolver,
-        Session $session
+        FlashBagInterface $flashBag
     ) {
-        $this->eventRepository     = $eventRepository;
-        $this->sheetRepository     = $sheetRepository;
-        $this->requestStack        = $requestStack;
-        $this->session             = $session;
-        $this->typeRepository      = $typeRepository;
-        $this->typeResolver        = $typeResolver;
+        $this->eventRepository = $eventRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->requestStack = $requestStack;
+        $this->flashBag = $flashBag;
+        $this->typeRepository = $typeRepository;
+        $this->typeResolver = $typeResolver;
     }
 
     /**
@@ -90,11 +76,7 @@ class UserChecker extends SymfonyUserChecker
         $this->checkUserType($user, $event);
     }
 
-    /**
-     * @param User  $user
-     * @param Event $event
-     */
-    private function checkSheetDisabled(User $user, Event $event)
+    private function checkSheetDisabled(User $user, Event $event): void
     {
         $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
 
@@ -111,14 +93,10 @@ class UserChecker extends SymfonyUserChecker
         }
     }
 
-    /**
-     * @param User  $user
-     * @param Event $event
-     */
-    private function checkUserType(User $user, Event $event)
+    private function checkUserType(User $user, Event $event): void
     {
-        $typeFlashBag = $this->session->getFlashBag()->get('register_type');
-        $typeId       = array_shift($typeFlashBag);
+        $typeFlashBag = $this->flashBag->get('register_type');
+        $typeId = array_shift($typeFlashBag);
 
         $type = $this->typeRepository->getById($typeId);
 

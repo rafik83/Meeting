@@ -1,7 +1,7 @@
 {% if not isCatalog %}
     <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}">
 {% endif %}
-    {{ taggedDataView.content|country }}
+    {{ taggedDataView.content?taggedDataView.content|country:'' }}
 {% if not isCatalog %}
     </a>
 {% endif %}

@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\View\Group\Sheet\SheetView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Create
+class Create implements Command
 {
     /** @var Event */
     public $event;

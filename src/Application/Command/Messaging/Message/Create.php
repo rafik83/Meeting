@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Message;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-final class Create
+final class Create implements Command
 {
     /** @var string */
     public $name;

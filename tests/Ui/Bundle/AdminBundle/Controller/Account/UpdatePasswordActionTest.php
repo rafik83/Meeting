@@ -18,14 +18,14 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdatePasswordActionTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $formFactory,
         $router,
-        $engine,
+        $twig,
         $commandBus,
         $flashBag,
         $admin,
@@ -36,7 +36,7 @@ class UpdatePasswordActionTest extends TestCase
     {
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->admin = $this->prophesize(Admin::class);
@@ -57,12 +57,12 @@ class UpdatePasswordActionTest extends TestCase
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form);
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
-        $this->engine->render('AdminBundle:Account:updatePassword.html.twig', ['form' => $view])->shouldBeCalled()->willReturn('<html></html>');
+        $this->twig->render('AdminBundle:Account:updatePassword.html.twig', ['form' => $view])->shouldBeCalled()->willReturn('<html></html>');
 
         $action = new UpdatePasswordAction(
             $this->formFactory->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal()
         );
@@ -89,12 +89,12 @@ class UpdatePasswordActionTest extends TestCase
         $this->flashBag->add('success', 'flash.admin.change_password.success')->shouldBeCalled();
         $this->router->generate('admin_account')->shouldBeCalled()->willReturn('/account');
 
-        $this->engine->render('AdminBundle:Account:updatePassword.html.twig', Argument::any())->shouldNotBeCalled();
+        $this->twig->render('AdminBundle:Account:updatePassword.html.twig', Argument::any())->shouldNotBeCalled();
 
         $action = new UpdatePasswordAction(
             $this->formFactory->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal()
         );

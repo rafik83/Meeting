@@ -49,7 +49,7 @@ class ParticipantAndPlanningViewQueryHandler
         $planningView = $this->planningViewQueryHandler->handle(
             new PlanningViewQuery(
                 $participantAndPlanningViewQuery->sheet,
-                $participantAndPlanningViewQuery->sheet->getPackage()->getParticipant(),
+                $participantAndPlanningViewQuery->sheet->getPackage()->getFirstProductParticipant(),
                 $participantAndPlanningViewQuery->locale
             )
         );

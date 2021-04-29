@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,7 +13,7 @@ class Version20180921091926 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         $this->addSql(
             "INSERT INTO user_event_extra_data (user_id, event_id, `name`, value, created_at, updated_at)
@@ -28,7 +28,7 @@ class Version20180921091926 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
     }
 }

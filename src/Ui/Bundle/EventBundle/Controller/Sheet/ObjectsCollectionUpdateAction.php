@@ -20,15 +20,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ObjectsCollectionUpdateAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var TemplateDataFactory */
     private $templateDataFactory;
@@ -50,7 +50,7 @@ class ObjectsCollectionUpdateAction
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
-        EngineInterface $engine,
+        Environment $twig,
         TemplateDataFactory $templateDataFactory,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
@@ -59,7 +59,7 @@ class ObjectsCollectionUpdateAction
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->templateDataFactory = $templateDataFactory;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
@@ -110,7 +110,7 @@ class ObjectsCollectionUpdateAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Sheet/objectsCollectionUpdate.html.twig',
                 [
                     'event' => $event,

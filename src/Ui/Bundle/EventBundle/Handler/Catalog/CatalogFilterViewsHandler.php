@@ -19,7 +19,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Catalog\SheetVisitView;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class CatalogFilterViewsHandler
 {
@@ -32,8 +33,8 @@ class CatalogFilterViewsHandler
     /** @var VisibleParticipationTypes */
     private $visibleParticipationTypes;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var GetDisplayObjectiveFilter */
     private $getDisplayObjectiveFilter;
@@ -42,13 +43,13 @@ class CatalogFilterViewsHandler
         QueryBusInterface $queryBus,
         VisibleParticipationCategories $visibleParticipationCategories,
         VisibleParticipationTypes $visibleParticipationTypes,
-        EngineInterface $engine,
+        Environment $twig,
         GetDisplayObjectiveFilter $getDisplayObjectiveFilter
     ) {
         $this->queryBus = $queryBus;
         $this->visibleParticipationCategories = $visibleParticipationCategories;
         $this->visibleParticipationTypes = $visibleParticipationTypes;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->getDisplayObjectiveFilter = $getDisplayObjectiveFilter;
     }
 
@@ -137,10 +138,10 @@ class CatalogFilterViewsHandler
             [],
             [],
             [],
-            $this->engine->renderResponse(
+            new Response($this->twig->render(
                 'EventBundle:Catalog:no-visible-type.html.twig',
                 ['event' => $event, 'sheet' => $sheet]
-            ),
+            )),
             []
         );
     }

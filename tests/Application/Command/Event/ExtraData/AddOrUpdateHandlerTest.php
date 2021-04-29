@@ -14,7 +14,7 @@ class AddOrUpdateHandlerTest extends TestCase
 {
     public function testAddHandle()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
@@ -23,10 +23,10 @@ class AddOrUpdateHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
-        $expectedExtraData = new ExtraData($event->reveal(), 'data-name', 'data-value', $datetime);
+        $expectedExtraData = new ExtraData($event->reveal(), 'data-name', 'data-value', $dateTime);
         $extraDataRepository->add($expectedExtraData)->shouldBeCalled();
 
-        $addOrUpdateHandler = new AddOrUpdateHandler($extraDataRepository->reveal(), $datetime);
+        $addOrUpdateHandler = new AddOrUpdateHandler($extraDataRepository->reveal(), $dateTime);
         $result = $addOrUpdateHandler->handle(new AddOrUpdate($event->reveal(), 'data-name', 'data-value'));
 
         $this->assertEquals($expectedExtraData, $result);

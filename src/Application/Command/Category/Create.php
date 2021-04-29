@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Category;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class Create implements Command
 {
     /**
      * @var Category

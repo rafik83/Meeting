@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class DisableBatch
+class DisableBatch implements Command
 {
     /**
      * @var Event

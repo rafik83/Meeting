@@ -25,7 +25,7 @@ class RawDataToParticipantConverterTest extends TestCase
 {
     public function testConvert()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $rawDataUser1 = [
             'Id' => 'user-id-1',
@@ -119,7 +119,7 @@ class RawDataToParticipantConverterTest extends TestCase
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository
-            ->add(new ExtraData($user2->reveal(), $event1->reveal(), 'leni_user_id', 'user-id-2', $datetime))
+            ->add(new ExtraData($user2->reveal(), $event1->reveal(), 'leni_user_id', 'user-id-2', $dateTime))
             ->shouldBeCalled()
         ;
 
@@ -167,7 +167,7 @@ class RawDataToParticipantConverterTest extends TestCase
                     $event1->reveal(),
                     'leni_fingerprint',
                     'a:1:{s:10:"normalized";s:4:"data";}',
-                    $datetime
+                    $dateTime
                 )
             )
             ->shouldBeCalled()
@@ -181,7 +181,7 @@ class RawDataToParticipantConverterTest extends TestCase
             $extraDataRepository->reveal(),
             $leniUserViewQueryHandler->reveal(),
             $leniUserViewNormalizer->reveal(),
-            $datetime
+            $dateTime
         );
         $rawDataToParticipantConverter->convert(
             $event1->reveal(),
@@ -201,7 +201,7 @@ class RawDataToParticipantConverterTest extends TestCase
 
     public function testConvertWithSheetState()
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
 
         $rawDataUser = [
             'Id' => 'user-id-2',
@@ -272,7 +272,7 @@ class RawDataToParticipantConverterTest extends TestCase
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository
-            ->add(new ExtraData($user->reveal(), $event->reveal(), 'leni_user_id', 'user-id-2', $datetime))
+            ->add(new ExtraData($user->reveal(), $event->reveal(), 'leni_user_id', 'user-id-2', $dateTime))
             ->shouldBeCalled()
         ;
 
@@ -310,7 +310,7 @@ class RawDataToParticipantConverterTest extends TestCase
                     $event->reveal(),
                     'leni_fingerprint',
                     'a:1:{s:10:"normalized";s:4:"data";}',
-                    $datetime
+                    $dateTime
                 )
             )
             ->shouldBeCalled()
@@ -324,7 +324,7 @@ class RawDataToParticipantConverterTest extends TestCase
             $extraDataRepository->reveal(),
             $leniUserViewQueryHandler->reveal(),
             $leniUserViewNormalizer->reveal(),
-            $datetime
+            $dateTime
         );
         $rawDataToParticipantConverter->convert(
             $event->reveal(),

@@ -41,11 +41,8 @@ class AuthenticationManager implements AuthenticationManagerInterface
 
     /**
      * Authenticate the user
-     *
-     * @param AbstractUser $user
-     * @param string       $providerKey
      */
-    public function authenticate(AbstractUser $user, $providerKey)
+    public function authenticate(AbstractUser $user, string $providerKey)
     {
         if ($user instanceof Admin) {
             if (!$user->isAccountNonExpired()

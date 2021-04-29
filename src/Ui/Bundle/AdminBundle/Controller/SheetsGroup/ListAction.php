@@ -7,9 +7,9 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ListAction
 {
@@ -21,17 +21,17 @@ class ListAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     public function __invoke(Event $event, AdminDomain $adminDomain): Response
@@ -44,9 +44,9 @@ class ListAction
 
         $groupViews = $this->queryBus->handle(new GroupListViewQuery($event, $adminDomain->getAdmin()));
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'groupViews' => $groupViews,
-        ]);
+        ]));
     }
 }

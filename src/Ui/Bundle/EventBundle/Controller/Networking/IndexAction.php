@@ -18,12 +18,12 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class IndexAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -42,13 +42,13 @@ class IndexAction
 
     public function __construct(
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         EventOpenAccessChecker $eventOpenAccessChecker,
         NetworkingAccessChecker $networkingAccessChecker,
         CommandBusInterface $commandBus
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->eventOpenAccessChecker = $eventOpenAccessChecker;
@@ -86,7 +86,7 @@ class IndexAction
         $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/Networking/index.html.twig',
                 [
                     'networkingView' => $networkingView,

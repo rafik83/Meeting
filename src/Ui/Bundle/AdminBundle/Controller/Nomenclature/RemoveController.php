@@ -2,20 +2,27 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Nomenclature;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Nomenclature\Remove;
 use Proximum\Vimeet\Application\Exception\Nomenclature\CanNotBeRemovedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class RemoveController extends Controller
+class RemoveController extends AbstractController
 {
-    /**
-     * @param Nomenclature $nomenclature
-     *
-     * @return Response
-     */
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->commandBus = $commandBus;
+    }
+
     public function removeAction(Nomenclature $nomenclature): Response
     {
         $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -34,13 +41,13 @@ class RemoveController extends Controller
         }
 
         try {
-            $this->get('tactician.commandbus')->handle(new Remove($nomenclature));
+            $this->commandBus->handle(new Remove($nomenclature));
 
             $this->addFlash('success', 'flash.admin.nomenclature.remove.success');
         } catch (CanNotBeRemovedException $exception) {
             $this->addFlash(
                 'error',
-                $this->get('translator')->trans('validators.nomenclature.canNotBeRemoved', ['%title%' => $nomenclature->getTitle()], 'validators')
+                $this->translator->trans('validators.nomenclature.canNotBeRemoved', ['%title%' => $nomenclature->getTitle()], 'validators')
             );
         }
 

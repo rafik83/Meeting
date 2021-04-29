@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Group;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SearchUser
+class SearchUser implements Command
 {
     /** @var Event */
     public $event;

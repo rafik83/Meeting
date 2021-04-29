@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class CreateMessage
+class CreateMessage implements Command
 {
     /**
      * @var Event

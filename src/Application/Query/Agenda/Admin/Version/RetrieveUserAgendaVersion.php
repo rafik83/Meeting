@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin\Version;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class RetrieveUserAgendaVersion
+class RetrieveUserAgendaVersion implements Query
 {
     /** @var Event */
     public $event;

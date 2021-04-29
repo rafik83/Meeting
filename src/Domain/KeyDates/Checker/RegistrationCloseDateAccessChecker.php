@@ -16,7 +16,7 @@ class RegistrationCloseDateAccessChecker extends AccessChecker
         $registrationCloseDate = $event->getConfiguration()->getRegistrationCloseDate();
 
         if (null !== $registrationCloseDate) {
-            return $this->datetime <= $registrationCloseDate;
+            return $this->dateTime <= $registrationCloseDate;
         }
 
         return true;

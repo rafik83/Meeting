@@ -8,6 +8,9 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractCustomizedMail;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Mail\UserMail;
 use Psr\Log\LoggerInterface;
+use Twig\Environment;
+use Twig\Template;
+
 use function Sentry\captureEvent;
 
 class MailerAdapter implements MailerInterface
@@ -15,8 +18,7 @@ class MailerAdapter implements MailerInterface
     /** @var \Swift_Mailer */
     private $mailer;
 
-    /** @var \Twig_Environment */
-    private $twig;
+    private Environment $twig;
 
     /** @var TranslatorAdapter */
     private $translator;
@@ -26,7 +28,7 @@ class MailerAdapter implements MailerInterface
 
     public function __construct(
         \Swift_Mailer $mailer,
-        \Twig_Environment $twig,
+        Environment $twig,
         TranslatorAdapter $translator,
         RouterInterface $router,
         LoggerInterface $logger
@@ -46,7 +48,7 @@ class MailerAdapter implements MailerInterface
      */
     public function send(AbstractMail $mail)
     {
-        /** @var \Twig_Template $template */
+        /** @var Template $template */
         $template = $this->twig->loadTemplate($mail->getTemplate());
         $body = $template->render(['mail' => $mail]);
 
@@ -94,6 +96,7 @@ class MailerAdapter implements MailerInterface
             $subject,
             $mail->getMessageId()
         );
+        $this->mailer->getTransport()->stop();
     }
 
     protected function handleResults(array $receivers, array $failedReceivers, string $subject, ?string $messageId = null)

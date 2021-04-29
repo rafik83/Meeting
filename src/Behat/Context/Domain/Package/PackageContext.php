@@ -81,7 +81,7 @@ class PackageContext implements Context
     public function assignProductPlanning()
     {
         $package = $this->packageContextProxy->getStorage()->get('package');
-        $planning = $this->packageContextProxy->getStorage()->get('planning');
+        $planning = $this->packageContextProxy->getStorage()->get('productPlanning');
 
         if (null === $package) {
             throw new \InvalidArgumentException('Missing Package');

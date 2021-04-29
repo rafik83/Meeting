@@ -3,36 +3,44 @@
 Feature: Register and login user
   I need to be able to register to an event and login to my account
 
-  Scenario: Register an user in 3 steps
+  Scenario: Register a user in 2 steps
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
+    And the event "ASD Days" is created
+    And the domain for this event is "asddays.vimeet.proximum"
+    And there is a turnover nomenclature
+    And there is a registration template
+    # We need several types, to display the step where user is asked to choose
+    And there is a type "Fournisseur" in this event
+    And there is a package "Package for participant" for this event
+    And this package is assigned to this type
+    And there is a plan called "Formule Jumbo" with a price of "567"
+    And this plan is assigned to this package
+    And there is a type "Exposant" in this event
+
+    When I go to this page "http://asddays.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
+
     When I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
+
     When I fill in "register_new_user_password_first" with "P1ssw0rd"
     And I fill in "register_new_user_password_second" with "P1ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
     And I should see "Profil"
     And I should see "register.step"
-    And I should see "1/3"
+    And I should see "1/2"
 
-  Scenario: Register an user in one step
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
-    And I check the "Structure de recherche" radio
+  Scenario: Register a user in one step
+    Given there is an event with domain "asddays.vimeet.proximum"
+    And there is a type "Investisseur" in this event
+    And there is a single step registration template
+    And this type has this registration template
+    When I go to this page "http://asddays.vimeet.proximum/fr/"
+    And I check the "Investisseur" radio
     And I press "common.next"
     Then the response status code should be 200
     When I fill in "email_email" with "user@example.net"
@@ -42,11 +50,11 @@ Feature: Register and login user
     And I fill in "register_new_user_password_second" with "My p1ssw0rd"
     And I press "common.next"
     Then the response status code should be 200
-    And I should see "Mon profil"
+    And I should see "Profil"
     And I should not see "register.step"
 
   Scenario: User already exists
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
+    When I go to this page "http://asddays.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -56,7 +64,7 @@ Feature: Register and login user
     And I should see "flash.event.register.already_known.message"
 
   Scenario: Login successful
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/login"
+    When I go to this page "http://asddays.vimeet.proximum/fr/login"
     And I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
@@ -67,7 +75,7 @@ Feature: Register and login user
     And I should be on this page "/fr/"
 
   Scenario: Login failed
-    And I go to this page "http://asddays-2016.vimeet.proximum/fr/login"
+    And I go to this page "http://asddays.vimeet.proximum/fr/login"
     And I fill in "email_email" with "test@test.com"
     And I press "common.next"
     Then the response status code should be 200
@@ -78,24 +86,22 @@ Feature: Register and login user
     And I should see "Bad credentials."
 
   Scenario: Fill a participant profile
-    Given I am logged with "test@test.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays.vimeet.proximum"
+    And I am logged with "test@test.com" on front
     When I go to this page "/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then I should be on this page "/fr/participate/1"
     When I fill in the following:
-      | Prénom             | Paul         |
-      | Nom                | Dupont       |
-      | Téléphone portable | +33698765432 |
-      | Téléphone fixe     | +33198765432 |
+      | Prénom | Paul   |
+      | Nom    | Dupont |
     Then I check the "gender.man" radio
-    And I select "Informatique" from "block[6c4a3a4f][item][first]"
-    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
+    And I select ">1M€" from "block[adc97e8d][item][first]"
     And I press "common.next"
     Then the response status code should be 200
 
   Scenario: Redirect on registration unfinished step
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
+    When I go to this page "http://asddays.vimeet.proximum/fr/"
     And I check the "Fournisseur" radio
     And I press "common.next"
     Then the response status code should be 200
@@ -107,39 +113,21 @@ Feature: Register and login user
     And I press "common.next"
     Then the response status code should be 200
     Then I should see "Profil"
-    And I should see "register.step"
-    And I should see "1/3"
     When I fill in the following:
-      | Prénom             | Paul         |
-      | Nom                | Dupont       |
-      | Téléphone portable | +33698765432 |
-      | Téléphone fixe     | +33198765432 |
+      | Titre                     | Aanera   |
+      | Prénom                    | Paul     |
+      | Nom                       | Dupont   |
+      | Nom (Société / Organisme) | Fairness |
     Then I check the "gender.man" radio
-    And I select "Informatique" from "block[6c4a3a4f][item][first]"
-    And I select "Ingénieur chef de projet" from "block[6c4a3a4f][item][second]"
+    And I select ">1M€" from "block[adc97e8d][item][first]"
     And I press "common.next"
     Then the response status code should be 200
     And I should see "register.step"
-    And I should see "2/3"
-    When I press "common.next"
-    Then the response status code should be 200
-    When I go to this page "http://asddays-2016.vimeet.proximum/fr/"
-    Then I should be on this page "/fr/participant/5/step/3"
-    And I should see "register.step"
-    And I should see "3/3"
-    And I fill in the following:
-      | Nom (Société / Organisme)     | Elao              |
-      | block[97ed778d][item][first]  | category1         |
-      | Adresse                       | 10 rue Saint Marc |
-      | Code postal                   | 75002             |
-      | Ville                         | Paris             |
-      | Pays                          | FR                |
-      | block[57da9df7ced30][boolean] | 1                 |
-      | Décrivez votre activité       | abc               |
+    And I should see "2/2"
     When I press "register.finalize"
-    Then I should be on this page "/fr/sheet/5"
+    Then I should be on this page "/fr/sheet/1"
     When I follow "navigation.links.notification"
-    Then I should be on this page "/fr/sheet/5/notification"
+    Then I should be on this page "/fr/sheet/1/notification"
     And I should see "notification.list.title.label"
     And I should see "notification.package.noOrder"
     And I should see "notification.label.required"

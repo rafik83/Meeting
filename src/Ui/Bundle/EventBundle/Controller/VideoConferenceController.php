@@ -2,6 +2,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
@@ -19,13 +23,36 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Visio\EndVisioRedirectHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class VideoConferenceController extends Controller
+class VideoConferenceController extends AbstractController
 {
+    private PreviousEvaluationCheckerHandler $previousEvaluationCheckerHandler;
+    private EndVisioRedirectHandler $endVisioRedirectHandler;
+    private VideoConferenceAdapterInterface $videoConferenceAdapter;
+    private DateTimeInterface $dateTime;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        PreviousEvaluationCheckerHandler $previousEvaluationCheckerHandler,
+        EndVisioRedirectHandler $endVisioRedirectHandler,
+        VideoConferenceAdapterInterface $videoConferenceAdapter,
+        DateTimeInterface $dateTime,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->previousEvaluationCheckerHandler = $previousEvaluationCheckerHandler;
+        $this->endVisioRedirectHandler = $endVisioRedirectHandler;
+        $this->videoConferenceAdapter = $videoConferenceAdapter;
+        $this->dateTime = $dateTime;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     public function videoMeetingAction(
         Request $request,
         UserDomain $userDomain,
@@ -46,14 +73,24 @@ class VideoConferenceController extends Controller
 
         if (false === $sheet->hasParticipant($participant)
             || false === $sheet->hasUser($user)
-            || ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet())
         ) {
             throw $this->createAccessDeniedException('Meeting is not accessible');
         }
 
+        if ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet()) {
+            // In case user has access to multiple sheets, redirect to meeting using related sheet
+            $otherSheet = $meeting->getSheetOfUser($user);
+
+            return $this->redirectToRoute('event_video_video_meeting', [
+                'sheet' => $otherSheet->getId(),
+                'meeting' => $meeting->getId(),
+                'participant' => $otherSheet->getUserParticipant($user)->getId(),
+            ]);
+        }
+
         $event = $eventDomain->getEvent();
 
-        $redirectResponse = ($this->get(PreviousEvaluationCheckerHandler::class))(
+        $redirectResponse = ($this->previousEvaluationCheckerHandler)(
             new PreviousEvaluationChecker(
                 $event,
                 $sheet,
@@ -67,7 +104,7 @@ class VideoConferenceController extends Controller
         }
 
         /** @var VideoConferenceView $videoConferenceView */
-        $videoConferenceView = $this->get('tactician.commandbus')->handle(
+        $videoConferenceView = $this->commandBus->handle(
             new RequestAccess(
                 $meeting,
                 $participant,
@@ -76,11 +113,11 @@ class VideoConferenceController extends Controller
         );
 
         /** @var MeetingView $meetingView */
-        $meetingView = $this->get('tactician.commandbus')->handle(
+        $meetingView = $this->queryBus->handle(
             new MeetingViewQuery($meeting, $sheet, false, $userDomain->getUser(), $event, $request->getLocale())
         );
 
-        $endRedirectLink = ($this->get(EndVisioRedirectHandler::class))(new EndVisioRedirect(
+        $endRedirectLink = ($this->endVisioRedirectHandler)(new EndVisioRedirect(
             $sheet,
             $participant,
             $meeting
@@ -97,7 +134,7 @@ class VideoConferenceController extends Controller
                 'meeting' => $meeting,
                 'videoConferenceView' => $videoConferenceView,
                 'meetingView' => $meetingView,
-                'currentTime' => $this->get('datetime')->getTimestamp(),
+                'currentTime' => $this->dateTime->getTimestamp(),
                 'endRedirectLink' => $endRedirectLink,
             ]
         );
@@ -105,14 +142,10 @@ class VideoConferenceController extends Controller
 
     /**
      * Opened page to create a session to test the Video Conference feature
-     *
-     * @param EventDomain $eventDomain
-     *
-     * @return RedirectResponse
      */
     public function createSessionVideoTestAction(EventDomain $eventDomain): RedirectResponse
     {
-        $sessionId = $this->get('adapter.video_conference_adapter')->createSession();
+        $sessionId = $this->videoConferenceAdapter->createSession();
 
         return $this->redirectToRoute('event_video_conference_access_session_test', ['sessionId' => $sessionId]);
     }
@@ -135,7 +168,7 @@ class VideoConferenceController extends Controller
 
         try {
             /** @var VideoConferenceView $videoConferenceView */
-            $videoConferenceView = $this->get('tactician.commandbus')->handle(
+            $videoConferenceView = $this->commandBus->handle(
                 new RequestTestAccess(
                     $event,
                     $sessionId,

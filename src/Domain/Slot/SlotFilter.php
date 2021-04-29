@@ -11,14 +11,14 @@ class SlotFilter
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      */
-    public function __construct(\DateTimeInterface $datetime)
+    public function __construct(\DateTimeInterface $dateTime)
     {
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -32,7 +32,7 @@ class SlotFilter
             return [];
         }
 
-        $dateTimePlus10Minutes = (clone $this->datetime)->modify('+' . self::DELAY_IN_MINUTES . 'min');
+        $dateTimePlus10Minutes = (clone $this->dateTime)->modify('+' . self::DELAY_IN_MINUTES . 'min');
 
         return array_filter($slots,
             function (MeetingSlot $slot) use ($dateTimePlus10Minutes) {

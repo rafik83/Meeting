@@ -1,0 +1,5 @@
+#index:
+#    path: /
+#    controller: Proximum\Vimeet\Controller\DefaultController::index
+_legacy:
+    resource: ../app/config/routing.yml

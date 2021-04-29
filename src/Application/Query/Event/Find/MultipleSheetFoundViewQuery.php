@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Event\Find;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class MultipleSheetFoundViewQuery
+class MultipleSheetFoundViewQuery implements Query
 {
     /** @var Sheet[] */
     public $sheets;

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateParametersAction
 {
@@ -25,8 +25,8 @@ class UpdateParametersAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -40,14 +40,14 @@ class UpdateParametersAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
         $this->router = $router;
@@ -77,7 +77,7 @@ class UpdateParametersAction
             ]));
         }
 
-        return new Response($this->engine->render('AdminBundle:Template/Form:updateParameters.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Template/Form:updateParameters.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
         ]));

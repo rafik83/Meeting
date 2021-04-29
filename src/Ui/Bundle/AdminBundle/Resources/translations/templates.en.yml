@@ -9,6 +9,8 @@ template.block.remove_confirm: 'Do you confirm the remove of this element ?'
 template.boolean.filter.active: 'Activate the filter'
 template.boolean.filter.label: 'Filter label'
 template.collection.title: 'Collection fields enabled'
+template.content.text.blank.link: 'To open a link in a new tab, here is an example: [Click here to go to google](https://google.com){: target="_blank"}'
+template.content.text.link: 'Here you will find elements to format your text'
 template.content.title: content
 template.defaultElement.title: 'element by default'
 template.error.objectsCollectionBlockCanNotContainForbiddenObjects: 'A collection block of objects can only contain editable text objects and nomenclature'
@@ -51,6 +53,7 @@ template.object.telephone: Phone
 template.object.text: 'non modifiable text'
 template.object.upload: 'File upload'
 template.object.url: Link
+template.object.video: Video
 template.object.visibility.editable: 'Editable (editable and visible by the participant and the admin)'
 template.object.visibility.hidden: 'Hidden (editable and visible only by admin)'
 template.object.visibility.label: 'Visibility of the field'

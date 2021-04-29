@@ -68,7 +68,7 @@ class ParticipantManager
         return $participant;
     }
 
-    public function setBasicRegistrationData(Participant $participant, string $firstname, string $lastname): void
+    public function setBasicRegistrationData(Participant $participant, User $user): void
     {
         $participant->getSheet()->setRegistrationData([
             // Chiffre d'affaires
@@ -78,8 +78,9 @@ class ParticipantManager
         ]);
 
         $object = $participant->getData();
-        $object['0aea62b3'] = ['text' => $firstname];
-        $object['0aea62b4'] = ['text' => $lastname];
+        $object['0aea62b3'] = ['text' => $user->getAccount()->getFirstname()];
+        $object['0aea62b4'] = ['text' => $user->getAccount()->getLastname()];
+        $object['4b674gba'] = ['gender' => $user->getAccount()->getGender()];
         $object['adc97e8d'] = ['nomenclature' => 'turnover2'];
 
         $participant->setData($object);

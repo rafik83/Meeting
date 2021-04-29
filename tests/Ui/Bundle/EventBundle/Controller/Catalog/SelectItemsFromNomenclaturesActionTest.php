@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SelectItemsFromNomenclaturesActionTest extends TestCase
 {
@@ -50,7 +50,7 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
     private $sheet;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $getNomenclaturesByTag;
@@ -63,7 +63,7 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->catalogAccessChecker = $this->prophesize(CatalogAccessChecker::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->getNomenclaturesByTag = $this->prophesize(GetNomenclaturesByTag::class);
 
         $this->event = $this->prophesize(Event::class);
@@ -79,7 +79,7 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
         $this->selectItemsFromNomenclaturesAction = new SelectItemsFromNomenclaturesAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->catalogAccessChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->formFactory->reveal(),
             $this->getNomenclaturesByTag->reveal()
         );
@@ -163,7 +163,7 @@ class SelectItemsFromNomenclaturesActionTest extends TestCase
         ;
 
         $this
-            ->engine
+            ->twig
             ->render(
                 'EventBundle:Catalog/Partial:selectItemsFromNomenclatures.html.twig',
                 [

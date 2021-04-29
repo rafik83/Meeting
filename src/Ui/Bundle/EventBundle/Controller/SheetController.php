@@ -2,8 +2,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
+use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsStat;
 use Proximum\Vimeet\Application\Query\Sheet\CanDisplayAnalyticsViewLink;
@@ -11,40 +15,95 @@ use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
+use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Sheet\SheetRedirectionMiddleware;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SheetController extends Controller
+class SheetController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param null|string $locale
-     *
-     * @return RedirectResponse
-     */
-    public function redirectToSheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    private TemplateDataFactory $templateDataFactory;
+    private TaggedDataFactory $taggedDataFactory;
+    private AddParticipantChecker $addParticipantChecker;
+    private CanDisplayAnalyticsStat $canDisplayAnalyticsStat;
+    private CanDisplayAnalyticsViewLink $canDisplayAnalyticsViewLink;
+    private CanSeeSheet $canSeeSheet;
+    private SheetPdfPrinter $sheetPdfPrinter;
+    private SheetInfosHelper $sheetInfosHelper;
+    private SheetRepositoryInterface $sheetRepository;
+    private SheetGuesser $sheetGuesser;
+    private CatalogAccessChecker $catalogAccessChecker;
+    private RuleRepositoryInterface $ruleRepository;
+    private Applyer $ruleApplyer;
+    private SheetRedirectionMiddleware $sheetRedirectionMiddleware;
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TemplateDataFactory $templateDataFactory,
+        TaggedDataFactory $taggedDataFactory,
+        AddParticipantChecker $addParticipantChecker,
+        CanDisplayAnalyticsStat $canDisplayAnalyticsStat,
+        CanDisplayAnalyticsViewLink $canDisplayAnalyticsViewLink,
+        CanSeeSheet $canSeeSheet,
+        SheetPdfPrinter $sheetPdfPrinter,
+        SheetInfosHelper $sheetInfosHelper,
+        SheetRepositoryInterface $sheetRepository,
+        SheetGuesser $sheetGuesser,
+        CatalogAccessChecker $catalogAccessChecker,
+        RuleRepositoryInterface $ruleRepository,
+        Applyer $ruleApplyer,
+        SheetRedirectionMiddleware $sheetRedirectionMiddleware,
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->templateDataFactory = $templateDataFactory;
+        $this->taggedDataFactory = $taggedDataFactory;
+        $this->addParticipantChecker = $addParticipantChecker;
+        $this->canDisplayAnalyticsStat = $canDisplayAnalyticsStat;
+        $this->canDisplayAnalyticsViewLink = $canDisplayAnalyticsViewLink;
+        $this->canSeeSheet = $canSeeSheet;
+        $this->sheetPdfPrinter = $sheetPdfPrinter;
+        $this->sheetInfosHelper = $sheetInfosHelper;
+        $this->sheetInfosHelper = $sheetInfosHelper;
+        $this->sheetRepository = $sheetRepository;
+        $this->sheetGuesser = $sheetGuesser;
+        $this->catalogAccessChecker = $catalogAccessChecker;
+        $this->ruleRepository = $ruleRepository;
+        $this->ruleApplyer = $ruleApplyer;
+        $this->sheetRedirectionMiddleware = $sheetRedirectionMiddleware;
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
+    public function redirectToSheetAction(Request $request, EventDomain $eventDomain, ?string $locale = null): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         try {
             $sheet = $this->getUserSheet($eventDomain->getEvent(), $locale ?: $request->getLocale());
         } catch (SheetNotFoundException $sheetNotFoundException) {
-            throw $this->createAccessDeniedException('User not have Sheet');
+            throw new AccessDeniedHttpException('User not have Sheet');
         }
 
         if (null === $locale) {
@@ -57,16 +116,8 @@ class SheetController extends Controller
 
     /**
      * Display the sheet in the choosen locale (independently from the interface locale).
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param UserDomain  $userDomain
-     * @param Sheet       $sheet
-     * @param string|null $locale
-     *
-     * @return RedirectResponse|Response
      */
-    public function sheetAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, $locale = null)
+    public function sheetAction(Request $request, EventDomain $eventDomain, UserDomain $userDomain, Sheet $sheet, ?string $locale = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -74,14 +125,14 @@ class SheetController extends Controller
         $locale = $locale ?: $request->getLocale();
         $user = $userDomain->getUser();
 
-        $redirectResponse = $this->get(SheetRedirectionMiddleware::class)->getForceRedirection($sheet, $user);
+        $redirectResponse = $this->sheetRedirectionMiddleware->getForceRedirection($sheet, $user);
 
         if (null !== $redirectResponse) {
             return $redirectResponse;
         }
 
         if ($sheet->isValidationDraft() && $sheet->getType()->canSubmitValidation()) {
-            $sheetValidationView = $this->get('tactician.commandbus.query')->handle(
+            $sheetValidationView = $this->queryBus->handle(
                 new SheetValidationViewQuery(
                     $sheet,
                     $locale
@@ -89,16 +140,16 @@ class SheetController extends Controller
             );
         }
 
-        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->sheetInfosHelper->getInfos(
             $sheet,
             $this->getUser(),
             $locale
         );
 
         // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
+        $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
 
-        $popinWelcome = $this->get('tactician.commandbus.query')->handle(new WelcomeViewQuery($sheet));
+        $popinWelcome = $this->queryBus->handle(new WelcomeViewQuery($sheet));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet,
@@ -106,110 +157,87 @@ class SheetController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_SHEET,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
-        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+        $canAddParticipant = $this->addParticipantChecker->canAddParticipant($sheet);
 
-        $displayAnalyticsStat = $this->get(CanDisplayAnalyticsStat::class)->isSatisfiedBy($sheet);
+        $displayAnalyticsStat = $this->canDisplayAnalyticsStat->isSatisfiedBy($sheet);
 
-        $displayAnalyticsViewLink = $this->get(CanDisplayAnalyticsViewLink::class)->isSatisfiedBy($sheet);
+        $displayAnalyticsViewLink = $this->canDisplayAnalyticsViewLink->isSatisfiedBy($sheet);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
-            'canAddParticipant'       => $canAddParticipant,
-            'event'                   => $eventDomain->getEvent(),
-            'sheet'                   => $sheet,
-            'taggedData'              => $taggedData,
-            'locale'                  => $locale,
-            'nomenclatures'           => $nomenclatures,
-            'participants'            => $participants,
-            'templateData'            => $templateData,
-            'popinWelcome'            => $popinWelcome,
-            'sheetValidationView'     => $sheetValidationView ?? null,
+            'canAddParticipant' => $canAddParticipant,
+            'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
+            'taggedData' => $taggedData,
+            'locale' => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants' => $participants,
+            'templateData' => $templateData,
+            'popinWelcome' => $popinWelcome,
+            'sheetValidationView' => $sheetValidationView ?? null,
             'isRequestMeetingEnabled' => false,
-            'isCatalog'               => false,
-            'tipTranslationViews'     => $tipTranslationViews,
+            'isCatalog' => false,
+            'tipTranslationViews' => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
             'displayAnalyticsStat' => $displayAnalyticsStat,
             'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
         ]);
     }
 
-    /**
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     * @param int           $sheetToDisplay
-     * @param string        $locale
-     *
-     * @return BinaryFileResponse
-     */
     public function generatePdfAction(
         EventDomain $eventDomain,
         Sheet $sheet,
         UserInterface $user,
-        $sheetToDisplay,
-        $locale
-    ) {
+        int $sheetToDisplay,
+        string $locale
+    ): BinaryFileResponse {
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $sheetToDisplay = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetById($sheetToDisplay);
+        $sheetToDisplay = $this->sheetRepository->getSheetById($sheetToDisplay);
 
         if (null === $sheetToDisplay || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()) {
             throw $this->createAccessDeniedException('Sheet not found');
         }
 
         if ($sheetToDisplay !== $sheet) {
-            if (!$sheetToDisplay->isInCatalog()) {
+            if (!$sheetToDisplay->isInInternalCatalog()) {
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
-            $canSeeSheet = $this->get(CanSeeSheet::class);
-
-            if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
+            if (false === $this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
         }
 
-        $pathToPdf = $this->get('printer.sheet_pdf_printer')->generate($user, $sheet, $sheetToDisplay, $locale);
+        $pathToPdf = $this->sheetPdfPrinter->generate($user, $sheet, $sheetToDisplay, $locale);
 
         return new BinaryFileResponse($pathToPdf);
     }
 
     /**
      * No access restriction, to allow phantomjs to open this route
-     *
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param User        $user
-     * @param int         $sheetToDisplay
-     * @param string      $locale
-     *
-     * @return Response
      */
-    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, $sheetToDisplay, $locale)
+    public function printAction(EventDomain $eventDomain, Sheet $sheet, User $user, int $sheetToDisplayId, string $locale): Response
     {
-        $event  = $eventDomain->getEvent();
+        $event = $eventDomain->getEvent();
         $locale = $event->getAvailableLocale($locale);
 
-        $sheetToDisplay = $this
-            ->get('vimeet_infrastructure.repository.sheet_repository')
-            ->getSheetById($sheetToDisplay);
+        $sheetToDisplay = $this->sheetRepository->getSheetById($sheetToDisplayId);
 
         if (null === $sheetToDisplay || $event !== $sheetToDisplay->getEvent()) {
             throw $this->createAccessDeniedException('Sheet not found');
         }
 
-        $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
+        $isCatalogAllowed = $this->catalogAccessChecker->allowedToAccess($event);
 
         // Build print template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataViewForPrint(
+        $templateData = $this->taggedDataFactory->buildTaggedDataViewForPrint(
             $sheetToDisplay,
             $locale
         );
 
-        [$nomenclatures, $participants, $taggedData] = $this->get('sheet.infos_helper')->getInfos(
+        [$nomenclatures, $participants, $taggedData] = $this->sheetInfosHelper->getInfos(
             $sheetToDisplay,
             $user,
             $locale
@@ -220,67 +248,47 @@ class SheetController extends Controller
                 throw $this->createAccessDeniedException('Sheet not in catalog');
             }
 
-            $canSeeSheet = $this->get(CanSeeSheet::class);
-
-            if (false === $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
+            if (false === $this->canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)) {
                 throw $this->createNotFoundException('You do not have the right to see this sheet');
             }
 
-            $rules = $this
-                ->get('repository.rule_repository')
-                ->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
+            $rules = $this->ruleRepository->getBySeerSheetAndSeeableSheet($sheet, $sheetToDisplay);
 
-            $ruleApplyer = $this->get('domain.rule.applyer');
-            $ruleApplyer->applyRuleForTemplate($templateData, $rules);
-            $ruleApplyer->applyRuleForCardList($participants, $rules);
+            $this->ruleApplyer->applyRuleForTemplate($templateData, $rules);
+            $this->ruleApplyer->applyRuleForCardList($participants, $rules);
         }
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
-            'event'         => $event,
-            'userSheet'     => $sheet,
-            'sheet'         => $sheetToDisplay,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
+            'event' => $event,
+            'userSheet' => $sheet,
+            'sheet' => $sheetToDisplay,
+            'taggedData' => $taggedData,
+            'locale' => $locale,
             'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
+            'participants' => $participants,
+            'templateData' => $templateData,
         ]);
     }
 
-    /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
-     *
-     * @return RedirectResponse
-     */
-    public function removeImageAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
+    public function removeImageAction(Sheet $sheet, string $locale, string $key): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
-        $object       = $templateData->getObject($key);
+        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
+        $object = $templateData->getObject($key);
 
         if (!$object instanceof Template\TemplateObject\Image) {
             throw $this->createNotFoundException('The key given is not an image');
         }
 
         $removeImage = new RemoveImage($object, $sheet, $templateData);
-        $this->get('tactician.commandbus')->handle($removeImage);
+        $this->commandBus->handle($removeImage);
 
         return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
-    /**
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
-     *
-     * @return RedirectResponse
-     */
-    public function submitValidationAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
+    public function submitValidationAction(Sheet $sheet, UserInterface $user): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -291,19 +299,13 @@ class SheetController extends Controller
 
         $submitValidation = new SubmitValidation($sheet, $user);
 
-        $this->get('tactician.commandbus')->handle($submitValidation);
+        $this->commandBus->handle($submitValidation);
 
         return $this->redirectToRoute('event_sheet_default', ['sheet' => $sheet->getId()]);
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return Sheet
-     */
-    private function getUserSheet(Event $event, $locale)
+    private function getUserSheet(Event $event, string $locale): Sheet
     {
-        return $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+        return $this->sheetGuesser->getUserSheet($this->getUser(), $event, $locale);
     }
 }

@@ -3,9 +3,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Connect;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class LinkedInConnectController extends Controller
+class LinkedInConnectController extends AbstractController
 {
     /** @var ClientRegistry */
     private $clientRegistry;

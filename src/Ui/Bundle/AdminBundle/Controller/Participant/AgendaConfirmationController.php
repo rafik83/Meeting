@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQuery;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -9,21 +11,23 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\User\Event\AgendaConfirmation\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\UpdateAgendaConfirmationType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AgendaConfirmationController extends Controller
+class AgendaConfirmationController extends AbstractController
 {
-    /**
-     * @param Request     $request
-     * @param Event       $event
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     *
-     * @return RedirectResponse|Response
-     */
+    private QueryBusInterface $queryBus;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        QueryBusInterface $queryBus,
+        CommandBusInterface $commandBus
+    ) {
+        $this->queryBus = $queryBus;
+        $this->commandBus = $commandBus;
+    }
+
     public function updateAgendaConfirmationAction(
         Request $request,
         Event $event,
@@ -37,7 +41,7 @@ class AgendaConfirmationController extends Controller
             throw $this->createAccessDeniedException('The participant is not on this sheet');
         }
 
-        $agendaConfirmationStatus = $this->get('tactician.commandbus.query')
+        $agendaConfirmationStatus = $this->queryBus
             ->handle(new AgendaConfirmationStatusQuery($participant, $event))
         ;
 
@@ -48,7 +52,7 @@ class AgendaConfirmationController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($updateAgendaConfirmation);
+            $this->commandBus->handle($updateAgendaConfirmation);
 
             return $this->redirectToRoute('admin_sheet_details', [
                 'event' => $event->getId(),

@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
+use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\ValidateCode;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeAlreadyValidatedException;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeNotValidException;
@@ -10,37 +13,49 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ValidateController extends Controller
+class ValidateController extends AbstractController
 {
-    /**
-     * @param Request            $request
-     * @param EventDomain        $eventDomain
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     *
-     * @return Response|RedirectResponse
-     */
+    private UserEventPhoneRepositoryInterface $userEventPhoneRepository;
+    private AuthenticationManagerInterface $authenticationManager;
+    private TranslatorInterface $translator;
+    private FlashBagInterface $flashBag;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        UserEventPhoneRepositoryInterface $userEventPhoneRepository,
+        AuthenticationManagerInterface $authenticationManager,
+        TranslatorInterface $translator,
+        FlashBagInterface $flashBag,
+        CommandBusInterface $commandBus
+    ) {
+        $this->userEventPhoneRepository = $userEventPhoneRepository;
+        $this->authenticationManager = $authenticationManager;
+        $this->translator = $translator;
+        $this->flashBag = $flashBag;
+        $this->commandBus = $commandBus;
+    }
+
     public function validateWithTokenAction(
         Request $request,
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
         UserInterface $user = null
-    ) {
+    ): Response {
         $event = $eventDomain->getEvent();
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($userEventToken->getUser(), $userEventToken->getEvent())
         ;
 
@@ -53,14 +68,14 @@ class ValidateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($validate);
+                $this->commandBus->handle($validate);
 
                 return $this->redirectToRoute('event_user_event_phone_validate_code_success', [
                     'token' => $userEventToken->getToken(),
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
-                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                    $this->translator->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
                 return $this->redirectToRoute('event_user_event_token_confirm_agenda', [
@@ -76,27 +91,17 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param UserInterface $user
-     * @param Sheet         $sheet
-     * @param Participant   $participant
-     *
-     * @return RedirectResponse|Response
-     */
     public function validateAction(
         Request $request,
         EventDomain $eventDomain,
         UserInterface $user = null,
         Sheet $sheet,
         Participant $participant
-    ) {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($user, $eventDomain->getEvent())
         ;
 
@@ -105,10 +110,10 @@ class ValidateController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($validate);
+                $this->commandBus->handle($validate);
                 $this->addFlash('confirm', 'flash.event.user_event_phone.validate.success');
 
-                if ($redirectTo = $this->container->get('session')->getFlashBag()->get('redirectTo')) {
+                if ($redirectTo = $this->flashBag->get('redirectTo')) {
                     return $this->redirect($redirectTo[0]);
                 }
 
@@ -118,7 +123,7 @@ class ValidateController extends Controller
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
-                    $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
+                    $this->translator->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
                 return $this->redirectToRoute('event_user_phone_validate', [
@@ -136,24 +141,16 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param EventDomain        $eventDomain
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     *
-     * @return Response|RedirectResponse
-     */
     public function validateSuccessAction(
         EventDomain $eventDomain,
         UserEventToken $userEventToken,
         UserInterface $user = null
-    ) {
+    ): Response {
         $event = $eventDomain->getEvent();
 
         $this->checkUserEventTokenAccess($event, $userEventToken, $user);
 
-        $userEventPhone = $this
-            ->get('repository.user.user_event_phone_repository')
+        $userEventPhone = $this->userEventPhoneRepository
             ->find($userEventToken->getUser(), $userEventToken->getEvent());
 
         if (null === $userEventPhone) {
@@ -171,19 +168,14 @@ class ValidateController extends Controller
         ]);
     }
 
-    /**
-     * @param Event              $event
-     * @param UserEventToken     $userEventToken
-     * @param UserInterface|null $user
-     */
-    private function checkUserEventTokenAccess(Event $event, UserEventToken $userEventToken, UserInterface $user = null)
+    private function checkUserEventTokenAccess(Event $event, UserEventToken $userEventToken, UserInterface $user = null): void
     {
         if ($userEventToken->getEvent() !== $event || !$userEventToken->isAgendaConfirmation()) {
             throw $this->createNotFoundException('Token invalid');
         }
 
         if ($user instanceof User && $user !== $userEventToken->getUser()) {
-            $this->get('adapter.authentication_manager')->disconnect();
+            $this->authenticationManager->disconnect();
         }
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Order\Export;
 
-class ExportOrders
+use Proximum\Vimeet\Application\Command\Command;
+
+class ExportOrders implements Command
 {
     /** @var int */
     public $eventId;

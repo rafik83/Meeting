@@ -12,8 +12,8 @@ use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
-use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
+use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Domain\Catalog\GetDisplayObjectiveFilter;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories;
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
@@ -24,8 +24,8 @@ use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class CatalogFilterViewsHandlerTest extends TestCase
 {
@@ -39,7 +39,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
     public $visibleParticipationTypes;
 
     /** @var ObjectProphecy */
-    public $engine;
+    public $twig;
 
     /** @var ObjectProphecy */
     public $event;
@@ -58,7 +58,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->visibleParticipationCategories = $this->prophesize(VisibleParticipationCategories::class);
         $this->visibleParticipationTypes = $this->prophesize(VisibleParticipationTypes::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->locale = 'fr';
@@ -84,20 +84,19 @@ class CatalogFilterViewsHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([])
         ;
-        $response = new Response();
 
-        $this->engine->renderResponse(
+        $this->twig->render(
                 'EventBundle:Catalog:no-visible-type.html.twig',
                 ['event' => $this->event->reveal(), 'sheet' => $this->sheet->reveal()]
             )
             ->shouldBeCalled()
-            ->willReturn($response);
+            ->willReturn('No visible type message');
 
         $handler = new CatalogFilterViewsHandler(
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->canDisplayObjectiveFilter->reveal()
         );
 
@@ -111,7 +110,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             [],
             [],
             [],
-            $response
+            new Response('No visible type message')
         );
 
         $this->assertEquals($expected, $result);
@@ -147,7 +146,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$typeView1->reveal(), $typeView2->reveal()])
         ;
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
 
         $positionView1 = $this->prophesize(PositionView::class);
         $positionView2 = $this->prophesize(PositionView::class);
@@ -177,7 +176,7 @@ class CatalogFilterViewsHandlerTest extends TestCase
             $this->queryBus->reveal(),
             $this->visibleParticipationCategories->reveal(),
             $this->visibleParticipationTypes->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->canDisplayObjectiveFilter->reveal()
         );
 

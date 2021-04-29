@@ -21,18 +21,18 @@ class OptionViewQueryHandler
     private $participantWithAttributedProductGetter;
 
     /** @var \DateTimeInterface */
-    private $now;
+    private $dateTime;
 
     public function __construct(
         CartManager $cartManager,
         Merger $merger,
         ParticipantWithAttributedProductGetter $participantWithAttributedProductGetter,
-        \DateTimeInterface $now
+        \DateTimeInterface $dateTime
     ) {
         $this->cartManager = $cartManager;
         $this->merger = $merger;
         $this->participantWithAttributedProductGetter = $participantWithAttributedProductGetter;
-        $this->now = $now;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -80,7 +80,7 @@ class OptionViewQueryHandler
             $optionViewQuery->product->getSubjectedToValidationHelp($optionViewQuery->locale),
             $optionViewQuery->product->isSubjectedToValidation(),
             $included,
-            $optionViewQuery->product->isBuyable($this->now),
+            $optionViewQuery->product->isBuyable($this->dateTime),
             $this->getParticipantsCompleteNameByAttributedProduct(
                 $optionViewQuery->sheet->getParticipantsArray(),
                 $optionViewQuery->product
@@ -108,6 +108,6 @@ class OptionViewQueryHandler
 
     private function isAttributableButNoLongerBuyable(Product $product): bool
     {
-        return $product->isAttributable() && !$product->isBuyable($this->now);
+        return $product->isAttributable() && !$product->isBuyable($this->dateTime);
     }
 }

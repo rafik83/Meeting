@@ -4,17 +4,20 @@ Feature: Manage participant
 
   Scenario: I can add participant to my sheet
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    And the event "ASD Days" is created
+    And the domain for this event is "asddays-2016.vimeet.proximum"
+
+    And there is a type "Fournisseur" in this event
+    And there is a package "Pack participants+rdv" for this event
+    And there is a product Participant called "Participant Supplémentaire" with a price of "130" and a max quantity of 10
+    And this product participant is assigned to this package
+    And this package is assigned to this type
+
+    And the user "user_asddays_1@proximum.com" is created
+    And there is a sheet for this type with the title "Aanera"
+    And there is a participant for this sheet and this user
+    And I am logged with "user_asddays_1@proximum.com" on front
+
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.object.action.add"
@@ -34,7 +37,8 @@ Feature: Manage participant
     And I should see "PM"
 
   Scenario: I can remove a participant of my sheet
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    Given I am logged with "user_asddays_1@proximum.com" on front
     When I go to this page "/fr/sheet/1"
     And I should see "sheet.object.action.remove"
     Then I follow "sheet.object.action.remove"

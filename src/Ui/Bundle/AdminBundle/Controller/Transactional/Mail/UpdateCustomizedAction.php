@@ -12,18 +12,18 @@ use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterf
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\UpdateCustomizedType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateCustomizedAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -47,7 +47,7 @@ class UpdateCustomizedAction
     private $typeRepository;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         MessageRepositoryInterface $messageRepository,
         TypeRepositoryInterface $typeRepository,
@@ -56,7 +56,7 @@ class UpdateCustomizedAction
         FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
@@ -120,7 +120,7 @@ class UpdateCustomizedAction
             ]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Transactional/Mail:updateCustomized.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Transactional/Mail:updateCustomized.html.twig', [
             'form' => $form->createView(),
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,
@@ -130,6 +130,6 @@ class UpdateCustomizedAction
                 $data['isCustomizableByType'] ? Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS : [],
                 $data['availableParameters']
             )
-        ]);
+        ]));
     }
 }

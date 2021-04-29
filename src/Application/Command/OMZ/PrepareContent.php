@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\OMZ;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PrepareContent
+class PrepareContent implements Command
 {
     /** @var Event */
     public $event;

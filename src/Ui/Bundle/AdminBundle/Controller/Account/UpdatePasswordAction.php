@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdatePasswordAction
 {
@@ -22,8 +22,8 @@ class UpdatePasswordAction
     /** @var RouterInterface */
     private $router;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var CommandBusInterface */
     private $commandBus;
@@ -34,13 +34,13 @@ class UpdatePasswordAction
     public function __construct(
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag
     ) {
         $this->formFactory = $formFactory;
         $this->router = $router;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
     }
@@ -60,7 +60,7 @@ class UpdatePasswordAction
             return new RedirectResponse($this->router->generate('admin_account'));
         }
 
-        return new Response($this->engine->render('AdminBundle:Account:updatePassword.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Account:updatePassword.html.twig', [
             'form' => $form->createView(),
         ]));
     }

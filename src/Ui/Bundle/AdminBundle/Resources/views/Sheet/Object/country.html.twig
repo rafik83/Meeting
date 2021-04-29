@@ -1,1 +1,5 @@
-<b>{{ object.getDefaultLabel }}:</b> {{ object.country|country(app.request.locale)|upper }}<br>
+<b>{{ object.getDefaultLabel }}:</b>
+{% if object.country %}
+{{ object.country|country(app.request.locale)|upper }}
+{% endif %}
+<br>

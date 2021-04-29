@@ -2,10 +2,10 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save;
 
-use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\LongJob;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\LeniApiCallCommand;
 
 class LeniApiCallJobQueue extends AbstractJobQueueAdapter implements LeniApiCallJobQueueInterface
@@ -16,7 +16,7 @@ class LeniApiCallJobQueue extends AbstractJobQueueAdapter implements LeniApiCall
     public function createJob(ExtraData $extraData)
     {
         // create a low priority job
-        $job = new Job(LeniApiCallCommand::NAME, [$extraData->getId()], true, Job::DEFAULT_QUEUE, Job::PRIORITY_LOW);
-        $this->setJob($job);
+        $job = new LongJob(LeniApiCallCommand::NAME, [LeniApiCallCommand::EXTRA_DATA_ID=> $extraData->getId()]);
+        $this->sendJob($job);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CatalogFilterViewsResult;
 
-class FilteredFieldsQuery
+class FilteredFieldsQuery implements Query
 {
     /** @var Event */
     public $event;

@@ -9,12 +9,12 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class ListAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -25,9 +25,9 @@ class ListAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
     }
@@ -42,7 +42,7 @@ class ListAction
 
         $list = $this->queryBus->handle(new StaticFormulationListViewQuery($event, $request));
 
-        return new Response($this->engine->render('AdminBundle:StaticFormulation:list.html.twig', [
+        return new Response($this->twig->render('AdminBundle:StaticFormulation:list.html.twig', [
             'event' => $event,
             'list' => $list,
         ]));

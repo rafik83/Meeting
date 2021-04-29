@@ -18,7 +18,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\PromotionCod
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class SummaryAction
 {
@@ -56,21 +56,9 @@ class SummaryAction
     /** @var BillingInfoRepositoryInterface */
     private $billingInfoRepository;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
-    /**
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     * @param CartCleaner                          $cartCleaner
-     * @param FunnelFactory                        $funnelFactory
-     * @param RouterInterface                      $router
-     * @param BillingInfoRepositoryInterface       $billingInfoRepository
-     * @param FlashBagInterface                    $flashBag
-     * @param FormFactoryInterface                 $formFactory
-     * @param CommandBusInterface                  $commandBus
-     * @param QueryBusInterface                    $queryBus
-     * @param EngineInterface                      $engine
-     */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CartCleaner $cartCleaner,
@@ -81,7 +69,7 @@ class SummaryAction
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->cartCleaner = $cartCleaner;
@@ -92,7 +80,7 @@ class SummaryAction
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
     /**
@@ -175,12 +163,12 @@ class SummaryAction
             )
         );
 
-        return $this->engine->renderResponse('EventBundle:Package:summary.html.twig', [
+        return new Response($this->twig->render('EventBundle:Package:summary.html.twig', [
             'event'             => $eventDomain->getEvent(),
             'formTermsOfSale'   => $formTermsOfSale->createView(),
             'formPromotionCode' => $formPromotionCode->createView(),
             'sheet'             => $sheet,
             'view'              => $view,
-        ]);
+        ]));
     }
 }

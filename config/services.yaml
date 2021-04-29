@@ -1,0 +1,108 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $isDebugMode: '%kernel.debug%'
+            $appEnv: '%kernel.environment%'
+            $dateTime: '@datetime'
+            $scheme: '%scheme%'
+            $sharedUploadedFiles: '%shared_uploaded_files%'
+            $pathToExport: '%infrastructure.common_export_path%'
+            $pathToOmzExport: '%infrastructure.export_omz_path%'
+            $mailerSender: '%mailer_sender%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    Proximum\Vimeet\:
+        resource: '../src/'
+        exclude:
+            - '../src/Infrastructure/Bundle/InfrastructureBundle/InfrastructureBundle.php'
+            - '../src/Infrastructure/Bundle/InfrastructureBundle/DependencyInjection/'
+            - '../src/Infrastructure/Bundle/InfrastructureBundle/DataFixtures/'
+            - '../src/Ui/Bundle/EventBundle/ValueResolver/UserDomain.php'
+            - '../src/Ui/Bundle/EventBundle/EventBundle.php'
+            - '../src/Domain/Model'
+            - '../src/Application/View'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\:
+        resource: '../src/Ui/Bundle/EventBundle/Controller/'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\:
+        resource: '../src/Ui/Bundle/AdminBundle/Controller/'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Controller\:
+        resource: '../src/Infrastructure/Bundle/InfrastructureBundle/Controller/'
+        tags: ['controller.service_arguments']
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction:
+        arguments:
+            $uploadDir: '%infrastructure.export_participant_path%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Export\ExportFileAction:
+        arguments:
+            $exportProductsPath: '%infrastructure.export_products_path%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
+        arguments:
+            $featureRegistrationTemplateBuilderEnabled: '%feature_registration_template_builder_enabled%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Rooming\DownloadRoomingListExportAction:
+        arguments:
+            $exportPath: '%infrastructure.export_rooming_list_path%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot\DownloadAction:
+        arguments:
+            $exportPath: '%infrastructure.export_spot_path%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Form\DownloadExportDataAction:
+        arguments:
+            $exportPath: '%infrastructure.export_form_template_user_data_path%'
+        tags: ['controller.service_arguments']
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction:
+        arguments:
+            $defaultLocales: '%infrastructure.default_locales%'
+        tags: ['controller.service_arguments']
+
+    Proximum\Vimeet\Infrastructure\Adapter\Elasticsearch\Sheet\TagFilterAggregator:
+        arguments:
+            $searchable: '@fos_elastica.index.sheet.sheet'
+
+    # explicit aliases for interfaces
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface:
+        alias: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator
+    Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface:
+        alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchCatalogJobQueue
+    Proximum\Vimeet\Application\Adapter\EmailingSenderInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
+    Proximum\Vimeet\Application\Adapter\ExecInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
+
+    # services not autowired
+    Symfony\Component\Serializer\Normalizer\DataUriNormalizer: ~
+    Symfony\Component\HttpKernel\UriSigner:
+        alias: uri_signer
+
+    # for compatibility with sf3 legacy (to be migrated)
+    Doctrine\ORM\EntityManager:
+        alias: Doctrine\ORM\EntityManagerInterface
+    adapter.event_url_generator:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\EventUrlGenerator
+    Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface:
+        alias: adapter.event_url_generator
+    Proximum\Vimeet\Application\Adapter\JobQueueInterface:
+        alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
+    adapter.job_queue_adapter:
+        alias: Proximum\Vimeet\Application\Adapter\JobQueueInterface

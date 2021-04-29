@@ -4,15 +4,21 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class OrderManager
 {
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
+    private ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository;
+    private ParticipantRepositoryInterface $participantRepository;
     /** @var SheetManager */
     private $sheetManager;
 
@@ -24,11 +30,15 @@ class OrderManager
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        ParticipantRepositoryInterface $participantRepository,
         SheetManager $sheetManager,
         BillingInfoManager $billingInfoManager,
         \DateTimeInterface $dateTime
     ) {
         $this->orderRepository = $orderRepository;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->participantRepository = $participantRepository;
         $this->sheetManager = $sheetManager;
         $this->billingInfoManager = $billingInfoManager;
         $this->dateTime = $dateTime;
@@ -73,12 +83,34 @@ class OrderManager
         return $orderRow;
     }
 
-    public function createOrderProductRow(Order $order, Product $product): Order\Row
+    public function createOrderProductRow(Order $order, Product $product, int $quantity = 1): Order\Row
     {
-        $orderRow = new Order\Row($order, 1, $product->getVat(), $product, null, $product->getTitle('fr'), $product->getUnitPrice());
+        $orderRow = new Order\Row($order, $quantity, $product->getVat(), $product, null, $product->getTitle('fr'), $product->getUnitPrice());
         $order->addRow($orderRow);
         $this->orderRepository->set($order);
 
         return $orderRow;
+    }
+
+    public function attributeProductToParticipant(Order\Row $orderRow, Product $product, Sheet $sheet): void
+    {
+        $participantsWithoutProduct = array_filter($sheet->getParticipantsArray(), fn (Participant $p) => $p->hasParticipantProduct());
+
+        if (empty($participantsWithoutProduct)) {
+            return;
+        }
+
+        $participant = $participantsWithoutProduct[0];
+
+        $productAttributedToParticipant = new ProductAttributedToParticipant(
+            $product,
+            $participant,
+            new \DateTime(),
+            $orderRow
+        );
+        $this->productAttributedToParticipantRepository->add($productAttributedToParticipant);
+
+        $participant->setParticipantProduct($product);
+        $this->participantRepository->set($participant);
     }
 }

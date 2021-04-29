@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Billing;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 
-class UpdateInfo
+class UpdateInfo implements Command
 {
     /**
      * @var BillingInfo

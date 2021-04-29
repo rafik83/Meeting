@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PostBatchCatalog
+class PostBatchCatalog implements Command
 {
     /**
      * @var Sheet[]

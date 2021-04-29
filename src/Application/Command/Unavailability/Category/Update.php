@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\Category;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 
-class Update
+class Update implements Command
 {
     /**
      * @var string

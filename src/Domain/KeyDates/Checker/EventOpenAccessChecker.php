@@ -13,6 +13,6 @@ class EventOpenAccessChecker extends AccessChecker
      */
     public function allowedToAccess(Event $event)
     {
-        return null !== $event->getOpenDate() && $event->getOpenDate() <= $this->datetime;
+        return null !== $event->getOpenDate() && $event->getOpenDate() <= $this->dateTime;
     }
 }

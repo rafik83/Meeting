@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Phone;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class UpdatePhoneValidationStatus
+class UpdatePhoneValidationStatus implements Command
 {
     /** @var Event */
     public $event;

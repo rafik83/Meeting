@@ -64,7 +64,7 @@ admin.agenda.meeting.move: 'Déplacer le RDV'
 admin.agenda.meeting.remove: 'Supprimer le RDV'
 admin.agenda.meeting.selectSlot: 'Sélectionner ce créneau'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
-admin.agenda.meeting.update: 'Modifier le RDV'
+admin.agenda.meeting.update: Modifier
 admin.agenda.meeting.updateMassAssignment.dateFormat: 'Format de date incorrect'
 admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: 'Rendez-vous ou conférence sur le créneau'
 admin.agenda.meeting.updateMassAssignment.missingData: 'Impossible de modifier l''indisponibilité de masse dispatchée, données manquantes'
@@ -564,7 +564,7 @@ admin.nomenclature.link: Nomenclatures
 admin.nomenclature.read.assign.button: 'Assigner à un événement'
 admin.nomenclature.read.configuration.title: Configuration
 admin.nomenclature.read.export.button: Exporter
-admin.nomenclature.read.export.help: 'Le fichier exporter contient une clé pour chaque ligne, la modification d''une de ces lignes modifiera l''élément correspondant. L''ajout d''une ligne sans clé créera un nouvel élément. La suppression n''est plus possible une fois que l''événement a des participants.'
+admin.nomenclature.read.export.help: 'Le fichier exporté contient une clé pour chaque ligne, la modification d''une de ces lignes modifiera l''élément correspondant. L''ajout d''une ligne sans clé créera un nouvel élément. La suppression n''est plus possible une fois que l''événement a des participants.'
 admin.nomenclature.read.export.title: Export
 admin.nomenclature.read.import.button: Importer
 admin.nomenclature.read.import.title: Import
@@ -1342,13 +1342,14 @@ admin.type.badge.example.lastName: Nom
 admin.type.badge.example.position: 'Directeur des badges '
 admin.type.badge.example.sheetTitle: 'Exemple de titre de Fiche'
 admin.type.badge.preview.link: 'aperçu du e-badge'
-admin.type.canUpdateMeeting: 'Peut modifier les RDV'
+admin.type.canMoveMeeting: 'Peut déplacer les RDV'
 admin.type.canRemoveMeeting: 'Peut supprimer un RDV'
+admin.type.canUpdateMeeting: 'Peut modifier les RDV'
 admin.type.content.specificTermsOfSale: 'CGV particulières'
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
 admin.type.form.template: Formulaires
-admin.type.form.template.status.draft: brouillon
+admin.type.form.template.status.draft: Brouillon
 admin.type.form.template.status.published: publié
 admin.type.hidden: Caché
 admin.type.id: Id
@@ -1452,8 +1453,8 @@ boolean.yes: Oui
 change_password.link: 'Changer le mot de passe'
 change_password.title: 'Changer le mot de passe'
 checkbox.checked: Coché
-checkbox.not_checked: Non coché
-checkbox.null: Sans réponse
+checkbox.not_checked: 'Non coché'
+checkbox.null: 'Sans réponse'
 event.activateAccount.password: 'Définir votre mot de passe'
 event.catalog.category.seeSheet: 'Voir la fiche'
 event.catalog.sheet.meetingRequest: 'Demander un rendez-vous'

@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Transformer\UniqueValuesTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,12 +34,13 @@ class UpdateType extends AbstractEventType
         PrefixRepositoryInterface $prefixRepository,
         AuthorizationCheckerInterface $authorizationChecker,
         TranslatorInterface $translator,
-        Event\EventUrlGeneratorInterface $eventUrlGenerator
+        Event\EventUrlGeneratorInterface $eventUrlGenerator,
+        UniqueValuesTransformer $uniqueValuesTransformer
     ) {
         $this->eventUrlGenerator = $eventUrlGenerator;
         $this->translator = $translator;
         $this->authorizationChecker = $authorizationChecker;
-        parent::__construct($supportedCurrencies, $preferredLocales, $prefixRepository, $authorizationChecker);
+        parent::__construct($supportedCurrencies, $preferredLocales, $prefixRepository, $authorizationChecker, $uniqueValuesTransformer);
     }
 
     /**

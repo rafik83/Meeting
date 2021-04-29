@@ -62,5 +62,7 @@ class SendCampaignCommand extends Command
         }
 
         $this->handler->handle(new Process($campaign));
+
+        return 0;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -14,7 +14,7 @@ class Version20170216153702 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql('ALTER TABLE billing_info ADD reference VARCHAR(255) DEFAULT NULL');
@@ -24,7 +24,7 @@ class Version20170216153702 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql('ALTER TABLE billing_info DROP reference');

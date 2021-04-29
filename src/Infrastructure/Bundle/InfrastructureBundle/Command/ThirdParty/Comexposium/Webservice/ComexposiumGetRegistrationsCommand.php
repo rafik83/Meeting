@@ -13,8 +13,8 @@ class ComexposiumGetRegistrationsCommand extends Command
 {
     public const NAME = 'vimeet:comexposium:get-registrations';
 
-    private const EVENT_ID = 'eventId';
-    private const REGISTRATION_REFERENCES = 'registrationReferences';
+    public const EVENT_ID = 'eventId';
+    public const REGISTRATION_REFERENCES = 'registrationReferences';
 
     /** @var EventRepositoryInterface */
     private $eventRepository;

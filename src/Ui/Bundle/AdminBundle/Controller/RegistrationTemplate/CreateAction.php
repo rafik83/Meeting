@@ -8,12 +8,12 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -26,8 +26,8 @@ class CreateAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -37,12 +37,12 @@ class CreateAction
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         RouterInterface $router,
-        EngineInterface $engine
+        Environment $twig
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
     }
 
@@ -73,12 +73,12 @@ class CreateAction
             return new RedirectResponse($this->router->generate('admin_template_registration_build', [
                 'event' => $event->getId(),
                 'registrationTemplate' => $result->registrationTemplate->getId(),
-                'locale' => $event->getFallback(),
+                'locale' => $event->getLocaleFallback(),
             ]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:create.html.twig', [
+        return new Response($this->twig->render('AdminBundle:RegistrationTemplate:create.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

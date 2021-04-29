@@ -8,7 +8,6 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 class CreateAction
 {
@@ -24,8 +24,8 @@ class CreateAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -39,25 +39,17 @@ class CreateAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /**
-     * @param CommandBus                           $commandBus
-     * @param RouterInterface                      $router
-     * @param FormFactoryInterface                 $formFactory
-     * @param EngineInterface                      $engine
-     * @param FlashBagInterface                    $flashBag
-     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
-     */
     public function __construct(
         CommandBus $commandBus,
         RouterInterface $router,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->router = $router;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->flashBag = $flashBag;
         $this->commandBus = $commandBus;
@@ -96,9 +88,9 @@ class CreateAction
             ]));
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
+        ]));
     }
 }

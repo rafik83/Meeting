@@ -7,14 +7,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\Exception\ParserException;
 use ScssPhp\ScssPhp\OutputStyle;
+use Twig\Environment;
 
 class Generator
 {
     /** @var string */
     private $webAssetsPath;
 
-    /** @var \Twig_Environment */
-    private $twig;
+    private Environment $twig;
 
     /** @var string */
     private $bundleGuidelinePath;
@@ -29,7 +29,7 @@ class Generator
     private $rootPath;
 
     public function __construct(
-        \Twig_Environment $twig,
+        Environment $twig,
         string $rootPath,
         string $webAssetsPath,
         string $bundleGuidelinePath,

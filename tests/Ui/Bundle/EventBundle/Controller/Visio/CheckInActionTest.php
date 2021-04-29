@@ -21,14 +21,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class CheckInActionTest extends TestCase
 {
     /** @var ObjectProphecy|DDayGuesser */
     private $dDayGuesser;
-    /** @var ObjectProphecy|EngineInterface */
-    private $engine;
+    /** @var ObjectProphecy */
+    private $twig;
     /** @var ObjectProphecy|CommandBusInterface */
     private $commandBus;
     /** @var ObjectProphecy|UrlGeneratorInterface */
@@ -66,7 +66,7 @@ class CheckInActionTest extends TestCase
         // dependencies
 
         $this->dDayGuesser = $this->prophesize(DDayGuesser::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
         $this->urlGenerator = $this->prophesize(UrlGeneratorInterface::class);
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -87,13 +87,13 @@ class CheckInActionTest extends TestCase
         $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet->reveal())->willReturn(true);
         $this->isParticipantVisio->isSatisfiedBy($this->participant->reveal())->willReturn(true);
         $this->dDayGuesser->isItDDay($this->event->reveal())->willReturn(true);
-        $this->engine->render('@Event/Visio/checkIn.html.twig', ['event' => $this->event->reveal()])
+        $this->twig->render('@Event/Visio/checkIn.html.twig', ['event' => $this->event->reveal()])
             ->willReturn('Hello there')
         ;
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -126,7 +126,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -157,7 +157,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -188,7 +188,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -219,7 +219,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -250,7 +250,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),
@@ -281,7 +281,7 @@ class CheckInActionTest extends TestCase
 
         $action = new CheckInAction(
             $this->dDayGuesser->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->commandBus->reveal(),
             $this->urlGenerator->reveal(),
             $this->authorizationChecker->reveal(),

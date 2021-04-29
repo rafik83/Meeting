@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Event\BillingConfiguration;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\PracticalInfo\Update as PracticalInfoUpdate;
@@ -14,20 +16,25 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PracticalInfo;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventController extends Controller
+class EventController extends AbstractController
 {
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function readAction(Event $event)
+    private TranslatorInterface $translator;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        TranslatorInterface $translator,
+        CommandBusInterface $commandBus
+    ) {
+        $this->translator = $translator;
+        $this->commandBus = $commandBus;
+    }
+
+    public function readAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -58,7 +65,7 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $newEvent = $this->get('tactician.commandbus')->handle($create);
+                $newEvent = $this->commandBus->handle($create);
                 $this->addFlash('warning', 'flash.admin.event.duplicate.warning');
 
                 return $this->redirectToRoute('admin_event_update', ['event' => $newEvent->getId()]);
@@ -66,7 +73,7 @@ class EventController extends Controller
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
             } catch (DomainAlreadyUsedException $ex) {
                 $form->get('domain')->addError(
-                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                    new FormError($this->translator->trans('validators.event.domain.unique', [], 'validators'))
                 );
             }
         }
@@ -76,9 +83,6 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse|Response
-     */
     public function createAction(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -93,7 +97,7 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($create);
+                $this->commandBus->handle($create);
                 $this->addFlash('success', 'flash.admin.event.create.success');
 
                 return $this->redirectToRoute('admin_event_list');
@@ -101,7 +105,7 @@ class EventController extends Controller
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
             } catch (DomainAlreadyUsedException $ex) {
                 $form->get('domain')->addError(
-                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                    new FormError($this->translator->trans('validators.event.domain.unique', [], 'validators'))
                 );
             }
         }
@@ -111,9 +115,6 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse|Response
-     */
     public function updateAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -131,7 +132,7 @@ class EventController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($update);
+                $this->commandBus->handle($update);
                 $this->addFlash('success', 'flash.admin.event.update.success');
 
                 return $this->redirectToRoute('admin_event_update', ['event' => $event->getId()]);
@@ -139,7 +140,7 @@ class EventController extends Controller
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');
             } catch (DomainAlreadyUsedException $ex) {
                 $form->get('domain')->addError(
-                    new FormError($this->get('translator')->trans('validators.event.domain.unique', [], 'validators'))
+                    new FormError($this->translator->trans('validators.event.domain.unique', [], 'validators'))
                 );
             }
         }
@@ -150,9 +151,6 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * @return Response|RedirectResponse
-     */
     public function duplicateAction(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -174,13 +172,7 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function billingConfigurationAction(Request $request, Event $event)
+    public function billingConfigurationAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -190,7 +182,7 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($billingConfiguration);
+            $this->commandBus->handle($billingConfiguration);
             $this->addFlash('success', 'flash.admin.event.billing.configuration.success');
 
             return $this->redirectToRoute('admin_event_list');
@@ -202,10 +194,6 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     *
-     * @return RedirectResponse|Response
-     */
     public function practicalInfoAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -220,7 +208,7 @@ class EventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
+            $this->commandBus->handle($update);
             $this->addFlash('success', 'flash.admin.event.practicalInfo.update.success');
 
             return $this->redirectToRoute('admin_event_practical_info_update', ['event' => $event->getId()]);

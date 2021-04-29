@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -30,8 +30,8 @@ class UpdateAction
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
     /** @var FormFactoryInterface */
     private $formFactory;
 
@@ -40,14 +40,14 @@ class UpdateAction
         FlashBagInterface $flashBag,
         RouterInterface $router,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory
     ) {
         $this->jobQueue = $jobQueue;
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
     }
 
@@ -70,7 +70,7 @@ class UpdateAction
             return new RedirectResponse($this->router->generate('admin_translations_update'));
         }
 
-        return new Response($this->engine->render('@Admin/Translations/update.html.twig', [
+        return new Response($this->twig->render('@Admin/Translations/update.html.twig', [
             'form' => $form->createView(),
         ]));
     }

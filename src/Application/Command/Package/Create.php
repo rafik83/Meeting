@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Create
+class Create implements Command
 {
     /** @var string */
     public $title;

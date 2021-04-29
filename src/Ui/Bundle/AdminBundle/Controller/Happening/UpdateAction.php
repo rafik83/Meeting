@@ -12,7 +12,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateAction
 {
@@ -31,8 +31,8 @@ class UpdateAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -49,7 +49,7 @@ class UpdateAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
@@ -57,7 +57,7 @@ class UpdateAction
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
@@ -111,11 +111,11 @@ class UpdateAction
             }
         }
 
-        return $this->engine->renderResponse(self::TEMPLATE, [
+        return new Response($this->twig->render(self::TEMPLATE, [
             'event' => $event,
             'form' => $form->createView(),
             'products' => $happening->getProducts(),
             'happening' => $happening,
-        ]);
+        ]));
     }
 }

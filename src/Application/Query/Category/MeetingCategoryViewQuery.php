@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Category;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class MeetingCategoryViewQuery
+class MeetingCategoryViewQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

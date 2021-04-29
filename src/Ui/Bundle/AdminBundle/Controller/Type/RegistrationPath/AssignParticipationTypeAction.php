@@ -10,13 +10,13 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Answer;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\AssignParticipationTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class AssignParticipationTypeAction
 {
@@ -32,8 +32,8 @@ class AssignParticipationTypeAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -43,14 +43,14 @@ class AssignParticipationTypeAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
     }
 
@@ -88,7 +88,7 @@ class AssignParticipationTypeAction
             );
         }
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/Type/RegistrationPath/assignParticipationType.html.twig',
             [
                 'event' => $event,
@@ -96,6 +96,6 @@ class AssignParticipationTypeAction
                 'answerTitle' => $answer->getTitle($locale),
                 'form' => $assignParticipationTypeForm->createView(),
             ]
-        );
+        ));
     }
 }

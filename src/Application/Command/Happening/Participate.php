@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
-class Participate
+class Participate implements Command
 {
     /** @var Happening */
     public $happening;

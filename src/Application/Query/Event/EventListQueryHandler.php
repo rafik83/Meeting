@@ -14,7 +14,7 @@ class EventListQueryHandler
     /**
      * @var \DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var EventRepositoryInterface
@@ -25,13 +25,13 @@ class EventListQueryHandler
      * EventListQueryHandler constructor.
      *
      * @param EventRepositoryInterface $eventRepository
-     * @param \DateTimeInterface       $datetime
+     * @param \DateTimeInterface       $dateTime
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        \DateTimeInterface $datetime
+        \DateTimeInterface $dateTime
     ) {
-        $this->datetime        = $datetime;
+        $this->dateTime        = $dateTime;
         $this->eventRepository = $eventRepository;
     }
 
@@ -43,7 +43,7 @@ class EventListQueryHandler
     public function handle(EventListQuery $query)
     {
         $eventListView = [];
-        $pastEventDate = clone $this->datetime->modify('-1 month');
+        $pastEventDate = clone $this->dateTime->modify('-1 month');
 
         if (EventListQuery::STATE_ARCHIVED === $query->state) {
             $events = $this->eventRepository->findArchivedByAdmin($query->admin);

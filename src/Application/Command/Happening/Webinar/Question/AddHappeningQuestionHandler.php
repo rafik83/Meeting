@@ -17,16 +17,16 @@ class AddHappeningQuestionHandler
     private $notificationPublisher;
 
     /** @var DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     public function __construct(
         QuestionRepositoryInterface $questionRepository,
         NotificationPublisherInterface $notificationPublisher,
-        DateTimeInterface $datetime
+        DateTimeInterface $dateTime
     ) {
         $this->questionRepository = $questionRepository;
         $this->notificationPublisher = $notificationPublisher;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     public function handle(AddHappeningQuestion $command): void
@@ -39,7 +39,7 @@ class AddHappeningQuestionHandler
             $command->getHappening(),
             $command->getSheet(),
             $command->getCreatedBy(),
-            $this->datetime,
+            $this->dateTime,
             $command->getContent(),
             true
         );

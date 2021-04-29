@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Index
+class Index implements Command
 {
     /**
      * @var Event

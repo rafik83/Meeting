@@ -1,36 +1,36 @@
-services:
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Unavailability\System\SystemUnavailabilityEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator'
-        tags:
-            - { name: kernel.event_subscriber }
+# services:
+#     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Unavailability\System\SystemUnavailabilityEventSubscriber:
+#         arguments:
+#             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator'
+#         tags:
+#             - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AuthenticationFailureSubscriber:
-        arguments:
-            - '@request_stack'
-            - '@vimeet_infrastructure.repository.event_repository'
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AuthenticationFailureSubscriber:
+    #     arguments:
+    #         - '@request_stack'
+    #         - '@vimeet_infrastructure.repository.event_repository'
+    #         - '@vimeet_infrastructure.repository.user_repository'
+    #         - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AdminAuthenticationFailureSubscriber:
-        arguments:
-            - '@request_stack'
-            - '@repository.admin_repository'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\AdminAuthenticationFailureSubscriber:
+    #     arguments:
+    #         - '@request_stack'
+    #         - '@repository.admin_repository'
+    #         - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\UserConnectedEventListener:
-        arguments:
-            - '@adapter.authorization_checker'
-            - '@domain.key_dates.checker.networking_access_checker'
-            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver'
-            - '@adapter.session'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\UserConnectedEventListener:
+    #     arguments:
+    #         - '@adapter.authorization_checker'
+    #         - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider'
+    #         - '@domain.key_dates.checker.networking_access_checker'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
+    #         - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }

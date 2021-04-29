@@ -17,6 +17,6 @@ class AgendaAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getAgendaOnlineDate();
+        return $this->dateTime >= $event->getConfiguration()->getAgendaOnlineDate();
     }
 }

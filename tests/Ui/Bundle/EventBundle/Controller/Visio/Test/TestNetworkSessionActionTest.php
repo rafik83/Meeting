@@ -18,12 +18,12 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class TestNetworkSessionActionTest extends TestCase
 {
     /** @var ObjectProphecy */
-    private $commandBus, $engine, $authorizationCheckerAdapter, $request, $user, $event, $sheet;
+    private $commandBus, $twig, $authorizationCheckerAdapter, $request, $user, $event, $sheet;
 
     /** @var EventDomain */
     private $eventDomain;
@@ -31,7 +31,7 @@ class TestNetworkSessionActionTest extends TestCase
     public function setUp(): void
     {
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->request = $this->prophesize(Request::class);
         $this->user = $this->prophesize(User::class);
@@ -53,14 +53,14 @@ class TestNetworkSessionActionTest extends TestCase
             ->handle(Argument::any())
             ->shouldNotBeCalled()
         ;
-        $this->engine
+        $this->twig
             ->render('EventBundle:VideoConference:testNetworkAudioVideo.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
 
         $action = new TestNetworkSessionAction(
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
 
@@ -94,14 +94,14 @@ class TestNetworkSessionActionTest extends TestCase
             ->willThrow(InvalidTokenGeneratorArgumentsException::class)
         ;
 
-        $this->engine
+        $this->twig
             ->render('EventBundle:VideoConference:testNetworkAudioVideo.html.twig', Argument::any())
             ->shouldNotBeCalled()
         ;
 
         $action = new TestNetworkSessionAction(
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
 
@@ -141,7 +141,7 @@ class TestNetworkSessionActionTest extends TestCase
             ->willReturn($view)
         ;
 
-        $this->engine
+        $this->twig
             ->render('EventBundle:VideoConference:testNetworkAudioVideo.html.twig', [
                 'sheet' => $this->sheet->reveal(),
                 'event' => $this->event->reveal(),
@@ -153,7 +153,7 @@ class TestNetworkSessionActionTest extends TestCase
 
         $action = new TestNetworkSessionAction(
             $this->commandBus->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->authorizationCheckerAdapter->reveal()
         );
 

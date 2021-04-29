@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Schedule;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SlotViewQuery
+class SlotViewQuery implements Query
 {
     /**
      * @var Event

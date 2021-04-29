@@ -4,66 +4,49 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\ConnectedEvent;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\UserDomainProvider;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class UserConnectedEventListener implements EventSubscriberInterface
 {
-    /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationChecker;
-
-    /** @var NetworkingAccessChecker */
-    private $networkingAccessChecker;
-
-    /** @var UserDomainValueResolver */
-    private $userResolver;
-
-    /** @var SessionInterface */
-    private $session;
-
-    /** @var NotificationPublisherInterface */
-    private $notificationPublisher;
-
-    /** @var DatetimeInterface */
-    private $datetime;
-
-    /** @var Sheet */
-    private $sheet;
-
-    /** @var UserDomain */
-    private $userDomain;
-
-    /** @var bool */
-    private $publishNotification = false;
+    private AuthorizationCheckerAdapterInterface $authorizationChecker;
+    private UserDomainProvider $userDomainProvider;
+    private NetworkingAccessChecker $networkingAccessChecker;
+    private SessionInterface $session;
+    private DelayedEventDispatcherInterface $delayedEventDispatcher;
+    private DatetimeInterface $dateTime;
+    private ?Sheet $sheet;
+    private ?UserDomain $currentUser;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
+        UserDomainProvider $userDomainProvider,
         NetworkingAccessChecker $networkingAccessChecker,
-        UserDomainValueResolver $userResolver,
         SessionInterface $session,
-        NotificationPublisherInterface $notificationPublisher,
-        DateTimeInterface $datetime
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        DateTimeInterface $dateTime
     ) {
         $this->authorizationChecker = $authorizationChecker;
+        $this->userDomainProvider = $userDomainProvider;
         $this->networkingAccessChecker = $networkingAccessChecker;
-        $this->userResolver = $userResolver;
         $this->session = $session;
-        $this->notificationPublisher = $notificationPublisher;
-        $this->datetime = $datetime;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->dateTime = $dateTime;
     }
 
     public static function getSubscribedEvents()
     {
         return [
             KernelEvents::CONTROLLER_ARGUMENTS => 'onController',
-            KernelEvents::TERMINATE => 'onTerminate',
         ];
     }
 
@@ -73,8 +56,8 @@ class UserConnectedEventListener implements EventSubscriberInterface
             return;
         }
 
-        $this->userDomain = $this->userResolver->getUserDomain();
-        if (null === $this->userDomain) {
+        $this->currentUser = $this->userDomainProvider->getUserDomain();
+        if (null === $this->currentUser) {
             $this->session->remove('connectedLastSeen');
             return;
         }
@@ -93,19 +76,12 @@ class UserConnectedEventListener implements EventSubscriberInterface
             return;
         }
 
-        // publish notiifcation after 10 min of inactivity, to reduce number of notifications
+        // publish notification after 10 min of inactivity, to reduce number of notifications
         $lastNotification = $this->session->get('connectedLastSeen');
-        if ($lastNotification < ($this->datetime->getTimestamp() - 600)) {
-            $this->publishNotification = true;
+        if ($lastNotification < ($this->dateTime->getTimestamp() - 600)) {
+            $this->delayedEventDispatcher->dispatch(Events::USER_CONNECTED, new ConnectedEvent($this->sheet, $this->currentUser->getUser()));
         }
 
-        $this->session->set('connectedLastSeen', $this->datetime->getTimestamp());
-    }
-
-    public function onTerminate(KernelEvent $event): void
-    {
-        if ($this->publishNotification) {
-            $this->notificationPublisher->publishUserConnectionNotification($this->sheet, $this->userDomain->getUser());
-        }
+        $this->session->set('connectedLastSeen', $this->dateTime->getTimestamp());
     }
 }

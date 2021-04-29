@@ -39,7 +39,7 @@ class SheetSubmittedMail extends AdminMail
     /**
      * @var DateTimeInterface
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var string
@@ -67,7 +67,7 @@ class SheetSubmittedMail extends AdminMail
      * @param string            $locale
      * @param Sheet             $sheet
      * @param Admin             $admin
-     * @param DateTimeInterface $datetime
+     * @param DateTimeInterface $dateTime
      * @param string            $sheetName
      * @param string            $firstname
      * @param string            $lastname
@@ -79,7 +79,7 @@ class SheetSubmittedMail extends AdminMail
         $locale,
         Sheet $sheet,
         Admin $admin,
-        DateTimeInterface $datetime,
+        DateTimeInterface $dateTime,
         $sheetName,
         $firstname,
         $lastname
@@ -88,7 +88,7 @@ class SheetSubmittedMail extends AdminMail
 
         $this->admin     = $admin;
         $this->sheet     = $sheet;
-        $this->datetime  = $datetime;
+        $this->dateTime  = $dateTime;
         $this->sheetName = $sheetName;
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
@@ -141,7 +141,7 @@ class SheetSubmittedMail extends AdminMail
      */
     public function getDatetime()
     {
-        return $this->datetime;
+        return $this->dateTime;
     }
 
     /**

@@ -2,32 +2,48 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Delete;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
+use Proximum\Vimeet\Application\Components\Happening\HappeningListViewFactory;
 use Proximum\Vimeet\Application\Exception\Speaker\EmailDoesNotExistException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\CreateSpeakerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\UpdateSpeakerType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class SpeakerController extends Controller
+class SpeakerController extends AbstractController
 {
-    /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function listAction(Event $event)
+    private SpeakerRepositoryInterface $speakerRepository;
+    private TranslatorInterface $translator;
+    private HappeningListViewFactory $happeningListViewFactory;
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        SpeakerRepositoryInterface $speakerRepository,
+        TranslatorInterface $translator,
+        HappeningListViewFactory $happeningListViewFactory,
+        CommandBusInterface $commandBus
+    ) {
+        $this->speakerRepository = $speakerRepository;
+        $this->translator = $translator;
+        $this->happeningListViewFactory = $happeningListViewFactory;
+        $this->commandBus = $commandBus;
+    }
+
+    public function listAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $speakers = $this->get('repository.happening.speaker')->allByEvent($event);
+        $speakers = $this->speakerRepository->allByEvent($event);
 
         return $this->render('AdminBundle:Speaker:list.html.twig', [
             'event'    => $event,
@@ -35,29 +51,22 @@ class SpeakerController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createAction(Request $request, Event $event)
+    public function createAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $translator = $this->get('translator');
 
         $command = new Create($event);
         $form    = $this->createForm(CreateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($command);
+                $this->commandBus->handle($command);
                 $this->addFlash('success', 'flash.admin.speaker.create.success');
 
                 return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
                 $error =  new FormError(
-                    $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
+                    $this->translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 );
 
                 $form->get('email')->addError($error);
@@ -70,26 +79,17 @@ class SpeakerController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Speaker $speaker
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Event $event, Speaker $speaker)
+    public function updateAction(Request $request, Event $event, Speaker $speaker): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongSpeakerEvent($event, $speaker);
-
-        $translator = $this->get('translator');
 
         $command = new Update($speaker);
         $form    = $this->createForm(UpdateSpeakerType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($command);
+                $this->commandBus->handle($command);
                 $this->addFlash('success', 'flash.admin.speaker.update.success');
 
                 return $this->redirectToRoute(
@@ -98,7 +98,7 @@ class SpeakerController extends Controller
                 );
             } catch (EmailDoesNotExistException $emailDoesNotExistException) {
                 $error =  new FormError(
-                    $translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
+                    $this->translator->trans('form.speaker.email_does_not_exist.error', [], 'forms')
                 );
 
                 $form->get('email')->addError($error);
@@ -112,19 +112,12 @@ class SpeakerController extends Controller
         ]);
     }
 
-    /**
-     * @param Event   $event
-     * @param Speaker $speaker
-     *
-     * @return Response
-     */
-    public function readAction(Request $request, Event $event, Speaker $speaker)
+    public function readAction(Request $request, Event $event, Speaker $speaker): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
-        $happenings = $this
-            ->get('happening.happening_list_view_factory')
+        $happenings = $this->happeningListViewFactory
             ->getListBySpeakerAndLocale($speaker, $event->getAvailableLocale($request->getLocale()));
 
         return $this->render('AdminBundle:Speaker:read.html.twig', [
@@ -134,18 +127,12 @@ class SpeakerController extends Controller
         ]);
     }
 
-    /**
-     * @param Event   $event
-     * @param Speaker $speaker
-     *
-     * @return RedirectResponse
-     */
-    public function deleteAction(Event $event, Speaker $speaker)
+    public function deleteAction(Event $event, Speaker $speaker): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->notFoundIfWrongSpeakerEvent($event, $speaker);
 
-        $this->get('tactician.commandbus')->handle(new Delete($speaker));
+        $this->commandBus->handle(new Delete($speaker));
         $this->addFlash('success', 'flash.admin.speaker.delete.success');
 
         return $this->redirectToRoute('admin_happening_speaker_list', ['event' => $event->getId()]);

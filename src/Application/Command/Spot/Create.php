@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 
-class Create
+class Create implements Command
 {
     /**
      * @var string

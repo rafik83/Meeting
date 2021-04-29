@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Export;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 
-class Notify
+class Notify implements Command
 {
     /** @var Event */
     public $event;

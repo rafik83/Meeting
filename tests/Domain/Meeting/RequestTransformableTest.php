@@ -17,11 +17,11 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
 
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
@@ -31,14 +31,14 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -47,20 +47,20 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $dateTime);
 
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -69,14 +69,14 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
 
-        $participantOne = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantThree = new Participant($toSheet, $user, [], true, $datetime);
-        $participantFour = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantThree = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantFour = new Participant($toSheet, $user, [], true, $dateTime);
 
         $fromSheet->addParticipant($participantOne);
         $fromSheet->addParticipant($participantTwo);
@@ -84,7 +84,7 @@ class RequestTransformableTest extends TestCase
         $toSheet->addParticipant($participantThree);
         $toSheet->addParticipant($participantFour);
 
-        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -93,12 +93,12 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
 
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
@@ -108,15 +108,15 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
 
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -125,21 +125,21 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
 
-        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $dateTime);
 
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -148,15 +148,15 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
 
-        $participantOne = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantThree = new Participant($toSheet, $user, [], true, $datetime);
-        $participantFour = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantThree = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantFour = new Participant($toSheet, $user, [], true, $dateTime);
 
         $fromSheet->addParticipant($participantOne);
         $fromSheet->addParticipant($participantTwo);
@@ -164,7 +164,7 @@ class RequestTransformableTest extends TestCase
         $toSheet->addParticipant($participantThree);
         $toSheet->addParticipant($participantFour);
 
-        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -173,12 +173,12 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
 
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
@@ -188,15 +188,15 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -205,21 +205,21 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $dateTime);
 
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -228,15 +228,15 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $participantOne = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantThree = new Participant($toSheet, $user, [], true, $datetime);
-        $participantFour = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantThree = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantFour = new Participant($toSheet, $user, [], true, $dateTime);
 
         $fromSheet->addParticipant($participantOne);
         $fromSheet->addParticipant($participantTwo);
@@ -244,7 +244,7 @@ class RequestTransformableTest extends TestCase
         $toSheet->addParticipant($participantThree);
         $toSheet->addParticipant($participantFour);
 
-        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(false, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -253,13 +253,13 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
 
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
@@ -269,16 +269,16 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
-        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $datetime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
+        $toSheet->addParticipant(new Participant($toSheet, $user, [], true, $dateTime));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -287,22 +287,22 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $participantOne = new Participant($toSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($toSheet, $user, [], true, $dateTime);
 
         $toSheet->addParticipant($participantOne);
         $toSheet->addParticipant($participantTwo);
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
 
-        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [], $toSheet, [$participantTwo, $participantOne], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 
@@ -311,16 +311,16 @@ class RequestTransformableTest extends TestCase
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
         $user      = new User('user@gmail.com', '', '', $locale);
-        $datetime  = new \DateTime();
+        $dateTime  = new \DateTime();
         $fromSheet = SheetFactory::create($event);
         $toSheet   = SheetFactory::create($event);
         $this->allSheetParticipantsAreAssignedToMeeting($toSheet);
         $this->allSheetParticipantsAreAssignedToMeeting($fromSheet);
 
-        $participantOne = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantTwo = new Participant($fromSheet, $user, [], true, $datetime);
-        $participantThree = new Participant($toSheet, $user, [], true, $datetime);
-        $participantFour = new Participant($toSheet, $user, [], true, $datetime);
+        $participantOne = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantTwo = new Participant($fromSheet, $user, [], true, $dateTime);
+        $participantThree = new Participant($toSheet, $user, [], true, $dateTime);
+        $participantFour = new Participant($toSheet, $user, [], true, $dateTime);
 
         $fromSheet->addParticipant($participantOne);
         $fromSheet->addParticipant($participantTwo);
@@ -328,7 +328,7 @@ class RequestTransformableTest extends TestCase
         $toSheet->addParticipant($participantThree);
         $toSheet->addParticipant($participantFour);
 
-        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $datetime, $user, $event);
+        $request = new Meeting\Request($fromSheet, [$participantOne, $participantTwo], $toSheet, [], $dateTime, $user, $event);
         $this->assertEquals(true, Meeting\TransformableRequest::isTransformable($request));
     }
 

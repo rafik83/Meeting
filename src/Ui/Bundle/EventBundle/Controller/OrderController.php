@@ -2,42 +2,54 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
+use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Order\Balance;
+use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderController extends Controller
+class OrderController extends AbstractController
 {
-    /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return Response
-     */
+    private Balance $orderBalance;
+    private InvoiceViewQueryHandler $invoiceViewQueryHandler;
+    private Merger $orderMerger;
+    private QueryBusInterface $queryBus;
+
+    public function __construct(
+        Balance $orderBalance,
+        InvoiceViewQueryHandler $invoiceViewQueryHandler,
+        Merger $orderMerger,
+        QueryBusInterface $queryBus
+    ) {
+        $this->orderBalance = $orderBalance;
+        $this->invoiceViewQueryHandler = $invoiceViewQueryHandler;
+        $this->orderMerger = $orderMerger;
+        $this->queryBus = $queryBus;
+    }
+
     public function listAction(EventDomain $eventDomain, Sheet $sheet): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $balance = $this->get('order.balance');
-        $orderVatViews = $balance->getOrderVatViews($sheet);
+        $orderVatViews = $this->orderBalance->getOrderVatViews($sheet);
 
         if (!$sheet->getPackage()->isPassable() || empty($orderVatViews)) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $paymentConditionsView = $this
-            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
-            ->handle(new PaymentConditionsViewQuery($sheet))
+        $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($sheet))
         ;
 
         $canPayIfRemaining = \in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
@@ -46,23 +58,15 @@ class OrderController extends Controller
             'event'             => $eventDomain->getEvent(),
             'canPayIfRemaining' => $canPayIfRemaining,
             'orderVatViews'     => $orderVatViews,
-            'remainingToPay'    => $balance->getRemainingToPay($sheet),
+            'remainingToPay'    => $this->orderBalance->getRemainingToPay($sheet),
             'sheet'             => $sheet,
-            'transactions'      => $balance->getTransactions($sheet),
-            'invoiceViews'      => $this->get('sheet.sheet_details.invoice_view_query_handler')->handle(
+            'transactions'      => $this->orderBalance->getTransactions($sheet),
+            'invoiceViews'      => $this->invoiceViewQueryHandler->handle(
                 new InvoiceViewQuery($sheet)
             ),
         ]);
     }
 
-    /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Order       $order
-     *
-     * @return Response
-     */
     public function proFormaAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -72,7 +76,7 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $view = $this->get('tactician.commandbus.query')->handle(
+        $view = $this->queryBus->handle(
             new ProFormaQuery(
                 $sheet,
                 $order,
@@ -106,9 +110,9 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $order = $this->get('order.merger')->merge($orders);
+        $order = $this->orderMerger->merge($orders);
 
-        $view = $this->get('tactician.commandbus.query')->handle(new SummaryQuery(
+        $view = $this->queryBus->handle(new SummaryQuery(
             $sheet,
             $order,
             $request->getLocale()

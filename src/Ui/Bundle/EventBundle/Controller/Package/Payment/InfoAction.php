@@ -11,26 +11,26 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class InfoAction
 {
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
     }
 
@@ -49,7 +49,7 @@ class InfoAction
 
         $view = $this->queryBus->handle(new InfoViewQuery($sheet, $request->getLocale()));
 
-        return new Response($this->engine->render('EventBundle:Sheet:paymentInfo.html.twig', [
+        return new Response($this->twig->render('EventBundle:Sheet:paymentInfo.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'sheet'  => $sheet,
             'view' => $view,

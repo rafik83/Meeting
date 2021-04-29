@@ -2,16 +2,15 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Batch;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
+use Twig\Environment;
 
 class CreateMessageHandler
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
+    private Environment $twig;
 
     /**
      * @var \DateTimeInterface
@@ -23,15 +22,8 @@ class CreateMessageHandler
      */
     private $translator;
 
-    /**
-     * CreateHandler constructor.
-     *
-     * @param \Twig_Environment   $twig
-     * @param TranslatorInterface $translator
-     * @param \DateTimeInterface  $dateTime
-     */
     public function __construct(
-        \Twig_Environment $twig,
+        Environment $twig,
         TranslatorInterface $translator,
         \DateTimeInterface $dateTime
     ) {

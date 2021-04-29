@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Messaging\Campaign;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 
-class SelectMessage
+class SelectMessage implements Command
 {
     /** @var Campaign */
     public $campaign;

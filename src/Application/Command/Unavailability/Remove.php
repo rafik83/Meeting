@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 
-class Remove
+class Remove implements Command
 {
     /**
      * @var Unavailability

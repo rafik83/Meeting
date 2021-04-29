@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
-class Index
+class Index implements Command
 {
     /**
      * @var SheetTemplate

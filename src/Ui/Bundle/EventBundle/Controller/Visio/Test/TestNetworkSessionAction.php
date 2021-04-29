@@ -13,26 +13,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class TestNetworkSessionAction
 {
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
 
     public function __construct(
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
@@ -61,7 +61,7 @@ class TestNetworkSessionAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 'EventBundle:VideoConference:testNetworkAudioVideo.html.twig',
                 [
                     'sheet' => $sheet,

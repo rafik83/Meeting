@@ -14,11 +14,7 @@ class EventUrlGenerator implements EventUrlGeneratorInterface
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
-    /**
-     * @param string                $scheme
-     * @param UrlGeneratorInterface $urlGenerator
-     */
-    public function __construct($scheme, UrlGeneratorInterface $urlGenerator)
+    public function __construct(string $scheme, UrlGeneratorInterface $urlGenerator)
     {
         $this->scheme       = $scheme;
         $this->urlGenerator = $urlGenerator;

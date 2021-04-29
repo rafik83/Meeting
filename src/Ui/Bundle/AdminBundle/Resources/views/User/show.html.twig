@@ -28,7 +28,11 @@
         <li><i class="glyphicon glyphicon-phone"></i> {{ user.account.mobile|default('-') }}</li>
         <li>
             <i class="glyphicon glyphicon-home"></i>
-            {{ [user.account.address|default('-'), user.account.zipCode|default('-'), user.account.city|default('-'), user.account.country|country|default('-')]|join(', ') }}
+            {{ [user.account.address|default('-'),
+                user.account.zipCode|default('-'),
+                user.account.city|default('-'),
+                user.account.country ? (user.account.country|country) : '-'
+                ]|join(', ') }}
         </li>
 
         {% if user.account.website is not empty %}
@@ -43,7 +47,12 @@
     <h4>{{ 'admin.user.company-information'|trans }}</h4>
     <ul>
         <li>{{ user.account.company|default('-') }}</li>
-        <li>{{ [user.account.companyAddress|default('-'), user.account.companyZipCode|default('-'), user.account.companyCity|default('-'), user.account.companyCountry|country|default('-')]|join(', ') }}</li>
+        <li>{{ [
+                user.account.companyAddress|default('-'),
+                user.account.companyZipCode|default('-'),
+                user.account.companyCity|default('-'),
+                user.account.country ? (user.account.companyCountry|country) : '-'
+                ]|join(', ') }}</li>
 
         {% if user.account.companyWebsite is not empty %}
             <li>

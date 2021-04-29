@@ -24,7 +24,7 @@ class UpdateParticipantsHandlerTest extends TestCase
     public function testHandle()
     {
         // Data
-        $datetime      = new \DateTime();
+        $dateTime      = new \DateTime();
         $event         = EventFactory::createEvent();
         $sheetFrom     = SheetFactory::create($event);
         $sheetTo       = SheetFactory::create($event);
@@ -37,10 +37,10 @@ class UpdateParticipantsHandlerTest extends TestCase
         $participantT1 = ParticipantFactory::create($sheetTo, $user3);
         $participantT2 = ParticipantFactory::create($sheetTo, $user4);
 
-        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $dateTime, $user1, $event);
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [$participantF1], $sheetTo, [$participantT1], $datetime, $user1, $event);
+        $expectedRequest = new Request($sheetFrom, [$participantF1], $sheetTo, [$participantT1], $dateTime, $user1, $event);
 
         // Reflection
         $reflection = new \ReflectionClass(Participant::class);
@@ -94,7 +94,7 @@ class UpdateParticipantsHandlerTest extends TestCase
     public function testHandleRemoveAll()
     {
         // Data
-        $datetime      = new \DateTime();
+        $dateTime      = new \DateTime();
         $event         = EventFactory::createEvent();
         $sheetFrom     = SheetFactory::create($event);
         $sheetTo       = SheetFactory::create($event);
@@ -107,10 +107,10 @@ class UpdateParticipantsHandlerTest extends TestCase
         $participantT1 = ParticipantFactory::create($sheetTo, $user3);
         $participantT2 = ParticipantFactory::create($sheetTo, $user4);
 
-        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $dateTime, $user1, $event);
 
         // Expected
-        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $datetime, $user1, $event);
+        $expectedRequest = new Request($sheetFrom, [], $sheetTo, [], $dateTime, $user1, $event);
 
         // Reflection
         $reflection = new \ReflectionClass(Participant::class);
@@ -156,7 +156,7 @@ class UpdateParticipantsHandlerTest extends TestCase
         $this->expectException(InvalidParticipantException::class);
 
         // Data
-        $datetime      = new \DateTime();
+        $dateTime      = new \DateTime();
         $event         = EventFactory::createEvent();
         $sheetFrom     = SheetFactory::create($event);
         $sheetTo       = SheetFactory::create($event);
@@ -172,7 +172,7 @@ class UpdateParticipantsHandlerTest extends TestCase
         $participantT2 = ParticipantFactory::create($sheetTo, $user4);
         $participantUnknown = ParticipantFactory::create($sheetUnknown, $userUnknown);
 
-        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $dateTime, $user1, $event);
 
         // Reflection
         $reflection = new \ReflectionClass(Participant::class);
@@ -209,7 +209,7 @@ class UpdateParticipantsHandlerTest extends TestCase
         $this->expectException(InvalidParticipantException::class);
 
         // Data
-        $datetime      = new \DateTime();
+        $dateTime      = new \DateTime();
         $event         = EventFactory::createEvent();
         $sheetFrom     = SheetFactory::create($event);
         $sheetTo       = SheetFactory::create($event);
@@ -225,7 +225,7 @@ class UpdateParticipantsHandlerTest extends TestCase
         $participantT2 = ParticipantFactory::create($sheetTo, $user4);
         $participantUnknown = ParticipantFactory::create($sheetUnknown, $userUnknown);
 
-        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $datetime, $user1, $event);
+        $request = new Request($sheetFrom, [$participantF2], $sheetTo, [$participantT2], $dateTime, $user1, $event);
 
         // Reflection
         $reflection = new \ReflectionClass(Participant::class);

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
+use DateTime;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\EventContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
@@ -138,17 +139,66 @@ class EventContext implements Context
     }
 
     /**
+     * @Given the happenings are open
+     */
+    public function thehappeningsAreOpen()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getAccessManager()->setHappeningsOpenDate(
+            new \DateTime('yesterday'), $event
+        );
+    }
+
+    /**
      * @Given the locale for this event is :locale
      */
     public function theLocaleForThisEventIs($locale)
     {
-        $event = $this->eventContextProxy->getStorage()->get('event');
-
-        if (null === $event) {
-            throw new \InvalidArgumentException('Missing Event');
-        }
+        $event = $this->getEvent();
 
         $this->eventContextProxy->getEventManager()->setLocale($event, $locale);
+    }
+
+    /**
+     * @Given the organiser name of this event is :organiserName
+     */
+    public function theOrganiserNameOfThisEventIs($organiserName)
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setOrganiserName($event, $organiserName);
+    }
+
+    /**
+     * @Given the organiser email of this event is :organiserEmail
+     */
+    public function theOrganiserEmailOfThisEventIs($organiserEmail)
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setOrganiserEmail($event, $organiserEmail);
+    }
+
+    /**
+     * @Given this event happens september 1 2020
+     */
+    public function thisEventHappensSeptember1()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-01'));
+    }
+
+    /**
+     * @Given this event happens from september 1 to september 2 2020
+     */
+    public function thisEventHappensFromSeptember1ToSeptember22020()
+    {
+        $event = $this->getEvent();
+
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-01'));
+        $this->eventContextProxy->getEventManager()->setDay($event, new DateTime('2020-09-02'));
     }
 
     /**

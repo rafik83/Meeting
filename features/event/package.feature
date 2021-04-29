@@ -4,31 +4,52 @@ Feature: Complete my package
 
   Scenario: I can buy plan
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    And the event "ASD Days" is created
+    And the domain for this event is "asddays-2016.vimeet.proximum"
+
+    And there is a type "Fournisseur" in this event
+
+    # package with product of type "Participant"
+    And there is a package "Pack participants+rdv" for this event
+    And there is a product Participant called "Participant Supplémentaire" with a price of "130" and a max quantity of 10
+    And this product participant is assigned to this package
+    And there is a promotion "Assdays Promotion Code" with code "ASDDAYS10" for this product participant
+    And this package is assigned to this type
+    And there is a plan called "Formule premium" with a price of "99"
+    And this plan is assigned to this package
+    And this plan includes this product participant 1 times
+
+    # package with product of type "Planning"
+    And there is a planning called "Planning meetings" with a price of "39"
+    And this product planning is assigned to this package
+    And there is an option subject to validation called "Gala dinner" with a price of "139"
+    And there is a promotion "Assdays Promotion Code 2" with code "ASDDAYS20" for this product options
+    And there is an option called "Goodies" with a price of "5" and a max quantity of 3
+    And there is an option called "Conference pass" no more available
+    And there is an option called "Gold sponsor" out of stock
+    And these options are assigned to this package
+
+    And the user "user_asddays_1@proximum.com" is created
+    And there is a sheet for this type with the title "Aanera"
+    And there is a participant for this sheet and this user
+    And there is a paid transaction with reference "ref_1" and amount 100 for this sheet
+
+    And I am logged with "user_asddays_1@proximum.com" on front
+
     When I am on this page "/fr"
     And I go to this page "/fr/sheet"
     And I follow "navigation.category.package"
     Then I should be on this page "/fr/sheet/1/package/step/1"
-    And I should see "Formule B2B Meeting"
-    And I should see "Stand équipé 4m² (2x2m)"
-    When I check radio "plans_plan_2"
+    And I should see "Formule premium"
+    When I select "0" from "plans[plan]"
     And I press "package.plans.validate"
     Then I should be on this page "/fr/sheet/1/package/step/2"
     When I go to this page "/fr/sheet/1/package/step/1"
-    Then The radio "plans_plan_2" should be checked
+    Then the radio "plans_plan_2" should be checked
 
   Scenario: I can buy participant product
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Participant supplémentaire"
     And I should see "package.product.unitPrice"
@@ -37,9 +58,10 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/step/3"
 
   Scenario: I can buy planning
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/step/2"
-    Then I should see "Packs de rendez-vous"
+    Then I should see "Planning meetings"
     And I should see "package.participant_planning.validate"
     And I should see "package.product.unitPrice"
     And I should see "package.product.totalPrice"
@@ -48,35 +70,31 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/step/3"
 
   Scenario: I can buy options
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/step/3"
-    Then I should see "Options d’exposition"
-    And I should see "Options d'exposition et de communication"
-    And I should see "Options de communication"
+    Then I should see "Gala dinner"
+    And I should see "Conference pass"
     And I should see "package.product.subjectedToValidationHelp"
     When I fill in the following:
-    # Chaise
-      | options[6][quantity]  | 1  |
-    # Option D
-      | options[10][quantity] | 1  |
-    # Option E
-      | options[11][quantity] | 10 |
+      | options[4][quantity] | 1  |
+      | options[5][quantity] | 10 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityNotMatch"
     And I should see "package.product.unavailable"
+    And I should see "package.product.outOfStock"
     When I fill in the following:
-    # Option E
-      | options[11][quantity] | 3 |
+      | options[5][quantity] | 3 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
     When I go to this page "/fr/sheet/1/package/step/3"
-    Then the "options[6][quantity]" field should contain "1"
-    Then the "options[10][quantity]" field should contain "1"
-    Then the "options[11][quantity]" field should contain "3"
+    Then the "options[4][quantity]" field should contain "1"
+    Then the "options[5][quantity]" field should contain "3"
 
   Scenario: I can add a participant at step 2
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     And I am on this page "/fr/sheet/1/package/step/2"
     When I follow "package.participant.add"
     Then I should see "sheet.participant.sendInvite"
@@ -90,7 +108,8 @@ Feature: Complete my package
     And I should see "TT"
 
   Scenario: I can fill my billing-info
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/step/3"
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
@@ -112,23 +131,24 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/summary"
 
   Scenario: I can see my package summary
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
-    And I should see "Formule Exposant"
+    And I should see "Formule premium"
     And I should see "Participant supplémentaire"
-    And I should see "Packs de rendez-vous"
-    And I should see "Packs de rendez-vous"
-    And I should see "Option D"
-    And I should see "Option E"
-    And I should see "Chaise"
+    And I should see "Planning meetings"
+    And I should see "Groupe 1"
+    And I should see "Gala dinner"
+    And I should see "Goodies"
     And I should see "package.summary.pay"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
 
   Scenario: I can add multiple promotion code
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
     And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
@@ -142,7 +162,8 @@ Feature: Complete my package
     And I should see "Assdays Promotion Code 2"
 
   Scenario: I can choose my payment method
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/summary"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
@@ -156,7 +177,8 @@ Feature: Complete my package
     And the "order.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum"
 
   Scenario: I can see my package total summary:
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     And I am on this page "/fr/sheet"
     When I follow "navigation.links.package.order_summary_total"
     Then I should be on this page "/fr/sheet/1/order/summary"
@@ -167,7 +189,8 @@ Feature: Complete my package
     And I should see "summary.totalToPay"
 
   Scenario: I can see how to pay in my transaction list
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet"
     And I follow "navigation.links.package.order_list"
     Then I should be on this page "/fr/sheet/1/orders"
@@ -180,30 +203,31 @@ Feature: Complete my package
     And I should see "package.payment.bankInfo"
 
   Scenario: I can see the remaining amount to pay
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     And I am on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then I should be on this page "/fr/sheet/1/orders"
     # Order total
-    And I should see "3 066,00 €"
+    And I should see "482,40 €"
     # Remaining to pay
-    And I should see "2 816,00 €"
+    And I should see "382,40 €"
     And I should see "order.list.remainingToPay"
     And I should see "order.list.pay_remaining"
 
   Scenario: I can not delete option assigned to previously used promotion code
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    Given there is an event with domain "asddays-2016.vimeet.proximum"
+    And I am logged with "user_asddays_1@proximum.com" on front
     When I am on this page "/fr/sheet/1/package/step/2"
-    Then I should see "Chaise"
-    # Chaise
-    And the "options[6][quantity]" field should contain "1"
+    Then I should see "Gala dinner"
+    And the "options[4][quantity]" field should contain "1"
     When I fill in the following:
-      | options[6][quantity] | 0 |
+      | options[4][quantity] | 0 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/2"
     And I should see "package.product.quantityMinPromotionCode"
     When I fill in the following:
-      | options[6][quantity] | 2 |
+      | options[4][quantity] | 2 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/summary"
-    And I should see "Chaise"
+    And I should see "Gala dinner"

@@ -7,7 +7,7 @@ use IntlDateFormatter;
 class MeetingDdayView
 {
     /** @var \DateTimeInterface */
-    private $datetime;
+    private $dateTime;
 
     /** @var string */
     public $spotName;
@@ -24,20 +24,20 @@ class MeetingDdayView
     /**
      * MeetingDdayView constructor.
      *
-     * @param \DateTimeInterface $datetime
+     * @param \DateTimeInterface $dateTime
      * @param string             $spotName
      * @param string             $timezone
      * @param string             $locale
      * @param array              $participantsFullname
      */
     public function __construct(
-        \DateTimeInterface $datetime,
+        \DateTimeInterface $dateTime,
         string $spotName,
         string $timezone,
         string $locale,
         array $participantsFullname
     ) {
-        $this->datetime             = $datetime;
+        $this->dateTime             = $dateTime;
         $this->spotName             = $spotName;
         $this->locale               = $locale;
         $this->timezone             = $timezone;
@@ -56,7 +56,7 @@ class MeetingDdayView
             $this->timezone
         );
 
-        return $dayFormatter->format($this->datetime);
+        return $dayFormatter->format($this->dateTime);
     }
 
     /**
@@ -71,7 +71,7 @@ class MeetingDdayView
             $this->timezone
         );
 
-        return $timeFormatter->format($this->datetime);
+        return $timeFormatter->format($this->dateTime);
     }
 
     /**

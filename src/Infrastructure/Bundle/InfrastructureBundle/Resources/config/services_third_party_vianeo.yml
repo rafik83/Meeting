@@ -13,7 +13,7 @@ services:
         arguments:
             - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
             - '@template.participant_info_guesser'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter'
 
     command.third_party.vianeo.vianeo_register_sheet_handler:
         class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoRegisterSheetHandler
@@ -29,7 +29,7 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@tagged_info_guesser'
-            - '@adapter.vianeo_api_call_job_queue'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Vianeo\VianeoApiCallJobQueue'
 
     infrastructure.command.api.vianeo_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
@@ -56,7 +56,7 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    adapter.vianeo_api_call_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Vianeo\VianeoApiCallJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
+    # adapter.vianeo_api_call_job_queue:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Vianeo\VianeoApiCallJobQueue
+    #     arguments:
+    #         - '@doctrine.orm.entity_manager'

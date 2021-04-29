@@ -8,14 +8,15 @@ use Proximum\Vimeet\Application\Query\Event\GetQRCodeIdentifiersByEventQuery;
 use Proximum\Vimeet\Application\View\Event\QRCodeIdentifierListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class QrCodeAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -27,12 +28,12 @@ class QrCodeAction
     private $dateTime;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         \DateTimeInterface $dateTime
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
         $this->dateTime = $dateTime;
@@ -56,12 +57,12 @@ class QrCodeAction
             )
         );
 
-        return $this->engine->renderResponse('AdminBundle:Scan/Happening:qrcode.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Scan/Happening:qrcode.html.twig', [
             'happening' => $happening,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'event' => $event,
             'identifiers' => $identifiers->list,
             'date' => $this->dateTime,
-        ]);
+        ]));
     }
 }

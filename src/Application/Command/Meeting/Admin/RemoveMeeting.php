@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Meeting;
 
-class RemoveMeeting
+class RemoveMeeting implements Command
 {
     /**
      * @var Meeting

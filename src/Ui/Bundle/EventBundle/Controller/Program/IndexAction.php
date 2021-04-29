@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class IndexAction
 {
@@ -30,8 +30,8 @@ class IndexAction
     /** @var QueryBusInterface */
     private $queryBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -43,12 +43,12 @@ class IndexAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         QueryBusInterface $queryBus,
         RouterInterface $router,
-        EngineInterface $engine,
+        Environment $twig,
         IsParticipantVisio $isParticipantVisio
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
         $this->isParticipantVisio = $isParticipantVisio;
     }
@@ -119,7 +119,7 @@ class IndexAction
         );
         $tipTranslationViews = $this->queryBus->handle($tipTranslationViewQuery);
 
-        return new Response($this->engine->render('EventBundle:Program:index.html.twig', [
+        return new Response($this->twig->render('EventBundle:Program:index.html.twig', [
             'event' => $event,
             'sheet' => $sheet,
             'program' => $program,

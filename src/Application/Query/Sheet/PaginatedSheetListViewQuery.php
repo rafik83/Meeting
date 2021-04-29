@@ -2,11 +2,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class PaginatedSheetListViewQuery
+class PaginatedSheetListViewQuery implements Query
 {
     /**
      * @var Event

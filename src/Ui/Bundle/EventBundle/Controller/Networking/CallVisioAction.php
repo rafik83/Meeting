@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class CallVisioAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -46,13 +46,13 @@ class CallVisioAction
 
     public function __construct(
         QueryBusInterface $queryBus,
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         NetworkingAccessChecker $networkingAccessChecker,
         UserRepositoryInterface $userRepository,
         CommandBus $commandBus
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->networkingAccessChecker = $networkingAccessChecker;
@@ -98,7 +98,7 @@ class CallVisioAction
         $visioView = $this->queryBus->handle(new CallVisioQuery($sheet, $user, $toUser, $locale));
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Event/CallVisio/CallVisio.html.twig',
                 [
                     'visioView' => $visioView,

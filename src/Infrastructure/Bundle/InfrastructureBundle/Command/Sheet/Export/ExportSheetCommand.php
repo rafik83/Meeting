@@ -115,5 +115,7 @@ class ExportSheetCommand extends Command
         );
 
         $this->exportHandler->handle($command);
+
+        return 0;
     }
 }

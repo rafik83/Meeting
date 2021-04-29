@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class UpdateVisio
+class UpdateVisio implements Command
 {
     /** @var bool */
     public $visio;

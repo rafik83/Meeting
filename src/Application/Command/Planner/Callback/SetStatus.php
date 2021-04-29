@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner\Callback;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\AbstractSetStatus;
 
 /**
@@ -37,7 +38,7 @@ use Proximum\Vimeet\Application\ThirdParty\Jenkins\AbstractSetStatus;
  *     "phase": "FINALIZED"/"status": "SUCCESS",
  *     "phase": "COMPLETED"/"status": "SUCCESS"
  */
-class SetStatus extends AbstractSetStatus
+class SetStatus extends AbstractSetStatus implements Command
 {
     /** @var string */
     public $filepath;

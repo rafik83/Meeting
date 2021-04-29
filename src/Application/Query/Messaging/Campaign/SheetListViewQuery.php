@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Messaging\Campaign;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\ConditionRules\View\RuleInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SheetListViewQuery
+class SheetListViewQuery implements Query
 {
     /** @var Event */
     public $event;

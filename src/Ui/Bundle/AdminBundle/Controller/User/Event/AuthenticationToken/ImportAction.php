@@ -9,17 +9,17 @@ use Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class ImportAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -34,13 +34,13 @@ class ImportAction
     private $router;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         FormFactoryInterface $formFactory,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
         RouterInterface $router
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->formFactory = $formFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
@@ -72,9 +72,9 @@ class ImportAction
             );
         }
 
-        return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/import.html.twig', [
+        return new Response($this->twig->render('@Admin/User/Event/AuthenticationToken/import.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
-        ]);
+        ]));
     }
 }

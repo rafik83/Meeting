@@ -12,7 +12,6 @@ use Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\AvailabilityTimeRange\CreateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -21,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class CreateActionTest extends TestCase
 {
@@ -28,7 +28,7 @@ class CreateActionTest extends TestCase
     private $authorizationChecker;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -51,7 +51,7 @@ class CreateActionTest extends TestCase
     public function setUp()
     {
         $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
@@ -68,7 +68,7 @@ class CreateActionTest extends TestCase
 
         $action = new CreateAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
@@ -99,7 +99,7 @@ class CreateActionTest extends TestCase
 
         $action = new CreateAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
@@ -142,19 +142,19 @@ class CreateActionTest extends TestCase
         $formView = $this->prophesize(FormView::class);
         $form->createView()->shouldBeCalled()->willReturn($formView->reveal());
 
-        $response = new Response();
-        $this->engine
-            ->renderResponse('AdminBundle:AvailabilityTimeRange:create.html.twig', [
+        $response = new Response('Create availability time range');
+        $this->twig
+            ->render('AdminBundle:AvailabilityTimeRange:create.html.twig', [
                 'event' => $this->event->reveal(),
                 'form' => $formView->reveal(),
             ])
             ->shouldBeCalled()
-            ->willReturn($response)
+            ->willReturn('Create availability time range')
         ;
 
         $action = new CreateAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
@@ -193,7 +193,7 @@ class CreateActionTest extends TestCase
         $form->isValid()->shouldBeCalled()->willReturn(true);
         $form->createView()->shouldNotBeCalled();
 
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($create)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.availabilityTimeRange.create.success')->shouldBeCalled();
         $this->router
@@ -204,7 +204,7 @@ class CreateActionTest extends TestCase
 
         $action = new CreateAction(
             $this->authorizationChecker->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),

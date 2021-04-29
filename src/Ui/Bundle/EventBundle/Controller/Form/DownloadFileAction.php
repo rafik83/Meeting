@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class DownloadFileAction
 {
@@ -27,8 +27,8 @@ class DownloadFileAction
     /** @var DataUriNormalizer */
     private $dataUriNormalizer;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var UploadObjectDownloadPathGetter */
     private $uploadObjectDownloadPathGetter;
@@ -39,13 +39,13 @@ class DownloadFileAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         DataUriNormalizer $dataUriNormalizer,
-        EngineInterface $engine,
+        Environment $twig,
         UploadObjectDownloadPathGetter $uploadObjectDownloadPathGetter,
         QueryBusInterface $queryBus
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->dataUriNormalizer = $dataUriNormalizer;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->uploadObjectDownloadPathGetter = $uploadObjectDownloadPathGetter;
         $this->queryBus = $queryBus;
     }
@@ -79,7 +79,7 @@ class DownloadFileAction
             );
 
             if (true === $preview) {
-                return new Response($this->engine->render('@Event/base64Image.html.twig', [
+                return new Response($this->twig->render('@Event/base64Image.html.twig', [
                     'file' => $this->dataUriNormalizer->normalize(new \SplFileInfo($downloadPath)),
                 ]));
             }

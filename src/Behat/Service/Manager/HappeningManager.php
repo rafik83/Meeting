@@ -4,6 +4,8 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
@@ -40,11 +42,36 @@ class HappeningManager
 
         $this->happeningRepository->add($happening);
 
+        $happeningTranslation = new HappeningTranslation($happening, 'fr', 'Présentation flash', 'Description de la conférence');
+        $happening->setTranslation($happeningTranslation);
+
         return $happening;
     }
 
     public function userParticipateToHappening(User $user, Happening $happening): void
     {
         $this->happeningParticipationRepository->add(new HappeningParticipation($happening, $user));
+    }
+
+    public function allowTypeToAccessHappening(Type $type, Happening $happening): void
+    {
+        $happening->update(
+            $happening->getBegin(),
+            $happening->getEnd(),
+            $happening->getCategory(),
+            [$type],
+            $happening->isQuestionAllowed(),
+            $happening->getLimitParticipant(),
+            $happening->isWebinar(),
+            $happening->isInteractiveWebinar(),
+            $happening->isVideoWebinar(),
+            $happening->getInvitationCode(),
+            $happening->getLiveUrl(),
+            $happening->isSidebarAllowed(),
+            $happening->isWebinarRecorded(),
+            $happening->allowWebinarOnHLS(),
+            $happening->isWebinarRecordSentToSpeakers()
+        );
+        $this->happeningRepository->set($happening);
     }
 }

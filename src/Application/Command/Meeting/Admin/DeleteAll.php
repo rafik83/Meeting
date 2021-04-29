@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class DeleteAll
+class DeleteAll implements Command
 {
     /** @var Event */
     public $event;

@@ -26,7 +26,7 @@ class ImportMappingHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
-        $datetime = new \DateTime();
+        $dateTime = new \DateTime();
         $locale   = 'fr';
 
         $registrationHeaders = [
@@ -139,7 +139,7 @@ class ImportMappingHandlerTest extends TestCase
                 'Facture - Code postal' => 'zipcode',
                 'Facture - Adresse' => 'address',
             ],
-            $datetime,
+            $dateTime,
             null
         );
         $participantImportRepository->add($participantImport)->shouldBeCalled();
@@ -189,7 +189,7 @@ class ImportMappingHandlerTest extends TestCase
             $session->reveal(),
             $eventDispatcher->reveal(),
             $localFileStorage->reveal(),
-            $datetime,
+            $dateTime,
             $participantImportRepository->reveal()
         );
 

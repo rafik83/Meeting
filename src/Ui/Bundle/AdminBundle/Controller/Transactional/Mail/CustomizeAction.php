@@ -4,13 +4,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Transactional\Mail;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Transactional\Mail\Customize;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Transactional\Mail\CustomizeType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 use function array_key_exists;
 
 class CustomizeAction
 {
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -51,7 +51,7 @@ class CustomizeAction
     private $translator;
 
     public function __construct(
-        EngineInterface $engine,
+        Environment $twig,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         TranslatorInterface $translator,
         MessageRepositoryInterface $messageRepository,
@@ -61,7 +61,7 @@ class CustomizeAction
         FlashBagInterface $flashBag,
         RouterInterface $router
     ) {
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->messageRepository = $messageRepository;
         $this->formFactory = $formFactory;
@@ -139,7 +139,7 @@ class CustomizeAction
             ]));
         }
 
-        return $this->engine->renderResponse('AdminBundle:Transactional/Mail:customize.html.twig', [
+        return new Response($this->twig->render('AdminBundle:Transactional/Mail:customize.html.twig', [
             'form' => $form->createView(),
             'transactionalMailType' => $transactionalMailType,
             'event' => $event,
@@ -148,7 +148,7 @@ class CustomizeAction
                 $data['isCustomizableByType'] ? Constant::TRANSACTIONAL_MAIL_GENERIC_CUSTOMIZABLE_BY_TYPE_PARAMETERS : [],
                 $data['availableParameters']
             )
-        ]);
+        ]));
     }
 
     /**
@@ -171,7 +171,7 @@ class CustomizeAction
                     'mail',
                     $locale
                 ),
-                'content' => $this->engine->render(
+                'content' => $this->twig->render(
                     Constant::TRANSACTIONAL_MAIL_LIST[$transactionalMailType]['template_full_text'],
                     ['locale' => $locale]
                 )

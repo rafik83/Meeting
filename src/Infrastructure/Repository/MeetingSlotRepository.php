@@ -16,13 +16,13 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 {
     private EntityManager $entityManager;
     private TypeRepositoryInterface $typeRepository;
-    private DateTimeInterface $datetime;
+    private DateTimeInterface $dateTime;
 
-    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository, DateTimeInterface $datetime)
+    public function __construct(EntityManager $entityManager, TypeRepositoryInterface $typeRepository, DateTimeInterface $dateTime)
     {
         $this->entityManager = $entityManager;
         $this->typeRepository = $typeRepository;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -174,7 +174,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         if ($excludePastSlots) {
             $queryBuilder
                 ->andWhere('slot.end > :now')
-                ->setParameter('now', $this->datetime);
+                ->setParameter('now', $this->dateTime);
         }
 
         // Participants have not unavailability during this slot

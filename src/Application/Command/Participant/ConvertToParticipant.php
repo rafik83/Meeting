@@ -2,12 +2,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class ConvertToParticipant
+class ConvertToParticipant implements Command
 {
     /** @var Event */
     public $event;

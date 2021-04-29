@@ -13,7 +13,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\PaymentConditions\UpdateType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class PaymentConditionsActionTest extends TestCase
 {
@@ -32,7 +32,7 @@ class PaymentConditionsActionTest extends TestCase
     private $formFactory;
 
     /** @var ObjectProphecy */
-    private $engine;
+    private $twig;
 
     /** @var ObjectProphecy */
     private $router;
@@ -59,7 +59,7 @@ class PaymentConditionsActionTest extends TestCase
         $this->type = $this->prophesize(Type::class);
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->twig = $this->prophesize(Environment::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->commandBus = $this->prophesize(CommandBusInterface::class);
@@ -78,7 +78,7 @@ class PaymentConditionsActionTest extends TestCase
         $action = new PaymentConditionsAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal()
@@ -106,7 +106,7 @@ class PaymentConditionsActionTest extends TestCase
         $action = new PaymentConditionsAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal()
@@ -156,8 +156,8 @@ class PaymentConditionsActionTest extends TestCase
         $this->event->getAvailableLocale('fr')->willReturn('de');
         $this->commandBus->handle(Argument::any())->shouldNotBeCalled();
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
-        $this->engine
-            ->renderResponse(PaymentConditionsAction::TEMPLATE, [
+        $this->twig
+            ->render(PaymentConditionsAction::TEMPLATE, [
                 'locale' => 'de',
                 'event'  => $this->event->reveal(),
                 'type'   => $this->type->reveal(),
@@ -170,7 +170,7 @@ class PaymentConditionsActionTest extends TestCase
         $action = new PaymentConditionsAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal()
@@ -219,7 +219,7 @@ class PaymentConditionsActionTest extends TestCase
 
         $this->request->getLocale()->willReturn('fr');
         $this->event->getId()->willReturn(15);
-        $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
+        $this->twig->render(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($update)->shouldBeCalled();
         $this->flashBag->add('success', 'flash.admin.type.paymentConditions.updated')->shouldBeCalled();
         $this->router
@@ -231,7 +231,7 @@ class PaymentConditionsActionTest extends TestCase
         $action = new PaymentConditionsAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
-            $this->engine->reveal(),
+            $this->twig->reveal(),
             $this->router->reveal(),
             $this->flashBag->reveal(),
             $this->commandBus->reveal()

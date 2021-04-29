@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class ImportAction
@@ -26,8 +26,8 @@ class ImportAction
     /** @var CommandBusInterface */
     private $commandBus;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -44,7 +44,7 @@ class ImportAction
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         CommandBusInterface $commandBus,
-        EngineInterface $engine,
+        Environment $twig,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
@@ -52,7 +52,7 @@ class ImportAction
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
         $this->router = $router;
@@ -94,7 +94,7 @@ class ImportAction
         }
 
         return new Response(
-            $this->engine->render(
+            $this->twig->render(
                 '@Admin/User/Event/Import/import.html.twig',
                 [
                     'event' => $event,

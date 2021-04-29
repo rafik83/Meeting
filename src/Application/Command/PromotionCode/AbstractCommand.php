@@ -2,7 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\PromotionCode;
 
-abstract class AbstractCommand
+use Proximum\Vimeet\Application\Command\Command;
+
+abstract class AbstractCommand implements Command
 {
     /**
      * @var string

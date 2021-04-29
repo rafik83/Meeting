@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 
-class Remove
+class Remove implements Command
 {
     /** @var ExtraParameter */
     public $extraParameter;

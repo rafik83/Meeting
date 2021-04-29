@@ -9,19 +9,19 @@ use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\EBadgePdfPrinter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class DownloadAction
 {
     /** @var UserEventTokenRepositoryInterface */
     private $userEventTokenRepository;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var QueryBusInterface */
     private $queryBus;
@@ -31,12 +31,12 @@ class DownloadAction
 
     public function __construct(
         UserEventTokenRepositoryInterface $userEventTokenRepository,
-        EngineInterface $engine,
+        Environment $twig,
         QueryBusInterface $queryBus,
         EBadgePdfPrinter $eBadgePdfPrinter
     ) {
         $this->userEventTokenRepository = $userEventTokenRepository;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->queryBus = $queryBus;
         $this->eBadgePdfPrinter = $eBadgePdfPrinter;
     }
@@ -64,8 +64,8 @@ class DownloadAction
 
         $badge = $this->queryBus->handle(new GetUserBadgeByEventQuery($event, $user));
 
-        return $this->engine->renderResponse('@Event/Badge/Print/show.html.twig', [
+        return new Response($this->twig->render('@Event/Badge/Print/show.html.twig', [
             'userBadgeByEventView' => $badge,
-        ]);
+        ]));
     }
 }

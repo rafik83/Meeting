@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ForgottenPassword
+class ForgottenPassword implements Command
 {
     /** @var string */
     public $email;

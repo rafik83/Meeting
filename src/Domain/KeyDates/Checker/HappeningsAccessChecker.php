@@ -17,6 +17,6 @@ class HappeningsAccessChecker extends AccessChecker
             return false;
         }
 
-        return $this->datetime >= $event->getConfiguration()->getHappeningsOpenDate();
+        return $this->dateTime >= $event->getConfiguration()->getHappeningsOpenDate();
     }
 }

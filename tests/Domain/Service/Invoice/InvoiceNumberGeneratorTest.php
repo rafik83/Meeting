@@ -23,7 +23,7 @@ class InvoiceNumberGeneratorTest extends TestCase
     /**
      * @var \DateTime
      */
-    private $datetime;
+    private $dateTime;
 
     /**
      * @var InvoiceNumberGenerator
@@ -37,7 +37,7 @@ class InvoiceNumberGeneratorTest extends TestCase
 
     public function setUp()
     {
-        $this->datetime               = new \DateTime();
+        $this->dateTime               = new \DateTime();
         $this->event                  = EventFactory::createEvent();
         $this->invoiceNumberGenerator = new InvoiceNumberGenerator();
         $this->invoiceRepository      = $this->prophesize(InvoiceRepositoryInterface::class)->reveal();
@@ -58,7 +58,7 @@ class InvoiceNumberGeneratorTest extends TestCase
     {
         $type    = new Type($this->event);
         $owner   = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
-        $sheet   = new Sheet($this->event, $type, [], $owner, $this->datetime);
+        $sheet   = new Sheet($this->event, $type, [], $owner, $this->dateTime);
         $invoice = new Invoice(
             $this->event,
             $sheet,
@@ -74,7 +74,7 @@ class InvoiceNumberGeneratorTest extends TestCase
             10,
             'EUR',
             'some-data',
-            $this->datetime
+            $this->dateTime
         );
         $expectedInvoiceIncrement = '0889';
         $invoiceIncrement = $this->invoiceNumberGenerator->generate($invoice);

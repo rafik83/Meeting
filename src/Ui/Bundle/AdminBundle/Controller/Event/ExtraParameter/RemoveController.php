@@ -2,19 +2,22 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\ExtraParameter;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class RemoveController extends Controller
+class RemoveController extends AbstractController
 {
-    /**
-     * @param Event                $event
-     * @param Event\ExtraParameter $extraParameter
-     *
-     * @return RedirectResponse
-     */
+    private CommandBusInterface $commandBus;
+
+    public function __construct(
+        CommandBusInterface $commandBus
+    ) {
+        $this->commandBus = $commandBus;
+    }
+
     public function removeAction(Event $event, Event\ExtraParameter $extraParameter): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -27,7 +30,7 @@ class RemoveController extends Controller
         }
 
         $remove = new Remove($extraParameter);
-        $this->get('tactician.commandbus')->handle($remove);
+        $this->commandBus->handle($remove);
 
         return $this->redirectToRoute('admin_event_extra_parameter_list', [
             'event' => $event->getId(),

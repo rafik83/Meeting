@@ -9,13 +9,13 @@ use Proximum\Vimeet\Application\Command\Type\RegistrationPath\UpdateQuestion;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\RegistrationPath\Question;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\RegistrationPath\UpdateQuestionType;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Twig\Environment;
 
 class UpdateQuestionAction
 {
@@ -31,8 +31,8 @@ class UpdateQuestionAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
+    /** @var Environment */
+    private $twig;
 
     /** @var RouterInterface */
     private $router;
@@ -42,14 +42,14 @@ class UpdateQuestionAction
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         FormFactoryInterface $formFactory,
-        EngineInterface $engine,
+        Environment $twig,
         RouterInterface $router
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->commandBus = $commandBus;
         $this->flashBag = $flashBag;
         $this->formFactory = $formFactory;
-        $this->engine = $engine;
+        $this->twig = $twig;
         $this->router = $router;
     }
 
@@ -80,12 +80,12 @@ class UpdateQuestionAction
             );
         }
 
-        return $this->engine->renderResponse(
+        return new Response($this->twig->render(
             '@Admin/Type/RegistrationPath/updateQuestion.html.twig',
             [
                 'event' => $event,
                 'form' => $updateQuestionForm->createView(),
             ]
-        );
+        ));
     }
 }

@@ -53,7 +53,7 @@
         {% endblock body %}
 
         {% if event is defined %}
-            {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction', {'event': event})) }}
+            {{ render_esi(controller('Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\Crisp\\ChatAction')) }}
         {% endif %}
 
         {% if sheet is defined and sheet is not null %}

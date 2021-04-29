@@ -4,6 +4,7 @@ form.add_participant.children.email.placeholder: Email
 form.add_participant.children.firstName.placeholder: 'First name'
 form.add_participant.children.lastName.placeholder: 'Last Name'
 form.add_participant.children.product.label: 'Linked products'
+form.block.children.locale.label: 'Choice of language'
 form.catalog_approve_meeting_request.children.description.label: 'Respond to the meeting request?'
 form.catalog_approve_meeting_request.children.description.placeholder: 'Write a message'
 form.catalog_approve_meeting_request.children.participants.label: 'Assign this meeting exclusively to?'
@@ -102,6 +103,7 @@ form.payment_choice.children.paymentMode.bank_card: 'Credit card'
 form.payment_choice.children.paymentMode.bank_check: Cheque
 form.payment_choice.children.paymentMode.bank_transfer: 'Bank transfer'
 form.payment_choice.children.paymentMode.paypal: 'Credit card or Paypal'
+form.profile.children.locale.label: 'Choice of language'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.register.newUser.repeatedPassword.placeholder: 'confirm password'
 form.remove_meeting.children.content.label: 'Comment to your contact'
@@ -180,6 +182,8 @@ form.sheet_media_data.children.type.video: video
 form.sheet_template_objects_collection_type.children.objectsCollection.label_add: Add
 form.sheet_template_objects_collection_type.children.objectsCollection.label_delete: Delete
 form.sheet_template_objects_collection_type.children.submit.label: Save
+form.sheet_video_data.children.selectedProduct.label: 'Related products'
+form.sheet_video_data.children.submit.label: Record
 form.sort_participants.children.submit.label: Save
 form.user_availability_confirmation.children.confirm.label: 'Go directly to catalogue'
 form.user_event_phone_validate_code.children.code.label: 'Validation code received'

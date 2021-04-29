@@ -2,10 +2,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class BillingConfiguration
+class BillingConfiguration implements Command
 {
     /**
      * @var Event

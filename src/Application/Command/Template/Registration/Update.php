@@ -2,9 +2,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 
-class Update
+class Update implements Command
 {
     /**
      * @var string
