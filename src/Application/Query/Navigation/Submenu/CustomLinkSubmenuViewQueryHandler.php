@@ -99,11 +99,10 @@ class CustomLinkSubmenuViewQueryHandler
                 false,
                 null,
                 false,
-                [],
+                ['target' => '_blank'],
                 $customLink->getIconColor(),
                 $customLink->getLabelColor(),
-                $customLink->getButtonColor(),
-
+                $customLink->getButtonColor()
             );
         }
 
