@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2503 - Add questions, replies, votes, datetimes to happening participants export
 ### Fixed
 - MV-324 - fix bad viewers count for speakers when opening webinar
 

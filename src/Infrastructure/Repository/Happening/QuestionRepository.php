@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\QuestionVote;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 
@@ -82,17 +81,20 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet): array
+    public function findByHappeningAndUser(Happening $happening, User $user): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('question')
+            ->addSelect('COUNT(vote)')
             ->from(Question::class, 'question')
-            ->where('question.happening = :happening')
-            ->andWhere('question.sheet = :sheet')
+            ->leftJoin(QuestionVote::class, 'vote', 'WITH', 'vote.question = question')
+            ->andWhere('question.happening = :happening')
             ->setParameter('happening', $happening)
-            ->setParameter('sheet', $sheet)
+            ->andWhere('question.createdBy = :user')
+            ->setParameter('user', $user)
+            ->addGroupBy('question')
         ;
 
         return $queryBuilder->getQuery()->getResult();

@@ -355,7 +355,7 @@ class SlotViewQueryHandlerTest extends TestCase
             $this->slot,
             SlotAvailability::MEETING_ON_OTHER_SHEET,
             'otherSheetTitle',
-            ''
+            123
         )];
 
         $this->assertEquals($expected, $result);
