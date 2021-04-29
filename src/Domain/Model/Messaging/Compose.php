@@ -9,6 +9,10 @@ class Compose
     public const TAG_PARTICIPATION_TYPE = '%participationType%';
     public const TAG_SHEET_PLANNING     = '%sheetPlanning%';
     public const TAG_SHEET_SPOT         = '%sheetSpot%';
+    public const TAG_EVALUATED_SHEET    = '%evaluatedSheet%';
+    public const TAG_EVALUATING_SHEET   = '%evaluatingSheet%';
+    public const TAG_MEETING_EVALUATION = '%meetingEvaluation%';
+    public const TAG_MET_PARTICIPANTS   = '%metParticipants%';
 
     // CTA
     public const TAG_CTA_AGENDA_CONFIRMATION = '%agendaConfirmationCTA%';
@@ -48,6 +52,10 @@ class Compose
         self::TAG_CTA_AGENDA_CONFIRMATION,
         self::TAG_CTA_EBADGE,
         self::TAG_CTA_TEST_VISIO_CONFIGURATION,
+        self::TAG_EVALUATED_SHEET,
+        self::TAG_EVALUATING_SHEET,
+        self::TAG_MEETING_EVALUATION,
+        self::TAG_MET_PARTICIPANTS,
     ];
 
     /**
@@ -56,21 +64,5 @@ class Compose
     public static function getAllPlaceholders(): array
     {
         return array_merge(self::TAG_PLACEHOLDERS, self::LINK_PLACEHOLDERS);
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function getTagPlaceholders(): array
-    {
-        return self::TAG_PLACEHOLDERS;
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function getLinkPlaceholders(): array
-    {
-        return self::LINK_PLACEHOLDERS;
     }
 }
