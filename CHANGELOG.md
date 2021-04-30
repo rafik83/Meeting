@@ -5,11 +5,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- VIMEET-2412 Height space between nav buttons
+- VIMEET-2412 - Height space between nav buttons
+- VIMEET-2485 - Agenda title uppercase
+- VIMEET-2503 - Add questions, replies, votes, datetimes to happening participants export
+
+### Fixed
+- MV-324 - fix bad viewers count for speakers when opening webinar
+
+## [2.88.3] - 2021-04-26
+### Fixed
+- MV-331 - Add missing fontconfig lib
+
+## [2.88.2] - 2021-04-26
+### Fixed
+- Remove Imagick php module to avoid segmentation faults
+
+## [2.88.1] - 2021-04-23
+### Fixed
+- MV-330 - Disable mailer spool, to enabled previous fix (closing smtp is not supported with spool)
+
+## [2.88.0] - 2021-04-23
+### Added
+- VIMEET-2395 - Header event width full
 
 ### Fixed
 - Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated
+- MV-330 - Close smtp transport after sending email, to avoid disconnection after timeout
 
 ## [2.87.5] - 2021-04-20
 ### Fixed

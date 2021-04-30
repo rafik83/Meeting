@@ -1,7 +1,6 @@
 swiftmailer:
     # TODO: update deployement files to use env variable
     # url: '%env(MAILER_URL)%'
-    # spool: { type: 'memory' }
     default_mailer: default
     mailers:
         default:
@@ -11,7 +10,7 @@ swiftmailer:
             password:   "%mailer_password%"
             port:       "%mailer_port%"
             encryption: "%mailer_encryption%"
-            spool:      { type: memory }
+            # spool must NOT be activated, else closing smtp connexion won't be supported
         error:
             transport:  "%mailer_error_transport%"
             host:       "%mailer_error_host%"
