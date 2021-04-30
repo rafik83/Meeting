@@ -113,9 +113,29 @@ class HappeningParticipantExportViewQueryHandler
             $sheet = null;
         }
 
-        $questions = null !== $sheet ? $this->questionRepository->findByHappeningAndSheet($happening, $sheet) : [];
-
         $timezone = $event->getTimeZone();
+
+        $questionRows = null !== $sheet ? $this->questionRepository->findByHappeningAndUser($happening, $user) : [];
+
+        $participantQuestions = new HappeningParticipantQuestions();
+
+        /** @var Happening\Question $question */
+        foreach ($questionRows as [$question, $votes]) {
+            if (null === $question) {
+                break;
+            }
+
+            if ($question->getAskedDuringWebinar()) {
+                $participantQuestions->addQuestionWebinar(
+                    $question->getContent(),
+                    $question->getReplyContent(),
+                    $votes,
+                    HappeningDateHelper::getDateTime($question->getCreatedAt(), $locale, $timezone)
+                );
+            } else {
+                $participantQuestions->setQuestionRegister($question->getContent());
+            }
+        }
 
         $happeningParticipantView = new HappeningParticipantView(
             $happening->getId(),
@@ -125,9 +145,11 @@ class HappeningParticipantExportViewQueryHandler
             $happening->getTitle($locale),
             null !== $sheet ? $sheet->getId() : '',
             $user->getId(),
-            implode("\n", array_map(static function (Happening\Question $question) {
-                return $question->getContent();
-            }, $questions)),
+            $participantQuestions->getQuestionRegister(),
+            $participantQuestions->getQuestionsWebinar(),
+            $participantQuestions->getReplies(),
+            $participantQuestions->getVotes(),
+            $participantQuestions->getDateTimes(),
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),

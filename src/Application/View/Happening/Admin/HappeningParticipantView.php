@@ -6,230 +6,156 @@ use Proximum\Vimeet\Application\Serializer\Normalizer\HappeningParticipantNormal
 
 class HappeningParticipantView
 {
-    /**
-     * @var int
-     */
-    private $happeningId;
-
-    /**
-     * @var string
-     */
-    private $happeningBeginHour;
-
-    /**
-     * @var string
-     */
-    private $happeningEndHour;
-
-    /**
-     * @var string
-     */
-    private $happeningDay;
-
-    /**
-     * @var string
-     */
-    private $happeningTitle;
-
-    /**
-     * @var int
-     */
-    private $sheetId;
-
-    /**
-     * @var int
-     */
-    private $participantId;
-
-    /**
-     * @var string
-     */
-    private $question;
-
-    /**
-     * @var string
-     */
-    private $email;
-
-    /**
-     * @var string
-     */
-    private $firstname;
-
-    /**
-     * @var string
-     */
-    private $lastname;
-
-    /**
-     * @var string
-     */
-    private $position;
-
-    /**
-     * @var string
-     */
-    private $sheetName;
-
+    private int $happeningId;
+    private string $happeningBeginHour;
+    private string $happeningEndHour;
+    private string $happeningDay;
+    private string $happeningTitle;
+    private int $sheetId;
+    private int $participantId;
+    // question asked during registration to happening
+    private ?string $questionRegister;
+    // question(s) asked during webinar
+    private ?string $questionsWebinar;
+    // reply(ies) for webinar question(s)
+    private ?string $replies;
+    // votes for webinar question(s)
+    private ?string $votes;
+    private ?string $questionsDateTimes;
+    private string $email;
+    private string $firstname;
+    private string $lastname;
+    private ?string $position;
+    private string $sheetName;
     private ?string $phone;
-
     private ?int $evaluation;
-
     private ?string $connect;
 
-    /**
-     * HappeningParticipantView constructor.
-     *
-     * @param int    $happeningId
-     * @param string $happeningBeginHour
-     * @param string $happeningEndHour
-     * @param string $happeningDay
-     * @param string $happeningTitle
-     * @param int    $sheetId
-     * @param int    $participantId
-     * @param string $question
-     * @param string $email
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $position
-     * @param string $sheetName
-     */
     public function __construct(
-        $happeningId,
-        $happeningBeginHour,
-        $happeningEndHour,
-        $happeningDay,
-        $happeningTitle,
-        $sheetId,
-        $participantId,
-        $question,
-        $email,
-        $firstname,
-        $lastname,
-        $position,
-        $sheetName,
+        int $happeningId,
+        string $happeningBeginHour,
+        string $happeningEndHour,
+        string $happeningDay,
+        string $happeningTitle,
+        int $sheetId,
+        int $participantId,
+        ?string $questionRegister,
+        ?string $questionsWebinar,
+        ?string $replies,
+        ?string $votes,
+        ?string $questionsDateTimes,
+        string $email,
+        string $firstname,
+        string $lastname,
+        ?string $position,
+        string $sheetName,
         ?string $phone,
         ?int $evaluation,
         ?string $connect
     ) {
-        $this->sheetId            = $sheetId;
-        $this->participantId      = $participantId;
-        $this->question           = $question;
-        $this->email              = $email;
-        $this->firstname          = $firstname;
-        $this->lastname           = $lastname;
-        $this->position           = $position;
-        $this->sheetName          = $sheetName;
-        $this->happeningId        = $happeningId;
+        $this->sheetId = $sheetId;
+        $this->participantId = $participantId;
+        $this->questionRegister = $questionRegister;
+        $this->questionsWebinar = $questionsWebinar;
+        $this->replies = $replies;
+        $this->votes = $votes;
+        $this->questionsDateTimes = $questionsDateTimes;
+        $this->email = $email;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->position = $position;
+        $this->sheetName = $sheetName;
+        $this->happeningId = $happeningId;
         $this->happeningBeginHour = $happeningBeginHour;
-        $this->happeningEndHour   = $happeningEndHour;
-        $this->happeningDay       = $happeningDay;
-        $this->happeningTitle     = $happeningTitle;
-        $this->phone              = $phone;
-        $this->evaluation         = $evaluation;
-        $this->connect            = $connect;
+        $this->happeningEndHour = $happeningEndHour;
+        $this->happeningDay = $happeningDay;
+        $this->happeningTitle = $happeningTitle;
+        $this->phone = $phone;
+        $this->evaluation = $evaluation;
+        $this->connect = $connect;
     }
 
-    /**
-     * @return int
-     */
-    public function getHappeningId()
+    public function getHappeningId(): int
     {
         return $this->happeningId;
     }
 
-    /**
-     * @return string
-     */
-    public function getHappeningBeginHour()
+    public function getHappeningBeginHour(): string
     {
         return $this->happeningBeginHour;
     }
 
-    /**
-     * @return string
-     */
-    public function getHappeningEndHour()
+    public function getHappeningEndHour(): string
     {
         return $this->happeningEndHour;
     }
 
-    /**
-     * @return string
-     */
-    public function getHappeningDay()
+    public function getHappeningDay(): string
     {
         return $this->happeningDay;
     }
 
-    /**
-     * @return string
-     */
-    public function getHappeningTitle()
+    public function getHappeningTitle(): string
     {
         return $this->happeningTitle;
     }
 
-    /**
-     * @return int
-     */
-    public function getSheetId()
+    public function getSheetId(): int
     {
         return $this->sheetId;
     }
 
-    /**
-     * @return int
-     */
-    public function getParticipantId()
+    public function getParticipantId(): int
     {
         return $this->participantId;
     }
 
-    /**
-     * @return string
-     */
-    public function getQuestion()
+    public function getQuestionRegister(): ?string
     {
-        return $this->question;
+        return $this->questionRegister;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getQuestionsWebinar(): ?string
+    {
+        return $this->questionsWebinar;
+    }
+
+    public function getReplies(): ?string
+    {
+        return $this->replies;
+    }
+
+    public function getVotes(): ?string
+    {
+        return $this->votes;
+    }
+
+    public function getQuestionsDateTimes(): ?string
+    {
+        return $this->questionsDateTimes;
+    }
+
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    /**
-     * @return string
-     */
-    public function getPosition()
+    public function getPosition(): ?string
     {
         return $this->position;
     }
 
-    /**
-     * @return string
-     */
-    public function getSheetName()
+    public function getSheetName(): string
     {
         return $this->sheetName;
     }
@@ -249,28 +175,29 @@ class HappeningParticipantView
         return $this->connect;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            HappeningParticipantNormalizer::COL_HAPPENING_ID          => $this->getHappeningId(),
-            HappeningParticipantNormalizer::COL_HAPPENING_BEGIN_HOUR  => $this->getHappeningBeginHour(),
-            HappeningParticipantNormalizer::COL_HAPPENING_END_HOUR    => $this->getHappeningEndHour(),
-            HappeningParticipantNormalizer::COL_HAPPENING_NAME        => $this->getHappeningTitle(),
-            HappeningParticipantNormalizer::COL_HAPPENING_DAY         => $this->getHappeningDay(),
-            HappeningParticipantNormalizer::COL_SHEET_ID              => $this->getSheetId(),
-            HappeningParticipantNormalizer::COL_SHEET_NAME            => $this->getSheetName(),
-            HappeningParticipantNormalizer::COL_PARTICIPANT_ID        => $this->getParticipantId(),
+            HappeningParticipantNormalizer::COL_HAPPENING_ID => $this->getHappeningId(),
+            HappeningParticipantNormalizer::COL_HAPPENING_BEGIN_HOUR => $this->getHappeningBeginHour(),
+            HappeningParticipantNormalizer::COL_HAPPENING_END_HOUR => $this->getHappeningEndHour(),
+            HappeningParticipantNormalizer::COL_HAPPENING_NAME => $this->getHappeningTitle(),
+            HappeningParticipantNormalizer::COL_HAPPENING_DAY => $this->getHappeningDay(),
+            HappeningParticipantNormalizer::COL_SHEET_ID => $this->getSheetId(),
+            HappeningParticipantNormalizer::COL_SHEET_NAME => $this->getSheetName(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_ID => $this->getParticipantId(),
             HappeningParticipantNormalizer::COL_PARTICIPANT_FIRSTNAME => $this->getFirstname(),
-            HappeningParticipantNormalizer::COL_PARTICIPANT_LASTNAME  => $this->getLastname(),
-            HappeningParticipantNormalizer::COL_PARTICIPANT_EMAIL     => $this->getEmail(),
-            HappeningParticipantNormalizer::COL_PARTICIPANT_PHONE     => $this->getPhone(),
-            HappeningParticipantNormalizer::COL_HAPPENING_GRADE       => $this->getEvaluation(),
-            HappeningParticipantNormalizer::COL_HAPPENING_CONNECT     => $this->getConnect(),
-            HappeningParticipantNormalizer::COL_PARTICIPANT_POSITION  => $this->getPosition(),
-            HappeningParticipantNormalizer::COL_QUESTION              => $this->getQuestion(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_LASTNAME => $this->getLastname(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_EMAIL => $this->getEmail(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_PHONE => $this->getPhone(),
+            HappeningParticipantNormalizer::COL_HAPPENING_GRADE => $this->getEvaluation(),
+            HappeningParticipantNormalizer::COL_HAPPENING_CONNECT => $this->getConnect(),
+            HappeningParticipantNormalizer::COL_PARTICIPANT_POSITION => $this->getPosition(),
+            HappeningParticipantNormalizer::COL_QUESTION_REGISTER => $this->getQuestionRegister(),
+            HappeningParticipantNormalizer::COL_QUESTIONS_WEBINAR => $this->getQuestionsWebinar(),
+            HappeningParticipantNormalizer::COL_REPLIES => $this->getReplies(),
+            HappeningParticipantNormalizer::COL_VOTES => $this->getVotes(),
+            HappeningParticipantNormalizer::COL_QUESTIONS_DATETIMES => $this->getQuestionsDateTimes(),
         ];
     }
 }

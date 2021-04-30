@@ -363,9 +363,13 @@ admin.happening.export.fields.participant_firstname: Prénom
 admin.happening.export.fields.participant_id: 'ID Participant'
 admin.happening.export.fields.participant_lastname: Nom
 admin.happening.export.fields.participant_position: Fonction
-admin.happening.export.fields.question: Question
+admin.happening.export.fields.questions_datetimes: Horodatage des questions
+admin.happening.export.fields.question_register: Question lors de l'inscription
+admin.happening.export.fields.questions_webinar: Questions lors du webinaire
+admin.happening.export.fields.replies: Réponses
 admin.happening.export.fields.sheet_id: 'ID Fiche'
 admin.happening.export.fields.sheet_name: 'Titre fiche'
+admin.happening.export.fields.votes: Votes
 admin.happening.link: Conférences
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
