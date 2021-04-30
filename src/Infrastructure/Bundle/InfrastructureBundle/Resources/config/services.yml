@@ -1615,6 +1615,14 @@ services:
             - '@repository.event.content_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\Update }
+    Proximum\Vimeet\Application\Command\Event\CustomLink\CreateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\CustomLink\Create }
+    Proximum\Vimeet\Application\Command\Event\CustomLink\UpdateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\CustomLink\Update }
     command.participant.remove_handler:
         class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
         arguments:
@@ -4638,6 +4646,11 @@ services:
             - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQuery }
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
         arguments:

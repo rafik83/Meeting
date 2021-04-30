@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQue
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\CatalogSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\ContactsSubmenuViewQuery;
+use Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\NetworkingSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\PackageSubmenuButtonViewQuery;
@@ -171,6 +172,17 @@ class SubmenuViewQueryHandler
         if (null !== $packageSubmenuButtonView) {
             $buttonsViews[] = $packageSubmenuButtonView;
         }
+
+        $customLinkViews = $this->queryBus->handle(
+            new CustomLinkSubmenuViewQuery(
+                $submenuViewQuery->sheet,
+                $submenuViewQuery->user,
+                $submenuViewQuery->event,
+                $submenuViewQuery->locale
+            )
+        );
+
+        $buttonsViews = array_merge($buttonsViews, $customLinkViews);
 
         $visioSubmenuButtonView = $this->queryBus->handle(
             new VisioSubmenuViewQuery(

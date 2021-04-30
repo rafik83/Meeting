@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.89.0] - 2021-04-30
 ### Added
 - VIMEET-2412 - Height space between nav buttons
+- VIMEET-2355 - Add custom link administration
+- VIMEET-2413 - Display custom buttons
 - VIMEET-2485 - Agenda title uppercase
 - VIMEET-2503 - Add questions, replies, votes, datetimes to happening participants export
 
 ### Fixed
 - MV-324 - fix bad viewers count for speakers when opening webinar
+- Static formulation list : orignal title was always translated with event default locale
 
 ## [2.88.3] - 2021-04-26
 ### Fixed
