@@ -4,11 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.90.0] - 2021-04-30
+### Added
+- VIMEET-2413 - Display custom buttons
+- VIMEET-2355 - Add custom link administration
+
 ## [2.89.0] - 2021-04-30
 ### Added
 - VIMEET-2412 - Height space between nav buttons
-- VIMEET-2355 - Add custom link administration
-- VIMEET-2413 - Display custom buttons
 - VIMEET-2485 - Agenda title uppercase
 - VIMEET-2503 - Add questions, replies, votes, datetimes to happening participants export
 
