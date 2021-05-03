@@ -58,7 +58,8 @@ class GetHappeningQuestionsAction
             throw new AccessDeniedException('Access denied to this happening');
         }
 
-        $questionViews = $this->queryBus->handle(new GetHappeningQuestions($happening, $user, $request->getLocale()));
+        $orderBy = $request->query->get('value');
+        $questionViews = $this->queryBus->handle(new GetHappeningQuestions($happening, $user, $request->getLocale(), $orderBy));
 
         return new JsonResponse($questionViews);
     }
