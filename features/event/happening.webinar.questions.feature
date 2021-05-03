@@ -29,12 +29,12 @@ Feature: I can add question via the API
   Scenario: I can view a new question
     Given there is an event with domain "asddays.vimeet.proximum"
     And I am logged with "user_asddays_1@proximum.com" on front
-    When I send a GET request to "http://asddays.vimeet.proximum/fr/sheet/1/happening/1/webinar/questions"
+    When I send a GET request to "http://asddays.vimeet.proximum/fr/sheet/1/happening/1/webinar/questions?value=date"
     Then the JSON node "[0].questionContent" should be equal to the string "Bonjour, comment allez-vous ?"
 
   Scenario: I can't access questions if happening is not a webinar
     Given there is an event with domain "asddays.vimeet.proximum"
     And I am logged with "user_asddays_1@proximum.com" on front
     And there is a webinar in this event
-    When I send a GET request to "http://asddays.vimeet.proximum/fr/sheet/1/happening/2/webinar/questions"
+    When I send a GET request to "http://asddays.vimeet.proximum/fr/sheet/1/happening/2/webinar/questions?value=date"
     Then the response status code should be 403
