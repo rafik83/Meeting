@@ -18,4 +18,5 @@ interface EventUrlGeneratorInterface
     public function generateEventAbsoluteUrl(Event $event, $routeName, $parameters = []);
 
     public function generateBaseEventAbsoluteUrl(Event $event): string;
+    public function generateImageAbsoluteUrl(Event $event, string $path);
 }
