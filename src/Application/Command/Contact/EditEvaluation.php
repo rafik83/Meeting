@@ -2,20 +2,20 @@
 
 namespace Proximum\Vimeet\Application\Command\Contact;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Contact;
 
 class EditEvaluation implements Command
 {
-    /** @var Contact */
-    public $contact;
+    public Contact $contact;
+    public ?int $evaluation;
+    public DateTimeInterface $evaluatedAt;
 
-    /** @var int|null */
-    public $evaluation;
-
-    public function __construct(Contact $contact, ?int $evaluation)
+    public function __construct(Contact $contact, ?int $evaluation, DateTimeInterface $evaluatedAt)
     {
         $this->contact = $contact;
         $this->evaluation = $evaluation;
+        $this->evaluatedAt = $evaluatedAt;
     }
 }
