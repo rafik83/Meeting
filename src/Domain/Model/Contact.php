@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
+use DateTimeInterface;
+use InvalidArgumentException;
+
 class Contact
 {
     public const ORIGIN_MEETING = 'meeting';
@@ -18,11 +21,12 @@ class Contact
     /** @var User */
     private $contact;
 
-    /** @var \DateTimeInterface */
-    private $createdAt;
+    private DateTimeInterface $createdAt;
 
     /** @var int|null */
     private $evaluation;
+
+    private ?DateTimeInterface $evaluatedAt;
 
     /** @var string|null */
     private $comment;
@@ -34,7 +38,7 @@ class Contact
         Event $event,
         User $user,
         User $contact,
-        \DateTimeInterface $createdAt,
+        DateTimeInterface $createdAt,
         string $origin
     )
     {
@@ -70,6 +74,11 @@ class Contact
         return $this->evaluation;
     }
 
+    public function getEvaluatedAt(): ?DateTimeInterface
+    {
+        return $this->evaluatedAt;
+    }
+
     public function hasEvaluation(): bool
     {
         return null !== $this->evaluation;
@@ -90,9 +99,15 @@ class Contact
         return self::ORIGIN_SCAN === $this->origin;
     }
 
-    public function setEvaluation(int $evaluation): void
+    /** @throws InvalidArgumentException */
+    public function setEvaluation(int $evaluation, ?DateTimeInterface $evaluatedAt = null): void
     {
+        if ($this->origin === self::ORIGIN_MEETING && $evaluatedAt === null) {
+            throw new InvalidArgumentException('evaluatedeAt must not be null for meeting evaluation');
+        }
+
         $this->evaluation = $evaluation;
+        $this->evaluatedAt = $evaluatedAt;
     }
 
     public function setComment(?string $comment): void

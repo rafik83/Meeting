@@ -15,6 +15,9 @@ Proximum\Vimeet\Domain\Model\Contact:
         evaluation:
             type: smallint
             nullable: true
+        evaluatedAt:
+            type: datetime
+            nullable: true
         comment:
             type: text
             nullable: true
