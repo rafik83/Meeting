@@ -1,5 +1,5 @@
 .questions-list {
-  height: calc(100vh - 160px);
+  height: calc(100vh - 213px);
   margin-top: 10px;
   overflow: hidden;
   overflow-y: scroll;
@@ -164,6 +164,11 @@
     justify-content: center;
     display: flex;
     margin-top: -5px;
+    background-color:rgb(252 252 252 / 90%);
+    padding-bottom: 15px;
+    z-index: 10;
+    position:absolute;
+    width:100%;
 
     span {
       color:gray;
