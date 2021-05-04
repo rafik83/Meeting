@@ -175,15 +175,15 @@
       height:22px;
       display:inline-block;
       background-image:url('../../../assets/images/icons/icon-loading.svg');
-      -webkit-animation: rotating 1s linear infinite;
+      animation: rotating 1s linear infinite;
     }
 
-    @-webkit-keyframes rotating {
+    @keyframes rotating {
       from{
-        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
       }
       to{
-        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
       }
     }
   }

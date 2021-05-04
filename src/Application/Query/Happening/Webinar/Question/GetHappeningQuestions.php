@@ -17,8 +17,7 @@ class GetHappeningQuestions implements Query
     /** @var string */
     private $locale;
 
-    /** @var string */
-    private $orderBy;
+    private string $orderBy;
 
     public function __construct(Happening $happening, User $user, string $locale, string $orderBy)
     {

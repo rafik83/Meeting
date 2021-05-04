@@ -48,11 +48,11 @@ Question.prototype.initQuestions = function () {
     const voteHref = this.questionsContainer.getAttribute('data-vote-href');
     const urlQuestionDelete = this.questionsContainer.getAttribute('data-question-message-delete');
     const choice = this.select.selectedIndex;
-    const value = this.select.options[choice].value;
+    const orderBy = this.select.options[choice].value;
     this.loading.classList.remove('hide');
     const $questionsList = $(this.questionsList);
 
-    $.get(href, {'value':value}, function (response) {
+    $.get(href, {'orderBy':orderBy}, function (response) {
 
         // make shure there no listeners leak
         this.removeQuestionListeners();

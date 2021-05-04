@@ -106,7 +106,7 @@ class QuestionRepository implements QuestionRepositoryInterface
     public function getByHappeningDuringWebinar(Happening $happening, User $currentUser, string $orderBy): array
     {
 
-        $orderBy === 'like' ? $value = 'COUNT(vote)' : $value = 'question.createdAt';
+        $orderByColumn = $orderBy === 'like' ? 'COUNT(vote)' : 'question.createdAt';
 
         return $this
             ->entityManager
@@ -122,7 +122,7 @@ class QuestionRepository implements QuestionRepositoryInterface
             ->setParameter('happening', $happening)
             ->andWhere('question.askedDuringWebinar = true')
             ->groupBy('question.id')
-            ->orderBy($value, 'DESC')
+            ->orderBy($orderByColumn, 'DESC')
             ->getQuery()
             ->getResult()
         ;
