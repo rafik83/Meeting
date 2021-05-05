@@ -83,7 +83,9 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             $this->evaluatedSheet->reveal(),
             'Acme Corp',
             5,
-            $this->metParticipants
+            $this->metParticipants,
+            true,
+            true
         );
 
         $this->prepareMeetingFollowUpMail = new PrepareMeetingFollowUpMail(
@@ -115,7 +117,9 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             'Fairness',
             'Acme Corp',
             5,
-            $this->metParticipants
+            $this->metParticipants,
+            true,
+            true
         );
 
         $this->assertEquals($expectedMail, $preparedMail);

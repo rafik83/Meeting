@@ -40,8 +40,10 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $this->assertTrue($noRule->isPhoneVisible(null));
         $this->assertTrue($noRule->isEmailVisible(null));
+        $this->assertTrue($noRule->canSendFollowUpEmail(null));
         $this->assertTrue($noRule->isPhoneVisible(1));
         $this->assertTrue($noRule->isEmailVisible(1));
+        $this->assertTrue($noRule->canSendFollowUpEmail(1));
     }
 
     public function testSingleRule()
@@ -67,6 +69,8 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
         $rule->getPhoneAccessMinEvaluation()->shouldBeCalled()->willReturn(3);
         // min grade for email access is 3
         $rule->getEmailAccessMinEvaluation()->shouldBeCalled()->willReturn(2);
+        // min grade for follow up email is 5
+        $rule->getSendEmailMinEvaluation()->shouldBeCalled()->willReturn(4);
         $rule->getSeer()->shouldBeCalled()->willReturn($seerType->reveal());
         $rule->getSeeable()->shouldBeCalled()->willReturn($seeableType);
 
@@ -76,9 +80,12 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $this->assertFalse($singleAccessRule->isPhoneVisible(null));
         $this->assertFalse($singleAccessRule->isEmailVisible(null));
+        $this->assertFalse($singleAccessRule->canSendFollowUpEmail(null));
         $this->assertFalse($singleAccessRule->isPhoneVisible(3));
         $this->assertFalse($singleAccessRule->isEmailVisible(2));
+        $this->assertFalse($singleAccessRule->canSendFollowUpEmail(4));
         $this->assertTrue($singleAccessRule->isPhoneVisible(4));
         $this->assertTrue($singleAccessRule->isEmailVisible(3));
+        $this->assertTrue($singleAccessRule->canSendFollowUpEmail(5));
     }
 }
