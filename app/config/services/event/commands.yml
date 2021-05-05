@@ -196,6 +196,10 @@ services:
     # Meeting
     #
     Proximum\Vimeet\Application\Command\Meeting\EvaluateMeetingHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+            - '@datetime'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\MessageBusAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting }
 
