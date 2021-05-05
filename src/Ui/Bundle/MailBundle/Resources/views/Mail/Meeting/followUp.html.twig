@@ -14,7 +14,12 @@
 
     {% include
         'MailBundle:Mail:Meeting/followUpMetParticipants.html.twig'
-        with { metParticipantViews: mail.metParticipantViews, evaluatedSheetId: mail.evaluatedSheetId }
+        with {
+            metParticipantViews: mail.metParticipantViews,
+            evaluatedSheetId: mail.evaluatedSheetId,
+            showEmail: mail.showEmail,
+            showPhone: mail.showPhone,
+        }
     %}
 
     {{ 'mail.meeting.followUp.end'|trans({}, 'mail', mail.locale)|html|nl2br }}

@@ -13,6 +13,8 @@ class PrepareMeetingFollowUpView extends AbstractPrepareMail
     public string $evaluatingSheetTitle;
     public int $evaluation;
     public FollowUpParticipantListView $metParticipants;
+    public bool $showEmail;
+    public bool $showPhone;
 
     public function __construct(
         Event $event,
@@ -21,7 +23,9 @@ class PrepareMeetingFollowUpView extends AbstractPrepareMail
         Sheet $evaluatedSheet,
         string $evaluatingSheetTitle,
         int $evaluation,
-        FollowUpParticipantListView $metParticipants
+        FollowUpParticipantListView $metParticipants,
+        bool $showEmail,
+        bool $showPhone
     ) {
         parent::__construct(
             $event,
@@ -34,5 +38,7 @@ class PrepareMeetingFollowUpView extends AbstractPrepareMail
         $this->evaluatingSheetTitle = $evaluatingSheetTitle;
         $this->evaluation = $evaluation;
         $this->metParticipants = $metParticipants;
+        $this->showEmail = $showEmail;
+        $this->showPhone = $showPhone;
     }
 }

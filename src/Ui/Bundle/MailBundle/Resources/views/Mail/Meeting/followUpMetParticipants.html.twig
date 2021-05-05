@@ -24,10 +24,10 @@
                     {% if participant.position %}
                     <br>{{ participant.position }}
                     {% endif %}
-                    {% if participant.phone %}
+                    {% if showPhone and participant.phone %}
                     <br>{{ participant.phone }}
                     {% endif %}
-                    {% if participant.email %}
+                    {% if showEmail and participant.email %}
                     <br><a href="mailto:{{ participant.email }}">{{ participant.email }}</a>
                     {% endif %}
                 </p>

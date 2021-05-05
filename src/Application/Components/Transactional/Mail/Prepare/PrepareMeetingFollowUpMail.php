@@ -50,7 +50,9 @@ class PrepareMeetingFollowUpMail extends AbstractPrepareMailService
             $prepareMail->sheet->getTitle(),
             $prepareMail->evaluatingSheetTitle,
             $prepareMail->evaluation,
-            $prepareMail->metParticipants
+            $prepareMail->metParticipants,
+            $prepareMail->showEmail,
+            $prepareMail->showPhone
         );
     }
 }
