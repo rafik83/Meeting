@@ -50,7 +50,8 @@ class MeetingFactory
         Sheet $toSheet = null,
         Event $event = null,
         array $fromParticipant = [],
-        array $toParticipant = []
+        array $toParticipant = [],
+        int $id = 1
     ) {
         $request   = self::createRequest($fromSheet, $toSheet);
         $slot      = SlotFactory::createSlot();
@@ -71,6 +72,12 @@ class MeetingFactory
             false,
             false
         );
+
+        $reflection = new \ReflectionClass(Meeting::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($meeting, $id);
+        $property->setAccessible(false);
 
         return $meeting;
     }

@@ -21,7 +21,7 @@ class SearchUserQueryHandlerTest extends TestCase
         $userRepository       = $this->prophesize(UserRepositoryInterface::class);
         $userToManagerChecker = $this->prophesize(UserToGroupManagerChecker::class);
 
-        $expectedView = new UserView(null, 'patrick.sebastien@example.com', ' ');
+        $expectedView = new UserView(1, 'patrick.sebastien@example.com', ' ');
 
         $command = new SearchUser($event);
         $command->email = 'patrick.sebastien@example.com';
