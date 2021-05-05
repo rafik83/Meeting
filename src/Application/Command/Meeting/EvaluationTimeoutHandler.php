@@ -72,7 +72,9 @@ class EvaluationTimeoutHandler
             $contactUser = $this->userRepository->findOneById($contactId);
 
             if ($contactUser === null) {
-                $this->logger->warning(sprintf('User %d not found when dispatching MeetingEvaluationUpdateExpiredEvent', $contactId));
+                if ($this->logger) {
+                    $this->logger->warning(sprintf('User %d not found when dispatching MeetingEvaluationUpdateExpiredEvent', $contactId));
+                }
                 continue;
             }
 
@@ -85,11 +87,13 @@ class EvaluationTimeoutHandler
             ));
 
             if ($contact === null) {
-                $this->logger->warning(sprintf(
-                    'Contact not found for users %d/%d when dispatching MeetingEvaluationUpdateExpiredEvent',
-                    $message->getFromUserId(),
-                    $contactId
-                ));
+                if ($this->logger) {
+                    $this->logger->warning(sprintf(
+                        'Contact not found for users %d/%d when dispatching MeetingEvaluationUpdateExpiredEvent',
+                        $message->getFromUserId(),
+                        $contactId
+                    ));
+                }
                 continue;
             }
 

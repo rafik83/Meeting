@@ -63,7 +63,16 @@ class PrepareMeetingFollowUpMailTest extends TestCase
 
         $this->metParticipants = new FollowUpParticipantListView(
             [
-                new FollowUpParticipantView('Alice', 'Dupont', 'CTO', 4, null, 'alice@example.net', '+33111224466')
+                new FollowUpParticipantView(
+                    'Alice',
+                    'Dupont',
+                    'CTO',
+                    4,
+                    'https://example.vimeet.events/path/to/sheet',
+                    null,
+                    'alice@example.net',
+                    '+33111224466'
+                )
             ]
         );
 

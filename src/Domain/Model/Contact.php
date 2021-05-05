@@ -103,7 +103,7 @@ class Contact
     public function setEvaluation(int $evaluation, ?DateTimeInterface $evaluatedAt = null): void
     {
         if ($this->origin === self::ORIGIN_MEETING && $evaluatedAt === null) {
-            throw new InvalidArgumentException('evaluatedeAt must not be null for meeting evaluation');
+            throw new InvalidArgumentException('evaluatedAt must not be null for meeting evaluation');
         }
 
         $this->evaluation = $evaluation;
