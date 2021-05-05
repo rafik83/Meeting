@@ -278,7 +278,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findOneByUsers(Event $event, User $user1, User $user2): ?Meeting
+    public function findByUsers(Event $event, User $user1, User $user2): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('meeting')
@@ -294,7 +294,7 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setParameter('user1', $user1)
             ->setParameter('user2', $user2);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

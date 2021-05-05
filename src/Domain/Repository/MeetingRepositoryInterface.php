@@ -72,7 +72,10 @@ interface MeetingRepositoryInterface
      */
     public function findByEventAndUsers(Event $event, array $users);
 
-    public function findOneByUsers(Event $event, User $user1, User $user2): ?Meeting;
+    /**
+     * @return Meeting[]
+     */
+    public function findByUsers(Event $event, User $user1, User $user2): array;
 
     /**
      * @param Event $event

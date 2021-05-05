@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Command\Contact;
 
 use Proximum\Vimeet\Application\Adapter\MessageBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -34,11 +35,15 @@ class EditEvaluationHandler
 
         // Send message only once
         if ($sendMessage) {
-            $meeting = $this->meetingRepository->findOneByUsers(
+            $meetings = $this->meetingRepository->findByUsers(
                 $command->contact->getEvent(),
                 $command->contact->getUser(),
                 $command->contact->getContact()
             );
+
+            // in edge cases, if user has multiple sheets, find meeting for current sheet
+            $filteredMeetings = array_filter($meetings, fn (Meeting $meeting) => $meeting->hasSheet($command->sheet));
+            $meeting = $filteredMeetings[0] ?? null;
 
             if ($meeting === null) {
                 // Log error if meeting is not found

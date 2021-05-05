@@ -214,7 +214,7 @@ class ShowAction
             ];
         }
 
-        $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation(), $this->dateTime);
+        $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation(), $sheet, $this->dateTime);
         $ratingForm = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand, $options);
 
         $ratingForm->handleRequest($request);

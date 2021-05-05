@@ -10,20 +10,24 @@ use Proximum\Vimeet\Application\Command\Contact\EditEvaluationHandler;
 use Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class EditEvaluationHandlerTest extends TestCase
 {
     private \DateTimeInterface $dateTime;
+    private Sheet $sheet;
     private ObjectProphecy $contactRepository;
     private ObjectProphecy $meetingRepository;
     private ObjectProphecy $messageBus;
 
     protected function setUp()
     {
+        $this->sheet = SheetFactory::create();
         $this->dateTime = \DateTime::createFromFormat('!Y-m-d H:i', '2021-01-20 13:45');
 
         // prophecies dependencies
@@ -41,7 +45,7 @@ class EditEvaluationHandlerTest extends TestCase
         $this->contactRepository->set($contact)->shouldBeCalled();
 
         // run tests
-        $command = new EditEvaluation($contact->reveal(), 2, $this->dateTime);
+        $command = new EditEvaluation($contact->reveal(), 2, $this->sheet, $this->dateTime);
 
         $editCommentHandler = new EditEvaluationHandler(
             $this->contactRepository->reveal(),
@@ -71,13 +75,14 @@ class EditEvaluationHandlerTest extends TestCase
 
         $meeting = $this->prophesize(Meeting::class);
         $meeting->getId()->willReturn(26001);
+        $meeting->hasSheet($this->sheet)->willReturn(true);
         $this->meetingRepository
-            ->findOneByUsers($event, $user->reveal(), $contactedUser->reveal())
+            ->findByUsers($event, $user->reveal(), $contactedUser->reveal())
             ->shouldBeCalled()
-            ->willReturn($meeting->reveal());
+            ->willReturn([$meeting->reveal()]);
 
         // run tests
-        $command = new EditEvaluation($contact->reveal(), 2, $this->dateTime);
+        $command = new EditEvaluation($contact->reveal(), 2, $this->sheet, $this->dateTime);
 
         $editCommentHandler = new EditEvaluationHandler(
             $this->contactRepository->reveal(),
@@ -105,12 +110,12 @@ class EditEvaluationHandlerTest extends TestCase
         $this->contactRepository->set($contact)->shouldBeCalled();
 
         $this->meetingRepository
-            ->findOneByUsers($event, $user->reveal(), $contactedUser->reveal())
+            ->findByUsers($event, $user->reveal(), $contactedUser->reveal())
             ->shouldBeCalled()
-            ->willReturn(null);
+            ->willReturn([]);
 
         // run tests
-        $command = new EditEvaluation($contact->reveal(), 2, $this->dateTime);
+        $command = new EditEvaluation($contact->reveal(), 2, $this->sheet, $this->dateTime);
 
         $editCommentHandler = new EditEvaluationHandler(
             $this->contactRepository->reveal(),
