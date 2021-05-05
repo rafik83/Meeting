@@ -9,7 +9,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 /**
- * Get a ParticipantInfoAccessRule from 2 sheets, to be used in contact export
+ * Get a ParticipantInfoAccessRule from 2 sheets, to be used in contact export and to send followup mails
  */
 class ParticipantInfoAccessRulesResolver
 {
@@ -41,9 +41,10 @@ class ParticipantInfoAccessRulesResolver
         // extract direct rules
         foreach ($seerWhos as $who) {
             if (isset($rules[$who->getId()])) {
-                $rulesApplicable = array_merge($rulesApplicable, array_filter($rules[$who->getId()], function (Rule $rule) use ($seeableWhos) {
-                    return in_array($rule->getSeeable(), $seeableWhos);
-                }));
+                $rulesApplicable = array_merge(
+                    $rulesApplicable,
+                    array_filter($rules[$who->getId()], fn (Rule $rule) => in_array($rule->getSeeable(), $seeableWhos))
+                );
             }
         }
 
@@ -64,10 +65,14 @@ class ParticipantInfoAccessRulesResolver
         return $this->rules;
     }
 
+    /**
+     * @param Rule[] $rulesApplicable
+     */
     private function createAccessInfoRuleFromRulesList(array $rulesApplicable): ParticipantInfoAccessRule
     {
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
+        $sendEmailMinEvaluation = null;
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
@@ -77,9 +82,12 @@ class ParticipantInfoAccessRulesResolver
                 if (null !== $rule->getEmailAccessMinEvaluation() && $rule->getEmailAccessMinEvaluation() > $emailAccessMinEvaluation) {
                     $emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
                 }
+                if (null !== $rule->getSendEmailMinEvaluation() && $rule->getSendEmailMinEvaluation() > $sendEmailMinEvaluation) {
+                    $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
+                }
             }
         }
 
-        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
+        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation, $sendEmailMinEvaluation);
     }
 }
