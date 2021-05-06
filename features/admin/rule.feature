@@ -35,7 +35,6 @@ Feature: add rule who see who
       | rule_see_what_phoneAccessMinEvaluation | 1 |
       | rule_see_what_emailAccessMinEvaluation | 2 |
       | rule_see_what_sendEmailMinEvaluation   | 3 |
-      | rule_see_what_sendEmailMinEvaluation   | 3 |
     And I check "rule_see_what_requestAutomaticallyTransformedIntoMeeting"
     And I press "rule_see_what_submit"
     Then I should be on this page "/fr/event/1/who-see-who"
@@ -46,7 +45,6 @@ Feature: add rule who see who
     And "participant_firstname" should be selected in "rule_see_what_seeWhat" input
     And the "rule_see_what_phoneAccessMinEvaluation" field should contain "1"
     And the "rule_see_what_emailAccessMinEvaluation" field should contain "2"
-    And the "rule_see_what_sendEmailMinEvaluation" field should contain "3"
     And the "rule_see_what_sendEmailMinEvaluation" field should contain "3"
     And the checkbox "rule_see_what_requestAutomaticallyTransformedIntoMeeting" should be checked
 

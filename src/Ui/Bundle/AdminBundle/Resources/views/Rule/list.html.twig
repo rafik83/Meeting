@@ -38,13 +38,33 @@
                     <td>{{ rule.priority }}</td>
                     <td>
                         {% if rule.phoneAccessMinEvaluation %}
-                            <span class="badge"><i class="icon-Appeler"></i> &gt; {{ rule.phoneAccessMinEvaluation }}</span>
+                            <span class="badge">
+                                <i class="icon-Appeler"></i>
+                                {% if rule.phoneAccessMinEvaluation < 5 %}
+                                &gt; {{ rule.phoneAccessMinEvaluation }}
+                                {% else %}
+                                <i class="icon-Fermer_1"></i>
+                                {% endif %}
+                            </span>
                         {% endif %}
                         {% if rule.emailAccessMinEvaluation %}
-                            <span class="badge">@ &gt; {{ rule.emailAccessMinEvaluation }}</span>
+                            <span class="badge">@
+                                {% if rule.emailAccessMinEvaluation < 5 %}
+                                &gt; {{ rule.emailAccessMinEvaluation }}
+                                {% else %}
+                                <i class="icon-Fermer_1"></i>
+                                {% endif %}
+                            </span>
                         {% endif %}
                         {% if rule.sendEmailMinEvaluation %}
-                            <span class="badge"><i class="icon-Transferer"></i> &gt; {{ rule.sendEmailMinEvaluation }}</span>
+                            <span class="badge">
+                                <i class="icon-Transferer"></i>
+                                {% if rule.sendEmailMinEvaluation < 5 %}
+                                &gt; {{ rule.sendEmailMinEvaluation }}
+                                {% else %}
+                                <i class="icon-Fermer_1"></i>
+                                {% endif %}
+                            </span>
                         {% endif %}
                     </td>
                     <td>
