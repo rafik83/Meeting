@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Avoid error if country is not defined when displaying participant info
+- MV-333 - Impossible to use Google & Linkedin login
 
 ## [2.90.0] - 2021-04-30
 ### Added
