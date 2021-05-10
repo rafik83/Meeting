@@ -170,11 +170,16 @@ class AgendaController extends AbstractController
 
         $myParticipant = $sheet->getUserParticipant($user);
 
-        $icalUrl = $this->generateUrl(
-            'event_agenda_participant_ical',
-            ['sheet' => $sheet->getId(), 'participant' => $myParticipant->getId(), 'slug' => $sheet->getEvent()->getTitle()],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        if ($myParticipant) {
+            $icalUrlUnsigned = $this->generateUrl(
+                'event_agenda_participant_ical',
+                ['sheet' => $sheet->getId(), 'participant' => $myParticipant->getId(), 'slug' => $sheet->getEvent()->getTitle()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+            $icalUrl = $this->uriSigner->sign($icalUrlUnsigned);
+        } else {
+            $icalUrl = '';
+        }
 
         return $this->render(
             '@Event/Agenda/participant_agenda.html.twig',
@@ -190,7 +195,7 @@ class AgendaController extends AbstractController
                 'participant' => $participant,
                 'isUnavailabilityManagementDisabled' => $this->hasUnavailabilityManagementDisabled->isSatisfiedBy($sheet),
                 'isAvailabilityManagementEnabled' => $this->hasAvailabilityManagementEnabled->isSatisfiedBy($sheet),
-                'icalUrl' => $this->uriSigner->sign($icalUrl),
+                'icalUrl' => $icalUrl,
             ]
         );
     }
