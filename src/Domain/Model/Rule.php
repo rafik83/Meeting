@@ -21,6 +21,7 @@ class Rule
     private ?int $emailAccessMinEvaluation = null;
     private ?int $sendEmailMinEvaluation = null;
     private bool $requestAutomaticallyTransformedIntoMeeting = false;
+    private bool $disableMeetingRequest = false;
 
     public function __construct(
         Event $event,
