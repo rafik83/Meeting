@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Rule;
 
-use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
