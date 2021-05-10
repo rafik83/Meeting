@@ -108,7 +108,8 @@ class SheetPreviewViewQueryHandler
             $catalogSheetPreviewViewQuery->isSeenByCurrentUser,
             $catalogSheetPreviewViewQuery->isMobileValidationRequired,
             $validatePhoneLink ?? null,
-            $catalogSheetPreviewViewQuery->isPriority
+            $catalogSheetPreviewViewQuery->isPriority,
+            $catalogSheetPreviewViewQuery->canRequestMeeting
         );
     }
 

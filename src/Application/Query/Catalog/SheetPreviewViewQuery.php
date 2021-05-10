@@ -41,6 +41,8 @@ class SheetPreviewViewQuery
     /** @var bool */
     public $isPriority;
 
+    public bool $canRequestMeeting;
+
     public function __construct(
         Event $event,
         Sheet $sheet,
@@ -52,7 +54,8 @@ class SheetPreviewViewQuery
         bool $isSeenByCurrentUser,
         bool $isMobileValidationRequired,
         bool $showCategory,
-        bool $isPriority
+        bool $isPriority,
+        bool $canRequestMeeting
     ) {
         $this->event = $event;
         $this->sheet = $sheet;
@@ -65,5 +68,6 @@ class SheetPreviewViewQuery
         $this->user = $user;
         $this->showCategory = $showCategory;
         $this->isPriority = $isPriority;
+        $this->canRequestMeeting = $canRequestMeeting;
     }
 }

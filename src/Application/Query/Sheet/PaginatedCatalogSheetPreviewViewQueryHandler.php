@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
@@ -50,6 +51,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var GetViewedSheetsFromFilters */
     private $getViewedSheetsFromFilters;
 
+    private ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -60,7 +63,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         ValidationRequiredChecker $validationRequiredChecker,
         NomenclatureItemsGetter $nomenclatureItemsGetter,
         RequestRepositoryInterface $meetingRequestRepository,
-        GetViewedSheetsFromFilters $getViewedSheetsFromFilters
+        GetViewedSheetsFromFilters $getViewedSheetsFromFilters,
+        ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->sheetSearchAdapter = $sheetSearchAdapter;
@@ -72,6 +76,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
         $this->meetingRequestRepository = $meetingRequestRepository;
         $this->getViewedSheetsFromFilters = $getViewedSheetsFromFilters;
+        $this->participantInfoAccessRulesResolver = $participantInfoAccessRulesResolver;
     }
 
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query): PaginatedResult
@@ -111,6 +116,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                 $seenSheetIndexed,
                 $isPhoneValidationRequired
             ) {
+                $participantInfoRuleAccessRule = $this->participantInfoAccessRulesResolver
+                    ->getParticipantInfoAccessRule($query->viewer, $sheet);
+
                 return $this
                     ->sheetPreviewViewQueryHandler
                     ->handle(
@@ -129,7 +137,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                                 $query,
                                 $this->meetingRequestRepository
                                 ->getRequestBetweenSheets($sheet, $query->viewer)
-                            )
+                            ),
+                            $participantInfoRuleAccessRule->canRequestMeeting()
                         )
                     );
             },

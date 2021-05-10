@@ -72,6 +72,7 @@ class ParticipantInfoAccessRulesResolver
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
         $sendEmailMinEvaluation = null;
+        $canRequestMeeting = true;
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
@@ -84,9 +85,16 @@ class ParticipantInfoAccessRulesResolver
                 if (null !== $rule->getSendEmailMinEvaluation() && $rule->getSendEmailMinEvaluation() > $sendEmailMinEvaluation) {
                     $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
                 }
+
+                $canRequestMeeting = !$rule->isMeetingRequestDisabled();
             }
         }
 
-        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation, $sendEmailMinEvaluation);
+        return new ParticipantInfoAccessRule(
+            $phoneAccessMinEvaluation,
+            $emailAccessMinEvaluation,
+            $sendEmailMinEvaluation,
+            $canRequestMeeting
+        );
     }
 }

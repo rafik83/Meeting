@@ -40,6 +40,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     /** @var bool */
     public $isPriority;
 
+    private bool $canRequestMeeting;
+
     public function __construct(
         int $id,
         Sheet $sheet,
@@ -56,7 +58,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         bool $isSeenByCurrentUser,
         bool $isPhoneValidationRequired,
         ?string $validatePhoneLink,
-        bool $isPriority
+        bool $isPriority,
+        bool $canRequestMeeting
     ) {
         parent::__construct($id, $title, $type, $preview, $sheet);
 
@@ -71,6 +74,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
         $this->validatePhoneLink               = $validatePhoneLink;
         $this->isPriority = $isPriority;
+        $this->canRequestMeeting = $canRequestMeeting;
     }
 
     /**
@@ -86,7 +90,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
      */
     public function isAllowedToCreateMeetingRequest()
     {
-        return null === $this->meetingRequest;
+        return null === $this->meetingRequest && $this->canRequestMeeting;
     }
 
     /**

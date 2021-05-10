@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Counter;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
@@ -86,6 +87,7 @@ class MeetingRequestController extends AbstractController
     private ParticipantInfoGuesser $participantInfoGuesser;
     private QueryBusInterface $queryBus;
     private CommandBusInterface $commandBus;
+    private ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver;
 
     public function __construct(
         AvailabilityConfirmationCheckerHandler $availabilityConfirmationCheckerHandler,
@@ -104,7 +106,8 @@ class MeetingRequestController extends AbstractController
         FormFactoryInterface $formFactory,
         ParticipantInfoGuesser $participantInfoGuesser,
         QueryBusInterface $queryBus,
-        CommandBusInterface $commandBus
+        CommandBusInterface $commandBus,
+        ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver
     ) {
         $this->availabilityConfirmationCheckerHandler = $availabilityConfirmationCheckerHandler;
         $this->dDayGuesser = $dDayGuesser;
@@ -123,6 +126,7 @@ class MeetingRequestController extends AbstractController
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
+        $this->participantInfoAccessRulesResolver = $participantInfoAccessRulesResolver;
     }
     /**
      * List all meeting request of a sheet (sent and received)
@@ -359,6 +363,13 @@ class MeetingRequestController extends AbstractController
         // If there is already a meeting request between the two sheets
         if (null !== $this->requestRepository->getRequestBetweenSheets($fromSheet, $toSheet)) {
             throw $this->createNotFoundException('You can not request a meeting as there is already one');
+        }
+
+        // If meeting request is disabled by "who see what"
+        $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($fromSheet, $toSheet);
+
+        if (!$participantInfoAccessRule->canRequestMeeting()) {
+            throw $this->createNotFoundException('You can not allowed to request meeting.');
         }
     }
 

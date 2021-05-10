@@ -44,6 +44,7 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
         $this->assertTrue($noRule->isPhoneVisible(1));
         $this->assertTrue($noRule->isEmailVisible(1));
         $this->assertTrue($noRule->canSendFollowUpEmail(1));
+        $this->assertTrue($noRule->canRequestMeeting());
     }
 
     public function testSingleRule()
@@ -73,6 +74,7 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
         $rule->getSendEmailMinEvaluation()->shouldBeCalled()->willReturn(4);
         $rule->getSeer()->shouldBeCalled()->willReturn($seerType->reveal());
         $rule->getSeeable()->shouldBeCalled()->willReturn($seeableType);
+        $rule->isMeetingRequestDisabled()->willReturn(true);
 
         $this->ruleRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([$rule->reveal()]);
 
@@ -87,5 +89,6 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
         $this->assertTrue($singleAccessRule->isPhoneVisible(4));
         $this->assertTrue($singleAccessRule->isEmailVisible(3));
         $this->assertTrue($singleAccessRule->canSendFollowUpEmail(5));
+        $this->assertFalse($singleAccessRule->canRequestMeeting());
     }
 }
