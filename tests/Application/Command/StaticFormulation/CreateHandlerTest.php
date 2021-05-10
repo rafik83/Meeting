@@ -57,6 +57,8 @@ class CreateHandlerTest extends TestCase
 
         $handler = new CreateHandler($staticFormulationRepository->reveal());
 
-        $handler->handle($create);
+        $result = $handler->handle($create);
+
+        self::assertEquals($staticFormulation, $result);
     }
 }

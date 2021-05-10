@@ -2,33 +2,28 @@ services:
     #
     # Params converters
     #
-    vimeet_app.param_converter.event_domain_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomainParamConverter
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomainParamConverter:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
         tags:
             - { name: 'request.param_converter', priority: -1, converter: 'event_domain_param_converter' }
-    vimeet_app.param_converter.participant_type_view_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\TypeViewParamConverter
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\TypeViewParamConverter:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'participant_type_view_param_converter' }
-    vimeet_app.param_converter.category_view_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\CategoryViewParamConverter
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\CategoryViewParamConverter:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'category_view_param_converter' }
-    vimeet_app.param_converter.sheet_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\SheetParamConverter
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\SheetParamConverter:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: 'request.param_converter', priority: 2, converter: 'sheet_param_converter' }
 
-    vimeet_app.param_converter.group_param_converter:
-        class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\GroupParamConverter
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\GroupParamConverter:
         arguments:
             - '@repository.sheet.group_repository'
         tags:
@@ -46,89 +41,89 @@ services:
     #
     # Security
     #
-    security.admin_event_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminEventAccessVoter
-        arguments:
-            - '@components.security.admin_event_access'
-        tags:
-            - { name: security.voter }
+    # security.admin_event_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminEventAccessVoter
+    #     arguments:
+    #         - '@components.security.admin_event_access'
+    #     tags:
+    #         - { name: security.voter }
 
-    security.admin_template_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter
-        arguments:
-            - '@components.security.admin_event_access'
-        tags:
-            - { name: security.voter }
+    # security.admin_template_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter
+    #     arguments:
+    #         - '@components.security.admin_event_access'
+    #     tags:
+    #         - { name: security.voter }
 
-    security.admin_sheet_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminSheetAccessVoter
-        arguments:
-            - '@components.security.admin_sheet_access'
-        tags:
-            - { name: security.voter }
+    # security.admin_sheet_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminSheetAccessVoter
+    #     arguments:
+    #         - '@components.security.admin_sheet_access'
+    #     tags:
+    #         - { name: security.voter }
 
-    security.admin_user_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter
-        arguments:
-            - '@components.security.admin_sheet_access'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: security.voter }
+    # security.admin_user_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminUserEventAccessVoter
+    #     arguments:
+    #         - '@components.security.admin_sheet_access'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #     tags:
+    #         - { name: security.voter }
 
-    security_voter.happening_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
-        arguments:
-            - '@domain.key_dates.checker.happenings_access_checker'
-        tags:
-            - { name: security.voter }
-    security_voter.event_open_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\EventOpenAccessVoter
-        arguments:
-            - '@domain.key_dates.checker.event_open_access_checker'
-        tags:
-            - { name: security.voter }
-    security_voter.participant_import_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
-        tags:
-            - { name: security.voter }
-    security_voter.catalog_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
-        arguments:
-            - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
-        tags:
-            - { name: security.voter }
-    security_voter.agenda_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter
-        arguments:
-            - '@domain.key_dates.checker.agenda_access_checker'
-        tags:
-            - { name: security.voter }
-    security_voter.meeting_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter
-        tags:
-            - { name: security.voter }
-    security_voter.video_meeting_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter
-        arguments:
-            - '@Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess'
-        tags:
-            - { name: security.voter }
-    security_voter.validate_mobile_access_voter:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter
-        arguments:
-            - '@request_stack'
-            - '@security.validate_mobile_process_access_checker'
-        tags:
-            - { name: security.voter }
+    # security_voter.happening_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter
+    #     arguments:
+    #         - '@domain.key_dates.checker.happenings_access_checker'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.event_open_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\EventOpenAccessVoter
+    #     arguments:
+    #         - '@domain.key_dates.checker.event_open_access_checker'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.participant_import_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ParticipantImportAccessVoter
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.catalog_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.agenda_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter
+    #     arguments:
+    #         - '@domain.key_dates.checker.agenda_access_checker'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.meeting_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.video_meeting_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter
+    #     arguments:
+    #         - '@Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess'
+    #     tags:
+    #         - { name: security.voter }
+    # security_voter.validate_mobile_access_voter:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter
+    #     arguments:
+    #         - '@request_stack'
+    #         - '@security.validate_mobile_process_access_checker'
+    #     tags:
+    #         - { name: security.voter }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
-            - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
-        tags:
-            - { name: security.voter }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Happening\BroadcastVoter:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\Happening\IsUserSpeaker'
+    #         - '@Proximum\Vimeet\Domain\Happening\Webinar\Broadcast\CanWebinarBeBroadcast'
+    #     tags:
+    #         - { name: security.voter }
 
     #
     # Form extension
@@ -403,60 +398,61 @@ services:
             - '@Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
-    event_listener.registration_step_event_subscriber:
-            class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RegistrationStepEventSubscriber
-            arguments:
-                - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
-                - '@components.registration.step_manager'
-            tags:
-                 - { name: kernel.event_subscriber }
-    event_listener.mail_event_subscriber:
-        class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
-            - '@query.mail.participant_mail_view_query_handler'
-            - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
-        tags:
-            - { name: kernel.event_subscriber }
-    Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SubmitSheetMailEventSubscriber:
-        arguments:
-            - '@template.participant_info_guesser'
-            - '@repository.admin_repository'
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
-    event_listener.trace_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
-        arguments:
-            - '@repository.trace_repository'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
-    event_listener.sheet_validator_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetValidatorEventSubscriber
-        arguments:
-             - '@components.sheet.sheet_validator'
-        tags:
-            - { name: kernel.event_subscriber }
-    event_listener.sheet.sheet_updated_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
-        arguments:
-            - '@sheet.completeness_calculator'
-            - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
-        tags:
-            - { name: kernel.event_subscriber }
-    event_listener.sheet.package_orders_updated_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Package\MustSelectPackageEventSubscriber
-        arguments:
-            - '@package.orders_checker'
-        tags:
-            - { name: kernel.event_subscriber }
+
+    # event_listener.registration_step_event_subscriber:
+    #         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RegistrationStepEventSubscriber
+    #         arguments:
+    #             - '@Proximum\Vimeet\Domain\Participant\ParticipantOfSheetWithPackageParticipantAndPlanningDisabled'
+    #             - '@components.registration.step_manager'
+    #         tags:
+    #              - { name: kernel.event_subscriber }
+    # event_listener.mail_event_subscriber:
+    #     class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\MailEventSubscriber
+    #     arguments:
+    #         - '@adapter.mailer_adapter'
+    #         - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender'
+    #         - '@query.mail.participant_mail_view_query_handler'
+    #         - '@Proximum\Vimeet\Application\Components\Transactional\Mail\PrepareHandler'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SubmitSheetMailEventSubscriber:
+    #     arguments:
+    #         - '@template.participant_info_guesser'
+    #         - '@repository.admin_repository'
+    #         - '@adapter.mailer_adapter'
+    #         - '%mailer_sender%'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # event_listener.trace_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\TraceEventSubscriber
+    #     arguments:
+    #         - '@repository.trace_repository'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # event_listener.sheet_validator_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetValidatorEventSubscriber
+    #     arguments:
+    #          - '@components.sheet.sheet_validator'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # event_listener.sheet.sheet_updated_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
+    #     arguments:
+    #         - '@sheet.completeness_calculator'
+    #         - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
+    #         - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
+    # event_listener.sheet.package_orders_updated_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Package\MustSelectPackageEventSubscriber
+    #     arguments:
+    #         - '@package.orders_checker'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
     event_listener.xhr_authentication_expired_exception_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\XHRAuthenticationExpiredExceptionListener
         tags:
@@ -474,105 +470,105 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: accessChecker }
 
-    event_listener.sheet.sheet_populate_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.sheet.sheet_populate_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber
+    #     arguments:
+    #         - '@Proximum\Vimeet\Infrastructure\Adapter\SheetIndexer'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Template\SheetTemplateUpdatedEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Application\Command\Sheet\Template\GenerateTaggedNomenclatureFilterHandler'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Template\SheetTemplateUpdatedEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Application\Command\Sheet\Template\GenerateTaggedNomenclatureFilterHandler'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener.notification_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Notification\NotificationEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.notification_repository'
-            - '@repository.transaction'
-            - '@order.balance'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.notification_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Notification\NotificationEventSubscriber
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.notification_repository'
+    #         - '@repository.transaction'
+    #         - '@order.balance'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener_aggregate.aggregate_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Aggregate\AggregateEventSubscriber
-        arguments:
-            - '@domain.unavailability.participant_unavailable_aggregator'
-            - '@domain.request.participant_assigned_aggregator'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener_aggregate.aggregate_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Aggregate\AggregateEventSubscriber
+    #     arguments:
+    #         - '@domain.unavailability.participant_unavailable_aggregator'
+    #         - '@domain.request.participant_assigned_aggregator'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener.sheet_agenda.agenda_confirmation_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Agenda\AgendaConfirmationEventSubscriber
-        arguments:
-            - '@command.sheet.agenda.update_agenda_confirmed_status_handler'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.sheet_agenda.agenda_confirmation_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Agenda\AgendaConfirmationEventSubscriber
+    #     arguments:
+    #         - '@command.sheet.agenda.update_agenda_confirmed_status_handler'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener_sheet_aggregate.sheet_aggregate_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Aggregate\SheetAggregateEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener_sheet_aggregate.sheet_aggregate_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Aggregate\SheetAggregateEventSubscriber
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
+    #         - '@adapter.job_queue_adapter'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Analytics\SheetsUserActivityEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Application\Command\Sheet\AddViewHandler'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Analytics\SheetsUserActivityEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Application\Command\Sheet\AddViewHandler'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener.sheet.phone.phone_validation_status_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone\PhoneValidationStatusEventSubscriber
-        arguments:
-            - '@domain.sheet.phone.validation_calculator'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.sheet.phone.phone_validation_status_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone\PhoneValidationStatusEventSubscriber
+    #     arguments:
+    #         - '@domain.sheet.phone.validation_calculator'
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@adapter.job_queue_adapter'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener.sheet_availability.availability_confirmation_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Availability\AvailabilityConfirmationEventSubscriber
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@domain.sheet.availability.confirmation_calculator'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener.sheet_availability.availability_confirmation_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Availability\AvailabilityConfirmationEventSubscriber
+    #     arguments:
+    #         - '@vimeet_infrastructure.repository.sheet_repository'
+    #         - '@domain.sheet.availability.confirmation_calculator'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    event_listener_happening.happening_event_subscriber:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningEventSubscriber
-        arguments:
-            - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
-            - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
-            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
-            - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
-            - '@datetime'
-        tags:
-            - { name: kernel.event_subscriber }
+    # event_listener_happening.happening_event_subscriber:
+    #     class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningEventSubscriber
+    #     arguments:
+    #         - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
+    #         - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
+    #         - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\PrepareReconciliationHandler'
+    #         - '@Proximum\Vimeet\Application\Command\Happening\Webinar\Record\Download\PlanDownloadRecordArchiveHandler'
+    #         - '@datetime'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningParticipationEventSubscriber:
-        arguments:
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningParticipationEventSubscriber:
+    #     arguments:
+    #         - '@adapter.mailer_adapter'
+    #         - '%mailer_sender%'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Cart\CartEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Cart\CartEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Order\OrderEventSubscriber:
-        arguments:
-            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
-            - '@Proximum\Vimeet\Domain\Sheet\Product\SelectedProductAssigner'
-        tags:
-            - { name: kernel.event_subscriber }
+    # Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Order\OrderEventSubscriber:
+    #     arguments:
+    #         - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+    #         - '@Proximum\Vimeet\Domain\Sheet\Product\SelectedProductAssigner'
+    #     tags:
+    #         - { name: kernel.event_subscriber }
 
     #
     # Twig extension
@@ -645,9 +641,9 @@ services:
     security.app.admin_checker:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\AdminChecker
 
-    Proximum\Vimeet\Ui\Bundle\AdminBundle\Security\Voter\AdminVoter:
-        tags:
-            - { name: security.voter }
+    # Proximum\Vimeet\Ui\Bundle\AdminBundle\Security\Voter\AdminVoter:
+    #     tags:
+    #         - { name: security.voter }
     #
     # Services
     #

@@ -12,6 +12,7 @@ RUN set -eux \
   libbz2-dev \
   libfreetype6-dev \
   libfreetype6-dev \
+  fontconfig \
   libicu-dev \
   libjpeg-dev \
   libjpeg62-turbo-dev \
@@ -21,7 +22,6 @@ RUN set -eux \
   libxml2-dev \
   libxslt-dev \
   libzip-dev \
-  libmagickwand-dev \
   unzip \
   msmtp \
   python-minimal \
@@ -57,9 +57,8 @@ RUN set -x \
   xsl \
   zip
 
-RUN pecl install redis apcu lzf timezonedb \
-  && yes '' | pecl install imagick \
-  && docker-php-ext-enable redis apcu lzf imagick timezonedb \
+RUN pecl install redis lzf timezonedb \
+  && docker-php-ext-enable redis lzf timezonedb \
   && rm -rf /tmp/pear
 
 # Install New Relic but disable it by default

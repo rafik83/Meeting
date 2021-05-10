@@ -10,7 +10,11 @@
 
   .logo {
     display: block;
-    max-width: 1024px;
+    width: 100%;
+  }
+
+  a {
+    width: 100%;
   }
 }
 
@@ -130,8 +134,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
-  padding: 15px;
+  padding: 0 15px 15px;
   margin: 0 auto;
   background: $color-primary;
   box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
@@ -264,6 +267,7 @@
   > li {
     display: inline-block;
     margin-right: 10px;
+    margin-top: 15px;
 
     &:last-child {
       margin-right: 0;

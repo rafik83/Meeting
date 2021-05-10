@@ -49,10 +49,10 @@ class SheetPdfPrinter
         $urlToPrint = $this->router->generate(
             'event_sheet_internal_print',
             [
-                'user'           => $user->getId(),
-                'sheet'          => $sheet->getId(),
-                'sheetToDisplay' => $sheetToDisplay->getId(),
-                'locale'         => $locale,
+                'user' => $user->getId(),
+                'sheet' => $sheet->getId(),
+                'sheetToDisplayId' => $sheetToDisplay->getId(),
+                'locale' => $locale,
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

@@ -96,6 +96,7 @@ class MailerAdapter implements MailerInterface
             $subject,
             $mail->getMessageId()
         );
+        $this->mailer->getTransport()->stop();
     }
 
     protected function handleResults(array $receivers, array $failedReceivers, string $subject, ?string $messageId = null)

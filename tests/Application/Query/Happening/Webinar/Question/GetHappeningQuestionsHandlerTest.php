@@ -115,7 +115,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         ;
 
         $this->questionRepository
-            ->getByHappeningDuringWebinar($happening->reveal(), $user1->reveal())
+            ->getByHappeningDuringWebinar($happening->reveal(), $user1->reveal(), 'like')
             ->shouldBeCalled()
             ->willReturn([
                 [$question1, 0, 0],
@@ -123,7 +123,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
             ]);
 
         $result = $this->getHappeningQuestionsHandler->handle(
-            new GetHappeningQuestions($happening->reveal(), $user1->reveal(), 'en')
+            new GetHappeningQuestions($happening->reveal(), $user1->reveal(), 'en', 'like')
         );
 
         $this->assertEquals(
@@ -198,14 +198,14 @@ class GetHappeningQuestionsHandlerTest extends TestCase
         ;
 
         $this->questionRepository
-            ->getByHappeningDuringWebinar($happening->reveal(), $user->reveal())
+            ->getByHappeningDuringWebinar($happening->reveal(), $user->reveal(), 'like')
             ->shouldBeCalled()
             ->willReturn([
                 [$question, 0, 0],
             ]);
 
         $result = $this->getHappeningQuestionsHandler->handle(
-            new GetHappeningQuestions($happening->reveal(), $user->reveal(), 'en')
+            new GetHappeningQuestions($happening->reveal(), $user->reveal(), 'en', 'like')
         );
 
         $this->assertEquals(

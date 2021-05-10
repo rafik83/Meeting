@@ -23,9 +23,6 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
     {
         $event     = EventFactory::createEvent();
         $locale    = 'fr';
-        $category  = new Happening\Category($event, 'picto', 1, '#000', '#fff');
-        $begin     = new \DateTime();
-        $end       = new \DateTime();
 
         $user      = $this->prophesize(User::class);
         $user->getId()->willReturn(1);
@@ -36,11 +33,15 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $user->getPhone()->willReturn('0134345656');
 
         $sheet     = SheetFactory::create($event, $user->reveal());
-        $happening = new Happening($event, $begin, $end, $category, []);
+        $happening = $this->prophesize(Happening::class);
+        $happening->getId()->willReturn(512);
+        $happening->getTitle($locale)->willReturn('My happening');
+        $happening->getBegin()->willReturn(\DateTime::createFromFormat('!Y-m-d H:i', '2020-11-09 02:00'));
+        $happening->getEnd()->willReturn(\DateTime::createFromFormat('!Y-m-d H:i', '2020-11-09 03:00'));
 
-        $participation = new HappeningParticipation($happening, $user->reveal());
+        $participation = new HappeningParticipation($happening->reveal(), $user->reveal());
         $participation->setEvaluation(4);
-        $happening->setParticipations([$participation]);
+        $happening->getParticipations()->shouldBeCalled()->willReturn([$participation]);
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
@@ -49,16 +50,21 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $sheetGuesser        = $this->prophesize(SheetGuesser::class);
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
 
-        $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening]);
+        $happeningRepository->findHappeningParticipant($event)->shouldBeCalled()->willReturn([$happening->reveal()]);
 
         $question1 = $this->prophesize(Happening\Question::class);
         $question1->getContent()->shouldBeCalled()->willReturn('Question 1 ?');
+        $question1->getAskedDuringWEbinar()->shouldBeCalled()->willReturn(false);
         $question2 = $this->prophesize(Happening\Question::class);
         $question2->getContent()->shouldBeCalled()->willReturn('Question 2 ?');
+        $question2->getAskedDuringWebinar()->shouldBeCalled()->willReturn(true);
+        $question2->getReplyContent()->shouldBeCalled()->willReturn('Réponse question 2');
+        $question2->getCreatedAt()->shouldBeCalled()->willReturn(\DateTime::createFromFormat('!Y-m-d H:i', '2020-11-09 02:00'));
+
         $questionRepository
-            ->findByHappeningAndSheet($happening, $sheet)
+            ->findByHappeningAndUser($happening, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn([$question1->reveal(), $question2->reveal()])
+            ->willReturn([[$question1->reveal(), 0], [$question2->reveal(), 2]])
         ;
 
         $groupNameResolver->resolve($event, $user)->shouldBeCalled()->willReturn('');
@@ -83,7 +89,10 @@ class HappeningParticipantExportViewQueryHandlerTest extends TestCase
         $this->assertEquals('doh', $happeningParticipantView->getLastname());
         $this->assertEquals('ceo', $happeningParticipantView->getPosition());
         $this->assertEquals('johndoh@gmail.com', $happeningParticipantView->getEmail());
-        $this->assertEquals("Question 1 ?\nQuestion 2 ?", $happeningParticipantView->getQuestion());
+        $this->assertEquals("Question 1 ?", $happeningParticipantView->getQuestionRegister());
+        $this->assertEquals("Question 2 ?", $happeningParticipantView->getQuestionsWebinar());
+        $this->assertEquals("Réponse question 2", $happeningParticipantView->getReplies());
+        $this->assertEquals("2", $happeningParticipantView->getVotes());
         $this->assertEquals(4, $happeningParticipantView->getEvaluation());
     }
 

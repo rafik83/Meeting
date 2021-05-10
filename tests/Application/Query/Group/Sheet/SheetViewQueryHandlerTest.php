@@ -25,7 +25,7 @@ class SheetViewQueryHandlerTest extends TestCase
         $sheet    = SheetFactory::create($event, $user, $dateTime);
 
         $sheetViewQuery = new SheetViewQuery($event, $user, 'fr');
-        $expectedView   = new SheetView(null, null);
+        $expectedView   = new SheetView(123, null);
         $handler        = new SheetViewQueryHandler($sheetRepository->reveal(), $sheetInfoGuesser->reveal());
 
         $sheetRepository->getAllSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);

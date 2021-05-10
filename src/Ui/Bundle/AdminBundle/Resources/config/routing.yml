@@ -2264,6 +2264,39 @@ admin_event_static_formulation_update:
     controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\StaticFormulation\UpdateAction
 
 #
+# Custom links
+#
+admin_event_custom_links_list:
+    path: /event/{event}/custom-link
+    requirements:
+        event: \d+
+    methods: [ GET ]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\ListAction
+
+admin_event_custom_link_create:
+    path: /event/{event}/custom-link/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\CreateAction
+
+admin_event_custom_link_update:
+    path: /event/{event}/custom-link/update/{customLink}
+    requirements:
+        event: \d+
+        customLink: \d+
+    methods: [GET, POST]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\UpdateAction
+
+admin_event_custom_link_remove:
+    path: /event/{event}/custom-link/{customLink}/remove
+    requirements:
+        event: \d+
+        customLink: \d+
+    methods: [DELETE]
+    controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\CustomLink\DeleteAction
+
+#
 # Rooming
 #
 admin_event_rooming_accommodation_list:

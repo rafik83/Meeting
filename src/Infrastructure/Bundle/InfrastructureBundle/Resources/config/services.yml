@@ -2,12 +2,15 @@ services:
     #
     # Event
     #
-    vimeet_infrastructure.adapter.delayed_event_dispatcher:
-        class: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
+    Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher:
         arguments:
             - '@event_dispatcher'
         tags:
             - { name: kernel.event_listener, event: kernel.terminate, method: process }
+    vimeet_infrastructure.adapter.delayed_event_dispatcher:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
+    Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface:
+        alias: Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher
 
     #
     # Repositories
@@ -1612,6 +1615,14 @@ services:
             - '@repository.event.content_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Content\Update }
+    Proximum\Vimeet\Application\Command\Event\CustomLink\CreateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\CustomLink\Create }
+    Proximum\Vimeet\Application\Command\Event\CustomLink\UpdateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\CustomLink\Update }
     command.participant.remove_handler:
         class: Proximum\Vimeet\Application\Command\Participant\RemoveHandler
         arguments:
@@ -4635,6 +4646,11 @@ services:
             - '@Proximum\Vimeet\Domain\Scan\CanScanParticipant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\BadgeScanSubmenuViewQuery }
+
+    Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Navigation\Submenu\CustomLinkSubmenuViewQuery }
 
     Proximum\Vimeet\Application\Query\Navigation\Submenu\LeniBadgeLinkSubmenuViewQueryHandler:
         arguments:
