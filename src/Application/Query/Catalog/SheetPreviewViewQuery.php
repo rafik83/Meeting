@@ -41,31 +41,18 @@ class SheetPreviewViewQuery
     /** @var bool */
     public $isPriority;
 
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param Sheet  $viewer
-     * @param User   $user
-     * @param bool   $isMeetingRequestClosed
-     * @param bool   $isAnsweringMeetingRequestClosed
-     * @param bool   $isSeenByCurrentUser
-     * @param bool   $isMobileValidationRequired
-     * @param bool   $showCategory
-     * @param bool   $isPriority
-     */
     public function __construct(
         Event $event,
         Sheet $sheet,
-        $locale,
+        string $locale,
         Sheet $viewer,
         User $user,
-        bool $isMeetingRequestClosed = false,
-        bool $isAnsweringMeetingRequestClosed = false,
-        bool $isSeenByCurrentUser = false,
-        bool $isMobileValidationRequired = false,
-        bool $showCategory = false,
-        bool $isPriority = false
+        bool $isMeetingRequestClosed,
+        bool $isAnsweringMeetingRequestClosed,
+        bool $isSeenByCurrentUser,
+        bool $isMobileValidationRequired,
+        bool $showCategory,
+        bool $isPriority
     ) {
         $this->event = $event;
         $this->sheet = $sheet;

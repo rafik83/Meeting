@@ -40,41 +40,23 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     /** @var bool */
     public $isPriority;
 
-    /**
-     * @param int             $id
-     * @param Sheet           $sheet
-     * @param string          $title
-     * @param string          $type
-     * @param array           $preview
-     * @param Meeting\Request $meetingRequest
-     * @param bool            $isItMySheet
-     * @param bool            $isMeetingPublished
-     * @param bool            $isMeetingRequestUpdateLocked
-     * @param bool            $isMeetingRequestClosed
-     * @param bool            $isAnsweringMeetingRequestClosed
-     * @param bool            $hasMessage
-     * @param bool            $isSeenByCurrentUser
-     * @param bool            $isPhoneValidationRequired
-     * @param null            $validatePhoneLink
-     * @param bool            $isPriority
-     */
     public function __construct(
         int $id,
         Sheet $sheet,
         $title,
         $type,
         array $preview,
-        Meeting\Request $meetingRequest = null,
-        $isItMySheet,
-        $isMeetingPublished = false,
-        $isMeetingRequestUpdateLocked = false,
-        $isMeetingRequestClosed = false,
-        $isAnsweringMeetingRequestClosed = false,
-        $hasMessage = false,
-        $isSeenByCurrentUser = false,
-        $isPhoneValidationRequired = false,
-        $validatePhoneLink = null,
-        $isPriority = false
+        ?Meeting\Request $meetingRequest,
+        bool $isItMySheet,
+        bool $isMeetingPublished,
+        bool $isMeetingRequestUpdateLocked,
+        bool $isMeetingRequestClosed,
+        bool $isAnsweringMeetingRequestClosed,
+        bool $hasMessage,
+        bool $isSeenByCurrentUser,
+        bool $isPhoneValidationRequired,
+        ?string $validatePhoneLink,
+        bool $isPriority
     ) {
         parent::__construct($id, $title, $type, $preview, $sheet);
 

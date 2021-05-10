@@ -140,7 +140,7 @@ class Rule
         ?int $phoneAccessMinEvaluation,
         ?int $emailAccessMinEvaluation,
         ?int $sendEmailMinEvaluation,
-        bool $requestAutomaticallyTransformedIntoMeeting = false
+        bool $requestAutomaticallyTransformedIntoMeeting
     ) {
         $this->what     = $what;
         $this->priority = $priority;
