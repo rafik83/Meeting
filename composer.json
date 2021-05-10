@@ -15,6 +15,7 @@
   },
   "require": {
     "php": "^7.4",
+    "ext-iconv": "*",
     "ext-json": "*",
     "ext-simplexml": "*",
     "ext-soap": "*",
@@ -90,7 +91,7 @@
     "twig/extra-bundle": "^2.12|^3.0",
     "twig/twig": "^2.12|^3.0",
     "twilio/sdk": "^5.27",
-    "yohang88/letter-avatar": "^2.2"
+    "yohang88/letter-avatar": "^2.2",
   },
   "require-dev": {
     "behat/behat": "^3.4.3",
