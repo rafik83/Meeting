@@ -249,6 +249,14 @@ class Transaction
     }
 
     /**
+     * @return bool
+     */
+    public function isCCIP()
+    {
+        return Mode::PAYMENT_CCIP === $this->getMode();
+    }
+
+    /**
      * Set state to Paid
      */
     public function setPaid()

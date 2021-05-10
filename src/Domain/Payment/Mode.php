@@ -9,6 +9,7 @@ class Mode
     const PAYMENT_BANK_TRANSFER = 'bank_transfer';
     const PAYMENT_BANK_CHECK    = 'bank_check';
     const PAYMENT_BANK_CASH     = 'bank_cash';
+    const PAYMENT_CCIP          = 'ccip';
 
     /**
      * Return all the payment modes allowed on front
@@ -21,6 +22,7 @@ class Mode
             self::PAYMENT_PAYPAL        => self::PAYMENT_PAYPAL,
             self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
             self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
+            self::PAYMENT_CCIP          => self::PAYMENT_CCIP,
         ];
     }
 
@@ -46,6 +48,7 @@ class Mode
             self::PAYMENT_BANK_TRANSFER => self::PAYMENT_BANK_TRANSFER,
             self::PAYMENT_BANK_CHECK    => self::PAYMENT_BANK_CHECK,
             self::PAYMENT_BANK_CASH     => self::PAYMENT_BANK_CASH,
+            self::PAYMENT_CCIP          => self::PAYMENT_CCIP,
         ];
     }
 }
