@@ -32,7 +32,7 @@ interface QuestionRepositoryInterface
      *
      * @return Question[]
      */
-    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser): array;
+    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser, string $orderBy): array;
 
     public function findById(int $id): ?Question;
 
