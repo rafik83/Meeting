@@ -135,19 +135,26 @@ class Rule
         return $this->requestAutomaticallyTransformedIntoMeeting;
     }
 
+    public function isMeetingRequestDisabled(): bool
+    {
+        return $this->disableMeetingRequest;
+    }
+
     public function update(
         array $what,
         $priority,
         ?int $phoneAccessMinEvaluation,
         ?int $emailAccessMinEvaluation,
         ?int $sendEmailMinEvaluation,
-        bool $requestAutomaticallyTransformedIntoMeeting
-    ) {
+        bool $requestAutomaticallyTransformedIntoMeeting,
+        bool $disableMeetingRequest
+    ): void {
         $this->what     = $what;
         $this->priority = $priority;
         $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
         $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
         $this->sendEmailMinEvaluation = $sendEmailMinEvaluation;
         $this->requestAutomaticallyTransformedIntoMeeting = $requestAutomaticallyTransformedIntoMeeting;
+        $this->disableMeetingRequest = $disableMeetingRequest;
     }
 }

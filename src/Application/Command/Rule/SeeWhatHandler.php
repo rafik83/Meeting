@@ -24,7 +24,8 @@ class SeeWhatHandler
             $seeWhat->phoneAccessMinEvaluation,
             $seeWhat->emailAccessMinEvaluation,
             $seeWhat->sendEmailMinEvaluation,
-            $seeWhat->requestAutomaticallyTransformedIntoMeeting
+            $seeWhat->requestAutomaticallyTransformedIntoMeeting,
+            $seeWhat->isMeetingRequestDisabled
         );
 
         $this->ruleRepository->update($seeWhat->rule);
