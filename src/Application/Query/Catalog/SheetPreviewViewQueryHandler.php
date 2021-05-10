@@ -104,7 +104,7 @@ class SheetPreviewViewQueryHandler
             $isMeetingRequestUpdateLocked,
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
-            null !== $meetingRequest ? $meetingRequest->hasMessage() : false,
+            $meetingRequest && $meetingRequest->hasMessage(),
             $catalogSheetPreviewViewQuery->isSeenByCurrentUser,
             $catalogSheetPreviewViewQuery->isMobileValidationRequired,
             $validatePhoneLink ?? null,
