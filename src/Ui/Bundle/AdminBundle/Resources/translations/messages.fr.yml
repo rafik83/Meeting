@@ -1263,7 +1263,7 @@ admin.transactional.mail.list.disabled: Désactivé
 admin.transactional.mail.list.generic.title: 'Email génériques'
 admin.transactional.mail.list.key.mail_agenda_version_diff_changed: 'Notification automatique de la modification du planning'
 admin.transactional.mail.list.key.mail_happening_participation_automatically_updated: 'Recalcule automatique des sous-événements suite à changement de plage de disponbilité'
-admin.transactional.mail.list.key.mail_meeting_follow_up: 'Reprise de contact après rendez-vous'
+admin.transactional.mail.list.key.mail_meeting_follow_up: 'Reprise de contact après rendez-vous (uniquement si règle de qui voit qui définie)'
 admin.transactional.mail.list.key.mail_order_confirmed: 'Commande passée'
 admin.transactional.mail.list.key.mail_participation_added_confirmation: 'Participant ajouté à votre fiche'
 admin.transactional.mail.list.key.mail_pre_registered: Pre-enregistrement

@@ -40,10 +40,10 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $this->assertTrue($noRule->isPhoneVisible(null));
         $this->assertTrue($noRule->isEmailVisible(null));
-        $this->assertTrue($noRule->canSendFollowUpEmail(null));
+        $this->assertFalse($noRule->canSendFollowUpEmail(null));
         $this->assertTrue($noRule->isPhoneVisible(1));
         $this->assertTrue($noRule->isEmailVisible(1));
-        $this->assertTrue($noRule->canSendFollowUpEmail(1));
+        $this->assertFalse($noRule->canSendFollowUpEmail(1));
     }
 
     public function testSingleRule()

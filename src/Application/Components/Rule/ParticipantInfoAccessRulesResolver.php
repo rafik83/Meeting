@@ -95,7 +95,7 @@ class ParticipantInfoAccessRulesResolver
     {
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
-        $sendEmailMinEvaluation = null;
+        $sendEmailMinEvaluation = 0;
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
@@ -109,6 +109,11 @@ class ParticipantInfoAccessRulesResolver
                     $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
                 }
             }
+        }
+
+        // by default, don't send email if there's no rule
+        if ($sendEmailMinEvaluation === 0) {
+            $sendEmailMinEvaluation = 5;
         }
 
         return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation, $sendEmailMinEvaluation);
