@@ -924,7 +924,7 @@ form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des 
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
-form.rule_see_what.children.sendEmailMinEvaluation.label: 'Ne pas envoyer de mail de reprise de contact pour les notes de 1 à'
+form.rule_see_what.children.sendEmailMinEvaluation.label: 'Quand "%seer%" note "%seeable%", ne pas envoyer de mail de reprise de contact pour les notes de 1 à'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
 form.rule_see_what.children.unrestricted: 'Toujours afficher'
 form.rule_see_what.children.unrestrictedSend: 'Toujours envoyer'

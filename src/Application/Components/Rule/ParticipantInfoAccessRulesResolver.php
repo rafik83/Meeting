@@ -105,6 +105,9 @@ class ParticipantInfoAccessRulesResolver
                 if (null !== $rule->getEmailAccessMinEvaluation() && $rule->getEmailAccessMinEvaluation() > $emailAccessMinEvaluation) {
                     $emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
                 }
+                if ($sendEmailMinEvaluation === 0) {
+                    $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
+                }
                 if (null !== $rule->getSendEmailMinEvaluation() && $rule->getSendEmailMinEvaluation() > $sendEmailMinEvaluation) {
                     $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
                 }
