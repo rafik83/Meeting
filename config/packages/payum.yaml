@@ -16,5 +16,14 @@ payum:
             signature: '%paypal_signature%'
             sandbox: '%paypal_sandbox%'
             payum.action.store_notification: '@Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction'
+        ccip:
+            factory: 'ccip'
         offline:
             factory: offline
+
+services:
+    vimeet.ccip_gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [Proximum\Vimeet\Infrastructure\Payum\CCIP\GatewayFactory]
+        tags:
+            - { name: payum.gateway_factory_builder, factory: ccip }
