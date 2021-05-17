@@ -62,7 +62,7 @@ abstract class AbstractChoiceHandler
      *
      * @return Transaction
      */
-    protected function handleChoice(AbstractChoice $choice, $total): Transaction
+    protected function handleChoice(AbstractChoice $choice, $total): PaymentResult
     {
         // Convert cart to order
         $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
@@ -75,6 +75,13 @@ abstract class AbstractChoiceHandler
 
         if (Mode::PAYMENT_PAYPAL === $choice->mode) {
             $transaction = Transaction::createForPaypal(
+                $choice->sheet,
+                $choice->user,
+                $total,
+                $this->dateTime
+            );
+        } else if (Mode::PAYMENT_CCIP === $choice->mode) {
+            $transaction = Transaction::createForCcip(
                 $choice->sheet,
                 $choice->user,
                 $total,
@@ -100,6 +107,6 @@ abstract class AbstractChoiceHandler
             new TransactionCreatedEvent($transaction)
         );
 
-        return $transaction;
+        return new PaymentResult($transaction, $order->getId());
     }
 }
