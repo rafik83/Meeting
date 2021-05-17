@@ -22,7 +22,7 @@
                     <input type="hidden" name="store_key" value="c731d7bea7dd23f65c9e4a21671c21cf06ff88f3" />
                     <input type="hidden" name="store_mode" value="TEST" />
                     <input type="hidden" name="errorurl" value="{{ url('event_package_payment_done', {sheet:sheet.id}) }}" />
-                    <input type="hidden" name="xmlKey" value="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+                    <input type="hidden" name="xmlKey" value="{{ payumToken }}" />
                     <div class="validation">
                         <button type="submit" class="btn btn-primary">
                             <i class="icon-Paiement_1"></i> {{ 'package.payment.pay.label'|trans }}
