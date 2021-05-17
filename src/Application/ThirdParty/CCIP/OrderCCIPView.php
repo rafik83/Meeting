@@ -5,7 +5,6 @@ namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
 
 use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class OrderCCIPView
@@ -48,6 +47,10 @@ class OrderCCIPView
 
     public string $password;
 
+    public string $paymentNumber;
+
+    public string $captureToken;
+
     public function __construct(
         Order $order,
         User $user,
@@ -66,9 +69,10 @@ class OrderCCIPView
         float $vat,
         string $label,
         float $price,
-        string $password
-    )
-    {
+        string $password,
+        string $captureToken,
+        string $paymentNumber
+    ) {
         $this->order = $order;
         $this->user = $user;
         $this->email = $email;
@@ -87,5 +91,7 @@ class OrderCCIPView
         $this->label = $label;
         $this->price = $price;
         $this->password = $password;
+        $this->captureToken = $captureToken;
+        $this->paymentNumber = $paymentNumber;
     }
 }

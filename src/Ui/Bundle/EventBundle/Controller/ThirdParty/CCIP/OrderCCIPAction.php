@@ -12,6 +12,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Twig\Environment;
 
 class OrderCCIPAction
@@ -37,13 +38,14 @@ class OrderCCIPAction
 
     public function __invoke(Request $request, Order $order, EventDomain $eventDomain, User $user): Response
     {
+        $captureToken = $this->getCaptureToken($request->query->get('xmlKey', ''));
 
-        if($order->isCancelled() === true){
+        if ($order->isCancelled() === true){
             $this->logger->info('cancel', [$order->isCancelled()]);
         }
 
         $orderView = $this->queryBus->handle(
-            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $order, $user)
+            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $order, $user, $captureToken)
         );
 
         $xml = $this->twig->render(self::TEMPLATE, [
@@ -53,7 +55,17 @@ class OrderCCIPAction
         $response = new Response(iconv("UTF-8", "ISO-8859-1//TRANSLIT", $xml));
         $response->setCharset('ISO-8859-1');
         $response->headers->set('content-type','application/xml');
+
         return $response;
     }
 
+    private function getCaptureToken(string $xmlKey): string
+    {
+        $hash = md5('r34_rpack');
+        if (strpos($xmlKey, $hash) !== 0) {
+            throw new AccessDeniedHttpException('Invalid xmlKey parameter');
+        }
+
+        return substr($xmlKey, strlen($hash));
+    }
 }

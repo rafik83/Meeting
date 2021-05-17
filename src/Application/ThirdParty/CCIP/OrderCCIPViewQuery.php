@@ -11,22 +11,18 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class OrderCCIPViewQuery implements Query
 {
-    /** @var string */
-    public $locale;
-
-    /** @var Event */
-    public $event;
-
-    /** @var Order */
-    public $order;
-
+    public string $locale;
+    public Event $event;
+    public Order $order;
     public User $user;
+    public string $captureToken;
 
-    public function __construct(Event $event, string $locale, Order $order, User $user)
+    public function __construct(Event $event, string $locale, Order $order, User $user, string $captureToken)
     {
         $this->event = $event;
         $this->locale = $locale;
         $this->order = $order;
         $this->user = $user;
+        $this->captureToken = $captureToken;
     }
 }

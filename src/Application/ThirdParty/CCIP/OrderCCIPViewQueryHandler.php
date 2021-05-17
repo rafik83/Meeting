@@ -3,28 +3,27 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
-
+use Payum\Core\Payum;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\UnsupportedMultipleRows;
 use Proximum\Vimeet\Domain\Model\Order\Row;
+use Proximum\Vimeet\Domain\Model\Payment\Payment;
+use Proximum\Vimeet\Domain\Model\Payment\PaymentToken;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Symfony\Component\Intl\Countries;
-use Twig\Environment;
 
 class OrderCCIPViewQueryHandler
 {
     public const TEMPLATE_ERROR_CANCEL_URL = 'AdminBundle:ThirdParty:CCIP:orderCCIPErrorCancelUrl.html.twig';
 
-    private Environment $twig;
-
     private BillingInfoRepositoryInterface $billingInfoRepository;
+    private Payum $payum;
 
     public function __construct
     (
-        Environment $twig,
+        Payum $payum,
         BillingInfoRepositoryInterface $billingInfoRepository
-    )
-    {
-        $this->twig = $twig;
+    ) {
+        $this->payum = $payum;
         $this->billingInfoRepository = $billingInfoRepository;
     }
 
@@ -46,6 +45,11 @@ class OrderCCIPViewQueryHandler
         // return new Response($this->twig->render(self::TEMPLATE_ERROR_CANCEL_URL, ['error']));
 
         $password = bin2hex(random_bytes(10));
+
+        /** @var PaymentToken $paymentToken */
+        $paymentToken = $this->payum->getTokenStorage()->find($orderCCIPViewQuery->captureToken);
+        /** @var Payment $payment */
+        $payment = $this->payum->getStorage(Payment::class)->find($paymentToken->getDetails());
 
         $row = $paidRows[0];
 
@@ -69,7 +73,9 @@ class OrderCCIPViewQueryHandler
             $row->getVatRate(),
             $row->getLabel()??'',
             $row->getPrice(),
-            $password
+            $password,
+            $orderCCIPViewQuery->captureToken,
+            $payment->getNumber()
         );
     }
 }

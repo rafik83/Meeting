@@ -41,7 +41,11 @@
     </origin>
     <!--URL utilisees pour rediriger l'internaute-->
     <cancel_url>{{ url('event_order_ccip_cancel_error_url', {user:orderView.user.id, order:orderView.order.id}) }}</cancel_url>
-    <valid_url>{{ url('event') }}</valid_url>
+    <valid_url>{{ url('event_order_ccip_valid_url', {
+        sheet: orderView.order.sheet.id,
+        captureToken: orderView.captureToken,
+        paymentNumber: orderView.paymentNumber,
+    }) }}</valid_url>
     <error_url>{{ url('event_order_ccip_cancel_error_url', {user:orderView.user.id, order:orderView.order.id}) }}</error_url>
     <!--infos pour la mise a jour de l'etat de vos commandes !-->
     <update_url>{{ url('event_order_ccip_update_url', {user:orderView.user.id, order:orderView.order.id}) }}</update_url>
