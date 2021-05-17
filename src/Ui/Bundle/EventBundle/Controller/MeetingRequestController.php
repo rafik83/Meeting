@@ -369,7 +369,7 @@ class MeetingRequestController extends AbstractController
         $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($fromSheet, $toSheet);
 
         if (!$participantInfoAccessRule->canRequestMeeting()) {
-            throw $this->createNotFoundException('You can not allowed to request meeting.');
+            throw $this->createNotFoundException('You are not allowed to request meeting.');
         }
     }
 
