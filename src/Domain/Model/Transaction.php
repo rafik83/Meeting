@@ -318,4 +318,19 @@ class Transaction
             true
         );
     }
+
+    public static function createForCcip(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
+    {
+        return new self(
+            $sheet,
+            $amount,
+            $date,
+            Mode::PAYMENT_CCIP,
+            null,
+            self::STATE_PENDING,
+            $sheet->getEvent()->getCurrency(),
+            $user,
+            true
+        );
+    }
 }
