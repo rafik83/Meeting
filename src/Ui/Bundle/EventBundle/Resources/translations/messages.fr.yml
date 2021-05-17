@@ -504,6 +504,7 @@ order.transaction.list.title: 'Liste des transactions'
 order.transaction.mode.bank_card: 'Carte bancaire'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Virement
+order.transaction.mode.ccip: CCIP
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
 order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement %eventName%'
