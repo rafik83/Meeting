@@ -179,3 +179,11 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\GetApiListQuery }
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+
+    #
+    # CCIP
+    #
+    Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQuery }

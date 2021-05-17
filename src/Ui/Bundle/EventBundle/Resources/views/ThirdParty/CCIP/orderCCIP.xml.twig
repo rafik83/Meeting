@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE rpack_order SYSTEM "rpack_order.dtd">
+<rpack_order type="cb" date="{{ orderView.order.createdAt|date('Ymd') }}" id='{{ orderView.order.numero }}'>
+    <!-- id => votre numero interne pour identifie la commande !-->
+    <customer>
+        <email>{{ orderView.email }}</email>
+        <receiver_email>{{ orderView.email }}</receiver_email>
+        <password>{{ orderView.password }}</password>
+        {% if orderView.gender %}
+            <gender>{{ orderView.gender }}</gender>
+        {% endif %}
+{#        <siret>2222333311111</siret>#}
+{#        <tva_intracom>FR00000000001</tva_intracom>#}
+        <phone>{{ orderView.phone }}</phone>
+{#        <fax>0465983265</fax>#}
+{#        <ape>code APE</ape>#}
+{#        <statut>Entreprise</statut>#}
+{#        <newsletter>1</newsletter>#}
+        <adress type="main">
+            <firstname>{{ orderView.firstname }}</firstname>
+            <lastname>{{ orderView.lastname }}</lastname>
+            <street>{{ orderView.address }}</street>
+            <postcode>{{ orderView.postcode }}</postcode>
+            <city>{{ orderView.city }}</city>
+            <country>{{ orderView.country }}</country>
+        </adress>
+    </customer>
+    <order>
+        <product_id>{{ orderView.product_id }}</product_id>
+        <product_name>{{ orderView.product_name }}</product_name>
+        <number>{{ orderView.quantity }}</number>
+        <tva>{{ orderView.vat }}</tva>
+        <infos_sup>{{ orderView.label }}</infos_sup>
+        <prixTTC>{{ orderView.price }}</prixTTC>
+    </order>
+{#    <delivering></delivering>#}
+{#    <delivering_tax></delivering_tax>#}
+    <origin>
+        <origin_name>Vimeet</origin_name>
+        <origin_url>{{ url('event') }}</origin_url>
+    </origin>
+    <!--URL utilisees pour rediriger l'internaute-->
+    <cancel_url>{{ url('event_order_ccip_cancel_error_url', {user:orderView.user.id, order:orderView.order.id}) }}</cancel_url>
+    <valid_url>{{ url('event') }}</valid_url>
+    <error_url>{{ url('event_order_ccip_cancel_error_url', {user:orderView.user.id, order:orderView.order.id}) }}</error_url>
+    <!--infos pour la mise a jour de l'etat de vos commandes !-->
+    <update_url>{{ url('event_order_ccip_update_url', {user:orderView.user.id, order:orderView.order.id}) }}</update_url>
+{#    <update_mail></update_mail>#}
+    <generation_facture>1</generation_facture>
+    <envoi_mail_commande_client>{{ orderView.email }}</envoi_mail_commande_client>
+{#    <logo>http://www.xxxx.fr/images/bandeau-paiement.jpg</logo>#}
+{#    <mention_txt>Texte d'information</mention_txt>#}
+</rpack_order>
