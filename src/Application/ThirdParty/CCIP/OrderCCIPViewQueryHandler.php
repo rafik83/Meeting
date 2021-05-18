@@ -5,10 +5,12 @@ namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
 use Payum\Core\Payum;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\UnsupportedMultipleRows;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Payment\PaymentToken;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Symfony\Component\Intl\Countries;
 
 class OrderCCIPViewQueryHandler
@@ -17,17 +19,20 @@ class OrderCCIPViewQueryHandler
 
     private BillingInfoRepositoryInterface $billingInfoRepository;
     private Payum $payum;
+    private ExtraParameterRepositoryInterface $extraParameterRepository;
 
     public function __construct
     (
         Payum $payum,
-        BillingInfoRepositoryInterface $billingInfoRepository
+        BillingInfoRepositoryInterface $billingInfoRepository,
+        ExtraParameterRepositoryInterface $extraParameterRepository
     ) {
         $this->payum = $payum;
         $this->billingInfoRepository = $billingInfoRepository;
+        $this->extraParameterRepository = $extraParameterRepository;
     }
 
-    public function handle(OrderCCIPViewQuery $orderCCIPViewQuery)
+    public function handle(OrderCCIPViewQuery $orderCCIPViewQuery): OrderCCIPView
     {
 
         $paidRows = array_filter($orderCCIPViewQuery->order->getRows(), function(Row $row){
@@ -49,6 +54,17 @@ class OrderCCIPViewQueryHandler
 
         $billingInfo = $this->billingInfoRepository->getBySheet($orderCCIPViewQuery->order->getSheet());
 
+        $extraParameter = $this->extraParameterRepository->findByEventAndType(
+            $orderCCIPViewQuery->order->getSheet()->getEvent(),
+            Type::TYPE_PRODUCT_CCIP
+        );
+
+        if($extraParameter === null || $extraParameter->getValue() === null){
+            throw new \Exception('Product CCIP parameter is not defined');
+        }
+
+        $parameters = json_decode($extraParameter->getValue(), true);
+
         return new OrderCCIPView(
             $orderCCIPViewQuery->order,
             $orderCCIPViewQuery->user,
@@ -61,7 +77,7 @@ class OrderCCIPViewQueryHandler
             $billingInfo->getAddress()->getCity(),
             Countries::getAlpha3Code($billingInfo->getAddress()->getCountry()),
             $orderCCIPViewQuery->user->getPhone()??'',
-            $row->getProductId(),
+            $parameters[$row->getProductId()],
             $row->getProduct()->getTitle($orderCCIPViewQuery->locale),
             $row->getQuantity(),
             $row->getVatRate(),
