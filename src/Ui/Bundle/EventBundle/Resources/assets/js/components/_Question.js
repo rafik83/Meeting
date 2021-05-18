@@ -13,6 +13,11 @@ function Question(element) {
 
     this.questionsForm.addEventListener('submit', this.submitQuestion.bind(this));
 
+    this.select = this.questionsContainer.querySelector('#orderBy');
+    this.select.addEventListener('change', this.initQuestions.bind(this));
+
+    this.loading = this.questionsContainer.querySelector('#loading');
+
     this.questionVoteMessage = element.getAttribute('data-question-vote-message');
     this.questionUnvoteMessage = element.getAttribute('data-question-unvote-message');
     this.questionVoteDisabledMessage = element.getAttribute('data-question-vote-disabled-message');
@@ -42,10 +47,13 @@ Question.prototype.initQuestions = function () {
     const href = this.questionsContainer.getAttribute('data-href');
     const voteHref = this.questionsContainer.getAttribute('data-vote-href');
     const urlQuestionDelete = this.questionsContainer.getAttribute('data-question-message-delete');
-
+    const choice = this.select.selectedIndex;
+    const orderBy = this.select.options[choice].value;
+    this.loading.classList.remove('hide');
     const $questionsList = $(this.questionsList);
 
-    $.get(href, function (response) {
+    $.get(href, {'orderBy':orderBy}, function (response) {
+
         // make shure there no listeners leak
         this.removeQuestionListeners();
         $questionsList.empty();
@@ -175,6 +183,7 @@ Question.prototype.initQuestions = function () {
 
         });
         this.questionMessageCount = questionMessageCount;
+        this.loading.classList.add('hide');
     }.bind(this))
         .fail(function () {
             console.error('Failed to load webinar questions');

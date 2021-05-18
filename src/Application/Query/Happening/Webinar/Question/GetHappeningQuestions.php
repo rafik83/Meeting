@@ -17,11 +17,14 @@ class GetHappeningQuestions implements Query
     /** @var string */
     private $locale;
 
-    public function __construct(Happening $happening, User $user, string $locale)
+    private string $orderBy;
+
+    public function __construct(Happening $happening, User $user, string $locale, string $orderBy)
     {
         $this->happening = $happening;
         $this->user = $user;
         $this->locale = $locale;
+        $this->orderBy = $orderBy;
     }
 
     public function getHappening(): Happening
@@ -37,5 +40,10 @@ class GetHappeningQuestions implements Query
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    public function getOrderBy(): string
+    {
+        return $this->orderBy;
     }
 }

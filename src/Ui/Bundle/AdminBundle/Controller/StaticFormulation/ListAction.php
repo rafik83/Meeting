@@ -40,7 +40,7 @@ class ListAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $list = $this->queryBus->handle(new StaticFormulationListViewQuery($event, $request));
+        $list = $this->queryBus->handle(new StaticFormulationListViewQuery($event, $request->getLocale()));
 
         return new Response($this->twig->render('AdminBundle:StaticFormulation:list.html.twig', [
             'event' => $event,

@@ -3,6 +3,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide;
 
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Resources\Icon\StyleGuideIcon;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -26,6 +27,7 @@ class ShowAction
                 'EventBundle:StyleGuide:show.html.twig',
                 [
                     'event' => $event,
+                    'icons' => StyleGuideIcon::LIST,
                 ]
             )
         );

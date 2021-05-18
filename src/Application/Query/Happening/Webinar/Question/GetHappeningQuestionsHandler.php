@@ -23,8 +23,7 @@ class GetHappeningQuestionsHandler
 
     public function handle(GetHappeningQuestions $query): array
     {
-        $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening(), $query->getUser());
-
+        $questions = $this->questionRepository->getByHappeningDuringWebinar($query->getHappening(), $query->getUser(), $query->getOrderBy());
         $timezone = $this->getTimezoneHelper
             ->getTimezoneByEventAndUser($query->getHappening()->getEvent(), $query->getUser());
         $mediumHourFormatter = DayHelper::getMediumHourFormatter($query->getLocale(), $timezone);

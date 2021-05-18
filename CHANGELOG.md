@@ -4,12 +4,55 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
+
+## [2.91.1] - 2021-05-11
+- Hotfix - Allow empty country in tag template
+
+## [2.91.0] - 2021-05-10
+### Added
+- VIMEET-2526 - Happening question sort by like or sort by date
+
+### Fixed
+- Avoid error if country is not defined when displaying participant info
+- MV-333 - Impossible to use Google & Linkedin login
+- Don't generate ical url if user has no participant
+
+## [2.90.0] - 2021-04-30
+### Added
+- VIMEET-2413 - Display custom buttons
+- VIMEET-2355 - Add custom link administration
+
+## [2.89.0] - 2021-04-30
+### Added
+- VIMEET-2412 - Height space between nav buttons
+- VIMEET-2485 - Agenda title uppercase
+- VIMEET-2503 - Add questions, replies, votes, datetimes to happening participants export
+
+### Fixed
+- MV-324 - fix bad viewers count for speakers when opening webinar
+- Static formulation list : orignal title was always translated with event default locale
+
+## [2.88.3] - 2021-04-26
+### Fixed
+- MV-331 - Add missing fontconfig lib
+
+## [2.88.2] - 2021-04-26
+### Fixed
+- Remove Imagick php module to avoid segmentation faults
+
+## [2.88.1] - 2021-04-23
+### Fixed
+- MV-330 - Disable mailer spool, to enabled previous fix (closing smtp is not supported with spool)
+
+## [2.88.0] - 2021-04-23
 ### Added
 - VIMEET-2395 - Header event width full
-- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
+
 ### Fixed
-- update services config to avoid duplicates in event subscribers
+- Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated
+- MV-330 - Close smtp transport after sending email, to avoid disconnection after timeout
 
 ## [2.87.5] - 2021-04-20
 ### Fixed

@@ -4,7 +4,6 @@ namespace Proximum\Vimeet\Domain\Repository\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface QuestionRepositoryInterface
@@ -26,14 +25,14 @@ interface QuestionRepositoryInterface
     /**
      * @return Question[]
      */
-    public function findByHappeningAndSheet(Happening $happening, Sheet $sheet): array;
+    public function findByHappeningAndUser(Happening $happening, User $user): array;
 
     /**
      * @param User $currentUser to indicate which questions have been voted for
      *
      * @return Question[]
      */
-    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser): array;
+    public function getByHappeningDuringWebinar(Happening $happening, User $currentUser, string $orderBy): array;
 
     public function findById(int $id): ?Question;
 
