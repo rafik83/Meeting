@@ -11,7 +11,7 @@ class HappeningParticipantView
     private string $happeningEndHour;
     private string $happeningDay;
     private string $happeningTitle;
-    private int $sheetId;
+    private ?int $sheetId;
     private int $participantId;
     // question asked during registration to happening
     private ?string $questionRegister;
@@ -26,7 +26,7 @@ class HappeningParticipantView
     private string $firstname;
     private string $lastname;
     private ?string $position;
-    private string $sheetName;
+    private ?string $sheetName;
     private ?string $phone;
     private ?int $evaluation;
     private ?string $connect;
@@ -37,7 +37,7 @@ class HappeningParticipantView
         string $happeningEndHour,
         string $happeningDay,
         string $happeningTitle,
-        int $sheetId,
+        ?int $sheetId,
         int $participantId,
         ?string $questionRegister,
         ?string $questionsWebinar,
@@ -48,7 +48,7 @@ class HappeningParticipantView
         string $firstname,
         string $lastname,
         ?string $position,
-        string $sheetName,
+        ?string $sheetName,
         ?string $phone,
         ?int $evaluation,
         ?string $connect
@@ -100,7 +100,7 @@ class HappeningParticipantView
         return $this->happeningTitle;
     }
 
-    public function getSheetId(): int
+    public function getSheetId(): ?int
     {
         return $this->sheetId;
     }
@@ -155,7 +155,7 @@ class HappeningParticipantView
         return $this->position;
     }
 
-    public function getSheetName(): string
+    public function getSheetName(): ?string
     {
         return $this->sheetName;
     }
