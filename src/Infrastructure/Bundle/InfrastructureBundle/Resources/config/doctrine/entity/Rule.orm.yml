@@ -43,6 +43,10 @@ Proximum\Vimeet\Domain\Model\Rule:
             type: boolean
             options:
                 default: false
+        disableMeetingRequest:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

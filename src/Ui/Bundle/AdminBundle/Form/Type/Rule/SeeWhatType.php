@@ -101,6 +101,9 @@ class SeeWhatType extends AbstractType
             ->add('requestAutomaticallyTransformedIntoMeeting', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('isMeetingRequestDisabled', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
 
         $builder->get('sendEmailMinEvaluation')

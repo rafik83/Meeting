@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2471 - Trigger event 5 minutes after meeting evaluation, to send follow up email, and manage permissions, according to who see who rules
+- VIMEET-2573 - Hide request meeting button according "who see what"
 - VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
 
 ## [2.91.1] - 2021-05-11

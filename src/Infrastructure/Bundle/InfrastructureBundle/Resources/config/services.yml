@@ -3575,6 +3575,7 @@ services:
             - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@Proximum\Vimeet\Application\Components\Catalog\GetViewedSheetsFromFilters'
+            - '@Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 

@@ -15,6 +15,7 @@ class SeeWhat implements Command
     public ?int $sendEmailMinEvaluation;
 
     public bool $requestAutomaticallyTransformedIntoMeeting;
+    public bool $isMeetingRequestDisabled;
 
     public function __construct(Rule $rule)
     {
@@ -25,5 +26,6 @@ class SeeWhat implements Command
         $this->emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
         $this->sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
         $this->requestAutomaticallyTransformedIntoMeeting = $rule->getRequestAutomaticallyTransformedIntoMeeting();
+        $this->isMeetingRequestDisabled = $rule->isMeetingRequestDisabled();
     }
 }

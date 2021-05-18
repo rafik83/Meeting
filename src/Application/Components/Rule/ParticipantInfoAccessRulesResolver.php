@@ -2,7 +2,6 @@
 
 namespace Proximum\Vimeet\Application\Components\Rule;
 
-use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -96,6 +95,7 @@ class ParticipantInfoAccessRulesResolver
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
         $sendEmailMinEvaluation = 0;
+        $canRequestMeeting = true;
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
@@ -111,6 +111,8 @@ class ParticipantInfoAccessRulesResolver
                 if (null !== $rule->getSendEmailMinEvaluation() && $rule->getSendEmailMinEvaluation() > $sendEmailMinEvaluation) {
                     $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
                 }
+
+                $canRequestMeeting = !$rule->isMeetingRequestDisabled();
             }
         }
 
@@ -119,6 +121,11 @@ class ParticipantInfoAccessRulesResolver
             $sendEmailMinEvaluation = 5;
         }
 
-        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation, $sendEmailMinEvaluation);
+        return new ParticipantInfoAccessRule(
+            $phoneAccessMinEvaluation,
+            $emailAccessMinEvaluation,
+            $sendEmailMinEvaluation,
+            $canRequestMeeting
+        );
     }
 }

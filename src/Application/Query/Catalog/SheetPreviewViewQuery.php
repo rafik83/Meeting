@@ -3,7 +3,6 @@
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -42,31 +41,21 @@ class SheetPreviewViewQuery
     /** @var bool */
     public $isPriority;
 
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param string $locale
-     * @param Sheet  $viewer
-     * @param User   $user
-     * @param bool   $isMeetingRequestClosed
-     * @param bool   $isAnsweringMeetingRequestClosed
-     * @param bool   $isSeenByCurrentUser
-     * @param bool   $isMobileValidationRequired
-     * @param bool   $showCategory
-     * @param bool   $isPriority
-     */
+    public bool $canRequestMeeting;
+
     public function __construct(
         Event $event,
         Sheet $sheet,
-        $locale,
+        string $locale,
         Sheet $viewer,
         User $user,
-        bool $isMeetingRequestClosed = false,
-        bool $isAnsweringMeetingRequestClosed = false,
-        bool $isSeenByCurrentUser = false,
-        bool $isMobileValidationRequired = false,
-        bool $showCategory = false,
-        bool $isPriority = false
+        bool $isMeetingRequestClosed,
+        bool $isAnsweringMeetingRequestClosed,
+        bool $isSeenByCurrentUser,
+        bool $isMobileValidationRequired,
+        bool $showCategory,
+        bool $isPriority,
+        bool $canRequestMeeting
     ) {
         $this->event = $event;
         $this->sheet = $sheet;
@@ -79,5 +68,6 @@ class SheetPreviewViewQuery
         $this->user = $user;
         $this->showCategory = $showCategory;
         $this->isPriority = $isPriority;
+        $this->canRequestMeeting = $canRequestMeeting;
     }
 }

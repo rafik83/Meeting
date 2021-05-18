@@ -30,6 +30,7 @@ class SeeWhatHandlerTest extends TestCase
         $seeWhat->phoneAccessMinEvaluation = 1;
         $seeWhat->emailAccessMinEvaluation = 2;
         $seeWhat->sendEmailMinEvaluation = 3;
+        $seeWhat->isMeetingRequestDisabled = true;
 
         // Mock
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
@@ -48,7 +49,8 @@ class SeeWhatHandlerTest extends TestCase
                 && $rule->getRequestAutomaticallyTransformedIntoMeeting() === true
                 && $rule->getPhoneAccessMinEvaluation() === 1
                 && $rule->getEmailAccessMinEvaluation() === 2
-                && $rule->getSendEmailMinEvaluation() === 3;
+                && $rule->getSendEmailMinEvaluation() === 3
+                && $rule->isMeetingRequestDisabled() === true;
         }))->shouldHaveBeenCalled();
     }
 
