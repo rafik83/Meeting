@@ -119,6 +119,12 @@ Go to the folder where you've unzipped the sql dump and run
 mysql -u root -h 127.0.0.1 -p proximum_vimeet < <your_db_dump_name>.sql
 ```
 
+If you have an error `MySQL server has gone away`, try to increase the value of `max_allowed_packet` using the following SQL query:
+
+```
+SET GLOBAL max_allowed_packet=100000000;
+```
+
 ##### Indexing Elastic Search DB
 
 Now it's time to index the Elastic Search Database
