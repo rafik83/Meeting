@@ -40,7 +40,7 @@ class EventListQueryHandlerTest extends TestCase
         $day       = new Day($eventOne, $startTime, $endTime);
         $eventOne->setDays([$day]);
 
-        $eventTwo = EventFactory::createEvent('event2');
+        $eventTwo = EventFactory::createEvent('event2', null, ['fr'], null, null, 2);
 
         $eventThree     = EventFactory::createEvent('event3');
         $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
@@ -50,7 +50,7 @@ class EventListQueryHandlerTest extends TestCase
 
         // Expected
         $currentEvent1 = new EventListView(
-            null,
+            1,
             'event1',
             'super-event.vimeet.proximum',
             ['fr', 'en'],
@@ -60,10 +60,10 @@ class EventListQueryHandlerTest extends TestCase
         );
 
         $currentEvent2 = new EventListView(
-            null,
+            2,
             'event2',
             'super-event.vimeet.proximum',
-            ['fr', 'en'],
+            ['fr'],
             'fr',
             true,
             []
@@ -91,9 +91,9 @@ class EventListQueryHandlerTest extends TestCase
         $day       = new Day($eventOne, $startTime, $endTime);
         $eventOne->setDays([$day]);
 
-        $eventTwo = EventFactory::createEvent('event2');
+        $eventTwo = EventFactory::createEvent('event2', null, ['fr'], null, null, 2);
 
-        $eventThree     = EventFactory::createEvent('event3');
+        $eventThree     = EventFactory::createEvent('event3', null, ['fr'], null, null, 3);
         $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
         $endTimeThree   = new \DateTime('2017-01-04 18:00:00.000');
         $dayThree       = new Day($eventThree, $startTimeThree, $endTimeThree);
@@ -102,10 +102,10 @@ class EventListQueryHandlerTest extends TestCase
         // Expected
         $expectedEventListsView = new EventListsView([
             new EventListView(
-                null,
+                3,
                 'event3',
                 'super-event.vimeet.proximum',
-                ['fr', 'en'],
+                ['fr'],
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]
@@ -133,7 +133,7 @@ class EventListQueryHandlerTest extends TestCase
         $day       = new Day($eventOne, $startTime, $endTime);
         $eventOne->setDays([$day]);
 
-        $eventThree     = EventFactory::createEvent('event3');
+        $eventThree     = EventFactory::createEvent('event3', null, ['fr'], null, null, 3);
         $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
         $endTimeThree   = new \DateTime('2017-01-04 18:00:00.000');
         $dayThree       = new Day($eventThree, $startTimeThree, $endTimeThree);
@@ -142,7 +142,7 @@ class EventListQueryHandlerTest extends TestCase
         // Expected
         $expectedEventListsView = new EventListsView([
             new EventListView(
-                null,
+                1,
                 'event1',
                 'super-event.vimeet.proximum',
                 ['fr', 'en'],
@@ -151,10 +151,10 @@ class EventListQueryHandlerTest extends TestCase
                 [new DayView($startTime, $endTime)]
             ),
             new EventListView(
-                null,
+                3,
                 'event3',
                 'super-event.vimeet.proximum',
-                ['fr', 'en'],
+                ['fr'],
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]

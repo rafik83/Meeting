@@ -23,7 +23,8 @@ class EventFactory
         ?string $fallbackLocale = null,
         array $locales = ['fr', 'en'],
         ?string $vatMode = null,
-        Event $duplicatedFrom = null
+        Event $duplicatedFrom = null,
+        int $id = 1
     ) {
         if (null === $vatMode) {
             $vatMode = Event::VAT_MODE_ET;
@@ -35,7 +36,7 @@ class EventFactory
 
         $prefix = self::createInvoicePrefix();
 
-        return new Event(
+        $event = new Event(
             null === $eventTitle ? 'super event' : $eventTitle,
             $fallbackLocale,
             $locales,
@@ -51,6 +52,14 @@ class EventFactory
             true,
             $duplicatedFrom
         );
+
+        $reflection = new \ReflectionClass(Event::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($event, $id);
+        $property->setAccessible(false);
+
+        return $event;
     }
 
     /**

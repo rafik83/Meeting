@@ -66,6 +66,9 @@
                                 {% endif %}
                             </span>
                         {% endif %}
+                        {% if rule.sendEmailMinEvaluation %}
+                            <span class="badge"><i class="icon-Transferer"></i> &gt; {{ rule.sendEmailMinEvaluation }}</span>
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ path('admin_rule_see_what', { 'event': event.id, 'rule': rule.id }) }}" class="btn btn-primary btn-sm">{{ 'admin.rule.list.action.seeWhat'|trans }}</a>

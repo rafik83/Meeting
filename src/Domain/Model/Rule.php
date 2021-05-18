@@ -104,9 +104,19 @@ class Rule
         return $this->seerCategory ?: $this->seerType;
     }
 
+    public function getSeerTitle(string $locale): string
+    {
+        return $this->seerCategory ? $this->seerCategory->getTitle($locale) : $this->seerType->getTitle($locale);
+    }
+
     public function getSeeable(): WhoInterface
     {
         return $this->seeableCategory ?: $this->seeableType;
+    }
+
+    public function getSeeableTitle(string $locale): string
+    {
+        return $this->seeableCategory ? $this->seeableCategory->getTitle($locale) : $this->seeableType->getTitle($locale);
     }
 
     public function getPriority(): int

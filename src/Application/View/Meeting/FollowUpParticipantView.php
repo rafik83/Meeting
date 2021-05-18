@@ -10,6 +10,7 @@ class FollowUpParticipantView
     public string $lastname;
     public string $position;
     public int $sheetId;
+    public string $sheetUrl;
     public ?string $avatar;
     public ?string $email;
     public ?string $phone;
@@ -20,6 +21,7 @@ class FollowUpParticipantView
         string $lastname,
         string $position,
         string $sheetId,
+        string $sheetUrl,
         ?string $avatar,
         ?string $email,
         ?string $phone
@@ -28,6 +30,7 @@ class FollowUpParticipantView
         $this->lastname = $lastname;
         $this->position = $position;
         $this->sheetId = $sheetId;
+        $this->sheetUrl = $sheetUrl;
         $this->avatar = $avatar;
         $this->email = $email;
         $this->phone = $phone;

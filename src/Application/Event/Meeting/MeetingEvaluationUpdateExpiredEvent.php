@@ -32,7 +32,7 @@ class MeetingEvaluationUpdateExpiredEvent extends SymfonyEvent
         $this->user = $user;
         $this->evaluatingSheet = $evaluatingSheet;
         $this->evaluation = $evaluation;
-        $this->locale = $locale;
+        $this->locale = $locale ?? $user->getLocale();
     }
 
     public function getMeeting(): Meeting

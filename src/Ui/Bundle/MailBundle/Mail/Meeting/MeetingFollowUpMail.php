@@ -29,6 +29,8 @@ class MeetingFollowUpMail extends UserMail
     private string $evaluatingSheetTitle;
     private int $meetingEvaluation;
     private FollowUpParticipantListView $metParticipants;
+    private bool $showEmail;
+    private bool $showPhone;
 
     public function __construct(
         Event $event,
@@ -40,7 +42,9 @@ class MeetingFollowUpMail extends UserMail
         string $evaluatedSheetTitle,
         string $evaluatingSheetTitle,
         int $meetingEvaluation,
-        FollowUpParticipantListView $metParticipants
+        FollowUpParticipantListView $metParticipants,
+        bool $showEmail,
+        bool $showPhone
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
 
@@ -49,6 +53,8 @@ class MeetingFollowUpMail extends UserMail
         $this->evaluatingSheetTitle = $evaluatingSheetTitle;
         $this->meetingEvaluation = $meetingEvaluation;
         $this->metParticipants = $metParticipants;
+        $this->showEmail = $showEmail;
+        $this->showPhone = $showPhone;
     }
 
     /**
@@ -86,5 +92,15 @@ class MeetingFollowUpMail extends UserMail
     public function getMetParticipantViews(): array
     {
         return $this->metParticipants->participantViews;
+    }
+
+    public function showEmail(): bool
+    {
+        return $this->showEmail;
+    }
+
+    public function showPhone(): bool
+    {
+        return $this->showPhone;
     }
 }

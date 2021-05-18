@@ -196,6 +196,7 @@ class ShowAction
         return $this->contactRepository->find($contactQuery);
     }
 
+
     protected function prepareRatingForm(Request $request, Sheet $sheet, Contact $contact, string $mode): array
     {
         $options = [];
@@ -213,7 +214,7 @@ class ShowAction
             ];
         }
 
-        $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation());
+        $editEvaluationCommand = new EditEvaluation($contact, $contact->getEvaluation(), $sheet, $this->dateTime);
         $ratingForm = $this->formFactory->create(EvaluationType::class, $editEvaluationCommand, $options);
 
         $ratingForm->handleRequest($request);

@@ -20,9 +20,11 @@ class MetParticipantsSubstitutionTest extends TestCase
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getId()->willReturn(123);
 
-        $mail = $this->prophesize(PrepareMeetingFollowUpView::class);
-        $mail->reveal()->sheet = $sheet->reveal();
-        $mail->reveal()->metParticipants = new FollowUpParticipantListView($participantViews);
+        $prepareMailView = $this->prophesize(PrepareMeetingFollowUpView::class);
+        $prepareMailView->reveal()->sheet = $sheet->reveal();
+        $prepareMailView->reveal()->metParticipants = new FollowUpParticipantListView($participantViews);
+        $prepareMailView->reveal()->showEmail = true;
+        $prepareMailView->reveal()->showPhone = false;
 
         $templating = $this->prophesize(TemplatingAdapterInterface::class);
         $templating->render(
@@ -30,13 +32,15 @@ class MetParticipantsSubstitutionTest extends TestCase
                 [
                     'metParticipantViews' => $participantViews,
                     'evaluatedSheetId' => 123,
+                    'showEmail' => true,
+                    'showPhone' => false,
                 ]
             )
             ->shouldBeCalled()
             ->willReturn('<table>list...</table>');
 
         $substitution = new MetParticipantsSubstitution($templating->reveal());
-        $result = $substitution->substitute($mail->reveal());
+        $result = $substitution->substitute($prepareMailView->reveal());
 
         $this->assertEquals('<table>list...</table>', $result);
     }

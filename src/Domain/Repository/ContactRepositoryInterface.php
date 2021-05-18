@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationRow;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -14,6 +15,7 @@ interface ContactRepositoryInterface
     public function set(Contact $contact): void;
 
     public function find(Contact $contact): ?Contact;
+    public function findLatestEvaluatedAt(int $eventId, int $fromUserId, array $contactIds): ?DateTimeInterface;
 
     /**
      * @param Event $event

@@ -11,12 +11,20 @@ class UserFactory
      *
      * @return User
      */
-    public static function create($email = null)
+    public static function create($email = null, int $id = 1)
     {
         $email = null === $email ? 'email@email.com' : $email;
 
         // p@ssw0rd
-        return new User($email, '0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5', 'q5sEATy5kfjoDYZqxBP7vNVJwqQ=', 'fr');
+        $user = new User($email, '0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5', 'q5sEATy5kfjoDYZqxBP7vNVJwqQ=', 'fr');
+
+        $reflection = new \ReflectionClass(User::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($user, $id);
+        $property->setAccessible(false);
+
+        return $user;
     }
 
     public static function createWithEmptyPassword(string $email): User

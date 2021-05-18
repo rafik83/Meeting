@@ -7185,8 +7185,7 @@ services:
             - { name: tactician.handler, typehints: true }
 
     Proximum\Vimeet\Application\Command\Contact\EditEvaluationHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
+        autowire: true
         tags:
             - { name: tactician.handler, typehints: true }
 

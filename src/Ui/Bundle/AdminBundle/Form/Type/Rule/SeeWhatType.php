@@ -89,6 +89,14 @@ class SeeWhatType extends AbstractType
                     ['form.rule_see_what.children.neverSend', ...$grades],
                     ['never', ...$grades]
                 ),
+                'label' => $this->translator->trans(
+                    'form.rule_see_what.children.sendEmailMinEvaluation.label',
+                    [
+                        '%seer%' => $options['rule']->getSeerTitle($locale),
+                        '%seeable%' => $options['rule']->getSeeableTitle($locale),
+                    ],
+                    'forms'
+                ),
             ])
             ->add('requestAutomaticallyTransformedIntoMeeting', CheckboxType::class, [
                 'required' => false,

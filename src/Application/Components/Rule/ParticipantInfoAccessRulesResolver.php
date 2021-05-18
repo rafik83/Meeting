@@ -6,10 +6,11 @@ use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRule;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 /**
- * Get a ParticipantInfoAccessRule from 2 sheets, to be used in contact export
+ * Get a ParticipantInfoAccessRule from 2 sheets, to be used in contact export and to send followup mails
  */
 class ParticipantInfoAccessRulesResolver
 {
@@ -41,9 +42,10 @@ class ParticipantInfoAccessRulesResolver
         // extract direct rules
         foreach ($seerWhos as $who) {
             if (isset($rules[$who->getId()])) {
-                $rulesApplicable = array_merge($rulesApplicable, array_filter($rules[$who->getId()], function (Rule $rule) use ($seeableWhos) {
-                    return in_array($rule->getSeeable(), $seeableWhos);
-                }));
+                $rulesApplicable = array_merge(
+                    $rulesApplicable,
+                    $this->extractMatchingRules($rules[$who->getId()], $seeableWhos)
+                );
             }
         }
 
@@ -64,10 +66,36 @@ class ParticipantInfoAccessRulesResolver
         return $this->rules;
     }
 
+    /**
+     * @param Rule[] $rules
+     * @param WhoInterface[] $seeableWhos
+     *
+     * @return Rule[]
+     */
+    private function extractMatchingRules(array $rules, array $seeableWhos): array
+    {
+        return array_filter($rules, static function (Rule $rule) use ($seeableWhos) {
+
+            foreach ($seeableWhos as $seeableWho) {
+                if ($seeableWho->getId() === $rule->getSeeable()->getId()
+                    && $seeableWho->getIdentifier() === $rule->getSeeable()->getIdentifier()
+                ) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * @param Rule[] $rulesApplicable
+     */
     private function createAccessInfoRuleFromRulesList(array $rulesApplicable): ParticipantInfoAccessRule
     {
         $phoneAccessMinEvaluation = null;
         $emailAccessMinEvaluation = null;
+        $sendEmailMinEvaluation = 0;
 
         if (!empty($rulesApplicable)) {
             foreach ($rulesApplicable as $rule) {
@@ -77,9 +105,20 @@ class ParticipantInfoAccessRulesResolver
                 if (null !== $rule->getEmailAccessMinEvaluation() && $rule->getEmailAccessMinEvaluation() > $emailAccessMinEvaluation) {
                     $emailAccessMinEvaluation = $rule->getEmailAccessMinEvaluation();
                 }
+                if ($sendEmailMinEvaluation === 0) {
+                    $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
+                }
+                if (null !== $rule->getSendEmailMinEvaluation() && $rule->getSendEmailMinEvaluation() > $sendEmailMinEvaluation) {
+                    $sendEmailMinEvaluation = $rule->getSendEmailMinEvaluation();
+                }
             }
         }
 
-        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation);
+        // by default, don't send email if there's no rule
+        if ($sendEmailMinEvaluation === 0) {
+            $sendEmailMinEvaluation = 5;
+        }
+
+        return new ParticipantInfoAccessRule($phoneAccessMinEvaluation, $emailAccessMinEvaluation, $sendEmailMinEvaluation);
     }
 }

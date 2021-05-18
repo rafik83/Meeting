@@ -15,13 +15,10 @@ use function Sentry\captureEvent;
 
 class MailerAdapter implements MailerInterface
 {
-    /** @var \Swift_Mailer */
-    private $mailer;
-
+    private \Swift_Mailer $mailer;
     private Environment $twig;
-
-    /** @var TranslatorAdapter */
-    private $translator;
+    private TranslatorAdapter $translator;
+    private RouterInterface $router;
 
     /** @var LoggerInterface */
     private $logger;
@@ -36,9 +33,10 @@ class MailerAdapter implements MailerInterface
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->translator = $translator;
+        $this->router = $router;
         $this->logger = $logger;
         // make sure scheme is https
-        $router->initScheme();
+        $this->router->initScheme();
     }
 
     /**
@@ -97,6 +95,11 @@ class MailerAdapter implements MailerInterface
             $mail->getMessageId()
         );
         $this->mailer->getTransport()->stop();
+    }
+
+    public function setHost(string $domain)
+    {
+        $this->router->getContext()->setHost($domain);
     }
 
     protected function handleResults(array $receivers, array $failedReceivers, string $subject, ?string $messageId = null)

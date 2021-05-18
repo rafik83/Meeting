@@ -199,6 +199,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ContactRepository'
             - '@datetime'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\MessageBusAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting }
 

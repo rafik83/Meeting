@@ -275,16 +275,16 @@ final class Constant
             'template_full_text' => ParticipantAddedMail::TEMPLATE_FULL_TEXT,
         ],
         // TODO: add missing prepare handler
-        // self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
-        //     'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
-        //     'availableParameters' => [
-        //         '%happeningParticipationChanges%'
-        //     ],
-        //     'isCustomizableByType' => true,
-        //     'isHidden' => false,
-        //     'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE,
-        //     'template_full_text' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE_FULL_TEXT,
-        // ],
+        self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
+            'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
+            'availableParameters' => [
+                '%happeningParticipationChanges%'
+            ],
+            'isCustomizableByType' => true,
+            'isHidden' => false,
+            'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE,
+            'template_full_text' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE_FULL_TEXT,
+        ],
         self::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED => [
             'subject' => OrderConfirmMail::SUBJECT,
             'availableParameters' => [
@@ -328,7 +328,7 @@ final class Constant
                 '%meetingEvaluation%',
                 '%metParticipants%',
             ],
-            'isCustomizableByType' => false,
+            'isCustomizableByType' => true,
             'isHidden' => false,
             'template' => Meeting\MeetingFollowUpMail::TEMPLATE,
             'template_full_text' => Meeting\MeetingFollowUpMail::TEMPLATE_FULL_TEXT,

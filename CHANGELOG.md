@@ -4,6 +4,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- VIMEET-2471 - Trigger event 5 minutes after meeting evaluation, to send follow up email, and manage permissions, according to who see who rules
 - VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
 
 ## [2.91.1] - 2021-05-11
@@ -48,7 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.88.0] - 2021-04-23
 ### Added
 - VIMEET-2395 - Header event width full
-
 ### Fixed
 - Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated

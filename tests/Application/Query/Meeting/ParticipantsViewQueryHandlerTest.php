@@ -209,7 +209,7 @@ class ParticipantsViewQueryHandlerTest extends TestCase
         $this->participantInfoAccessRulesResolver
             ->getParticipantInfoAccessRule($sheet->reveal(), $sheet->reveal())
             ->shouldBeCalled()
-            ->willReturn(new ParticipantInfoAccessRule(null, null));
+            ->willReturn(new ParticipantInfoAccessRule(null, null, null));
 
         $this->assertEquals(
             $participantView,

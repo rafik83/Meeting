@@ -3,8 +3,10 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\MessageBusInterface;
 use Proximum\Vimeet\Application\Command\Meeting\EvaluateMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\EvaluateMeetingHandler;
+use Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -19,17 +21,22 @@ class EvaluateMeetingHandlerTest extends TestCase
     {
         $contactRepository = $this->prophesize(ContactRepositoryInterface::class);
         $date = new \DateTime();
+        $messageBus = $this->prophesize(MessageBusInterface::class);
         $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
         $meeting = $this->prophesize(Meeting::class);
         $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(118);
 
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
 
         $userMet1 = $this->prophesize(User::class);
+        $userMet1->getId()->willReturn(1);
         $userMet2 = $this->prophesize(User::class);
+        $userMet2->getId()->willReturn(2);
 
+        $meeting->getId()->willReturn(486);
         $meeting->getMetParticipants($sheet->reveal())
             ->shouldBeCalled()
             ->willReturn([$participant1->reveal(), $participant2->reveal()])
@@ -61,7 +68,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $date,
             Contact::ORIGIN_MEETING
         );
-        $expectedContact1->setEvaluation(4);
+        $expectedContact1->setEvaluation(4, $date);
 
         $expectedContact2 = new Contact(
             $event->reveal(),
@@ -70,7 +77,7 @@ class EvaluateMeetingHandlerTest extends TestCase
             $date,
             Contact::ORIGIN_MEETING
         );
-        $expectedContact2->setEvaluation(4);
+        $expectedContact2->setEvaluation(4, $date);
 
         $contactRepository
             ->find($contact1)
@@ -87,9 +94,17 @@ class EvaluateMeetingHandlerTest extends TestCase
         $contactRepository->set($expectedContact1)->shouldBeCalled();
         $contactRepository->add($expectedContact2)->shouldBeCalled();
 
+        $expectedMessage = new EvaluationTimeoutMessage(
+            $meeting->reveal(),
+            $user->reveal(),
+            [$expectedContact1, $expectedContact2]
+        );
+        $messageBus->dispatchDelayed($expectedMessage, EvaluationTimeoutMessage::WAIT_DELAY)->shouldBeCalled();
+
         $handler = new EvaluateMeetingHandler(
             $contactRepository->reveal(),
-            $date
+            $date,
+            $messageBus->reveal()
         );
 
         $command = new EvaluateMeeting(

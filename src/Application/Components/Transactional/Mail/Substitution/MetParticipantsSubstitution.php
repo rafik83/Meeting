@@ -25,6 +25,8 @@ class MetParticipantsSubstitution implements SubstituteInterface
         return $this->templating->render(MeetingFollowUpMail::TEMPLATE_MET_PARTICIPANTS, [
             'metParticipantViews' => $prepareMail->metParticipants->participantViews,
             'evaluatedSheetId' => $prepareMail->sheet->getId(),
+            'showEmail' => $prepareMail->showEmail,
+            'showPhone' => $prepareMail->showPhone,
         ]);
     }
 }

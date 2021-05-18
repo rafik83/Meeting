@@ -108,6 +108,9 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface, 
      */
     private $status;
 
+    /** @var int[] list of sheet ids (from or to) that have already received a followup mail */
+    private array $followupSentSheetIds = [];
+
     public function __construct(
         Request $request,
         MeetingSlot $slot,
@@ -604,5 +607,20 @@ class Meeting implements MessageSubjectInterface, ChatMessageLinkableInterface, 
     public function getEnd(): \DateTimeInterface
     {
         return $this->getSlot()->getEnd();
+    }
+
+    public function setFollowupSent(Sheet $sheet): void
+    {
+        if (in_array($sheet->getId(), $this->followupSentSheetIds)) {
+            return;
+        }
+
+        $followupSentSheetIds = array_filter($this->followupSentSheetIds, fn ($id) => !empty($id));
+        $this->followupSentSheetIds = [...$followupSentSheetIds, $sheet->getId()];
+    }
+
+    public function isFollowupSent(Sheet $sheet): bool
+    {
+        return in_array($sheet->getId(), $this->followupSentSheetIds);
     }
 }
