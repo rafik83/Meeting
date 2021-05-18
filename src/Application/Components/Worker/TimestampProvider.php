@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Application\Components\Worker;
 
 /**
- * Give real time timestamp, usefull for long running jobs (dateTime service provides an immutable date)
+ * Give real time timestamp
+ * Unlike an http request, a worker cannot keep a unique datetime (generated at start time)
+ * while processing different messages
  */
 class TimestampProvider
 {

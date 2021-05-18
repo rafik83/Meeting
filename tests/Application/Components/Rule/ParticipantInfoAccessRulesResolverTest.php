@@ -40,10 +40,10 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $this->assertTrue($noRule->isPhoneVisible(null));
         $this->assertTrue($noRule->isEmailVisible(null));
-        $this->assertTrue($noRule->canSendFollowUpEmail(null));
+        $this->assertFalse($noRule->canSendFollowUpEmail(null));
         $this->assertTrue($noRule->isPhoneVisible(1));
         $this->assertTrue($noRule->isEmailVisible(1));
-        $this->assertTrue($noRule->canSendFollowUpEmail(1));
+        $this->assertFalse($noRule->canSendFollowUpEmail(1));
         $this->assertTrue($noRule->canRequestMeeting());
     }
 
@@ -55,12 +55,14 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
 
         $seerSheet = $this->prophesize(Sheet::class);
         $seerType = $this->prophesize(Type::class);
-        $seerType->getId()->shouldBeCalled()->willReturn(1);
+        $seerType->getId()->shouldBeCalled()->willReturn(11);
         $seerType->getCategories()->shouldBeCalled()->willReturn(new ArrayCollection());
         $seerSheet->getType()->shouldBecalled()->willreturn($seerType->reveal());
 
         $seeableSheet = $this->prophesize(Sheet::class);
         $seeableType = $this->prophesize(Type::class);
+        $seeableType->getId()->shouldBeCalled()->willReturn(12);
+        $seeableType->getIdentifier()->shouldBeCalled()->willReturn('type');
         $seeableType->getCategories()->shouldBeCalled()->willReturn(new ArrayCollection());
         $seeableSheet->getType()->shouldBecalled()->willreturn($seeableType->reveal());
         $seeableSheet->getEvent()->shouldBecalled()->willreturn($event->reveal());
@@ -73,7 +75,7 @@ class ParticipantInfoAccessRulesResolverTest extends TestCase
         // min grade for follow up email is 5
         $rule->getSendEmailMinEvaluation()->shouldBeCalled()->willReturn(4);
         $rule->getSeer()->shouldBeCalled()->willReturn($seerType->reveal());
-        $rule->getSeeable()->shouldBeCalled()->willReturn($seeableType);
+        $rule->getSeeable()->shouldBeCalled()->willReturn($seeableType->reveal());
         $rule->isMeetingRequestDisabled()->willReturn(true);
 
         $this->ruleRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn([$rule->reveal()]);

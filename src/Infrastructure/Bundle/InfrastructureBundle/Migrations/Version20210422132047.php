@@ -19,7 +19,7 @@ final class Version20210422132047 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $this->addSql('ALTER TABLE rule ADD send_email_min_evaluation SMALLINT DEFAULT NULL');
+        $this->addSql('ALTER TABLE rule ADD send_email_min_evaluation SMALLINT DEFAULT 5');
     }
 
     public function down(Schema $schema) : void

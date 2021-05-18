@@ -19,8 +19,8 @@ class FollowUpMailAccessRules
     public function createAccessRule(Sheet $evaluatedSheet, Sheet $evaluatingSheet): ParticipantInfoAccessRule
     {
         return $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule(
-            $evaluatedSheet,
-            $evaluatingSheet
+            $evaluatingSheet,
+            $evaluatedSheet
         );
     }
 
