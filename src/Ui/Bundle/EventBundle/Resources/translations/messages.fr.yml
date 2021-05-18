@@ -526,6 +526,7 @@ package.payment.billingAddress: 'Adresse de facturation'
 package.payment.deposit.title: 'Acompte :'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un acompte de %deposit% en sélectionnant les modes de paiement avec acompte'
 package.payment.pay.label: Valider
+package.payment.description: 'Vous arrivez maintenant à la phase finale de règlement de votre commande et allez être redirigé vers notre plateforme de paiement sécurisée.'
 package.payment.title: Paiement
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'

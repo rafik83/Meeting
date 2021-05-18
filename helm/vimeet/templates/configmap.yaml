@@ -51,3 +51,5 @@ data:
   {{- if .Values.jenkins.agent.url }}
     JENKINS_URL: {{ .Values.jenkins.agent.url }}
   {{- end }}
+    CCIP_MODE: {{ .Values.ccip.mode | quote }}
+    CCIP_FORM_ACTION: {{ .Values.ccip.formAction | quote }}

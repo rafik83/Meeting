@@ -22,15 +22,21 @@ class PreparePaymentAction
     private Environment $twig;
     private FunnelFactory $packageFunnelFactory;
     private PreparePayment $prepareCcipPayment;
+    public string $ccipMode;
+    public string $ccipFormAction;
 
     public function __construct(
         Environment $twig,
         FunnelFactory $packageFunnelFactory,
-        PreparePayment $prepareCcipPayment
+        PreparePayment $prepareCcipPayment,
+        string $ccipMode,
+        string $ccipFormAction
     ) {
         $this->twig = $twig;
         $this->packageFunnelFactory = $packageFunnelFactory;
         $this->prepareCcipPayment = $prepareCcipPayment;
+        $this->ccipMode = $ccipMode;
+        $this->ccipFormAction = $ccipFormAction;
     }
 
     public function __invoke(
@@ -56,6 +62,8 @@ class PreparePaymentAction
             'view' => ['funnel' => $funnel],
             'event' => $eventDomain->getEvent(),
             'payumToken' => $captureToken->getHash(),
+            'ccipMode'=> $this->ccipMode,
+            'ccipFormAction' => $this->ccipFormAction
         ]));
     }
 }

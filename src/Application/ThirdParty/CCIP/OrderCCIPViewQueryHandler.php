@@ -38,12 +38,6 @@ class OrderCCIPViewQueryHandler
             throw new UnsupportedMultipleRows('Unsupported multiple rows for CCIP, order: ' . $orderCCIPViewQuery->order->getNumero());
         }
 
-        // si la commande est annulée on envoie vers le twig avec le message annulé
-        // return new Response($this->twig->render(self::TEMPLATE_ERROR_CANCEL_URL, ['cancel']));
-
-        // si la commande est en erreur on envoie vers le twig avec le message erreur
-        // return new Response($this->twig->render(self::TEMPLATE_ERROR_CANCEL_URL, ['error']));
-
         $password = bin2hex(random_bytes(10));
 
         /** @var PaymentToken $paymentToken */
