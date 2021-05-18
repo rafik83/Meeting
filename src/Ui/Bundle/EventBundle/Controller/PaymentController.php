@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
+use Proximum\Vimeet\Application\Command\Payment\PaymentResult;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Application\Query\Package\Payment\InfoViewQuery;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
@@ -15,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\PreparePayment;
@@ -34,8 +36,8 @@ class PaymentController extends AbstractController
     private FunnelFactory $packageFunnelFactory;
     private CartCleaner $cartCleaner;
     private TotalToPay $paymentTotalToPay;
-    private PreparePayment $preparePayment;
-    private CapturePayment $capturePayment;
+    private PreparePayment $preparePaypalPayment;
+    private CapturePayment $capturePaypalPayment;
     private FlashBagInterface $flashBag;
     private QueryBusInterface $queryBus;
     private CommandBusInterface $commandBus;
@@ -44,8 +46,8 @@ class PaymentController extends AbstractController
         FunnelFactory $packageFunnelFactory,
         CartCleaner $cartCleaner,
         TotalToPay $paymentTotalToPay,
-        PreparePayment $preparePayment,
-        CapturePayment $capturePayment,
+        PreparePayment $preparePaypalPayment,
+        CapturePayment $capturePaypalPayment,
         FlashBagInterface $flashBag,
         QueryBusInterface $queryBus,
         CommandBusInterface $commandBus
@@ -53,8 +55,8 @@ class PaymentController extends AbstractController
         $this->packageFunnelFactory = $packageFunnelFactory;
         $this->cartCleaner = $cartCleaner;
         $this->paymentTotalToPay = $paymentTotalToPay;
-        $this->preparePayment = $preparePayment;
-        $this->capturePayment = $capturePayment;
+        $this->preparePaypalPayment = $preparePaypalPayment;
+        $this->capturePaypalPayment = $capturePaypalPayment;
         $this->flashBag = $flashBag;
         $this->queryBus = $queryBus;
         $this->commandBus = $commandBus;
@@ -126,10 +128,27 @@ class PaymentController extends AbstractController
             ]);
         }
 
+        // Create order if only CCIP payment is available and redirect
+        dump('dump', $paymentConditionsView->paymentModes);
+        if (count($paymentConditionsView->paymentModes) === 1
+            && array_values($paymentConditionsView->paymentModes)[0] === Mode::PAYMENT_CCIP) {
+            $paymentChoice->mode = Mode::PAYMENT_CCIP;
+            /** @var PaymentResult $paymentResult */
+            $paymentResult = $this->commandBus->handle($paymentChoice);
+            $this->consumePackageCompletedPaymentFlash();
+
+            return $this->redirectToRoute('event_order_ccip_payment', [
+                'order' => $paymentResult->orderId,
+                'transaction' => $paymentResult->transaction->getId(),
+            ]);
+        }
+
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                /** @var Transaction $transaction */
-                $transaction = $this->commandBus->handle($paymentChoice);
+                /** @var PaymentResult $paymentResult */
+                $paymentResult = $this->commandBus->handle($paymentChoice);
+                $transaction = $paymentResult->transaction;
+
                 $this->consumePackageCompletedPaymentFlash();
 
                 if ($transaction->isPaypal()) {
@@ -171,7 +190,7 @@ class PaymentController extends AbstractController
     ): RedirectResponse {
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $captureToken = $this->preparePayment->process($transaction, $request->getLocale());
+        $captureToken = $this->preparePaypalPayment->process($transaction, $request->getLocale());
 
         return $this->redirect($captureToken->getTargetUrl());
     }
@@ -180,7 +199,7 @@ class PaymentController extends AbstractController
     {
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $status = $this->capturePayment->process($request);
+        $status = $this->capturePaypalPayment->process($request);
 
         $this->addFlash(
             CapturePayment::STATUS_SUCCESS === $status ? 'success' : 'error',

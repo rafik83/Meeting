@@ -58,7 +58,8 @@ class ChoiceHandlerTest extends TestCase
             $owner
         );
 
-        $order = Order::createFromSheet($sheet, $dateTime);
+        $order = $this->prophesize(Order::class);
+        $order->getId()->willReturn(1789);
 
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
@@ -67,7 +68,7 @@ class ChoiceHandlerTest extends TestCase
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart);
-        $converter->toOrder($cart)->shouldBeCalled()->willReturn($order);
+        $converter->toOrder($cart)->shouldBeCalled()->willReturn($order->reveal());
         $totalToPay->getTotal($sheet)->shouldBeCalled()->willReturn(480);
         $transactionRepository->add($transaction)->shouldBeCalled();
 

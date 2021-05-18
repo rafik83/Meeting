@@ -746,6 +746,7 @@ form.participate_happening.children.participants.label: 'Participants concernés
 form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Virement
+form.payment_mode_choice.children.paymentMode.ccip: CCIP
 form.payment_mode_choice.children.paymentMode.paypal: Paypal
 form.planner_export.children.lockMeetingRequest.label: 'Verrouiller les demandes de rendez-vous'
 form.planner_export.children.lockMeetingRequest.option.no: Non

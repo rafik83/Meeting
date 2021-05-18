@@ -508,6 +508,7 @@ order.transaction.list.title: 'Liste des transactions'
 order.transaction.mode.bank_card: 'Carte bancaire'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Virement
+order.transaction.mode.ccip: CCIP
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
 order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement %eventName%'
@@ -529,6 +530,7 @@ package.payment.billingAddress: 'Adresse de facturation'
 package.payment.deposit.title: 'Acompte :'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un acompte de %deposit% en sélectionnant les modes de paiement avec acompte'
 package.payment.pay.label: Valider
+package.payment.description: 'Vous arrivez maintenant à la phase finale de règlement de votre commande et allez être redirigé vers notre plateforme de paiement sécurisée.'
 package.payment.title: Paiement
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'

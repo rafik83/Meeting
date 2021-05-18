@@ -18,6 +18,7 @@ Feature: See and update payment conditions
     And I uncheck "paypal"
     And I uncheck "bank_transfer"
     And I uncheck "bank_check"
+    And I uncheck "ccip"
     And I press "event_payment_conditions_update_submit"
     And I should see "validators.paymentModesChoiceEmpty"
     And I check "paypal"

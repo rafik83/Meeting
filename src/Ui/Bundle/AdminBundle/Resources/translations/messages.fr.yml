@@ -1256,6 +1256,7 @@ admin.transaction.mode.bank_card: 'Carte bleue'
 admin.transaction.mode.bank_cash: 'Argent comptant'
 admin.transaction.mode.bank_check: Chèque
 admin.transaction.mode.bank_transfer: Virement
+admin.transaction.mode.ccip: CCIP
 admin.transaction.mode.paypal: Paypal
 admin.transaction.remove: Supprimer
 admin.transaction.state.cancelled: Annulé
