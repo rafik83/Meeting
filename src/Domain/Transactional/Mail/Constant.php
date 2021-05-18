@@ -328,7 +328,7 @@ final class Constant
                 '%meetingEvaluation%',
                 '%metParticipants%',
             ],
-            'isCustomizableByType' => false,
+            'isCustomizableByType' => true,
             'isHidden' => false,
             'template' => Meeting\MeetingFollowUpMail::TEMPLATE,
             'template_full_text' => Meeting\MeetingFollowUpMail::TEMPLATE_FULL_TEXT,
