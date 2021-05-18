@@ -9,67 +9,27 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
  */
 class Rule
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
+    private Event $event;
+    private ?Type $seerType = null;
+    private ?Category $seerCategory = null;
+    private ?Type $seeableType = null;
+    private ?Category $seeableCategory = null;
+    private array $what;
+    private int $priority;
+    private ?int $phoneAccessMinEvaluation = null;
+    private ?int $emailAccessMinEvaluation = null;
+    private ?int $sendEmailMinEvaluation = 5;
+    private bool $requestAutomaticallyTransformedIntoMeeting = false;
 
-    /**
-     * @var Event
-     */
-    private $event;
-
-    /**
-     * @var Type
-     */
-    private $seerType;
-
-    /**
-     * @var Category
-     */
-    private $seerCategory;
-
-    /**
-     * @var Type
-     */
-    private $seeableType;
-
-    /**
-     * @var Category
-     */
-    private $seeableCategory;
-
-    /**
-     * @var array
-     */
-    private $what;
-
-    /**
-     * @var int
-     */
-    private $priority;
-
-    /** @var int|null */
-    private $phoneAccessMinEvaluation;
-
-    /** @var int|null */
-    private $emailAccessMinEvaluation;
-
-    /** @var bool */
-    private $requestAutomaticallyTransformedIntoMeeting = false;
-
-    /**
-     * Rule constructor.
-     *
-     * @param Event        $event
-     * @param WhoInterface $seer
-     * @param WhoInterface $seeable
-     * @param array        $what
-     * @param int          $priority
-     * @param bool         $requestAutomaticallyTransformedIntoMeeting
-     */
-    public function __construct(Event $event, WhoInterface $seer, WhoInterface $seeable, array $what, $priority = 0, bool $requestAutomaticallyTransformedIntoMeeting = false)
-    {
+    public function __construct(
+        Event $event,
+        WhoInterface $seer,
+        WhoInterface $seeable,
+        array $what,
+        int $priority = 0,
+        bool $requestAutomaticallyTransformedIntoMeeting = false
+    ) {
         $this->event    = $event;
         $this->what     = $what;
         $this->priority = $priority;
@@ -97,110 +57,59 @@ class Rule
         return new self($event, $seer, $seeable, Tag::getSeeableTags(), $priority);
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Get event.
-     *
-     * @return Event
-     */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    /**
-     * Get seerType.
-     *
-     * @return Type
-     */
-    public function getSeerType()
+    public function getSeerType(): ?Type
     {
         return $this->seerType;
     }
 
-    /**
-     * Get seerCategory.
-     *
-     * @return Category
-     */
-    public function getSeerCategory()
+    public function getSeerCategory(): ?Category
     {
         return $this->seerCategory;
     }
 
-    /**
-     * Get seeableType.
-     *
-     * @return Type
-     */
-    public function getSeeableType()
+    public function getSeeableType(): ?Type
     {
         return $this->seeableType;
     }
 
-    /**
-     * Get seeableCategory.
-     *
-     * @return Category
-     */
-    public function getSeeableCategory()
+    public function getSeeableCategory(): ?Category
     {
         return $this->seeableCategory;
     }
 
-    /**
-     * Get what.
-     *
-     * @return array
-     */
-    public function getWhat()
+    public function getWhat(): array
     {
         return $this->what;
     }
 
-    /**
-     * Set what.
-     *
-     * @param array $what
-     *
-     * @return Rule
-     */
-    public function setWhat(array $what)
+    public function setWhat(array $what): Rule
     {
         $this->what = $what;
 
         return $this;
     }
 
-    /**
-     * @return WhoInterface
-     */
-    public function getSeer()
+    public function getSeer(): WhoInterface
     {
         return $this->seerCategory ?: $this->seerType;
     }
 
-    /**
-     * @return WhoInterface
-     */
-    public function getSeeable()
+    public function getSeeable(): WhoInterface
     {
         return $this->seeableCategory ?: $this->seeableType;
     }
 
-    /**
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
@@ -215,27 +124,29 @@ class Rule
         return $this->emailAccessMinEvaluation;
     }
 
-    /**
-     * @return bool
-     */
+    public function getSendEmailMinEvaluation(): ?int
+    {
+        return $this->sendEmailMinEvaluation;
+    }
+
     public function getRequestAutomaticallyTransformedIntoMeeting(): bool
     {
         return $this->requestAutomaticallyTransformedIntoMeeting;
     }
 
-    /**
-     * @param array $what
-     * @param int $priority
-     * @param int|null $phoneAccessMinEvaluation
-     * @param int|null $emailAccessMinEvaluation
-     * @param bool $requestAutomaticallyTransformedIntoMeeting
-     */
-    public function update(array $what, $priority, ?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation, bool $requestAutomaticallyTransformedIntoMeeting = false)
-    {
+    public function update(
+        array $what,
+        $priority,
+        ?int $phoneAccessMinEvaluation,
+        ?int $emailAccessMinEvaluation,
+        ?int $sendEmailMinEvaluation,
+        bool $requestAutomaticallyTransformedIntoMeeting = false
+    ) {
         $this->what     = $what;
         $this->priority = $priority;
         $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
         $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
+        $this->sendEmailMinEvaluation = $sendEmailMinEvaluation;
         $this->requestAutomaticallyTransformedIntoMeeting = $requestAutomaticallyTransformedIntoMeeting;
     }
 }
