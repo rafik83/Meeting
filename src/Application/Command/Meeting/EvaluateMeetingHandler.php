@@ -2,6 +2,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\MessageBusInterface;
+use Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -9,18 +12,18 @@ use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
 
 class EvaluateMeetingHandler
 {
-    /** @var ContactRepositoryInterface */
-    private $contactRepository;
-
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    private ContactRepositoryInterface $contactRepository;
+    private DateTimeInterface $dateTime;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
         ContactRepositoryInterface $contactRepository,
-        \DateTimeInterface $dateTime
+        DateTimeInterface $dateTime,
+        MessageBusInterface $messageBus
     ) {
         $this->contactRepository = $contactRepository;
         $this->dateTime = $dateTime;
+        $this->messageBus = $messageBus;
     }
 
     public function handle(EvaluateMeeting $command): void
@@ -32,12 +35,20 @@ class EvaluateMeetingHandler
         $event = $command->event;
         $participants = $command->meeting->getMetParticipants($command->sheet);
 
+        $contacts = [];
         foreach ($participants as $participant) {
-            $this->addEvaluation($event, $command->user, $participant->getUser(), $command->evaluation);
+            $contacts[] = $this->addEvaluation($event, $command->user, $participant->getUser(), $command->evaluation);
         }
+
+        if (!count($contacts)) {
+            return;
+        }
+
+        $message = new EvaluationTimeoutMessage($command->meeting, $command->user, $contacts);
+        $this->messageBus->dispatchDelayed($message, EvaluationTimeoutMessage::WAIT_DELAY);
     }
 
-    private function addEvaluation(Event $event, User $fromUser, User $toUser, int $evaluation): void
+    private function addEvaluation(Event $event, User $fromUser, User $toUser, int $evaluation): Contact
     {
         $contact = new Contact(
             $event,
@@ -50,13 +61,15 @@ class EvaluateMeetingHandler
         $foundContact = $this->contactRepository->find($contact);
 
         if ($foundContact instanceof Contact) {
-            $foundContact->setEvaluation($evaluation);
+            $foundContact->setEvaluation($evaluation, $this->dateTime);
             $this->contactRepository->set($foundContact);
 
-            return;
+            return $foundContact;
         }
 
-        $contact->setEvaluation($evaluation);
+        $contact->setEvaluation($evaluation, $this->dateTime);
         $this->contactRepository->add($contact);
+
+        return $contact;
     }
 }

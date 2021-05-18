@@ -7,8 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET 2550 - Add checkbox CCIP payment
 
+## [2.92.0] - 2021-05-18
+### Added
+- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
+- VIMEET-2513 - Contact follow up notification (email template)
+- VIMEET-2471 - Trigger event 5 minutes after meeting evaluation, to send follow up email, and manage permissions, according to who see who rules
+- VIMEET-2573 - Hide request meeting button according "who see what"
+
+## [2.91.1] - 2021-05-11
+- Hotfix - Allow empty country in tag template
+
+## [2.91.0] - 2021-05-10
+### Added
+- VIMEET-2526 - Happening question sort by like or sort by date
+
 ### Fixed
 - Avoid error if country is not defined when displaying participant info
+- MV-333 - Impossible to use Google & Linkedin login
+- Don't generate ical url if user has no participant
 
 ## [2.90.0] - 2021-04-30
 ### Added
@@ -40,7 +56,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.88.0] - 2021-04-23
 ### Added
 - VIMEET-2395 - Header event width full
-
 ### Fixed
 - Update services config to avoid duplicates in event subscribers
 - Add fallback for getLabel call, to prevent exception if label is not translated

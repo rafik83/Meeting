@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeNewMailAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeOldMailAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareMeetingFollowUpMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
@@ -52,6 +53,8 @@ class PrepareHandler
     /** @var PrepareChangeNewMailAccountMail */
     private $prepareChangeNewMailAccountMail;
 
+    private PrepareMeetingFollowUpMail $prepareMeetingFollowUpMail;
+
     public function __construct(
         PrepareRegisterAccountMail $prepareRegisterAccountMail,
         PrepareActivateAccountMail $prepareActivateAccountMail,
@@ -63,7 +66,8 @@ class PrepareHandler
         PrepareVersionDiffChangedMail $prepareVersionDiffChangedMail,
         PrepareSheetChangeTypeMail $prepareSheetChangeTypeMail,
         PrepareChangeOldMailAccountMail $prepareChangeOldMailAccountMail,
-        PrepareChangeNewMailAccountMail $prepareChangeNewMailAccountMail
+        PrepareChangeNewMailAccountMail $prepareChangeNewMailAccountMail,
+        PrepareMeetingFollowUpMail $prepareMeetingFollowUpMail
     ) {
         $this->prepareRegisterAccountMail = $prepareRegisterAccountMail;
         $this->prepareActivateAccountMail = $prepareActivateAccountMail;
@@ -76,6 +80,7 @@ class PrepareHandler
         $this->prepareSheetChangeTypeMail = $prepareSheetChangeTypeMail;
         $this->prepareChangeOldMailAccountMail = $prepareChangeOldMailAccountMail;
         $this->prepareChangeNewMailAccountMail = $prepareChangeNewMailAccountMail;
+        $this->prepareMeetingFollowUpMail = $prepareMeetingFollowUpMail;
     }
 
     public function handle(AbstractPrepareMail $prepareMail): ?AbstractMail
@@ -103,6 +108,8 @@ class PrepareHandler
                 return $this->prepareChangeOldMailAccountMail->prepare($prepareMail);
             case Constant::TRANSACTIONAL_MAIL_KEY_USER_CHANGE_NEW_MAIL:
                 return $this->prepareChangeNewMailAccountMail->prepare($prepareMail);
+            case Constant::TRANSACTIONAL_MAIL_KEY_MEETING_FOLLOW_UP:
+                return $this->prepareMeetingFollowUpMail->prepare($prepareMail);
             default: return null;
         }
     }

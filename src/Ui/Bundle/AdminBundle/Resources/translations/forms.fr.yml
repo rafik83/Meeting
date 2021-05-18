@@ -948,12 +948,16 @@ form.registration_template_duplicate.children.event.label: 'Événement de desti
 form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
+form.rule_see_what.children.isMeetingRequestDisabled.label: 'Cacher le bouton demande de rdv'
+form.rule_see_what.children.neverSend: 'Ne jamais envoyer'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'
 form.rule_see_what.children.seeWhat.label: 'Définir les règles de ce qui peut être vu ou pas'
+form.rule_see_what.children.sendEmailMinEvaluation.label: 'Quand "%seer%" note "%seeable%", ne pas envoyer de mail de reprise de contact pour les notes de 1 à'
 form.rule_see_what.children.submit.label: 'Enregistrer la règle'
 form.rule_see_what.children.unrestricted: 'Toujours afficher'
+form.rule_see_what.children.unrestrictedSend: 'Toujours envoyer'
 form.rule_see_what.not_see_what_column: 'Ne voit pas'
 form.rule_see_what.see_what_column: Voit
 form.schedule_config.children.scale.label: 'Echelle (en minutes)'

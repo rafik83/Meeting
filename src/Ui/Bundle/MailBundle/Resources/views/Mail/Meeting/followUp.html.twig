@@ -1,0 +1,27 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import 'MailBundle:Mail:macros.html.twig' as macros %}
+
+{% block body %}
+    {{ 'mail.meeting.followUp.body'|trans({
+        '%event%': mail.event.title,
+        '%firstName%': mail.firstname|capitalize,
+        '%lastName%': mail.lastname|upper,
+        '%evaluatedSheet%': mail.evaluatedSheetTitle,
+        '%evaluatingSheet%': mail.evaluatingSheetTitle,
+        '%meetingEvaluation%': mail.meetingEvaluation
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    {% include
+        'MailBundle:Mail:Meeting/followUpMetParticipants.html.twig'
+        with {
+            metParticipantViews: mail.metParticipantViews,
+            evaluatedSheetId: mail.evaluatedSheetId,
+            showEmail: mail.showEmail,
+            showPhone: mail.showPhone,
+        }
+    %}
+
+    {{ 'mail.meeting.followUp.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+
+{% endblock %}

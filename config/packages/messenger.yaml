@@ -24,3 +24,4 @@ framework:
             # Route your messages to the transports
             'Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\Job': job_async
             'Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\LongJob': job_async_low
+            'Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage': job_async_low

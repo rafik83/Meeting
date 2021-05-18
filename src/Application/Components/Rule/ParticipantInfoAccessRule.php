@@ -4,16 +4,21 @@ namespace Proximum\Vimeet\Application\Components\Rule;
 
 class ParticipantInfoAccessRule
 {
-    /** @var int|null */
-    private $phoneAccessMinEvaluation;
+    private ?int $phoneAccessMinEvaluation;
+    private ?int $emailAccessMinEvaluation;
+    private ?int $sendEmailMinEvaluation;
+    private bool $canRequestMeeting;
 
-    /** @var int|null */
-    private $emailAccessMinEvaluation;
-
-    public function __construct(?int $phoneAccessMinEvaluation, ?int $emailAccessMinEvaluation)
-    {
+    public function __construct(
+        ?int $phoneAccessMinEvaluation,
+        ?int $emailAccessMinEvaluation,
+        ?int $sendEmailMinEvaluation,
+        bool $canRequestMeeting
+    ) {
         $this->phoneAccessMinEvaluation = $phoneAccessMinEvaluation;
         $this->emailAccessMinEvaluation = $emailAccessMinEvaluation;
+        $this->sendEmailMinEvaluation = $sendEmailMinEvaluation;
+        $this->canRequestMeeting = $canRequestMeeting;
     }
 
     public function isPhoneVisible(?int $evaluation): bool
@@ -24,5 +29,15 @@ class ParticipantInfoAccessRule
     public function isEmailVisible(?int $evaluation): bool
     {
         return $this->emailAccessMinEvaluation === null || ($evaluation !== null && $evaluation > $this->emailAccessMinEvaluation);
+    }
+
+    public function canSendFollowUpEmail(?int $evaluation): bool
+    {
+        return $this->sendEmailMinEvaluation === null || ($evaluation !== null && $evaluation > $this->sendEmailMinEvaluation);
+    }
+
+    public function canRequestMeeting(): bool
+    {
+        return $this->canRequestMeeting;
     }
 }

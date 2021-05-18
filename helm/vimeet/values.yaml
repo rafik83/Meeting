@@ -335,7 +335,7 @@ newrelic:
 ##
 ccip:
   mode: TEST
-  formAction: http://ccip.rpack.net/PostExternOrder.php
+  formAction: https://ccip.rpack.net/PostExternOrder.php
 
 ## Proxy cache configuration
 ##
