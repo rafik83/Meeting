@@ -84,6 +84,9 @@ mail.happening.webinar.zip_record_archive_available_for_speaker.intro: "Bonjour,
 mail.happening.webinar.zip_record_archive_available_for_speaker.link: 'Télécharger l''enregistrement'
 mail.happening.webinar.zip_record_archive_available_for_speaker.outro: 'Bonne journée'
 mail.happening.webinar.zip_record_archive_available_for_speaker.subject: '%happeningTitle% : Télécharger l''enregistrement du webinar'
+mail.meeting.followUp.body: "Bonjour %firstName% %lastName%,\n\n Vous venez de participer à notre événement %event%.\n\n Suite à votre rendez-vous, la présentation de %evaluatedSheet% a reçu un vote %meetingEvaluation% étoiles de la part de %evaluatingSheet%.\n\n Nous vous invitons donc à prendre rendez-vous ensemble afin d'approfondir vos projets."
+mail.meeting.followUp.end: "Nous sommes à votre disposition si besoin."
+mail.meeting.followUp.subject: '%evaluatingSheet% - %evaluatedSheet% : suivi de votre rendez-vous / %event%'
 mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
 mail.omz.export.link.click: 'Télécharger le fichier des participants OMZ'
 mail.omz.export.subject: 'Fichier d''export OMZ'

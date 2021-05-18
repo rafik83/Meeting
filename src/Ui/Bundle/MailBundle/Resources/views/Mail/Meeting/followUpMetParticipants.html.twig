@@ -1,0 +1,37 @@
+{% for participant in metParticipantViews %}
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 100px;">
+                <a style="display: flex; justify-content: center; align-items: center;
+                    width: 80px; height: 80px; border-radius: 36px; text-align: center;
+                    overflow: hidden; background: #D0D0D0;"
+                    href="{{ url('event_catalog_complete_sheet', {sheet: evaluatedSheetId, sheetToDisplay: participant.sheetId}) }}"
+                >
+                {% if participant.avatar %}
+                    <img style="width: 100%"
+                        src="{{ absolute_url(participant.avatar|imagine_filter('user_avatar')) }}"
+                        alt="{{ participant.initials }} avatar">
+                {% else %}
+                    <p>{{ participant.initials }}</p>
+                {% endif %}
+                </a>
+            </td>
+            <td>
+                <p>
+                    <a href="{{ url('event_catalog_complete_sheet', {sheet: evaluatedSheetId, sheetToDisplay: participant.sheetId}) }}">
+                        {{ participant.firstname|title }} {{ participant.lastname }}
+                    </a>
+                    {% if participant.position %}
+                    <br>{{ participant.position }}
+                    {% endif %}
+                    {% if participant.phone %}
+                    <br>{{ participant.phone }}
+                    {% endif %}
+                    {% if participant.email %}
+                    <br><a href="mailto:{{ participant.email }}">{{ participant.email }}</a>
+                    {% endif %}
+                </p>
+            </td>
+        </tr>
+    </table>
+{% endfor %}

@@ -8,6 +8,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareActivateAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeNewMailAccountMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareChangeOldMailAccountMail;
+use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareMeetingFollowUpMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareOrderConfirmedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PrepareParticipantAddedMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\Prepare\PreparePreRegisterMail;
@@ -29,8 +30,7 @@ use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User\RegisterAccountMail;
 
 class PrepareHandlerTest extends TestCase
 {
-    /** @var ObjectProphecy */
-    private $prepareRegisterAccountMail,
+    private ObjectProphecy $prepareRegisterAccountMail,
         $prepareActivateAccountMail,
         $prepareParticipantAddedMail,
         $preparePreRegisterMail,
@@ -43,11 +43,11 @@ class PrepareHandlerTest extends TestCase
         $event,
         $prepareChangeOldMailAccountMail,
         $prepareChangeNewMailAccountMail,
-        $changeMailToken
+        $changeMailToken,
+        $prepareMeetingFollowUpMail
     ;
 
-    /** @var string */
-    private $locale;
+    private string $locale;
 
     public function setUp()
     {
@@ -65,6 +65,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareSheetChangeTypeMail = $this->prophesize(PrepareSheetChangeTypeMail::class);
         $this->prepareChangeOldMailAccountMail = $this->prophesize(PrepareChangeOldMailAccountMail::class);
         $this->prepareChangeNewMailAccountMail = $this->prophesize(PrepareChangeNewMailAccountMail::class);
+        $this->prepareMeetingFollowUpMail = $this->prophesize(PrepareMeetingFollowUpMail::class);
         $this->changeMailToken = $this->prophesize(ChangeMailToken::class);
     }
 
@@ -88,6 +89,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareSheetChangeTypeMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareChangeOldMailAccountMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareChangeNewMailAccountMail->prepare(Argument::any())->shouldNotBeCalled();
+        $this->prepareMeetingFollowUpMail->prepare(Argument::any())->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -100,7 +102,8 @@ class PrepareHandlerTest extends TestCase
             $this->prepareVersionDiffChangedMail->reveal(),
             $this->prepareSheetChangeTypeMail->reveal(),
             $this->prepareChangeOldMailAccountMail->reveal(),
-            $this->prepareChangeNewMailAccountMail->reveal()
+            $this->prepareChangeNewMailAccountMail->reveal(),
+            $this->prepareMeetingFollowUpMail->reveal()
         );
 
         $result = $handler->handle($mail);
@@ -138,6 +141,7 @@ class PrepareHandlerTest extends TestCase
         $this->prepareSheetChangeTypeMail->prepare(Argument::any())->shouldNotBeCalled();
         $this->prepareChangeOldMailAccountMail->prepare($oldMail)->shouldBeCalled()->willReturn($preparedOldMail->reveal());
         $this->prepareChangeNewMailAccountMail->prepare($newMail)->shouldBeCalled()->willReturn($preparedNewMail->reveal());
+        $this->prepareMeetingFollowUpMail->prepare($newMail)->shouldNotBeCalled();
 
         $handler = new PrepareHandler(
             $this->prepareRegisterAccountMail->reveal(),
@@ -150,7 +154,8 @@ class PrepareHandlerTest extends TestCase
             $this->prepareVersionDiffChangedMail->reveal(),
             $this->prepareSheetChangeTypeMail->reveal(),
             $this->prepareChangeOldMailAccountMail->reveal(),
-            $this->prepareChangeNewMailAccountMail->reveal()
+            $this->prepareChangeNewMailAccountMail->reveal(),
+            $this->prepareMeetingFollowUpMail->reveal()
         );
 
         $oldResult = $handler->handle($oldMail);

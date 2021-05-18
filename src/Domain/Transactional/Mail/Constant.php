@@ -5,12 +5,13 @@ namespace Proximum\Vimeet\Domain\Transactional\Mail;
 use Proximum\Vimeet\Domain\Model\Messaging\Compose;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Agenda\VersionDiffChangedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Event\PreRegisteredMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\HappeningParticipationAutomaticallyUpdatedMail;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Order\OrderConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ThirdParty\Comexposium\SSO\Participant\ParticipantAddedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Transaction\TransactionConfirmMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\User;
-use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\HappeningParticipationAutomaticallyUpdatedMail;
 
 final class Constant
 {
@@ -90,6 +91,11 @@ final class Constant
      * Agenda
      */
     public const TRANSACTIONAL_MAIL_KEY_AGENDA_VERSION_DIFF_CHANGED = 'mail_agenda_version_diff_changed';
+
+    /*
+     * Meeting
+     */
+    public const TRANSACTIONAL_MAIL_KEY_MEETING_FOLLOW_UP = 'mail_meeting_follow_up';
 
     public const TRANSACTIONAL_MAIL_LIST = [
         self::TRANSACTIONAL_MAIL_KEY_PRE_REGISTERED => [
@@ -268,16 +274,17 @@ final class Constant
             'template' => ParticipantAddedMail::TEMPLATE,
             'template_full_text' => ParticipantAddedMail::TEMPLATE_FULL_TEXT,
         ],
-        self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
-            'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
-            'availableParameters' => [
-                '%happeningParticipationChanges%'
-            ],
-            'isCustomizableByType' => true,
-            'isHidden' => false,
-            'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE,
-            'template_full_text' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE_FULL_TEXT,
-        ],
+        // TODO: add missing prepare handler
+        // self::TRANSACTIONAL_MAIL_KEY_HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => [
+        //     'subject' => HappeningParticipationAutomaticallyUpdatedMail::SUBJECT,
+        //     'availableParameters' => [
+        //         '%happeningParticipationChanges%'
+        //     ],
+        //     'isCustomizableByType' => true,
+        //     'isHidden' => false,
+        //     'template' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE,
+        //     'template_full_text' => HappeningParticipationAutomaticallyUpdatedMail::TEMPLATE_FULL_TEXT,
+        // ],
         self::TRANSACTIONAL_MAIL_KEY_ORDER_CONFIRMED => [
             'subject' => OrderConfirmMail::SUBJECT,
             'availableParameters' => [
@@ -312,6 +319,19 @@ final class Constant
             'isHidden' => false,
             'template' => VersionDiffChangedMail::TEMPLATE,
             'template_full_text' => VersionDiffChangedMail::TEMPLATE_FULL_TEXT,
+        ],
+        self::TRANSACTIONAL_MAIL_KEY_MEETING_FOLLOW_UP => [
+            'subject' => Meeting\MeetingFollowUpMail::SUBJECT,
+            'availableParameters' => [
+                '%evaluatedSheet%',
+                '%evaluatingSheet%',
+                '%meetingEvaluation%',
+                '%metParticipants%',
+            ],
+            'isCustomizableByType' => false,
+            'isHidden' => false,
+            'template' => Meeting\MeetingFollowUpMail::TEMPLATE,
+            'template_full_text' => Meeting\MeetingFollowUpMail::TEMPLATE_FULL_TEXT,
         ],
     ];
 
