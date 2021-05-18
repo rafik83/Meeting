@@ -129,8 +129,9 @@ class PaymentController extends AbstractController
         }
 
         // Create order if only CCIP payment is available and redirect
+        dump('dump', $paymentConditionsView->paymentModes);
         if (count($paymentConditionsView->paymentModes) === 1
-            && $paymentConditionsView->paymentModes[0] === Mode::PAYMENT_CCIP) {
+            && array_values($paymentConditionsView->paymentModes)[0] === Mode::PAYMENT_CCIP) {
             $paymentChoice->mode = Mode::PAYMENT_CCIP;
             /** @var PaymentResult $paymentResult */
             $paymentResult = $this->commandBus->handle($paymentChoice);

@@ -80,6 +80,12 @@ services:
         arguments:
             $searchable: '@fos_elastica.index.sheet.sheet'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\PreparePaymentAction:
+        arguments:
+            $ccipMode: '%env(CCIP_MODE)%'
+            $ccipFormAction: '%env(CCIP_FORM_ACTION)%'
+        tags: ['controller.service_arguments']
+
     # explicit aliases for interfaces
     Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface:
         alias: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator
