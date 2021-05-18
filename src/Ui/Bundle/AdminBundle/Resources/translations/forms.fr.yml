@@ -253,6 +253,32 @@ form.create_transaction.children.mode.label: 'Mode de paiement'
 form.create_transaction.children.reference.label: Référence
 form.create_transaction.children.state.label: Statut
 form.create_transaction.children.submit.label: Enregistrer
+form.custom_link_create.children.buttonColor.label: Couleur du bouton
+form.custom_link_create.children.iconColor.label: Couleur de l'icone
+form.custom_link_create.children.iconName.label: Icone
+form.custom_link_create.children.labelColor.label: Couleur du libellé
+form.custom_link_create.children.localizedUrls.label: URL
+form.custom_link_create.children.localizedUrls.prototype.children.title.label: URL
+form.custom_link_create.children.localizedUrls.prototype.label: URL
+form.custom_link_create.children.priority.label: Ordre
+form.custom_link_create.children.submit.label: Enregistrer
+form.custom_link_create.children.translatedLabels.prototype.children.title.label: 'Libellé du lien'
+form.custom_link_create.children.types.label: Types
+form.custom_link_create.children.url.help: 'Les placeholders possibles sont : {userId}, {userEmail}, {participantId}, {sheetId} et {techEventIdContact}. Exemple : https://example.org/?user={userId}'
+form.custom_link_create.children.url.label: URL
+form.custom_link_update.children.buttonColor.label: Couleur du bouton
+form.custom_link_update.children.iconColor.label: Couleur de l'icone
+form.custom_link_update.children.iconName.label: Icone
+form.custom_link_update.children.labelColor.label: Couleur du libellé
+form.custom_link_update.children.localizedUrls.label: URL
+form.custom_link_update.children.localizedUrls.prototype.children.title.label: URL
+form.custom_link_update.children.localizedUrls.prototype.label: URL
+form.custom_link_update.children.priority.label: Ordre
+form.custom_link_update.children.submit.label: Enregistrer
+form.custom_link_update.children.translatedLabels.prototype.children.title.label: 'Libellé du lien'
+form.custom_link_update.children.types.label: Types
+form.custom_link_update.children.url.help: 'Les placeholders possibles sont : {userId}, {userEmail}, {participantId}, {sheetId} et {techEventIdContact}. Exemple : https://example.org/?user={userId}'
+form.custom_link_update.children.url.label: URL
 form.delete_participant.children.submit.label: Supprimer
 form.dont_see_what.children.participant.label: Participant
 form.dont_see_what.children.sheet.label: Fiche
@@ -921,6 +947,7 @@ form.registration_template_duplicate.children.submit.label: Dupliquer
 form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.rule_see_what.children.emailAccessMinEvaluation.label: 'Dans l''export des contacts, masquer l''adresse email pour les notes de 1 à'
 form.rule_see_what.children.isMeetingRequestDisabled.label: 'Cacher le bouton demande de rdv'
+form.rule_see_what.children.neverSend: 'Ne jamais envoyer'
 form.rule_see_what.children.phoneAccessMinEvaluation.label: 'Dans l''export des contacts, masquer les coordonnées téléphoniques pour les notes de 1 à'
 form.rule_see_what.children.priority.label: 'Priorité de la règle'
 form.rule_see_what.children.requestAutomaticallyTransformedIntoMeeting.label: 'RDV demandé est automatiquement positionné en gestion live'

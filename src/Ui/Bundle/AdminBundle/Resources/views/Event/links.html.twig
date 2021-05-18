@@ -41,6 +41,11 @@
             </li>
             {% endif %}
             <li>
+                <a href="{{ path('admin_event_custom_links_list', { 'event': event.id }) }}">
+                    {{ 'admin.custom_links.link'|trans }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
                     {{ 'admin.event.practicalInfo.link'|trans }}
                 </a>

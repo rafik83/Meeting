@@ -6,6 +6,7 @@ use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Rule\TagIdentifier;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -84,7 +85,10 @@ class SeeWhatType extends AbstractType
             ->add('sendEmailMinEvaluation', ChoiceType::class, [
                 'required' => false,
                 'placeholder' => 'form.rule_see_what.children.unrestrictedSend',
-                'choices' => $gradeChoices,
+                'choices' => array_combine(
+                    ['form.rule_see_what.children.neverSend', ...$grades],
+                    ['never', ...$grades]
+                ),
             ])
             ->add('requestAutomaticallyTransformedIntoMeeting', CheckboxType::class, [
                 'required' => false,
@@ -92,6 +96,17 @@ class SeeWhatType extends AbstractType
             ->add('isMeetingRequestDisabled', CheckboxType::class, [
                 'required' => false,
             ])
+        ;
+
+        $builder->get('sendEmailMinEvaluation')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($entityChoice) {
+                    return ($entityChoice !== 5) ? $entityChoice : 'never';
+                },
+                function ($formChoice) {
+                    return ($formChoice !== 'never') ? $formChoice : 5;
+                }
+            ))
         ;
 
     }

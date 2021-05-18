@@ -159,6 +159,7 @@ function Webinar(element, isSpeaker) {
 
     this.streamEndpoint = element.getAttribute('data-webinar-stream-endpoint');
 
+    this.webRTCConnectionCount = 0;
     this.isWebinarRecorded = element.getAttribute('data-webinar-recorded');
     this.canRecordWebinar = element.getAttribute('data-webinar-can-record');
     this.recordEndpoint = element.getAttribute('data-webinar-record-endpoint');
@@ -380,7 +381,6 @@ Webinar.prototype.initWebRTCStack = function() {
         return;
     }
 
-    this.viewersCount = 0;
     this.webRTCStackInitialized = true;
 
     this.session = TokboxInstance.initSession(this.apiKey, this.sessionId);
@@ -419,12 +419,12 @@ Webinar.prototype.initWebRTCStack = function() {
     }.bind(this));
 
     this.session.on('connectionCreated', function (event) {
-        ++this.viewersCount;
+        ++this.webRTCConnectionCount;
         this.updateViewers();
     }.bind(this));
 
     this.session.on('connectionDestroyed', function (event) {
-        --this.viewersCount;
+        --this.webRTCConnectionCount;
         this.updateViewers();
     }.bind(this));
 
@@ -515,7 +515,15 @@ Webinar.prototype.init = function () {
 };
 
 Webinar.prototype.updateViewers = function () {
-    this.viewersTextContainer.textContent = this.viewersCount;
+    let counter;
+
+    if (this.isHls || !this.isStreamOpenToPublic) {
+        counter = this.viewersCount;
+    } else {
+        counter = this.webRTCConnectionCount;
+    }
+
+    this.viewersTextContainer.textContent = counter;
 };
 
 Webinar.prototype.subscribeToStreamNotifications = function () {

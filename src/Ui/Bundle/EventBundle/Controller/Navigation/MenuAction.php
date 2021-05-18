@@ -118,6 +118,9 @@ class MenuAction
                 $staticFormulationsIndexedByCategories = [];
 
                 foreach ($staticFormulations as $staticFormulation) {
+                    if (!isset(Constant::STATIC_FORMULATION_LIST[$staticFormulation->getKey()])) {
+                        continue;
+                    }
                     $key = Constant::STATIC_FORMULATION_LIST[$staticFormulation->getKey()]['categoryKey'];
                     $staticFormulationsIndexedByCategories[$key] = $staticFormulation;
                 }

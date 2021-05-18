@@ -17,6 +17,7 @@ class Constant
     public const STATIC_FORMULATION_KEY_MEMBER_SPACE = 'member_space';
     public const STATIC_FORMULATION_KEY_FORMS = 'forms';
     public const STATIC_FORMULATION_KEY_VISIO_TEST = 'visio_test';
+    public const STATIC_FORMULATION_KEY_CUSTOM_LINK = 'custom_link';
 
     public const STATIC_FORMULATION_LIST = [
         self::STATIC_FORMULATION_KEY_SHEET => [

@@ -25,6 +25,12 @@ class SubmenuButtonView
     /** @var array */
     public $attributes;
 
+    public ?string $iconColor;
+
+    public ?string $labelColor;
+
+    public ?string $bgButtonColor;
+
     /**
      * SubmenuButtonView constructor.
      *
@@ -43,7 +49,10 @@ class SubmenuButtonView
         bool $state = true,
         ?int $counter = null,
         bool $isShowOnMobile = false,
-        array $attributes = []
+        array $attributes = [],
+        ?string $iconColor = null,
+        ?string $labelColor = null,
+        ?string $bgButtonColor = null
     ) {
         $this->icon = $icon;
         $this->state = $state;
@@ -52,6 +61,9 @@ class SubmenuButtonView
         $this->counter = $counter;
         $this->isShowOnMobile = $isShowOnMobile;
         $this->attributes = $attributes;
+        $this->iconColor = $iconColor;
+        $this->labelColor = $labelColor;
+        $this->bgButtonColor = $bgButtonColor;
     }
 
     public function getCounter(): ?int

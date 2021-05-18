@@ -1,0 +1,7 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block goback_link path('admin_event_custom_links_list', {'event': event.id}) %}
+
+{% block form_title %}
+    {{ 'admin.custom_links.action.create'|trans }}:
+{% endblock form_title %}
