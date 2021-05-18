@@ -120,7 +120,7 @@ common.validate: Valider
 contact.edit.comment: 'Modifier le commentaire'
 contact.edit.later: 'Plus tard'
 contact.show.comment: 'Mon commentaire (confidentiel)'
-contact.show.evaluation: 'Qualité du contact (confidentiel)'
+contact.show.evaluation: 'Qualité du contact'
 contact.show.evaluation.1.label: 'Rdv manqué'
 contact.show.evaluation.2.label: 'Non pertinent'
 contact.show.evaluation.3.label: 'Pertinent à long terme'
@@ -154,7 +154,7 @@ event.info.contact: 'Informations pratiques'
 event.info.privacyPolicy.content: "Les informations recueillies sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 event.info.privacyPolicy.title: 'Politique de confidentialité'
 event.invisible.label: Invisible
-event.meeting.evaluation.label: 'Qualifiez votre rendez-vous et retrouvez ces notations + commentaires dans votre fichier de suivi de contacts, téléchargeable à la fin de l''événement. (Confidentiel)'
+event.meeting.evaluation.label: 'Qualifiez votre rendez-vous et retrouvez ces notations + commentaires dans votre fichier de suivi de contacts, téléchargeable à la fin de l''événement.'
 event.meeting.evaluation.skip: 'Plus tard'
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.contact.insufficient_evaluation: 'Le niveau de note du RDV ne permet l''accès à cette information'
@@ -312,6 +312,10 @@ happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.reply: 'Réponse de %name% :'
 happening.webinar.questions.reply_button: Répondre
 happening.webinar.questions.reply_writing: '%name% est en train de répondre...'
+happening.webinar.question.sort_by_date: 'plus récents'
+happening.webinar.question.sort_by_label: 'Trier par'
+happening.webinar.question.sort_by_like: 'plus likés'
+happening.webinar.question.sort_by_loading: 'chargement de la liste'
 happening.webinar.questions.tab: Questions
 happening.webinar.questions.unvote: 'Retirer mon vote'
 happening.webinar.questions.vote: 'Voter pour cette question'

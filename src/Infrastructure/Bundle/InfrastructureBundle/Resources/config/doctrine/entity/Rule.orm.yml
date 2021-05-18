@@ -36,7 +36,14 @@ Proximum\Vimeet\Domain\Model\Rule:
         emailAccessMinEvaluation:
             type: smallint
             nullable: true
+        sendEmailMinEvaluation:
+            type: smallint
+            nullable: true
         requestAutomaticallyTransformedIntoMeeting:
+            type: boolean
+            options:
+                default: false
+        disableMeetingRequest:
             type: boolean
             options:
                 default: false

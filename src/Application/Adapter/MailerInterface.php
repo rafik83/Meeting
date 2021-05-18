@@ -6,8 +6,6 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 
 interface MailerInterface
 {
-    /**
-     * @param AbstractMail $mail
-     */
     public function send(AbstractMail $mail);
+    public function setHost(string $domain);
 }

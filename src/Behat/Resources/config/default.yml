@@ -111,5 +111,6 @@ default:
                 - Proximum\Vimeet\Behat\Context\Domain\Promotion\PromotionContext:
                     - '@behat_storage'
                     - '@repository.promotion_code_repository'
+                - behatch:context:browser
                 - behatch:context:json
                 - behatch:context:rest

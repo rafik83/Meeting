@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Application\Query\User\Event\Contact\UserContactEvaluationRow;
@@ -56,6 +58,30 @@ class ContactRepository implements ContactRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findLatestEvaluatedAt(int $eventId, int $fromUserId, array $contactIds): ?DateTimeInterface
+    {
+        $result = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('MAX(contact.evaluatedAt)')
+            ->from(Contact::class, 'contact')
+            ->andWhere('contact.event = :event')
+            ->andWhere('contact.user = :user')
+            ->andWhere('contact.contact IN (:contactIds)')
+            ->setParameters(
+                [
+                    'event' => $eventId,
+                    'user' => $fromUserId,
+                    'contactIds' => $contactIds,
+                ]
+            )
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return new DateTimeImmutable($result);
     }
 
     public function findSeenUserByEventAndUser(Event $event, User $user): array

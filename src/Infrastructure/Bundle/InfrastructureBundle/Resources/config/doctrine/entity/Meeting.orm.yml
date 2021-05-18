@@ -26,6 +26,9 @@ Proximum\Vimeet\Domain\Model\Meeting:
         createdType:
             type: string
             nullable: false
+        followupSentSheetIds:
+            type: simple_array
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

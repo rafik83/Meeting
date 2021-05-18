@@ -393,6 +393,26 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then :option should be selected in :select input
+     */
+    public function optionShouldBeSelectedInInput($option, $select)
+    {
+        $page = $this->getSession()->getPage();
+
+        $optionElements = $page->findAll('css', sprintf('#%s > option', $select));
+
+        foreach ($optionElements as $optionElement) {
+            if ($optionElement->getAttribute('value') === $option || $optionElement->getText() === $option) {
+                if ($optionElement->isSelected()) {
+                    return;
+                }
+            }
+        }
+
+        throw new \Exception(sprintf('Selected option %s not found in %s select', $option, $select));
+    }
+
+    /**
      * @Then the index :index of the table should contain :title
      */
     public function theGivenIndexShouldContain(int $index = 1, string $title)
