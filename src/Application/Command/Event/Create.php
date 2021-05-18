@@ -51,10 +51,6 @@ class Create extends AbstractEvent
         $this->organiserName = $event->getOrganiserName();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->timeZone = $event->getTimeZone();
-        $this->organiserName = $event->getOrganiserName();
-        $this->emailTeam = $event->getEmailTeam();
-        $this->invoicePrefix = $event->getInvoicePrefix();
-        $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
         $this->visio = $event->getConfiguration()->isVisio();
         $this->welcomeEnabled = $event->isWelcomeEnabled();

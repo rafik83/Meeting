@@ -27,7 +27,7 @@ class ViewedSheetListViewQueryHandlerTest extends TestCase
         $sheetViewedRepository = $this->prophesize(SheetViewedRepositoryInterface::class);
 
         $sheetViewedOne = new SheetViewed($sheetOne, $user, $dateTime);
-        $expectedView   = ['' => true];
+        $expectedView   = [123 => true];
         $query          = new ViewedSheetListViewQuery($user, $sheets);
         $handler        = new ViewedSheetListViewQueryHandler($sheetViewedRepository->reveal());
 

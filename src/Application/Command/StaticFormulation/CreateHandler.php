@@ -15,7 +15,7 @@ class CreateHandler
         $this->staticFormulationRepository = $staticFormulationRepository;
     }
 
-    public function handle(Create $command): void
+    public function handle(Create $command): StaticFormulation
     {
         $staticFormulation = new StaticFormulation(
             $command->event,
@@ -28,5 +28,7 @@ class CreateHandler
         }
 
         $this->staticFormulationRepository->add($staticFormulation);
+
+        return $staticFormulation;
     }
 }

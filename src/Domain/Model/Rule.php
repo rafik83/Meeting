@@ -19,7 +19,7 @@ class Rule
     private int $priority;
     private ?int $phoneAccessMinEvaluation = null;
     private ?int $emailAccessMinEvaluation = null;
-    private ?int $sendEmailMinEvaluation = null;
+    private ?int $sendEmailMinEvaluation = 5;
     private bool $requestAutomaticallyTransformedIntoMeeting = false;
 
     public function __construct(

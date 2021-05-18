@@ -12,6 +12,7 @@ RUN set -eux \
   libbz2-dev \
   libfreetype6-dev \
   libfreetype6-dev \
+  fontconfig \
   libicu-dev \
   libjpeg-dev \
   libjpeg62-turbo-dev \

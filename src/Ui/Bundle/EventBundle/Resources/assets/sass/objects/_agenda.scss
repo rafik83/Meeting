@@ -10,7 +10,11 @@ $slotHeight: 60px;
     }
   }
 
-  .agenda-head,
+  .agenda-head{
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
   .agenda-foot {
     font-size: 17px;
 
