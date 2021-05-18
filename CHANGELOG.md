@@ -4,10 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.92.0] - 2021-05-18
 ### Added
+- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
+- VIMEET-2513 - Contact follow up notification (email template)
 - VIMEET-2471 - Trigger event 5 minutes after meeting evaluation, to send follow up email, and manage permissions, according to who see who rules
 - VIMEET-2573 - Hide request meeting button according "who see what"
-- VIMEET-2512 - New option in admin to set evaluation level that triggers email send after a meeting
 
 ## [2.91.1] - 2021-05-11
 - Hotfix - Allow empty country in tag template
