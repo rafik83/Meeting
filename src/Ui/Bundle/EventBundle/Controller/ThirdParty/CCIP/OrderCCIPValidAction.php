@@ -9,7 +9,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Payum\CCIP\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -37,9 +36,10 @@ class OrderCCIPValidAction
         Sheet $sheet,
         string $captureToken,
         string $paymentNumber
-    ): Response {
+    ): RedirectResponse {
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
+            || empty($paymentNumber)
         ) {
             throw new AccessDeniedException();
         }
