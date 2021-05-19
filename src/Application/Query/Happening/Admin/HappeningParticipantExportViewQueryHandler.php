@@ -143,7 +143,7 @@ class HappeningParticipantExportViewQueryHandler
             HappeningDateHelper::getHour($happening->getEnd(), $locale, $timezone),
             HappeningDateHelper::getDay($happening->getBegin(), $locale, $timezone),
             $happening->getTitle($locale),
-            null !== $sheet ? $sheet->getId() : '',
+            null !== $sheet ? $sheet->getId() : null,
             $user->getId(),
             $participantQuestions->getQuestionRegister(),
             $participantQuestions->getQuestionsWebinar(),

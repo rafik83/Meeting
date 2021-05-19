@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hotfix - PHP runtime error when unavailability is out of an event day
 - MV-337 - no "best fit" layout during webinar record because of stream data loss during js runtime
 - Hotfix - Remove duplicated display (merge error)
+- Hotfix - Fix type for default value when sheet is not available
 
 ## [2.92.1] - 2021-05-18
 - Hotfix - Allow empty sheet in happening participants export
