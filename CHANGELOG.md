@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Hotfix - PHP runtime error when unavailability is out of an event day
+- Hotfix - Remove duplicated display (merge error)
 
 ## [2.92.1] - 2021-05-18
 - Hotfix - Allow empty sheet in happening participants export
