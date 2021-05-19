@@ -4,12 +4,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
 
-use Psr\Log\LoggerInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -40,7 +40,7 @@ class OrderCCIPAction
     {
         $captureToken = $this->getCaptureToken($request->query->get('xmlKey', ''));
 
-        if ($order->isCancelled() === true){
+        if ($order->isCancelled() === true) {
             $this->logger->info('cancel', [$order->isCancelled()]);
         }
 
@@ -49,12 +49,12 @@ class OrderCCIPAction
         );
 
         $xml = $this->twig->render(self::TEMPLATE, [
-            'orderView' => $orderView
+            'orderView' => $orderView,
         ]);
 
         $response = new Response(iconv("UTF-8", "ISO-8859-1//TRANSLIT", $xml));
         $response->setCharset('ISO-8859-1');
-        $response->headers->set('content-type','application/xml');
+        $response->headers->set('content-type', 'application/xml');
 
         return $response;
     }

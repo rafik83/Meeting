@@ -57,6 +57,8 @@ class Type
     public const TYPE_CUSTOM_BUTTON_1 = 'custom_button';
     public const TYPE_CUSTOM_BUTTON_2 = 'custom_button_2';
 
+    public const TYPE_PRODUCT_CCIP = 'product_ccip';
+
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
@@ -82,6 +84,7 @@ class Type
         self::TYPE_CRISP_SITE_ID,
         self::TYPE_TRACKING_CODE,
         self::TYPE_CUSTOM_BUTTON_1,
-        self::TYPE_CUSTOM_BUTTON_2
+        self::TYPE_CUSTOM_BUTTON_2,
+        self::TYPE_PRODUCT_CCIP
     ];
 }

@@ -298,6 +298,7 @@ admin.extraParameter.type.leni_predefined_filters: 'LENI filtres de l''API (GET)
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI Paramètre SendingRequests'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.type.product_ccip: 'Correspondance produits CCIP'
 admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.tracking_code: 'Code de suivi'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
