@@ -151,12 +151,15 @@ export default class ScreenSharing {
     /**
      * Handle stop screen sharing
      */
-    stopSharing() {
+    async stopSharing() {
         if (this.screenElement) {
             this.screenElement.remove();
             this.screenElement = null;
         }
 
+        if (document.pictureInPictureElement) {
+            await document.exitPictureInPicture();
+        }
         if (this.pipVideoElement) {
             this.onWindowFocused();
             window.removeEventListener('click', this.onWindowFocused);
