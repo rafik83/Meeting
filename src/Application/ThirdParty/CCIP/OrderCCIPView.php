@@ -33,7 +33,7 @@ class OrderCCIPView
 
     public string $phone;
 
-    public int $product_id;
+    public string $product_id;
 
     public string $product_name;
 
@@ -63,7 +63,7 @@ class OrderCCIPView
         string $city,
         string $country,
         string $phone,
-        int $product_id,
+        string $product_id,
         string $product_name,
         int $quantity,
         float $vat,

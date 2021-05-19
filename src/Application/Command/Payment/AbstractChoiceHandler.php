@@ -56,13 +56,7 @@ abstract class AbstractChoiceHandler
         $this->dateTime              = $dateTime;
     }
 
-    /**
-     * @param AbstractChoice $choice
-     * @param float          $total
-     *
-     * @return Transaction
-     */
-    protected function handleChoice(AbstractChoice $choice, $total): PaymentResult
+    protected function handleChoice(AbstractChoice $choice, float $total): PaymentResult
     {
         // Convert cart to order
         $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));

@@ -22,7 +22,11 @@
                     <input type="hidden" name="store_email" value="vngo@cci-paris-idf.fr" />
                     <input type="hidden" name="store_key" value="c731d7bea7dd23f65c9e4a21671c21cf06ff88f3" />
                     <input type="hidden" name="store_mode" value="{{ ccipMode }}" />
-                    <input type="hidden" name="errorurl" value="{{ url('event_package_payment_done', {sheet:sheet.id}) }}" />
+                    <input type="hidden" name="errorurl" value="{{ url('event_order_ccip_error_url', {
+                        sheet:sheet.id,
+                        captureToken: payumToken,
+                        error: 'xml_access_error',
+                    }) }}" />
                     <input type="hidden" name="xmlKey" value="{{ payumToken }}" />
                     <div class="validation">
                         <button type="submit" class="btn btn-primary">

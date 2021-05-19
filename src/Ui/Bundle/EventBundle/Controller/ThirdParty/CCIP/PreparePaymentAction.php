@@ -4,7 +4,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
 
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
@@ -31,7 +30,8 @@ class PreparePaymentAction
         PreparePayment $prepareCcipPayment,
         string $ccipMode,
         string $ccipFormAction
-    ) {
+    )
+    {
         $this->twig = $twig;
         $this->packageFunnelFactory = $packageFunnelFactory;
         $this->prepareCcipPayment = $prepareCcipPayment;
@@ -45,7 +45,8 @@ class PreparePaymentAction
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Transaction $transaction
-    ): Response {
+    ): Response
+    {
 
         // TODO: check that order and transaction belong to current user
 
@@ -62,7 +63,7 @@ class PreparePaymentAction
             'view' => ['funnel' => $funnel],
             'event' => $eventDomain->getEvent(),
             'payumToken' => $captureToken->getHash(),
-            'ccipMode'=> $this->ccipMode,
+            'ccipMode' => $this->ccipMode,
             'ccipFormAction' => $this->ccipFormAction
         ]));
     }
