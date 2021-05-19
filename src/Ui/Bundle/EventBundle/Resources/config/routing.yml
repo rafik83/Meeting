@@ -1436,11 +1436,19 @@ event_order_ccip_valid_url:
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPValidAction
 
-event_order_ccip_cancel_error_url:
-    path: /user/{user}/order-ccip/{order}/cancel
+event_order_ccip_cancel_url:
+    path: /sheet/{sheet}/order-ccip/{captureToken}/cancel
     requirements:
-        user: \d+
-        order: \d+
+        sheet: \d+
+        captureToken: '[0-9a-zA-Z-_]+'
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPCancelErrorAction
+
+event_order_ccip_error_url:
+    path: /sheet/{sheet}/order-ccip/{captureToken}/error
+    requirements:
+        sheet: \d+
+        captureToken: '[0-9a-zA-Z-_]+'
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPCancelErrorAction
 
