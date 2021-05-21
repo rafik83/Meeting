@@ -529,6 +529,9 @@ form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.liveUrl.help: 'Uniquement pour les webinaires, ex: https://www.youtube.com/embed/wwNZKfBLAsc?autoplay=1&modestbranding=1&controls=0&disablekb=1&showinfo=0&fs=0&rel=0'
 form.happening_create.children.liveUrl.label: 'URL pour la diffusion en iframe'
+form.happening_create.children.pollAllowed.answer.false: Non
+form.happening_create.children.pollAllowed.answer.true: Oui
+form.happening_create.children.pollAllowed.label: 'Activer les sondages'
 form.happening_create.children.questionAllowed.answer.false: Non
 form.happening_create.children.questionAllowed.answer.true: Oui
 form.happening_create.children.questionAllowed.label: 'Question des participants'
@@ -561,6 +564,7 @@ form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.mustEvaluateHappening.label: 'Les participants doivent noter'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.liveUrl.label: 'Url de l''iframe pour la diffusion d''un live'
+form.happening_update.children.pollAllowed.label: 'Activer les sondages'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.sidebarAllowed.label: 'Activer les options d''interactions'
 form.happening_update.children.submit.label: Envoyer

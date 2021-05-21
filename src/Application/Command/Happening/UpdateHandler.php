@@ -64,7 +64,8 @@ class UpdateHandler
             $update->isWebinar() && $update->webinarRecorded,
             $update->isWebinar() && $update->allowHls,
             $update->isWebinar() && $update->webinarRecorded && $update->webinarRecordSentToSpeakers,
-            $update->mustEvaluateHappening
+            $update->mustEvaluateHappening,
+            $update->pollAllowed
         );
 
         foreach ($update->translations as $locale => $translation) {
