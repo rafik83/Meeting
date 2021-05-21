@@ -4,6 +4,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
 use Payum\Core\Payum;
+use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\MissingCcipProductId;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\UnsupportedMultipleRows;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -11,6 +12,7 @@ use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Payment\PaymentToken;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Symfony\Component\Intl\Countries;
 
 class OrderCCIPViewQueryHandler
@@ -20,16 +22,19 @@ class OrderCCIPViewQueryHandler
     private BillingInfoRepositoryInterface $billingInfoRepository;
     private Payum $payum;
     private ExtraParameterRepositoryInterface $extraParameterRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     public function __construct
     (
         Payum $payum,
         BillingInfoRepositoryInterface $billingInfoRepository,
-        ExtraParameterRepositoryInterface $extraParameterRepository
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->payum = $payum;
         $this->billingInfoRepository = $billingInfoRepository;
         $this->extraParameterRepository = $extraParameterRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function handle(OrderCCIPViewQuery $orderCCIPViewQuery): OrderCCIPView
@@ -65,11 +70,24 @@ class OrderCCIPViewQueryHandler
 
         $parameters = json_decode($extraParameter->getValue(), true);
 
+        $orders = $this->orderRepository->findByIds(explode(',', $orderCCIPViewQuery->transaction->getInternalReference()));
+
+        // check that products are supported
+        foreach ($orders as $order) {
+            foreach ($order->getRows() as $orderRow) {
+                if (!isset($parameters[$orderRow->getProductId()])) {
+                    throw new MissingCcipProductId(
+                        sprintf('CCIP product id not found in extra parameter for product %d', $orderRow->getProductId())
+                    );
+                }
+            }
+        }
+
         return new OrderCCIPView(
-            $orderCCIPViewQuery->order,
+            $orders,
             $orderCCIPViewQuery->user,
             $orderCCIPViewQuery->user->getEmail(),
-            substr($orderCCIPViewQuery->user->getGender(),0,1),
+            $orderCCIPViewQuery->user->getGender() ? substr($orderCCIPViewQuery->user->getGender(), 0, 1) : null,
             $orderCCIPViewQuery->user->getFirstName(),
             $orderCCIPViewQuery->user->getLastName(),
             $billingInfo->getAddress()->getStreet(),
@@ -77,7 +95,7 @@ class OrderCCIPViewQueryHandler
             $billingInfo->getAddress()->getCity(),
             Countries::getAlpha3Code($billingInfo->getAddress()->getCountry()),
             $orderCCIPViewQuery->user->getPhone()??'',
-            $parameters[$row->getProductId()],
+            $parameters,
             $row->getProduct()->getTitle($orderCCIPViewQuery->locale),
             $row->getQuantity(),
             $row->getVatRate(),

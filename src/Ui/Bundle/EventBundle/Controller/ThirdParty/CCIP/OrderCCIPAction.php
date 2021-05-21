@@ -6,7 +6,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQuery;
-use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Psr\Log\LoggerInterface;
@@ -36,16 +36,12 @@ class OrderCCIPAction
         $this->logger = $logger;
     }
 
-    public function __invoke(Request $request, Order $order, EventDomain $eventDomain, User $user): Response
+    public function __invoke(Request $request, Transaction $transaction, EventDomain $eventDomain, User $user): Response
     {
         $captureToken = $this->getCaptureToken($request->query->get('xmlKey', ''));
 
-        if ($order->isCancelled() === true) {
-            $this->logger->info('cancel', [$order->isCancelled()]);
-        }
-
         $orderView = $this->queryBus->handle(
-            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $order, $user, $captureToken)
+            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $transaction, $user, $captureToken)
         );
 
         $xml = $this->twig->render(self::TEMPLATE, [

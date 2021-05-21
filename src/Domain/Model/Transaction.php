@@ -46,6 +46,9 @@ class Transaction
      */
     private $reference;
 
+    // For some payment gateway, we need to store additionnal info (like order ids for CCIP)
+    private string $internalReference = '';
+
     /**
      * @var string
      */
@@ -296,6 +299,16 @@ class Transaction
         $this->hidden = false;
     }
 
+    public function getInternalReference(): string
+    {
+        return $this->internalReference;
+    }
+
+    public function setInternalReference(string $internalReference)
+    {
+        $this->internalReference = $internalReference;
+    }
+
     /**
      * @param Sheet              $sheet
      * @param User               $user
@@ -304,7 +317,7 @@ class Transaction
      *
      * @return Transaction
      */
-    public static function createForPaypal(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
+    public static function createForPaypal(Sheet $sheet, User $user, $amount, \DateTimeInterface $date): Transaction
     {
         return new self(
             $sheet,
@@ -319,9 +332,14 @@ class Transaction
         );
     }
 
-    public static function createForCcip(Sheet $sheet, User $user, $amount, \DateTimeInterface $date)
+    /**
+     * @param \DateTimeInterface $date
+     * @param int[] $orderIds we need to store this information for CCIP payments,
+     *                        in order to add order info in payment process
+     */
+    public static function createForCcip(Sheet $sheet, User $user, float $amount, \DateTimeInterface $date, array $orderIds): Transaction
     {
-        return new self(
+        $transaction = new self(
             $sheet,
             $amount,
             $date,
@@ -332,5 +350,9 @@ class Transaction
             $user,
             true
         );
+
+        $transaction->setInternalReference(implode(',', $orderIds));
+
+        return $transaction;
     }
 }

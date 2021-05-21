@@ -500,7 +500,8 @@ class Configuration
      */
     public function isAllowedToPayRemaining()
     {
-        return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes, true);
+        return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes, true)
+                || in_array(Mode::PAYMENT_CCIP, $this->paymentModes, true);
     }
 
     /**

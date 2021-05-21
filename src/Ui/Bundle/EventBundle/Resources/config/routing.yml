@@ -1420,10 +1420,9 @@ event_styleguide:
 # Order CCIP
 #
 event_order_ccip:
-    path: /user/{user}/order-ccip/{order}/order.xml
+    path: /order-ccip/{transaction}/order.xml
     requirements:
-        user: \d+
-        order: \d+
+        transaction: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPAction
 
@@ -1461,9 +1460,9 @@ event_order_ccip_update_url:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPUpdateAction
 
 event_order_ccip_payment:
-    path: /order-ccip/{order}/prepare-payment/{transaction}
+    path: /sheet/{sheet}/order-ccip/prepare-payment/{transaction}
     requirements:
-        order: \d+
+        sheet: \d+
         transaction: \d+
     methods: [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\PreparePaymentAction

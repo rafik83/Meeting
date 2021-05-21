@@ -101,4 +101,10 @@ interface OrderRepositoryInterface
     public function findWithPromotion(): array;
 
     public function hasOrderWithPromotionCode(PromotionCode $promotionCode): bool;
+
+    /**
+     * @param int[] $ids
+     * @return Order[]
+     */
+    public function findByIds(array $ids): array;
 }
