@@ -14,10 +14,11 @@ use Proximum\Vimeet\Domain\Payment\CanPayOnline;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\PaymentConditionsView;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
+use Proximum\Vimeet\Domain\View\OrderVatView;
+use Proximum\Vimeet\Infrastructure\Payum\CCIP\FindUnpaidOrders;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -29,9 +30,10 @@ class PayRemainingAction
     private QueryBusInterface $queryBus;
     private TransactionRepositoryInterface $transactionRepository;
     private RouterInterface $router;
-    private DateTimeInterface $dateTime;
     private Balance $balance;
     private CanPayOnline $canPayOnline;
+    private FindUnpaidOrders $ccipFindUnpaidOrders;
+    private DateTimeInterface $dateTime;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -40,6 +42,7 @@ class PayRemainingAction
         RouterInterface $router,
         Balance $balance,
         CanPayOnline $canPayOnline,
+        FindUnpaidOrders $ccipFindUnpaidOrders,
         DateTimeInterface $dateTime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
@@ -48,6 +51,7 @@ class PayRemainingAction
         $this->router = $router;
         $this->balance = $balance;
         $this->canPayOnline = $canPayOnline;
+        $this->ccipFindUnpaidOrders = $ccipFindUnpaidOrders;
         $this->dateTime = $dateTime;
     }
 
@@ -82,29 +86,24 @@ class PayRemainingAction
             ));
         }
 
-        // CCIP payment (should always be the sole payment available for an event)
+        // CCIP payment (should always be the sole online payment available for an event)
         if (in_array(Mode::PAYMENT_CCIP, $paymentConditionsView->paymentModes)) {
             $remainingOrders = $this->balance->getNotCancelledOrderVatViews($sheet);
 
-            if (count($remainingOrders) > 1) {
-                throw new RuntimeException(
-                    sprintf('User must not have more than one order when CCIP payment is used (sheet #%d)', $sheet->getId())
-                );
-            }
-
-            $orderVatView = reset($remainingOrders);
+            $remainingOrderIds = array_map(fn (OrderVatView $orderVatView) => $orderVatView->orderId, $remainingOrders);
+            $unpaidOrderIds = $this->ccipFindUnpaidOrders->fromOrderIds($sheet, $remainingOrderIds);
 
             $transaction = Transaction::createForCcip(
                 $sheet,
                 $userDomain->getUser(),
                 AmountFormatter::centsToDecimalAmount($remainingToPay),
-                $this->dateTime
+                $this->dateTime,
+                $unpaidOrderIds
             );
 
             $this->transactionRepository->add($transaction);
 
             return new RedirectResponse($this->router->generate('event_order_ccip_payment', [
-                'order' => $orderVatView->orderId,
                 'transaction' => $transaction->getId(),
             ]));
         }

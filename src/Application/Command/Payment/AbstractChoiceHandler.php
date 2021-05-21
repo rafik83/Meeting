@@ -79,7 +79,8 @@ abstract class AbstractChoiceHandler
                 $choice->sheet,
                 $choice->user,
                 $total,
-                $this->dateTime
+                $this->dateTime,
+                [$order->getId()]
             );
         } else {
             $transaction = new Transaction(

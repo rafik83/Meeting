@@ -138,7 +138,7 @@ class PaymentController extends AbstractController
             $this->consumePackageCompletedPaymentFlash();
 
             return $this->redirectToRoute('event_order_ccip_payment', [
-                'order' => $paymentResult->orderId,
+                'sheet' => $sheet,
                 'transaction' => $paymentResult->transaction->getId(),
             ]);
         }
@@ -155,6 +155,13 @@ class PaymentController extends AbstractController
                     return $this->redirectToRoute('event_package_payment_prepare_paypal', [
                         'sheet'       => $sheet->getId(),
                         'transaction' => $transaction->getId(),
+                    ]);
+                }
+
+                if ($transaction->isCCIP()) {
+                    return $this->redirectToRoute('event_order_ccip_payment', [
+                        'sheet' => $sheet,
+                        'transaction' => $paymentResult->transaction->getId(),
                     ]);
                 }
 

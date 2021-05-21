@@ -9,50 +9,31 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class OrderCCIPView
 {
-    /** @var Order */
-    public $order;
+    /** @var Order[] */
+    public array $order;
 
-    /** @var User */
-    public $user;
-
+    public User $user;
     public string $email;
-
     public string $gender;
-
     public string $firstname;
-
     public string $lastname;
-
     public string $address;
-
     public string $postcode;
-
     public string $city;
-
     public string $country;
-
     public string $phone;
-
-    public string $product_id;
-
-    public string $product_name;
-
+    public string $ccipProductIdsMap;
+    public string $productName;
     public int $quantity;
-
     public float $vat;
-
     public string $label;
-
     public float $price;
-
     public string $password;
-
     public string $paymentNumber;
-
     public string $captureToken;
 
     public function __construct(
-        Order $order,
+        array $orders,
         User $user,
         string $email,
         string $gender,
@@ -63,8 +44,8 @@ class OrderCCIPView
         string $city,
         string $country,
         string $phone,
-        string $product_id,
-        string $product_name,
+        array $ccipProductIdsMap,
+        string $productName,
         int $quantity,
         float $vat,
         string $label,
@@ -73,7 +54,7 @@ class OrderCCIPView
         string $captureToken,
         string $paymentNumber
     ) {
-        $this->order = $order;
+        $this->orders = $orders;
         $this->user = $user;
         $this->email = $email;
         $this->gender = $gender;
@@ -84,8 +65,8 @@ class OrderCCIPView
         $this->city = $city;
         $this->country = $country;
         $this->phone = $phone;
-        $this->product_id = $product_id;
-        $this->product_name = $product_name;
+        $this->ccipProductIdsMap = $ccipProductIdsMap;
+        $this->productName = $productName;
         $this->quantity = $quantity;
         $this->vat = $vat;
         $this->label = $label;

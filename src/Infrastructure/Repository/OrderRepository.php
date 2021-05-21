@@ -298,4 +298,17 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findByIds(array $ids): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('_order')
+            ->from(Order::class, '_order')
+            ->where('_order IN(:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
 }

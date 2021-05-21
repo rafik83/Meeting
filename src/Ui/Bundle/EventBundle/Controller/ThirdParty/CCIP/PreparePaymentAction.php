@@ -4,9 +4,10 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
 
-use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
+use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Payum\CCIP\PreparePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -21,6 +22,7 @@ class PreparePaymentAction
     private Environment $twig;
     private FunnelFactory $packageFunnelFactory;
     private PreparePayment $prepareCcipPayment;
+    private OrderRepositoryInterface $orderRepository;
     public string $ccipMode;
     public string $ccipFormAction;
 
@@ -28,10 +30,10 @@ class PreparePaymentAction
         Environment $twig,
         FunnelFactory $packageFunnelFactory,
         PreparePayment $prepareCcipPayment,
+        OrderRepositoryInterface $orderRepository,
         string $ccipMode,
         string $ccipFormAction
-    )
-    {
+    ) {
         $this->twig = $twig;
         $this->packageFunnelFactory = $packageFunnelFactory;
         $this->prepareCcipPayment = $prepareCcipPayment;
@@ -41,23 +43,24 @@ class PreparePaymentAction
 
     public function __invoke(
         Request $request,
-        Order $order,
+        Sheet $sheet,
         EventDomain $eventDomain,
         UserDomain $userDomain,
         Transaction $transaction
-    ): Response
-    {
+    ): Response {
 
         // TODO: check that order and transaction belong to current user
 
         $event = $eventDomain->getEvent();
-        $funnel = $this->packageFunnelFactory->create($order->getSheet(), $request->getLocale());
+        $funnel = $this->packageFunnelFactory->create($sheet, $request->getLocale());
 
         $captureToken = $this->prepareCcipPayment->process($transaction, $request->getLocale());
 
+        $orders = $this->orderRepository->findByIds(explode(',', $transaction->getInternalReference()));
+
         return new Response($this->twig->render(self::TEMPLATE, [
-            'order' => $order,
-            'sheet' => $order->getSheet(),
+            'orders' => $orders,
+            'sheet' => $sheet,
             'user' => $userDomain->getUser(),
             'domain' => $event->getDomain(),
             'view' => ['funnel' => $funnel],
