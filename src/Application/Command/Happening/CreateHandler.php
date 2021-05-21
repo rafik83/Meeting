@@ -60,7 +60,8 @@ class CreateHandler
             $create->isWebinar() && $create->webinarRecorded,
             $create->isWebinar() && $create->allowHls,
             $create->isWebinar() && $create->webinarRecorded && $create->webinarRecordSentToSpeakers,
-            $create->mustEvaluateHappening
+            $create->mustEvaluateHappening,
+            $create->pollAllowed
         );
 
         foreach ($create->translations as $locale => $translation) {

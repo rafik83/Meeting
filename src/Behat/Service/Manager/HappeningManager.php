@@ -70,7 +70,8 @@ class HappeningManager
             $happening->isSidebarAllowed(),
             $happening->isWebinarRecorded(),
             $happening->allowWebinarOnHLS(),
-            $happening->isWebinarRecordSentToSpeakers()
+            $happening->isWebinarRecordSentToSpeakers(),
+            $happening->isPollAllowed()
         );
         $this->happeningRepository->set($happening);
     }

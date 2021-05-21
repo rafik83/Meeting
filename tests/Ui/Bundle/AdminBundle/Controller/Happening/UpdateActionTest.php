@@ -147,6 +147,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getBegin()->willReturn(new \DateTime());
         $this->happening->getEnd()->willReturn(new \DateTime());
         $this->happening->isQuestionAllowed()->willReturn(false);
+        $this->happening->isPollAllowed()->willReturn(false);
         $this->happening->getLimitParticipant()->willReturn(null);
         $this->event->getLocales()->willReturn([]);
         $this->happening->getSpeakers()->willReturn([]);
@@ -231,6 +232,7 @@ class UpdateActionTest extends TestCase
         $this->happening->getBegin()->willReturn(new \DateTime());
         $this->happening->getEnd()->willReturn(new \DateTime());
         $this->happening->isQuestionAllowed()->willReturn(false);
+        $this->happening->isPollAllowed()->willReturn(false);
         $this->happening->getLimitParticipant()->willReturn(null);
         $this->event->getLocales()->willReturn([]);
         $this->happening->getSpeakers()->willReturn([]);

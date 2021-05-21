@@ -119,6 +119,14 @@ abstract class HappeningType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
             ])
+            ->add('pollAllowed', ChoiceType::class, [
+                'choices'  => [
+                    'form.happening_create.children.pollAllowed.answer.true'  => true,
+                    'form.happening_create.children.pollAllowed.answer.false' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, static function (FormEvent $event) use ($options) {
