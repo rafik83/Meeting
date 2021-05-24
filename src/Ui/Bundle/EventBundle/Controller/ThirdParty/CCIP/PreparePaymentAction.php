@@ -3,16 +3,18 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
-
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Package\Funnel\FunnelFactory;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Payum\CCIP\PreparePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig\Environment;
 
 class PreparePaymentAction
@@ -23,6 +25,7 @@ class PreparePaymentAction
     private FunnelFactory $packageFunnelFactory;
     private PreparePayment $prepareCcipPayment;
     private OrderRepositoryInterface $orderRepository;
+    private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
     public string $ccipMode;
     public string $ccipFormAction;
 
@@ -31,15 +34,17 @@ class PreparePaymentAction
         FunnelFactory $packageFunnelFactory,
         PreparePayment $prepareCcipPayment,
         OrderRepositoryInterface $orderRepository,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         string $ccipMode,
         string $ccipFormAction
     ) {
         $this->twig = $twig;
         $this->packageFunnelFactory = $packageFunnelFactory;
         $this->prepareCcipPayment = $prepareCcipPayment;
+        $this->orderRepository = $orderRepository;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->ccipMode = $ccipMode;
         $this->ccipFormAction = $ccipFormAction;
-        $this->orderRepository = $orderRepository;
     }
 
     public function __invoke(
@@ -49,8 +54,12 @@ class PreparePaymentAction
         UserDomain $userDomain,
         Transaction $transaction
     ): Response {
-
-        // TODO: check that order and transaction belong to current user
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
+            || $userDomain->getUser()->getId() !== $transaction->getUser()->getId()
+        ) {
+            throw new AccessDeniedException();
+        }
 
         $event = $eventDomain->getEvent();
         $funnel = $this->packageFunnelFactory->create($sheet, $request->getLocale());
