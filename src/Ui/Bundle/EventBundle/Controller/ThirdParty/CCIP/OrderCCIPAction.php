@@ -36,12 +36,12 @@ class OrderCCIPAction
         $this->logger = $logger;
     }
 
-    public function __invoke(Request $request, Transaction $transaction, EventDomain $eventDomain, User $user): Response
+    public function __invoke(Request $request, Transaction $transaction, EventDomain $eventDomain): Response
     {
         $captureToken = $this->getCaptureToken($request->query->get('xmlKey', ''));
 
         $orderView = $this->queryBus->handle(
-            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $transaction, $user, $captureToken)
+            new OrderCCIPViewQuery($eventDomain->getEvent(), $request->getLocale(), $transaction, $transaction->getUser(), $captureToken)
         );
 
         $xml = $this->twig->render(self::TEMPLATE, [

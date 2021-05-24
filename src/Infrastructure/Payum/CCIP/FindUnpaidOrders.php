@@ -16,22 +16,25 @@ class FindUnpaidOrders
     }
 
     /**
-     * Get all order views that are not referenced in a paid transaction
-     * @param int[] $orderIds
-     * @return int[]
+     * Get all order ids that are not referenced in a CCIP paid transaction
+     * @return int[] order ids
      */
-    public function fromOrderIds(Sheet $sheet, array $orderIds): array
+    public function findBySheet(Sheet $sheet): array
     {
-        $paidTransactions = $this->transactionRepository->findPaid($sheet);
+        $sheetTransactions = $this->transactionRepository->findBySheet($sheet);
 
-        $paidOrderIds = array_reduce(
-            $paidTransactions,
-            fn ($carry, Transaction $transaction) => [...$carry, ...explode(',', $transaction->getInternalReference())],
+        $unpaidOrderIds = array_reduce(
+            $sheetTransactions,
+            function ($carry, Transaction $transaction) {
+                if ($transaction->isCCIP() && !$transaction->isPaid()) {
+                    return [...$carry, ...explode(',', $transaction->getInternalReference())];
+                }
+
+                return $carry;
+            },
             []
         );
 
-        return array_values(array_filter($orderIds, function (int $orderIds) use ($paidOrderIds) {
-            return !in_array($orderIds, $paidOrderIds);
-        }));
+        return array_values($unpaidOrderIds);
     }
 }

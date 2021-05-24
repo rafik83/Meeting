@@ -18,13 +18,18 @@ class FindUnpaidOrdersTest extends TestCase
         $date = new \DateTime();
 
         $paidTransaction1 = Transaction::createForCcip($sheet, $user, 12, $date, [41,42]);
+        $paidTransaction1->setPaid();
         $paidTransaction2 = Transaction::createForCcip($sheet, $user, 12, $date, [43]);
+        $paidTransaction2->setPaid();
+        $unpaidTransaction = Transaction::createForCcip($sheet, $user, 12, $date, [44]);
 
         $transactionRepository = $this->prophesize(TransactionRepositoryInterface::class);
-        $transactionRepository->findPaid($sheet)->shouldBeCalled()->willReturn([$paidTransaction1, $paidTransaction2]);
+        $transactionRepository->findBySheet($sheet)
+            ->shouldBeCalled()
+            ->willReturn([$paidTransaction1, $paidTransaction2, $unpaidTransaction]);
 
         $findUnpaidOrders = new FindUnpaidOrders($transactionRepository->reveal());
-        $result = $findUnpaidOrders->fromOrderIds($sheet, [41, 43, 44]);
+        $result = $findUnpaidOrders->findBySheet($sheet);
         $this->assertEquals([44], $result);
     }
 }

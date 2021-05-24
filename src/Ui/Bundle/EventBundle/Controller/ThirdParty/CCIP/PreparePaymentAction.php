@@ -39,6 +39,7 @@ class PreparePaymentAction
         $this->prepareCcipPayment = $prepareCcipPayment;
         $this->ccipMode = $ccipMode;
         $this->ccipFormAction = $ccipFormAction;
+        $this->orderRepository = $orderRepository;
     }
 
     public function __invoke(
@@ -67,7 +68,8 @@ class PreparePaymentAction
             'event' => $eventDomain->getEvent(),
             'payumToken' => $captureToken->getHash(),
             'ccipMode' => $this->ccipMode,
-            'ccipFormAction' => $this->ccipFormAction
+            'ccipFormAction' => $this->ccipFormAction,
+            'transactionId' => $transaction->getId()
         ]));
     }
 }

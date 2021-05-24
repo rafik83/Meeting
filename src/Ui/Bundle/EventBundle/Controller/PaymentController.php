@@ -137,7 +137,7 @@ class PaymentController extends AbstractController
             $this->consumePackageCompletedPaymentFlash();
 
             return $this->redirectToRoute('event_order_ccip_payment', [
-                'sheet' => $sheet,
+                'sheet' => $sheet->getId(),
                 'transaction' => $paymentResult->transaction->getId(),
             ]);
         }

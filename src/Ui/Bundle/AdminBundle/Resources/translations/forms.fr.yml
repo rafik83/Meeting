@@ -1284,6 +1284,7 @@ form.transaction.children.state.paid: Réglé
 form.transaction.children.state.pending: 'En attente'
 form.transaction.children.transaction_mode.bank_card: 'Carte bancaire'
 form.transaction.children.transaction_mode.bank_cash: 'Argent comptant'
+form.transaction.children.transaction_mode.bank_ccip: 'CCIP'
 form.transaction.children.transaction_mode.bank_check: Chèque
 form.transaction.children.transaction_mode.bank_transfer: Virement
 form.transaction.children.transaction_mode.paypal: Paypal

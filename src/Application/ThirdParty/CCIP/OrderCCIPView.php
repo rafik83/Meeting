@@ -4,11 +4,16 @@
 namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
 
+use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class OrderCCIPView
 {
+    public int $transactionId;
+    public DateTimeInterface $date;
+    public Sheet $sheet;
     /** @var Order[] */
     public array $order;
 
@@ -22,17 +27,16 @@ class OrderCCIPView
     public string $city;
     public string $country;
     public string $phone;
-    public string $ccipProductIdsMap;
-    public string $productName;
-    public int $quantity;
-    public float $vat;
-    public string $label;
-    public float $price;
+    public array $ccipProductIdsMap;
+    public string $locale;
     public string $password;
     public string $paymentNumber;
     public string $captureToken;
 
     public function __construct(
+        int $transactionId,
+        DateTimeInterface $date,
+        Sheet $sheet,
         array $orders,
         User $user,
         string $email,
@@ -45,15 +49,14 @@ class OrderCCIPView
         string $country,
         string $phone,
         array $ccipProductIdsMap,
-        string $productName,
-        int $quantity,
-        float $vat,
-        string $label,
-        float $price,
+        string $locale,
         string $password,
         string $captureToken,
         string $paymentNumber
     ) {
+        $this->transactionId = $transactionId;
+        $this->date = $date;
+        $this->sheet = $sheet;
         $this->orders = $orders;
         $this->user = $user;
         $this->email = $email;
@@ -66,11 +69,7 @@ class OrderCCIPView
         $this->country = $country;
         $this->phone = $phone;
         $this->ccipProductIdsMap = $ccipProductIdsMap;
-        $this->productName = $productName;
-        $this->quantity = $quantity;
-        $this->vat = $vat;
-        $this->label = $label;
-        $this->price = $price;
+        $this->locale = $locale;
         $this->password = $password;
         $this->captureToken = $captureToken;
         $this->paymentNumber = $paymentNumber;

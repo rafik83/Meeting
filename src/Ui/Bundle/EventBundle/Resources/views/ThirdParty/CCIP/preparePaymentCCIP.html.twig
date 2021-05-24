@@ -16,9 +16,9 @@
                 <p>{{ 'package.payment.description'|trans }}</p>
                 <hr>
                 <form name="get_xml" method="post" action="{{ ccipFormAction }}">
-                    <input type="hidden" name="xmlsrc" value="{{ path('event_order_ccip', {user:user.id, order:order.id}) |trim('/','left')}}" />
+                    <input type="hidden" name="xmlsrc" value="{{ path('event_order_ccip', {transaction:transactionId}) |trim('/','left')}}" />
                     <input type="hidden" name="xmlhostsrc" value="{{ domain }}" />
-                    <input type="hidden" name="xmlname" value="{{ order.numero }}" />
+                    <input type="hidden" name="xmlname" value="{{ transactionId }}" />
                     <input type="hidden" name="store_email" value="vngo@cci-paris-idf.fr" />
                     <input type="hidden" name="store_key" value="c731d7bea7dd23f65c9e4a21671c21cf06ff88f3" />
                     <input type="hidden" name="store_mode" value="{{ ccipMode }}" />

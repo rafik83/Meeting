@@ -5,14 +5,14 @@ namespace Proximum\Vimeet\Application\ThirdParty\CCIP;
 
 use Payum\Core\Payum;
 use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\MissingCcipProductId;
-use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\UnsupportedMultipleRows;
+use Proximum\Vimeet\Application\ThirdParty\CCIP\Exception\TransactionHasNoRelatedOrder;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
-use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Payment\Payment;
 use Proximum\Vimeet\Domain\Model\Payment\PaymentToken;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use RuntimeException;
 use Symfony\Component\Intl\Countries;
 
 class OrderCCIPViewQueryHandler
@@ -40,14 +40,6 @@ class OrderCCIPViewQueryHandler
     public function handle(OrderCCIPViewQuery $orderCCIPViewQuery): OrderCCIPView
     {
 
-        $paidRows = array_filter($orderCCIPViewQuery->order->getRows(), function(Row $row){
-            return $row->getPrice()>0;
-        });
-
-        if (count($paidRows) > 1) {
-            throw new UnsupportedMultipleRows('Unsupported multiple rows for CCIP, order: ' . $orderCCIPViewQuery->order->getNumero());
-        }
-
         $password = bin2hex(random_bytes(10));
 
         /** @var PaymentToken $paymentToken */
@@ -55,22 +47,29 @@ class OrderCCIPViewQueryHandler
         /** @var Payment $payment */
         $payment = $this->payum->getStorage(Payment::class)->find($paymentToken->getDetails());
 
-        $row = $paidRows[0];
-
-        $billingInfo = $this->billingInfoRepository->getBySheet($orderCCIPViewQuery->order->getSheet());
+        $sheet = $orderCCIPViewQuery->transaction->getSheet();
+        $billingInfo = $this->billingInfoRepository->getBySheet($sheet);
 
         $extraParameter = $this->extraParameterRepository->findByEventAndType(
-            $orderCCIPViewQuery->order->getSheet()->getEvent(),
+            $sheet->getEvent(),
             Type::TYPE_PRODUCT_CCIP
         );
 
-        if($extraParameter === null || $extraParameter->getValue() === null){
-            throw new \Exception('Product CCIP parameter is not defined');
+        if ($extraParameter === null || $extraParameter->getValue() === null) {
+            throw new RuntimeException(
+                sprintf('Product CCIP parameter is not defined (transaction #%d)', $orderCCIPViewQuery->transaction->getId())
+            );
         }
 
         $parameters = json_decode($extraParameter->getValue(), true);
 
         $orders = $this->orderRepository->findByIds(explode(',', $orderCCIPViewQuery->transaction->getInternalReference()));
+
+        if (empty($orders)) {
+            throw new TransactionHasNoRelatedOrder(
+                sprintf('No order found for transaction #%d', $orderCCIPViewQuery->transaction->getId())
+            );
+        }
 
         // check that products are supported
         foreach ($orders as $order) {
@@ -84,6 +83,9 @@ class OrderCCIPViewQueryHandler
         }
 
         return new OrderCCIPView(
+            $orderCCIPViewQuery->transaction->getId(),
+            $orderCCIPViewQuery->transaction->getDate(),
+            $sheet,
             $orders,
             $orderCCIPViewQuery->user,
             $orderCCIPViewQuery->user->getEmail(),
@@ -96,11 +98,7 @@ class OrderCCIPViewQueryHandler
             Countries::getAlpha3Code($billingInfo->getAddress()->getCountry()),
             $orderCCIPViewQuery->user->getPhone()??'',
             $parameters,
-            $row->getProduct()->getTitle($orderCCIPViewQuery->locale),
-            $row->getQuantity(),
-            $row->getVatRate(),
-            $row->getLabel()??'',
-            $row->getPrice(),
+            $orderCCIPViewQuery->locale,
             $password,
             $orderCCIPViewQuery->captureToken,
             $payment->getNumber()

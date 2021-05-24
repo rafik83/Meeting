@@ -4,7 +4,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\CCIP\Exception;
 
 
-class UnsupportedMultipleRows extends \Exception
+class TransactionHasNoRelatedOrder extends \Exception
 {
 
 }

@@ -91,7 +91,7 @@ class PayRemainingAction
             $remainingOrders = $this->balance->getNotCancelledOrderVatViews($sheet);
 
             $remainingOrderIds = array_map(fn (OrderVatView $orderVatView) => $orderVatView->orderId, $remainingOrders);
-            $unpaidOrderIds = $this->ccipFindUnpaidOrders->fromOrderIds($sheet, $remainingOrderIds);
+            $unpaidOrderIds = $this->ccipFindUnpaidOrders->findBySheet($sheet);
 
             $transaction = Transaction::createForCcip(
                 $sheet,
@@ -104,6 +104,7 @@ class PayRemainingAction
             $this->transactionRepository->add($transaction);
 
             return new RedirectResponse($this->router->generate('event_order_ccip_payment', [
+                'sheet' => $sheet->getId(),
                 'transaction' => $transaction->getId(),
             ]));
         }
