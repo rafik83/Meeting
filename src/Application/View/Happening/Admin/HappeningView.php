@@ -77,7 +77,7 @@ class HappeningView
         bool $isWebinarRecorded = true,
         bool $isWebinarRecordAvailable = false,
         ?string $webinarRecordZipFileUrl = null,
-        bool $pollAllowed
+        bool $pollAllowed = false
     ) {
         $this->id = $id;
         $this->title = $title;

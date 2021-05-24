@@ -71,6 +71,7 @@ class HappeningManager
             $happening->isWebinarRecorded(),
             $happening->allowWebinarOnHLS(),
             $happening->isWebinarRecordSentToSpeakers(),
+            null,
             $happening->isPollAllowed()
         );
         $this->happeningRepository->set($happening);

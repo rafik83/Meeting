@@ -275,7 +275,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         bool $allowHls = true,
         bool $webinarRecordSentToSpeakers = true,
         bool $mustEvaluateHappening = null,
-        bool $pollAllowed
+        bool $pollAllowed = false
     ): void {
         $this->begin = $begin;
         $this->end = $end;
