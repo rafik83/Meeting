@@ -4,25 +4,28 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP;
 
 
-use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderCCIPUpdateAction
 {
 
-    private QueryBusInterface $queryBus;
+    private LoggerInterface $logger;
 
     public function __construct(
-        QueryBusInterface $queryBus
+        LoggerInterface $logger
     ) {
-        $this->queryBus = $queryBus;
+        $this->logger = $logger;
     }
 
-    public function __invoke(Request $request, EventDomain $eventDomain, Transaction $transaction): Response
+    public function __invoke(Request $request, Transaction $transaction): Response
     {
+        $this->logger->info(
+            '[CCIP Payment] Update received transaction {transactionId}, status {status}',
+            ['transactionId' => $transaction->getId(), 'status' => $request->request->get('update')]
+        );
 
         return new Response();
     }
