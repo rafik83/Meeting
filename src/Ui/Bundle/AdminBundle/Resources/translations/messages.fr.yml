@@ -208,6 +208,10 @@ admin.event.page.transactions.title: 'Export des transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des types avec conditions de paiement spécifiques:'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
+admin.event.paymentConditions.update.ccipHelp: |
+  Pour le paiement CCIP : un paramètre supplémentaire d'événement devra être ajouté pour définir la correspondance entre les identifiants de produit.
+  ex: {"2615":"116Pr-csa-202105-0008582I9D"} où 2615 est l'id produit Vimeet
+  L'acompte n'est pas supporté pour ce mode de paiement.
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin

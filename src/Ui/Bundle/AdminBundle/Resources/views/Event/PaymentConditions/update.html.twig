@@ -22,7 +22,8 @@
     {{ form_row(form.minimumForDeposit, {widget_columns: 3}) }}
     {{ form_row(form.depositUntil, {widget_columns: 3}) }}
     {{ form_row(form.deposit, {widget_columns: 3}) }}
-    {{ form_row(form.paymentModes, {widget_columns: 3}) }}
+    {{ form_row(form.paymentModes, {widget_columns: 9}) }}
+    <em>{{ 'admin.event.paymentConditions.update.ccipHelp'|trans|nl2br }}</em>
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

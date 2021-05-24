@@ -159,7 +159,7 @@ class PaymentController extends AbstractController
 
                 if ($transaction->isCCIP()) {
                     return $this->redirectToRoute('event_order_ccip_payment', [
-                        'sheet' => $sheet,
+                        'sheet' => $sheet->getId(),
                         'transaction' => $paymentResult->transaction->getId(),
                     ]);
                 }

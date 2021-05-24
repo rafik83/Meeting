@@ -41,7 +41,7 @@ class UpdateType extends AbstractType
         $resolver->setRequired(['event']);
         $resolver->setAllowedTypes('event', Event::class);
         $resolver->setDefaults([
-            'data-class' => Update::class,
+            'data_class' => Update::class,
         ]);
     }
 
