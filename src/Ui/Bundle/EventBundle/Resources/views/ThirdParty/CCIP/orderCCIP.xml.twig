@@ -30,7 +30,7 @@
         </order>
         {% endfor %}
     {% endfor %}
-    <delivering>Téléchargeable</delivering>
+    <delivering>Telechargeable</delivering>
     <delivering_tax>0</delivering_tax>
     <origin>
         <origin_name>Vimeet</origin_name>
@@ -51,8 +51,8 @@
         captureToken: orderView.captureToken,
     }) }}</error_url>
     {# infos pour la mise a jour de l'etat de vos commandes #}
-    <update_url>{{ url('event_order_ccip_update_url', {transaction: orderView.transactionId}) }}</update_url>
-{#    <update_mail></update_mail>#}
+    {# <update_url>{{ url('event_order_ccip_update_url', {transaction: orderView.transactionId}) }}</update_url> #}
+    {# <update_mail></update_mail> #}
     <generation_facture>1</generation_facture>
     <envoi_mail_commande_client>{{ orderView.email }}</envoi_mail_commande_client>
 </rpack_order>

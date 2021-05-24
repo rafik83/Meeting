@@ -347,8 +347,7 @@ class Transaction
             null,
             self::STATE_PENDING,
             $sheet->getEvent()->getCurrency(),
-            $user,
-            true
+            $user
         );
 
         $transaction->setInternalReference(implode(',', $orderIds));

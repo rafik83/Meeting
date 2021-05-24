@@ -88,9 +88,6 @@ class PayRemainingAction
 
         // CCIP payment (should always be the sole online payment available for an event)
         if (in_array(Mode::PAYMENT_CCIP, $paymentConditionsView->paymentModes)) {
-            $remainingOrders = $this->balance->getNotCancelledOrderVatViews($sheet);
-
-            $remainingOrderIds = array_map(fn (OrderVatView $orderVatView) => $orderVatView->orderId, $remainingOrders);
             $unpaidOrderIds = $this->ccipFindUnpaidOrders->findBySheet($sheet);
 
             $transaction = Transaction::createForCcip(

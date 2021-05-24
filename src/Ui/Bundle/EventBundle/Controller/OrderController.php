@@ -12,7 +12,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Order\Merger;
-use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Domain\Payment\CanPayOnline;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,17 +24,20 @@ class OrderController extends AbstractController
     private Balance $orderBalance;
     private InvoiceViewQueryHandler $invoiceViewQueryHandler;
     private Merger $orderMerger;
+    private CanPayOnline $canPayOnline;
     private QueryBusInterface $queryBus;
 
     public function __construct(
         Balance $orderBalance,
         InvoiceViewQueryHandler $invoiceViewQueryHandler,
         Merger $orderMerger,
+        CanPayOnline $canPayOnline,
         QueryBusInterface $queryBus
     ) {
         $this->orderBalance = $orderBalance;
         $this->invoiceViewQueryHandler = $invoiceViewQueryHandler;
         $this->orderMerger = $orderMerger;
+        $this->canPayOnline = $canPayOnline;
         $this->queryBus = $queryBus;
     }
 
@@ -49,10 +52,9 @@ class OrderController extends AbstractController
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($sheet))
-        ;
+        $paymentConditionsView = $this->queryBus->handle(new PaymentConditionsViewQuery($sheet));
 
-        $canPayIfRemaining = \in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
+        $canPayIfRemaining = $this->canPayOnline->isSatisfiedBy($paymentConditionsView->paymentModes);
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'             => $eventDomain->getEvent(),

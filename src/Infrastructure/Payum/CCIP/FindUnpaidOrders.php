@@ -35,6 +35,6 @@ class FindUnpaidOrders
             []
         );
 
-        return array_values($unpaidOrderIds);
+        return array_unique(array_values($unpaidOrderIds));
     }
 }
