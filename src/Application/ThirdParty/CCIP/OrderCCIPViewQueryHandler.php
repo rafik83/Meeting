@@ -17,8 +17,6 @@ use Symfony\Component\Intl\Countries;
 
 class OrderCCIPViewQueryHandler
 {
-    public const TEMPLATE_ERROR_CANCEL_URL = 'AdminBundle:ThirdParty:CCIP:orderCCIPErrorCancelUrl.html.twig';
-
     private BillingInfoRepositoryInterface $billingInfoRepository;
     private Payum $payum;
     private ExtraParameterRepositoryInterface $extraParameterRepository;

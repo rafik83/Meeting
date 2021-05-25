@@ -12,7 +12,6 @@
                 <h1><i class="icon-Paiement_1"></i> {{ 'package.payment.title'|trans }}</h1>
             </header>
             <div class="main__content styled-form form-with-label">
-{#                <b>{{ 'package.payment.total.title'|trans }}</b>#}
                 <p>{{ 'package.payment.description'|trans }}</p>
                 <hr>
                 <form name="get_xml" method="post" action="{{ ccipFormAction }}">
@@ -35,25 +34,6 @@
                     </div>
                 </form>
             </div>
-
-{#            {% if paymentInfoView is defined %}#}
-{#                <div id="payment-info-block" class="info__content styled-form hide">#}
-{#                    <h2>{{ 'order.transaction.howtopay'|trans }}</h2>#}
-{#                    <ul>#}
-{#                        <li>{{ paymentInfoView.organiserName }}</li>#}
-{#                        <li>{{ paymentInfoView.billingAddress|nl2br }}</li>#}
-{#                        <li>{{ paymentInfoView.organiserEmail }}</li>#}
-{#                    </ul>#}
-{#                    <div class="form-info">#}
-{#                        <div>{{ 'package.payment.bankInfo'|trans }}:</div>#}
-{#                        <div>{{ paymentInfoView.bankInfo|nl2br }}</div>#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        {{ paymentInfoView.paymentCondition|nl2br }}#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% endif %}#}
-
         </div>
     </section>
 {% endblock %}
