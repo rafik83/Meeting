@@ -140,9 +140,6 @@ security:
         - { path: ^/(fr|en)/logout, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }
         - { path: '^/(fr|en)/_internal', roles: ROLE_PHANTOMJS, host: '%admin_domain%' }
         - { path: '/(fr|en)/happening/webinar/record/archive/status-change', role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' } # Tokbox Callback
-        - { path: '^/(fr|en)/user/\d+/order-ccip/\d+/order.xml$', role: IS_AUTHENTICATED_ANONYMOUSLY } # CCIP Callback
-        - { path: '^/(fr|en)/user/\d+/order-ccip/\d+/cancel$', role: IS_AUTHENTICATED_ANONYMOUSLY } # CCIP Callback
-        - { path: '^/(fr|en)/user/\d+/order-ccip/\d+/update$', role: IS_AUTHENTICATED_ANONYMOUSLY } # CCIP Callback
         - { path: '/healthz', role: IS_AUTHENTICATED_ANONYMOUSLY } # Healthcheck
         - { path: ^/, role: ROLE_ALLOWED_TO_ADMIN, host: '%admin_domain%' }
         # calendar feed
