@@ -53,3 +53,4 @@ data:
   {{- end }}
     CCIP_MODE: {{ .Values.ccip.mode | quote }}
     CCIP_FORM_ACTION: {{ .Values.ccip.formAction | quote }}
+    CCIP_STORE_KEY: {{ .Values.ccip.storeKey | quote }}
