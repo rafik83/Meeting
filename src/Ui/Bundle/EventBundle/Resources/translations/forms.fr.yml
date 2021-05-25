@@ -102,6 +102,7 @@ form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement'
 form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Virement
+form.payment_choice.children.paymentMode.ccip: 'Boutique en ligne CCI Paris Île de France'
 form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
 form.profile.children.locale.label: 'Choix de la langue'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
