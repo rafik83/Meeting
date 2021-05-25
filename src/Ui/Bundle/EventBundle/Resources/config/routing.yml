@@ -1432,7 +1432,7 @@ event_order_ccip_valid_url:
         sheet: \d+
         captureToken: '[0-9a-zA-Z-_]+'
         paymentNumber: '[0-9a-f-]+'
-    methods: [GET]
+    methods: [GET,POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPValidAction
 
 event_order_ccip_cancel_url:
@@ -1452,7 +1452,7 @@ event_order_ccip_error_url:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPCancelErrorAction
 
 event_order_ccip_update_url:
-    path: /order-ccip/{transaction}/update
+    path: /order-ccip/{transaction}/{paymentNumber}/update
     requirements:
         transaction: \d+
     methods: [POST]
