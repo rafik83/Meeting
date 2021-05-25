@@ -22,7 +22,7 @@ class SendGridApiAdapter implements EmailingSenderInterface
      *
      * @var int
      */
-    const MAX_RECEIVERS = 1000;
+    const MAX_RECEIVERS = 990;
 
     /**
      * @var SendGridApiClient
