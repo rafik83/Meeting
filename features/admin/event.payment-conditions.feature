@@ -15,13 +15,12 @@ Feature: See and update payment conditions
       | event_payment_conditions_update_minimumForDeposit | 555              |
       | event_payment_conditions_update_depositUntil      | 03/07/2016 17:30 |
       | event_payment_conditions_update_deposit           | 20               |
-    And I uncheck "paypal"
+    And I check the "form.payment_mode_choice.children.paymentMode.none" radio
     And I uncheck "bank_transfer"
     And I uncheck "bank_check"
-    And I uncheck "ccip"
     And I press "event_payment_conditions_update_submit"
     And I should see "validators.paymentModesChoiceEmpty"
-    And I check "paypal"
+    And I check the "form.payment_mode_choice.children.paymentMode.paypal" radio
     And I press "event_payment_conditions_update_submit"
     And I should see "flash.admin.event.paymentConditions.update.success"
 
