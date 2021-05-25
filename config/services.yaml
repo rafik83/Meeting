@@ -84,6 +84,7 @@ services:
         arguments:
             $ccipMode: '%env(CCIP_MODE)%'
             $ccipFormAction: '%env(CCIP_FORM_ACTION)%'
+            $ccipStoreKey: '%env(CCIP_STORE_KEY)%'
         tags: ['controller.service_arguments']
 
     # explicit aliases for interfaces

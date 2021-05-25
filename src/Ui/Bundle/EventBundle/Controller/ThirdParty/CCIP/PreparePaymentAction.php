@@ -28,6 +28,7 @@ class PreparePaymentAction
     private AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter;
     public string $ccipMode;
     public string $ccipFormAction;
+    public string $ccipStoreKey;
 
     public function __construct(
         Environment $twig,
@@ -36,7 +37,8 @@ class PreparePaymentAction
         OrderRepositoryInterface $orderRepository,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         string $ccipMode,
-        string $ccipFormAction
+        string $ccipFormAction,
+        string $ccipStoreKey
     ) {
         $this->twig = $twig;
         $this->packageFunnelFactory = $packageFunnelFactory;
@@ -45,6 +47,7 @@ class PreparePaymentAction
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->ccipMode = $ccipMode;
         $this->ccipFormAction = $ccipFormAction;
+        $this->ccipStoreKey = $ccipStoreKey;
     }
 
     public function __invoke(
@@ -78,6 +81,7 @@ class PreparePaymentAction
             'payumToken' => $captureToken->getHash(),
             'ccipMode' => $this->ccipMode,
             'ccipFormAction' => $this->ccipFormAction,
+            'ccipStoreKey' => $this->ccipStoreKey,
             'transactionId' => $transaction->getId()
         ]));
     }

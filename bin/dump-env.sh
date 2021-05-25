@@ -10,5 +10,6 @@ else
     echo "REDIS_URL=redis://${REDIS_HOST}:${REDIS_PORT}" >> .env.prod.local
     echo "CCIP_MODE=${CCIP_MODE}" >> .env.prod.local
     echo "CCIP_FORM_ACTION=${CCIP_FORM_ACTION}" >> .env.prod.local
+    echo "CCIP_STORE_KEY=${CCIP_STORE_KEY}" >> .env.prod.local
     composer dump-env prod
 fi

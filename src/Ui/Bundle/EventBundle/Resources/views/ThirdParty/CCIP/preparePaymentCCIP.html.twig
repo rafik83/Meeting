@@ -19,7 +19,7 @@
                     <input type="hidden" name="xmlhostsrc" value="{{ domain }}" />
                     <input type="hidden" name="xmlname" value="{{ transactionId }}" />
                     <input type="hidden" name="store_email" value="vngo@cci-paris-idf.fr" />
-                    <input type="hidden" name="store_key" value="c731d7bea7dd23f65c9e4a21671c21cf06ff88f3" />
+                    <input type="hidden" name="store_key" value="{{ ccipStoreKey }}" />
                     <input type="hidden" name="store_mode" value="{{ ccipMode }}" />
                     <input type="hidden" name="errorurl" value="{{ url('event_order_ccip_error_url', {
                         sheet:sheet.id,
