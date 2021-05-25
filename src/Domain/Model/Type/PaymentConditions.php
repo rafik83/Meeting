@@ -111,7 +111,7 @@ class PaymentConditions
         float $minimumForDeposit = null,
         int $deposit = null
     ) {
-        $this->paymentModes = $paymentModes;
+        $this->paymentModes = array_values($paymentModes);
         $this->allowDeposit = $allowDeposit;
         $this->depositUntil = $depositUntil;
         $this->minimumForDeposit = $minimumForDeposit;

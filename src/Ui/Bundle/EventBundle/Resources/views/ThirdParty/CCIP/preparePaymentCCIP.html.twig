@@ -1,0 +1,39 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title %}
+    {{ event.title }}: {{ 'package.payment.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        {{ include('EventBundle:Package:breadcrumb.html.twig', {view: view}) }}
+        <div class="profile__content">
+            <header>
+                <h1><i class="icon-Paiement_1"></i> {{ 'package.payment.title'|trans }}</h1>
+            </header>
+            <div class="main__content styled-form form-with-label">
+                <p>{{ 'package.payment.description'|trans }}</p>
+                <hr>
+                <form name="get_xml" method="post" action="{{ ccipFormAction }}">
+                    <input type="hidden" name="xmlsrc" value="{{ path('event_order_ccip', {transaction:transactionId}) |trim('/','left')}}" />
+                    <input type="hidden" name="xmlhostsrc" value="{{ domain }}" />
+                    <input type="hidden" name="xmlname" value="{{ transactionId }}" />
+                    <input type="hidden" name="store_email" value="vngo@cci-paris-idf.fr" />
+                    <input type="hidden" name="store_key" value="c731d7bea7dd23f65c9e4a21671c21cf06ff88f3" />
+                    <input type="hidden" name="store_mode" value="{{ ccipMode }}" />
+                    <input type="hidden" name="errorurl" value="{{ url('event_order_ccip_error_url', {
+                        sheet:sheet.id,
+                        captureToken: payumToken,
+                        error: 'xml_access_error',
+                    }) }}" />
+                    <input type="hidden" name="xmlKey" value="{{ payumToken }}" />
+                    <div class="validation">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="icon-Paiement_1"></i> {{ 'package.payment.pay.label'|trans }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

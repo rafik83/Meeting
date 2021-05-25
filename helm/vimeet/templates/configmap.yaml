@@ -17,7 +17,7 @@ data:
     MASTER_USER: {{ .Values.mysql.mysqlUser }}
         {{- else }}
     MASTER_HOST: {{ .Values.externalDatabase.host }}
-    MASTER_PORT: {{ .Values.externalDatabase.port }}
+    MASTER_PORT: {{ .Values.externalDatabase.port | quote}}
     MASTER_DB_NAME: {{ .Values.externalDatabase.database }}
     MASTER_USER: {{ .Values.externalDatabase.user }}
         {{- end }}
@@ -51,3 +51,5 @@ data:
   {{- if .Values.jenkins.agent.url }}
     JENKINS_URL: {{ .Values.jenkins.agent.url }}
   {{- end }}
+    CCIP_MODE: {{ .Values.ccip.mode | quote }}
+    CCIP_FORM_ACTION: {{ .Values.ccip.formAction | quote }}
