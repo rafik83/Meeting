@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.93.1] - 2021-05-25
+### Fixed
+- Hotfix - Use env variable to set store_key for CCIP payment
+
 ## [2.93.0] - 2021-05-25
 ### Added
 - VIMEET-2550 - Add CCIP (Numkium / rpack) payment
