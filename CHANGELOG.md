@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Hotfix - change form methods call order
+
 ## [2.93.2] - 2021-05-27
 ### Fixed
 - Hotfix - missing dependency persistence in for multisheet's requests list

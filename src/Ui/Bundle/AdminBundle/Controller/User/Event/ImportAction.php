@@ -68,7 +68,7 @@ class ImportAction
         $import = new Import($event);
         $form = $this->formFactory->create(ImportType::class, $import, ['submit' => true]);
 
-        if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             /** @var ImportResult $importResult */
             $importResult = $this->commandBus->handle($import);
             $this->flashBag->add(
