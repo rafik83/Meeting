@@ -26,7 +26,6 @@ class RequestController extends AbstractController
         QueryBusInterface $queryBus
     ) {
         $this->queryBus = $queryBus;
-        $this->sheetRepository = $sheetRepository;
     }
 
     public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user = null): Response
