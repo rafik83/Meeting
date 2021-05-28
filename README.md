@@ -71,6 +71,9 @@ Create a file to set local evironment vaiables:
 Add the following line to be able to run behat tests locally:
 
     DATABASE_HOST=127.0.0.1
+    REDIS_URL=redis://localhost
+    LOCK_DSN=${REDIS_URL}/3
+    JOB_MESSENGER_TRANSPORT_DSN=doctrine://default 
 
 #### Install the php dependencies
 
@@ -79,7 +82,7 @@ This projet uses a PHAR for composer stored in `bin/composer.phar`.
 The recommended way to install the dependencies on this project is to use this phar, by running :
 
 ```
- bin/composer.phar installer.phar install
+ bin/composer.phar install
 ```
 
 #### Working with Elastic Search, MySQL, NGINX and Redis
@@ -108,7 +111,7 @@ Then let's create the database and import this dump.
 ##### Create the database
 
 ```
-make install-db
+make install-db@local
 ```
 
 **Import the dump**
@@ -154,6 +157,12 @@ The easiest way to install and manage node is by using [`nvm`](https://github.co
 
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+```
+
+You should maybe need to restart your shell with this command (replace <user> with your current user)
+
+```
+su - <user>
 ```
 
 Install the lts version of node
