@@ -73,7 +73,6 @@ Add the following line to be able to run behat tests locally:
     DATABASE_HOST=127.0.0.1
     REDIS_URL=redis://localhost
     LOCK_DSN=${REDIS_URL}/3
-    JOB_MESSENGER_TRANSPORT_DSN=doctrine://default 
 
 #### Install the php dependencies
 
