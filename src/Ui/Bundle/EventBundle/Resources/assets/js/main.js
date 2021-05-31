@@ -93,19 +93,19 @@ function init(target) {
         event.preventDefault();
     });
 
-    $(".filter__select-all", target).on("click", function () {
-        var checkboxes = $(this).closest(".filter").find("input[type=checkbox]").prop('checked', true);
-        
-        new CatalogFilters(checkboxes.eq(0), $(".catalog form", target), target.querySelector(".catalog"));
+    $('.filter__select-all', target).on('click', function () {
+        var checkboxes = $(this).closest('.filter').find('input[type=checkbox]').prop('checked', true);
+
+        new CatalogFilters(checkboxes.eq(0), $('.catalog form', target), target.querySelector('.catalog'));
     });
 
-    $(".filter__unselect-all", target).on("click", function () {
+    $('.filter__unselect-all', target).on('click', function () {
         $(this).closest(".filter").find("input[type=checkbox]").prop("checked", false);
 
-        $(".see-more-align").remove();
-        $(".catalog__filters").remove();
-        $(".catalog__list.catalog__list--block").remove();
-        $(".important.fail").removeClass('hide');
+        $('.see-more-align').remove();
+        $('.catalog__filters').remove();
+        $('.catalog__list.catalog__list--block').remove();
+        $('.important.fail').removeClass('hide');
     });
 
     $('.catalog form input, .catalog form select:not([data-disable-auto-submit])', target).on('change', function () {
