@@ -1,6 +1,6 @@
 <div class="filter">
     <h3>{{ form.vars.label }}</h3>
-    {% if form.vars.name == "categories" %}
+    {% if showSelectAll|default(false) %}
         <a class="filter__select-all" role='button'>{{ 'form.common.choices.all'|trans({}, 'forms') }}</a>
         /
         <a class="filter__unselect-all" role='button'>{{ 'catalog.selectItemsFromNomenclatures.unSelectAll'|trans }}</a>
