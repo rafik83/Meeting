@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add as AddSheetViewed;
+use Proximum\Vimeet\Application\Components\Rule\ParticipantInfoAccessRulesResolver;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetViewedEvent;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
@@ -75,6 +76,8 @@ class DisplaySheetAction
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
+    private ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver;
+
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
@@ -98,6 +101,7 @@ class DisplaySheetAction
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        ParticipantInfoAccessRulesResolver $participantInfoAccessRulesResolver,
         ValidationRequiredChecker $validationRequiredChecker,
         DelayedEventDispatcherInterface $delayedEventDispatcher,
         Applyer $applyer
@@ -115,6 +119,7 @@ class DisplaySheetAction
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
         $this->meetingRequestAccessChecker = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->participantInfoAccessRulesResolver = $participantInfoAccessRulesResolver;
         $this->validationRequiredChecker = $validationRequiredChecker;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->applyer = $applyer;
@@ -192,6 +197,7 @@ class DisplaySheetAction
         $isMeetingRequestUpdateLocked = false;
         $isMeetingRequestClosed = false;
         $isAnsweringMeetingRequestClosed = false;
+        $canRequestMeeting = false;
 
         if ($sheet === $seingSheet) {
             $meetingRequest = null;
@@ -203,6 +209,8 @@ class DisplaySheetAction
             $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
             $isMeetingRequestClosed = !$this->meetingRequestAccessChecker->allowedToAccess($event);
             $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($event);
+            $participantInfoAccessRule = $this->participantInfoAccessRulesResolver->getParticipantInfoAccessRule($sheet, $seingSheet);
+            $canRequestMeeting = $participantInfoAccessRule->canRequestMeeting();
         }
 
         $isPhoneValidationRequired = $this->validationRequiredChecker->handle($sheet, $user, $locale);
@@ -241,6 +249,7 @@ class DisplaySheetAction
             'phoneValidationLink' => $phoneValidationLink ?? null,
             'isRequestMeetingEnabled' => $sheet !== $seingSheet,
             'isCatalog' => true,
+            'hideMeetingRequest' => !$canRequestMeeting,
         ]));
     }
 }
