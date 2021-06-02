@@ -109,6 +109,9 @@ Then let's create the database and import this dump.
 
 ##### Create the database
 
+You can either use this command or use a dump ton create the database. The first command is using symfony commands to drop, create and update the database,
+the dump will give you datas so it will be easier to begin with.
+
 ```
 make install-db@local
 ```
