@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Application\Query\Networking;
 
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\View\Networking\ChatSessionView;
 use Proximum\Vimeet\Application\View\Networking\NetworkingView;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
@@ -27,16 +28,20 @@ class NetworkingQueryHandler
     /** @var ChatSessionRepositoryInterface */
     private $chatSessionRepository;
 
+    private RouterInterface $routerAdapter;
+
     public function __construct(
         NotificationSubscriberInterface $notificationSubscriber,
         NotificationSubscriptionsInterface $notificationSubscriptions,
         ChatMessageRepositoryInterface $chatMessageRepository,
-        ChatSessionRepositoryInterface $chatSessionRepository
+        ChatSessionRepositoryInterface $chatSessionRepository,
+        RouterInterface $routerAdapter
     ) {
         $this->notificationSubscriber = $notificationSubscriber;
         $this->notificationSubscriptions = $notificationSubscriptions;
         $this->chatMessageRepository = $chatMessageRepository;
         $this->chatSessionRepository = $chatSessionRepository;
+        $this->routerAdapter = $routerAdapter;
     }
 
     public function handle(NetworkingQuery $networkingQuery): NetworkingView
@@ -52,8 +57,17 @@ class NetworkingQueryHandler
 
         $privateChatSessions = array_map(
             function ($row) use ($networkingQuery) {
+                $avatar = $row['otherUser']->getAvatar();
+                if ($avatar === null) {
+                    $avatar = $this->routerAdapter->generate(
+                        'event_chat_avatar',
+                        ['name' => $row['otherUser']->getAccount()->getCompleteName()]
+                    );
+                }
+
                 return new ChatSessionView(
                     $row['otherUser'],
+                    $avatar,
                     $row['latestMessageDate'],
                     $row['messagesCount'],
                     $row['unreadMessages'][$networkingQuery->user->getId()] ?? 0
