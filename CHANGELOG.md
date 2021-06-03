@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- MV-340 - fix avatars in networking and chat
+
 ## [2.94.0] - 2021-05-31
 ### Added
 - VIMEET-2394 - Select or unselect all kind of participation in the catalog
