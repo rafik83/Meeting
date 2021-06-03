@@ -59,15 +59,20 @@ class NetworkingQueryHandler
             function ($row) use ($networkingQuery) {
                 $avatar = $row['otherUser']->getAvatar();
                 if ($avatar === null) {
-                    $avatar = $this->routerAdapter->generate(
+                    $avatarUrl = $this->routerAdapter->generate(
                         'event_chat_avatar',
                         ['name' => $row['otherUser']->getAccount()->getCompleteName()]
+                    );
+                } else {
+                    $avatarUrl = $this->routerAdapter->generate(
+                        'liip_imagine_filter',
+                        ['path' => $avatar, 'filter' => 'user_icon']
                     );
                 }
 
                 return new ChatSessionView(
                     $row['otherUser'],
-                    $avatar,
+                    $avatarUrl,
                     $row['latestMessageDate'],
                     $row['messagesCount'],
                     $row['unreadMessages'][$networkingQuery->user->getId()] ?? 0
