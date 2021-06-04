@@ -251,7 +251,11 @@ export default function initNetworking(target, userConnection, notificationCallV
                     });
 
                     const callback = (notification) => {
+                        const payload = JSON.parse(notification.data);
                         this.notificationHandler.handle(notification, chat);
+                        if (payload.visioEnable){
+                            this.notificationHandler.chatVisio.visioEnable = '1';
+                        }
                     };
                     this.userConnection.addListener(callback);
 

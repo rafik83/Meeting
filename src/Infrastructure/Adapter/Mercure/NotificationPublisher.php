@@ -6,6 +6,7 @@ use Firebase\JWT\JWT;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\NotificationPublisherInterface;
 use Proximum\Vimeet\Application\Command\Chat\NotificationType;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker;
 use Proximum\Vimeet\Domain\Model\ChatMessage;
 use Proximum\Vimeet\Domain\Model\ChatMessageLinkableInterface;
 use Proximum\Vimeet\Domain\Model\ChatSession;
@@ -30,16 +31,20 @@ class NotificationPublisher extends AbstractNotification implements Notification
     /** @var UserPayloadBuilder */
     private $userPayloadBuilder;
 
+    private AskCallVisioPrivateChatAccessChecker $askCallVisioPrivateChatAccessChecker;
+
     public function __construct(
         string $mercureHubUrl,
         string $mercurePublisherKey,
         HttpAdapterInterface $httpAdapter,
-        UserPayloadBuilder $userPayloadBuilder
+        UserPayloadBuilder $userPayloadBuilder,
+        AskCallVisioPrivateChatAccessChecker $askCallVisioPrivateChatAccessChecker
     ) {
         $this->mercureHubUrl = $mercureHubUrl;
         $this->mercurePublisherKey = $mercurePublisherKey;
         $this->httpAdapter = $httpAdapter;
         $this->userPayloadBuilder = $userPayloadBuilder;
+        $this->askCallVisioPrivateChatAccessChecker = $askCallVisioPrivateChatAccessChecker;
     }
 
     public function publishHappeningNotification(Happening $happening, string $type, array $data): void
@@ -70,6 +75,9 @@ class NotificationPublisher extends AbstractNotification implements Notification
             $payload['content'] = $message->getContent();
             $payload['author'] = $message->getCreatedBy()->getFullname();
             $payload['authorId'] = $message->getCreatedBy()->getId();
+            if($this->askCallVisioPrivateChatAccessChecker->allowedToAccess($object->getEvent(),$object, $object->getToUser())){
+                $payload['visioEnable'] = true;
+            }
         } elseif ($object instanceof Meeting) {
             //todo: add special topic for meeting
             return;
