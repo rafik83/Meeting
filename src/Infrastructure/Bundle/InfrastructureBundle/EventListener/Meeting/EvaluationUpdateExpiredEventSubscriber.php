@@ -58,7 +58,7 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
     public function onMeetingEvaluationUpdateExpired(MeetingEvaluationUpdateExpiredEvent $event): void
     {
         $meeting = $event->getMeeting();
-        $evaluatedSheet = $meeting->getSheetOfUser($event->getUser());
+        $evaluatedSheet = $meeting->getSheetMet($event->getEvaluatingSheet());
 
         $accessRule = $this->followupMailAccessRules->createAccessRule($evaluatedSheet, $event->getEvaluatingSheet());
         // check if user will receive follow up email
@@ -68,9 +68,10 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
 
         $mail = $this->prepareHandler->handle(new PrepareMeetingFollowUpView(
             $event->getEvent(),
-            $event->getUser(),
+            array_map(fn (Participant $p) => $p->getUser(), $meeting->getParticipants($evaluatedSheet)),
             $event->getLocale(),
             $evaluatedSheet,
+            $event->getEvaluatingUser()->getEmail(),
             $event->getEvaluatingSheet()->getTitle(),
             $event->getEvaluation(),
             $this->createParticipantList($event->getEvaluatingSheet(), $evaluatedSheet, $event->getLocale()),

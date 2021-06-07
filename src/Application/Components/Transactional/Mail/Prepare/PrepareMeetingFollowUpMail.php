@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Components\Transactional\Mail\View\PrepareMeetingFollowUpView;
 use Proximum\Vimeet\Application\Query\Mail\ParticipantMailViewQuery;
 use Proximum\Vimeet\Domain\Model\Transactional\Mail\Message;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpMail;
 
@@ -40,19 +41,23 @@ class PrepareMeetingFollowUpMail extends AbstractPrepareMailService
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
         );
 
-        return new MeetingFollowUpMail(
+        $meetingFollowUpMail = new MeetingFollowUpMail(
             $prepareMail->event,
             $this->eventSenderGuesser->generate($prepareMail->event),
             $prepareMail->user->getEmail(),
+            array_map(fn (User $user) => $user->getEmail(), $prepareMail->additionalUsers),
             $prepareMail->locale,
             $participantMailView,
             $prepareMail->sheet->getId(),
             $prepareMail->sheet->getTitle(),
+            $prepareMail->evaluatingUserEmail,
             $prepareMail->evaluatingSheetTitle,
             $prepareMail->evaluation,
             $prepareMail->metParticipants,
             $prepareMail->showEmail,
             $prepareMail->showPhone
         );
+
+        return $meetingFollowUpMail;
     }
 }

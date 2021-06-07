@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Hotfix - Improve exception info if meeting not found after evaluation timeout
+### Added
+- VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
 
 ## [2.94.1] - 2021-06-03
 ### Fixed

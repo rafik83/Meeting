@@ -45,6 +45,11 @@ class AbstractMail
     private $receivers;
 
     /**
+     * @var array of receivers in Cc
+     */
+    private array $receiversCc = [];
+
+    /**
      * AbstractMail constructor.
      *
      * @param string $sender
@@ -76,12 +81,24 @@ class AbstractMail
         }
     }
 
+    public function addReceiverCc(string $email): void
+    {
+        if (false === in_array($email, $this->receiversCc)) {
+            $this->receiversCc[] = $email;
+        }
+    }
+
     /**
      * @return array of receivers email
      */
     public function getReceivers()
     {
         return $this->receivers;
+    }
+
+    public function getReceiversCc(): array
+    {
+        return $this->receiversCc;
     }
 
     /**
