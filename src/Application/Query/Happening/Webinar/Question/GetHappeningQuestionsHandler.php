@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Happening\Webinar\Question;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Event\GetTimezoneHelper;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
@@ -15,10 +16,16 @@ class GetHappeningQuestionsHandler
     /** @var GetTimezoneHelper */
     private $getTimezoneHelper;
 
-    public function __construct(QuestionRepositoryInterface $questionRepository, GetTimezoneHelper $getTimezoneHelper)
-    {
+    private RouterInterface $routerAdapter;
+
+    public function __construct(
+        QuestionRepositoryInterface $questionRepository,
+        GetTimezoneHelper $getTimezoneHelper,
+        RouterInterface $routerAdapter
+    ) {
         $this->questionRepository = $questionRepository;
         $this->getTimezoneHelper = $getTimezoneHelper;
+        $this->routerAdapter = $routerAdapter;
     }
 
     public function handle(GetHappeningQuestions $query): array
@@ -45,13 +52,21 @@ class GetHappeningQuestionsHandler
                 );
             }
 
+            $avatarUrl = null;
+            if ($author->getAvatar()) {
+                $avatarUrl = $this->routerAdapter->generate(
+                    'liip_imagine_filter',
+                    ['path' => $author->getAvatar(), 'filter' => 'user_icon']
+                );
+            }
+
             $questionViews[] = new QuestionView(
                 $question->getId(),
                 $question->getContent(),
                 $author->getFirstName(),
                 $author->getLastName(),
                 $author->getPosition(),
-                $author->getAvatar(),
+                $avatarUrl,
                 $question->getSheet()->getTitle(),
                 $mediumHourFormatter->format($question->getCreatedAt()),
                 $voteCount,

@@ -7291,11 +7291,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
 
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        autowire: true
         tags:
             - { name: tactician.handler, typehints: true }
 
