@@ -75,9 +75,7 @@ class NotificationPublisher extends AbstractNotification implements Notification
             $payload['content'] = $message->getContent();
             $payload['author'] = $message->getCreatedBy()->getFullname();
             $payload['authorId'] = $message->getCreatedBy()->getId();
-            if($this->askCallVisioPrivateChatAccessChecker->allowedToAccess($object->getEvent(),$object, $object->getToUser())){
-                $payload['visioEnable'] = true;
-            }
+            $payload['visioEnable'] = $this->askCallVisioPrivateChatAccessChecker->allowedToAccess($object->getEvent(), $object, $object->getToUser());
         } elseif ($object instanceof Meeting) {
             //todo: add special topic for meeting
             return;
