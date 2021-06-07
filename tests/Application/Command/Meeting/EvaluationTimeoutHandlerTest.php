@@ -12,6 +12,7 @@ use Proximum\Vimeet\Application\Command\Meeting\EvaluationTimeoutMessage;
 use Proximum\Vimeet\Application\Components\Worker\TimestampProvider;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingEvaluationUpdateExpiredEvent;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
 use Proximum\Vimeet\Domain\Exception\Meeting\MeetingException;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -135,6 +136,15 @@ class EvaluationTimeoutHandlerTest extends TestCase
         $this->userRepository->findOneById(66)->willReturn(null);
 
         $this->expectException(MeetingException::class);
+        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, []);
+        $this->evaluationTimeoutHandler->handle($message);
+    }
+
+    public function testThrowExceptionIfMeetingNotFound()
+    {
+        $this->meetingRepository->findById(1)->willReturn(null);
+
+        $this->expectException(MeetingNotFoundException::class);
         $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, []);
         $this->evaluationTimeoutHandler->handle($message);
     }
