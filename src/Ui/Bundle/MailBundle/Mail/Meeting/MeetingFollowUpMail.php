@@ -32,14 +32,19 @@ class MeetingFollowUpMail extends UserMail
     private bool $showEmail;
     private bool $showPhone;
 
+    /**
+     * @param string[] $additionalReceivers
+     */
     public function __construct(
         Event $event,
         string $sender,
         string $receiver,
+        array $additionalReceivers,
         string $locale,
         ParticipantInfoView $participantInfoView,
         int $evaluatedSheetId,
         string $evaluatedSheetTitle,
+        string $evaluatingSheetEmail,
         string $evaluatingSheetTitle,
         int $meetingEvaluation,
         FollowUpParticipantListView $metParticipants,
@@ -47,6 +52,12 @@ class MeetingFollowUpMail extends UserMail
         bool $showPhone
     ) {
         parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
+
+        foreach ($additionalReceivers as $additionalReceiver) {
+            $this->addReceiver($additionalReceiver);
+        }
+
+        $this->addReceiverCc($evaluatingSheetEmail);
 
         $this->evaluatedSheetId = $evaluatedSheetId;
         $this->evaluatedSheetTitle = $evaluatedSheetTitle;
