@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\MessageBusInterface;
 use Proximum\Vimeet\Application\Components\Worker\TimestampProvider;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingEvaluationUpdateExpiredEvent;
+use Proximum\Vimeet\Application\Exception\Meeting\MeetingNotFoundException;
 use Proximum\Vimeet\Domain\Exception\Meeting\MeetingException;
 use Proximum\Vimeet\Domain\Model\Contact;
 use Proximum\Vimeet\Domain\Repository\ContactRepositoryInterface;
@@ -45,6 +46,16 @@ class EvaluationTimeoutHandler
     public function handle(EvaluationTimeoutMessage $message)
     {
         $meeting = $this->meetingRepository->findById($message->getMeetingId());
+
+        if ($meeting === null) {
+            throw new MeetingNotFoundException(
+                sprintf(
+                    'Meeting #%d not found when evalution reached timeout for user #%d',
+                    $message->getMeetingId(),
+                    $message->getFromUserId()
+                )
+            );
+        }
 
         // check if evaluation has been updated
         $latestEvaluatedAt = $this->contactRepository->findLatestEvaluatedAt(

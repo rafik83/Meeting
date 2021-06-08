@@ -66,6 +66,9 @@ class Counter
         $sheetPriorityNumberAllowed = $sheet->getType()->getPriorityMeetingRequestsNumber();
         $sheetPriorityNumberUsed = $this->requestRepository->countBySheetWithPriority($sheet);
 
-        return $sheetPriorityNumberAllowed - $sheetPriorityNumberUsed;
+        // In some rare cases, if requests number has been changed after the event start,
+        // $sheetPriorityNumberUsed may be greater than
+
+        return max(0, $sheetPriorityNumberAllowed - $sheetPriorityNumberUsed);
     }
 }

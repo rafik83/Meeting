@@ -8,9 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-339 - Display call visio button in the networking private chat
 
+## [2.94.2] - 2021-06-08
+### Fixed
+- Hotfix - Improve exception info if meeting not found after evaluation timeout
+- MV-341 - Fix exception if number of remaining priority meeting requests is negative
+
 ## [2.94.1] - 2021-06-03
 ### Fixed
 - MV-338 - Hide meeting request on sheet if not allowed by seewhat rule
+
+### Fixed
+- MV-340 - fix avatars in networking and chat
 
 ## [2.94.0] - 2021-05-31
 ### Added

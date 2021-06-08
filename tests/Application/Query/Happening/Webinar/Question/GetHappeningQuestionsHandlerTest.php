@@ -3,7 +3,9 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Happening\Webinar\Question;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler;
 use Proximum\Vimeet\Application\Query\Happening\Webinar\Question\QuestionReplyView;
@@ -31,10 +33,12 @@ class GetHappeningQuestionsHandlerTest extends TestCase
     {
         $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
         $this->getTimezoneHelper = $this->prophesize(GetTimezoneHelper::class);
+        $this->routerAdapter = $this->prophesize(RouterInterface::class);
 
         $this->getHappeningQuestionsHandler = new GetHappeningQuestionsHandler(
             $this->questionRepository->reveal(),
-            $this->getTimezoneHelper->reveal()
+            $this->getTimezoneHelper->reveal(),
+            $this->routerAdapter->reveal()
         );
     }
 
@@ -70,7 +74,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
             ->willReturn('DOE');
         $user2->getAvatar()
             ->shouldBeCalled()
-            ->willReturn(null);
+            ->willReturn('some-file.jpg');
         $user2->getPosition()
             ->shouldBeCalled()
             ->willReturn('Employee');
@@ -122,6 +126,11 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                 [$question2, 2, 1],
             ]);
 
+        $this->routerAdapter
+            ->generate('liip_imagine_filter', Argument::withEntry('path', 'some-file.jpg'))
+            ->shouldBeCalled()
+            ->willReturn('/resized-picture.jpg');
+
         $result = $this->getHappeningQuestionsHandler->handle(
             new GetHappeningQuestions($happening->reveal(), $user1->reveal(), 'en', 'like')
         );
@@ -148,7 +157,7 @@ class GetHappeningQuestionsHandlerTest extends TestCase
                     'George',
                     'DOE',
                     'Employee',
-                    null,
+                    '/resized-picture.jpg',
                     'Cola inc.',
                     '10:00:00 AM',
                     2,

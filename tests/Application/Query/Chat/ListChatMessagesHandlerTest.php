@@ -101,14 +101,34 @@ class ListChatMessagesHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('/fr/chat/avatar?Leeloo');
 
+        $this->routerAdapter->generate('liip_imagine_filter', Argument::withKey('path'))
+            ->shouldBeCalled()
+            ->willReturn('/media/resized/photo');
+
         $chatMessageViews = $this->listChatMessagesHandler->handle(
             new ListChatMessages($this->happening->reveal(), $this->user->reveal(), 'fr')
         );
 
-        $result1 = new ChatMessageView(1, 'Hello!', new \DateTime('2020-05-05 12:00:00'), '/custom-picture.jpg', 12345, 'Pierre DUPONT.', 'Taxi Inc.');
+        $result1 = new ChatMessageView(
+            1,
+            'Hello!',
+            new \DateTime('2020-05-05 12:00:00'),
+            '/media/resized/photo',
+            12345,
+            'Pierre DUPONT.',
+            'Taxi Inc.'
+        );
         $result1->formattedCreatedAt = '14:00:00';
 
-        $result2 = new ChatMessageView(2, 'How are you?', new \DateTime('2020-05-05 12:05:00'), '/fr/chat/avatar?Leeloo', 007, 'Leeloo', 'Fifth Element');
+        $result2 = new ChatMessageView(
+            2,
+            'How are you?',
+            new \DateTime('2020-05-05 12:05:00'),
+            '/fr/chat/avatar?Leeloo',
+            007,
+            'Leeloo',
+            'Fifth Element'
+        );
         $result2->selfVote = 'like';
         $result2->formattedCreatedAt = '14:05:00';
 
