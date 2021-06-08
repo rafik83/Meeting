@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
@@ -156,21 +157,21 @@ class DayViewQueryHandlerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->currentTime = new \DateTime('2016-10-12 15:00:00');
+        $this->currentTime = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 15:00');
         $this->event = EventFactory::createEvent();
         $this->category = null;
         $this->user = UserFactory::create();
-        $this->startTime = new \DateTime('2016-10-12 10:00:00');
-        $this->endTime = new \DateTime('2016-10-12 18:00:00');
+        $this->startTime = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 10:00');
+        $this->endTime = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 18:00');
         $this->day = new TimeRangeView($this->startTime, $this->endTime);
         $this->sheet = SheetFactory::create($this->event);
         $this->sheet->setInCatalog(true);
         $this->participant = ParticipantFactory::create($this->sheet, $this->user);
 
-        $this->beginHappening1 = new \DateTime('2016-10-12 12:00:00');
-        $this->beginHappening2 = new \DateTime('2016-10-12 15:30:00');
-        $this->endHappening1   = new \DateTime('2016-10-12 14:00:00');
-        $this->endHappening2   = new \DateTime('2016-10-12 16:50:00');
+        $this->beginHappening1 = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:00');
+        $this->beginHappening2 = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 15:30');
+        $this->endHappening1   = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:20');
+        $this->endHappening2   = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 16:50');
 
         $this->expectedHappeningViews = [
             new HappeningView(1, $this->beginHappening1, $this->endHappening1, 'title', 'description', [], 'picto', 'leftColor', 'rightColor', 'Europe/Paris'),
@@ -323,7 +324,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->assertEquals($this->expectedDayView, $result);
     }
 
-    public function testHandleWithMeeting(): void
+    public function testHandleWithMeetingAndMass(): void
     {
         $user2       = UserFactory::create('test2@test.fr');
         $sheet2      = SheetFactory::create($this->event, $user2);
@@ -351,8 +352,8 @@ class DayViewQueryHandlerTest extends TestCase
         $availableSlotViews = new AvailableSlotView(1, $this->beginHappening1, $this->endHappening2);
         $meetingSlot = new MeetingSlot(
             $this->event,
-            new \DateTime('2016-10-12 11:00:00'),
-            new \DateTime('2016-10-12 11:20:00')
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:00'),
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:20')
         );
 
         $expected = new DayView(
@@ -365,8 +366,8 @@ class DayViewQueryHandlerTest extends TestCase
             [$meetingView],
             [
                 '2016-10-12 11:00:00' => new TimeRangeView(
-                    new \DateTime('2016-10-12 11:00:00'),
-                    new \DateTime('2016-10-12 11:20:00')
+                    DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:00'),
+                    DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:20')
                 )
             ],
             [$availableSlotViews],
@@ -459,18 +460,18 @@ class DayViewQueryHandlerTest extends TestCase
         $event     = EventFactory::createEvent();
         $user      = UserFactory::create();
         $category  = null;
-        $startTime = new \DateTime('2016-10-12 10:00:00');
-        $endTime   = new \DateTime('2016-10-12 18:00:00');
+        $startTime = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 10:00');
+        $endTime   = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 18:00');
         $eventDay  = new TimeRangeView($startTime, $endTime);
         $sheet     = SheetFactory::create($event);
         $sheet->setAttendance(false);
         $participant  = ParticipantFactory::create($sheet);
         $massCategory = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
         // Data
-        $beginHappening1 = new \DateTime('2016-10-12 12:00:00');
-        $beginHappening2 = new \DateTime('2016-10-12 15:30:00');
-        $endHappening1   = new \DateTime('2016-10-12 14:00:00');
-        $endHappening2   = new \DateTime('2016-10-12 16:50:00');
+        $beginHappening1 = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:00');
+        $beginHappening2 = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 15:30');
+        $endHappening1   = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 11:20');
+        $endHappening2   = DateTime::createFromFormat('!Y-m-d H:i', '2016-10-12 16:50');
         $categoryH1      = new Happening\Category($event, 'Conference', 1, '#123123', '#123123');
         $categoryH2      = new Happening\Category($event, 'RDV', 2, '#123123', '#123123');
         $happening1      = new Happening(
@@ -556,33 +557,33 @@ class DayViewQueryHandlerTest extends TestCase
 
     public function testDayIsFullUnavailable(): void
     {
-        $day1 = new TimeRangeView(new \DateTime('2018-10-25 10:00:00'), new \DateTime('2018-10-25 19:00:00'));
-        $day2 = new TimeRangeView(new \DateTime('2018-10-26 09:00:00'), new \DateTime('2018-10-26 17:00:00'));
-        $day3 = new TimeRangeView(new \DateTime('2018-10-27 11:00:00'), new \DateTime('2018-10-27 16:00:00'));
+        $day1 = new TimeRangeView(DateTime::createFromFormat('!Y-m-d H:i', '2016-10-13 10:00'), DateTime::createFromFormat('!Y-m-d H:i', '2016-10-13 19:00'));
+        $day2 = new TimeRangeView(DateTime::createFromFormat('!Y-m-d H:i', '2016-10-14 09:00'), DateTime::createFromFormat('!Y-m-d H:i', '2016-10-14 17:00'));
+        $day3 = new TimeRangeView(DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 11:00'), DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 16:00'));
 
         $unavailability1 = new Unavailability(
             $this->user,
             $this->event,
-            new \DateTime('2018-10-25 10:00:00'),
-            new \DateTime('2018-10-25 19:00:00')
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-13 10:00'),
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-13 19:00')
         );
         $unavailability2 = new Unavailability(
             $this->user,
             $this->event,
-            new \DateTime('2018-10-26 12:00:00'),
-            new \DateTime('2018-10-26 14:00:00')
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-14 12:00'),
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-14 14:00')
         );
         $unavailability3 = new Unavailability(
             $this->user,
             $this->event,
-            new \DateTime('2018-10-27 11:00:00'),
-            new \DateTime('2018-10-27 13:00:00')
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 11:00'),
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 13:00')
         );
         $unavailability4 = new Unavailability(
             $this->user,
             $this->event,
-            new \DateTime('2018-10-27 12:00:00'),
-            new \DateTime('2018-10-27 16:00:00')
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 12:00'),
+            DateTime::createFromFormat('!Y-m-d H:i', '2016-10-15 16:00')
         );
 
         $this
