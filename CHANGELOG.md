@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Hotfix - Improve exception info if meeting not found after evaluation timeout
+- MV-341 - Fix exception if number of remaining priority meeting requests is negative
 
 ## [2.94.1] - 2021-06-03
 ### Fixed
