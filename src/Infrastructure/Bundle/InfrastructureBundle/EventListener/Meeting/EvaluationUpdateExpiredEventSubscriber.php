@@ -13,6 +13,7 @@ use Proximum\Vimeet\Application\View\Meeting\FollowUpParticipantListView;
 use Proximum\Vimeet\Application\View\Meeting\FollowUpParticipantView;
 use Proximum\Vimeet\Domain\Meeting\FollowUpMailAccessRules;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -74,7 +75,7 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
             array_map(fn (Participant $p) => $p->getUser(), $meeting->getParticipants($event->getEvaluatingSheet())),
             $event->getEvaluatingSheet()->getTitle(),
             $event->getEvaluation(),
-            $this->createParticipantList($event->getEvaluatingSheet(), $evaluatedSheet, $event->getLocale()),
+            $this->createParticipantList($meeting, $evaluatedSheet, $event->getLocale()),
             $accessRule->isEmailVisible($event->getEvaluation()),
             $accessRule->isPhoneVisible($event->getEvaluation())
         ));
@@ -90,23 +91,29 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
         $this->meetingRepository->set($meeting);
     }
 
-    private function createParticipantList(Sheet $sheet, Sheet $evaluatedSheet, string  $locale): FollowUpParticipantListView
+    private function createParticipantList(Meeting $meeting, Sheet $evaluatedSheet, string  $locale): FollowUpParticipantListView
     {
-        $participantViews = $sheet->getParticipants()->map(
-            function (Participant $participant) use ($sheet, $evaluatedSheet, $locale) {
+        $allParticipants = array_merge(
+            $meeting->getMetParticipants($evaluatedSheet),
+            $meeting->getParticipants($evaluatedSheet)
+        );
+
+        $participantViews = array_map(
+            function (Participant $participant) use ($evaluatedSheet, $locale) {
                 $infos = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+                $sheetToDisplayId = $participant->getSheet()->getId();
 
                 return new FollowUpParticipantView(
                     $infos[Tag::PARTICIPANT_FIRSTNAME],
                     $infos[Tag::PARTICIPANT_LASTNAME],
                     $infos[Tag::PARTICIPANT_POSITION],
-                    $sheet->getId(),
+                    $sheetToDisplayId,
                     $this->eventUrlGeneratorInterface->generateEventAbsoluteUrl(
-                        $sheet->getEvent(),
+                        $evaluatedSheet->getEvent(),
                         'event_catalog_complete_sheet',
                         [
                             'sheet' => $evaluatedSheet->getId(),
-                            'sheetToDisplay' => $sheet->getId(),
+                            'sheetToDisplay' => $sheetToDisplayId,
                             '_locale' => $locale,
                         ]
                     ),
@@ -114,9 +121,10 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
                     $participant->getEmail(),
                     $infos[Tag::PARTICIPANT_PHONE]
                 );
-            }
+            },
+            $allParticipants
         );
 
-        return new FollowUpParticipantListView($participantViews->toArray());
+        return new FollowUpParticipantListView($participantViews);
     }
 }
