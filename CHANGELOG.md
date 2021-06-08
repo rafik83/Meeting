@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.94.2] - 2021-06-08
 ### Fixed
 - Hotfix - Improve exception info if meeting not found after evaluation timeout
 - MV-341 - Fix exception if number of remaining priority meeting requests is negative
