@@ -44,7 +44,7 @@ class EvaluateMeetingHandler
             return;
         }
 
-        $message = new EvaluationTimeoutMessage($command->meeting, $command->user, $contacts);
+        $message = new EvaluationTimeoutMessage($command->meeting, $command->user);
         $this->messageBus->dispatchDelayed($message, EvaluationTimeoutMessage::WAIT_DELAY);
     }
 

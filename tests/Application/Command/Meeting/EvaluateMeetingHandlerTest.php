@@ -96,8 +96,7 @@ class EvaluateMeetingHandlerTest extends TestCase
 
         $expectedMessage = new EvaluationTimeoutMessage(
             $meeting->reveal(),
-            $user->reveal(),
-            [$expectedContact1, $expectedContact2]
+            $user->reveal()
         );
         $messageBus->dispatchDelayed($expectedMessage, EvaluationTimeoutMessage::WAIT_DELAY)->shouldBeCalled();
 
