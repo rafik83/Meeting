@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
+- VIMEET-2607 - Display all meeting participants in follow up email
 
 ## [2.94.3] - 2021-06-08
 ### Fixed

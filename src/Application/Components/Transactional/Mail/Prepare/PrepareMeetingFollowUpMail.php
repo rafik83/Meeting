@@ -41,7 +41,7 @@ class PrepareMeetingFollowUpMail extends AbstractPrepareMailService
             new ParticipantMailViewQuery($prepareMail->sheet, $prepareMail->user)
         );
 
-        $meetingFollowUpMail = new MeetingFollowUpMail(
+        return new MeetingFollowUpMail(
             $prepareMail->event,
             $this->eventSenderGuesser->generate($prepareMail->event),
             $prepareMail->user->getEmail(),
@@ -57,7 +57,5 @@ class PrepareMeetingFollowUpMail extends AbstractPrepareMailService
             $prepareMail->showEmail,
             $prepareMail->showPhone
         );
-
-        return $meetingFollowUpMail;
     }
 }
