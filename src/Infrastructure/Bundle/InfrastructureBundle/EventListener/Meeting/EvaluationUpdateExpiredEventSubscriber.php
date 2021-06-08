@@ -71,7 +71,7 @@ class EvaluationUpdateExpiredEventSubscriber implements EventSubscriberInterface
             array_map(fn (Participant $p) => $p->getUser(), $meeting->getParticipants($evaluatedSheet)),
             $event->getLocale(),
             $evaluatedSheet,
-            $event->getEvaluatingUser()->getEmail(),
+            array_map(fn (Participant $p) => $p->getUser(), $meeting->getParticipants($event->getEvaluatingSheet())),
             $event->getEvaluatingSheet()->getTitle(),
             $event->getEvaluation(),
             $this->createParticipantList($event->getEvaluatingSheet(), $evaluatedSheet, $event->getLocale()),

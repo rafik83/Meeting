@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpMail;
 
@@ -80,12 +81,14 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             ]
         );
 
+        $evaluatinguser = UserFactory::create('alice@acme.corp', 42);
+
         $this->prepareMail = new PrepareMeetingFollowUpView(
             $this->event->reveal(),
             [$this->evaluatedUser1->reveal(), $this->evaluatedUser2->reveal()],
             'fr',
             $this->evaluatedSheet->reveal(),
-            'alice@acme.corp',
+            [$evaluatinguser],
             'Acme Corp',
             5,
             $this->metParticipants,
@@ -121,7 +124,7 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             $this->participantInfoView,
             8,
             'Fairness',
-            'alice@acme.corp',
+            ['alice@acme.corp'],
             'Acme Corp',
             5,
             $this->metParticipants,

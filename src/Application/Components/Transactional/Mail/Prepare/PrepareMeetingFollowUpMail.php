@@ -50,7 +50,7 @@ class PrepareMeetingFollowUpMail extends AbstractPrepareMailService
             $participantMailView,
             $prepareMail->sheet->getId(),
             $prepareMail->sheet->getTitle(),
-            $prepareMail->evaluatingUserEmail,
+            array_map(fn (User $user) => $user->getEmail(), $prepareMail->evaluatingUsers),
             $prepareMail->evaluatingSheetTitle,
             $prepareMail->evaluation,
             $prepareMail->metParticipants,

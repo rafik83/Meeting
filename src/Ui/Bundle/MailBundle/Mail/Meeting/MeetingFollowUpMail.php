@@ -44,7 +44,7 @@ class MeetingFollowUpMail extends UserMail
         ParticipantInfoView $participantInfoView,
         int $evaluatedSheetId,
         string $evaluatedSheetTitle,
-        string $evaluatingSheetEmail,
+        array $evaluatingEmails,
         string $evaluatingSheetTitle,
         int $meetingEvaluation,
         FollowUpParticipantListView $metParticipants,
@@ -57,7 +57,9 @@ class MeetingFollowUpMail extends UserMail
             $this->addReceiver($additionalReceiver);
         }
 
-        $this->addReceiverCc($evaluatingSheetEmail);
+        foreach ($evaluatingEmails as $evaluatingEmail) {
+            $this->addReceiverCc($evaluatingEmail);
+        }
 
         $this->evaluatedSheetId = $evaluatedSheetId;
         $this->evaluatedSheetTitle = $evaluatedSheetTitle;

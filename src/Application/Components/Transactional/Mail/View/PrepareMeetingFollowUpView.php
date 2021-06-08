@@ -11,7 +11,7 @@ use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 class PrepareMeetingFollowUpView extends AbstractPrepareMail
 {
     public array $additionalUsers;
-    public string $evaluatingUserEmail;
+    public array $evaluatingUsers;
     public string $evaluatingSheetTitle;
     public int $evaluation;
     public FollowUpParticipantListView $metParticipants;
@@ -20,13 +20,14 @@ class PrepareMeetingFollowUpView extends AbstractPrepareMail
 
     /**
      * @param User[] $users
+     * @param User[] $evaluatingUsers
      */
     public function __construct(
         Event $event,
         array $users,
         string $locale,
         Sheet $evaluatedSheet,
-        string $evaluatingUserEmail,
+        array $evaluatingUsers,
         string $evaluatingSheetTitle,
         int $evaluation,
         FollowUpParticipantListView $metParticipants,
@@ -42,7 +43,7 @@ class PrepareMeetingFollowUpView extends AbstractPrepareMail
         );
 
         $this->additionalUsers = array_slice($users, 1);
-        $this->evaluatingUserEmail = $evaluatingUserEmail;
+        $this->evaluatingUsers = $evaluatingUsers;
         $this->evaluatingSheetTitle = $evaluatingSheetTitle;
         $this->evaluation = $evaluation;
         $this->metParticipants = $metParticipants;
