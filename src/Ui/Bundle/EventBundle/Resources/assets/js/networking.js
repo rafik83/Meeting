@@ -140,6 +140,9 @@ export default function initNetworking(target, userConnection, notificationCallV
                     networkingBadgeManager.incrementMenuBadgesCounter();
                 }
 
+                if (payload.visioEnable){
+                    this.chatVisio.visioEnable = '1';
+                }
                 targetChat.reload();
                 return;
             }
