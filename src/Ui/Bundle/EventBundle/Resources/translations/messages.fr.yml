@@ -5,6 +5,8 @@ account.profile.contactInformation: Coordonnées
 account.profile.profile: Profil
 account.profile.title: Profil
 account.profile.updateAvatar: 'Modifier la photo'
+account.status.offline: 'Offline'
+account.status.meetOnline: 'Meet Online'
 account.update_email.title: 'Changer mon email'
 account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'

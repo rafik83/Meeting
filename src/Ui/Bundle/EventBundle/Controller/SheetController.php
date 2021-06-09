@@ -181,7 +181,7 @@ class SheetController extends AbstractController
             'tipTranslationViews' => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
             'displayAnalyticsStat' => $displayAnalyticsStat,
-            'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
+            'displayAnalyticsViewLink' => $displayAnalyticsViewLink
         ]);
     }
 

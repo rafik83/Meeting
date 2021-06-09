@@ -48,7 +48,8 @@ class CardViewQueryHandler
                     $cardViewQuery->participant->getSheet()->getEvent(),
                     $this->dateTime
                 )
-                : false
+                : false,
+            true
         );
     }
 }
