@@ -3,8 +3,8 @@
 namespace Proximum\Vimeet\Application\Query\Participant;
 
 use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\CachedNetworkingStatusInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Query\Participant\MeetOnline\MeetOnlineQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -18,10 +18,12 @@ class CardViewQueryHandler
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ScanRepositoryInterface $scanRepository,
+        CachedNetworkingStatusInterface $cachedNetworkingStatus,
         DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->scanRepository = $scanRepository;
+        $this->cachedNetworkingStatus = $cachedNetworkingStatus;
         $this->dateTime = $dateTime;
     }
 
@@ -31,7 +33,10 @@ class CardViewQueryHandler
         $isOnline = null;
 
         if($cardViewQuery->showMeetOnline){
-            $isOnline = true;
+            $isOnline = $this->cachedNetworkingStatus->isOnline(
+                $cardViewQuery->participant->getSheet()->getEvent()->getId(),
+                $cardViewQuery->participant->getUser()->getId()
+            );
         }
 
         return new CardView(
