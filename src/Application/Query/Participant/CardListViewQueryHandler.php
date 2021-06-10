@@ -24,8 +24,6 @@ class CardListViewQueryHandler
         $user = $cardListViewQuery->user;
         $cardListView = new CardListView();
 
-        $showMeetOnline = $this->networkingAccessChecker->isSheetAllowedToAccess($cardListViewQuery->sheet);
-
         foreach ($participants as $participant) {
             if ($cardListViewQuery->editable) {
                 $editable = $participant->getUser() === $user || $cardListViewQuery->sheet->isOwner($user);
@@ -33,7 +31,13 @@ class CardListViewQueryHandler
                 $editable = false;
             }
 
-            $cardViewQuery = new CardViewQuery($participant, $cardListViewQuery->locale, $editable, $showMeetOnline);
+            $cardViewQuery = new CardViewQuery(
+                $participant,
+                $cardListViewQuery->locale,
+                $editable,
+                false,
+                $cardListViewQuery->showMeetOnline
+            );
 
             $cardListView->cardViews[$participant->getId()] = $this->cardViewQueryHandler->handle($cardViewQuery);
         }

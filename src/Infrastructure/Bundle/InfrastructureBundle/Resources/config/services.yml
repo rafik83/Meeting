@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        bind:
+            $dateTime: '@datetime'
     #
     # Event
     #
@@ -5614,11 +5617,10 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
         arguments:
             - '@datetime'
-            -
+
     domain.key_dates.checker.networking_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
-        arguments:
-            - '@datetime'
+        autowire: true
 
     domain.key_dates.checker.ask_call_visio_private_chat_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker

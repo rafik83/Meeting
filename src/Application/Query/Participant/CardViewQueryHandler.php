@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Query\Participant;
 
 use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Query\Participant\MeetOnline\MeetOnlineQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -27,6 +28,11 @@ class CardViewQueryHandler
     public function handle(CardViewQuery $cardViewQuery): CardView
     {
         $infos = $this->participantInfoGuesser->guessParticipantInfos($cardViewQuery->participant, $cardViewQuery->locale);
+        $isOnline = null;
+
+        if($cardViewQuery->showMeetOnline){
+            $isOnline = true;
+        }
 
         return new CardView(
             $cardViewQuery->participant->getId(),
@@ -38,14 +44,12 @@ class CardViewQueryHandler
             $cardViewQuery->participant->isOwnerParticipant(),
             $cardViewQuery->participant->getSheet()->getId(),
             $cardViewQuery->getCheckinStatus,
-            $cardViewQuery->getCheckinStatus
-                ? $this->scanRepository->isUserCheckinTodayByEvent(
-                    $cardViewQuery->participant->getUser(),
-                    $cardViewQuery->participant->getSheet()->getEvent(),
-                    $this->dateTime
-                )
-                : false,
-            true
+            $cardViewQuery->getCheckinStatus && $this->scanRepository->isUserCheckinTodayByEvent(
+                $cardViewQuery->participant->getUser(),
+                $cardViewQuery->participant->getSheet()->getEvent(),
+                $this->dateTime
+            ),
+            $isOnline
         );
     }
 }

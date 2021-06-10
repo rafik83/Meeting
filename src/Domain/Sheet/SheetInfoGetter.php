@@ -5,6 +5,7 @@ namespace Proximum\Vimeet\Domain\Sheet;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -26,6 +27,8 @@ class SheetInfoGetter
     /** @var CanSeeOtherSheets */
     private $canSeeSheet;
 
+    private NetworkingAccessChecker $networkingAccessChecker;
+
     /**
      * @param CanSeeSheet                     $canSeeSheet
      * @param NomenclatureRepositoryInterface $nomenclatureRepository
@@ -36,12 +39,14 @@ class SheetInfoGetter
         CanSeeSheet $canSeeSheet,
         NomenclatureRepositoryInterface $nomenclatureRepository,
         TemplateDataFactory $templateDataFactory,
-        CardListViewQueryHandler $cardListViewQueryHandler
+        CardListViewQueryHandler $cardListViewQueryHandler,
+        NetworkingAccessChecker $networkingAccessChecker
     ) {
         $this->canSeeSheet = $canSeeSheet;
         $this->nomenclatureRepository = $nomenclatureRepository;
         $this->templateDataFactory = $templateDataFactory;
         $this->cardListViewQueryHandler = $cardListViewQueryHandler;
+        $this->networkingAccessChecker = $networkingAccessChecker;
     }
 
     /**
@@ -67,7 +72,9 @@ class SheetInfoGetter
         }
 
         $nomenclatures = $this->nomenclatureRepository->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
+        $showMeetOnline = $this->networkingAccessChecker->isSheetAllowedToAccess($sheet);
+
+        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale, true, $showMeetOnline);
         $participants = $this->cardListViewQueryHandler->handle($cardListViewQuery);
 
         $registrationTemplateData = $this

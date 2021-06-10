@@ -4,6 +4,7 @@ namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
@@ -43,9 +44,10 @@ class SheetInfosHelper
      *
      * @return array
      */
-    public function getInfos(Sheet $sheet, User $fromUser, $locale, bool $editableParticipantProfile = true)
+    public function getInfos(Sheet $sheet,  User $fromUser, $locale, bool $editableParticipantProfile = true)
     {
         $nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
+
         $participants  = $this->cardListViewQueryHandler->handle(
             new CardListViewQuery($sheet, $fromUser, $locale, $editableParticipantProfile)
         );

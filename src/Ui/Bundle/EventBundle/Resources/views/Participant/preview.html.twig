@@ -33,7 +33,7 @@
         <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
         <p class="job">{{ participant.position }}</p>
 
-        {% if participant.isOnline is not same as null %}
+        {% if participant.isOnline is not same as (null) %}
             {% if participant.isOnline %}
                 <a class="user__meet">
                     <div class="online">{{ 'account.status.meetOnline'|trans }}</div>
