@@ -1,7 +1,5 @@
 imports:
     - { resource: config.yml }
-    # - { resource: services_dev.yml }
-    - { resource: packages/snc_redis.yml }
 
 framework:
     # router:
@@ -12,18 +10,3 @@ framework:
         cookie_secure: auto
         cookie_lifetime: 2592000
         gc_maxlifetime:  2592000
-
-# web_profiler:
-#     toolbar: true
-#     intercept_redirects: false
-
-# monolog:
-#     handlers:
-#         main:
-#             type:   stream
-#             path:   "%kernel.logs_dir%/%kernel.environment%.log"
-#             level:  debug
-#         console:
-#             type:   console
-#             process_psr_3_messages: false
-#             channels: ['!event', '!doctrine', '!console']
