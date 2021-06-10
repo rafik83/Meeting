@@ -16,23 +16,23 @@ use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 class MeetingEvaluationUpdateExpiredEvent extends SymfonyEvent
 {
     private Meeting $meeting;
-    private User $user;
     private Sheet $evaluatingSheet;
+    private User $evaluatingUser;
     private int $evaluation;
     private ?string $locale;
 
     public function __construct(
         Meeting $meeting,
-        User $user,
         Sheet $evaluatingSheet,
+        User $evaluatingUser,
         int $evaluation,
         ?string $locale = null
     ) {
         $this->meeting = $meeting;
-        $this->user = $user;
+        $this->evaluatingUser = $evaluatingUser;
         $this->evaluatingSheet = $evaluatingSheet;
         $this->evaluation = $evaluation;
-        $this->locale = $locale ?? $user->getLocale();
+        $this->locale = $locale ?? $meeting->getSheetMet($this->evaluatingSheet)->getOwnerLocale();
     }
 
     public function getMeeting(): Meeting
@@ -45,12 +45,9 @@ class MeetingEvaluationUpdateExpiredEvent extends SymfonyEvent
         return $this->meeting->getEvent();
     }
 
-    /**
-     * User from the sheet that has been evaluated
-     */
-    public function getUser(): User
+    public function getEvaluatingUser(): User
     {
-        return $this->user;
+        return $this->evaluatingUser;
     }
 
     /**

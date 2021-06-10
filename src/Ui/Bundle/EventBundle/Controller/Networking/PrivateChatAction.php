@@ -74,13 +74,12 @@ class PrivateChatAction
             }
         }
 
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $event = $eventDomain->getEvent();
 
-        if (!$this->networkingAccessChecker->allowedToAccess($event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || !$this->networkingAccessChecker->isSheetAllowedToAccess($sheet)
+            || $sheet->getEvent()->getId() !== $event->getId()
+        ) {
             throw new AccessDeniedException();
         }
 

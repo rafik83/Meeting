@@ -61,13 +61,12 @@ class AbandonCallVisioAction
             }
         }
 
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $event = $eventDomain->getEvent();
 
-        if (!$this->networkingAccessChecker->allowedToAccess($event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || $sheet->getEvent()->getId() !== $event->getId()
+            || !$this->networkingAccessChecker->isSheetAllowedToAccess($sheet)
+        ) {
             throw new AccessDeniedException();
         }
 

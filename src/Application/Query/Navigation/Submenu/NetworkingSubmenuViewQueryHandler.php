@@ -9,48 +9,31 @@ use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
 class NetworkingSubmenuViewQueryHandler
 {
-    /** @var NavigationBuilderInterface */
-    private $navigationBuilder;
-
-    /** @var NetworkingAccessChecker */
-    private $networkingAccessChecker;
-
-    /** @var ChatMessageRepositoryInterface */
-    private $chatMessageRepository;
-
-    /** @var ChatSessionRepositoryInterface */
-    private $chatSessionRepository;
-
-    /** @var CanAccessToNetworking */
-    private $canAccessToNetworking;
+    private NavigationBuilderInterface $navigationBuilder;
+    private NetworkingAccessChecker $networkingAccessChecker;
+    private ChatMessageRepositoryInterface $chatMessageRepository;
+    private ChatSessionRepositoryInterface $chatSessionRepository;
 
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
         NetworkingAccessChecker $networkingAccessChecker,
         ChatMessageRepositoryInterface $chatMessageRepository,
-        ChatSessionRepositoryInterface $chatSessionRepository,
-        CanAccessToNetworking $canAccessToNetworking
+        ChatSessionRepositoryInterface $chatSessionRepository
     ) {
         $this->navigationBuilder = $navigationBuilder;
         $this->networkingAccessChecker = $networkingAccessChecker;
         $this->chatMessageRepository = $chatMessageRepository;
         $this->chatSessionRepository = $chatSessionRepository;
-        $this->canAccessToNetworking = $canAccessToNetworking;
     }
 
     public function handle(NetworkingSubmenuViewQuery $query): ?SubmenuButtonView
     {
-        if (!$this->canAccessToNetworking->isSatisfied($query->sheet)) {
-            return null;
-        }
-
-        if (!$this->networkingAccessChecker->allowedToAccess($query->event)) {
+        if (!$this->networkingAccessChecker->isSheetAllowedToAccess($query->sheet)) {
             return null;
         }
 

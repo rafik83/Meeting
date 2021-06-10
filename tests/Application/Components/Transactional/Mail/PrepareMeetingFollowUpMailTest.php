@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Transactional\Mail\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Transactional\Mail\Constant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSender;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpCustomizedMail;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Meeting\MeetingFollowUpMail;
 
@@ -33,7 +34,8 @@ class PrepareMeetingFollowUpMailTest extends TestCase
     private ObjectProphecy $eventSenderGuesser;
     private ObjectProphecy $participantMailViewQueryHandler;
     private ObjectProphecy $event;
-    private ObjectProphecy $evaluatedUser;
+    private ObjectProphecy $evaluatedUser1;
+    private ObjectProphecy $evaluatedUser2;
     private ParticipantInfoView $participantInfoView;
     private FollowUpParticipantListView $metParticipants;
     private PrepareMeetingFollowUpView $prepareMail;
@@ -50,8 +52,11 @@ class PrepareMeetingFollowUpMailTest extends TestCase
         $this->eventSenderGuesser->generate($this->event->reveal())->willReturn('sender@example.net');
 
         // user from sheet that has been evaluated
-        $this->evaluatedUser = $this->prophesize(User::class);
-        $this->evaluatedUser->getEmail()->willReturn('john@doe.com');
+        $this->evaluatedUser1 = $this->prophesize(User::class);
+        $this->evaluatedUser1->getEmail()->willReturn('john@doe.com');
+        $this->evaluatedUser2 = $this->prophesize(User::class);
+        $this->evaluatedUser2->getEmail()->willReturn('alan@turing.com');
+
         $this->evaluatedSheet = $this->prophesize(Sheet::class);
         $this->evaluatedSheet->getId()->willReturn(8);
         $this->evaluatedSheet->getTitle()->willReturn('Fairness');
@@ -76,11 +81,14 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             ]
         );
 
+        $evaluatinguser = UserFactory::create('alice@acme.corp', 42);
+
         $this->prepareMail = new PrepareMeetingFollowUpView(
             $this->event->reveal(),
-            $this->evaluatedUser->reveal(),
+            [$this->evaluatedUser1->reveal(), $this->evaluatedUser2->reveal()],
             'fr',
             $this->evaluatedSheet->reveal(),
+            [$evaluatinguser],
             'Acme Corp',
             5,
             $this->metParticipants,
@@ -111,10 +119,12 @@ class PrepareMeetingFollowUpMailTest extends TestCase
             $this->event->reveal(),
             'sender@example.net',
             'john@doe.com',
+            ['alan@turing.com'],
             'fr',
             $this->participantInfoView,
             8,
             'Fairness',
+            ['alice@acme.corp'],
             'Acme Corp',
             5,
             $this->metParticipants,

@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\MeetingFactory;
+use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -53,7 +54,8 @@ class EvaluationTimeoutHandlerTest extends TestCase
         $this->fromUser = UserFactory::create('boss@bigcompany.com', 66);
         $event = EventFactory::createEvent();
         $fromSheet = SheetFactory::create($event, $this->fromUser);
-        $this->meeting = MeetingFactory::createMeeting($fromSheet, null, $event);
+        $toSheet = SheetFactory::create($event);
+        $this->meeting = MeetingFactory::createMeeting($fromSheet, $toSheet, $event);
         $this->dateTime = DateTime::createFromFormat('!Y-m-d H:i', '2020-06-01 12:05');
         $this->timestampProvider->getTimestamp()->willReturn($this->dateTime->getTimestamp());
 
@@ -73,8 +75,9 @@ class EvaluationTimeoutHandlerTest extends TestCase
     {
         $this->meetingRepository->findById(1)->willReturn($this->meeting);
         $fiveMinutesBeforeDateTime = DateTime::createFromFormat('!Y-m-d H:i', '2020-06-01 12:00');
-        $this->contactRepository->findLatestEvaluatedAt(1, 66, [21, 22, 23, 24])->willReturn($fiveMinutesBeforeDateTime);
+
         $this->userRepository->findOneById(66)->willReturn($this->fromUser);
+        $this->contactRepository->findLatestEvaluatedAt(1, 66, [21, 22, 23, 24])->willReturn($fiveMinutesBeforeDateTime);
         $contactUser1 = UserFactory::create('alice@provider.com', 21);
         $this->userRepository->findOneById(21)->willReturn($contactUser1);
         $contactUser2 = UserFactory::create('bob@provider.com', 22);
@@ -83,35 +86,36 @@ class EvaluationTimeoutHandlerTest extends TestCase
         $this->userRepository->findOneById(23)->willReturn(null);
         $contactUser4 = UserFactory::create('david@provider.com', 24);
         $this->userRepository->findOneById(24)->willReturn($contactUser4);
+        $this->meeting->setParticipants($this->meeting->getToSheet(), [
+            ParticipantFactory::create($this->meeting->getToSheet(), $contactUser1),
+            ParticipantFactory::create($this->meeting->getToSheet(), $contactUser2),
+            ParticipantFactory::create($this->meeting->getToSheet(), $contactUser3),
+            ParticipantFactory::create($this->meeting->getToSheet(), $contactUser4),
+        ]);
+
         $contact1 = new Contact($this->meeting->getEvent(), $this->fromUser, $contactUser1, $this->dateTime, Contact::ORIGIN_MEETING);
         $contact1->setEvaluation(4, $fiveMinutesBeforeDateTime);
+        // in real life, this should not happen: all contacts should have same evaluation
         $contact2 = new Contact($this->meeting->getEvent(), $this->fromUser, $contactUser2, $this->dateTime, Contact::ORIGIN_MEETING);
         $contact2->setEvaluation(5, $fiveMinutesBeforeDateTime);
-        $contact3 = new Contact($this->meeting->getEvent(), $this->fromUser, $contactUser3, $this->dateTime, Contact::ORIGIN_MEETING);
-        $contact4 = new Contact($this->meeting->getEvent(), $this->fromUser, $contactUser4, $this->dateTime, Contact::ORIGIN_MEETING);
         $this->contactRepository->find(Argument::type(Contact::class))->willReturn($contact1, $contact2);
 
-        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, [$contact1, $contact2, $contact3, $contact4]);
+        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser);
         $this->evaluationTimeoutHandler->handle($message);
 
         $this->eventDispatcher->dispatch(Events::MEETING_EVALUATION_UPDATE_EXPIRED, new MeetingEvaluationUpdateExpiredEvent(
             $this->meeting,
-            $contactUser1,
             $this->meeting->getFromSheet(),
+            $this->fromUser,
             4
-        ))->shouldHaveBeenCalled();
-        $this->eventDispatcher->dispatch(Events::MEETING_EVALUATION_UPDATE_EXPIRED, new MeetingEvaluationUpdateExpiredEvent(
-            $this->meeting,
-            $contactUser2,
-            $this->meeting->getFromSheet(),
-            5
-        ))->shouldHaveBeenCalled();
+        ))->shouldHaveBeenCalledOnce();
     }
 
     public function testPostponeDispatchIfEvaluationHasBeenUpdated()
     {
         $this->meetingRepository->findById(1)->willReturn($this->meeting);
         $threeMinutesBeforeDateTime = DateTime::createFromFormat('!Y-m-d H:i', '2020-06-01 12:02');
+        $this->userRepository->findOneById(66)->willReturn($this->fromUser);
         $this->contactRepository->findLatestEvaluatedAt(1, 66, [21])->willReturn($threeMinutesBeforeDateTime);
         $contact1 = new Contact(
             $this->meeting->getEvent(),
@@ -120,8 +124,11 @@ class EvaluationTimeoutHandlerTest extends TestCase
             $this->dateTime,
             Contact::ORIGIN_MEETING
         );
+        $this->meeting->setParticipants($this->meeting->getToSheet(), [
+            ParticipantFactory::create($this->meeting->getToSheet(), $contact1->getContact()),
+        ]);
 
-        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, [$contact1]);
+        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser);
         $this->evaluationTimeoutHandler->handle($message);
 
         $this->messageBus->dispatchDelayed($message, 120)->shouldHaveBeenCalled();
@@ -136,7 +143,7 @@ class EvaluationTimeoutHandlerTest extends TestCase
         $this->userRepository->findOneById(66)->willReturn(null);
 
         $this->expectException(MeetingException::class);
-        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, []);
+        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser);
         $this->evaluationTimeoutHandler->handle($message);
     }
 
@@ -145,7 +152,7 @@ class EvaluationTimeoutHandlerTest extends TestCase
         $this->meetingRepository->findById(1)->willReturn(null);
 
         $this->expectException(MeetingNotFoundException::class);
-        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser, []);
+        $message = new EvaluationTimeoutMessage($this->meeting, $this->fromUser);
         $this->evaluationTimeoutHandler->handle($message);
     }
 }

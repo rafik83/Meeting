@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2393 - Meet Online button
 
+## [2.95.0] - 2021-06-08
+### Added
+- VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
+- VIMEET-2607 - Display all meeting participants in follow up email
+
 ## [2.94.3] - 2021-06-08
 ### Fixed
 - MV-339 - Display call visio button in the networking private chat
@@ -15,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.94.2] - 2021-06-08
 ### Fixed
 - Hotfix - Improve exception info if meeting not found after evaluation timeout
+### Added
 - MV-341 - Fix exception if number of remaining priority meeting requests is negative
 
 ## [2.94.1] - 2021-06-03

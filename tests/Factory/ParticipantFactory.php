@@ -8,8 +8,11 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class ParticipantFactory
 {
-    public static function create(Sheet $sheet, User $user = null, \DateTimeInterface $registrationDate = null)
-    {
+    public static function create(
+        Sheet $sheet,
+        User $user = null,
+        \DateTimeInterface $registrationDate = null
+    ): Participant {
         $user = (null !== $user) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
 
         $participant = new Participant($sheet, $user, [], true, $registrationDate ?? new \DateTime());

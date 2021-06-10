@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
-use Proximum\Vimeet\Domain\Networking\Sheet\CanAccessToNetworking;
 use Proximum\Vimeet\Domain\Repository\ChatMessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ChatSessionRepositoryInterface;
 
@@ -35,7 +34,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($this->prophesize(Participant::class));
 
         $accessChecker = $this->prophesize(NetworkingAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $accessChecker->isSheetAllowedToAccess($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
         $navigationBuilder->getRoute(
@@ -52,15 +51,11 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([]);
 
-        $canAccessToNetworking = $this->prophesize(CanAccessToNetworking::class);
-        $canAccessToNetworking->isSatisfied($sheet->reveal())->shouldBeCalled()->willReturn(true);
-
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
             $accessChecker->reveal(),
             $chatMessageRepository->reveal(),
-            $chatSessionRepository->reveal(),
-            $canAccessToNetworking->reveal()
+            $chatSessionRepository->reveal()
         );
         $expectedAttributes =  ['data-submenu' => 'networking'];
 
@@ -105,7 +100,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
 
         $accessChecker = $this->prophesize(NetworkingAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $accessChecker->isSheetAllowedToAccess($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), $lastViewDate)
@@ -123,15 +118,12 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
 
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldBeCalled()->willReturn([['unreadMessages' => [31415 => 2]]]);
-        $canAccessToNetworking = $this->prophesize(CanAccessToNetworking::class);
-        $canAccessToNetworking->isSatisfied($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $networkingSubMenuQueryHandler = new NetworkingSubmenuViewQueryHandler(
             $navigationBuilder->reveal(),
             $accessChecker->reveal(),
             $chatMessageRepository->reveal(),
-            $chatSessionRepository->reveal(),
-            $canAccessToNetworking->reveal()
+            $chatSessionRepository->reveal()
         );
 
         $expectedAttributes =  ['data-submenu' => 'networking'];
@@ -161,8 +153,12 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
 
+        $sheetId = 1337;
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->getId()->willReturn($sheetId);
+
         $accessChecker = $this->prophesize(NetworkingAccessChecker::class);
-        $accessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $accessChecker->isSheetAllowedToAccess($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $queryRoute = Route::NETWORKING;
 
@@ -172,20 +168,13 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
         $chatSessionRepository = $this->prophesize(ChatSessionRepositoryInterface::class);
         $chatSessionRepository->findSessionsByEventAndUser($event->reveal(), $user->reveal())->shouldNotBeCalled();
 
-        $sheetId = 1337;
         $expectedMessagesCount = 0;
-
-        $sheet = $this->prophesize(Sheet::class);
-        $sheet->getId()->willReturn($sheetId);
 
         $lastViewDate = new \DateTime('2020-03-14T03:14:15');
 
         $chatMessageRepository = $this->prophesize(ChatMessageRepositoryInterface::class);
         $chatMessageRepository->getMessagesCountByLinkableObject($event->reveal(), $lastViewDate)
             ->shouldNotBeCalled();
-        $canAccessToNetworking = $this->prophesize(CanAccessToNetworking::class);
-        $canAccessToNetworking->isSatisfied($sheet->reveal())->shouldBeCalled()->willReturn(true);
-
 
         $dummyUrl = "/dummy/url/";
 
@@ -205,8 +194,7 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $navigationBuilder->reveal(),
             $accessChecker->reveal(),
             $chatMessageRepository->reveal(),
-            $chatSessionRepository->reveal(),
-            $canAccessToNetworking->reveal()
+            $chatSessionRepository->reveal()
         );
 
         $expectedAttributes =  ['data-submenu' => 'networking'];
@@ -229,6 +217,6 @@ class NetworkingSubmenuViewQueryHandlerTest extends TestCase
             $queryRoute
         ));
 
-        $this->assertEquals($result, $expectedSubButtonView);
+        $this->assertEquals($expectedSubButtonView, $result);
     }
 }

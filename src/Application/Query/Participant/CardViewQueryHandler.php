@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant;
 
+use DateTimeInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
@@ -9,19 +10,14 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class CardViewQueryHandler
 {
-    /** @var ParticipantInfoGuesser */
-    private $participantInfoGuesser;
-
-    /** @var ScanRepositoryInterface */
-    private $scanRepository;
-
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    private ParticipantInfoGuesser $participantInfoGuesser;
+    private ScanRepositoryInterface $scanRepository;
+    private DateTimeInterface $dateTime;
 
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ScanRepositoryInterface $scanRepository,
-        \DateTimeInterface $dateTime
+        DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->scanRepository = $scanRepository;
