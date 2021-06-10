@@ -24,12 +24,12 @@ class GetSnippetQueryHandler
     }
 
     /**
-     * @throws ClosedNetworkingException
+     * @throws NetworkingNotAccessibleException
      */
     public function handle(GetSnippetQuery $getSnippetQuery): GetSnippetView
     {
-        if (!$this->networkingAccessChecker->allowedToAccess($getSnippetQuery->sheet->getEvent())) {
-            throw new ClosedNetworkingException();
+        if (!$this->networkingAccessChecker->isSheetAllowedToAccess($getSnippetQuery->sheet)) {
+            throw new NetworkingNotAccessibleException();
         }
 
         return new GetSnippetView(

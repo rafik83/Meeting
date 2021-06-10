@@ -3332,16 +3332,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery }
     query.participant.card_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
-        arguments:
-            - '@query.participant.card_view_query_handler'
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardListViewQuery }
     query.participant.card_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler
-        arguments:
-            - '@template.participant_info_guesser'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
-            - '@datetime'
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
     query.participant.import.import_mapping_view_query_handler:

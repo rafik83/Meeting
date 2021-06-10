@@ -72,7 +72,7 @@ class UserConnectedEventListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->networkingAccessChecker->allowedToAccess($this->sheet->getEvent())) {
+        if (!$this->networkingAccessChecker->isSheetAllowedToAccess($this->sheet)) {
             return;
         }
 
