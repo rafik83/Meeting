@@ -7,33 +7,23 @@ use Proximum\Vimeet\Domain\Model\Participant;
 
 class CardViewQuery implements Query
 {
-    /**
-     * @var string
-     */
-    public $locale;
-
-    /**
-     * @var Participant
-     */
-    public $participant;
-
-    /**
-     * @var bool
-     */
-    public $editable;
-
-    /** @var bool */
-    public $getCheckinStatus;
+    public string $locale;
+    public Participant$participant;
+    public bool $editable;
+    public bool $getCheckinStatus;
+    public bool $showMeetOnline;
 
     public function __construct(
         Participant $participant,
         string $locale,
         bool $editable = false,
-        $getCheckinStatus = false
+        bool $getCheckinStatus = false,
+        bool $showMeetOnline = false
     ) {
         $this->participant = $participant;
         $this->locale = $locale;
         $this->editable = $editable;
         $this->getCheckinStatus = $getCheckinStatus;
+        $this->showMeetOnline = $showMeetOnline;
     }
 }
