@@ -3,11 +3,13 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter\Mercure;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Happening\Poll;
 
 class AbstractNotification
 {
     const TYPE_QUESTIONS = 'questions';
     const TYPE_CHAT = 'chat';
+    const TYPE_POLL = 'poll';
     // stream is used only when broadcast mode (hls) is enabled
     const TYPE_STREAM = 'stream';
 
@@ -24,6 +26,11 @@ class AbstractNotification
     public function getUserTopic(int $eventId, int $userId): string
     {
         return sprintf('https://vimeet.events/event/%d/user/%d', $eventId, $userId);
+    }
+
+    public function getPollResultsTopic(Poll $poll): string
+    {
+        return sprintf('https://vimeet.events/poll/%d/results', $poll->getId());
     }
 
     public function getCallVisioTopic(Event $event): string

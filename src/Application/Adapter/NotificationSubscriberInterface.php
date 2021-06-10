@@ -16,6 +16,8 @@ interface NotificationSubscriberInterface
 
     public function getNetworkingSubscriberKey(Sheet $sheet, User $user, $types): string;
 
+    public function getPollResultsSubscriberKey(Happening\Poll $poll): string;
+
     public function getNetworkingTopic(int $eventId): string;
 
     public function getUserTopic(int $eventId, int $userId): string;
