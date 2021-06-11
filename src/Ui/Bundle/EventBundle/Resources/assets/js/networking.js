@@ -6,6 +6,7 @@ import { NetworkingBadgeManager, BADGE_TYPE } from './components/_NetworkingBadg
 import NotificationSubscriber from './components/_Subscriber';
 import axios from 'axios';
 import RefuseVisio from "./components/_RefuseVisio";
+import Modal from "./components/Modal";
 
 const { PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM } = BADGE_TYPE;
 
@@ -23,8 +24,44 @@ const doesChatItemExistsFromAuthor = (authorId) => {
     }) !== -1
 }
 
-export default function initNetworking(target, userConnection, notificationCallVisio) {
+export default function initNetworking(target, userConnection, notificationCallVisio, userMeetNodes) {
+
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
+
+    if (userMeetNodes){
+        const modalChat = {
+            userConnection,
+            notificationHandler,
+            notificationCallVisio,
+            close: function () {
+                $(this.currentModal).modal('hide');
+                this.currentModal = null;
+            },
+            open: function (userMeetNode) {
+                const userIdNode = userMeetNode.querySelector('[data-participant-user-id]');
+                const userId = userIdNode.getAttribute('data-participant-user-id');
+                console.log(userId);
+                const privateChatModalId = 'privateChat-' + userId;
+                let modal = document.getElementById(privateChatModalId);
+
+                if (modal == null) {
+                    modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
+                    modal.setAttribute('id', privateChatModalId);
+
+                    axios.get(userIdNode.getAttribute('data-private-chat-url')).then((response) => {
+                        modal.querySelector('.modal-body').innerHTML = response.data;
+
+                    });
+                }
+
+                this.currentModal = modal;
+                $(modal).modal('show')
+            }
+        }
+        modalChat.open.bind(modalChat);
+        modalChat.close.bind(modalChat);
+        userMeetNodes.forEach(userMeetNode => userMeetNode.addEventListener('click', () => modalChat.open(userMeetNode)));
+    }
 
     if (!chatNetworkingElement) {
         return;

@@ -307,8 +307,9 @@ function init(target) {
     userConnectionRegister.connect();
 
     const notificationCallVisio = new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
+    const userMeetNodes = document.querySelectorAll('.user__infos');
 
-    initNetworking(document, userConnectionRegister, notificationCallVisio);
+    initNetworking(document, userConnectionRegister, notificationCallVisio, userMeetNodes);
 
     new NotificationToastManager(target.querySelector('[data-notification-toast]'), target.querySelector('[data-notification-toast-container]'), userConnectionRegister);
 }

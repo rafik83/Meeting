@@ -32,19 +32,20 @@
     <div class="user__infos">
         <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
         <p class="job">{{ participant.position }}</p>
-
-        {% if participant.isOnline is not same as (null) %}
-            {% if participant.isOnline %}
-                <a class="user__meet">
-                    <div class="online">{{ 'account.status.meetOnline'|trans }}</div>
-                    <p></p>
-                </a>
-            {% else %}
-                <span class="user__meet">
-                    <div class="offline">{{ 'account.status.offline'|trans }}</div>
-                </span>
+        <div class="user_meet_container" data-chat>
+            {% if participant.isOnline is not same as (null) %}
+                {% if participant.isOnline %}
+                    <a class="user__meet" data-participant-user-id="{{ sheet.id  }}" data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id, toUser: participant.id}) }}">
+                        <div class="online">{{ 'account.status.meetOnline'|trans }}</div>
+                        <p></p>
+                    </a>
+                {% else %}
+                    <span class="user__meet">
+                        <div class="offline">{{ 'account.status.offline'|trans }}</div>
+                    </span>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
 
 
         {% if not isCatalog and editAvatar is defined and editAvatar == true %}
