@@ -40,7 +40,7 @@ export default function initNetworking(target, userConnection, notificationCallV
             open: function (userMeetNode) {
                 const userIdNode = userMeetNode.querySelector('[data-participant-user-id]');
                 const userId = userIdNode.getAttribute('data-participant-user-id');
-                console.log(userId);
+
                 const privateChatModalId = 'privateChat-' + userId;
                 let modal = document.getElementById(privateChatModalId);
 

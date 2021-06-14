@@ -35,7 +35,7 @@
         <div class="user_meet_container" data-chat>
             {% if participant.isOnline is not same as (null) %}
                 {% if participant.isOnline %}
-                    <a class="user__meet" data-participant-user-id="{{ sheet.id  }}" data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id, toUser: participant.id}) }}">
+                    <a class="user__meet" data-participant-user-id="{{ sheet.id  }}" data-private-chat-url="{{ path('event_networking_chat', {sheet: sheet.id, toUser: sheet.id }) }}">
                         <div class="online">{{ 'account.status.meetOnline'|trans }}</div>
                         <p></p>
                     </a>
