@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
 use Proximum\Vimeet\Domain\Sheet\SheetInfoGetter;

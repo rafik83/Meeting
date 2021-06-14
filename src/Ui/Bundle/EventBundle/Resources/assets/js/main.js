@@ -307,7 +307,7 @@ function init(target) {
     userConnectionRegister.connect();
 
     const notificationCallVisio = new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
-    const userMeetNodes = document.querySelectorAll('.user__infos');
+    const userMeetNodes = document.querySelectorAll('.user__meet[data-private-chat-url]');
 
     initNetworking(document, userConnectionRegister, notificationCallVisio, userMeetNodes);
 

@@ -54,7 +54,8 @@ class CardViewQueryHandler
                 $cardViewQuery->participant->getSheet()->getEvent(),
                 $this->dateTime
             ),
-            $isOnline
+            $isOnline,
+            $cardViewQuery->participant->getUser()->getId()
         );
     }
 }
