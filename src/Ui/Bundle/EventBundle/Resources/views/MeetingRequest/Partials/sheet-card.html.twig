@@ -21,15 +21,15 @@
                 sheetToDisplayLink: sheetToDisplayLink,
                 sheetToDisplayId: meetingRequestView.sheet.id
             }, false) }}
-        </div>
 
-        {% if meetingRequestView.participantList is not same as(null) %}
-            {% for card in meetingRequestView.participantList.cardViews %}
-                <div class="list--users">
-                    {{ include('EventBundle:Participant:preview.html.twig', {participant: card}) }}
-                </div>
-            {% endfor %}
-        {% endif %}
+            {% if meetingRequestView.participantList is not same as(null) %}
+                {% for participantCard in meetingRequestView.participantList.cardViews %}
+                    <div class="list--users">
+                        {{ include('EventBundle:Participant:preview.html.twig', {participant: participantCard, userSheet: sheet}) }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
 
         <footer>
             {% if sheetToDisplayLink is not null %}

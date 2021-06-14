@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Catalog;
 
+use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
@@ -41,6 +42,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     public $isPriority;
 
     private bool $canRequestMeeting;
+    public ?CardListView $participantList;
 
     public function __construct(
         int $id,
@@ -59,7 +61,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         bool $isPhoneValidationRequired,
         ?string $validatePhoneLink,
         bool $isPriority,
-        bool $canRequestMeeting
+        bool $canRequestMeeting,
+        ?CardListView $participantList
     ) {
         parent::__construct($id, $title, $type, $preview, $sheet);
 
@@ -75,6 +78,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $this->validatePhoneLink               = $validatePhoneLink;
         $this->isPriority = $isPriority;
         $this->canRequestMeeting = $canRequestMeeting;
+        $this->participantList = $participantList;
     }
 
     /**

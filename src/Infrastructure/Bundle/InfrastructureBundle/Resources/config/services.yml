@@ -3535,16 +3535,8 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
-    query.catalog.sheet_preview_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@domain.rule.composer'
-            - '@sheet.preview'
-            - '@repository.rule_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@domain.key_dates.checker.meeting_published_access_checker'
-            - '@adapter.router'
+    Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler:
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
 
@@ -3566,7 +3558,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
-            - '@query.catalog.sheet_preview_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler'
             - '@query.sheet.viewed.viewed_sheet_list_view_query_handler'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
