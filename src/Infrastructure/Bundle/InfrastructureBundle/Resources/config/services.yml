@@ -4761,7 +4761,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.meeting_request.meeting_request_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler'
             - '@query.sheet.viewed.viewed_sheet_list_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.meeting_request_access_checker'
@@ -4774,15 +4774,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
-
-    query.meeting_request.meeting_request_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler
-        arguments:
-            - '@sheet.preview'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@repository.rule_repository'
-            - '@domain.rule.composer'
-            - '@adapter.router'
 
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler

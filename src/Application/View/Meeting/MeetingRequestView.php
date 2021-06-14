@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
+use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -56,6 +57,8 @@ class MeetingRequestView
     /** @var string */
     public $isPriority;
 
+    public ?CardListView $participantList;
+
     /**
      * MeetingRequestView constructor.
      *
@@ -92,7 +95,8 @@ class MeetingRequestView
         $isSeenByCurrentUser = false,
         $isPhoneValidationRequired = false,
         $validatePhoneLink = null,
-        $isPriority = false
+        $isPriority = false,
+        ?CardListView $participantList = null
     ) {
         $this->sheet = $sheet;
         $this->sheetName = $sheetName;
@@ -110,6 +114,7 @@ class MeetingRequestView
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->validatePhoneLink = $validatePhoneLink;
         $this->isPriority = $isPriority;
+        $this->participantList = $participantList;
     }
 
     /**
