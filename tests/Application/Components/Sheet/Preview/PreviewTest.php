@@ -104,7 +104,7 @@ class PreviewTest extends TestCase
 
         $participantsResolver = $this->prophesize(ParticipantsResolver::class);
         $participantsResolver
-            ->handle($sheet->reveal(), $locale, $participantObject->reveal(), [])
+            ->handle($sheet->reveal(), $locale, $participantObject->reveal(), [], false)
             ->shouldBeCalled()
             ->willReturn(new PreviewView('key1', '', AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT))
         ;

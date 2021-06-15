@@ -22,7 +22,11 @@
     {% elseif object.isParticipant %}
         <div class="list list--users">
             {% for participant in object.cardViews %}
-                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant, 'isCatalog': isCatalog}) }}
+                {{ include('EventBundle:Participant:preview.html.twig', {
+                    participant: participant,
+                    isCatalog: isCatalog,
+                    userSheet: userSheet,
+                }) }}
             {% endfor %}
         </div>
     {% elseif object.isTag %}

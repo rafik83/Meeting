@@ -19,16 +19,9 @@
                 isCatalog: isCatalog,
                 isPriority: meetingRequestView.isPriority,
                 sheetToDisplayLink: sheetToDisplayLink,
-                sheetToDisplayId: meetingRequestView.sheet.id
+                sheetToDisplayId: meetingRequestView.sheet.id,
+                userSheet: sheet,
             }, false) }}
-
-            {% if meetingRequestView.participantList is not same as(null) %}
-                {% for participantCard in meetingRequestView.participantList.cardViews %}
-                    <div class="list--users">
-                        {{ include('EventBundle:Participant:preview.html.twig', {participant: participantCard, userSheet: sheet}) }}
-                    </div>
-                {% endfor %}
-            {% endif %}
         </div>
 
         <footer>

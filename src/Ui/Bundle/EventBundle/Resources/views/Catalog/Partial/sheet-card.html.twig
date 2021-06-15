@@ -13,15 +13,15 @@
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink, sheetToDisplayId: catalogSheetPreviewView.id }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', {
+                title: catalogSheetPreviewView.title,
+                preview: catalogSheetPreviewView.preview,
+                isCatalog: isCatalog,
+                sheetToDisplayLink: sheetToDisplayLink,
+                sheetToDisplayId: catalogSheetPreviewView.id,
+                userSheet: viewer,
+            }, false) }}
 
-            {% if catalogSheetPreviewView.participantList is not same as(null) %}
-                {% for participantCard in catalogSheetPreviewView.participantList.cardViews %}
-                    <div class="list--users">
-                        {{ include('EventBundle:Participant:preview.html.twig', {participant: participantCard, userSheet: viewer}) }}
-                    </div>
-                {% endfor %}
-            {% endif %}
         </div>
 
         <footer>

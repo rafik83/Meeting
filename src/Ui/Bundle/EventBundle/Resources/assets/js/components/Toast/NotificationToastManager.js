@@ -3,6 +3,8 @@ import NotificationToast from '../Toast/NotificationToast';
 class NotificationToastManager {
 
     constructor(element, container, currentUserConnection) {
+        this.listeners = null;
+
         if (element && container) {
             this.element = element;
             this.container = container;
@@ -45,10 +47,18 @@ class NotificationToastManager {
     }
 
     addListener(callback) {
+        if (this.listeners === null) {
+            return;
+        }
+
         this.listeners.push(callback);
     }
 
     removeListener(callback) {
+        if (this.listeners === null) {
+            return;
+        }
+
         this.listeners = this.listeners.filter((item) => {
             return item !== callback
         })

@@ -57,8 +57,6 @@ class MeetingRequestView
     /** @var string */
     public $isPriority;
 
-    public ?CardListView $participantList;
-
     /**
      * MeetingRequestView constructor.
      *
@@ -95,8 +93,7 @@ class MeetingRequestView
         $isSeenByCurrentUser = false,
         $isPhoneValidationRequired = false,
         $validatePhoneLink = null,
-        $isPriority = false,
-        ?CardListView $participantList = null
+        $isPriority = false
     ) {
         $this->sheet = $sheet;
         $this->sheetName = $sheetName;
@@ -114,7 +111,6 @@ class MeetingRequestView
         $this->isPhoneValidationRequired = $isPhoneValidationRequired;
         $this->validatePhoneLink = $validatePhoneLink;
         $this->isPriority = $isPriority;
-        $this->participantList = $participantList;
     }
 
     /**
