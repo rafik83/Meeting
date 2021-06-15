@@ -12,16 +12,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class ParticipantsResolver
 {
-    /** @var CardViewQueryHandler */
-    private $cardViewQueryHandler;
+    private CardViewQueryHandler $cardViewQueryHandler;
+    private Applyer $ruleApplyer;
 
-    /** @var Applyer */
-    private $ruleApplyer;
-
-    /**
-     * @param CardViewQueryHandler $cardViewQueryHandler
-     * @param Applyer              $ruleApplyer
-     */
     public function __construct(CardViewQueryHandler $cardViewQueryHandler, Applyer $ruleApplyer)
     {
         $this->cardViewQueryHandler = $cardViewQueryHandler;
@@ -40,7 +33,8 @@ class ParticipantsResolver
         Sheet $sheet,
         string $locale,
         TemplateObject\Participant $participantObject,
-        array $rules = []
+        array $rules = [],
+        bool $showMeetOnline = false
     ): PreviewView {
         $participants = $sheet->getParticipants()->toArray();
         $cardViews = [];
@@ -53,7 +47,7 @@ class ParticipantsResolver
             }
 
             $cardView = $this->cardViewQueryHandler->handle(
-                new CardViewQuery($participant, $locale)
+                new CardViewQuery($participant, $locale, false, false, $showMeetOnline)
             );
 
             if (!empty($rules)) {
