@@ -8,10 +8,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
-use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -37,7 +34,6 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
         $ruleComposer = $this->prophesize(Composer::class);
         $networkingAccessChecker = $this->prophesize(NetworkingAccessChecker::class);
-        $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
         $router = $this->prophesize(RouterInterface::class);
 
         $type1 = $this->prophesize(Type::class);
@@ -59,12 +55,9 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
         $ruleRepository->getBySeerSheetAndSeeableSheet($sheet->reveal(), $sheet2->reveal())->shouldBeCalled()
             ->willReturn([]);
-        $preview->getPreview($sheet2->reveal(), $locale, null)->shouldBeCalled()->willReturn([]);
+        $preview->getPreview($sheet2->reveal(), $locale, null, true)->shouldBeCalled()->willReturn([]);
 
         $networkingAccessChecker->isSheetAllowedToAccess($sheet->reveal())->willReturn(true);
-        $cardListViewQuery = new CardListViewQuery($sheet2->reveal(), $user, $locale, false, true);
-        $participantList = new CardListView();
-        $cardListViewQueryHandler->handle($cardListViewQuery)->shouldBeCalled()->willReturn($participantList);
 
         $router->generate('event_user_phone_redirect_to_validation', [
             'sheet' => 1,
@@ -90,7 +83,6 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $ruleRepository->reveal(),
             $ruleComposer->reveal(),
             $networkingAccessChecker->reveal(),
-            $cardListViewQueryHandler->reveal(),
             $router->reveal()
         );
 
@@ -124,8 +116,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             false,
             true,
             'validatePhoneLink',
-            false,
-            $participantList
+            false
         );
 
         $this->assertEquals($expected, $result);
