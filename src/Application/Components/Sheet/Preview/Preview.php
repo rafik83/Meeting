@@ -50,13 +50,9 @@ class Preview
     }
 
     /**
-     * @param Sheet             $sheet
-     * @param string            $locale
-     * @param ComposedRule|null $composedRule
-     *
      * @return PreviewView[]
      */
-    public function getPreview(Sheet $sheet, string $locale, ComposedRule $composedRule = null)
+    public function getPreview(Sheet $sheet, string $locale, ComposedRule $composedRule = null, $showMeetOnline = false)
     {
         $this->localeFallback = $sheet->getEvent()->getLocaleFallback();
 
@@ -83,7 +79,13 @@ class Preview
 
                 // Participant object
                 if ($templateObject instanceof TemplateObject\Participant) {
-                    $previewObjects[] = $this->participantsResolver->handle($sheet, $locale, $templateObject, $rules);
+                    $previewObjects[] = $this->participantsResolver->handle(
+                        $sheet,
+                        $locale,
+                        $templateObject,
+                        $rules,
+                        $showMeetOnline
+                    );
 
                     continue;
                 }

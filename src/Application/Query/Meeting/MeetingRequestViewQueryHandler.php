@@ -5,8 +5,6 @@ namespace Proximum\Vimeet\Application\Query\Meeting;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
@@ -32,7 +30,6 @@ class MeetingRequestViewQueryHandler
     private $router;
 
     private NetworkingAccessChecker $networkingAccessChecker;
-    private CardListViewQueryHandler $cardListViewQueryHandler;
 
     public function __construct(
         Preview $preview,
@@ -40,7 +37,6 @@ class MeetingRequestViewQueryHandler
         RuleRepositoryInterface $ruleRepository,
         Composer $ruleComposer,
         NetworkingAccessChecker $networkingAccessChecker,
-        CardListViewQueryHandler $cardListViewQueryHandler,
         RouterInterface $router
     ) {
         $this->preview = $preview;
@@ -48,7 +44,6 @@ class MeetingRequestViewQueryHandler
         $this->ruleRepository = $ruleRepository;
         $this->ruleComposer = $ruleComposer;
         $this->networkingAccessChecker = $networkingAccessChecker;
-        $this->cardListViewQueryHandler = $cardListViewQueryHandler;
         $this->router = $router;
     }
 
@@ -63,7 +58,9 @@ class MeetingRequestViewQueryHandler
             $composedRule = $this->ruleComposer->compose($rules);
         }
 
-        $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule);
+        $showMeetOnline = $this->networkingAccessChecker->isSheetAllowedToAccess($query->sheet);
+
+        $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule, $showMeetOnline);
 
         $participant = $query->sheet->getUserParticipant($query->user);
 
@@ -76,12 +73,6 @@ class MeetingRequestViewQueryHandler
                     'sheetToDisplay' => $otherSheet->getId(),
                 ]),
             ]);
-        }
-
-        $participantList = null;
-        if ($this->networkingAccessChecker->isSheetAllowedToAccess($query->sheet)) {
-            $cardListViewQuery = new CardListViewQuery($otherSheet, $query->user, $query->locale, false, true);
-            $participantList = $this->cardListViewQueryHandler->handle($cardListViewQuery);
         }
 
         return new MeetingRequestView(
@@ -100,8 +91,7 @@ class MeetingRequestViewQueryHandler
             $query->isSeenByUser,
             $query->isPhoneValidationRequired,
             $validatePhoneLink ?? null,
-            $query->isPriority,
-            $participantList
+            $query->isPriority
         );
     }
 
