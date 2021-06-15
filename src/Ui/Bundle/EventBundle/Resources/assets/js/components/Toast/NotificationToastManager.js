@@ -8,6 +8,7 @@ class NotificationToastManager {
             this.container = container;
             currentUserConnection.addListener(this.onNotificationReceived.bind(this));
             this.toasts = [];
+            this.listeners = [];
         }
     }
 
@@ -28,12 +29,29 @@ class NotificationToastManager {
                 toastToRemove.destroy();
             }
 
-            toast.element.querySelector('.close').addEventListener('click', ()=> {
+            const close = () => {
                 const index = this.toasts.indexOf(toast);
                 this.toasts.splice(index,1);
                 toast.destroy();
+            };
+
+            toast.element.querySelector('.close').addEventListener('click', close);
+
+            toast.element.querySelector('.message-link').addEventListener('click', () => {
+                this.listeners.forEach((callback) => callback(toast));
+                close();
             });
         }
+    }
+
+    addListener(callback) {
+        this.listeners.push(callback);
+    }
+
+    removeListener(callback) {
+        this.listeners = this.listeners.filter((item) => {
+            return item !== callback
+        })
     }
 }
 export default NotificationToastManager;

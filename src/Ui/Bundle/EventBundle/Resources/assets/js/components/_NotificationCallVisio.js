@@ -4,16 +4,13 @@ class NotificationCallVisio {
 
     constructor(element, currentUserConnection) {
         if (element) {
-            this.element = element;
+            this.modalElement = element;
             currentUserConnection.addListener(this.onNotificationReceived.bind(this));
-            this.acceptVisio = this.element.querySelector('.call-visio-accept');
-            this.element.querySelector('.close').addEventListener('click', () => this.hide());
+            this.acceptVisio = this.modalElement.querySelector('.call-visio-accept');
+            this.modalElement.querySelector('.close').addEventListener('click', () => this.hide());
             this.disabled = false;
-            this.refuseVisio = new RefuseVisio(this.element.querySelector('.call-visio-refuse'), ()=> this.hide());
-
-            $(element).on('click', '[data-close-modal]', ()=> {
-                this.hide();
-            });
+            this.timerId = null;
+            this.refuseVisio = new RefuseVisio(this.modalElement.querySelector('.call-visio-refuse'), ()=> this.hide());
         }
     }
 
@@ -35,22 +32,27 @@ class NotificationCallVisio {
         if (this.disabled) {
             return;
         }
-        const author = document.querySelector('.author');
+
+        const author = this.modalElement.querySelector('.author');
         const user = document.createElement('p');
         const position = document.createElement('em');
         user.textContent = message.from.userFirstName+' '+ message.from.userLastName+' - '+ message.from.userCompany + ' - ';
         position.textContent = message.from.userPosition;
+
+        author.innerHTML = '';
         author.appendChild(user);
         author.appendChild(position);
-        this.element.classList.remove('hide');
-        $("#notificationCallVisio").modal('show');
+
+        this.modalElement.classList.remove('hide');
+        $(this.modalElement).modal('show');
     }
 
     hide() {
-        const author = document.querySelector('.author');
-        author.innerHTML = "";
-        $("#notificationCallVisio").modal('hide');
-        clearTimeout(this.timerId);
+        $(this.modalElement).modal('hide');
+        if (this.timerId) {
+            clearTimeout(this.timerId);
+            this.timerId = null;
+        }
     }
 
     disable() {

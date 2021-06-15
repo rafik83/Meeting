@@ -1,11 +1,10 @@
 import Chat from './components/_Chat';
-import ChatVisio from './components/_ChatVisio';
 import ParticipantList from './components/_ParticipantList';
-import ParticipantListFilter from './components/_ParticipantListFilter';
 import { NetworkingBadgeManager, BADGE_TYPE } from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
-import axios from 'axios';
-import RefuseVisio from "./components/_RefuseVisio";
+import { EVENT_NEW_CHAT_MESSAGE, EVENT_NEW_USER_CONNECTED } from './components/ChatNotificationHandler';
+import { EVENT_OPEN_CHAT_MODAL } from './components/ChatModalManager';
+import ParticipantListFilter from './components/_ParticipantListFilter';
 
 const { PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM } = BADGE_TYPE;
 
@@ -16,187 +15,10 @@ const CHAT_TAB = {
 
 let activeChatTab = CHAT_TAB.GENERAL;
 
-const doesChatItemExistsFromAuthor = (authorId) => {
-    const elements = document.querySelectorAll('[chat-item-for-user-id]');
-    return Array.from(elements).findIndex((item) => {
-        return item.getAttribute('chat-item-for-user-id') == authorId;
-    }) !== -1
-}
-
-export default function initNetworking(target, userConnection, notificationCallVisio, userMeetNodes) {
+export default function initNetworking(target, userConnection, notificationHandler, modalManager) {
 
     const chatNetworkingElement = target.querySelector('[data-chat-networking]');
     const participantLists = [];
-
-    const notificationHandler = {
-        participantLists,
-        target,
-        divCallVisioMessageTimeoutId: null,
-        /**
-         * @param {String} notification
-         * @param {Chat} targetChat
-         */
-        handle: function (notification, targetChat) {
-            const payload = JSON.parse(notification.data);
-            if (payload.action === 'user_connection') {
-                this.participantLists.forEach((participantList) => {
-                    participantList.addNewuser(payload, participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
-                    participantListFilter.filter(this.target.querySelectorAll('.networking_list_row'));
-                });
-                this.target.querySelectorAll('.networking_list_count')
-                    .forEach((element) => element.textContent = this.target.querySelectorAll('.participantList tr').length);
-                return;
-            }
-
-            if (payload.action === 'add_chat_message') {
-                if (activeChatTab !== CHAT_TAB.GENERAL) {
-                    networkingBadgeManager.updateBadgeCounterValue(GENERALCHAT, 1);
-                    networkingBadgeManager.incrementMenuBadgesCounter();
-                }
-
-                if (payload.visioEnable){
-                    this.chatVisio.visioEnable = '1';
-                }
-                targetChat.reload();
-                return;
-            }
-
-            if (payload.action === 'update_chat_message_votes') {
-                targetChat.updateVotes(payload.messageId, payload.votes);
-                return;
-            }
-
-            if (payload.action === 'request_visio') {
-                const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
-                const buttonVisio = document.querySelector('.state-normal');
-                if (divCallVisioMessage != null) {
-
-                    divCallVisioMessage.classList.remove("hide");
-                    this.chatVisio.hideAllButtons();
-                    this.chatVisio.setUrlAccept(payload.urlAccept);
-                    this.refuseVisio.setUrlRefuse(payload.urlRefuse);
-                    this.divCallVisioMessageTimeoutId = setTimeout(() => {
-                        divCallVisioMessage.classList.add("hide");
-                        this.chatVisio.showVisioButton();
-                        buttonVisio.classList.remove("hide");
-                    }, 30000);
-                }
-            }
-
-            if (payload.action === 'refuse_visio') {
-                this.chatVisio.onRefuseVisio();
-            }
-
-            if (payload.action === 'join_visio') {
-                this.chatVisio.showJoinVisioButton(payload.urlAccept);
-            }
-        }
-    }
-    notificationHandler.handle.bind(notificationHandler);
-
-    if (networkingTopic) {
-        // networking page
-        const notificationProviderUrl = chatNetworkingElement.getAttribute('data-notifications-provider-url');
-        const notificationSubscriberKey = chatNetworkingElement.getAttribute('data-notifications-subscriber-key');
-
-        const subscriber = new NotificationSubscriber(notificationProviderUrl);
-        subscriber.addSubscriber(networkingTopic, notificationSubscriberKey, (notification) => {
-            notificationHandler.handle(notification, chatNetworking);
-        });
-    }
-
-    const participantListFilter = new ParticipantListFilter(
-        document.getElementById('networking_list_search_input'),
-        target.querySelectorAll('.networking_list_row')
-    );
-
-
-    if (userMeetNodes){
-        const modalChat = {
-            userConnection,
-            notificationHandler,
-            notificationCallVisio,
-            close: function () {
-                $(this.currentModal).modal('hide');
-                this.currentModal = null;
-            },
-            open: function (userMeetNode) {
-
-                const authorId = userMeetNode.getAttribute("data-participant-user-id");
-
-                if (doesChatItemExistsFromAuthor(authorId)) {
-                    const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
-                    networkingBadgeManager.updateBadgeCounterValue(
-                        PRIVATECHAT, -deltaToRemove
-                    );
-
-                    networkingBadgeManager.decreaseChatItemMessageCounter(
-                        authorId
-                    );
-                    networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
-                }
-
-                const userId = userMeetNode.getAttribute('data-participant-user-id');
-
-                const privateChatModalId = 'privateChat-' + userId;
-                let modal = document.getElementById(privateChatModalId);
-
-                if (modal == null) {
-                    modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
-                    modal.setAttribute('id', privateChatModalId);
-
-                    axios.get(userMeetNode.getAttribute('data-private-chat-url')).then((response) => {
-                        modal.querySelector('.modal-body').innerHTML = response.data;
-
-                        const privateChatModalElement = modal.querySelector('[data-chat-networking]');
-
-                        const chat = new Chat(privateChatModalElement);
-
-                        chat.setToUserId(userId);
-
-                        const chatVisio = new ChatVisio(modal.querySelector('.chat-header-tools'), modal.querySelector('.call-visio-accept'));
-
-                        const refuseVisio = new RefuseVisio(modal.querySelector('.call-visio-refuse'),
-                            () => {
-                                modal.querySelector('.chat-message-call-visio').classList.add('hide');
-                                modal.querySelector('.state-normal').classList.remove('hide');
-                            });
-
-                        this.notificationHandler.refuseVisio = refuseVisio;
-                        this.notificationHandler.chatVisio = chatVisio;
-                        chat.initChat();
-                        this.notificationCallVisio.disable();
-                        chat.addListener((messages) => {
-                            chatVisio.onMessagesReceived(messages);
-                        });
-
-                        const callback = (notification) => {
-                            this.notificationHandler.handle(notification, chat);
-                        };
-                        this.userConnection.addListener(callback);
-
-                        $(modal).on('hidden.bs.modal', () => {
-                            modal.remove();
-                            this.notificationCallVisio.enable();
-                            this.userConnection.removeListener(callback);
-                            chatVisio.abandonRequestVisio();
-                            clearTimeout(this.notificationHandler.divCallVisioMessageTimeoutId);
-                        })
-                    });
-                }
-
-                this.currentModal = modal;
-                $(modal).modal('show')
-            }
-        }
-        modalChat.open.bind(modalChat);
-        modalChat.close.bind(modalChat);
-        userMeetNodes.forEach(userMeetNode => userMeetNode.addEventListener('click', () => modalChat.open(userMeetNode)));
-
-        $('.networking_container').on('click', '[data-close-modal]', () => {
-            modalChat.close();
-        });
-    }
 
     if (!chatNetworkingElement) {
         return;
@@ -210,8 +32,6 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     chatPrivateButton.addEventListener('click', showChatPrivate);
     chatGeneralButton.addEventListener('click', showChatGeneral);
-
-    const newMessageItems = document.querySelectorAll("[data-new-messages-count]");
 
     const headerSubmenuNetworkingBadgeNodes = document.querySelectorAll(`[${NETWORKING_BUTTON}]`);
     const unreadPrivateChatMessageCountNodes = document.querySelectorAll(`[${PRIVATECHAT}]`);
@@ -271,6 +91,17 @@ export default function initNetworking(target, userConnection, notificationCallV
 
     const networkingTopic = chatNetworkingElement.getAttribute('data-networking-topic');
 
+    if (networkingTopic) {
+        // networking page
+        const notificationProviderUrl = chatNetworkingElement.getAttribute('data-notifications-provider-url');
+        const notificationSubscriberKey = chatNetworkingElement.getAttribute('data-notifications-subscriber-key');
+
+        const subscriber = new NotificationSubscriber(notificationProviderUrl);
+        subscriber.addSubscriber(networkingTopic, notificationSubscriberKey, (notification) => {
+            notificationHandler.handle(notification, chatNetworking);
+        });
+    }
+
     const chatNetworking = new Chat(chatNetworkingElement);
     chatNetworking.initChat();
 
@@ -284,89 +115,59 @@ export default function initNetworking(target, userConnection, notificationCallV
         participantLists.push(new ParticipantList(element, userCurrentIdElement.getAttribute('data-user-current')));
     });
 
+    target.addEventListener(EVENT_NEW_CHAT_MESSAGE, () => {
+        if (activeChatTab !== CHAT_TAB.GENERAL) {
+            networkingBadgeManager.updateBadgeCounterValue(GENERALCHAT, 1);
+            networkingBadgeManager.incrementMenuBadgesCounter();
+        }
+    });
+
+    const participantListFilter = new ParticipantListFilter(
+        target.getElementById('networking_list_search_input'),
+        target.querySelectorAll('.networking_list_row')
+    );
+
+    target.addEventListener(EVENT_NEW_USER_CONNECTED, (event) => {
+        const payload = event.detail;
+        participantLists.forEach((participantList) => {
+            participantList.addNewuser(
+                payload,
+                participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode))
+            );
+            participantListFilter.filter(target.querySelectorAll('.networking_list_row'));
+        });
+        target.querySelectorAll('.networking_list_count')
+            .forEach((element) => element.textContent = target.querySelectorAll('.participantList tr').length);
+    });
 
     // private chat modale
 
+    // participants under private chat tab
     const participantNodes = target.querySelectorAll('.participantChat');
 
-    const modalManager = {
-        userConnection,
-        notificationHandler,
-        notificationCallVisio,
-        close: function () {
-            $(this.currentModal).modal('hide');
-            this.currentModal = null;
-        },
-        open: function (participantNode) {
-
-            const authorId = participantNode.getAttribute("data-participant-user-id");
-
-            if (doesChatItemExistsFromAuthor(authorId)) {
-                const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
-                networkingBadgeManager.updateBadgeCounterValue(
-                    PRIVATECHAT, -deltaToRemove
-                );
-
-                networkingBadgeManager.decreaseChatItemMessageCounter(
-                    authorId
-                );
-                networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
-            }
-
-            const toUserId = parseInt(participantNode.getAttribute('data-participant-user-id'), 10);
-            const privateChatModalId = 'private-chat-' + toUserId;
-            let modal = document.getElementById(privateChatModalId);
-            if (modal == null) {
-                modal = document.getElementById('privateChat-modalTemplate').cloneNode(true);
-                modal.setAttribute('id', privateChatModalId);
-
-                target.querySelector('.networking_container').appendChild(modal);
-                axios.get(participantNode.getAttribute('data-private-chat-url')).then((response) => {
-                    modal.querySelector('.modal-body').innerHTML = response.data;
-
-                    const privateChatModalElement = modal.querySelector('[data-chat-networking]');
-
-                    const chat = new Chat(privateChatModalElement);
-                    chat.setToUserId(toUserId);
-                    const chatVisio = new ChatVisio(modal.querySelector('.chat-header-tools'), modal.querySelector('.call-visio-accept'));
-                    const refuseVisio = new RefuseVisio(modal.querySelector('.call-visio-refuse'),
-                        () => {
-                            modal.querySelector('.chat-message-call-visio').classList.add('hide');
-                            modal.querySelector('.state-normal').classList.remove('hide');
-                        });
-                    this.notificationHandler.refuseVisio = refuseVisio;
-                    this.notificationHandler.chatVisio = chatVisio;
-                    chat.initChat();
-                    this.notificationCallVisio.disable();
-                    chat.addListener((messages) => {
-                        chatVisio.onMessagesReceived(messages);
-                    });
-
-                    const callback = (notification) => {
-                        this.notificationHandler.handle(notification, chat);
-                    };
-                    this.userConnection.addListener(callback);
-
-                    $(modal).on('hidden.bs.modal', () => {
-                        modal.remove();
-                        this.notificationCallVisio.enable();
-                        this.userConnection.removeListener(callback);
-                        chatVisio.abandonRequestVisio();
-                        clearTimeout(this.notificationHandler.divCallVisioMessageTimeoutId);
-                    })
-                });
-            }
-            this.currentModal = modal;
-            $(modal).modal('show')
-        }
+    const doesChatItemExistsFromAuthor = (authorId) => {
+        const elements = document.querySelectorAll('[chat-item-for-user-id]');
+        return Array.from(elements).findIndex((item) => {
+            return item.getAttribute('chat-item-for-user-id') == authorId;
+        }) !== -1
     }
-    modalManager.open.bind(modalManager);
-    modalManager.close.bind(modalManager);
-    participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
 
-    $('.networking_container').on('click', '[data-close-modal]', () => {
-        modalManager.close();
+    target.addEventListener(EVENT_OPEN_CHAT_MODAL, (event) => {
+        const authorId = event.detail;
+        if (doesChatItemExistsFromAuthor(authorId)) {
+            const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
+            networkingBadgeManager.updateBadgeCounterValue(
+                PRIVATECHAT, -deltaToRemove
+            );
+
+            networkingBadgeManager.decreaseChatItemMessageCounter(
+                authorId
+            );
+            networkingBadgeManager.decreaseMenuBadgesCounter(deltaToRemove);
+        }
     });
+
+    participantNodes.forEach(participantNode => participantNode.addEventListener('click', () => modalManager.open(participantNode)));
 
     // open private chat if "toUser" known is queryString
     const queryString = window.location.search;

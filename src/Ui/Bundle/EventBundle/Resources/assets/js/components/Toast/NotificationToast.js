@@ -1,3 +1,4 @@
+
 class NotificationToast {
     /**
      *
@@ -11,11 +12,15 @@ class NotificationToast {
     }
 
     show(message) {
-        const url = new URL(this.element.getAttribute('data-private-chat-url'), document.URL);
-        url.searchParams.append('toUser', message.authorId);
-        this.element.querySelector('.message-content').textContent = message.content;
         this.element.querySelector('.message-author').textContent = message.author;
-        this.element.querySelector('.message-link').setAttribute('href', url);
+        this.element.querySelector('.message-content').textContent = message.content;
+
+        this.element.dataset.participantUserId = message.authorId;
+
+        const url = new URL(this.element.dataset.privateChatUrl, document.URL);
+        url.searchParams.append("toUser", message.authorId);
+        this.element.dataset.privateChatUrl = url.toString();
+
         this.element.classList.remove('hide');
     }
 
