@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - VIMEET-2577 - Allow poll in webinar
 
+### Fixed
+- Fix - Center interactive buttons on webinar
+
 ## [2.95.0] - 2021-06-08
 ### Added
 - VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
