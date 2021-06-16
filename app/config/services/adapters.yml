@@ -61,6 +61,10 @@ services:
             - '%mercure_publisher_key%'
             - '@adapter.http_adapter'
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\UserPayloadBuilder'
+            - '@domain.key_dates.checker.ask_call_visio_private_chat_access_checker'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\MessageBusAdapter'
+            - '@lock.job.store'
+            - '@Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollHandler'
 
     Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber:
         arguments:

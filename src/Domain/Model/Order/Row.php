@@ -145,6 +145,14 @@ class Row
     }
 
     /**
+     * @return float
+     */
+    public function getPriceWithVat(): float
+    {
+        return $this->price * (1 + $this->vatRate * 0.01);
+    }
+
+    /**
      * @return string
      */
     public function getData()

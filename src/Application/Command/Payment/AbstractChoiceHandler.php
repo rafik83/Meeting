@@ -56,13 +56,7 @@ abstract class AbstractChoiceHandler
         $this->dateTime              = $dateTime;
     }
 
-    /**
-     * @param AbstractChoice $choice
-     * @param float          $total
-     *
-     * @return Transaction
-     */
-    protected function handleChoice(AbstractChoice $choice, $total): Transaction
+    protected function handleChoice(AbstractChoice $choice, float $total): PaymentResult
     {
         // Convert cart to order
         $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));
@@ -79,6 +73,14 @@ abstract class AbstractChoiceHandler
                 $choice->user,
                 $total,
                 $this->dateTime
+            );
+        } else if (Mode::PAYMENT_CCIP === $choice->mode) {
+            $transaction = Transaction::createForCcip(
+                $choice->sheet,
+                $choice->user,
+                $total,
+                $this->dateTime,
+                [$order->getId()]
             );
         } else {
             $transaction = new Transaction(
@@ -100,6 +102,6 @@ abstract class AbstractChoiceHandler
             new TransactionCreatedEvent($transaction)
         );
 
-        return $transaction;
+        return new PaymentResult($transaction, $order->getId());
     }
 }

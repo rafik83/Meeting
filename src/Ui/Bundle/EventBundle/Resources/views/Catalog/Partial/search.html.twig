@@ -33,11 +33,19 @@
 
 
     {% if searchForm.categories is defined %}
-        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', {
+            form: searchForm.categories,
+            choices: categoryViews,
+            showSelectAll: true,
+        }, false) }}
     {% endif %}
 
     {% if searchForm.type is defined %}
-        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', {
+            form: searchForm.type,
+            choices: typeViews,
+            showSelectAll: true,
+        }, false) }}
     {% endif %}
 
     {% if searchForm.objective is defined %}

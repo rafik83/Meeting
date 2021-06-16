@@ -18,6 +18,10 @@
     }, false) }}
 </div>
 
+<div class="hide col-md-12 important fail">
+    {{ 'catalog.noResult'|trans }}
+</div>
+
 {% if seeMoreButton %}
     <div class="col-md-12 text-center see-more-align" >
         <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>

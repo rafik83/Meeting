@@ -193,6 +193,10 @@ liip_imagine:
                 thumbnail: { size: [160, 160], mode: outbound }
                 # fix orientation issue for example for iOS photo
                 auto_rotate: ~
+        user_icon:
+            quality: 60
+            filters:
+                thumbnail: { size: [64, 64], mode: outbound }
         upload_object:
             quality: 100
             filters:

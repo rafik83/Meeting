@@ -1,3 +1,4 @@
+
 # Changelog
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -6,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2577 - Allow poll in webinar
+
+## [2.95.0] - 2021-06-08
+### Added
+- VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
+- VIMEET-2607 - Display all meeting participants in follow up email
+
+## [2.94.3] - 2021-06-08
+### Fixed
+- MV-339 - Display call visio button in the networking private chat
+
+## [2.94.2] - 2021-06-08
+### Fixed
+- Hotfix - Improve exception info if meeting not found after evaluation timeout
+### Added
+- MV-341 - Fix exception if number of remaining priority meeting requests is negative
+
+## [2.94.1] - 2021-06-03
+### Fixed
+- MV-338 - Hide meeting request on sheet if not allowed by seewhat rule
+
+### Fixed
+- MV-340 - fix avatars in networking and chat
+
+## [2.94.0] - 2021-05-31
+### Added
+- VIMEET-2394 - Select or unselect all kind of participation in the catalog
+
+## [2.93.4] - 2021-05-31
+### Fixed
+- Hotfix - fix argument for vimeet:planning:generate job command
+
+## [2.93.3] - 2021-05-27
+### Fixed
+- Hotfix - change form methods call order
+
+## [2.93.2] - 2021-05-27
+### Fixed
+- Hotfix - missing dependency persistence in for multisheet's requests list
+
+## [2.93.1] - 2021-05-25
+### Fixed
+- Hotfix - Use env variable to set store_key for CCIP payment
+
+## [2.93.0] - 2021-05-25
+### Added
+- VIMEET-2550 - Add CCIP (Numkium / rpack) payment
+- Hotfix - Decrease limit for receivers when sending batch emails via sendgrid API
 
 ## [2.92.2] - 2021-05-20
 ### Fixed

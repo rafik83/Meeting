@@ -34,9 +34,14 @@ class UserPayloadBuilder
     {
         $avatar = $user->getAvatar();
         if ($avatar === null) {
-            $avatar = $this->routerAdapter->generate(
+            $avatarUrl = $this->routerAdapter->generate(
                 'event_chat_avatar',
                 ['name' => $user->getAccount()->getCompleteName()]
+            );
+        } else {
+            $avatarUrl = $this->routerAdapter->generate(
+                'liip_imagine_filter',
+                ['path' => $avatar, 'filter' => 'user_icon']
             );
         }
 
@@ -55,7 +60,7 @@ class UserPayloadBuilder
             'userLastName' => $user->getLastName(),
             'userFirstName' => $user->getFirstName(),
             'userPosition' => $position,
-            'userAvatar' => $avatar,
+            'userAvatar' => $avatarUrl,
             'userCompany' => $sheet->getTitle(),
         ];
     }

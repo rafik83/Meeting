@@ -19,6 +19,7 @@ services:
             $pathToExport: '%infrastructure.common_export_path%'
             $pathToOmzExport: '%infrastructure.export_omz_path%'
             $mailerSender: '%mailer_sender%'
+            Predis\Client: '@snc_redis.default'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -80,6 +81,13 @@ services:
         arguments:
             $searchable: '@fos_elastica.index.sheet.sheet'
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\PreparePaymentAction:
+        arguments:
+            $ccipMode: '%env(CCIP_MODE)%'
+            $ccipFormAction: '%env(CCIP_FORM_ACTION)%'
+            $ccipStoreKey: '%env(CCIP_STORE_KEY)%'
+        tags: ['controller.service_arguments']
+
     # explicit aliases for interfaces
     Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface:
         alias: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator
@@ -106,3 +114,5 @@ services:
         alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
     adapter.job_queue_adapter:
         alias: Proximum\Vimeet\Application\Adapter\JobQueueInterface
+    Proximum\Vimeet\Domain\Repository\Happening\PollVoteRepositoryInterface:
+        alias: Proximum\Vimeet\Infrastructure\Repository\Happening\CachedPollVoteRepository

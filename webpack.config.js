@@ -39,6 +39,12 @@ Encore
     // css tokbox chat (legacy)
     .addStyleEntry('css/videoConferenceChatTokbox', './src/Ui/Bundle/EventBundle/Resources/assets/sass/objects/_videoConferenceChatTokbox.scss')
 
+    // svelte loader
+    .addLoader({
+        test: /\.svelte$/,
+        loader: 'svelte-loader',
+    })
+
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
 
@@ -71,6 +77,11 @@ Encore
 ;
 
 var config = Encore.getWebpackConfig();
+
+config.resolve.mainFields = ['svelte', 'browser', 'module', 'main'];
+config.resolve.extensions = ['.mjs', '.js', '.svelte'];
+let svelte = config.module.rules.pop();
+config.module.rules.unshift(svelte);
 
 config.resolve = {
     alias: {

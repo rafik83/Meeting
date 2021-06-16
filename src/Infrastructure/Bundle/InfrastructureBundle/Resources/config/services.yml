@@ -5820,19 +5820,19 @@ services:
     #
     # Payum
     #
-    vimeet.payum.paypal.prepare_payment:
-        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\PreparePayment
-        arguments:
-            - '@payum'
-            - '@repository.billing_info_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-    vimeet.payum.paypal.capture_payment:
-        class: Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment
-        arguments:
-            - '@payum'
-            - '@repository.transaction'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+    # vimeet.payum.paypal.prepare_payment:
+    #     class: Proximum\Vimeet\Infrastructure\Payum\Paypal\PreparePayment
+    #     arguments:
+    #         - '@payum'
+    #         - '@repository.billing_info_repository'
+    #         - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+    #         - '@vimeet_infrastructure.adapter.translator_adapter'
+    # vimeet.payum.paypal.capture_payment:
+    #     class: Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment
+    #     arguments:
+    #         - '@payum'
+    #         - '@repository.transaction'
+    #         - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     Proximum\Vimeet\Infrastructure\Payum\Paypal\StoreNotificationAction:
         arguments:
             - '@repository.payment.notification_repository'
@@ -7291,11 +7291,7 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
 
     Proximum\Vimeet\Application\Query\Networking\NetworkingQueryHandler:
-        arguments:
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriber'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationSubscriptions'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatMessageRepository'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ChatSessionRepository'
+        autowire: true
         tags:
             - { name: tactician.handler, typehints: true }
 

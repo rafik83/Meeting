@@ -47,7 +47,7 @@ class ImportController extends AbstractController
 
         $form = $this->createForm(SpotImportType::class, $spotImport, ['submit' => true]);
 
-        if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             /** @var File $importedFile */
             $importedFile = $this->commandBus->handle($spotImport);
 
@@ -83,7 +83,7 @@ class ImportController extends AbstractController
 
         $form = $this->createForm(SpotConfirmType::class, $spotImportConfirm, ['locale' => $locale]);
 
-        if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($spotImportConfirm);
 
             return $this->redirectToRoute('admin_spot_list', ['event' => $event->getId()]);

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE rpack_order SYSTEM "rpack_order.dtd">
+<rpack_order type="cb" date="{{ orderView.date|date('Ymd') }}" id="{{ orderView.transactionId }}">
+    <customer>
+        <email>{{ orderView.email }}</email>
+        <receiver_email>{{ orderView.email }}</receiver_email>
+        <password>{{ orderView.password }}</password>
+        {% if orderView.gender %}
+            <gender>{{ orderView.gender }}</gender>
+        {% endif %}
+        <phone>{{ orderView.phone }}</phone>
+        <adress type="main">
+            <firstname>{{ orderView.firstname }}</firstname>
+            <lastname>{{ orderView.lastname }}</lastname>
+            <street>{{ orderView.address }}</street>
+            <postcode>{{ orderView.postcode }}</postcode>
+            <city>{{ orderView.city }}</city>
+            <country>{{ orderView.country }}</country>
+        </adress>
+    </customer>
+    {% for order in orderView.orders %}
+        {% for orderRow in order.rows %}
+        <order>
+            <product_id>{{ orderView.ccipProductIdsMap[orderRow.productId] }}</product_id>
+            <product_name>{{ orderRow.product.getTitle(orderView.locale) }}</product_name>
+            <number>{{ orderRow.quantity }}</number>
+            <tva>{{ orderRow.vatRate }}</tva>
+            <infos_sup>{{ orderRow.getLabel(orderView.locale) }}</infos_sup>
+            <prixTTC>{{ orderRow.priceWithVat }}</prixTTC>
+        </order>
+        {% endfor %}
+    {% endfor %}
+    <delivering>Telechargeable</delivering>
+    <delivering_tax>0</delivering_tax>
+    <origin>
+        <origin_name>Vimeet</origin_name>
+        <origin_url>{{ url('event') }}</origin_url>
+    </origin>
+    {# URL utilisees pour rediriger l'internaute #}
+    <cancel_url>{{ url('event_order_ccip_cancel_url', {
+        sheet: orderView.sheet.id,
+        captureToken: orderView.captureToken,
+    }) }}</cancel_url>
+    <valid_url>{{ url('event_order_ccip_valid_url', {
+        sheet: orderView.sheet.id,
+        captureToken: orderView.captureToken,
+        paymentNumber: orderView.paymentNumber,
+    }) }}</valid_url>
+    <error_url>{{ url('event_order_ccip_error_url', {
+        sheet: orderView.sheet.id,
+        captureToken: orderView.captureToken,
+    }) }}</error_url>
+    {# infos pour la mise a jour de l'etat de vos commandes #}
+    <update_url>{{ url('event_order_ccip_update_url', {
+        transaction: orderView.transactionId,
+        paymentNumber: orderView.paymentNumber,
+    }) }}</update_url>
+    {# <update_mail></update_mail> #}
+    <generation_facture>1</generation_facture>
+    <envoi_mail_commande_client>{{ orderView.email }}</envoi_mail_commande_client>
+</rpack_order>

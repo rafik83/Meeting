@@ -63,11 +63,19 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\GetBroadcastViewQuery }
 
     Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestionsHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.happening_question_repository'
-            - '@Proximum\Vimeet\Domain\Event\GetTimezoneHelper'
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollResultsHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollResults }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollsHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPolls }
 
     Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
         arguments:
@@ -179,3 +187,11 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\GetApiListQuery }
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+
+    #
+    # CCIP
+    #
+    Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQueryHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\CCIP\OrderCCIPViewQuery }

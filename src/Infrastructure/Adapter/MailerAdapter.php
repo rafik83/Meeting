@@ -69,6 +69,12 @@ class MailerAdapter implements MailerInterface
             $message->addTo($receiver);
         }
 
+        $receiversCc = array_unique($mail->getReceiversCc());
+
+        foreach ($receiversCc as $receiverCc) {
+            $message->addCc($receiverCc);
+        }
+
         if (true === $mail->sendToEmailTeam()
             && ($mail instanceof UserMail || $mail instanceof AbstractCustomizedMail)
         ) {

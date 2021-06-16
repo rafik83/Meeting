@@ -75,7 +75,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             [
                 '--sheetIdsExtraData' => $extraData->getId(),
                 '--orderBy' => $orderBy,
-                '--emailToNotify', $emailToNotify,
+                '--emailToNotify' => $emailToNotify,
                 '--locale' => $locale,
                 '--printOption' => $printOption,
             ]

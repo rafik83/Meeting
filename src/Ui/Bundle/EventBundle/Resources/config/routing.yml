@@ -1032,6 +1032,7 @@ event_sheet_happening_webinar:
     methods:  [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction
 
+# Questions
 event_sheet_happening_webinar_questions:
     path: /sheet/{sheet}/happening/{happening}/webinar/questions
     requirements:
@@ -1079,6 +1080,56 @@ event_sheet_happening_webinar_question_reply_delete:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction
+
+# Polls
+event_sheet_happening_webinar_polls_published:
+    path: /sheet/{sheet}/happening/{happening}/webinar/polls/published
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollsPublishedAction
+
+event_sheet_happening_webinar_polls:
+    path: /sheet/{sheet}/happening/{happening}/webinar/polls
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollsAction
+
+event_sheet_happening_webinar_poll_result:
+    path: /sheet/{sheet}/happening/{happening}/poll/{poll}/results
+    requirements:
+        sheet: \d+
+        happening: \d+
+        poll: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollResultsAction
+
+event_sheet_happening_webinar_save_poll:
+    path: /sheet/{sheet}/happening/{happening}/webinar/poll/save
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\SaveHappeningPollAction
+
+event_sheet_happening_webinar_set_poll_status:
+    path: /sheet/{sheet}/happening/{happening}/webinar/poll/status
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [PUT]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\SetHappeningPollStatusAction
+
+event_sheet_happening_webinar_vote_poll:
+    path: /sheet/{sheet}/happening/{happening}/poll/vote
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\VoteHappeningPollAction
 
 event_happening_webinar_mute:
     path: /sheet/{sheet}/happening/{happening}/webinar/mute
@@ -1415,3 +1466,53 @@ event_styleguide:
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\StyleGuide\ShowAction
     defaults:
         template: EventBundle:StyleGuide:index.html.twig
+
+#
+# Order CCIP
+#
+event_order_ccip:
+    path: /order-ccip/{transaction}/order.xml
+    requirements:
+        transaction: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPAction
+
+event_order_ccip_valid_url:
+    path: /sheet/{sheet}/order-ccip/{captureToken}/{paymentNumber}/valid
+    requirements:
+        sheet: \d+
+        captureToken: '[0-9a-zA-Z-_]+'
+        paymentNumber: '[0-9a-f-]+'
+    methods: [GET,POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPValidAction
+
+event_order_ccip_cancel_url:
+    path: /sheet/{sheet}/order-ccip/{captureToken}/cancel
+    requirements:
+        sheet: \d+
+        captureToken: '[0-9a-zA-Z-_]+'
+    methods: [GET,POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPCancelErrorAction
+
+event_order_ccip_error_url:
+    path: /sheet/{sheet}/order-ccip/{captureToken}/error
+    requirements:
+        sheet: \d+
+        captureToken: '[0-9a-zA-Z-_]+'
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPCancelErrorAction
+
+event_order_ccip_update_url:
+    path: /order-ccip/{transaction}/{paymentNumber}/update
+    requirements:
+        transaction: \d+
+    methods: [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\OrderCCIPUpdateAction
+
+event_order_ccip_payment:
+    path: /sheet/{sheet}/order-ccip/prepare-payment/{transaction}
+    requirements:
+        sheet: \d+
+        transaction: \d+
+    methods: [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\PreparePaymentAction

@@ -1,7 +1,12 @@
 <div class="filter">
     <h3>{{ form.vars.label }}</h3>
+    {% if showSelectAll|default(false) %}
+        <a class="filter__select-all" role='button'>{{ 'form.common.choices.all'|trans({}, 'forms') }}</a>
+        /
+        <a class="filter__unselect-all" role='button'>{{ 'catalog.selectItemsFromNomenclatures.unSelectAll'|trans }}</a>
+    {% endif %}
 
-    <ul data-message-at-least-one-checked="{{ ('form.search.' ~ form.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+    <ul data-message-at-least-one-checked="{{ ('form.search.' ~ form.vars.name ~ '.at_least_one_checked')|trans({}, 'forms') }}">
         {% for child in form.children %}
             {% set disabled = choices[child.vars.value].count == 0 %}
             <li class="filter__item">

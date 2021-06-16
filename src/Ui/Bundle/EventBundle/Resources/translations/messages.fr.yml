@@ -308,6 +308,36 @@ happening.webinar.messageQuestionConfirm: 'Souhaitez-vous effacer la question ?'
 happening.webinar.messageWarningBeforeStart: 'Le webinar est sur le point de commencer'
 happening.webinar.muteStreamConfirm: 'Souhaitez-vous désactiver le micro du speaker ?'
 happening.webinar.open: 'Ouvrir au public'
+happening.webinar.polls.tab: Sondages
+happening.webinar.polls.no_poll: 'Il n’y a pas de sondage pour le moment'
+happening.webinar.polls.submit: 'Soumettre le vote'
+happening.webinar.polls.see_results: 'Voter pour voir les résultats.'
+happening.webinar.polls.loading: 'Chargement...'
+happening.webinar.polls.tab_create: 'Créer'
+happening.webinar.polls.tab_view: 'Visualiser'
+happening.webinar.polls.button_add_question: 'Ajouter une question'
+happening.webinar.polls.question_placeholder: 'Texte de la question'
+happening.webinar.polls.choices.single: 'Choix unique'
+happening.webinar.polls.choices.multiple: 'Choix multiple'
+happening.webinar.polls.choices.mention_multiple: 'Plusieurs choix possibles'
+happening.webinar.polls.choice_placeholder: 'Réponse %index%'
+happening.webinar.polls.api_error: 'Erreur lors de la communication avec le serveur (%code%)'
+happening.webinar.polls.button_add_choice: 'Ajouter une réponse'
+happening.webinar.polls.button_save: 'Enregistrer'
+happening.webinar.polls.button_publish: 'Publier'
+happening.webinar.polls.button_confirm: 'Confirmer'
+happening.webinar.polls.button_cancel: 'Annuler'
+happening.webinar.polls.button_enable_question: 'Activer la question'
+happening.webinar.polls.button_disable_question: 'Désactiver la question'
+happening.webinar.polls.question_published: 'La question est accessible aux participants'
+happening.webinar.polls.question_hidden: 'La question est masquée pour les participants'
+happening.webinar.polls.admin_polls_empty: 'Vous n''avez pas encore de sondage'
+happening.webinar.polls.response_delete_confirm: |
+  Suppression d'une réponse. Êtes-vous sûr de vouloir supprimer cette réponse ?
+happening.webinar.polls.votes_count: '%count% votant(s)'
+happening.webinar.polls.publish_confirm: |
+  Vous êtes sur le point de publier une question. Après publication, la question ne sera plus modifiable.
+  Êtes-vous sûr de vouloir publier la question ?
 happening.webinar.questions.add: 'Ajoutez votre question'
 happening.webinar.questions.reply: 'Réponse de %name% :'
 happening.webinar.questions.reply_button: Répondre
@@ -508,6 +538,7 @@ order.transaction.list.title: 'Liste des transactions'
 order.transaction.mode.bank_card: 'Carte bancaire'
 order.transaction.mode.bank_check: Chèque
 order.transaction.mode.bank_transfer: Virement
+order.transaction.mode.ccip: CCIP
 order.transaction.mode.paypal: Paypal
 order.transaction.no: Aucune
 order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %sheetName% à l''évènement %eventName%'
@@ -529,6 +560,7 @@ package.payment.billingAddress: 'Adresse de facturation'
 package.payment.deposit.title: 'Acompte :'
 package.payment.deposit.toPay: 'Vous pouvez choisir de payer un acompte de %deposit% en sélectionnant les modes de paiement avec acompte'
 package.payment.pay.label: Valider
+package.payment.description: 'Vous arrivez maintenant à la phase finale de règlement de votre commande et allez être redirigé vers notre plateforme de paiement sécurisée.'
 package.payment.title: Paiement
 package.payment.total.title: Total
 package.payment.total.toPay: '%total%'

@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\Happening\Poll:
+    type:  entity
+    table: happening_poll
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 1000
+        createdAt:
+            type: datetime
+        status:
+            type: string
+        multipleChoice:
+            type: boolean
+    manyToOne:
+        happening:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            joinColumn:
+                onDelete: CASCADE
+        createdBy:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+    oneToMany:
+        pollChoices:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\PollChoice
+            cascade: ['persist', 'remove']
+            mappedBy: poll
+            orphanRemoval: true

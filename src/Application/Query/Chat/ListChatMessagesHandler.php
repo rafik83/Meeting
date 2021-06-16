@@ -64,6 +64,11 @@ class ListChatMessagesHandler
             $chatMessagesView->isAuthor = $query->user->getId() === $chatMessagesView->authorId;
             if (null === $chatMessagesView->avatar) {
                 $chatMessagesView->avatar = $this->routerAdapter->generate('event_chat_avatar', ['name' => $chatMessagesView->authorName]);
+            } else {
+                $chatMessagesView->avatar = $this->routerAdapter->generate(
+                    'liip_imagine_filter',
+                    ['path' => $chatMessagesView->avatar, 'filter' => 'user_icon']
+                );
             }
             $chatMessagesView->selfVote = $selfVotes[$chatMessagesView->id] ?? null;
         }

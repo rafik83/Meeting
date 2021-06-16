@@ -331,6 +331,13 @@ newrelic:
   #appName: "My Application"
   #licenseKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
 
+## CCIP
+##
+ccip:
+  mode: TEST
+  formAction: https://ccip.rpack.net/PostExternOrder.php
+  storeKey: c731d7bea7dd23f65c9e4a21671c21cf06ff88f3
+
 ## Proxy cache configuration
 ##
 proxyCache:

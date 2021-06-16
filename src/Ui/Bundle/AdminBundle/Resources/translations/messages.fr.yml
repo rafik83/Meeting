@@ -208,6 +208,10 @@ admin.event.page.transactions.title: 'Export des transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des types avec conditions de paiement spécifiques:'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
+admin.event.paymentConditions.update.ccipHelp: |
+  Pour le paiement CCIP : un paramètre supplémentaire d'événement devra être ajouté pour définir la correspondance entre les identifiants de produit.
+  ex: {"2615":"116Pr-csa-202105-0008582I9D"} où 2615 est l'id produit Vimeet
+  L'acompte n'est pas supporté pour ce mode de paiement.
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.qrcode.checkin: Checkin
@@ -298,6 +302,7 @@ admin.extraParameter.type.leni_predefined_filters: 'LENI filtres de l''API (GET)
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_sending_request: 'LENI Paramètre SendingRequests'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.type.product_ccip: 'Correspondance produits CCIP'
 admin.extraParameter.type.tech_event_configuration: 'Configuration TechEvent'
 admin.extraParameter.type.tracking_code: 'Code de suivi'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
@@ -1256,6 +1261,7 @@ admin.transaction.mode.bank_card: 'Carte bleue'
 admin.transaction.mode.bank_cash: 'Argent comptant'
 admin.transaction.mode.bank_check: Chèque
 admin.transaction.mode.bank_transfer: Virement
+admin.transaction.mode.ccip: CCIP
 admin.transaction.mode.paypal: Paypal
 admin.transaction.remove: Supprimer
 admin.transaction.state.cancelled: Annulé

@@ -16,6 +16,10 @@ Proximum\Vimeet\Domain\Model\Transaction:
         reference:
             type: string
             nullable: true
+        internalReference:
+            type: string
+            length: 20000
+            default: ''
         state:
             type: string
         currency:

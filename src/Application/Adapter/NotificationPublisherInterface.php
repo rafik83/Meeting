@@ -25,4 +25,12 @@ interface NotificationPublisherInterface
     public function publishUserConnectionNotification(Sheet $sheet, User $user): void;
 
     public function publishRequestVisioNotification(Sheet $sheet, User $fromUser, int $toUserId, string $type): void;
+
+    public function publishDelayedPollVoteNotification(Happening\Poll $poll): void;
+
+    public function publishedPollVoteNotification(Happening\Poll $poll): void;
+
+    public function publishNewPublishedPollNotification(Happening\Poll $poll): void;
+
+    public function publishHiddenPollNotification(Happening\Poll $poll): void;
 }
