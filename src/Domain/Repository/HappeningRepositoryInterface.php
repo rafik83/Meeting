@@ -49,6 +49,7 @@ interface HappeningRepositoryInterface
         Event $event,
         Type $type,
         \DateTimeInterface $day,
+        string $locale,
         Happening\Category $category = null
     );
 

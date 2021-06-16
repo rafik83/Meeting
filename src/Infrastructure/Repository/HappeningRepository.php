@@ -79,7 +79,8 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->leftJoin('happening.talkings', 'talking')
             ->leftJoin('talking.speaker', 'speaker')
             ->setParameter('locale', $locale)
-            ->orderBy('happening.begin', 'ASC')
+            ->orderBy('happening.begin')
+            ->addOrderBy('translation.title', 'ASC')
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -126,6 +127,7 @@ class HappeningRepository implements HappeningRepositoryInterface
         Event $event,
         Type $type,
         \DateTimeInterface $day,
+        string $locale,
         Happening\Category $category = null
     ) {
         $startDay = $this->getBeginningOfDaySeenByDefaultTZ($day);
@@ -143,13 +145,15 @@ class HappeningRepository implements HappeningRepositoryInterface
                 'happening.translations',
                 'translations',
                 'WITH',
-                'happening.event = :event AND happening.begin >= :startDay AND happening.begin < :endDay'
+                'happening.event = :event AND translations.locale = :locale AND happening.begin >= :startDay AND happening.begin < :endDay '
             )
-            ->orderBy('happening.begin')
+            ->setParameter('locale', $locale)
             ->setParameter('event', $event)
             ->setParameter('type', $type)
             ->setParameter('startDay', $startDay)
-            ->setParameter('endDay', $endDay);
+            ->setParameter('endDay', $endDay)
+            ->orderBy('happening.begin')
+            ->addOrderBy('translations.title', 'ASC');
 
         if (null !== $category) {
             $queryBuilder

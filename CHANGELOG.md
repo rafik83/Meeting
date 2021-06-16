@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIMEET-2577 - Allow poll in webinar
 - VIMEET-2182 - UI for polls in webinar
 
+### Fixed
+- MV-318 - Conference order alphabetical
+
 ## [2.95.0] - 2021-06-08
 ### Added
 - VIMEET-2605 - Send follow up email only once with all met participants as receivers and user that made evaluation in carbon copy (cc)
@@ -21,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.94.2] - 2021-06-08
 ### Fixed
 - Hotfix - Improve exception info if meeting not found after evaluation timeout
+
 ### Added
 - MV-341 - Fix exception if number of remaining priority meeting requests is negative
 
