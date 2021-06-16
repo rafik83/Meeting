@@ -19,6 +19,7 @@ services:
             $pathToExport: '%infrastructure.common_export_path%'
             $pathToOmzExport: '%infrastructure.export_omz_path%'
             $mailerSender: '%mailer_sender%'
+            Predis\Client: '@snc_redis.default'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -113,3 +114,5 @@ services:
         alias: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter
     adapter.job_queue_adapter:
         alias: Proximum\Vimeet\Application\Adapter\JobQueueInterface
+    Proximum\Vimeet\Domain\Repository\Happening\PollVoteRepositoryInterface:
+        alias: Proximum\Vimeet\Infrastructure\Repository\Happening\CachedPollVoteRepository

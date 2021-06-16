@@ -18,7 +18,8 @@ export default class Subscriber {
         const eventSource = new EventSourcePolyfill(url, {
             headers: {
                 'Authorization': `Bearer ${subscriberKey}`
-            }
+            },
+            heartbeatTimeout: 600000,
         });
         eventSource.onmessage = callback;
         this.subscribers[topic] = eventSource;
