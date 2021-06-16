@@ -93,6 +93,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
 
     private bool $mustEvaluateHappening = false;
 
+    private bool $pollAllowed = false;
+
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
@@ -110,7 +112,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         bool $webinarRecorded = true,
         bool $allowHls = false,
         bool $webinarRecordSentToSpeakers = true,
-        bool $mustEvaluateHappening = false
+        bool $mustEvaluateHappening = false,
+        bool $pollAllowed = false
     ) {
         $this->event = $event;
         $this->begin = $begin;
@@ -135,6 +138,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         $this->isStreamOpenToPublic = false;
         $this->webinarRecordSentToSpeakers = $webinarRecordSentToSpeakers;
         $this->mustEvaluateHappening = $mustEvaluateHappening;
+        $this->pollAllowed = $pollAllowed;
     }
 
     public function getId(): ?int
@@ -270,7 +274,8 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         bool $webinarRecorded = true,
         bool $allowHls = true,
         bool $webinarRecordSentToSpeakers = true,
-        bool $mustEvaluateHappening = null
+        bool $mustEvaluateHappening = null,
+        bool $pollAllowed = false
     ): void {
         $this->begin = $begin;
         $this->end = $end;
@@ -290,6 +295,7 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         if (null !== $mustEvaluateHappening) {
             $this->mustEvaluateHappening = $mustEvaluateHappening;
         }
+        $this->pollAllowed = $pollAllowed;
     }
 
     public function updateTranslation(
@@ -364,6 +370,16 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
     public function setQuestionAllowed(bool $questionAllowed): void
     {
         $this->questionAllowed = $questionAllowed;
+    }
+
+    public function isPollAllowed(): bool
+    {
+        return $this->pollAllowed;
+    }
+
+    public function setPollAllowed(bool $pollAllowed): void
+    {
+        $this->pollAllowed = $pollAllowed;
     }
 
     public function isParticipantLimited(): bool

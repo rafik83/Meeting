@@ -165,6 +165,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.google.com/iframe?u=_firstname_%20_lastname_');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
@@ -247,9 +248,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                false,
                 21,
                 false,
                 0,
+                true,
                 true,
                 true,
                 true,
@@ -317,6 +320,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->getEvent()->shouldBeCalledTimes(2)->willReturn($event->reveal());
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
         $happening->isStreamOpenToPublic()->willReturn(true);
@@ -411,9 +415,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                false,
                 21,
                 false,
                 0,
+                true,
                 true,
                 true,
                 true,
@@ -477,6 +483,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->shouldBeCalled()->willReturn(null);
         $happening->hasSpeaker($user->reveal())->shouldBeCalled()->willReturn(false);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(true);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(true);
@@ -578,6 +585,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 null,
                 true,
                 false,
+                false,
                 true,
                 true,
                 false,
@@ -585,6 +593,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 0,
                 true,
+                false,
                 false,
                 false,
                 false,
@@ -626,6 +635,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarWaitingMediaType('en')->shouldBeCalled()->willReturn(null);
         $happening->getLiveUrl()->shouldBeCalled()->willReturn('https://www.utube.com/embed/whatever');
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(true);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(false);
@@ -674,6 +684,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 new WaitingMediaView(null, null),
                 'https://www.utube.com/embed/whatever',
                 true,
+                false,
                 true,
                 21,
                 false,
@@ -740,6 +751,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getWebinarHeaderImage('en')->shouldBeCalled()->willReturn('/path/image.jpg');
         $happening->getLiveUrl()->willReturn(null);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->isWebinarRecorded()->shouldBeCalled()->willReturn(false);
         $this->isRecordingAllowed->isSatisfiedBy($happening->reveal())->shouldBeCalled()->willReturn(false);
@@ -821,9 +833,11 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
+                false,
                 21,
                 true,
                 42,
+                true,
                 true,
                 true,
                 true,
@@ -866,6 +880,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->willReturn(null);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(true);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
         $happening->isStreamOpenToPublic()->willReturn(true);
@@ -933,6 +948,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 new WaitingMediaView('/path/to/video.mp4', MimeType::FORMAT_VIDEO),
                 null,
                 true,
+                true,
                 false,
                 21,
                 true,
@@ -978,6 +994,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
         $happening->getLiveUrl()->willReturn(null);
         $this->questionRepository->getMessagesCountDuringHappening($happening->reveal())->shouldBeCalled()->willReturn(21);
         $happening->isSidebarAllowed()->shouldBeCalled()->willReturn(true);
+        $happening->isPollAllowed()->shouldBeCalled()->willReturn(false);
         $happening->isVideoWebinarAndHasLiveUrl()->shouldBeCalled()->willReturn(false);
         $happening->allowWebinarOnHLS()->shouldBeCalled()->willReturn(true);
         $happening->isStreamOpenToPublic()->willReturn(false);
@@ -1043,6 +1060,7 @@ class GetWebinarViewQueryHandlerTest extends TestCase
                 new WaitingMediaView('/path/to/video.mp4', MimeType::FORMAT_VIDEO),
                 null,
                 true,
+                false,
                 false,
                 21,
                 true,

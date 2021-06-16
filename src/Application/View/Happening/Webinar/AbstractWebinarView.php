@@ -67,6 +67,8 @@ abstract class AbstractWebinarView
     /** @var bool */
     public $sidebarAllowed;
 
+    public bool $pollAllowed;
+
     /** @var bool */
     public $isVideoWebinarAndHasLiveUrl;
 
@@ -103,6 +105,7 @@ abstract class AbstractWebinarView
         ?string $headerImage,
         ?string $liveUrl,
         bool $sidebarAllowed,
+        bool $pollAllowed,
         int $questionsCount,
         bool $isVideoWebinarAndHappeningIsEnded,
         int $viewersCount,
@@ -123,6 +126,7 @@ abstract class AbstractWebinarView
         $this->participantViews = $participantViews;
         $this->liveUrl = $liveUrl;
         $this->sidebarAllowed = $sidebarAllowed;
+        $this->pollAllowed = $pollAllowed;
         $this->isVideoWebinarAndHasLiveUrl = $isVideoWebinarAndHasLiveUrl;
         $this->isVideoWebinarAndHappeningIsEnded = $isVideoWebinarAndHappeningIsEnded;
         $this->questionsCount = $questionsCount;

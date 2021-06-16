@@ -59,7 +59,7 @@ class EditEvaluationHandler
                 return;
             }
 
-            $message = new EvaluationTimeoutMessage($meeting, $command->contact->getUser(), [$command->contact]);
+            $message = new EvaluationTimeoutMessage($meeting, $command->contact->getUser());
             $this->messageBus->dispatchDelayed($message, EvaluationTimeoutMessage::WAIT_DELAY);
         }
     }

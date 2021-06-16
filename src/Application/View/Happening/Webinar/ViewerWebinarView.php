@@ -30,6 +30,7 @@ class ViewerWebinarView extends AbstractWebinarView
     public string $voteUrl;
 
     public bool $hasToVote;
+    public bool $canAdminPoll = false;
 
     /**
      * @param WebinarSpeakerView[]     $speakers
@@ -54,6 +55,7 @@ class ViewerWebinarView extends AbstractWebinarView
         WaitingMediaView $waitingMediaView,
         ?string $liveUrl,
         bool $sidebarAllowed,
+        bool $pollAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
         int $questionsCount,
         bool $isWebinarHls,
@@ -81,6 +83,7 @@ class ViewerWebinarView extends AbstractWebinarView
             $headerImage,
             $liveUrl,
             $sidebarAllowed,
+            $pollAllowed,
             $questionsCount,
             $isVideoWebinarAndHappeningIsEnded,
             $viewersCount,

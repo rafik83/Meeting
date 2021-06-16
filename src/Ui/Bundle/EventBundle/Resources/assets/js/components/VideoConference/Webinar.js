@@ -10,6 +10,7 @@ import HlsPlayer from './HlsPlayer';
 
 import Chat from '../_Chat.js';
 import Question from '../_Question.js';
+import PollContainer from './Poll/PollContainer.svelte';
 import NotificationSubscriber from '../_Subscriber';
 import Modal from '../Modal';
 import WebinarStatus from './WebinarStatus';
@@ -33,6 +34,7 @@ function Webinar(element, isSpeaker) {
     this.endFullScreenClass = 'icon-Reduire_3';
 
     this.sidebarAllowed = element.getAttribute('data-sidebar-allowed') == 1;
+    this.pollAllowed = element.getAttribute('data-poll-allowed') == 1;
 
     this.newMessageChatCountNotification = element.querySelector('[data-chat-button] span');
     this.newMessageQuestionCountNotification = element.querySelector('[data-questions-button] span');
@@ -68,7 +70,7 @@ function Webinar(element, isSpeaker) {
     this.programUrl = element.getAttribute('data-program-url');
     this.hasToVote = false;
     this.voteUrl = null;
-    if(!this.isSpeaker) {
+    if (!this.isSpeaker) {
         this.hasToVote = element.hasAttribute('data-has-to-vote');
         this.voteUrl = element.getAttribute('data-vote-url');
     }
@@ -101,10 +103,11 @@ function Webinar(element, isSpeaker) {
 
     this.sideContainer = element.querySelector('.side-container');
 
+    this.pollsContainer = element.querySelector('[data-polls-container]');
+
     if (this.sidebarAllowed) {
         this.chat = new Chat(element);
         this.question = new Question(element);
-
 
         this.chatButton = element.querySelector('[data-chat-button]');
         this.chatButton.addEventListener('click', this.showChat.bind(this));
@@ -112,6 +115,28 @@ function Webinar(element, isSpeaker) {
         this.questionsButton = element.querySelector('[data-questions-button]');
         this.questionsButton.addEventListener('click', this.showQuestions.bind(this));
 
+        if (this.pollAllowed) {
+            this.pollsButton = element.querySelector('[data-polls-button]');
+            this.pollsButton.addEventListener('click', this.showPolls.bind(this));
+            const canAdminPoll = this.pollsContainer.dataset.canAdminPoll == 1;
+
+            this.pollContainer = new PollContainer({
+                target: this.pollsContainer,
+                props: {
+                     getPollsUrl: this.pollsContainer.dataset.apiList,
+                     votePollUrl: this.pollsContainer.dataset.apiVote,
+                     savePollUrl: canAdminPoll ? this.pollsContainer.dataset.apiSave : null,
+                     setPollStatusUrl: canAdminPoll ? this.pollsContainer.dataset.apiSetStatus : null,
+                     canAdmin: canAdminPoll,
+                     happeningId: this.happeningId,
+                     notificationProviderUrl: notificationProviderUrl,
+                     notificationSubscriberKey: this.notificationSubscriberKey,
+                     newPollIndicator: this.pollsButton.querySelector('#new-poll-indicator'),
+                     pollTab: this.pollsButton,
+                }
+            });
+
+        }
 
     }
 
@@ -317,8 +342,7 @@ Webinar.prototype.onSettingsValidate = function (invisibleMode) {
     this.showPrepareModalOrJoin();
 };
 
-Webinar.prototype.showPrepareModalOrJoin = function()
-{
+Webinar.prototype.showPrepareModalOrJoin = function () {
     if (this.isStreamOpenToPublic) {
         this.join();
     } else {
@@ -376,7 +400,7 @@ Webinar.prototype.initHLSPlayer = function () {
     this.hlsConnect(this.hlsVideoElement.dataset.startViewUrl);
 }
 
-Webinar.prototype.initWebRTCStack = function() {
+Webinar.prototype.initWebRTCStack = function () {
     if (this.sessionId.length === 0 || this.webRTCStackInitialized) {
         return;
     }
@@ -463,7 +487,7 @@ Webinar.prototype.initWebRTCStack = function() {
     this.prepareRecordButtons();
 }
 
-Webinar.prototype.prepareMuteAction = function(subscriber, stream) {
+Webinar.prototype.prepareMuteAction = function (subscriber, stream) {
     if (!this.canMuteStream) {
         return;
     }
@@ -557,11 +581,11 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
         }
 
         if (payload.action === 'mute_stream') {
-            if(payload.userId != this.currentUserId) {
+            if (payload.userId != this.currentUserId) {
                 return;
             }
 
-            if(!this.enableAudio) {
+            if (!this.enableAudio) {
                 return;
             }
 
@@ -577,7 +601,7 @@ Webinar.prototype.subscribeToStreamNotifications = function () {
 Webinar.prototype.connect = function () {
     this.session.connect(this.token, function (error) {
 
-        if(this.isStreamOpenToPublic) {
+        if (this.isStreamOpenToPublic) {
             this.showElement(this.endWebinarButton);
         } else {
             this.showElement(this.openToPublicButton);
@@ -613,9 +637,9 @@ Webinar.prototype.hlsConnect = function (hlsConnectUrl) {
             this.hlsPlayer.initHlsStreamPlayer(response.hlsUrl)
         }
     })
-    .fail((error) => {
-        console.error(error.status, error.statusText, this.recordEndpoint);
-    });
+        .fail((error) => {
+            console.error(error.status, error.statusText, this.recordEndpoint);
+        });
 }
 
 Webinar.prototype.showViewerControls = function () {
@@ -758,7 +782,7 @@ Webinar.prototype.showElement = function (element) {
     element.classList.remove('hide');
 };
 
-Webinar.prototype.blinkOpenToPublicBtnHandler = function() {
+Webinar.prototype.blinkOpenToPublicBtnHandler = function () {
     if (!this.hasOpenToPublicButtonBtnPrimaryClass) {
         this.openToPublicButton.classList.add('btn-primary');
     } else {
@@ -816,7 +840,7 @@ Webinar.prototype.onVideoElementCreated = function (event) {
     // Show user name on video element.
     if (this.subscribersNameMapping.hasOwnProperty(this.currentUserId)) {
         let iconMute = document.createElement('i');
-        iconMute.classList.add('iconMuteStream','icon-Conference-off','icon-center');
+        iconMute.classList.add('iconMuteStream', 'icon-Conference-off', 'icon-center');
 
         let publisherName = document.createElement('span');
         publisherName.classList.add('visio-user-name');
@@ -875,10 +899,10 @@ Webinar.prototype.handleStartStream = function (
         type: type,
         action: 'start'
     })
-    .fail((error) => {
-        this.showError('Stream creation failed');
-        console.error(error);
-    });
+        .fail((error) => {
+            this.showError('Stream creation failed');
+            console.error(error);
+        });
 };
 
 Webinar.prototype.handleStopStream = function (
@@ -895,10 +919,10 @@ Webinar.prototype.handleStopStream = function (
         type,
         action: 'stop',
     })
-    .fail((error) => {
-        this.showError('Stream stop failed');
-        console.error(error);
-    });
+        .fail((error) => {
+            this.showError('Stream stop failed');
+            console.error(error);
+        });
 };
 
 Webinar.prototype.liveVideo = function () {
@@ -1134,16 +1158,38 @@ Webinar.prototype.addHiddenQuestionSubscriber = function () {
     );
 }
 
+Webinar.prototype.showSidebarPanel = function (button, container)
+{
+
+    [this.chatButton, this.questionsButton, this.pollsButton].forEach((item) => {
+        if (button === item) {
+            item.classList.add('btn-primary');
+            item.classList.remove('btn-gray');
+            item.dispatchEvent(new Event('activate'));
+        } else {
+            item.classList.remove('btn-primary');
+            item.classList.add('btn-gray');
+            item.dispatchEvent(new Event('disable'));
+        }
+    })
+
+    if (container !== null){
+        [this.chat.chatContainer, this.question.questionsContainer, this.pollsContainer].forEach((item) => {
+            if (container === item) {
+                this.showElement(item);
+            } else {
+                this.hideElement(item);
+            }
+        })
+    }
+
+}
+
 Webinar.prototype.showChat = function (event) {
     event.preventDefault();
     this.openTab = 'chat';
     this.lastSeenQuestionMessageCount = this.question.questionMessageCount;
-    this.questionsButton.classList.remove('btn-primary');
-    this.questionsButton.classList.add('btn-gray');
-    this.chatButton.classList.remove('btn-gray');
-    this.chatButton.classList.add('btn-primary');
-    this.hideElement(this.question.questionsContainer);
-    this.showElement(this.chat.chatContainer);
+    this.showSidebarPanel(this.chatButton, this.chat.chatContainer);
     this.chat.reload();
     this.notificationSubscriber.removeSubscriber(this.topicChat);
     this.addShownChatSubscriber();
@@ -1158,15 +1204,9 @@ Webinar.prototype.showQuestions = function (event) {
     event.preventDefault();
     this.openTab = 'questions';
     this.lastSeenChatMessagesCount = this.chat.getChatMessagesCount();
-    this.chatButton.classList.remove('btn-primary');
-    this.chatButton.classList.add('btn-gray');
-    this.questionsButton.classList.remove('btn-gray');
-    this.questionsButton.classList.add('btn-primary');
-
-    this.hideElement(this.chat.chatContainer);
+    this.showSidebarPanel(this.questionsButton, this.question.questionsContainer);
     this.notificationSubscriber.removeSubscriber(this.topicChat);
     this.notificationSubscriber.removeSubscriber(this.topicQuestions);
-    this.showElement(this.question.questionsContainer);
 
     this.question.initQuestions();
 
@@ -1197,6 +1237,12 @@ Webinar.prototype.showQuestions = function (event) {
     this.addHiddenChatSubscriber();
 };
 
+Webinar.prototype.showPolls = function (event) {
+    event.preventDefault();
+    this.openTab = 'polls';
+    this.showSidebarPanel(this.pollsButton, this.pollsContainer);
+
+};
 
 Webinar.prototype.isSidebarOpened = function () {
     return !this.sideContainer.classList.contains('hide');
@@ -1268,11 +1314,11 @@ Webinar.prototype.toggleAudio = function () {
     this.enableAudio = enableAudio;
     this.toggleButton(this.toggleAudioElement, enableAudio);
 
-    if (enableAudio){
+    if (enableAudio) {
         this.pictoAudioElement.classList.remove('icon-Conference-off')
     }
 
-    if (!enableAudio){
+    if (!enableAudio) {
         this.pictoAudioElement.classList.add('icon-Conference-off')
     }
 };
@@ -1292,11 +1338,11 @@ Webinar.prototype.toggleVideo = function () {
     this.enableVideo = enableVideo;
     this.toggleButton(this.toggleVideoElement, enableVideo);
 
-    if (enableVideo){
+    if (enableVideo) {
         this.pictoVideoElement.classList.remove('icon-Video_2-off')
     }
 
-    if (!enableVideo){
+    if (!enableVideo) {
         this.pictoVideoElement.classList.add('icon-Video_2-off')
     }
 };

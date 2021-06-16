@@ -92,7 +92,7 @@ class EditEvaluationHandlerTest extends TestCase
         );
         $editCommentHandler->handle($command);
 
-        $expectedMessage = new EvaluationTimeoutMessage($meeting->reveal(), $user->reveal(), [$contact->reveal()]);
+        $expectedMessage = new EvaluationTimeoutMessage($meeting->reveal(), $user->reveal());
         $this->messageBus->dispatchDelayed($expectedMessage, EvaluationTimeoutMessage::WAIT_DELAY)->shouldHaveBeencalled();
     }
 

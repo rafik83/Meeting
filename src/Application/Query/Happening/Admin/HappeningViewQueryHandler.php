@@ -56,7 +56,8 @@ class HappeningViewQueryHandler
             $happening->isVideoWebinar(),
             $happening->isWebinarRecorded(),
             $happening->isWebinarRecorded() && $happening->getEnd() < $this->dateTime,
-            $happening->getWebinarRecordZipFileUrl()
+            $happening->getWebinarRecordZipFileUrl(),
+            $happening->isPollAllowed()
         );
     }
 }

@@ -67,6 +67,16 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Question\GetHappeningQuestions }
 
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollResultsHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollResults }
+
+    Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPollsHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Webinar\Poll\GetHappeningPolls }
+
     Proximum\Vimeet\Application\Command\Happening\Export\PrepareContentHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
