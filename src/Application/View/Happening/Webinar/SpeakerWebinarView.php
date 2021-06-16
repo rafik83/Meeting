@@ -46,6 +46,7 @@ class SpeakerWebinarView extends AbstractWebinarView
     /** @var bool */
     public $canMuteStream;
 
+    public bool $canAdminPoll;
     public string $programUrl;
 
     /**
@@ -73,6 +74,7 @@ class SpeakerWebinarView extends AbstractWebinarView
         ?string $headerImage,
         ?string $liveUrl,
         bool $sidebarAllowed,
+        bool $pollAllowed,
         bool $isVideoWebinarAndHappeningIsEnded,
         bool $isWebinarRecorded,
         bool $isWebinarRecording,
@@ -84,7 +86,8 @@ class SpeakerWebinarView extends AbstractWebinarView
         bool $canDeleteChatMessage = false,
         bool $canModerateQuestion = false,
         bool $canMuteStream = false,
-        string $programUrl
+        bool $canAdminPoll = false,
+        string $programUrl = ''
     ) {
         parent::__construct(
             $eventId,
@@ -103,6 +106,7 @@ class SpeakerWebinarView extends AbstractWebinarView
             $headerImage,
             $liveUrl,
             $sidebarAllowed,
+            $pollAllowed,
             $questionsCount,
             $isVideoWebinarAndHappeningIsEnded,
             $viewersCount,
@@ -121,6 +125,7 @@ class SpeakerWebinarView extends AbstractWebinarView
         $this->canDeleteChatMessage = $canDeleteChatMessage;
         $this->canModerateQuestion = $canModerateQuestion;
         $this->canMuteStream = $canMuteStream;
+        $this->canAdminPoll = $canAdminPoll;
         $this->programUrl = $programUrl;
     }
 }
