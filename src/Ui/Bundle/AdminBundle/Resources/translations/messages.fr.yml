@@ -1449,6 +1449,7 @@ admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
 admin.user.events: Evénements
 admin.user.export.contact.evaluation: 'Exporter les stats de notes par utilisateur'
+admin.user.export.contact.evaluation.details: 'Exporter le détail des notes par utilisateur'
 admin.user.export.title: Utilisateurs
 admin.user.requestedNewPasswordLink: 'Lien de réinitialisation de mot de passe : %url%'
 admin.users.batch.exportFormTemplate: 'Exporter les données de formulaire'
