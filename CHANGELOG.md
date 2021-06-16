@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2577 - Allow poll in webinar
+- VIMEET-2182 - UI for polls in webinar
 
 ## [2.95.0] - 2021-06-08
 ### Added
