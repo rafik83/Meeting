@@ -68,8 +68,6 @@
       }
 
       p {
-        align-items: flex-end;
-        display: flex;
         margin: 0;
 
         em {
@@ -108,6 +106,26 @@
     }
   }
 }
+
+.meetOnline_button {
+  position: absolute;
+  right: 30px;
+}
+
+.networking_list_img_name {
+  display: flex;
+  width: 77%;
+}
+
+.networking_list_name_position {
+  display: flex;
+  align-items: center;
+}
+
+.networking_list_between {
+  justify-content: space-between
+}
+
 
 @media (max-width: 1024px) {
 
@@ -155,5 +173,26 @@
     .list {
         margin-top: 20px;
     }
+
+  .meetOnline_button {
+    right: 65px;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .networking_container .list--users td {
+    display: block;
+  }
+
+  .meetOnline_button {
+    position: static;
+    right: 0;
+  }
+
+  .networking_list_img_name {
+    display: flex;
+    width: 100%;
+  }
 
 }

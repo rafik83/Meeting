@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - VIMEET-2393 - Meet Online button
+- VIMEET-2615 - Display meet online button on networking
 
 ## [2.95.0] - 2021-06-08
 ### Added
