@@ -3,31 +3,25 @@
 namespace Proximum\Vimeet\Application\Query\Participant;
 
 use Proximum\Vimeet\Application\View\Participant\CardListView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 
 class CardListViewQueryHandler
 {
-    /**
-     * @var CardViewQueryHandler
-     */
-    private $cardViewQueryHandler;
+    private CardViewQueryHandler $cardViewQueryHandler;
+    private NetworkingAccessChecker $networkingAccessChecker;
 
-    /**
-     * @param CardViewQueryHandler $cardViewQueryHandler
-     */
-    public function __construct(CardViewQueryHandler $cardViewQueryHandler)
-    {
+    public function __construct(
+        CardViewQueryHandler $cardViewQueryHandler,
+        NetworkingAccessChecker $networkingAccessChecker
+    ) {
         $this->cardViewQueryHandler = $cardViewQueryHandler;
+        $this->networkingAccessChecker = $networkingAccessChecker;
     }
 
-    /**
-     * @param CardListViewQuery $cardListViewQuery
-     *
-     * @return CardListView
-     */
-    public function handle(CardListViewQuery $cardListViewQuery)
+    public function handle(CardListViewQuery $cardListViewQuery): CardListView
     {
         $participants = $cardListViewQuery->sheet->getParticipants();
-        $user         = $cardListViewQuery->user;
+        $user = $cardListViewQuery->user;
         $cardListView = new CardListView();
 
         foreach ($participants as $participant) {
@@ -37,7 +31,13 @@ class CardListViewQueryHandler
                 $editable = false;
             }
 
-            $cardViewQuery = new CardViewQuery($participant, $cardListViewQuery->locale, $editable);
+            $cardViewQuery = new CardViewQuery(
+                $participant,
+                $cardListViewQuery->locale,
+                $editable,
+                false,
+                $cardListViewQuery->showMeetOnline
+            );
 
             $cardListView->cardViews[$participant->getId()] = $this->cardViewQueryHandler->handle($cardViewQuery);
         }

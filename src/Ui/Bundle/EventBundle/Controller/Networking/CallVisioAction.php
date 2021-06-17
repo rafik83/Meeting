@@ -78,17 +78,15 @@ class CallVisioAction
             }
         }
 
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $event = $eventDomain->getEvent();
+        $user = $userDomain->getUser();
 
-        if (!$this->networkingAccessChecker->allowedToAccess($event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || !$this->networkingAccessChecker->isSheetAllowedToAccess($sheet)
+            || $sheet->getEvent()->getId() !== $event->getId()
+        ) {
             throw new AccessDeniedException();
         }
-
-        $user = $userDomain->getUser();
 
         $this->commandBus->handle(new Add($event, $user, $toUser, Contact::ORIGIN_PRIVATE_CHAT_VISIO));
         $this->commandBus->handle(new JoinVisio($sheet, $user, $toUser));

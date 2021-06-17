@@ -10,6 +10,14 @@
         {% endif %}
 
         <div class="avatar">
+            {% if participant.isOnline is not same as null %}
+                {% if participant.isOnline %}
+                        <div class="user__status__online"></div>
+                {% else %}
+                         <div class="user__status__offline"></div>
+                {% endif %}
+            {% endif %}
+
             {% if participant.avatar != null %}
                 <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ participant.avatar|imagine_filter('user_avatar') }}" alt="{{ participant.initials }} avatar">
             {% else %}
@@ -24,6 +32,25 @@
     <div class="user__infos">
         <p class="name">{{ participant.firstname|capitalize }} {{ participant.lastname|upper }}</p>
         <p class="job">{{ participant.position }}</p>
+        <div class="user_meet_container" data-chat>
+            {% if participant.isOnline is not same as (null) %}
+                {% if participant.isOnline %}
+                    <a class="user__meet"
+                        data-participant-user-id="{{ participant.toUserId }}"
+                        data-private-chat-url="{{ path('event_networking_chat', {sheet: userSheet.id, toUser: participant.toUserId}) }}"
+                    >
+                        <div class="online">{{ 'account.status.meetOnline'|trans }}</div>
+                        <p></p>
+                    </a>
+                {% else %}
+                    <span class="user__meet">
+                        <div class="offline">{{ 'account.status.offline'|trans }}</div>
+                    </span>
+                {% endif %}
+            {% endif %}
+        </div>
+
+
         {% if not isCatalog and editAvatar is defined and editAvatar == true %}
             {% for key, avatar in avatarTemplate %}
                 <a class="edit" href="{{ path('event_account_participant_avatar', {sheet: sheet.id, participant: participant.id, key: key}) }}">

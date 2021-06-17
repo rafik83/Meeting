@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        bind:
+            $dateTime: '@datetime'
     #
     # Event
     #
@@ -3332,16 +3335,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery }
     query.participant.card_list_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler
-        arguments:
-            - '@query.participant.card_view_query_handler'
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardListViewQuery }
     query.participant.card_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler
-        arguments:
-            - '@template.participant_info_guesser'
-            - '@Proximum\Vimeet\Infrastructure\Repository\ScanRepository'
-            - '@datetime'
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Participant\CardViewQuery }
     query.participant.import.import_mapping_view_query_handler:
@@ -3536,16 +3535,8 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Order\PaginatedOrderListViewQuery }
-    query.catalog.sheet_preview_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@domain.rule.composer'
-            - '@sheet.preview'
-            - '@repository.rule_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@domain.key_dates.checker.meeting_published_access_checker'
-            - '@adapter.router'
+    Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler:
+        autowire: true
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
 
@@ -3567,7 +3558,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_search_adapter'
-            - '@query.catalog.sheet_preview_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler'
             - '@query.sheet.viewed.viewed_sheet_list_view_query_handler'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
@@ -4762,7 +4753,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@query.meeting_request.meeting_request_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler'
             - '@query.sheet.viewed.viewed_sheet_list_view_query_handler'
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.meeting_request_access_checker'
@@ -4775,15 +4766,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler
         arguments:
             - '@template.participant_info_guesser'
-
-    query.meeting_request.meeting_request_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler
-        arguments:
-            - '@sheet.preview'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@repository.rule_repository'
-            - '@domain.rule.composer'
-            - '@adapter.router'
 
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler
@@ -5618,11 +5600,10 @@ services:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\RegistrationCloseDateAccessChecker
         arguments:
             - '@datetime'
-            -
+
     domain.key_dates.checker.networking_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker
-        arguments:
-            - '@datetime'
+        autowire: true
 
     domain.key_dates.checker.ask_call_visio_private_chat_access_checker:
         class: Proximum\Vimeet\Domain\KeyDates\Checker\AskCallVisioPrivateChatAccessChecker

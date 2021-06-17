@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
+use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
 use Proximum\Vimeet\Domain\Model\Sheet;

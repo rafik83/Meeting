@@ -62,14 +62,13 @@ class IndexAction
         Sheet $sheet,
         Request $request
     ) {
-        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedException();
-        }
-
         $event = $eventDomain->getEvent();
         $user = $userDomain->getUser();
 
-        if (!$this->networkingAccessChecker->allowedToAccess($event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            || $sheet->getEvent()->getId() !== $event->getId()
+            || !$this->networkingAccessChecker->isSheetAllowedToAccess($sheet)
+        ) {
             throw new AccessDeniedException();
         }
 

@@ -10,14 +10,10 @@ use Proximum\Vimeet\Application\Adapter\NotificationSubscriptionsInterface;
 
 class NotificationSubscriptions extends AbstractNotification implements NotificationSubscriptionsInterface
 {
-    /** @var string */
-    private $mercureHubUrl;
-
-    /** @var string */
-    private $mercureSubscriberKey;
-
-    /** @var HttpAdapterInterface */
-    private $httpAdapter;
+    private string $mercureHubUrl;
+    private string $mercureSubscriberKey;
+    private HttpAdapterInterface $httpAdapter;
+    private ?array $loadedResults = null;
 
     public function __construct(
         string $mercureHubUrl,
@@ -29,13 +25,14 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         $this->httpAdapter = $httpAdapter;
     }
 
-    public function getSubscriptions(int $eventId, ?int $userId, string $topicFilter = null): array
+    public function getSubscriptions(int $eventId, ?int $currentUserId, string $topicFilter = null): array
     {
-        $result = $this->getSubscriptionsRaw();
+        if ($this->loadedResults === null) {
+            $this->loadedResults = $this->getSubscriptionsRaw();
+        }
 
         $users = [];
-
-        foreach ($result['subscriptions'] as $subscription) {
+        foreach ($this->loadedResults['subscriptions'] as $subscription) {
             if ($topicFilter && $subscription['topic'] !== $topicFilter) {
                 continue;
             }
@@ -46,7 +43,7 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
                 continue;
             }
             // exclude current user
-            if ($userId && $userId === $subscription['payload']['userId']) {
+            if ($currentUserId && $currentUserId === $subscription['payload']['userId']) {
                 continue;
             }
             $users[$subscription['payload']['userId']] = $subscription['payload'];
@@ -76,6 +73,11 @@ class NotificationSubscriptions extends AbstractNotification implements Notifica
         }, []);
 
         return count($indexedUsers);
+    }
+
+    public function hasUserSubscription(int $eventId, int $userId): bool
+    {
+        return !empty($this->getSubscriptions($eventId, null, $this->getUserTopic($eventId, $userId)));
     }
 
     private function getSubscriptionsRaw(?string $topic = null): array

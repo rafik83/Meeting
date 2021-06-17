@@ -143,3 +143,93 @@ table.list--users {
     border-radius: 5px;
   }
 }
+
+.user__meet {
+  display: flex;
+  text-decoration: none;
+  margin-top: 5px;
+  text-align: center;
+
+  .online {
+    color: #00CA00;
+    border-radius: 20px 0 0 20px;
+    background-color: #DCDCDC;
+    padding:  4px 12px 4px 7px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 10px;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  .offline {
+    color: #CB002E;
+    background-color: #DCDCDC;
+    border-radius: 20px;
+    padding: 4px 5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  p {
+    right: 8px;
+    position: relative;
+    width: 25px;
+    height: 21px;
+    background-color: #00CA00;
+    outline: 0;
+    color:#fff;
+    border: 0;
+    font-family: 'PictoOutline';
+    border-radius: 20px;
+    padding: 0 5px;
+    cursor: pointer;
+  }
+
+  p::before{
+    content: "=";
+  }
+}
+
+.user__meet:hover{
+  text-decoration: none;
+}
+
+.user__status__online {
+  background-color: #00CA00;
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  right: 5px;
+  bottom: 0;
+  border: 2px solid #fff;
+}
+
+.user__status__offline {
+  background-color: #CB002E;
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  right: 5px;
+  bottom: 0;
+  border: 2px solid #fff;
+}
+
+// iPad Pro
+@media (min-device-width: 1023px) and (max-device-width: 1366px) {
+  .user__meet {
+    .online {
+      padding: 3px 10px 2px 7px;
+      font-size: 8px;
+      line-height: 8px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

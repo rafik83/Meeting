@@ -97,6 +97,8 @@ services:
         alias: Proximum\Vimeet\Infrastructure\Adapter\SendGridApiAdapter
     Proximum\Vimeet\Application\Adapter\ExecInterface:
         alias: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
+    Predis\Client:
+        alias: snc_redis.default
 
     # services not autowired
     Symfony\Component\Serializer\Normalizer\DataUriNormalizer: ~

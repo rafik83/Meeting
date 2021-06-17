@@ -6,6 +6,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -28,18 +29,22 @@ class MeetingRequestViewQueryHandler
     /** @var RouterInterface */
     private $router;
 
+    private NetworkingAccessChecker $networkingAccessChecker;
+
     public function __construct(
         Preview $preview,
         SheetInfoGuesser $sheetInfoGuesser,
         RuleRepositoryInterface $ruleRepository,
         Composer $ruleComposer,
+        NetworkingAccessChecker $networkingAccessChecker,
         RouterInterface $router
     ) {
-        $this->preview          = $preview;
+        $this->preview = $preview;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
-        $this->ruleRepository   = $ruleRepository;
-        $this->ruleComposer     = $ruleComposer;
-        $this->router           = $router;
+        $this->ruleRepository = $ruleRepository;
+        $this->ruleComposer = $ruleComposer;
+        $this->networkingAccessChecker = $networkingAccessChecker;
+        $this->router = $router;
     }
 
     public function handle(MeetingRequestViewQuery $query): MeetingRequestView
@@ -53,7 +58,9 @@ class MeetingRequestViewQueryHandler
             $composedRule = $this->ruleComposer->compose($rules);
         }
 
-        $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule);
+        $showMeetOnline = $this->networkingAccessChecker->isSheetAllowedToAccess($query->sheet);
+
+        $previews = $this->preview->getPreview($otherSheet, $query->locale, $composedRule, $showMeetOnline);
 
         $participant = $query->sheet->getUserParticipant($query->user);
 

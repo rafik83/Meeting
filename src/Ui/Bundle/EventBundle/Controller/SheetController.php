@@ -85,7 +85,6 @@ class SheetController extends AbstractController
         $this->canSeeSheet = $canSeeSheet;
         $this->sheetPdfPrinter = $sheetPdfPrinter;
         $this->sheetInfosHelper = $sheetInfosHelper;
-        $this->sheetInfosHelper = $sheetInfosHelper;
         $this->sheetRepository = $sheetRepository;
         $this->sheetGuesser = $sheetGuesser;
         $this->catalogAccessChecker = $catalogAccessChecker;
@@ -181,7 +180,7 @@ class SheetController extends AbstractController
             'tipTranslationViews' => $tipTranslationViews,
             'isPhoneValidationRequired' => false,
             'displayAnalyticsStat' => $displayAnalyticsStat,
-            'displayAnalyticsViewLink' => $displayAnalyticsViewLink,
+            'displayAnalyticsViewLink' => $displayAnalyticsViewLink
         ]);
     }
 

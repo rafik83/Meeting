@@ -7,6 +7,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -35,6 +36,8 @@ class SheetPreviewViewQueryHandler
     /** @var RouterInterface */
     private $router;
 
+    private NetworkingAccessChecker $networkingAccessChecker;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         Composer $ruleComposer,
@@ -42,6 +45,7 @@ class SheetPreviewViewQueryHandler
         RuleRepositoryInterface $ruleRepository,
         RequestRepositoryInterface $meetingRequestRepository,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        NetworkingAccessChecker $networkingAccessChecker,
         RouterInterface $router
     ) {
         $this->sheetInfoGuesser              = $sheetInfoGuesser;
@@ -50,6 +54,7 @@ class SheetPreviewViewQueryHandler
         $this->ruleRepository                = $ruleRepository;
         $this->meetingRequestRepository      = $meetingRequestRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->networkingAccessChecker       = $networkingAccessChecker;
         $this->router                        = $router;
     }
 
@@ -92,12 +97,14 @@ class SheetPreviewViewQueryHandler
             ]);
         }
 
+        $showMeetOnline = $this->networkingAccessChecker->isSheetAllowedToAccess($viewer);
+
         return new CatalogSheetPreviewView(
             $sheet->getId(),
             $sheet,
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
             $this->getTypeOrCategoryTitle($catalogSheetPreviewViewQuery->showCategory, $sheet, $locale),
-            $this->preview->getPreview($sheet, $locale, $rule),
+            $this->preview->getPreview($sheet, $locale, $rule, $showMeetOnline),
             $meetingRequest,
             $viewer === $sheet,
             $meetingPublished,

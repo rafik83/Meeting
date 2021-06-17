@@ -9,6 +9,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -21,18 +22,19 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $locale           = 'fr';
-        $dateTime         = new \DateTime();
-        $sheet            = $this->prophesize(Sheet::class);
-        $sheet2           = $this->prophesize(Sheet::class);
-        $user             = UserFactory::create();
-        $participant      = $this->prophesize(Participant::class);
-        $meetingRequest   = $this->prophesize(Request::class);
-        $preview          = $this->prophesize(Preview::class);
+        $locale = 'fr';
+        $dateTime = new \DateTime();
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet2 = $this->prophesize(Sheet::class);
+        $user = UserFactory::create();
+        $participant = $this->prophesize(Participant::class);
+        $meetingRequest = $this->prophesize(Request::class);
+        $preview = $this->prophesize(Preview::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $ruleRepository   = $this->prophesize(RuleRepositoryInterface::class);
-        $ruleComposer     = $this->prophesize(Composer::class);
-        $router           = $this->prophesize(RouterInterface::class);
+        $ruleRepository = $this->prophesize(RuleRepositoryInterface::class);
+        $ruleComposer = $this->prophesize(Composer::class);
+        $networkingAccessChecker = $this->prophesize(NetworkingAccessChecker::class);
+        $router = $this->prophesize(RouterInterface::class);
 
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
@@ -53,10 +55,12 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
         $ruleRepository->getBySeerSheetAndSeeableSheet($sheet->reveal(), $sheet2->reveal())->shouldBeCalled()
             ->willReturn([]);
-        $preview->getPreview($sheet2->reveal(), $locale, null)->shouldBeCalled()->willReturn([]);
+        $preview->getPreview($sheet2->reveal(), $locale, null, true)->shouldBeCalled()->willReturn([]);
+
+        $networkingAccessChecker->isSheetAllowedToAccess($sheet->reveal())->willReturn(true);
 
         $router->generate('event_user_phone_redirect_to_validation', [
-            'sheet'       => 1,
+            'sheet' => 1,
             'participant' => 1,
             'redirectTo' => 'redirectLink/from/1/to/1337',
         ])->shouldBeCalled()->willReturn('validatePhoneLink');
@@ -65,7 +69,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             ->generate(
                 'event_catalog_complete_sheet',
                 [
-                    'sheet'          => 1,
+                    'sheet' => 1,
                     'sheetToDisplay' => 1337,
                 ]
             )
@@ -78,6 +82,7 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             $sheetInfoGuesser->reveal(),
             $ruleRepository->reveal(),
             $ruleComposer->reveal(),
+            $networkingAccessChecker->reveal(),
             $router->reveal()
         );
 
@@ -110,7 +115,8 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             true,
             false,
             true,
-            'validatePhoneLink'
+            'validatePhoneLink',
+            false
         );
 
         $this->assertEquals($expected, $result);

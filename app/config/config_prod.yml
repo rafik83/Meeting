@@ -1,7 +1,6 @@
 imports:
     # - { resource: config.yml }
     - { resource: services_prod.yml }
-    # - { resource: packages/snc_redis.yml }
 
 #framework:
 #    validation:

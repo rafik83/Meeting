@@ -57,6 +57,10 @@ class CardView
     /** @var bool */
     public $isCheckedToday;
 
+    public ?bool $isOnline;
+
+    public ?int $toUserId;
+
     /**
      * @param int    $id
      * @param bool   $editable
@@ -79,7 +83,9 @@ class CardView
         $owner,
         $sheetId,
         bool $getCheckinStatus = false,
-        bool $isCheckedToday = false
+        bool $isCheckedToday = false,
+        ?bool $isOnline = null,
+        ?int $toUserId = null
     ) {
         $this->id = $id;
         $this->editable = $editable;
@@ -92,5 +98,7 @@ class CardView
         $this->initials = (new GetParticipantInitials())($firstname, $lastname);
         $this->getCheckinStatus = $getCheckinStatus;
         $this->isCheckedToday = $isCheckedToday;
+        $this->isOnline = $isOnline;
+        $this->toUserId = $toUserId;
     }
 }

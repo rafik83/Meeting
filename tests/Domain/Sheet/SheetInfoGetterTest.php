@@ -8,6 +8,7 @@ use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\KeyDates\Checker\NetworkingAccessChecker;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CanSeeSheet;
@@ -26,22 +27,24 @@ class SheetInfoGetterTest extends TestCase
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
+        $networkingAccessChecker = $this->prophesize(NetworkingAccessChecker::class);
 
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
         $sheet = SheetFactory::create($event, $user);
         $sheetToDisplay = SheetFactory::create($event);
         $locale = 'fr';
+        $showMeetOnline = false;
 
         $nomenclatures = [
             new Nomenclature('title', 1, [], true, $event),
             new Nomenclature('title2', 1, [], true, $event),
         ];
 
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
+        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale, true, $showMeetOnline);
         $cardListView = new CardListView();
         $cardListView->cardViews = [
-            new CardView(1, false, 'toto', 'tata', 1, 'avatar', true, $sheetToDisplay->getId()),
+            new CardView(1, false, 'toto', 'tata', 1, 'avatar', true, $sheetToDisplay->getId(), false, false, false),
         ];
 
         $templateData = new TemplateData('type', [], $locale, $locale);
@@ -52,7 +55,8 @@ class SheetInfoGetterTest extends TestCase
             $canSeeSheet->reveal(),
             $nomenclatureRepository->reveal(),
             $templateDataFactory->reveal(),
-            $cardListViewQueryHandler->reveal()
+            $cardListViewQueryHandler->reveal(),
+            $networkingAccessChecker->reveal()
         );
 
         $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)
@@ -71,6 +75,8 @@ class SheetInfoGetterTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
+        $networkingAccessChecker->isSheetAllowedToAccess($sheet)->shouldBeCalled()->willReturn(false);
+
         $result = $sheetInfosGetter->sheetInfos($event, $sheet, $sheetToDisplay, $user, $locale);
 
         $this->assertEquals($result, $expectedResult);
@@ -82,6 +88,7 @@ class SheetInfoGetterTest extends TestCase
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
+        $networkingAccessChecker = $this->prophesize(NetworkingAccessChecker::class);
 
         $event = EventFactory::createEvent();
         $user = UserFactory::create();
@@ -93,7 +100,8 @@ class SheetInfoGetterTest extends TestCase
             $canSeeSheet->reveal(),
             $nomenclatureRepository->reveal(),
             $templateDataFactory->reveal(),
-            $cardListViewQueryHandler->reveal()
+            $cardListViewQueryHandler->reveal(),
+            $networkingAccessChecker->reveal()
         );
 
         $canSeeSheet->isSatisfiedBy($sheet, $sheetToDisplay)

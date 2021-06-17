@@ -4,7 +4,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Networking;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\NotificationSubscriberInterface;
-use Proximum\Vimeet\Application\Query\Networking\ClosedNetworkingException;
+use Proximum\Vimeet\Application\Query\Networking\NetworkingNotAccessibleException;
 use Proximum\Vimeet\Application\Query\Networking\GetSnippetQuery;
 use Proximum\Vimeet\Application\Query\Networking\GetSnippetQueryHandler;
 use Proximum\Vimeet\Application\View\Networking\GetSnippetView;
@@ -20,13 +20,13 @@ class GetSnippetQueryHandlerTest extends TestCase
         $notificationSubscriber = $this->prophesize(NotificationSubscriberInterface::class);
         $networkingAccessChecker = $this->prophesize(NetworkingAccessChecker::class);
         $getSnippetQueryHandler = new GetSnippetQueryHandler($notificationSubscriber->reveal(), $networkingAccessChecker->reveal());
-        $event = $this->prophesize(Event::class);
+
         $sheet = $this->prophesize(Sheet::class);
-        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $user = $this->prophesize(User::class);
         $getSnippetQuery = new GetSnippetQuery($sheet->reveal(), $user->reveal());
-        $this->expectException(ClosedNetworkingException::class);
-        $networkingAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
+
+        $this->expectException(NetworkingNotAccessibleException::class);
+        $networkingAccessChecker->isSheetAllowedToAccess($sheet->reveal())->shouldBeCalled()->willReturn(false);
         $getSnippetQueryHandler->handle($getSnippetQuery);
     }
 
@@ -41,7 +41,7 @@ class GetSnippetQueryHandlerTest extends TestCase
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $getSnippetQuery = new GetSnippetQuery($sheet->reveal(), $user->reveal());
 
-        $networkingAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
+        $networkingAccessChecker->isSheetAllowedToAccess($sheet->reveal())->shouldBeCalled()->willReturn(true);
         $notificationSubscriber->getUrl()->shouldBeCalled()->willReturn('http://www.google.fr');
         $notificationSubscriber->getUserSubscriberKey($sheet->reveal(), $user->reveal())->shouldBeCalled()->willReturn('123456');
         $user->getId()->shouldBeCalled()->willReturn(333);

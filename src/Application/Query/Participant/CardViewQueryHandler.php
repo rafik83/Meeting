@@ -2,6 +2,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant;
 
+use DateTimeInterface;
+use Proximum\Vimeet\Application\Adapter\CachedNetworkingStatusInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Repository\ScanRepositoryInterface;
@@ -9,28 +11,33 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class CardViewQueryHandler
 {
-    /** @var ParticipantInfoGuesser */
-    private $participantInfoGuesser;
-
-    /** @var ScanRepositoryInterface */
-    private $scanRepository;
-
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    private ParticipantInfoGuesser $participantInfoGuesser;
+    private ScanRepositoryInterface $scanRepository;
+    private DateTimeInterface $dateTime;
 
     public function __construct(
         ParticipantInfoGuesser $participantInfoGuesser,
         ScanRepositoryInterface $scanRepository,
-        \DateTimeInterface $dateTime
+        CachedNetworkingStatusInterface $cachedNetworkingStatus,
+        DateTimeInterface $dateTime
     ) {
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->scanRepository = $scanRepository;
+        $this->cachedNetworkingStatus = $cachedNetworkingStatus;
         $this->dateTime = $dateTime;
     }
 
     public function handle(CardViewQuery $cardViewQuery): CardView
     {
         $infos = $this->participantInfoGuesser->guessParticipantInfos($cardViewQuery->participant, $cardViewQuery->locale);
+        $isOnline = null;
+
+        if($cardViewQuery->showMeetOnline){
+            $isOnline = $this->cachedNetworkingStatus->isOnline(
+                $cardViewQuery->participant->getSheet()->getEvent()->getId(),
+                $cardViewQuery->participant->getUser()->getId()
+            );
+        }
 
         return new CardView(
             $cardViewQuery->participant->getId(),
@@ -42,13 +49,13 @@ class CardViewQueryHandler
             $cardViewQuery->participant->isOwnerParticipant(),
             $cardViewQuery->participant->getSheet()->getId(),
             $cardViewQuery->getCheckinStatus,
-            $cardViewQuery->getCheckinStatus
-                ? $this->scanRepository->isUserCheckinTodayByEvent(
-                    $cardViewQuery->participant->getUser(),
-                    $cardViewQuery->participant->getSheet()->getEvent(),
-                    $this->dateTime
-                )
-                : false
+            $cardViewQuery->getCheckinStatus && $this->scanRepository->isUserCheckinTodayByEvent(
+                $cardViewQuery->participant->getUser(),
+                $cardViewQuery->participant->getSheet()->getEvent(),
+                $this->dateTime
+            ),
+            $isOnline,
+            $cardViewQuery->participant->getUser()->getId()
         );
     }
 }

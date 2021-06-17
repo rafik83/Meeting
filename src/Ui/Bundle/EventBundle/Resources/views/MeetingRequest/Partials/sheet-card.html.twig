@@ -19,9 +19,11 @@
                 isCatalog: isCatalog,
                 isPriority: meetingRequestView.isPriority,
                 sheetToDisplayLink: sheetToDisplayLink,
-                sheetToDisplayId: meetingRequestView.sheet.id
+                sheetToDisplayId: meetingRequestView.sheet.id,
+                userSheet: sheet,
             }, false) }}
         </div>
+
         <footer>
             {% if sheetToDisplayLink is not null %}
                 <div class="actions">

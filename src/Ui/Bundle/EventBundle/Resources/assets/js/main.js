@@ -39,8 +39,10 @@ import { showSpinnerOnSubmit } from './components/form/_ShowSpinnerOnSubmit';
 import SheetVideo from './components/_SheetVideo';
 import UserConnectionRegister from './components/_UserConnectionRegister';
 import NotificationToastManager from './components/Toast/NotificationToastManager';
-import NotificationCallVisio from './components/_NotificationCallVisio';
+import MeetOnlineButtonHandler from './components/MeetOnlineButtonHandler';
 import initNetworking from './networking'
+import { createModalManager } from './components/ChatModalManager';
+import { createNotificationHandler } from './components/ChatNotificationHandler';
 
 import 'bootstrap';
 import 'elao-form.js';
@@ -306,11 +308,22 @@ function init(target) {
     const userConnectionRegister = new UserConnectionRegister();
     userConnectionRegister.connect();
 
-    const notificationCallVisio = new NotificationCallVisio(target.querySelector('[data-notification-call-visio]'), userConnectionRegister);
+    const notificationHandler = createNotificationHandler(target);
+    const chatModalManager = createModalManager(target, userConnectionRegister, notificationHandler);
 
-    initNetworking(document, userConnectionRegister, notificationCallVisio);
+    initNetworking(document, userConnectionRegister, notificationHandler, chatModalManager);
 
-    new NotificationToastManager(target.querySelector('[data-notification-toast]'), target.querySelector('[data-notification-toast-container]'), userConnectionRegister);
+    new MeetOnlineButtonHandler(document, userConnectionRegister);
+
+    const notificationToastManager = new NotificationToastManager(
+        target.querySelector('[data-notification-toast]'),
+        target.querySelector('[data-notification-toast-container]'),
+        userConnectionRegister
+    );
+
+    notificationToastManager.addListener((toast) => {
+        chatModalManager.open(toast.element);
+    });
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });

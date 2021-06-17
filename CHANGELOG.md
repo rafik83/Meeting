@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- VIMEET-2393 - Meet Online button
+- VIMEET-2615 - Display meet online button on networking
 - VIMEET-2577 - Allow poll in webinar
 - VIMEET-2182 - UI for polls in webinar
 

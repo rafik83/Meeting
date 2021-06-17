@@ -44,7 +44,7 @@ class CheckAccessToChatMessages
         }
 
         if ($object instanceof Event) {
-            return $this->networkingAccessChecker->allowedToAccess($object);
+            return $this->networkingAccessChecker->isEnabled($object);
         }
 
         if ($object instanceof ChatSession) {

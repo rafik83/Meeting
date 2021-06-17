@@ -13,8 +13,17 @@
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink, sheetToDisplayId: catalogSheetPreviewView.id }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', {
+                title: catalogSheetPreviewView.title,
+                preview: catalogSheetPreviewView.preview,
+                isCatalog: isCatalog,
+                sheetToDisplayLink: sheetToDisplayLink,
+                sheetToDisplayId: catalogSheetPreviewView.id,
+                userSheet: viewer,
+            }, false) }}
+
         </div>
+
         <footer>
             <div class="actions">
                 <a id="complete-sheet-link-{{ catalogSheetPreviewView.id }}"
