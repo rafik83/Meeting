@@ -3,7 +3,7 @@ import ParticipantList from './components/_ParticipantList';
 import { NetworkingBadgeManager, BADGE_TYPE } from './components/_NetworkingBadgeManager';
 import NotificationSubscriber from './components/_Subscriber';
 import { EVENT_NEW_CHAT_MESSAGE, EVENT_NEW_USER_CONNECTED } from './components/ChatNotificationHandler';
-import { EVENT_OPEN_CHAT_MODAL } from './components/ChatModalManager';
+import { EVENT_CHAT_MODAL_OPENED } from './components/ChatModalManager';
 import ParticipantListFilter from './components/_ParticipantListFilter';
 
 const { PRIVATECHAT, GENERALCHAT, NETWORKING_BUTTON, SINGLE_DISCUSSION_ITEM } = BADGE_TYPE;
@@ -152,7 +152,7 @@ export default function initNetworking(target, userConnection, notificationHandl
         }) !== -1
     }
 
-    target.addEventListener(EVENT_OPEN_CHAT_MODAL, (event) => {
+    target.addEventListener(EVENT_CHAT_MODAL_OPENED, (event) => {
         const authorId = event.detail;
         if (doesChatItemExistsFromAuthor(authorId)) {
             const deltaToRemove = networkingBadgeManager.getCurrentCounterValueForChatItem(authorId);
