@@ -306,8 +306,15 @@ class Happening implements TimeRangeInterface, ChatMessageLinkableInterface
         ?string $webinarWaitingMediaFile,
         ?string $webinarWaitingMediaType
     ): void {
-        /** @var HappeningTranslation $translation */
+        /** @var HappeningTranslation|null $translation */
         $translation = $this->translations->get($locale);
+
+        // $translation can be null if a locale has been added to event after Happening creation
+        if ($translation === null) {
+            $translation = new HappeningTranslation($this, $locale, $title, $description);
+            $this->translations->add($translation);
+        }
+
         $translation->update($title, $description, $webinarHeaderImage, $webinarWaitingMediaFile, $webinarWaitingMediaType);
     }
 
