@@ -172,7 +172,7 @@ table.list--users {
     text-transform: uppercase;
   }
 
-  p {
+  .picto_meet_online {
     right: 8px;
     position: relative;
     width: 25px;
@@ -188,7 +188,7 @@ table.list--users {
     font-size: 13px;
   }
 
-  p::before{
+  .picto_meet_online::before{
     content: "=";
   }
 }
