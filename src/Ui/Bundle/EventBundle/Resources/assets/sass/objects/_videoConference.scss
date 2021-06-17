@@ -111,16 +111,9 @@
     background-color: $bg-fail-color;
   }
 
-  .btn-group > .btn:first-child {
-    &:not(:last-child):not(.dropdown-toggle) {
-      @include border-right-radius(18px);
-      margin-right:10px;
-    }
-  }
-
-  .btn-group > .btn:last-child:not(:first-child),
-  .btn-group > .dropdown-toggle:not(:first-child) {
-    @include border-left-radius(18px);
+  .btn-sidebar > .btn:not(:last-child):not(.dropdown-toggle) {
+    border-radius: 18px;
+    margin-right: 10px;
   }
 
   .toggle-sidebar-button {
@@ -314,6 +307,10 @@
       margin: 20px auto;
     }
   }
+}
+
+.sidebar-center {
+  text-align: center;
 }
 
 @media screen and (max-width: 767px) {

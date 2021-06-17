@@ -1,0 +1,19 @@
+Proximum\Vimeet\Domain\Model\Happening\PollVote:
+    type:  entity
+    table: happening_poll_vote
+    id:
+        pollChoice:
+            associationKey: true
+        user:
+            associationKey: true
+    manyToOne:
+        pollChoice:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\PollChoice
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE

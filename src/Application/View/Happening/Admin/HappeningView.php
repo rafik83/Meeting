@@ -57,6 +57,8 @@ class HappeningView
     /** @var string|null */
     public $webinarRecordZipFileUrl;
 
+    public bool $pollAllowed;
+
     public function __construct(
         int $id,
         string $title,
@@ -74,7 +76,8 @@ class HappeningView
         bool $isVideoWebinar = false,
         bool $isWebinarRecorded = true,
         bool $isWebinarRecordAvailable = false,
-        ?string $webinarRecordZipFileUrl = null
+        ?string $webinarRecordZipFileUrl = null,
+        bool $pollAllowed = false
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -93,6 +96,7 @@ class HappeningView
         $this->isWebinarRecorded = $isWebinarRecorded;
         $this->isWebinarRecordAvailable = $isWebinarRecordAvailable;
         $this->webinarRecordZipFileUrl = $webinarRecordZipFileUrl;
+        $this->pollAllowed = $pollAllowed;
     }
 
     public function hasLimit(): bool

@@ -36,6 +36,7 @@ class DayViewQueryHandler
             $query->event,
             $query->sheet->getType(),
             $query->timeRange->getBegin(),
+            $query->locale,
             $query->category
         );
 
@@ -81,8 +82,8 @@ class DayViewQueryHandler
         $programElementViews = array_merge($happeningViews, $massUnavailabilityView);
 
         usort($programElementViews, static function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
-            if ($first->begin === $second->begin) {
-                return $first->end < $second->end ? -1 : 1;
+            if ($first->begin->getTimestamp() === $second->begin->getTimestamp()) {
+                return 0;
             }
 
             return $first->begin < $second->begin ? -1 : 1;

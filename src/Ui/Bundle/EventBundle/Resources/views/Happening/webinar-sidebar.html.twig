@@ -1,9 +1,16 @@
 <div class="side-container hide">
     {% if webinarView.sidebarAllowed %}
-        <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i class="icon-Suivant_3"></i></button>
-        <div class="btn-group btn-sidebar" role="group">
-            <a class="btn btn-primary btn-chat" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }} <span></span></a>
-            <a class="btn btn-gray btn-question" href="#" data-questions-button>{{ 'happening.webinar.questions.tab'|trans }} <span></span></a>
+        <button class="btn btn-gray pull-right hide-on-desktop" data-mobile-toggle-sidebar><i
+                    class="icon-Suivant_3"></i></button>
+        <div class="btn-sidebar sidebar-center" role="group">
+            <a class="btn btn-primary btn-chat" href="#" data-chat-button>{{ 'happening.webinar.chat.tab'|trans }}
+                <span></span></a>
+            <a class="btn btn-gray btn-question rounded" href="#"
+               data-questions-button>{{ 'happening.webinar.questions.tab'|trans }} <span></span></a>
+            {% if webinarView.pollAllowed %}
+                <a class="btn btn-gray btn-poll" href="#" data-polls-button>{{ 'happening.webinar.polls.tab'|trans }}
+                    <span id="new-poll-indicator"></span></a>
+            {% endif %}
         </div>
 
         <div data-chat-container
@@ -19,21 +26,22 @@
                     class="chat-form"
                     data-chat-form
             >
-                <input type="text" name="content" placeholder="{{ 'happening.webinar.chat.add'|trans }}" maxlength="250" autocomplete="off">
+                <input type="text" name="content" placeholder="{{ 'happening.webinar.chat.add'|trans }}" maxlength="250"
+                       autocomplete="off">
                 <button type="submit"></button>
             </form>
         </div>
         <div class="hide"
-            data-questions-container
-            data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId}) }}"
-            data-vote-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            data-question-message-delete="{{ path('event_sheet_happening_webinar_question_delete', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            data-question-begin-reply="{{ path('event_sheet_happening_webinar_question_begin_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            data-question-begin-reply-label="{{ 'happening.webinar.questions.reply_writing'|trans }}"
-            data-question-reply="{{ path('event_sheet_happening_webinar_question_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-            data-question-reply-label="{{ 'happening.webinar.questions.reply'|trans }}"
-            data-question-reply-button-label="{{ 'happening.webinar.questions.reply_button'|trans }}"
-            data-question-reply-delete="{{ path('event_sheet_happening_webinar_question_reply_delete', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+             data-questions-container
+             data-href="{{ path('event_sheet_happening_webinar_questions', {sheet: sheet.id, happening: webinarView.happeningId}) }}"
+             data-vote-href="{{ path('event_sheet_happening_webinar_question_vote', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+             data-question-message-delete="{{ path('event_sheet_happening_webinar_question_delete', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+             data-question-begin-reply="{{ path('event_sheet_happening_webinar_question_begin_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+             data-question-begin-reply-label="{{ 'happening.webinar.questions.reply_writing'|trans }}"
+             data-question-reply="{{ path('event_sheet_happening_webinar_question_reply', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+             data-question-reply-label="{{ 'happening.webinar.questions.reply'|trans }}"
+             data-question-reply-button-label="{{ 'happening.webinar.questions.reply_button'|trans }}"
+             data-question-reply-delete="{{ path('event_sheet_happening_webinar_question_reply_delete', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
         >
             <div class="loadingSortBy">
                 <div class="sortBy">
@@ -54,13 +62,61 @@
                 {# content filled with javascript #}
             </div>
             <form
-                action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
-                class="questions-form"
-                data-questions-form
+                    action="{{ path('event_sheet_happening_webinar_question_add', {sheet: sheet.id, happening: webinarView.happeningId }) }}"
+                    class="questions-form"
+                    data-questions-form
             >
-                <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}" maxlength="300" autocomplete="off">
+                <input type="text" name="content" placeholder="{{ 'happening.webinar.questions.add'|trans }}"
+                       maxlength="300" autocomplete="off">
                 <button type="submit"></button>
             </form>
         </div>
+        {% if webinarView.pollAllowed %}
+            {% set pollRoute = webinarView.canAdminPoll ? 'event_sheet_happening_webinar_polls' : 'event_sheet_happening_webinar_polls_published' %}
+            <div class="hide"
+                data-polls-container
+                data-api-list="{{ path(pollRoute, {sheet: sheet.id, happening: webinarView.happeningId}) }}"
+                data-api-vote="{{ path('event_sheet_happening_webinar_vote_poll', {sheet: sheet.id, happening: webinarView.happeningId}) }}"
+                data-can-admin-poll="{{ webinarView.canAdminPoll }}"
+                {% if webinarView.canAdminPoll %}
+                data-api-save="{{ path('event_sheet_happening_webinar_save_poll', {sheet: sheet.id, happening: webinarView.happeningId}) }}"
+                data-api-set-status="{{ path('event_sheet_happening_webinar_set_poll_status', {sheet: sheet.id, happening: webinarView.happeningId}) }}"
+                {% endif %}
+            >
+            </div>
+        {% endif %}
     {% endif %}
 </div>
+
+{% if webinarView.pollAllowed %}
+    <script id="poll-translations" type="application/json">
+        {{ {
+            'submitVote': 'happening.webinar.polls.submit'|trans,
+            'seeResults': 'happening.webinar.polls.see_results'|trans,
+            'noPoll': 'happening.webinar.polls.no_poll'|trans,
+            'loading': 'happening.webinar.polls.loading'|trans,
+            'tabCreate': 'happening.webinar.polls.tab_create'|trans,
+            'tabView': 'happening.webinar.polls.tab_view'|trans,
+            'buttonAddQuestion': 'happening.webinar.polls.button_add_question'|trans,
+            'questionPlaceholder': 'happening.webinar.polls.question_placeholder'|trans,
+            'choicesSingle': 'happening.webinar.polls.choices.single'|trans,
+            'choicesMultiple': 'happening.webinar.polls.choices.multiple'|trans,
+            'choicesMentionMultiple': 'happening.webinar.polls.choices.mention_multiple'|trans,
+            'choicePlaceholder': 'happening.webinar.polls.choice_placeholder'|trans,
+            'buttonAddChoice': 'happening.webinar.polls.button_add_choice'|trans,
+            'buttonSave': 'happening.webinar.polls.button_save'|trans,
+            'buttonPublish': 'happening.webinar.polls.button_publish'|trans,
+            'buttonConfirm': 'happening.webinar.polls.button_confirm'|trans,
+            'buttonCancel': 'happening.webinar.polls.button_cancel'|trans,
+            'buttonEnableQuestion': 'happening.webinar.polls.button_enable_question'|trans,
+            'buttonDisableQuestion': 'happening.webinar.polls.button_disable_question'|trans,
+            'questionPublished': 'happening.webinar.polls.question_published'|trans,
+            'questionHidden': 'happening.webinar.polls.question_hidden'|trans,
+            'pollsEmpty': 'happening.webinar.polls.admin_polls_empty'|trans,
+            'votesCount': 'happening.webinar.polls.votes_count'|trans,
+            'publishConfirm': 'happening.webinar.polls.publish_confirm'|trans,
+            'responseDeleteConfirm': 'happening.webinar.polls.response_delete_confirm'|trans,
+            'apiError': 'happening.webinar.polls.api_error'|trans,
+        } | json_encode | raw }}
+    </script>
+{% endif %}

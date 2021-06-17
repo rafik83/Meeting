@@ -1,0 +1,18 @@
+Proximum\Vimeet\Domain\Model\Happening\PollChoice:
+    type:  entity
+    table: happening_poll_choice
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        content:
+            type: string
+            length: 1000
+    manyToOne:
+        poll:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening\Poll
+            inversedBy: pollChoices
+            joinColumn:
+                onDelete: CASCADE

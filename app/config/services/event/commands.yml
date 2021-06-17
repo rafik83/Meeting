@@ -1,4 +1,9 @@
 services:
+    _defaults:
+        bind:
+            $dateTime: '@datetime'
+
+
     Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
@@ -57,6 +62,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\StartWebinarSessionCommand }
 
+    # Webinar questions
     Proximum\Vimeet\Application\Command\Happening\Webinar\Question\AddHappeningQuestionHandler:
         arguments:
             - '@vimeet_infrastructure.repository.happening_question_repository'
@@ -101,6 +107,27 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\Mercure\NotificationPublisher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Question\VoteHappeningQuestion }
+
+    # Webinar polls
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\AddHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\Add }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\UpdateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\Update }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\UpdateStatusHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\UpdateStatus }
+
+    Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\VoteHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Webinar\Poll\Vote }
 
     Proximum\Vimeet\Application\Command\Sheet\SortParticipantsHandler:
         arguments:

@@ -64,6 +64,20 @@ class NotificationSubscriber extends AbstractNotification implements Notificatio
         ], $this->mercureSubscriberKey);
     }
 
+    public function getPollResultsSubscriberKey(Happening\Poll $poll): string
+    {
+        return JWT::encode(
+            [
+                'mercure' => [
+                    'subscriber' => [
+                        ['topic' => $this->getPollResultsTopic($poll),],
+                    ],
+                ],
+            ],
+            $this->mercureSubscriberKey
+        );
+    }
+
     /**
      * Generate JWT token for all topics a user can be interested in
      */

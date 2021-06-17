@@ -1032,6 +1032,7 @@ event_sheet_happening_webinar:
     methods:  [GET]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningWebinarAction
 
+# Questions
 event_sheet_happening_webinar_questions:
     path: /sheet/{sheet}/happening/{happening}/webinar/questions
     requirements:
@@ -1079,6 +1080,56 @@ event_sheet_happening_webinar_question_reply_delete:
         happening: \d+
     methods:  [POST]
     controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\DeleteHappeningQuestionReplyAction
+
+# Polls
+event_sheet_happening_webinar_polls_published:
+    path: /sheet/{sheet}/happening/{happening}/webinar/polls/published
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollsPublishedAction
+
+event_sheet_happening_webinar_polls:
+    path: /sheet/{sheet}/happening/{happening}/webinar/polls
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollsAction
+
+event_sheet_happening_webinar_poll_result:
+    path: /sheet/{sheet}/happening/{happening}/poll/{poll}/results
+    requirements:
+        sheet: \d+
+        happening: \d+
+        poll: \d+
+    methods:  [GET]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\GetHappeningPollResultsAction
+
+event_sheet_happening_webinar_save_poll:
+    path: /sheet/{sheet}/happening/{happening}/webinar/poll/save
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\SaveHappeningPollAction
+
+event_sheet_happening_webinar_set_poll_status:
+    path: /sheet/{sheet}/happening/{happening}/webinar/poll/status
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [PUT]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\SetHappeningPollStatusAction
+
+event_sheet_happening_webinar_vote_poll:
+    path: /sheet/{sheet}/happening/{happening}/poll/vote
+    requirements:
+        sheet: \d+
+        happening: \d+
+    methods:  [POST]
+    controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\Poll\VoteHappeningPollAction
 
 event_happening_webinar_mute:
     path: /sheet/{sheet}/happening/{happening}/webinar/mute

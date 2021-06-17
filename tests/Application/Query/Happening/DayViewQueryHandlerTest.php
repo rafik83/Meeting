@@ -38,6 +38,7 @@ class DayViewQueryHandlerTest extends TestCase
         $timeRangeStartTime = new \DateTime('2016-10-12 10:00:00');
         $timeRangeEndTime   = new \DateTime('2016-10-12 18:00:00');
         $timeRange = new TimeRangeView($timeRangeStartTime, $timeRangeEndTime);
+        $locale = 'fr';
 
         $sheet->getType()->willReturn($type->reveal());
 
@@ -139,6 +140,7 @@ class DayViewQueryHandlerTest extends TestCase
             $event,
             $type->reveal(),
             $timeRange->getBegin(),
+            $locale,
             $category
         )->shouldBeCalled()->willReturn($happenings);
 

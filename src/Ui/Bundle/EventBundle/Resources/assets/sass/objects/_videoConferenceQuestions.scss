@@ -160,55 +160,23 @@
   }
 }
 
-  .loadingDiv {
-    justify-content: center;
-    display: flex;
-    margin-top: -5px;
-    background-color:rgb(252 252 252 / 90%);
-    padding-bottom: 15px;
-    z-index: 10;
-    position:absolute;
-    width:100%;
+.sortBy {
+  display:flex;
+  margin:10px 0px;
+  align-items: center;
+  justify-content: center;
 
-    span {
-      color:gray;
-      padding:0 5px;
-    }
-
-    .loadingIcon {
-      width:22px;
-      height:22px;
-      display:inline-block;
-      background-image:url('../../../assets/images/icons/icon-loading.svg');
-      animation: rotating 1s linear infinite;
-    }
-
-    @keyframes rotating {
-      from{
-        transform: rotate(0deg);
-      }
-      to{
-        transform: rotate(360deg);
-      }
-    }
+  p{
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-right:10px;
+    padding-top: 12px;
   }
 
-  .sortBy {
-    display:flex;
-    margin:10px 0px;
-    align-items: center;
-
-    p{
-      font-weight: bold;
-      text-transform: uppercase;
-      padding-right:10px;
-      padding-top: 12px;
-    }
-
-    select {
-      padding: 3px;
-      color:$color-highlighted;
-      width: 65%;
-    }
+  select {
+    padding: 3px;
+    color:$color-highlighted;
+    width: 65%;
   }
+}
 
