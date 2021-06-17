@@ -146,20 +146,20 @@ table.list--users {
 
 .user__meet {
   display: flex;
+  font-family: OpenSans, Helvetica, sans-serif;
+  font-size: 11px;
   text-decoration: none;
   margin-top: 5px;
   text-align: center;
+  letter-spacing: 1px;
 
   .online {
     color: #00CA00;
     border-radius: 20px 0 0 20px;
     background-color: #DCDCDC;
-    padding:  4px 12px 4px 7px;
+    padding: 3px 12px 3px 7px;
     text-decoration: none;
     text-transform: uppercase;
-    font-weight: bolder;
-    font-size: 10px;
-    letter-spacing: 1px;
     cursor: pointer;
   }
 
@@ -170,12 +170,9 @@ table.list--users {
     padding: 4px 5px;
     text-decoration: none;
     text-transform: uppercase;
-    font-weight: bolder;
-    font-size: 10px;
-    letter-spacing: 1px;
   }
 
-  p {
+  .picto_meet_online {
     right: 8px;
     position: relative;
     width: 25px;
@@ -186,11 +183,12 @@ table.list--users {
     border: 0;
     font-family: 'PictoOutline';
     border-radius: 20px;
-    padding: 0 5px;
+    padding: 2px 5px 0;
     cursor: pointer;
+    font-size: 13px;
   }
 
-  p::before{
+  .picto_meet_online::before{
     content: "=";
   }
 }
@@ -225,11 +223,13 @@ table.list--users {
 @media (min-device-width: 1023px) and (max-device-width: 1366px) {
   .user__meet {
     .online {
-      padding: 3px 10px 2px 7px;
-      font-size: 8px;
-      line-height: 8px;
-      display: flex;
       align-items: center;
+      display: flex;
+      font-size: 10px;
+      letter-spacing: 0;
+      line-height: 8px;
+      padding: 3px 10px 2px 7px;
+      white-space: nowrap;
     }
   }
 }

@@ -34,9 +34,9 @@ export const createNotificationHandler = (container) => {
             }
 
             if (payload.action === 'request_visio') {
-                const divCallVisioMessage = document.querySelector('.chat-message-call-visio');
-                const buttonVisio = document.querySelector('.state-normal');
-                if (divCallVisioMessage != null) {
+                const divCallVisioMessage = document.querySelector(`#private-chat-${payload.from.userId} .chat-message-call-visio`);
+                if (divCallVisioMessage) {
+                    const buttonVisio = divCallVisioMessage.querySelector('.state-normal');
 
                     divCallVisioMessage.classList.remove("hide");
                     this.chatVisio.hideAllButtons();
