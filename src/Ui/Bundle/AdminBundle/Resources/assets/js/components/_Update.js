@@ -61,7 +61,7 @@ Update.prototype.placeholder = function ()
     if (this.data.value === null || this.data.value === '') {
         this.element.innerHTML = '<span class="glyphicon glyphicon-edit"></span>';
     } else {
-        this.element.innerHTML = this.data.value;
+        this.element.textContent = this.data.value;
     }
 };
 

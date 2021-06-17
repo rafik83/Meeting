@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - MV-318 - Conference order alphabetical
+- MV-328 - Fix XSS vulnerability on Update.js (used on rooming list, participations, spots features)
 - Fix - Add translation key missing for user export contact evaluation details
 - Fix - Center interactive buttons on webinar
 - Hotfix - Fix exception if happening is updated when a new locale has been added to event after happening creation
