@@ -33,6 +33,14 @@ class NotificationCallVisio {
             return;
         }
 
+        // check if chat modal is opened
+        const chatModal = document.getElementById(`private-chat-${message.from.userId}`);
+
+        if (chatModal) {
+            // confirmation banner will be displayed in chat modal
+            return;
+        }
+
         const author = this.modalElement.querySelector('.author');
         const user = document.createElement('p');
         const position = document.createElement('em');
