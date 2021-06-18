@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.96.1] - 2021-06-18
 ### Fixed
 - Hotfix - avoid exception when polls are not activated
 
-## [2.96.0] - 2021-06-18
-### Added
+## [2.96.0] - 2021-06-1
+8### Added
 - VIMEET-2393 - Meet Online button
 - VIMEET-2615 - Display meet online button on networking
 - VIMEET-2577 - Allow poll in webinar
