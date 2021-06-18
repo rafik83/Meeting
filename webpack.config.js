@@ -74,6 +74,7 @@ Encore
 
     // add hash to the build files
     .enableVersioning()
+    .enablePostCssLoader()
 ;
 
 var config = Encore.getWebpackConfig();
