@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.96.0] - 2021-06-18
 ### Added
 - VIMEET-2393 - Meet Online button
 - VIMEET-2615 - Display meet online button on networking
@@ -14,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - MV-318 - Conference order alphabetical
 - MV-328 - Fix XSS vulnerability on Update.js (used on rooming list, participations, spots features)
+- MV-342 - Center interactive buttons on webinar
 - Fix - Add translation key missing for user export contact evaluation details
-- Fix - Center interactive buttons on webinar
 - Hotfix - Fix exception if happening is updated when a new locale has been added to event after happening creation
 
 ## [2.95.0] - 2021-06-08
