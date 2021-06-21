@@ -51,12 +51,8 @@
     "install": "napa"
   },
   "devDependencies": {
-    "@tailwindcss/postcss7-compat": "^2.1.4",
-    "autoprefixer": "^9.0.0",
     "napa": "2.3.*",
-    "node-sass": "4.14.x",
-    "postcss-loader": "3.0.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "node-sass": "4.14.x"
   },
   "browser": {
     "bootstrap": "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js",
