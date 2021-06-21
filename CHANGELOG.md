@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.96.2] - 2021-06-21
 ### Fixed
 - MV-348 - free ORM entities to avoid possible sync issues between workers
 
@@ -13,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hotfix - avoid exception when polls are not activated
 
 ## [2.96.0] - 2021-06-1
-8### Added
+### Added
 - VIMEET-2393 - Meet Online button
 - VIMEET-2615 - Display meet online button on networking
 - VIMEET-2577 - Allow poll in webinar
