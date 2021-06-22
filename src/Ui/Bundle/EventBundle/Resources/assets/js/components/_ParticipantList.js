@@ -24,6 +24,18 @@ class ParticipantList {
         const user = document.createElement('p');
         const position = document.createElement('em');
 
+        const participantList = this.target.querySelector('#ParticipantList');
+        const meetOnline = document.createElement('div');
+        const online = document.createElement('div');
+        const pictoMeetOnline = document.createElement('span');
+        meetOnline.classList.add('user__meet', 'meetOnline_button');
+        online.classList.add('online');
+        online.textContent = participantList.dataset.meetOnline;
+        pictoMeetOnline.classList.add('picto_meet_online');
+        meetOnline.appendChild(online);
+        meetOnline.appendChild(pictoMeetOnline);
+        td.appendChild(meetOnline);
+
         const url = new URL(this.target.getAttribute('data-private-chat-url'), document.URL);
         url.searchParams.append('toUser', payload.userId);
 
