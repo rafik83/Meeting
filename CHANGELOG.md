@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.96.3] - 2021-06-22
+### Fixed
+- MV-348 - Don't clear entity manager when worker is set to sync transport
+### Revert
+- Remove tailwind lib
+
+## [2.96.2] - 2021-06-21
+### Fixed
+- MV-348 - free ORM entities to avoid possible sync issues between workers
+
+## [2.96.1] - 2021-06-18
+### Fixed
+- Hotfix - Avoid exception when polls are not activated
+
 ## [2.96.0] - 2021-06-18
 ### Added
 - VIMEET-2393 - Meet Online button

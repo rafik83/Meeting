@@ -1162,6 +1162,10 @@ Webinar.prototype.showSidebarPanel = function (button, container)
 {
 
     [this.chatButton, this.questionsButton, this.pollsButton].forEach((item) => {
+        if (!item) {
+            return;
+        }
+
         if (button === item) {
             item.classList.add('btn-primary');
             item.classList.remove('btn-gray');
@@ -1173,8 +1177,12 @@ Webinar.prototype.showSidebarPanel = function (button, container)
         }
     })
 
-    if (container !== null){
+    if (container !== null) {
         [this.chat.chatContainer, this.question.questionsContainer, this.pollsContainer].forEach((item) => {
+            if (!item) {
+                return;
+            }
+
             if (container === item) {
                 this.showElement(item);
             } else {
