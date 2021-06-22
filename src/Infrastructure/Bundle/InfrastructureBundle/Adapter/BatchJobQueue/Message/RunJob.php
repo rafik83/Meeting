@@ -14,6 +14,7 @@ class RunJob
     private KernelInterface $kernel;
     private CrossProcessLockFactory $jobLockFactory;
     private bool $isDebugMode;
+    private bool $resetAfterRun;
     private ?LoggerInterface $logger;
     private EntityManagerAdapter $entityManager;
 
@@ -21,12 +22,14 @@ class RunJob
         KernelInterface $kernel,
         CrossProcessLockFactory $jobLockFactory,
         bool $isDebugMode,
+        bool $resetAfterRun,
         EntityManagerAdapter $entityManager,
         LoggerInterface $logger = null
     ) {
         $this->kernel = $kernel;
         $this->jobLockFactory = $jobLockFactory;
         $this->isDebugMode = $isDebugMode;
+        $this->resetAfterRun = $resetAfterRun;
         $this->logger = $logger;
         $this->entityManager = $entityManager;
     }
@@ -44,7 +47,9 @@ class RunJob
 
         $returnCode = $application->run($input);
 
-        $this->entityManager->clear();
+        if ($this->resetAfterRun) {
+            $this->entityManager->clear();
+        }
 
         if ($returnCode !== 0) {
             $this->logger->error(sprintf('Error %d while running command %s', $returnCode, (string) $input));
