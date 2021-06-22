@@ -81,6 +81,10 @@ services:
         arguments:
             $searchable: '@fos_elastica.index.sheet.sheet'
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\Message\RunJob:
+        arguments:
+            $resetAfterRun: '%env(JOB_MESSENGER_RESET_AFTER_RUN)%'
+
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\CCIP\PreparePaymentAction:
         arguments:
             $ccipMode: '%env(CCIP_MODE)%'
