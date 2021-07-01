@@ -83,8 +83,6 @@ class Type
         self::TYPE_TECH_EVENT_LOGIN_ENABLED,
         self::TYPE_CRISP_SITE_ID,
         self::TYPE_TRACKING_CODE,
-        self::TYPE_CUSTOM_BUTTON_1,
-        self::TYPE_CUSTOM_BUTTON_2,
         self::TYPE_PRODUCT_CCIP
     ];
 }
