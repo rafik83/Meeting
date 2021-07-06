@@ -635,7 +635,6 @@ register.connect: Valider
 register.finalize: Finaliser
 register.noAvailableRegistrationType: 'Aucun type d''inscription n''est disponible.'
 register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel,\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
-register.privacy_policies: "Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par Vimeet pour votre participation à cet événement.\n\nElles sont conservées pendant 2 ans et sont destinées à l'organisateur de l'événement basé dans l'Union européenne.\n\nConformément à la loi européenne sur la protection des données personnelles, vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier ou supprimer en contactant : cnil@vi-meet.com"
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape

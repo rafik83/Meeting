@@ -590,7 +590,6 @@ register.connect: Submit
 register.finalize: Submit
 register.noAvailableRegistrationType: 'No available registration type'
 register.photo: "Why should you publish a photo?\n\n- Let potential business partners “put a face to a name”\n- Help contacts to identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule\n- Reinforce your professional network"
-register.privacy_policies: "The data collected are registered by Vimeet and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
 register.register: Registration
 register.register_as: 'Register as:'
 register.step: Step

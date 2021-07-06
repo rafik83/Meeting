@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - MV-350 - Don't allow admin to create new custom button
+- Remove RGPD message under the subscribtion form
 
 ## [2.96.4] - 2021-06-22
 ### Fixed
