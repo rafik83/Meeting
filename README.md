@@ -1,4 +1,4 @@
-# Proximum - Vimeet
+# Intersa - Meeting
 
 [![CircleCI](https://circleci.com/gh/proximum/vimeet/tree/master.svg?style=svg&circle-token=1177af92f29a64cb40f13255e22d302b38d032b5)](https://circleci.com/gh/proximum/vimeet/tree/master)
 
