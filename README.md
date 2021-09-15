@@ -177,7 +177,7 @@ If you already have this node version just run `nvm use`
 
 #### Install Yarn
 
-Vimeet uses [Yarn](https://yarnpkg.com/) as package manager. Please follow the installation process [here](https://classic.yarnpkg.com/en/docs/install#debian-stable)
+ [Yarn](https://yarnpkg.com/) as package manager. Please follow the installation process [here](https://classic.yarnpkg.com/en/docs/install#debian-stable)
 
 **Please make sure you install Yarn 1.x and not 2.x**
 
@@ -204,7 +204,6 @@ symfony server:start -d
 
 Then you're ready to start hacking.
 
-You should access the project via https://admin.vimeet.proximum.wip/
 
 ### Day to day usage
 
@@ -251,10 +250,6 @@ To do not forget to rebuild js bundles:
 ```
 
 ### Localization
-
-All translations are stored on https://openl10n.vimeet.events (check 1password for access).
-If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
-
 Remarks :
 
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
@@ -280,8 +275,6 @@ To rollback on previous version, do the same using the previous version tag. Not
 
 ### Styleguide
 
-https://(subdomain event).vimeet.proximum.wip/fr/styleguide
-
 ### Code
 
 #### Gestion de la locale en Admin
@@ -296,6 +289,3 @@ $locale = $event->getAvailableLocale($request->getLocale);
 
 Pour tester le rendu ou son code sur un autre terminal (un téléphone portable par exemple), vous pouvez utiliser [ngrok](https://ngrok.com/).
 
-### More documentations
-
-See [Vimeet documentation](docs/index.md)
